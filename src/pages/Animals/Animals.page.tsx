@@ -1,9 +1,9 @@
 // Components
-import { HomeAnimalCard } from '@/components/business/Home/HomeAnimalCard'
+import { AnimalCard } from '@/components/business/Animals/AnimalCard'
 
 // Styles
 import { AppRoutes } from '@/config/constants/routes'
-import { animalsMock } from '@/mocks/Home/Home.mock'
+import { animalsMock } from '@/mocks/Animals/Animals.mock'
 import { useNavigate } from 'react-router-dom'
 import * as S from './Animals.styles'
 
@@ -19,7 +19,7 @@ export const Animals = () => {
 		<S.Container>
 			<S.AnimalsContainer>
 				{animalsMock.map((animal) => (
-					<HomeAnimalCard
+					<AnimalCard
 						key={animal.animalId}
 						animalId={animal.animalId}
 						animalKind={animal.animalKind}

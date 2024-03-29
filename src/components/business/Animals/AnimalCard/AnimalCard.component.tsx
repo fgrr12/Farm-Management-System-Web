@@ -1,8 +1,8 @@
 import { Button } from '../../../ui/Button'
-import * as S from './HomeAnimalCard.styles'
-import type { CardProps } from './HomeAnimalCard.types'
+import * as S from './AnimalCard.styles'
+import type { CardProps } from './AnimalCard.types'
 
-export const HomeAnimalCard: FC<CardProps> = ({
+export const AnimalCard: FC<CardProps> = ({
 	animalId,
 	animalKind,
 	animalBreed,
