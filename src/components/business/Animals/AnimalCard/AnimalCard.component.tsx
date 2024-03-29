@@ -4,11 +4,11 @@ import type { CardProps } from './AnimalCard.types'
 
 export const AnimalCard: FC<CardProps> = ({
 	animalId,
-	animalKind,
-	animalBreed,
-	animalBirthDate,
-	animalGender,
-	animalColor,
+	species: animalKind,
+	breed: animalBreed,
+	birthDate: animalBirthDate,
+	gender: animalGender,
+	color: animalColor,
 	...props
 }) => {
 	return (

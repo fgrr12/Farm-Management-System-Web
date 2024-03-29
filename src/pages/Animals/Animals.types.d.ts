@@ -1,10 +1,10 @@
 import type dayjs from 'dayjs'
 
-export interface Animal {
+export interface AnimalCard {
 	animalId: number
-	animalKind: string
-	animalBreed: string
-	animalBirthDate: dayjs.Dayjs
-	animalGender: string
-	animalColor: string
+	species: string
+	breed: string
+	birthDate: dayjs.Dayjs
+	gender: string
+	color: string
 }

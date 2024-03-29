@@ -22,11 +22,11 @@ export const Animals = () => {
 					<AnimalCard
 						key={animal.animalId}
 						animalId={animal.animalId}
-						animalKind={animal.animalKind}
-						animalBreed={animal.animalBreed}
-						animalBirthDate={animal.animalBirthDate}
-						animalGender={animal.animalGender}
-						animalColor={animal.animalColor}
+						species={animal.species}
+						breed={animal.breed}
+						birthDate={animal.birthDate}
+						gender={animal.gender}
+						color={animal.color}
 						onClick={() => navigateToAnimal(animal.animalId.toString())}
 					/>
 				))}
