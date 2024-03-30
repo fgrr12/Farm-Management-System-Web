@@ -14,59 +14,61 @@ export const Animal: FC = () => {
 
 	return (
 		<S.Container>
-			<S.InfoContainer>
-				<S.Label>Animal ID</S.Label>
-				<div>
+			<S.AnimalContainer>
+				<S.InfoContainer>
+					<S.Label>Animal ID</S.Label>
 					<div>
-						<S.Label>Species</S.Label>
-						<S.Value>{animal.species}</S.Value>
-					</div>
-					<div>
-						<S.Label>Breed</S.Label>
-						<S.Value>{animal.breed}</S.Value>
-					</div>
-					<div>
-						<S.Label>Gender</S.Label>
-						<S.Value>{animal.gender}</S.Value>
-					</div>
-					<div>
-						<S.Label>Color</S.Label>
-						<S.Value>{animal.color}</S.Value>
-					</div>
-					<div>
-						<S.Label>Weight</S.Label>
-						<S.Value>{animal.weight}</S.Value>
-					</div>
-					<div>
-						<S.Label>Birth Date</S.Label>
-						<S.Value>{animal.birthDate?.format('MM/DD/YYYY')}</S.Value>
-					</div>
-					<div>
-						<S.Label>Purchase Date</S.Label>
-						<S.Value>{animal.purchaseDate?.format('MM/DD/YYYY')}</S.Value>
-					</div>
-					{animal.soldDate && (
+						<div>
+							<S.Label>Species</S.Label>
+							<S.Value>{animal.species}</S.Value>
+						</div>
+						<div>
+							<S.Label>Breed</S.Label>
+							<S.Value>{animal.breed}</S.Value>
+						</div>
+						<div>
+							<S.Label>Gender</S.Label>
+							<S.Value>{animal.gender}</S.Value>
+						</div>
+						<div>
+							<S.Label>Color</S.Label>
+							<S.Value>{animal.color}</S.Value>
+						</div>
+						<div>
+							<S.Label>Weight</S.Label>
+							<S.Value>{animal.weight}</S.Value>
+						</div>
+						<div>
+							<S.Label>Birth Date</S.Label>
+							<S.Value>{animal.birthDate?.format('MM/DD/YYYY')}</S.Value>
+						</div>
 						<div>
 							<S.Label>Purchase Date</S.Label>
-							<S.Value>{animal.soldDate?.format('MM/DD/YYYY')}</S.Value>
+							<S.Value>{animal.purchaseDate?.format('MM/DD/YYYY')}</S.Value>
 						</div>
-					)}
-					{animal.deathDate && (
-						<div>
-							<S.Label>Death Date</S.Label>
-							<S.Value>{animal.deathDate?.format('MM/DD/YYYY')}</S.Value>
-						</div>
-					)}
-				</div>
-			</S.InfoContainer>
+						{animal.soldDate && (
+							<div>
+								<S.Label>Purchase Date</S.Label>
+								<S.Value>{animal.soldDate?.format('MM/DD/YYYY')}</S.Value>
+							</div>
+						)}
+						{animal.deathDate && (
+							<div>
+								<S.Label>Death Date</S.Label>
+								<S.Value>{animal.deathDate?.format('MM/DD/YYYY')}</S.Value>
+							</div>
+						)}
+					</div>
+				</S.InfoContainer>
 
-			<S.ImageContainer>
-				<S.Image src={animal.picture} alt={animal.species} />
-			</S.ImageContainer>
+				<S.ImageContainer>
+					<S.Image src={animal.picture} alt={animal.species} />
+				</S.ImageContainer>
+			</S.AnimalContainer>
 
-			<S.RelatedAnimalsContainer>
-				{animal.relatedAnimals.parents?.length !== 0 && <S.Label>Parents Related Animals</S.Label>}
-				{animal.relatedAnimals.parents?.length !== 0 && (
+			{animal.relatedAnimals.parents?.length !== 0 && (
+				<S.TableContainer>
+					<S.Label>Parents Related Animals</S.Label>
 					<Table>
 						<Table.Head>
 							<Table.Row>
@@ -89,11 +91,12 @@ export const Animal: FC = () => {
 							))}
 						</Table.Body>
 					</Table>
-				)}
-				{animal.relatedAnimals.children?.length !== 0 && (
+				</S.TableContainer>
+			)}
+
+			{animal.relatedAnimals.children?.length !== 0 && (
+				<S.TableContainer>
 					<S.Label>Children Related Animals</S.Label>
-				)}
-				{animal.relatedAnimals.children?.length !== 0 && (
 					<Table>
 						<Table.Head>
 							<Table.Row>
@@ -116,8 +119,8 @@ export const Animal: FC = () => {
 							))}
 						</Table.Body>
 					</Table>
-				)}
-			</S.RelatedAnimalsContainer>
+				</S.TableContainer>
+			)}
 
 			<S.TableContainer>
 				<S.Label>Health Records</S.Label>
@@ -131,8 +134,6 @@ export const Animal: FC = () => {
 							<Table.HeadCell>Date</Table.HeadCell>
 							<Table.HeadCell>Weight</Table.HeadCell>
 							<Table.HeadCell>Temperature</Table.HeadCell>
-							<Table.HeadCell>Heart Rate</Table.HeadCell>
-							<Table.HeadCell>Blood Pressure</Table.HeadCell>
 							<Table.HeadCell>Medication</Table.HeadCell>
 							<Table.HeadCell>Dosage</Table.HeadCell>
 							<Table.HeadCell>Frequency</Table.HeadCell>
@@ -149,8 +150,6 @@ export const Animal: FC = () => {
 								<Table.Cell>{healthRecord.date.format('MM/DD/YYYY')}</Table.Cell>
 								<Table.Cell>{healthRecord.weight}</Table.Cell>
 								<Table.Cell>{healthRecord.temperature}</Table.Cell>
-								<Table.Cell>{healthRecord.heartRate}</Table.Cell>
-								<Table.Cell>{healthRecord.bloodPressure}</Table.Cell>
 								<Table.Cell>{healthRecord.medication}</Table.Cell>
 								<Table.Cell>{healthRecord.dosage}</Table.Cell>
 								<Table.Cell>{healthRecord.frequency}</Table.Cell>

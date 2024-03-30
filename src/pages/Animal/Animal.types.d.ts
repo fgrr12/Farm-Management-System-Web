@@ -1,5 +1,14 @@
 import type dayjs from 'dayjs'
 
+declare type healthRecordType =
+	| 'Checkup'
+	| 'Vaccination'
+	| 'Medication'
+	| 'Surgery'
+	| 'Pregnant'
+	| 'Deworming'
+	| 'Birth'
+
 export interface RelatedAnimal {
 	animalId: number
 	species: Species
@@ -17,8 +26,6 @@ export interface AnimalHealthRecord {
 	date: dayjs.Dayjs
 	weight?: number
 	temperature?: number
-	heartRate?: number
-	bloodPressure?: number
 	medication?: string
 	dosage?: string
 	frequency?: string
