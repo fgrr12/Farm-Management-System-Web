@@ -8,10 +8,11 @@ export const Button: FC<ButtonProps> = ({ children, ...props }) => {
 	return <S.Button {...props}>{children}</S.Button>
 }
 
-export const AddButton: FC<ButtonProps> = ({ ...props }) => {
+export const BackButton: FC<ButtonProps> = (props) => {
 	return (
-		<S.AddButton {...props}>
-			<div className="i-material-symbols-add" />
-		</S.AddButton>
+		<S.BackButton {...props}>
+			<S.Icon className="i-material-symbols-arrow-left-alt-rounded" />
+			{props.children}
+		</S.BackButton>
 	)
 }

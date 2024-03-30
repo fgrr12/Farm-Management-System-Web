@@ -1,7 +1,7 @@
 import { colors } from '@/styles/variables'
 import styled from 'styled-components'
 
-export const Button = styled.button`
+export const ButtonStyles = styled.button`
     display: flex;
     align-items: center;
     justify-content: center;
@@ -29,17 +29,24 @@ export const Button = styled.button`
 	}
 `
 
-export const AddButton = styled(Button)`
-    padding: 0.5rem;
+export const Button = styled(ButtonStyles)`
+`
 
-    & > div {
-        font-size: 1.5rem;
-        background-color: ${colors.primary[300]};
-    }
-    
-    &:hover {
-        & > div {
-            background-color: ${colors.white};
-        }
-    }
+export const BackButton = styled(ButtonStyles)`
+	padding: 0.5rem;
+	text-transform: uppercase;
+	border: none;
+
+	&:hover {
+		color: ${colors.primary[950]};
+		border-color: ${colors.primary[600]};
+		background-color: ${colors.primary[100]};
+	}
+`
+
+export const Icon = styled.span`
+	height: 1.8rem;
+	width: 1.8rem;
+	background-color: ${colors.primary[600]};
+	margin-right: 5px;
 `

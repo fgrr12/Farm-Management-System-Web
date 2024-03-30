@@ -29,4 +29,13 @@ export const colors = {
 
 	black: '#000',
 	white: '#fff',
+
+	// Shadows
+	shadowBasic: 'rgba(0, 0, 0, 0.1)',
+	shadowLight: 'rgba(0, 0, 0, 0.05)',
+	shadowDark: 'rgba(0, 0, 0, 0.25)',
+}
+
+export const shadows = {
+	container: `0 0 10px ${colors.shadowBasic}`,
 }

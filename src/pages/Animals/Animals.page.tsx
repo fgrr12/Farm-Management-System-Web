@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 // Components
 import { AnimalCard } from '@/components/business/Animals/AnimalCard'
+import { PageHeader } from '@/components/ui/PageHeader'
 
 //Types
 import type { AnimalCardInformation } from './Animals.types'
@@ -33,6 +34,7 @@ export const Animals = () => {
 
 	return (
 		<S.Container>
+			<PageHeader>Animales</PageHeader>
 			<S.AnimalsContainer>
 				{animals.map((animal) => (
 					<AnimalCard
