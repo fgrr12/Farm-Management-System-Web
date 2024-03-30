@@ -1,3 +1,4 @@
+import { colors } from '@/styles/variables'
 import styled from 'styled-components'
 
 export const Container = styled.div`
@@ -8,6 +9,7 @@ export const Container = styled.div`
     width: 100%;
     padding: 1rem;
     overflow: auto;
+    background-color: ${colors.primary[50]};
 
     &::-webkit-scrollbar {
         display: none;

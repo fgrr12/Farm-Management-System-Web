@@ -66,6 +66,44 @@ export const Animal: FC = () => {
 				</S.ImageContainer>
 			</S.AnimalContainer>
 
+			<S.TableContainer>
+				<S.Label>Health Records</S.Label>
+				<Table>
+					<Table.Head>
+						<Table.Row>
+							<Table.HeadCell>Reason</Table.HeadCell>
+							<Table.HeadCell>Notes</Table.HeadCell>
+							<Table.HeadCell>Type</Table.HeadCell>
+							<Table.HeadCell>Reviewed By</Table.HeadCell>
+							<Table.HeadCell>Date</Table.HeadCell>
+							<Table.HeadCell>Weight</Table.HeadCell>
+							<Table.HeadCell>Temperature</Table.HeadCell>
+							<Table.HeadCell>Medication</Table.HeadCell>
+							<Table.HeadCell>Dosage</Table.HeadCell>
+							<Table.HeadCell>Frequency</Table.HeadCell>
+							<Table.HeadCell>Duration</Table.HeadCell>
+						</Table.Row>
+					</Table.Head>
+					<Table.Body>
+						{animal.healthRecords?.map((healthRecord) => (
+							<Table.Row key={healthRecord.animalId}>
+								<Table.Cell>{healthRecord.reason}</Table.Cell>
+								<Table.Cell>{healthRecord.notes}</Table.Cell>
+								<Table.Cell>{healthRecord.type}</Table.Cell>
+								<Table.Cell>{healthRecord.reviewedBy}</Table.Cell>
+								<Table.Cell>{healthRecord.date.format('MM/DD/YYYY')}</Table.Cell>
+								<Table.Cell>{healthRecord.weight}</Table.Cell>
+								<Table.Cell>{healthRecord.temperature}</Table.Cell>
+								<Table.Cell>{healthRecord.medication}</Table.Cell>
+								<Table.Cell>{healthRecord.dosage}</Table.Cell>
+								<Table.Cell>{healthRecord.frequency}</Table.Cell>
+								<Table.Cell>{healthRecord.duration}</Table.Cell>
+							</Table.Row>
+						))}
+					</Table.Body>
+				</Table>
+			</S.TableContainer>
+
 			{animal.relatedAnimals.parents?.length !== 0 && (
 				<S.TableContainer>
 					<S.Label>Parents Related Animals</S.Label>
@@ -121,44 +159,6 @@ export const Animal: FC = () => {
 					</Table>
 				</S.TableContainer>
 			)}
-
-			<S.TableContainer>
-				<S.Label>Health Records</S.Label>
-				<Table>
-					<Table.Head>
-						<Table.Row>
-							<Table.HeadCell>Reason</Table.HeadCell>
-							<Table.HeadCell>Notes</Table.HeadCell>
-							<Table.HeadCell>Type</Table.HeadCell>
-							<Table.HeadCell>Reviewed By</Table.HeadCell>
-							<Table.HeadCell>Date</Table.HeadCell>
-							<Table.HeadCell>Weight</Table.HeadCell>
-							<Table.HeadCell>Temperature</Table.HeadCell>
-							<Table.HeadCell>Medication</Table.HeadCell>
-							<Table.HeadCell>Dosage</Table.HeadCell>
-							<Table.HeadCell>Frequency</Table.HeadCell>
-							<Table.HeadCell>Duration</Table.HeadCell>
-						</Table.Row>
-					</Table.Head>
-					<Table.Body>
-						{animal.healthRecords?.map((healthRecord) => (
-							<Table.Row key={healthRecord.animalId}>
-								<Table.Cell>{healthRecord.reason}</Table.Cell>
-								<Table.Cell>{healthRecord.notes}</Table.Cell>
-								<Table.Cell>{healthRecord.type}</Table.Cell>
-								<Table.Cell>{healthRecord.reviewedBy}</Table.Cell>
-								<Table.Cell>{healthRecord.date.format('MM/DD/YYYY')}</Table.Cell>
-								<Table.Cell>{healthRecord.weight}</Table.Cell>
-								<Table.Cell>{healthRecord.temperature}</Table.Cell>
-								<Table.Cell>{healthRecord.medication}</Table.Cell>
-								<Table.Cell>{healthRecord.dosage}</Table.Cell>
-								<Table.Cell>{healthRecord.frequency}</Table.Cell>
-								<Table.Cell>{healthRecord.duration}</Table.Cell>
-							</Table.Row>
-						))}
-					</Table.Body>
-				</Table>
-			</S.TableContainer>
 		</S.Container>
 	)
 }

@@ -6,12 +6,12 @@ import styled from 'styled-components'
 export const Table = styled.table`
   ${Box}
   padding: 0;
-  //margin: 3rem;
   justify-content: center;
-  box-shadow: 0 0 0.9rem ${colors.black};
+  box-shadow: 0 0 0.9rem ${colors.primary[500]};
   border-radius: 0.5rem;
   background-color: ${colors.white};
   height: 100%;
+
   &, & * {
     border-collapse: collapse;
   }
@@ -35,7 +35,6 @@ export const Row = styled.tr`
   border-bottom: 1px solid ${colors.primary[400]};
 
   ${Head} > & {
-    border-radius: 0.5rem 0.5rem 0 0;
     &:first-of-type {
       border-bottom: none;
     }
@@ -43,12 +42,18 @@ export const Row = styled.tr`
 
   ${Body} > & {
     border-radius: 0;
+
     &:first-of-type {
       border-top: 1px solid ${colors.primary[400]};
     }
+
     &:last-of-type {
       border-radius: 0 0 0.5rem 0.5rem;
       border-bottom: none;
+    }
+
+    &:nth-child(odd) {
+      background-color: ${colors.primary[100]};
     }
   }
 `
@@ -56,15 +61,18 @@ export const Row = styled.tr`
 export const HeadCell = styled.th`
   ${FlexCenter};
   color: ${colors.primary[950]};
+  background-color: ${colors.primary[300]};
   font-size: 0.93rem;
   padding: 1rem 0;
   text-align: center;
 
   &:first-of-type {
+    border-radius: 0.5rem 0 0 0;
     padding-left: 0.75rem;
   }
 
   &:last-of-type {
+    border-radius: 0 0.5rem 0 0;
     padding-right: 0.75rem;
     border-right: none;
   }
