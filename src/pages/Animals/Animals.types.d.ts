@@ -1,6 +1,6 @@
 import type dayjs from 'dayjs'
 
-export interface AnimalCard {
+export interface IAnimalCard {
 	animalId: number
 	species: string
 	breed: string

@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { Button } from '../../../ui/Button'
 import * as S from './AnimalCard.styles'
 import type { CardProps } from './AnimalCard.types'
@@ -18,7 +19,7 @@ export const AnimalCard: FC<CardProps> = ({
 				<h5>{animalBreed}</h5>
 			</S.TopInfoContainer>
 			<S.MiddleInfoContainer>
-				<p>Date of Birth: {animalBirthDate.format('DD/MM/YYYY')}</p>
+				<p>Date of Birth: {dayjs(animalBirthDate).format('DD/MM/YYYY')}</p>
 				<p>Gender: {animalGender}</p>
 				<p>Color: {animalColor}</p>
 			</S.MiddleInfoContainer>

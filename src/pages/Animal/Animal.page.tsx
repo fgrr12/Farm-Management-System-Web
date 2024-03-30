@@ -12,15 +12,14 @@ import type { AnimalInformation } from './Animal.types'
 // Styles
 import { ActionButton } from '@/components/ui/ActionButton'
 import dayjs from 'dayjs'
+import { useLocation } from 'react-router-dom'
 import * as S from './Animal.styles'
 
 export const Animal: FC = () => {
+	const location = useLocation()
+	const { pathname } = location
 	const [animal, setAnimal] = useState<AnimalInformation>(ANIMAL_INITIAL_STATE)
 	const [user, setUser] = useState<boolean>(false) // useState<UserInformation>(USER_INITIAL_STATE)
-
-	useEffect(() => {
-		getAnimal()
-	}, [])
 
 	const getAnimal = async () => {
 		// const parents = animalMock.relatedAnimals.parents?.map((parent) => ({
@@ -62,10 +61,16 @@ export const Animal: FC = () => {
 		// 	purchaseDate: dayjs(animalMock.purchaseDate).format('MM/DD/YYYY'),
 		// })
 
-		const dbData = (await firestoreHandler.getDocument('animals', '1')) as AnimalInformation
+		const animalId = pathname.split('/').pop()
+		const dbData = (await firestoreHandler.getDocument('animals', animalId!)) as AnimalInformation
 
 		setAnimal(dbData)
 	}
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: This error is due to withFetching HOF
+	useEffect(() => {
+		getAnimal()
+	}, [])
 
 	return (
 		<S.Container>
@@ -76,6 +81,11 @@ export const Animal: FC = () => {
 						<ActionButton
 							title="Edit"
 							icon="i-material-symbols-edit-square-outline"
+							disabled={!user}
+						/>
+						<ActionButton
+							title="Delete"
+							icon="i-material-symbols-delete-outline"
 							disabled={!user}
 						/>
 					</S.CenterTitle>
@@ -132,7 +142,7 @@ export const Animal: FC = () => {
 				<S.CenterTitle>
 					<S.Label>Health Records</S.Label>
 					<ActionButton
-						title="Add Parent"
+						title="Add Health Record"
 						icon="i-material-symbols-add-circle-outline"
 						disabled={!user}
 					/>
@@ -237,7 +247,7 @@ export const Animal: FC = () => {
 						<S.CenterTitle>
 							<S.Label>Children Related Animals</S.Label>
 							<ActionButton
-								title="Add Parent"
+								title="Add Child"
 								icon="i-material-symbols-add-circle-outline"
 								disabled={!user}
 							/>
