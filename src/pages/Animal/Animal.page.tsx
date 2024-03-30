@@ -24,10 +24,12 @@ export const Animal: FC = () => {
 	const getAnimal = async () => {
 		// const parents = animalMock.relatedAnimals.parents?.map((parent) => ({
 		// 	animalId: parent.animalId,
+		// 	breed: parent.breed,
 		// 	relation: parent.relation,
 		// }))
 		// const children = animalMock.relatedAnimals.children?.map((child) => ({
 		// 	animalId: child.animalId,
+		// 	breed: child.breed,
 		// 	relation: child.relation,
 		// }))
 		// const healthRecords = animalMock.healthRecords?.map((healthRecord) => ({
