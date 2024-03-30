@@ -2,10 +2,10 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AppRoutes } from './config/constants/routes'
 
 // Pages
+import { Animal } from './pages/Animal'
 import { Animals } from './pages/Animals'
 
 // Styles
-import { Animal } from './pages/Animal'
 import { AppContainer } from './styles/root'
 
 export const App: FC = () => {
