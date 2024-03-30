@@ -46,7 +46,7 @@ export const Animal: FC = () => {
 		// 	duration: healthRecord.duration,
 		// }))
 
-		// await firestoreHandler.updateDocument('animals', '1', {
+		// await firestoreHandler.setDocument('animals', crypto.randomUUID(), {
 		// 	animalId: animalMock.animalId,
 		// 	species: animalMock.species,
 		// 	breed: animalMock.breed,
@@ -92,6 +92,10 @@ export const Animal: FC = () => {
 						/>
 					</S.CenterTitle>
 					<S.AnimalInfo>
+						<div>
+							<S.Label>ID</S.Label>
+							<S.Value>{animal.animalId}</S.Value>
+						</div>
 						<div>
 							<S.Label>Species</S.Label>
 							<S.Value>{animal.species}</S.Value>
@@ -294,6 +298,7 @@ export const Animal: FC = () => {
 }
 
 const ANIMAL_INITIAL_STATE: AnimalInformation = {
+	uuid: '',
 	animalId: 0,
 	species: 'Cow',
 	breed: '',

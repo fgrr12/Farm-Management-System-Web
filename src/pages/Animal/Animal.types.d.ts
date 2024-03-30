@@ -38,6 +38,7 @@ export interface RelatedAnimals {
 }
 
 export interface AnimalInformation {
+	uuid: string
 	animalId: number
 	species: Species
 	breed: string

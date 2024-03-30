@@ -13,8 +13,8 @@ export const Animals = () => {
 	const navigation = useNavigate()
 	const [animals, setAnimals] = useState<IAnimalCard[]>([])
 
-	const navigateToAnimal = (animalId: string) => {
-		const path = AppRoutes.ANIMAL.replace(':animalId', animalId)
+	const navigateToAnimal = (uuid: string) => {
+		const path = AppRoutes.ANIMAL.replace(':animalUuid', uuid)
 		navigation(path)
 	}
 
@@ -33,14 +33,14 @@ export const Animals = () => {
 			<S.AnimalsContainer>
 				{animals.map((animal) => (
 					<AnimalCard
-						key={animal.animalId}
+						key={animal.uuid}
 						animalId={animal.animalId}
 						species={animal.species}
 						breed={animal.breed}
 						birthDate={animal.birthDate}
 						gender={animal.gender}
 						color={animal.color}
-						onClick={() => navigateToAnimal(animal.animalId.toString())}
+						onClick={() => navigateToAnimal(animal.uuid)}
 					/>
 				))}
 			</S.AnimalsContainer>
