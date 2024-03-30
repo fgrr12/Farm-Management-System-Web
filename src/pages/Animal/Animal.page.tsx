@@ -10,6 +10,7 @@ import { Table } from '@/components/ui/Table'
 import type { AnimalInformation } from './Animal.types'
 
 // Styles
+import { ActionButton } from '@/components/ui/ActionButton'
 import dayjs from 'dayjs'
 import * as S from './Animal.styles'
 
@@ -135,6 +136,7 @@ export const Animal: FC = () => {
 							<Table.HeadCell>Dosage</Table.HeadCell>
 							<Table.HeadCell>Frequency</Table.HeadCell>
 							<Table.HeadCell>Duration</Table.HeadCell>
+							<Table.HeadCell>Actions</Table.HeadCell>
 						</Table.Row>
 					</Table.Head>
 					<Table.Body>
@@ -151,67 +153,79 @@ export const Animal: FC = () => {
 								<Table.Cell>{healthRecord.dosage}</Table.Cell>
 								<Table.Cell>{healthRecord.frequency}</Table.Cell>
 								<Table.Cell>{healthRecord.duration}</Table.Cell>
+								<Table.Cell>
+									<ActionButton title="Edit" icon="i-material-symbols-edit-square-outline" />
+									<ActionButton title="Delete" icon="i-material-symbols-delete-outline" />
+								</Table.Cell>
 							</Table.Row>
 						))}
 					</Table.Body>
 				</Table>
 			</S.TableContainer>
 
-			{animal.relatedAnimals.parents?.length !== 0 && (
-				<S.TableContainer>
-					<S.Label>Parents Related Animals</S.Label>
-					<Table>
-						<Table.Head>
-							<Table.Row>
-								<Table.HeadCell>Animal ID</Table.HeadCell>
-								<Table.HeadCell>Species</Table.HeadCell>
-								<Table.HeadCell>Breed</Table.HeadCell>
-								<Table.HeadCell>Gender</Table.HeadCell>
-								<Table.HeadCell>Relation</Table.HeadCell>
-							</Table.Row>
-						</Table.Head>
-						<Table.Body>
-							{animal.relatedAnimals.parents?.map((parent) => (
-								<Table.Row key={parent.animalId}>
-									<Table.Cell>{parent.animalId}</Table.Cell>
-									<Table.Cell>{parent.species}</Table.Cell>
-									<Table.Cell>{parent.breed}</Table.Cell>
-									<Table.Cell>{parent.gender}</Table.Cell>
-									<Table.Cell>{parent.relation}</Table.Cell>
-								</Table.Row>
-							))}
-						</Table.Body>
-					</Table>
-				</S.TableContainer>
-			)}
+			<S.InfoContainer>
+				<div>
+					{animal.relatedAnimals.parents?.length !== 0 && (
+						<S.TableContainer>
+							<S.Label>Parents Related Animals</S.Label>
+							<Table>
+								<Table.Head>
+									<Table.Row>
+										<Table.HeadCell>Animal ID</Table.HeadCell>
+										<Table.HeadCell>Breed</Table.HeadCell>
+										<Table.HeadCell>Relation</Table.HeadCell>
+										<Table.HeadCell>Actions</Table.HeadCell>
+									</Table.Row>
+								</Table.Head>
+								<Table.Body>
+									{animal.relatedAnimals.parents?.map((parent) => (
+										<Table.Row key={parent.animalId}>
+											<Table.Cell>{parent.animalId}</Table.Cell>
+											<Table.Cell>{parent.breed}</Table.Cell>
+											<Table.Cell>{parent.relation}</Table.Cell>
+											<Table.Cell>
+												<ActionButton title="View" icon="i-material-symbols-visibility-outline" />
+												<ActionButton title="Edit" icon="i-material-symbols-edit-square-outline" />
+												<ActionButton title="Delete" icon="i-material-symbols-delete-outline" />
+											</Table.Cell>
+										</Table.Row>
+									))}
+								</Table.Body>
+							</Table>
+						</S.TableContainer>
+					)}
 
-			{animal.relatedAnimals.children?.length !== 0 && (
-				<S.TableContainer>
-					<S.Label>Children Related Animals</S.Label>
-					<Table>
-						<Table.Head>
-							<Table.Row>
-								<Table.HeadCell>Animal ID</Table.HeadCell>
-								<Table.HeadCell>Species</Table.HeadCell>
-								<Table.HeadCell>Breed</Table.HeadCell>
-								<Table.HeadCell>Gender</Table.HeadCell>
-								<Table.HeadCell>Relation</Table.HeadCell>
-							</Table.Row>
-						</Table.Head>
-						<Table.Body>
-							{animal.relatedAnimals.children?.map((child) => (
-								<Table.Row key={child.animalId}>
-									<Table.Cell>{child.animalId}</Table.Cell>
-									<Table.Cell>{child.species}</Table.Cell>
-									<Table.Cell>{child.breed}</Table.Cell>
-									<Table.Cell>{child.gender}</Table.Cell>
-									<Table.Cell>{child.relation}</Table.Cell>
-								</Table.Row>
-							))}
-						</Table.Body>
-					</Table>
-				</S.TableContainer>
-			)}
+					{animal.relatedAnimals.children?.length !== 0 && (
+						<S.TableContainer>
+							<S.Label>Children Related Animals</S.Label>
+							<Table>
+								<Table.Head>
+									<Table.Row>
+										<Table.HeadCell>Animal ID</Table.HeadCell>
+										<Table.HeadCell>Breed</Table.HeadCell>
+										<Table.HeadCell>Relation</Table.HeadCell>
+										<Table.HeadCell>Actions</Table.HeadCell>
+									</Table.Row>
+								</Table.Head>
+								<Table.Body>
+									{animal.relatedAnimals.children?.map((child) => (
+										<Table.Row key={child.animalId}>
+											<Table.Cell>{child.animalId}</Table.Cell>
+											<Table.Cell>{child.breed}</Table.Cell>
+											<Table.Cell>{child.relation}</Table.Cell>
+											<Table.Cell>
+												<ActionButton title="View" icon="i-material-symbols-visibility-outline" />
+												<ActionButton title="Edit" icon="i-material-symbols-edit-square-outline" />
+												<ActionButton title="Delete" icon="i-material-symbols-delete-outline" />
+											</Table.Cell>
+										</Table.Row>
+									))}
+								</Table.Body>
+							</Table>
+						</S.TableContainer>
+					)}
+				</div>
+			</S.InfoContainer>
 		</S.Container>
 	)
 }

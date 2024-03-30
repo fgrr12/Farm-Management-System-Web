@@ -83,7 +83,7 @@ export const Cell = styled.td`
   color: ${colors.primary[800]};
   font-size: 0.93rem;
   gap: 1rem;
-  padding: 1.5rem 0;
+  padding: 1.2rem 0;
   text-align: center;
 
   &:first-of-type {
