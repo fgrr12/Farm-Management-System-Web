@@ -19,7 +19,7 @@ export const Container = styled.div`
 export const AnimalContainer = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr;
-    padding: 2rem 0;
+    padding: 1rem 0;
 `
 
 export const ImageContainer = styled.div`
