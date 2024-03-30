@@ -1,10 +1,9 @@
-import { Box } from '@/styles/box'
 import { FlexCenter } from '@/styles/utils'
 import { colors } from '@/styles/variables'
 import styled from 'styled-components'
 
 export const Table = styled.table`
-  ${Box}
+  width: 100%;
   padding: 0;
   justify-content: center;
   box-shadow: 0 0 0.9rem ${colors.primary[500]};

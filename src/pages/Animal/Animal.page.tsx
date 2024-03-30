@@ -16,6 +16,7 @@ import * as S from './Animal.styles'
 
 export const Animal: FC = () => {
 	const [animal, setAnimal] = useState<AnimalInformation>(ANIMAL_INITIAL_STATE)
+	const [user, setUser] = useState<boolean>(false) // useState<UserInformation>(USER_INITIAL_STATE)
 
 	useEffect(() => {
 		getAnimal()
@@ -70,8 +71,15 @@ export const Animal: FC = () => {
 		<S.Container>
 			<S.AnimalContainer>
 				<S.InfoContainer>
-					<S.Label>Animal ID</S.Label>
-					<div>
+					<S.CenterTitle>
+						<S.Label>Animal ID</S.Label>
+						<ActionButton
+							title="Edit"
+							icon="i-material-symbols-edit-square-outline"
+							disabled={!user}
+						/>
+					</S.CenterTitle>
+					<S.AnimalInfo>
 						<div>
 							<S.Label>Species</S.Label>
 							<S.Value>{animal.species}</S.Value>
@@ -112,7 +120,7 @@ export const Animal: FC = () => {
 								<S.Value>{dayjs(animal.deathDate).format('MM/DD/YYYY')}</S.Value>
 							</div>
 						)}
-					</div>
+					</S.AnimalInfo>
 				</S.InfoContainer>
 
 				<S.ImageContainer>
@@ -121,7 +129,14 @@ export const Animal: FC = () => {
 			</S.AnimalContainer>
 
 			<S.TableContainer>
-				<S.Label>Health Records</S.Label>
+				<S.CenterTitle>
+					<S.Label>Health Records</S.Label>
+					<ActionButton
+						title="Add Parent"
+						icon="i-material-symbols-add-circle-outline"
+						disabled={!user}
+					/>
+				</S.CenterTitle>
 				<Table>
 					<Table.Head>
 						<Table.Row>
@@ -154,8 +169,16 @@ export const Animal: FC = () => {
 								<Table.Cell>{healthRecord.frequency}</Table.Cell>
 								<Table.Cell>{healthRecord.duration}</Table.Cell>
 								<Table.Cell>
-									<ActionButton title="Edit" icon="i-material-symbols-edit-square-outline" />
-									<ActionButton title="Delete" icon="i-material-symbols-delete-outline" />
+									<ActionButton
+										title="Edit"
+										icon="i-material-symbols-edit-square-outline"
+										disabled={!user}
+									/>
+									<ActionButton
+										title="Delete"
+										icon="i-material-symbols-delete-outline"
+										disabled={!user}
+									/>
 								</Table.Cell>
 							</Table.Row>
 						))}
@@ -163,69 +186,97 @@ export const Animal: FC = () => {
 				</Table>
 			</S.TableContainer>
 
-			<S.InfoContainer>
-				<div>
-					{animal.relatedAnimals.parents?.length !== 0 && (
-						<S.TableContainer>
+			<S.InfoTableContainer>
+				{animal.relatedAnimals.parents?.length !== 0 && (
+					<S.TableContainer>
+						<S.CenterTitle>
 							<S.Label>Parents Related Animals</S.Label>
-							<Table>
-								<Table.Head>
-									<Table.Row>
-										<Table.HeadCell>Animal ID</Table.HeadCell>
-										<Table.HeadCell>Breed</Table.HeadCell>
-										<Table.HeadCell>Relation</Table.HeadCell>
-										<Table.HeadCell>Actions</Table.HeadCell>
+							<ActionButton
+								title="Add Parent"
+								icon="i-material-symbols-add-circle-outline"
+								disabled={!user}
+							/>
+						</S.CenterTitle>
+						<Table>
+							<Table.Head>
+								<Table.Row>
+									<Table.HeadCell>Animal ID</Table.HeadCell>
+									<Table.HeadCell>Breed</Table.HeadCell>
+									<Table.HeadCell>Relation</Table.HeadCell>
+									<Table.HeadCell>Actions</Table.HeadCell>
+								</Table.Row>
+							</Table.Head>
+							<Table.Body>
+								{animal.relatedAnimals.parents?.map((parent) => (
+									<Table.Row key={parent.animalId}>
+										<Table.Cell>{parent.animalId}</Table.Cell>
+										<Table.Cell>{parent.breed}</Table.Cell>
+										<Table.Cell>{parent.relation}</Table.Cell>
+										<Table.Cell>
+											<ActionButton title="View" icon="i-material-symbols-visibility-outline" />
+											<ActionButton
+												title="Edit"
+												icon="i-material-symbols-edit-square-outline"
+												disabled={!user}
+											/>
+											<ActionButton
+												title="Delete"
+												icon="i-material-symbols-delete-outline"
+												disabled={!user}
+											/>
+										</Table.Cell>
 									</Table.Row>
-								</Table.Head>
-								<Table.Body>
-									{animal.relatedAnimals.parents?.map((parent) => (
-										<Table.Row key={parent.animalId}>
-											<Table.Cell>{parent.animalId}</Table.Cell>
-											<Table.Cell>{parent.breed}</Table.Cell>
-											<Table.Cell>{parent.relation}</Table.Cell>
-											<Table.Cell>
-												<ActionButton title="View" icon="i-material-symbols-visibility-outline" />
-												<ActionButton title="Edit" icon="i-material-symbols-edit-square-outline" />
-												<ActionButton title="Delete" icon="i-material-symbols-delete-outline" />
-											</Table.Cell>
-										</Table.Row>
-									))}
-								</Table.Body>
-							</Table>
-						</S.TableContainer>
-					)}
+								))}
+							</Table.Body>
+						</Table>
+					</S.TableContainer>
+				)}
 
-					{animal.relatedAnimals.children?.length !== 0 && (
-						<S.TableContainer>
+				{animal.relatedAnimals.children?.length !== 0 && (
+					<S.TableContainer>
+						<S.CenterTitle>
 							<S.Label>Children Related Animals</S.Label>
-							<Table>
-								<Table.Head>
-									<Table.Row>
-										<Table.HeadCell>Animal ID</Table.HeadCell>
-										<Table.HeadCell>Breed</Table.HeadCell>
-										<Table.HeadCell>Relation</Table.HeadCell>
-										<Table.HeadCell>Actions</Table.HeadCell>
+							<ActionButton
+								title="Add Parent"
+								icon="i-material-symbols-add-circle-outline"
+								disabled={!user}
+							/>
+						</S.CenterTitle>
+						<Table>
+							<Table.Head>
+								<Table.Row>
+									<Table.HeadCell>Animal ID</Table.HeadCell>
+									<Table.HeadCell>Breed</Table.HeadCell>
+									<Table.HeadCell>Relation</Table.HeadCell>
+									<Table.HeadCell>Actions</Table.HeadCell>
+								</Table.Row>
+							</Table.Head>
+							<Table.Body>
+								{animal.relatedAnimals.children?.map((child) => (
+									<Table.Row key={child.animalId}>
+										<Table.Cell>{child.animalId}</Table.Cell>
+										<Table.Cell>{child.breed}</Table.Cell>
+										<Table.Cell>{child.relation}</Table.Cell>
+										<Table.Cell>
+											<ActionButton title="View" icon="i-material-symbols-visibility-outline" />
+											<ActionButton
+												title="Edit"
+												icon="i-material-symbols-edit-square-outline"
+												disabled={!user}
+											/>
+											<ActionButton
+												title="Delete"
+												icon="i-material-symbols-delete-outline"
+												disabled={!user}
+											/>
+										</Table.Cell>
 									</Table.Row>
-								</Table.Head>
-								<Table.Body>
-									{animal.relatedAnimals.children?.map((child) => (
-										<Table.Row key={child.animalId}>
-											<Table.Cell>{child.animalId}</Table.Cell>
-											<Table.Cell>{child.breed}</Table.Cell>
-											<Table.Cell>{child.relation}</Table.Cell>
-											<Table.Cell>
-												<ActionButton title="View" icon="i-material-symbols-visibility-outline" />
-												<ActionButton title="Edit" icon="i-material-symbols-edit-square-outline" />
-												<ActionButton title="Delete" icon="i-material-symbols-delete-outline" />
-											</Table.Cell>
-										</Table.Row>
-									))}
-								</Table.Body>
-							</Table>
-						</S.TableContainer>
-					)}
-				</div>
-			</S.InfoContainer>
+								))}
+							</Table.Body>
+						</Table>
+					</S.TableContainer>
+				)}
+			</S.InfoTableContainer>
 		</S.Container>
 	)
 }

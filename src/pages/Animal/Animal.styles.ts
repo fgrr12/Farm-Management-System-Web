@@ -7,7 +7,7 @@ export const Container = styled.div`
     justify-content: center;
     gap: 2rem;
     width: 100%;
-    padding: 1rem;
+    padding: 1rem 2rem;
     overflow: auto;
     background-color: ${colors.primary[50]};
 
@@ -48,26 +48,41 @@ export const InfoContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
+`
+
+export const AnimalInfo = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
 
     & > div {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1rem;
-
-        & > div {
-            display: flex;
-            flex-direction: column;
-        }
+        display: flex;
+        flex-direction: column;
     }
 `
 
 export const TableContainer = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
 
     & > table {
         max-height: 50vh;
         height: auto;
     }
+`
+
+export const CenterTitle = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+`
+
+export const InfoTableContainer = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
 `
