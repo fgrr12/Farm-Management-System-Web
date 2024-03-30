@@ -1,13 +1,16 @@
-// Components
-import { AnimalCard } from '@/components/business/Animals/AnimalCard'
-
-// Styles
 import { AppRoutes } from '@/config/constants/routes'
 import firestoreHandler from '@/config/persistence/firestoreHandler'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import * as S from './Animals.styles'
+
+// Components
+import { AnimalCard } from '@/components/business/Animals/AnimalCard'
+
+//Types
 import type { IAnimalCard } from './Animals.types'
+
+// Styles
+import * as S from './Animals.styles'
 
 export const Animals = () => {
 	const navigation = useNavigate()

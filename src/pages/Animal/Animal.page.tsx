@@ -1,18 +1,16 @@
 import firestoreHandler from '@/config/persistence/firestoreHandler'
+import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 
 // Components
+import { ActionButton } from '@/components/ui/ActionButton'
 import { Table } from '@/components/ui/Table'
-
-//Mocks
 
 // Types
 import type { AnimalInformation } from './Animal.types'
 
 // Styles
-import { ActionButton } from '@/components/ui/ActionButton'
-import dayjs from 'dayjs'
-import { useLocation } from 'react-router-dom'
 import * as S from './Animal.styles'
 
 export const Animal: FC = () => {
@@ -172,7 +170,7 @@ export const Animal: FC = () => {
 					</Table.Head>
 					<Table.Body>
 						{animal.healthRecords?.map((healthRecord) => (
-							<Table.Row key={healthRecord.animalId}>
+							<Table.Row key={crypto.randomUUID()}>
 								<Table.Cell>{healthRecord.reason}</Table.Cell>
 								<Table.Cell>{healthRecord.notes}</Table.Cell>
 								<Table.Cell>{healthRecord.type}</Table.Cell>
@@ -224,7 +222,7 @@ export const Animal: FC = () => {
 							</Table.Head>
 							<Table.Body>
 								{animal.relatedAnimals.parents?.map((parent) => (
-									<Table.Row key={parent.animalId}>
+									<Table.Row key={crypto.randomUUID()}>
 										<Table.Cell>{parent.animalId}</Table.Cell>
 										<Table.Cell>{parent.breed}</Table.Cell>
 										<Table.Cell>{parent.relation}</Table.Cell>
@@ -269,7 +267,7 @@ export const Animal: FC = () => {
 							</Table.Head>
 							<Table.Body>
 								{animal.relatedAnimals.children?.map((child) => (
-									<Table.Row key={child.animalId}>
+									<Table.Row key={crypto.randomUUID()}>
 										<Table.Cell>{child.animalId}</Table.Cell>
 										<Table.Cell>{child.breed}</Table.Cell>
 										<Table.Cell>{child.relation}</Table.Cell>
