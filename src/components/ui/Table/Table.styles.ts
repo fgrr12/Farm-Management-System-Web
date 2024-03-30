@@ -32,7 +32,7 @@ export const Row = styled.tr`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
   grid-auto-flow: column;
-  border-bottom: 1px solid ${colors.grey[400]};
+  border-bottom: 1px solid ${colors.primary[400]};
 
   ${Head} > & {
     border-radius: 0.5rem 0.5rem 0 0;
@@ -44,7 +44,7 @@ export const Row = styled.tr`
   ${Body} > & {
     border-radius: 0;
     &:first-of-type {
-      border-top: 1px solid ${colors.grey[400]};
+      border-top: 1px solid ${colors.primary[400]};
     }
     &:last-of-type {
       border-radius: 0 0 0.5rem 0.5rem;
@@ -55,7 +55,7 @@ export const Row = styled.tr`
 
 export const HeadCell = styled.th`
   ${FlexCenter};
-  color: ${colors.grey[950]};
+  color: ${colors.primary[950]};
   font-size: 0.93rem;
   padding: 1rem 0;
   text-align: center;
@@ -72,7 +72,7 @@ export const HeadCell = styled.th`
 
 export const Cell = styled.td`
   ${FlexCenter}
-  color: ${colors.grey[800]};
+  color: ${colors.primary[800]};
   font-size: 0.93rem;
   gap: 1rem;
   padding: 1.5rem 0;

@@ -1,23 +1,19 @@
 // Styles
 import { Table } from '@/components/ui/Table'
-import { AnimalMock } from '@/mocks/Animal/Animal.mock'
+import { animalMock } from '@/mocks/Animal/Animal.mock'
 import { useEffect, useState } from 'react'
 import * as S from './Animal.styles'
-import type { IAnimal } from './Animal.types'
+import type { AnimalInformation } from './Animal.types'
 
 export const Animal: FC = () => {
-	const [animal, setAnimal] = useState<IAnimal>(ANIMAL_INITIAL_STATE)
+	const [animal, setAnimal] = useState<AnimalInformation>(ANIMAL_INITIAL_STATE)
 
 	useEffect(() => {
-		setAnimal(AnimalMock)
+		setAnimal(animalMock)
 	}, [])
 
 	return (
 		<S.Container>
-			<S.ImageContainer>
-				<S.Image src={animal.picture} alt={animal.species} />
-			</S.ImageContainer>
-
 			<S.InfoContainer>
 				<S.Label>Animal ID</S.Label>
 				<div>
@@ -49,31 +45,78 @@ export const Animal: FC = () => {
 						<S.Label>Purchase Date</S.Label>
 						<S.Value>{animal.purchaseDate?.format('MM/DD/YYYY')}</S.Value>
 					</div>
+					{animal.soldDate && (
+						<div>
+							<S.Label>Purchase Date</S.Label>
+							<S.Value>{animal.soldDate?.format('MM/DD/YYYY')}</S.Value>
+						</div>
+					)}
+					{animal.deathDate && (
+						<div>
+							<S.Label>Death Date</S.Label>
+							<S.Value>{animal.deathDate?.format('MM/DD/YYYY')}</S.Value>
+						</div>
+					)}
 				</div>
 			</S.InfoContainer>
 
+			<S.ImageContainer>
+				<S.Image src={animal.picture} alt={animal.species} />
+			</S.ImageContainer>
+
 			<S.RelatedAnimalsContainer>
-				<S.Label>Related Animals</S.Label>
-				{animal.relatedAnimal?.map((relatedAnimal) => (
-					<div key={relatedAnimal.animalId}>
-						<div>
-							<S.Label>Species</S.Label>
-							<S.Value>{relatedAnimal.species}</S.Value>
-						</div>
-						<div>
-							<S.Label>Breed</S.Label>
-							<S.Value>{relatedAnimal.breed}</S.Value>
-						</div>
-						<div>
-							<S.Label>Gender</S.Label>
-							<S.Value>{relatedAnimal.gender}</S.Value>
-						</div>
-						<div>
-							<S.Label>Relation</S.Label>
-							<S.Value>{relatedAnimal.relation}</S.Value>
-						</div>
-					</div>
-				))}
+				{animal.relatedAnimals.parents?.length !== 0 && <S.Label>Parents Related Animals</S.Label>}
+				{animal.relatedAnimals.parents?.length !== 0 && (
+					<Table>
+						<Table.Head>
+							<Table.Row>
+								<Table.HeadCell>Animal ID</Table.HeadCell>
+								<Table.HeadCell>Species</Table.HeadCell>
+								<Table.HeadCell>Breed</Table.HeadCell>
+								<Table.HeadCell>Gender</Table.HeadCell>
+								<Table.HeadCell>Relation</Table.HeadCell>
+							</Table.Row>
+						</Table.Head>
+						<Table.Body>
+							{animal.relatedAnimals.parents?.map((parent) => (
+								<Table.Row key={parent.animalId}>
+									<Table.Cell>{parent.animalId}</Table.Cell>
+									<Table.Cell>{parent.species}</Table.Cell>
+									<Table.Cell>{parent.breed}</Table.Cell>
+									<Table.Cell>{parent.gender}</Table.Cell>
+									<Table.Cell>{parent.relation}</Table.Cell>
+								</Table.Row>
+							))}
+						</Table.Body>
+					</Table>
+				)}
+				{animal.relatedAnimals.children?.length !== 0 && (
+					<S.Label>Children Related Animals</S.Label>
+				)}
+				{animal.relatedAnimals.children?.length !== 0 && (
+					<Table>
+						<Table.Head>
+							<Table.Row>
+								<Table.HeadCell>Animal ID</Table.HeadCell>
+								<Table.HeadCell>Species</Table.HeadCell>
+								<Table.HeadCell>Breed</Table.HeadCell>
+								<Table.HeadCell>Gender</Table.HeadCell>
+								<Table.HeadCell>Relation</Table.HeadCell>
+							</Table.Row>
+						</Table.Head>
+						<Table.Body>
+							{animal.relatedAnimals.children?.map((child) => (
+								<Table.Row key={child.animalId}>
+									<Table.Cell>{child.animalId}</Table.Cell>
+									<Table.Cell>{child.species}</Table.Cell>
+									<Table.Cell>{child.breed}</Table.Cell>
+									<Table.Cell>{child.gender}</Table.Cell>
+									<Table.Cell>{child.relation}</Table.Cell>
+								</Table.Row>
+							))}
+						</Table.Body>
+					</Table>
+				)}
 			</S.RelatedAnimalsContainer>
 
 			<S.TableContainer>
@@ -121,11 +164,19 @@ export const Animal: FC = () => {
 	)
 }
 
-const ANIMAL_INITIAL_STATE: IAnimal = {
+const ANIMAL_INITIAL_STATE: AnimalInformation = {
 	animalId: 0,
-	species: '',
+	species: 'Cow',
 	breed: '',
-	gender: '',
+	gender: 'Male',
 	color: '',
 	weight: 0,
+	picture: '',
+	relatedAnimals: {
+		parents: [],
+		children: [],
+	},
+	healthRecords: [],
+	birthDate: undefined,
+	purchaseDate: undefined,
 }

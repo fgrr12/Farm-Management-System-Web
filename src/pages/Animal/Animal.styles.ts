@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const Container = styled.div`
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 2fr;
     justify-content: center;
     align-items: center;
     gap: 1rem;
@@ -58,7 +58,8 @@ export const InfoContainer = styled.div`
 export const RelatedAnimalsContainer = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.6rem;
+    height: 45vh;
 
     & > div {
         display: grid;
@@ -81,5 +82,5 @@ export const TableContainer = styled.div`
     display: flex;
     flex-direction: column;
     grid-column: span 3;
-    height: 64vh;
+    height: 50vh;
 `

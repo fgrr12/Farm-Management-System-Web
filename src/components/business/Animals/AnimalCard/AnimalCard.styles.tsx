@@ -29,7 +29,7 @@ export const TopInfoContainer = styled.div`
     h5 {
         font-size: 1rem;
         font-weight: 500;
-        color: ${colors.grey[600]};
+        color: ${colors.primary[600]};
     }
 `
 

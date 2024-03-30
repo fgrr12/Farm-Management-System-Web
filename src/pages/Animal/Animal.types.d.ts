@@ -1,24 +1,11 @@
 import type dayjs from 'dayjs'
 
-export interface IAnimal {
-	animalId: number
-	species: string
-	breed: string
-	gender: string
-	color: string
-	weight: number
-	picture?: string
-	relatedAnimal?: RelatedAnimal[]
-	healthRecords?: AnimalHealthRecord[]
-	birthDate?: dayjs.Dayjs
-	purchaseDate?: dayjs.Dayjs
-}
 export interface RelatedAnimal {
 	animalId: number
-	species: string
+	species: Species
 	breed: string
-	gender: string
-	relation: string
+	gender: Gender
+	relation: Relation
 }
 
 export interface AnimalHealthRecord {
@@ -36,4 +23,25 @@ export interface AnimalHealthRecord {
 	dosage?: string
 	frequency?: string
 	duration?: string
+}
+
+export interface RelatedAnimals {
+	children?: RelatedAnimal[]
+	parents?: RelatedAnimal[]
+}
+
+export interface AnimalInformation {
+	animalId: number
+	species: Species
+	breed: string
+	gender: Gender
+	color: string
+	weight: number
+	relatedAnimals: RelatedAnimals
+	picture?: string
+	healthRecords?: AnimalHealthRecord[]
+	birthDate?: dayjs.Dayjs
+	purchaseDate?: dayjs.Dayjs
+	soldDate?: dayjs.Dayjs
+	deathDate?: dayjs.Dayjs
 }
