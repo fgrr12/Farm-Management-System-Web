@@ -1,16 +1,69 @@
-// Styles
-import { Table } from '@/components/ui/Table'
-import { animalMock } from '@/mocks/Animal/Animal.mock'
+import firestoreHandler from '@/config/persistence/firestoreHandler'
 import { useEffect, useState } from 'react'
-import * as S from './Animal.styles'
+
+// Components
+import { Table } from '@/components/ui/Table'
+
+//Mocks
+
+// Types
 import type { AnimalInformation } from './Animal.types'
+
+// Styles
+import dayjs from 'dayjs'
+import * as S from './Animal.styles'
 
 export const Animal: FC = () => {
 	const [animal, setAnimal] = useState<AnimalInformation>(ANIMAL_INITIAL_STATE)
 
 	useEffect(() => {
-		setAnimal(animalMock)
+		getAnimal()
 	}, [])
+
+	const getAnimal = async () => {
+		// const parents = animalMock.relatedAnimals.parents?.map((parent) => ({
+		// 	animalId: parent.animalId,
+		// 	relation: parent.relation,
+		// }))
+		// const children = animalMock.relatedAnimals.children?.map((child) => ({
+		// 	animalId: child.animalId,
+		// 	relation: child.relation,
+		// }))
+		// const healthRecords = animalMock.healthRecords?.map((healthRecord) => ({
+		// 	reason: healthRecord.reason,
+		// 	notes: healthRecord.notes,
+		// 	type: healthRecord.type,
+		// 	reviewedBy: healthRecord.reviewedBy,
+		// 	date: dayjs(healthRecord.date).format('MM/DD/YYYY'),
+		// 	weight: healthRecord.weight,
+		// 	temperature: healthRecord.temperature,
+		// 	medication: healthRecord.medication,
+		// 	dosage: healthRecord.dosage,
+		// 	frequency: healthRecord.frequency,
+		// 	duration: healthRecord.duration,
+		// }))
+
+		// await firestoreHandler.updateDocument('animals', '1', {
+		// 	animalId: animalMock.animalId,
+		// 	species: animalMock.species,
+		// 	breed: animalMock.breed,
+		// 	gender: animal.gender,
+		// 	color: animalMock.color,
+		// 	weight: animalMock.weight,
+		// 	picture: animalMock.picture,
+		// 	relatedAnimals: {
+		// 		parents: parents,
+		// 		children: children,
+		// 	},
+		// 	healthRecords: healthRecords,
+		// 	birthDate: dayjs(animalMock.birthDate).format('MM/DD/YYYY'),
+		// 	purchaseDate: dayjs(animalMock.purchaseDate).format('MM/DD/YYYY'),
+		// })
+
+		const dbData = (await firestoreHandler.getDocument('animals', '1')) as AnimalInformation
+
+		setAnimal(dbData)
+	}
 
 	return (
 		<S.Container>
@@ -40,22 +93,22 @@ export const Animal: FC = () => {
 						</div>
 						<div>
 							<S.Label>Birth Date</S.Label>
-							<S.Value>{animal.birthDate?.format('MM/DD/YYYY')}</S.Value>
+							<S.Value>{dayjs(animal.birthDate).format('MM/DD/YYYY')}</S.Value>
 						</div>
 						<div>
 							<S.Label>Purchase Date</S.Label>
-							<S.Value>{animal.purchaseDate?.format('MM/DD/YYYY')}</S.Value>
+							<S.Value>{dayjs(animal.purchaseDate).format('MM/DD/YYYY')}</S.Value>
 						</div>
 						{animal.soldDate && (
 							<div>
 								<S.Label>Purchase Date</S.Label>
-								<S.Value>{animal.soldDate?.format('MM/DD/YYYY')}</S.Value>
+								<S.Value>{dayjs(animal.soldDate).format('MM/DD/YYYY')}</S.Value>
 							</div>
 						)}
 						{animal.deathDate && (
 							<div>
 								<S.Label>Death Date</S.Label>
-								<S.Value>{animal.deathDate?.format('MM/DD/YYYY')}</S.Value>
+								<S.Value>{dayjs(animal.deathDate).format('MM/DD/YYYY')}</S.Value>
 							</div>
 						)}
 					</div>
@@ -91,7 +144,7 @@ export const Animal: FC = () => {
 								<Table.Cell>{healthRecord.notes}</Table.Cell>
 								<Table.Cell>{healthRecord.type}</Table.Cell>
 								<Table.Cell>{healthRecord.reviewedBy}</Table.Cell>
-								<Table.Cell>{healthRecord.date.format('MM/DD/YYYY')}</Table.Cell>
+								<Table.Cell>{dayjs(healthRecord.date).format('MM/DD/YYYY')}</Table.Cell>
 								<Table.Cell>{healthRecord.weight}</Table.Cell>
 								<Table.Cell>{healthRecord.temperature}</Table.Cell>
 								<Table.Cell>{healthRecord.medication}</Table.Cell>

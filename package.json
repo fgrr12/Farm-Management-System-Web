@@ -4,7 +4,7 @@
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {
-		"dev": "vite",
+		"dev": "dotenv -e .env.local vite -- --mode local-develop",
 		"build:production": "tsc && dotenv -e .env.production vite build -- --mode production",
 		"build:develop": "tsc && dotenv -e .env.develop vite build -- --mode develop",
 		"preview": "vite preview",
