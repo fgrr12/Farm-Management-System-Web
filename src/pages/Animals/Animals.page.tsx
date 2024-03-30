@@ -7,14 +7,14 @@ import { useNavigate } from 'react-router-dom'
 import { AnimalCard } from '@/components/business/Animals/AnimalCard'
 
 //Types
-import type { IAnimalCard } from './Animals.types'
+import type { AnimalCardInformation } from './Animals.types'
 
 // Styles
 import * as S from './Animals.styles'
 
 export const Animals = () => {
 	const navigation = useNavigate()
-	const [animals, setAnimals] = useState<IAnimalCard[]>([])
+	const [animals, setAnimals] = useState<AnimalCardInformation[]>([])
 
 	const navigateToAnimal = (uuid: string) => {
 		const path = AppRoutes.ANIMAL.replace(':animalUuid', uuid)
@@ -22,7 +22,7 @@ export const Animals = () => {
 	}
 
 	const getAnimals = async () => {
-		const dbAnimals = (await firestoreHandler.getCollection('animals')) as IAnimalCard[]
+		const dbAnimals = (await firestoreHandler.getCollection('animals')) as AnimalCardInformation[]
 		setAnimals(dbAnimals)
 	}
 
