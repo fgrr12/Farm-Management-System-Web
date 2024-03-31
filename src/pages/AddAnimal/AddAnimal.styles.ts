@@ -6,7 +6,7 @@ export const Container = styled.div`
     flex-direction: column;
     align-items: center;
     background-color: ${colors.primary[50]};
-    height: 100vh;
+    min-height: 100vh;
 `
 
 export const Form = styled.form`
@@ -20,17 +20,23 @@ export const Form = styled.form`
     & > button {
         grid-column: span 2;
     }
+
+    @media (max-width: 768px) {
+        padding: 1rem;
+        grid-template-columns: 1fr;
+
+        & > button {
+            grid-column: 1;
+        }
+    }
 `
 
 export const DropzoneContainer = styled.div`
     height: 100%;
     grid-row: 1 / 4;
     grid-column: 2;
-`
 
-export const TextFieldContainer = styled.div`
-    grid-column: span 3;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+    @media (max-width: 768px) {
+        grid-column: 1;
+    }
 `
