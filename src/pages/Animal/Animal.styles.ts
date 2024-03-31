@@ -4,9 +4,9 @@ import styled from 'styled-components'
 export const Container = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: center;
     gap: 2rem;
     width: 100%;
+    min-height: calc(100vh - 76px);
     padding: 1rem 2rem;
     overflow: auto;
     background-color: ${colors.primary[50]};

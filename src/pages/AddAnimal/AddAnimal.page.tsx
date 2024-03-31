@@ -57,6 +57,8 @@ export const AddAnimal = () => {
 				picture: image.metadata.fullPath,
 				birthDate: animalForm.birthDate?.format('YYYY-MM-DD'),
 				purchaseDate: animalForm.purchaseDate?.format('YYYY-MM-DD'),
+				relatedAnimals: { children: [], parents: [] },
+				healthRecords: [],
 			})
 
 			setModalData({

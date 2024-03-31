@@ -31,8 +31,8 @@ export interface AnimalHealthRecord {
 }
 
 export interface RelatedAnimals {
-	children?: RelatedAnimal[]
-	parents?: RelatedAnimal[]
+	children: RelatedAnimal[]
+	parents: RelatedAnimal[]
 }
 
 export interface AnimalInformation {
@@ -45,7 +45,7 @@ export interface AnimalInformation {
 	weight: number
 	relatedAnimals: RelatedAnimals
 	picture?: string
-	healthRecords?: AnimalHealthRecord[]
+	healthRecords: AnimalHealthRecord[]
 	birthDate?: dayjs.Dayjs
 	purchaseDate?: dayjs.Dayjs
 	soldDate?: dayjs.Dayjs
