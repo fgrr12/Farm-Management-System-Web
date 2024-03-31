@@ -6,7 +6,7 @@ export const Container = styled.div`
     flex-direction: column;
     gap: 2rem;
     width: 100%;
-    min-height: calc(100vh - 76px);
+    height: 100%;
     padding: 1rem 2rem;
     overflow: auto;
     background-color: ${colors.primary[50]};
@@ -17,6 +17,7 @@ export const Container = styled.div`
 
     @media (max-width: 768px) {
         padding: 1rem;
+        gap: 1rem;
     }
 `
 
@@ -29,6 +30,7 @@ export const AnimalContainer = styled.div`
         display: flex;
         flex-direction: column-reverse;
         gap: 1rem;
+        padding: 0;
     }
 `
 
