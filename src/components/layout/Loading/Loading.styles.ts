@@ -17,7 +17,7 @@ export const Loading = styled.dialog`
 export const Spinner = styled.div`
 	width: 5rem;
 	height: 5rem;
-	border: 0.5rem solid ${colors.primary600};
+	border: 0.5rem solid ${colors.primary[600]};
 	border-top-color: transparent;
 	border-radius: 50%;
 	animation: spin 1.5s linear infinite;

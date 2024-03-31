@@ -8,7 +8,7 @@ export const ModalDialog = styled.dialog`
 	left: 50%;
 	transform: translate(-50%, -50%);
 	background-color: ${colors.white};
-	border: 2px solid ${colors.primary500};
+	border: 2px solid ${colors.primary[500]};
 	border-radius: 0.5rem;
 	overflow: hidden;
 
