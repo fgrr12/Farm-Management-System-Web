@@ -16,7 +16,7 @@ export const ButtonContainer = styled.div`
 
 export const AnimalsContainer = styled.div`
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(calc(25% - 1rem), 1fr));
     gap: 1rem;
     width: 100%;
     padding: 1rem;
@@ -24,5 +24,9 @@ export const AnimalsContainer = styled.div`
 
     &::-webkit-scrollbar {
         display: none;
+    }
+
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
     }
 `

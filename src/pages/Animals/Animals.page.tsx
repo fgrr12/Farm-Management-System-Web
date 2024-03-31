@@ -12,10 +12,12 @@ import type { AnimalCardInformation } from './Animals.types'
 
 // Styles
 import { Button } from '@/components/ui/Button'
+import { DEFAULT_MODAL_DATA, useAppStore } from '@/store/useAppStore'
 import * as S from './Animals.styles'
 
 export const Animals = () => {
 	const navigation = useNavigate()
+	const { setLoading, setModalData } = useAppStore()
 	const [animals, setAnimals] = useState<AnimalCardInformation[]>([])
 
 	const navigateToAnimal = (uuid: string) => {
@@ -24,8 +26,20 @@ export const Animals = () => {
 	}
 
 	const getAnimals = async () => {
-		const dbAnimals = (await firestoreHandler.getCollection('animals')) as AnimalCardInformation[]
-		setAnimals(dbAnimals)
+		try {
+			setLoading(true)
+			const dbAnimals = (await firestoreHandler.getCollection('animals')) as AnimalCardInformation[]
+			setAnimals(dbAnimals)
+		} catch (error) {
+			setModalData({
+				open: true,
+				title: 'Error',
+				message: 'Ocurrió un error al obtener los animales',
+				onAccept: () => DEFAULT_MODAL_DATA,
+			})
+		} finally {
+			setLoading(false)
+		}
 	}
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: This error is due to withFetching HOF

@@ -14,11 +14,12 @@ import type { AnimalInformation } from './Animal.types'
 
 // Styles
 import storageHandler from '@/config/persistence/storageHandler'
+import { DEFAULT_MODAL_DATA, useAppStore } from '@/store/useAppStore'
 import * as S from './Animal.styles'
 
 export const Animal: FC = () => {
 	const location = useLocation()
-	const { pathname } = location
+	const { setLoading, setModalData } = useAppStore()
 	const [animal, setAnimal] = useState<AnimalInformation>(ANIMAL_INITIAL_STATE)
 	const [user] = useState<boolean>(false) // useState<UserInformation>(USER_INITIAL_STATE)
 
@@ -63,14 +64,27 @@ export const Animal: FC = () => {
 		// 	birthDate: dayjs(animalMock.birthDate).format('MM/DD/YYYY'),
 		// 	purchaseDate: dayjs(animalMock.purchaseDate).format('MM/DD/YYYY'),
 		// })
+		try {
+			setLoading(true)
+			const { pathname } = location
+			const animalId = pathname.split('/').pop()
 
-		const animalId = pathname.split('/').pop()
-		const dbData = (await firestoreHandler.getDocument('animals', animalId!)) as AnimalInformation
-		if (dbData.picture) {
-			dbData.picture = await storageHandler.getPicture(dbData.picture)
+			const dbData = (await firestoreHandler.getDocument('animals', animalId!)) as AnimalInformation
+			if (dbData.picture) {
+				dbData.picture = await storageHandler.getPicture(dbData.picture)
+			}
+
+			setAnimal(dbData)
+		} catch (error) {
+			setModalData({
+				open: true,
+				title: 'Error',
+				message: 'Ocurrió un error al obtener el animal',
+				onAccept: () => DEFAULT_MODAL_DATA,
+			})
+		} finally {
+			setLoading(false)
 		}
-
-		setAnimal(dbData)
 	}
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: This error is due to withFetching HOF
