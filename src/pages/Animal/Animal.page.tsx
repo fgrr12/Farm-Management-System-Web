@@ -20,7 +20,7 @@ export const Animal: FC = () => {
 	const location = useLocation()
 	const { pathname } = location
 	const [animal, setAnimal] = useState<AnimalInformation>(ANIMAL_INITIAL_STATE)
-	const [user, setUser] = useState<boolean>(false) // useState<UserInformation>(USER_INITIAL_STATE)
+	const [user] = useState<boolean>(false) // useState<UserInformation>(USER_INITIAL_STATE)
 
 	const getAnimal = async () => {
 		// const parents = animalMock.relatedAnimals.parents?.map((parent) => ({
