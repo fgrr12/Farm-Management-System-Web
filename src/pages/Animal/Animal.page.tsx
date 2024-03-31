@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
 // Components
-import { RelatedAnimalsTable } from '@/components/business/Animal/RelatedAnimalsTable/RelatedAnimalsTable.component'
+import { RelatedAnimalsTable } from '@/components/business/Animal/RelatedAnimalsTable'
 import { ActionButton } from '@/components/ui/ActionButton'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { Table } from '@/components/ui/Table'

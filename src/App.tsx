@@ -6,6 +6,7 @@ import { Animal } from './pages/Animal'
 import { Animals } from './pages/Animals'
 
 // Styles
+import { AddAnimal } from './pages/AddAnimal'
 import { AppContainer } from './styles/root'
 
 export const App: FC = () => {
@@ -16,6 +17,7 @@ export const App: FC = () => {
 					<Route path="/" element={<Navigate to={AppRoutes.ANIMALS} />} />
 					<Route path={AppRoutes.ANIMALS} element={<Animals />} />
 					<Route path={AppRoutes.ANIMAL} element={<Animal />} />
+					<Route path={AppRoutes.ADD_ANIMAL} element={<AddAnimal />} />
 
 					<Route path={AppRoutes.LOGIN} element={<Animals />} />
 					<Route path={AppRoutes.REGISTER} element={<Animals />} />
