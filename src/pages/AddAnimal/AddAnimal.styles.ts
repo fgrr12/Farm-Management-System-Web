@@ -33,7 +33,7 @@ export const Form = styled.form`
 
 export const DropzoneContainer = styled.div`
     height: 100%;
-    grid-row: 1 / 4;
+    grid-row: 1 / 5;
     grid-column: 2;
 
     @media (max-width: 768px) {

@@ -5,16 +5,19 @@ import { Dropzone } from '@/components/ui/Dropzone'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { Select } from '@/components/ui/Select'
 import { TextField } from '@/components/ui/TextField'
+import { AppRoutes } from '@/config/constants/routes'
 import firestoreHandler from '@/config/persistence/firestoreHandler'
 import storageHandler from '@/config/persistence/storageHandler'
 import { DEFAULT_MODAL_DATA, useAppStore } from '@/store/useAppStore'
 import { fileToBase64 } from '@/utils/fileToBase64'
 import dayjs from 'dayjs'
 import { useState, type ChangeEvent, type FormEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
 import * as S from './AddAnimal.styles'
 import type { AnimalForm } from './AddAnimal.types'
 
 export const AddAnimal = () => {
+	const navigate = useNavigate()
 	const { setLoading, setModalData } = useAppStore()
 	const [animalForm, setAnimalForm] = useState<AnimalForm>(INITIAL_ANIMAL_FORM)
 
@@ -65,7 +68,10 @@ export const AddAnimal = () => {
 				open: true,
 				title: 'Animal Added',
 				message: 'The animal was added successfully',
-				onAccept: () => setModalData(DEFAULT_MODAL_DATA),
+				onAccept: () => {
+					setModalData(DEFAULT_MODAL_DATA)
+					navigate(AppRoutes.ANIMALS)
+				},
 			})
 		} catch (error) {
 			setModalData({

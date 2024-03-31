@@ -22,9 +22,13 @@ export const Modal = styled.main`
 	display: flex;
 	flex-direction: column;
 	min-width: 30rem;
-	background-color: var(--color-white);
+	background-color: ${colors.white};
 	margin: 0;
 	gap: 2rem;
+
+	@media (max-width: 768px) {
+		min-width: 15rem;
+	}
 `
 
 export const ModalHeader = styled.header`
@@ -32,7 +36,7 @@ export const ModalHeader = styled.header`
 	background-color: var(--color-primary);
 
 	& > h2 {
-		color: var(--color-white);
+		color: ${colors.black};
 	}
 `
 

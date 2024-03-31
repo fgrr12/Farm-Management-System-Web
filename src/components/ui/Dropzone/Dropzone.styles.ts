@@ -87,8 +87,13 @@ export const FileName = styled(Label).attrs({ as: 'p' })`
 export const Img = styled.img`
     width: 100%;
     height: 100%;
-    max-height: 206px;
+    max-height: 400px;
     max-width: 400px;
     object-fit: fill;
     border-radius: 0.5rem;
+
+    @media screen and (max-width: 768px) {
+        max-height: 300px;
+        max-width: 300px;
+    }
 `
