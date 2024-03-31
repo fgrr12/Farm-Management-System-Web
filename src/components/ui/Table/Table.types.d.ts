@@ -1,5 +1,5 @@
 import type { PropsWithChildren, TableHTMLAttributes } from 'react'
-import type { Head, Body, Row, HeadCell, Cell } from './Table.styles'
+import type { Body, Cell, Head, HeadCell, Row } from './Table.styles'
 
 export type TableProps = PropsWithChildren<TableHTMLAttributes<HTMLTableElement>>
 

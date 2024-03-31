@@ -89,6 +89,10 @@ export const CenterTitle = styled.div`
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
+
+    & > span {
+        padding: 0.5rem;
+    }
 `
 
 export const InfoTableContainer = styled.div`

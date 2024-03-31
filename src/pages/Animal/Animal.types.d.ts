@@ -11,9 +11,7 @@ declare type healthRecordType =
 
 export interface RelatedAnimal {
 	animalId: number
-	species: Species
 	breed: string
-	gender: Gender
 	relation: Relation
 }
 
