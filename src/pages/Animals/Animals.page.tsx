@@ -11,6 +11,7 @@ import { PageHeader } from '@/components/ui/PageHeader'
 import type { AnimalCardInformation } from './Animals.types'
 
 // Styles
+import { Button } from '@/components/ui/Button'
 import * as S from './Animals.styles'
 
 export const Animals = () => {
@@ -32,9 +33,14 @@ export const Animals = () => {
 		getAnimals()
 	}, [])
 
+	//! Añadir tabla de producción (x fecha el animal produce x cantidad de leche)
+
 	return (
 		<S.Container>
 			<PageHeader>Animales</PageHeader>
+			<S.ButtonContainer>
+				<Button onClick={() => navigation(AppRoutes.ADD_ANIMAL)}>Agregar animal</Button>
+			</S.ButtonContainer>
 			<S.AnimalsContainer>
 				{animals.map((animal) => (
 					<AnimalCard

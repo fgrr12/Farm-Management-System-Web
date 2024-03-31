@@ -14,12 +14,22 @@ export const Container = styled.div`
     &::-webkit-scrollbar {
         display: none;
     }
+
+    @media (max-width: 768px) {
+        padding: 1rem;
+    }
 `
 
 export const AnimalContainer = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr;
     padding: 1rem 0;
+
+    @media (max-width: 768px) {
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 1rem;
+    }
 `
 
 export const ImageContainer = styled.div`
@@ -85,4 +95,10 @@ export const InfoTableContainer = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
+
+    @media (max-width: 768px) {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
 `

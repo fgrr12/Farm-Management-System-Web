@@ -174,18 +174,20 @@ export const Animal: FC = () => {
 						<Table.Body>
 							{animal.healthRecords?.map((healthRecord) => (
 								<Table.Row key={crypto.randomUUID()}>
-									<Table.Cell>{healthRecord.reason}</Table.Cell>
-									<Table.Cell>{healthRecord.notes}</Table.Cell>
-									<Table.Cell>{healthRecord.type}</Table.Cell>
-									<Table.Cell>{healthRecord.reviewedBy}</Table.Cell>
-									<Table.Cell>{dayjs(healthRecord.date).format('MM/DD/YYYY')}</Table.Cell>
-									<Table.Cell>{healthRecord.weight}</Table.Cell>
-									<Table.Cell>{healthRecord.temperature}</Table.Cell>
-									<Table.Cell>{healthRecord.medication}</Table.Cell>
-									<Table.Cell>{healthRecord.dosage}</Table.Cell>
-									<Table.Cell>{healthRecord.frequency}</Table.Cell>
-									<Table.Cell>{healthRecord.duration}</Table.Cell>
-									<Table.Cell>
+									<Table.Cell data-title="Reason">{healthRecord.reason}</Table.Cell>
+									<Table.Cell data-title="Notes">{healthRecord.notes}</Table.Cell>
+									<Table.Cell data-title="Type">{healthRecord.type}</Table.Cell>
+									<Table.Cell data-title="Reviewed By">{healthRecord.reviewedBy}</Table.Cell>
+									<Table.Cell data-title="Date">
+										{dayjs(healthRecord.date).format('MM/DD/YYYY')}
+									</Table.Cell>
+									<Table.Cell data-title="Weight">{healthRecord.weight}</Table.Cell>
+									<Table.Cell data-title="Temperature">{healthRecord.temperature}</Table.Cell>
+									<Table.Cell data-title="Medication">{healthRecord.medication}</Table.Cell>
+									<Table.Cell data-title="Dosage">{healthRecord.dosage}</Table.Cell>
+									<Table.Cell data-title="Frequency">{healthRecord.frequency}</Table.Cell>
+									<Table.Cell data-title="Duration">{healthRecord.duration}</Table.Cell>
+									<Table.Cell data-title="Actions">
 										<ActionButton
 											title="Edit"
 											icon="i-material-symbols-edit-square-outline"
@@ -226,10 +228,10 @@ export const Animal: FC = () => {
 								<Table.Body>
 									{animal.relatedAnimals.parents?.map((parent) => (
 										<Table.Row key={crypto.randomUUID()}>
-											<Table.Cell>{parent.animalId}</Table.Cell>
-											<Table.Cell>{parent.breed}</Table.Cell>
-											<Table.Cell>{parent.relation}</Table.Cell>
-											<Table.Cell>
+											<Table.Cell data-title="Animal ID">{parent.animalId}</Table.Cell>
+											<Table.Cell data-title="Breed">{parent.breed}</Table.Cell>
+											<Table.Cell data-title="Relation">{parent.relation}</Table.Cell>
+											<Table.Cell data-title="Actions">
 												<ActionButton title="View" icon="i-material-symbols-visibility-outline" />
 												<ActionButton
 													title="Edit"
@@ -271,10 +273,10 @@ export const Animal: FC = () => {
 								<Table.Body>
 									{animal.relatedAnimals.children?.map((child) => (
 										<Table.Row key={crypto.randomUUID()}>
-											<Table.Cell>{child.animalId}</Table.Cell>
-											<Table.Cell>{child.breed}</Table.Cell>
-											<Table.Cell>{child.relation}</Table.Cell>
-											<Table.Cell>
+											<Table.Cell data-title="Animal ID">{child.animalId}</Table.Cell>
+											<Table.Cell data-title="Breed">{child.breed}</Table.Cell>
+											<Table.Cell data-title="Relation">{child.relation}</Table.Cell>
+											<Table.Cell data-title="Actions">
 												<ActionButton title="View" icon="i-material-symbols-visibility-outline" />
 												<ActionButton
 													title="Edit"

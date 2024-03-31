@@ -7,6 +7,13 @@ export const Container = styled.div`
     height: 100vh;
 `
 
+export const ButtonContainer = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+`
+
 export const AnimalsContainer = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));

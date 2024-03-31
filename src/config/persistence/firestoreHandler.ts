@@ -10,8 +10,6 @@ const getCollection = async (collectionName: string) => {
 const getDocument = async (collectionName: string, documentId: string) => {
 	const docRef = doc(firestore, collectionName, documentId)
 	const docSnap = await getDoc(docRef)
-	console.log(docSnap.id)
-
 	return docSnap.data()
 }
 

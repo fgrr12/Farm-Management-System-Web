@@ -4,4 +4,5 @@ export enum AppRoutes {
 	CHANGE_PASSWORD = '/change-password',
 	ANIMALS = '/animals',
 	ANIMAL = '/animals/:animalUuid',
+	ADD_ANIMAL = '/add-animal',
 }
