@@ -100,7 +100,7 @@ export const AddAnimal = () => {
 				<S.DropzoneContainer>
 					<Dropzone className="dropzone" cleanFile={false} onFile={handleFile} />
 				</S.DropzoneContainer>
-				<Select label="Species" onChange={handleSelectChange}>
+				<Select name="species" label="Species" onChange={handleSelectChange}>
 					{species.map((species) => (
 						<option key={species} value={species}>
 							{species}
@@ -115,7 +115,7 @@ export const AddAnimal = () => {
 					onChange={handleTextChange}
 					required
 				/>
-				<Select label="Gender" onChange={handleSelectChange}>
+				<Select name="gender" label="Gender" onChange={handleSelectChange}>
 					{genders.map((gender) => (
 						<option key={gender} value={gender}>
 							{gender}

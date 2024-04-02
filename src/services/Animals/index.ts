@@ -16,11 +16,7 @@ export module AnimalsService {
 
 		if (selectedSpecies !== 'all') {
 			const animals = await getDocs(
-				query(
-					collection(firestore, collectionName),
-					where('species', '==', selectedSpecies),
-					orderBy('animalId')
-				)
+				query(collection(firestore, collectionName), where('species', '==', selectedSpecies))
 			)
 			response = animals.docs.map((doc) => doc.data())
 		} else {

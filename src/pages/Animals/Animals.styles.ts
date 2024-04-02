@@ -4,11 +4,7 @@ export const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: calc(100vh - 76px);
-
-    @media (max-width: 768px) {
-        height: 100%;
-    }
+    height: 100%;
 `
 
 export const ButtonContainer = styled.div`

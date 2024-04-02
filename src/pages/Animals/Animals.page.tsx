@@ -53,7 +53,7 @@ export const Animals = () => {
 				open: true,
 				title: 'Error',
 				message: 'Ocurrió un error al obtener los animales',
-				onAccept: () => defaultModalData,
+				onAccept: () => setModalData(defaultModalData),
 			})
 		} finally {
 			setLoading(false)
@@ -69,7 +69,7 @@ export const Animals = () => {
 				open: true,
 				title: 'Error',
 				message: 'Ocurrió un error al obtener las especies',
-				onAccept: () => defaultModalData,
+				onAccept: () => setModalData(defaultModalData),
 			})
 		} finally {
 			setLoading(false)
@@ -94,7 +94,7 @@ export const Animals = () => {
 			<PageHeader>Animales</PageHeader>
 			<S.ButtonContainer>
 				<Search onKeyDown={handleSearchKeyPress} />
-				<Select label="Species" onChange={handleSelectChange}>
+				<Select name="selectedSpecies" label="Species" onChange={handleSelectChange}>
 					<option value="all">All</option>
 					{species.map((specie) => (
 						<option key={specie} value={specie}>
