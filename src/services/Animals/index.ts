@@ -32,8 +32,6 @@ export module AnimalsService {
 			)
 		}
 
-		console.log(response)
-
 		return response as GetAnimalsResponse[]
 	}
 
