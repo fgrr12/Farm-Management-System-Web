@@ -1,36 +1,36 @@
 {
-    "header": {
-        "return": "Volver"
-    },
-    "animals": {
-        "title": "Animales",
-        "search": "Buscar",
-        "species": "Especies",
-        "all": "Todos",
-        "addAnimal": "Añadir animal"
-    },
-    "animalCard": {
-        "birthDate": "Fecha de nacimiento",
-        "gender": "Género",
-        "color": "Color",
-        "view": "Ver"
-    },
-    "addAnimal": {
-        "title": "Añade animal",
-        "animalId": "ID del animal",
-        "species": "Especie",
-        "breed": "Raza",
-        "gender": "Género",
-        "color": "Color",
-        "weight": "Peso",
-        "birthDate": "Fecha de nacimiento",
-        "purchaseDate": "Fecha de compra",
-        "addAnimal": "Añadir animal"
-    },
-    "dropzone":{
-        "nonDrag": "Suelta tu imagen aquí o haz click para seleccionarla",
-        "drag": "Suelta tu imagen aquí",
-        "selected": "Imagen seleccionada:",
-        "invalid": "Solo se permiten imágenes"
-    }
+	"header": {
+		"return": "Volver"
+	},
+	"animals": {
+		"title": "Animales",
+		"search": "Buscar",
+		"species": "Especies",
+		"all": "Todos",
+		"addAnimal": "Añadir animal"
+	},
+	"animalCard": {
+		"birthDate": "Fecha de nacimiento",
+		"gender": "Género",
+		"color": "Color",
+		"view": "Ver"
+	},
+	"addAnimal": {
+		"title": "Añade animal",
+		"animalId": "ID del animal",
+		"species": "Especie",
+		"breed": "Raza",
+		"gender": "Género",
+		"color": "Color",
+		"weight": "Peso",
+		"birthDate": "Fecha de nacimiento",
+		"purchaseDate": "Fecha de compra",
+		"addAnimal": "Añadir animal"
+	},
+	"dropzone": {
+		"nonDrag": "Suelta tu imagen aquí o haz click para seleccionarla",
+		"drag": "Suelta tu imagen aquí",
+		"selected": "Imagen seleccionada:",
+		"invalid": "Solo se permiten imágenes"
+	}
 }
