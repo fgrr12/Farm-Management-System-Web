@@ -1,6 +1,5 @@
 import { AppRoutes } from '@/config/constants/routes'
-import firestoreHandler from '@/config/persistence/firestoreHandler'
-import { useEffect, useState, type ChangeEvent } from 'react'
+import { useEffect, useState, type ChangeEvent, type KeyboardEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 // Components
@@ -14,6 +13,7 @@ import type { AnimalCardInformation, AnimalsFilters } from './Animals.types'
 import { Button } from '@/components/ui/Button'
 import { Search } from '@/components/ui/Search'
 import { Select } from '@/components/ui/Select'
+import { AnimalsService } from '@/services/Animals'
 import { useAppStore } from '@/store/useAppStore'
 import * as S from './Animals.styles'
 
@@ -21,11 +21,19 @@ export const Animals = () => {
 	const navigation = useNavigate()
 	const { defaultModalData, setLoading, setModalData } = useAppStore()
 	const [animals, setAnimals] = useState<AnimalCardInformation[]>([])
+	const [species, setSpecies] = useState<string[]>([])
 	const [filters, setFilters] = useState<AnimalsFilters>(INITIAL_FILTERS)
 
 	const navigateToAnimal = (uuid: string) => {
 		const path = AppRoutes.ANIMAL.replace(':animalUuid', uuid)
 		navigation(path)
+	}
+
+	const handleSearchKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
+		const { value } = event.target as HTMLInputElement
+		if (event.key === 'Enter') {
+			setFilters((prev) => ({ ...prev, search: value }))
+		}
 	}
 
 	const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -36,7 +44,9 @@ export const Animals = () => {
 	const getAnimals = async () => {
 		try {
 			setLoading(true)
-			const dbAnimals = (await firestoreHandler.getCollection('animals')) as AnimalCardInformation[]
+			const { selectedSpecies, search } = filters
+			const dbAnimals = await AnimalsService.getAnimals({ selectedSpecies, search })
+
 			setAnimals(dbAnimals)
 		} catch (error) {
 			setModalData({
@@ -50,10 +60,32 @@ export const Animals = () => {
 		}
 	}
 
+	const getSpecies = async () => {
+		try {
+			const dbSpecies = await AnimalsService.getSpecies()
+			setSpecies(dbSpecies)
+		} catch (error) {
+			setModalData({
+				open: true,
+				title: 'Error',
+				message: 'Ocurrió un error al obtener las especies',
+				onAccept: () => defaultModalData,
+			})
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: This error is due to withFetching HOF
+	useEffect(() => {
+		getSpecies()
+		getAnimals()
+	}, [])
+
 	// biome-ignore lint/correctness/useExhaustiveDependencies: This error is due to withFetching HOF
 	useEffect(() => {
 		getAnimals()
-	}, [])
+	}, [filters])
 
 	//! Añadir tabla de producción (x fecha el animal produce x cantidad de leche)
 
@@ -61,19 +93,21 @@ export const Animals = () => {
 		<S.Container>
 			<PageHeader>Animales</PageHeader>
 			<S.ButtonContainer>
-				<Search />
+				<Search onKeyDown={handleSearchKeyPress} />
 				<Select label="Species" onChange={handleSelectChange}>
 					<option value="all">All</option>
-					<option value="cow">Cow</option>
-					<option value="goat">Goat</option>
-					<option value="sheep">Sheep</option>
+					{species.map((specie) => (
+						<option key={specie} value={specie}>
+							{specie}
+						</option>
+					))}
 				</Select>
 				<Button onClick={() => navigation(AppRoutes.ADD_ANIMAL)}>Agregar animal</Button>
 			</S.ButtonContainer>
 			<S.AnimalsContainer>
 				{animals.map((animal) => (
 					<AnimalCard
-						key={animal.uuid}
+						key={crypto.randomUUID()}
 						animalId={animal.animalId}
 						species={animal.species}
 						breed={animal.breed}
@@ -90,5 +124,5 @@ export const Animals = () => {
 
 const INITIAL_FILTERS: AnimalsFilters = {
 	selectedSpecies: 'all',
-	filter: '',
+	search: '',
 }
