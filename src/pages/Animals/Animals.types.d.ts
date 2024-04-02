@@ -9,3 +9,8 @@ export interface AnimalCardInformation {
 	gender: string
 	color: string
 }
+
+export interface AnimalsFilters {
+	selectedSpecies: string
+	filter: string
+}

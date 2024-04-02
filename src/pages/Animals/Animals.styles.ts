@@ -5,13 +5,32 @@ export const Container = styled.div`
     flex-direction: column;
     align-items: center;
     height: calc(100vh - 76px);
+
+    @media (max-width: 768px) {
+        height: 100%;
+    }
 `
 
 export const ButtonContainer = styled.div`
-    width: 100%;
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(calc(25% - 1rem), 1fr));
     align-items: center;
+    gap: 1rem;
+    width: 100%;
     padding: 1rem;
+
+    & > button {
+        grid-column: 4;
+    }
+
+    @media (max-width: 768px) {
+        display: flex;
+        flex-direction: column;
+
+        & > button {
+            width: 100%;
+        }
+    }
 `
 
 export const AnimalsContainer = styled.div`

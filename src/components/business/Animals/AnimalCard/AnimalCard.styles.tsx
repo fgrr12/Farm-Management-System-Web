@@ -13,6 +13,16 @@ export const Card = styled.div`
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border: 1px solid ${colors.primary[200]};
     user-select: none;
+
+    @media (max-width: 768px) {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+
+        & > button {
+            grid-column: 1 / -1;
+        }
+    }
 `
 
 export const TopInfoContainer = styled.div`
@@ -31,6 +41,10 @@ export const TopInfoContainer = styled.div`
         font-weight: 500;
         color: ${colors.primary[600]};
     }
+
+    @media (max-width: 768px) {
+        text-align: center;
+    }
 `
 
 export const MiddleInfoContainer = styled.div`
@@ -41,5 +55,9 @@ export const MiddleInfoContainer = styled.div`
 
     p {
         font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        text-align: center;
     }
 `

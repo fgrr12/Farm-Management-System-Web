@@ -1,6 +1,6 @@
 import { AppRoutes } from '@/config/constants/routes'
 import firestoreHandler from '@/config/persistence/firestoreHandler'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ChangeEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 // Components
@@ -8,10 +8,12 @@ import { AnimalCard } from '@/components/business/Animals/AnimalCard'
 import { PageHeader } from '@/components/ui/PageHeader'
 
 //Types
-import type { AnimalCardInformation } from './Animals.types'
+import type { AnimalCardInformation, AnimalsFilters } from './Animals.types'
 
 // Styles
 import { Button } from '@/components/ui/Button'
+import { Search } from '@/components/ui/Search'
+import { Select } from '@/components/ui/Select'
 import { useAppStore } from '@/store/useAppStore'
 import * as S from './Animals.styles'
 
@@ -19,10 +21,16 @@ export const Animals = () => {
 	const navigation = useNavigate()
 	const { defaultModalData, setLoading, setModalData } = useAppStore()
 	const [animals, setAnimals] = useState<AnimalCardInformation[]>([])
+	const [filters, setFilters] = useState<AnimalsFilters>(INITIAL_FILTERS)
 
 	const navigateToAnimal = (uuid: string) => {
 		const path = AppRoutes.ANIMAL.replace(':animalUuid', uuid)
 		navigation(path)
+	}
+
+	const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
+		const { name, value } = event.target
+		setFilters((prev) => ({ ...prev, [name]: value }))
 	}
 
 	const getAnimals = async () => {
@@ -53,6 +61,13 @@ export const Animals = () => {
 		<S.Container>
 			<PageHeader>Animales</PageHeader>
 			<S.ButtonContainer>
+				<Search />
+				<Select label="Species" onChange={handleSelectChange}>
+					<option value="all">All</option>
+					<option value="cow">Cow</option>
+					<option value="goat">Goat</option>
+					<option value="sheep">Sheep</option>
+				</Select>
 				<Button onClick={() => navigation(AppRoutes.ADD_ANIMAL)}>Agregar animal</Button>
 			</S.ButtonContainer>
 			<S.AnimalsContainer>
@@ -71,4 +86,9 @@ export const Animals = () => {
 			</S.AnimalsContainer>
 		</S.Container>
 	)
+}
+
+const INITIAL_FILTERS: AnimalsFilters = {
+	selectedSpecies: 'all',
+	filter: '',
 }
