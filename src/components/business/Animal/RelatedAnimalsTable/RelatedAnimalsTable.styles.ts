@@ -11,6 +11,13 @@ export const TableContainer = styled.div`
         max-height: 50vh;
         height: auto;
     }
+
+    @media (max-width: 768px) {
+        & > table {
+            height: auto;
+            max-height: 100%;
+        }
+    }
 `
 
 export const Label = styled.span`

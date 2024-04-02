@@ -1,7 +1,6 @@
 export interface AppStore {
 	loading: boolean
 	defaultModalData: AppModalData
-	isIOS: boolean
 }
 
 export interface AppModalData {

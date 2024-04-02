@@ -10,10 +10,6 @@ const DEFAULT_MODAL_DATA: AppModalData = {
 export const useAppStore = create<AppStore & AppStoreActions>((set) => ({
 	loading: false,
 	defaultModalData: DEFAULT_MODAL_DATA,
-	isIOS:
-		navigator.platform === 'iPad' ||
-		navigator.platform === 'iPhone' ||
-		navigator.platform === 'iPod',
 	setLoading: (loading) => set({ loading }),
 	setModalData: (modalData) => set({ defaultModalData: modalData }),
 }))

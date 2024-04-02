@@ -6,7 +6,7 @@ export const Container = styled.div`
     flex-direction: column;
     gap: 2rem;
     width: 100%;
-    height: calc(100vh - 76px);
+    height: 100%;
     padding: 1rem 2rem;
     overflow: auto;
     background-color: ${colors.primary[50]};
@@ -83,6 +83,13 @@ export const TableContainer = styled.div`
     & > table {
         max-height: 50vh;
         height: auto;
+    }
+
+    @media (max-width: 768px) {
+        & > table {
+            height: auto;
+            max-height: 100%;
+        }
     }
 `
 

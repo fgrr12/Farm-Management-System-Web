@@ -19,7 +19,7 @@ import * as S from './Animal.styles'
 
 export const Animal: FC = () => {
 	const location = useLocation()
-	const { setLoading, setModalData, defaultModalData } = useAppStore()
+	const { defaultModalData, setLoading, setModalData } = useAppStore()
 	const [animal, setAnimal] = useState<AnimalInformation>(ANIMAL_INITIAL_STATE)
 	const [user] = useState<boolean>(false) // useState<UserInformation>(USER_INITIAL_STATE)
 
