@@ -1,7 +1,11 @@
 import dayjs from 'dayjs'
+import { useTranslation } from 'react-i18next'
+
 import { Button } from '../../../ui/Button'
-import * as S from './AnimalCard.styles'
+
 import type { CardProps } from './AnimalCard.types'
+
+import * as S from './AnimalCard.styles'
 
 export const AnimalCard: FC<CardProps> = ({
 	animalId,
@@ -12,6 +16,7 @@ export const AnimalCard: FC<CardProps> = ({
 	color: animalColor,
 	...props
 }) => {
+	const { t } = useTranslation()
 	return (
 		<S.Card {...props}>
 			<S.TopInfoContainer>
@@ -19,11 +24,17 @@ export const AnimalCard: FC<CardProps> = ({
 				<h5>{animalBreed}</h5>
 			</S.TopInfoContainer>
 			<S.MiddleInfoContainer>
-				<p>Date of Birth: {dayjs(animalBirthDate).format('DD/MM/YYYY')}</p>
-				<p>Gender: {animalGender}</p>
-				<p>Color: {animalColor}</p>
+				<p>
+					{t('animalCard.birthDate')}: {dayjs(animalBirthDate).format('DD/MM/YYYY')}
+				</p>
+				<p>
+					{t('animalCard.gender')}: {animalGender}
+				</p>
+				<p>
+					{t('animalCard.color')}: {animalColor}
+				</p>
 			</S.MiddleInfoContainer>
-			<Button>View</Button>
+			<Button>{t('animalCard.view')}</Button>
 		</S.Card>
 	)
 }

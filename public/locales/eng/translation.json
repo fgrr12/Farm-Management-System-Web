@@ -1,0 +1,36 @@
+{
+    "header": {
+        "return": "Return"
+    },
+    "animals": {
+        "title": "Animals",
+        "search": "Search",
+        "species": "Species",
+        "all": "All",
+        "addAnimal": "Add Animal"
+    },
+    "animalCard": {
+        "birthDate": "Date of Birth",
+        "gender": "Gender",
+        "color": "Color",
+        "view": "View"
+    },
+    "addAnimal": {
+        "title": "Add Animal",
+        "animalId": "Animal ID",
+        "species": "Species",
+        "breed": "Breed",
+        "gender": "Gender",
+        "color": "Color",
+        "weight": "Weight",
+        "birthDate": "Date of Birth",
+        "purchaseDate": "Purchase Date",
+        "addAnimal": "Add Animal"
+    },
+    "dropzone": {
+        "nonDrag": "Drop your image here or click to select it",
+        "drag": "Drag and drop your image here",
+        "selected": "Selected file",
+        "invalid": "Invalid file type"
+    }
+}

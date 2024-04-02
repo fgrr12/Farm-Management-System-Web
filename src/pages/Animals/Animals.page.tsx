@@ -15,10 +15,12 @@ import { Search } from '@/components/ui/Search'
 import { Select } from '@/components/ui/Select'
 import { AnimalsService } from '@/services/Animals'
 import { useAppStore } from '@/store/useAppStore'
+import { useTranslation } from 'react-i18next'
 import * as S from './Animals.styles'
 
 export const Animals = () => {
 	const navigation = useNavigate()
+	const { t, i18n } = useTranslation()
 	const { defaultModalData, setLoading, setModalData } = useAppStore()
 	const [animals, setAnimals] = useState<AnimalCardInformation[]>([])
 	const [species, setSpecies] = useState<string[]>([])
@@ -78,6 +80,7 @@ export const Animals = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: This error is due to withFetching HOF
 	useEffect(() => {
+		i18n.changeLanguage('esp')
 		getSpecies()
 		getAnimals()
 	}, [])
@@ -91,18 +94,18 @@ export const Animals = () => {
 
 	return (
 		<S.Container>
-			<PageHeader>Animales</PageHeader>
+			<PageHeader>{t('animals.title')}</PageHeader>
 			<S.ButtonContainer>
-				<Search onKeyDown={handleSearchKeyPress} />
-				<Select name="selectedSpecies" label="Species" onChange={handleSelectChange}>
-					<option value="all">All</option>
+				<Search placeholder={t('animals.search')} onKeyDown={handleSearchKeyPress} />
+				<Select name="selectedSpecies" label={t('animals.species')} onChange={handleSelectChange}>
+					<option value="all">{t('animals.all')}</option>
 					{species.map((specie) => (
 						<option key={specie} value={specie}>
 							{specie}
 						</option>
 					))}
 				</Select>
-				<Button onClick={() => navigation(AppRoutes.ADD_ANIMAL)}>Agregar animal</Button>
+				<Button onClick={() => navigation(AppRoutes.ADD_ANIMAL)}>{t('animals.addAnimal')}</Button>
 			</S.ButtonContainer>
 			<S.AnimalsContainer>
 				{animals.map((animal) => (

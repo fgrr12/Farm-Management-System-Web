@@ -6,6 +6,7 @@ import {
 	type DragEvent,
 	type MouseEvent,
 } from 'react'
+import { useTranslation } from 'react-i18next'
 
 // Types
 import type { DropEvent, DropzoneProps } from './Dropzone.types'
@@ -14,8 +15,9 @@ import type { DropEvent, DropzoneProps } from './Dropzone.types'
 import * as S from './Dropzone.styles'
 
 export const Dropzone: FC<DropzoneProps> = ({ onFile, cleanFile, ...rest }) => {
+	const { t } = useTranslation()
 	const inputRef = useRef<HTMLInputElement>(null)
-	const [labelText, setLabelText] = useState<string>(DropzoneStates.NON_DRAG)
+	const [labelText, setLabelText] = useState<string>(t('dropzone.nonDrag'))
 	const [url, setUrl] = useState<string>('')
 	const [hasImg, setHasImg] = useState<boolean>(false)
 
@@ -30,24 +32,24 @@ export const Dropzone: FC<DropzoneProps> = ({ onFile, cleanFile, ...rest }) => {
 		const files = getFileList(event)
 		if (files.length && isImage(files[0])) {
 			onFile(files[0], event)
-			setLabelText(DropzoneStates.SELECTED)
+			setLabelText(t('dropzone.selected'))
 			setHasImg(true)
 			console.log(URL.createObjectURL(files[0]))
 
 			setUrl(URL.createObjectURL(files[0]))
 		} else {
-			setLabelText(DropzoneStates.INVALID)
+			setLabelText(t('dropzone.invalid'))
 		}
 	}
 
 	const handleDragEnter = (event: MouseEvent<HTMLDivElement>) => {
 		event.preventDefault()
-		setLabelText(DropzoneStates.DRAG)
+		setLabelText(t('dropzone.drag'))
 	}
 
 	const handleDragLeave = (event: MouseEvent<HTMLDivElement>) => {
 		event.preventDefault()
-		setLabelText(DropzoneStates.NON_DRAG)
+		setLabelText(t('dropzone.nonDrag'))
 	}
 
 	const handleStopPropagation = (event: MouseEvent<HTMLDivElement>) => {
@@ -56,7 +58,7 @@ export const Dropzone: FC<DropzoneProps> = ({ onFile, cleanFile, ...rest }) => {
 
 	const removeImage = () => {
 		inputRef.current!.value = ''
-		setLabelText(DropzoneStates.NON_DRAG)
+		setLabelText(t('dropzone.nonDrag'))
 		setHasImg(false)
 		setUrl('')
 	}
@@ -94,13 +96,6 @@ export const Dropzone: FC<DropzoneProps> = ({ onFile, cleanFile, ...rest }) => {
 			</S.Dropzone>
 		</S.DropzoneContainer>
 	)
-}
-
-enum DropzoneStates {
-	NON_DRAG = 'Suelta tu imagen aquí o haz click para seleccionarla',
-	DRAG = 'Suelta tu imagen aquí',
-	SELECTED = 'Imagen seleccionada:',
-	INVALID = 'Solo se permiten imágenes',
 }
 
 const isImage = (file: File): boolean => {

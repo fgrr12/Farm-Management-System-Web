@@ -1,23 +1,28 @@
-//Styles
+import { fileToBase64 } from '@/utils/fileToBase64'
+import dayjs from 'dayjs'
+import { useState, type ChangeEvent, type FormEvent } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
+
 import { Button } from '@/components/ui/Button'
 import { DatePicker } from '@/components/ui/DatePicker'
 import { Dropzone } from '@/components/ui/Dropzone'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { Select } from '@/components/ui/Select'
 import { TextField } from '@/components/ui/TextField'
+
 import { AppRoutes } from '@/config/constants/routes'
 import firestoreHandler from '@/config/persistence/firestoreHandler'
 import storageHandler from '@/config/persistence/storageHandler'
 import { useAppStore } from '@/store/useAppStore'
-import { fileToBase64 } from '@/utils/fileToBase64'
-import dayjs from 'dayjs'
-import { useState, type ChangeEvent, type FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
-import * as S from './AddAnimal.styles'
+
 import type { AnimalForm } from './AddAnimal.types'
+
+import * as S from './AddAnimal.styles'
 
 export const AddAnimal = () => {
 	const navigate = useNavigate()
+	const { t } = useTranslation()
 	const { defaultModalData, setLoading, setModalData } = useAppStore()
 	const [animalForm, setAnimalForm] = useState<AnimalForm>(INITIAL_ANIMAL_FORM)
 
@@ -87,20 +92,20 @@ export const AddAnimal = () => {
 
 	return (
 		<S.Container>
-			<PageHeader>Add Animal</PageHeader>
+			<PageHeader>{t('addAnimal.title')}</PageHeader>
 			<S.Form onSubmit={handleSubmit} autoComplete="off">
 				<TextField
 					name="animalId"
 					type="text"
-					placeholder="Animal ID"
-					label="Animal ID"
+					placeholder={t('addAnimal.animalId')}
+					label={t('addAnimal.animalId')}
 					onChange={handleTextChange}
 					required
 				/>
 				<S.DropzoneContainer>
 					<Dropzone className="dropzone" cleanFile={false} onFile={handleFile} />
 				</S.DropzoneContainer>
-				<Select name="species" label="Species" onChange={handleSelectChange}>
+				<Select name="species" label={t('addAnimal.species')} onChange={handleSelectChange}>
 					{species.map((species) => (
 						<option key={species} value={species}>
 							{species}
@@ -110,12 +115,12 @@ export const AddAnimal = () => {
 				<TextField
 					name="breed"
 					type="text"
-					placeholder="Breed"
-					label="Breed"
+					placeholder={t('addAnimal.breed')}
+					label={t('addAnimal.breed')}
 					onChange={handleTextChange}
 					required
 				/>
-				<Select name="gender" label="Gender" onChange={handleSelectChange}>
+				<Select name="gender" label={t('addAnimal.gender')} onChange={handleSelectChange}>
 					{genders.map((gender) => (
 						<option key={gender} value={gender}>
 							{gender}
@@ -125,30 +130,30 @@ export const AddAnimal = () => {
 				<TextField
 					name="color"
 					type="text"
-					placeholder="Color"
-					label="Color"
+					placeholder={t('addAnimal.color')}
+					label={t('addAnimal.color')}
 					onChange={handleTextChange}
 					required
 				/>
 				<TextField
 					name="weight"
 					type="text"
-					placeholder="Weight"
-					label="Weight"
+					placeholder={t('addAnimal.weight')}
+					label={t('addAnimal.weight')}
 					onChange={handleTextChange}
 					required
 				/>
 				<DatePicker
-					label="Birth Date"
+					label={t('addAnimal.birthDate')}
 					date={dayjs()}
 					onDateChange={handleDateChange('birthDate')}
 				/>
 				<DatePicker
-					label="Purchase Date"
+					label={t('addAnimal.purchaseDate')}
 					date={dayjs()}
 					onDateChange={handleDateChange('purchaseDate')}
 				/>
-				<Button type="submit">Add Animal</Button>
+				<Button type="submit">{t('addAnimal.addAnimal')}</Button>
 			</S.Form>
 		</S.Container>
 	)
