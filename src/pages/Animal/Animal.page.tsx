@@ -19,7 +19,7 @@ import * as S from './Animal.styles'
 
 export const Animal: FC = () => {
 	const location = useLocation()
-	const { isIOS, setLoading, setModalData, defaultModalData: modalData } = useAppStore()
+	const { setLoading, setModalData, defaultModalData } = useAppStore()
 	const [animal, setAnimal] = useState<AnimalInformation>(ANIMAL_INITIAL_STATE)
 	const [user] = useState<boolean>(false) // useState<UserInformation>(USER_INITIAL_STATE)
 
@@ -80,7 +80,7 @@ export const Animal: FC = () => {
 				open: true,
 				title: 'Error',
 				message: 'Ocurrió un error al obtener el animal',
-				onAccept: () => modalData,
+				onAccept: () => defaultModalData,
 			})
 		} finally {
 			setLoading(false)
