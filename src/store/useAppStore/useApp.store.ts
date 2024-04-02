@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import type { AppModalData, AppStore, AppStoreActions } from './useApp.types'
 
-export const DEFAULT_MODAL_DATA: AppModalData = {
+const DEFAULT_MODAL_DATA: AppModalData = {
 	title: '',
 	message: '',
 	open: false,
@@ -9,9 +9,13 @@ export const DEFAULT_MODAL_DATA: AppModalData = {
 
 export const useAppStore = create<AppStore & AppStoreActions>((set) => ({
 	loading: false,
-	modalData: DEFAULT_MODAL_DATA,
+	defaultModalData: DEFAULT_MODAL_DATA,
+	isIOS:
+		navigator.platform === 'iPad' ||
+		navigator.platform === 'iPhone' ||
+		navigator.platform === 'iPod',
 	setLoading: (loading) => set({ loading }),
-	setModalData: (modalData) => set({ modalData }),
+	setModalData: (modalData) => set({ defaultModalData: modalData }),
 }))
 
 export const GENERIC_MODAL_DATA: AppModalData = {

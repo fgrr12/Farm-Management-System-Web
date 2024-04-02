@@ -15,7 +15,7 @@ import { Modal } from './components/layout/Modal'
 import { AppContainer } from './styles/root'
 
 export const App: FC = () => {
-	const { loading: appLoading, modalData } = useAppStore()
+	const { loading: appLoading, defaultModalData: modalData } = useAppStore()
 
 	return (
 		<AppContainer className="app">

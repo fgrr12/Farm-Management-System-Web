@@ -8,7 +8,7 @@ import { TextField } from '@/components/ui/TextField'
 import { AppRoutes } from '@/config/constants/routes'
 import firestoreHandler from '@/config/persistence/firestoreHandler'
 import storageHandler from '@/config/persistence/storageHandler'
-import { DEFAULT_MODAL_DATA, useAppStore } from '@/store/useAppStore'
+import { useAppStore } from '@/store/useAppStore'
 import { fileToBase64 } from '@/utils/fileToBase64'
 import dayjs from 'dayjs'
 import { useState, type ChangeEvent, type FormEvent } from 'react'
@@ -18,7 +18,7 @@ import type { AnimalForm } from './AddAnimal.types'
 
 export const AddAnimal = () => {
 	const navigate = useNavigate()
-	const { setLoading, setModalData } = useAppStore()
+	const { defaultModalData, setLoading, setModalData } = useAppStore()
 	const [animalForm, setAnimalForm] = useState<AnimalForm>(INITIAL_ANIMAL_FORM)
 
 	const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -69,7 +69,7 @@ export const AddAnimal = () => {
 				title: 'Animal Added',
 				message: 'The animal was added successfully',
 				onAccept: () => {
-					setModalData(DEFAULT_MODAL_DATA)
+					setModalData(defaultModalData)
 					navigate(AppRoutes.ANIMALS)
 				},
 			})
@@ -78,7 +78,7 @@ export const AddAnimal = () => {
 				open: true,
 				title: 'Error',
 				message: 'There was an error adding the animal',
-				onAccept: () => setModalData(DEFAULT_MODAL_DATA),
+				onAccept: () => setModalData(defaultModalData),
 			})
 		} finally {
 			setLoading(false)

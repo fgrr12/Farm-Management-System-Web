@@ -12,12 +12,12 @@ import type { AnimalCardInformation } from './Animals.types'
 
 // Styles
 import { Button } from '@/components/ui/Button'
-import { DEFAULT_MODAL_DATA, useAppStore } from '@/store/useAppStore'
+import { useAppStore } from '@/store/useAppStore'
 import * as S from './Animals.styles'
 
 export const Animals = () => {
 	const navigation = useNavigate()
-	const { setLoading, setModalData } = useAppStore()
+	const { defaultModalData, setLoading, setModalData } = useAppStore()
 	const [animals, setAnimals] = useState<AnimalCardInformation[]>([])
 
 	const navigateToAnimal = (uuid: string) => {
@@ -35,7 +35,7 @@ export const Animals = () => {
 				open: true,
 				title: 'Error',
 				message: 'Ocurrió un error al obtener los animales',
-				onAccept: () => DEFAULT_MODAL_DATA,
+				onAccept: () => defaultModalData,
 			})
 		} finally {
 			setLoading(false)

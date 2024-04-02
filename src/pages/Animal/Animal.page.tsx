@@ -14,12 +14,12 @@ import type { AnimalInformation } from './Animal.types'
 
 // Styles
 import storageHandler from '@/config/persistence/storageHandler'
-import { DEFAULT_MODAL_DATA, useAppStore } from '@/store/useAppStore'
+import { useAppStore } from '@/store/useAppStore'
 import * as S from './Animal.styles'
 
 export const Animal: FC = () => {
 	const location = useLocation()
-	const { setLoading, setModalData } = useAppStore()
+	const { isIOS, setLoading, setModalData, defaultModalData: modalData } = useAppStore()
 	const [animal, setAnimal] = useState<AnimalInformation>(ANIMAL_INITIAL_STATE)
 	const [user] = useState<boolean>(false) // useState<UserInformation>(USER_INITIAL_STATE)
 
@@ -80,7 +80,7 @@ export const Animal: FC = () => {
 				open: true,
 				title: 'Error',
 				message: 'Ocurrió un error al obtener el animal',
-				onAccept: () => DEFAULT_MODAL_DATA,
+				onAccept: () => modalData,
 			})
 		} finally {
 			setLoading(false)
