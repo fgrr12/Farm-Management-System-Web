@@ -1,4 +1,3 @@
-import firestoreHandler from '@/config/persistence/firestoreHandler'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
@@ -13,7 +12,7 @@ import { Table } from '@/components/ui/Table'
 import type { AnimalInformation } from './Animal.types'
 
 // Styles
-import storageHandler from '@/config/persistence/storageHandler'
+import { AnimalService } from '@/services/Animal'
 import { useAppStore } from '@/store/useAppStore'
 import * as S from './Animal.styles'
 
@@ -69,10 +68,7 @@ export const Animal: FC = () => {
 			const { pathname } = location
 			const animalId = pathname.split('/').pop()
 
-			const dbData = (await firestoreHandler.getDocument('animals', animalId!)) as AnimalInformation
-			if (dbData.picture) {
-				dbData.picture = await storageHandler.getPicture(dbData.picture)
-			}
+			const dbData = await AnimalService.getAnimal({ animalUuid: animalId! })
 
 			setAnimal(dbData)
 		} catch (error) {

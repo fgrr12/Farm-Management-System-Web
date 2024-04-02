@@ -27,7 +27,7 @@ export module AnimalsService {
 			const animals = await getDocs(
 				query(collection(firestore, collectionName), orderBy('animalId'))
 			)
-			response = animals.docs.map((doc) => doc.data())
+			response = animals.docs.map((doc) => ({ ...doc.data(), uuid: doc.id }))
 		}
 
 		if (search) {
@@ -35,6 +35,8 @@ export module AnimalsService {
 				animal.animalId.toLowerCase().includes(search.toLowerCase())
 			)
 		}
+
+		console.log(response)
 
 		return response as GetAnimalsResponse[]
 	}
