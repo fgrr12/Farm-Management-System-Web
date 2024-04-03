@@ -12,12 +12,11 @@ import { Select } from '@/components/ui/Select'
 import { TextField } from '@/components/ui/TextField'
 
 import { AppRoutes } from '@/config/constants/routes'
-import firestoreHandler from '@/config/persistence/firestoreHandler'
-import storageHandler from '@/config/persistence/storageHandler'
 import { useAppStore } from '@/store/useAppStore'
 
 import type { AnimalForm } from './AddAnimal.types'
 
+import { AnimalsService } from '@/services/Animals'
 import * as S from './AddAnimal.styles'
 
 export const AddAnimal = () => {
@@ -50,24 +49,27 @@ export const AddAnimal = () => {
 		try {
 			setLoading(true)
 			event.preventDefault()
-			const image = await storageHandler.setPicture(
-				`animals/${animalForm.uuid}`,
-				animalForm.picture!
-			)
+			// const image = await storageHandler.setPicture(
+			// 	`animals/${animalForm.uuid}`,
+			// 	animalForm.picture!
+			// )
 
-			await firestoreHandler.setDocument('animals', animalForm.uuid, {
-				animalId: animalForm.animalId,
-				species: animalForm.species,
-				breed: animalForm.breed,
-				gender: animalForm.gender,
-				color: animalForm.color,
-				weight: animalForm.weight,
-				picture: image.metadata.fullPath,
-				birthDate: animalForm.birthDate?.format('YYYY-MM-DD'),
-				purchaseDate: animalForm.purchaseDate?.format('YYYY-MM-DD'),
-				relatedAnimals: { children: [], parents: [] },
-				healthRecords: [],
-			})
+			// await firestoreHandler.setDocument('animals', animalForm.uuid, {
+			// 	animalId: animalForm.animalId,
+			// 	species: animalForm.species,
+			// 	breed: animalForm.breed,
+			// 	gender: animalForm.gender,
+			// 	color: animalForm.color,
+			// 	weight: animalForm.weight,
+			// 	picture: image.metadata.fullPath,
+			// 	birthDate: animalForm.birthDate?.format('YYYY-MM-DD'),
+			// 	purchaseDate: animalForm.purchaseDate?.format('YYYY-MM-DD'),
+			// 	relatedAnimals: { children: [], parents: [] },
+			// 	healthRecords: [],
+			// 	productionRecords: [],
+			// })
+
+			await AnimalsService.setAnimal(animalForm)
 
 			setModalData({
 				open: true,
@@ -174,4 +176,7 @@ const INITIAL_ANIMAL_FORM: AnimalForm = {
 	picture: '',
 	birthDate: dayjs(),
 	purchaseDate: dayjs(),
+	relatedAnimals: { children: [], parents: [] },
+	healthRecords: [],
+	productionRecords: [],
 }

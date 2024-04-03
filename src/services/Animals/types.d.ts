@@ -9,6 +9,25 @@ export interface GetAnimalProps {
 	animalUuid: string
 }
 
+export interface SetAnimalProps {
+	uuid: string
+	animalId: number
+	species: string
+	breed: string
+	gender: string
+	color: string
+	weight: number
+	picture?: string
+	birthDate?: dayjs.Dayjs | string
+	purchaseDate?: dayjs.Dayjs | string
+	relatedAnimals: {
+		children: []
+		parents: []
+	}
+	healthRecords: []
+	productionRecords: []
+}
+
 declare type healthRecordType =
 	| 'Checkup'
 	| 'Vaccination'

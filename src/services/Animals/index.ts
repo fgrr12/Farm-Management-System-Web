@@ -1,7 +1,8 @@
 import { firestore } from '@/config/environment'
 import storageHandler from '@/config/persistence/storageHandler'
-import { collection, doc, getDoc, getDocs, orderBy, query, where } from 'firebase/firestore'
-import type { GetAnimalProps, GetAnimalResponse, GetAnimalsProps } from './types'
+import dayjs, { type Dayjs } from 'dayjs'
+import { collection, doc, getDoc, getDocs, orderBy, query, setDoc, where } from 'firebase/firestore'
+import type { GetAnimalProps, GetAnimalResponse, GetAnimalsProps, SetAnimalProps } from './types'
 
 const collectionName = 'animals'
 
@@ -56,5 +57,32 @@ export module AnimalsService {
 		}
 
 		return animalData as GetAnimalResponse
+	}
+
+	// Sets
+
+	export const setAnimal = async (animalData: SetAnimalProps) => {
+		if (animalData.picture) {
+			const image = await storageHandler.setPicture(
+				`animals/${animalData.uuid}`,
+				animalData.picture
+			)
+			animalData.picture = image.metadata.fullPath
+		}
+
+		if (animalData.birthDate) {
+			animalData.birthDate = formatDate(animalData.birthDate)
+		}
+
+		if (animalData.purchaseDate) {
+			animalData.purchaseDate = formatDate(animalData.purchaseDate)
+		}
+
+		const document = doc(firestore, collectionName, animalData.uuid)
+		await setDoc(document, animalData, { merge: true })
+	}
+
+	const formatDate = (date: Dayjs | string) => {
+		return dayjs(date).format('YYYY-MM-DD')
 	}
 }
