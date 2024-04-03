@@ -106,7 +106,7 @@ export const CenterTitle = styled.div`
 
 export const InfoTableContainer = styled.div`
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 2rem;
 
     @media (max-width: 768px) {

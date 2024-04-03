@@ -9,12 +9,6 @@ declare type healthRecordType =
 	| 'Deworming'
 	| 'Birth'
 
-export interface RelatedAnimal {
-	animalId: number
-	breed: string
-	relation: Relation
-}
-
 export interface AnimalHealthRecord {
 	animalId: number
 	reason: string
@@ -28,6 +22,19 @@ export interface AnimalHealthRecord {
 	dosage?: string
 	frequency?: string
 	duration?: string
+}
+
+export interface ProductionRecord {
+	animalId: number
+	date: dayjs.Dayjs
+	quantity: number
+	notes: string
+}
+
+export interface RelatedAnimal {
+	animalId: number
+	breed: string
+	relation: Relation
 }
 
 export interface RelatedAnimals {
@@ -46,6 +53,7 @@ export interface AnimalInformation {
 	relatedAnimals: RelatedAnimals
 	picture?: string
 	healthRecords: AnimalHealthRecord[]
+	productionRecords: ProductionRecord[]
 	birthDate?: dayjs.Dayjs
 	purchaseDate?: dayjs.Dayjs
 	soldDate?: dayjs.Dayjs
