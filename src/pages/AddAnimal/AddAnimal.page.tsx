@@ -16,7 +16,7 @@ import { useAppStore } from '@/store/useAppStore'
 
 import type { AnimalForm } from './AddAnimal.types'
 
-import { AnimalsService } from '@/services/Animals'
+import { AnimalsService } from '@/services/animals'
 import * as S from './AddAnimal.styles'
 
 export const AddAnimal = () => {

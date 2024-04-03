@@ -7,7 +7,7 @@ import { ActionButton } from '@/components/ui/ActionButton'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { Table } from '@/components/ui/Table'
 
-import { AnimalsService } from '@/services/Animals'
+import { AnimalsService } from '@/services/animals'
 import { useAppStore } from '@/store/useAppStore'
 
 import type { AnimalInformation } from './Animal.types'
