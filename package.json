@@ -28,7 +28,7 @@
 		"i18next-http-backend": "^2.5.0"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^1.6.3",
+		"@biomejs/biome": "^1.6.4",
 		"@types/node": "20.12.3",
 		"@types/react": "^18.2.74",
 		"@types/react-dom": "^18.2.23",
@@ -37,6 +37,6 @@
 		"dotenv-cli": "7.4.1",
 		"typescript": "^5.4.3",
 		"unocss": "^0.58.9",
-		"vite": "^5.2.7"
+		"vite": "^5.2.8"
 	}
 }
