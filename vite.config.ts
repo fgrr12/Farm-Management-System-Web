@@ -1,5 +1,5 @@
 import react from '@vitejs/plugin-react'
-import * as path from 'path'
+import * as path from 'node:path'
 import unocss from 'unocss/vite'
 import { defineConfig } from 'vite'
 

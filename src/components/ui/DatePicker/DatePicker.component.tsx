@@ -1,4 +1,4 @@
-import { FC, ReactElement } from 'react'
+import type { FC, ReactElement } from 'react'
 import dayjs from 'dayjs'
 import es from 'dayjs/locale/es'
 import customParseFormat from 'dayjs/plugin/customParseFormat'

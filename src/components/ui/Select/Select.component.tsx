@@ -1,5 +1,5 @@
 import * as S from './Select.styles'
-import { SelectProps } from './Select.types'
+import type { SelectProps } from './Select.types'
 
 export const Select: FC<SelectProps> = ({ className, ...rest }) => {
 	return (

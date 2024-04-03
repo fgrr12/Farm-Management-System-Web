@@ -1,5 +1,5 @@
-import { FC, ReactElement, MouseEvent } from 'react'
-import dayjs from 'dayjs'
+import type { FC, ReactElement, MouseEvent } from 'react'
+import type dayjs from 'dayjs'
 
 import type { CalendarItem, CalendarValues } from '../useCalendar'
 import * as S from './Calendar.styles'

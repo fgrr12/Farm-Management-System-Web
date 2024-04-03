@@ -1,4 +1,4 @@
-import { FC, ReactElement } from 'react'
+import type { FC, ReactElement } from 'react'
 import type { TextareaProps } from './Textarea.types'
 import * as S from './Textarea.styles'
 
