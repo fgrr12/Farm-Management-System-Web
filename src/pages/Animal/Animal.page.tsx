@@ -2,18 +2,16 @@ import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
-// Components
 import { RelatedAnimalsTable } from '@/components/business/Animal/RelatedAnimalsTable'
 import { ActionButton } from '@/components/ui/ActionButton'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { Table } from '@/components/ui/Table'
 
-// Types
+import { AnimalsService } from '@/services/Animals'
+import { useAppStore } from '@/store/useAppStore'
+
 import type { AnimalInformation } from './Animal.types'
 
-// Styles
-import { AnimalService } from '@/services/Animal'
-import { useAppStore } from '@/store/useAppStore'
 import * as S from './Animal.styles'
 
 export const Animal: FC = () => {
@@ -68,7 +66,7 @@ export const Animal: FC = () => {
 			const { pathname } = location
 			const animalId = pathname.split('/').pop()
 
-			const dbData = await AnimalService.getAnimal({ animalUuid: animalId! })
+			const dbData = await AnimalsService.getAnimal({ animalUuid: animalId! })
 
 			setAnimal(dbData)
 		} catch (error) {

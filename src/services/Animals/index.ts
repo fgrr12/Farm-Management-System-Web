@@ -1,6 +1,7 @@
 import { firestore } from '@/config/environment'
-import { collection, getDocs, orderBy, query, where } from 'firebase/firestore'
-import type { GetAnimalsProps, GetAnimalsResponse } from './types'
+import storageHandler from '@/config/persistence/storageHandler'
+import { collection, doc, getDoc, getDocs, orderBy, query, where } from 'firebase/firestore'
+import type { GetAnimalProps, GetAnimalResponse, GetAnimalsProps } from './types'
 
 const collectionName = 'animals'
 
@@ -10,7 +11,7 @@ export module AnimalsService {
 	// This function is responsible for getting all the animals from the database
 	export const getAnimals = async (
 		getAnimalsProps: GetAnimalsProps
-	): Promise<GetAnimalsResponse[]> => {
+	): Promise<GetAnimalResponse[]> => {
 		const { selectedSpecies, search } = getAnimalsProps
 		let response = []
 
@@ -32,7 +33,7 @@ export module AnimalsService {
 			)
 		}
 
-		return response as GetAnimalsResponse[]
+		return response as GetAnimalResponse[]
 	}
 
 	// This function is responsible for getting all the species from the database
@@ -42,5 +43,18 @@ export module AnimalsService {
 		const uniqueSpecies = Array.from(new Set(species))
 
 		return uniqueSpecies
+	}
+
+	export const getAnimal = async (getAnimalProps: GetAnimalProps): Promise<GetAnimalResponse> => {
+		const { animalUuid } = getAnimalProps
+		const docRef = doc(firestore, collectionName, animalUuid)
+		const animalDoc = await getDoc(docRef)
+		const animalData = animalDoc.data()
+
+		if (animalData?.picture) {
+			animalData!.picture = await storageHandler.getPicture(animalData?.picture)
+		}
+
+		return animalData as GetAnimalResponse
 	}
 }
