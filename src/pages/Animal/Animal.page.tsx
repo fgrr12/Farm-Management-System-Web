@@ -14,6 +14,7 @@ import type { AnimalInformation } from './Animal.types'
 import { HealthRecordsTable } from '@/components/business/Animal/HealthRecordsTable'
 import { ProductionRecordsTable } from '@/components/business/Animal/ProductionRecordsTable'
 import { HealthRecordsService } from '@/services/healthRecords'
+import { ProductionRecordsService } from '@/services/productionRecords'
 import * as S from './Animal.styles'
 
 export const Animal: FC = () => {
@@ -23,46 +24,6 @@ export const Animal: FC = () => {
 	const [user] = useState<boolean>(true) // useState<UserInformation>(USER_INITIAL_STATE)
 
 	const getAnimal = async () => {
-		// const parents = animalMock.relatedAnimals.parents?.map((parent) => ({
-		// 	animalId: parent.animalId,
-		// 	breed: parent.breed,
-		// 	relation: parent.relation,
-		// }))
-		// const children = animalMock.relatedAnimals.children?.map((child) => ({
-		// 	animalId: child.animalId,
-		// 	breed: child.breed,
-		// 	relation: child.relation,
-		// }))
-		// const healthRecords = animalMock.healthRecords?.map((healthRecord) => ({
-		// 	reason: healthRecord.reason,
-		// 	notes: healthRecord.notes,
-		// 	type: healthRecord.type,
-		// 	reviewedBy: healthRecord.reviewedBy,
-		// 	date: dayjs(healthRecord.date).format('MM/DD/YYYY'),
-		// 	weight: healthRecord.weight,
-		// 	temperature: healthRecord.temperature,
-		// 	medication: healthRecord.medication,
-		// 	dosage: healthRecord.dosage,
-		// 	frequency: healthRecord.frequency,
-		// 	duration: healthRecord.duration,
-		// }))
-
-		// await firestoreHandler.setDocument('animals', crypto.randomUUID(), {
-		// 	animalId: animalMock.animalId,
-		// 	species: animalMock.species,
-		// 	breed: animalMock.breed,
-		// 	gender: animal.gender,
-		// 	color: animalMock.color,
-		// 	weight: animalMock.weight,
-		// 	picture: animalMock.picture,
-		// 	relatedAnimals: {
-		// 		parents: parents,
-		// 		children: children,
-		// 	},
-		// 	healthRecords: healthRecords,
-		// 	birthDate: dayjs(animalMock.birthDate).format('MM/DD/YYYY'),
-		// 	purchaseDate: dayjs(animalMock.purchaseDate).format('MM/DD/YYYY'),
-		// })
 		try {
 			setLoading(true)
 			const { pathname } = location
@@ -70,8 +31,12 @@ export const Animal: FC = () => {
 
 			const dbAnimal = await AnimalsService.getAnimal({ animalUuid: animalId! })
 			const dbHealthRecords = await HealthRecordsService.getHealthRecords({ animalUuid: animalId! })
+			const bdProductionRecords = await ProductionRecordsService.getProductionRecords({
+				animalUuid: animalId!,
+			})
 
 			dbAnimal.healthRecords = dbHealthRecords
+			dbAnimal.productionRecords = bdProductionRecords
 
 			setAnimal(dbAnimal)
 		} catch (error) {

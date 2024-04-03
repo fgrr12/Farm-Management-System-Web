@@ -70,7 +70,7 @@ export const AddHealthRecord = () => {
 			setModalData({
 				open: true,
 				title: 'Error',
-				message: 'There was an error adding the animal',
+				message: 'There was an error adding the health record',
 				onAccept: () => setModalData(defaultModalData),
 			})
 		} finally {

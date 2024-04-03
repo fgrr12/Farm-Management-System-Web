@@ -16,8 +16,8 @@ export interface AnimalHealthRecord {
 }
 
 export interface ProductionRecord {
-	animalId: number
-	date: dayjs.Dayjs
+	animalUuid: string
+	date: dayjs.Dayjs | string
 	quantity: number
 	notes: string
 }
@@ -45,8 +45,8 @@ export interface AnimalInformation {
 	picture?: string
 	healthRecords: AnimalHealthRecord[]
 	productionRecords: ProductionRecord[]
-	birthDate?: dayjs.Dayjs
-	purchaseDate?: dayjs.Dayjs
-	soldDate?: dayjs.Dayjs
-	deathDate?: dayjs.Dayjs
+	birthDate?: dayjs.Dayjs | string
+	purchaseDate?: dayjs.Dayjs | string
+	soldDate?: dayjs.Dayjs | string
+	deathDate?: dayjs.Dayjs | string
 }

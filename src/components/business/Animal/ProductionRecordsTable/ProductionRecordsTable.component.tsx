@@ -1,19 +1,26 @@
+import { AppRoutes } from '@/config/constants/routes'
 import dayjs from 'dayjs'
+import { useLocation, useNavigate } from 'react-router-dom'
 
-// Components
 import { ActionButton } from '@/components/ui/ActionButton'
 import { Table } from '@/components/ui/Table'
 
-// Types
 import type { ProductionRecordsTableProps } from './ProductionRecordsTable.types'
 
-// Styles
 import * as S from './ProductionRecordsTable.styles'
 
 export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 	productionRecords,
 	user,
 }) => {
+	const location = useLocation()
+	const navigate = useNavigate()
+
+	const handleAddHealthRecord = () => {
+		const animalUuid = location.pathname.split('/').pop()
+		const path = AppRoutes.ADD_PRODUCTION_RECORD.replace(':animalUuid', animalUuid || '')
+		navigate(path)
+	}
 	return (
 		<S.TableContainer>
 			<S.CenterTitle>
@@ -22,6 +29,7 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 					<ActionButton
 						title="Add Production Record"
 						icon="i-material-symbols-add-circle-outline"
+						onClick={handleAddHealthRecord}
 					/>
 				)}
 			</S.CenterTitle>
@@ -29,8 +37,8 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 				<Table.Head>
 					<Table.Row>
 						<Table.HeadCell>Date</Table.HeadCell>
-						<Table.HeadCell>Notes</Table.HeadCell>
 						<Table.HeadCell>Quantity</Table.HeadCell>
+						<Table.HeadCell>Notes</Table.HeadCell>
 						{user && <Table.HeadCell>Actions</Table.HeadCell>}
 					</Table.Row>
 				</Table.Head>

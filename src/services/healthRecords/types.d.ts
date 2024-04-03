@@ -5,6 +5,7 @@ export interface GetHealthRecordsProps {
 }
 
 export interface SetHealthRecordProps {
+	uuid: string
 	animalUuid: string
 	reason: string
 	notes: string

@@ -53,8 +53,8 @@ declare interface AnimalHealthRecord {
 }
 
 declare interface ProductionRecord {
-	animalId: number
-	date: dayjs.Dayjs
+	animalUuid: string
+	date: dayjs.Dayjs | string
 	quantity: number
 	notes: string
 }

@@ -4,6 +4,8 @@ import { useAppStore } from './store/useAppStore'
 
 // Pages
 import { AddAnimal } from './pages/AddAnimal'
+import { AddHealthRecord } from './pages/AddHealthRecord'
+import { AddProductionRecord } from './pages/AddProductionRecord'
 import { Animal } from './pages/Animal'
 import { Animals } from './pages/Animals'
 
@@ -12,7 +14,6 @@ import { Loading } from './components/layout/Loading'
 import { Modal } from './components/layout/Modal'
 
 // Styles
-import { AddHealthRecord } from './pages/AddHealthRecord'
 import { AppContainer } from './styles/root'
 
 export const App: FC = () => {
@@ -27,6 +28,7 @@ export const App: FC = () => {
 					<Route path={AppRoutes.ANIMAL} element={<Animal />} />
 					<Route path={AppRoutes.ADD_ANIMAL} element={<AddAnimal />} />
 					<Route path={AppRoutes.ADD_HEALTH_RECORD} element={<AddHealthRecord />} />
+					<Route path={AppRoutes.ADD_PRODUCTION_RECORD} element={<AddProductionRecord />} />
 
 					<Route path={AppRoutes.LOGIN} element={<Animals />} />
 					<Route path={AppRoutes.REGISTER} element={<Animals />} />

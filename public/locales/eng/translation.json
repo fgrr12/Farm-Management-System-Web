@@ -42,6 +42,13 @@
 		"notes": "Notes",
 		"addHealthRecord": "Add Health Record"
 	},
+	"addProductionRecord": {
+		"title": "Add Production Record",
+		"quantity": "Quantity",
+		"date": "Date",
+		"notes": "Notes",
+		"addProductionRecord": "Add Health Record"
+	},
 	"dropzone": {
 		"nonDrag": "Drop your image here or click to select it",
 		"drag": "Drag and drop your image here",

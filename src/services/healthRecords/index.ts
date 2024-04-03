@@ -1,6 +1,6 @@
 import { firestore } from '@/config/environment'
 import dayjs from 'dayjs'
-import { addDoc, collection, getDocs, query, where } from 'firebase/firestore'
+import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore'
 import type { GetHealthRecordResponse, GetHealthRecordsProps, SetHealthRecordProps } from './types'
 
 const collectionName = 'healthRecords'
@@ -15,7 +15,7 @@ export module HealthRecordsService {
 		const healthRecords = await getDocs(
 			query(collection(firestore, collectionName), where('animalUuid', '==', animalUuid))
 		)
-		const response = healthRecords.docs.map((doc) => ({ ...doc.data(), uuid: doc.id }))
+		const response = healthRecords.docs.map((doc) => ({ ...doc.data() }))
 
 		return response as GetHealthRecordResponse[]
 	}
@@ -25,7 +25,8 @@ export module HealthRecordsService {
 	export const setHealthRecord = async (healthRecordData: SetHealthRecordProps) => {
 		healthRecordData.date = formatDate(healthRecordData.date)
 
-		await addDoc(collection(firestore, collectionName), healthRecordData)
+		const document = doc(firestore, collectionName, healthRecordData.uuid)
+		await setDoc(document, healthRecordData, { merge: true })
 	}
 
 	const formatDate = (date: dayjs.Dayjs | string) => {
