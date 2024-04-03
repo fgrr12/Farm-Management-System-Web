@@ -25,13 +25,19 @@ export module AnimalsService {
 			const animals = await getDocs(
 				query(collection(firestore, collectionName), orderBy('animalId'))
 			)
-			response = animals.docs.map((doc) => ({ ...doc.data(), uuid: doc.id }))
+			response = animals.docs.map((doc) => ({ ...doc.data(), uuid: doc.id })) as GetAnimalResponse[]
 		}
 
 		if (search) {
 			response = response.filter((animal) =>
 				animal.animalId.toLowerCase().includes(search.toLowerCase())
 			)
+		}
+
+		for (const animal of response) {
+			if (animal.picture) {
+				animal.picture = await storageHandler.getPicture(animal.picture)
+			}
 		}
 
 		return response as GetAnimalResponse[]

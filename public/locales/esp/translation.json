@@ -49,6 +49,17 @@
 		"notes": "Notas",
 		"addProductionRecord": "Añadir registro de producción"
 	},
+	"addRelatedAnimals": {
+		"title": "Añade animales relacionados",
+		"animalId": "ID del animal",
+		"relationship": "Relación",
+		"addRelative": "Añadir relativo"
+	},
+	"relatedAnimalCard": {
+		"animalId": "ID del animal",
+		"breed": "Raza",
+		"gender": "Género"
+	},
 	"dropzone": {
 		"nonDrag": "Suelta tu imagen aquí o haz click para seleccionarla",
 		"drag": "Suelta tu imagen aquí",
