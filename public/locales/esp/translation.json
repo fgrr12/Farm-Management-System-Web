@@ -27,6 +27,21 @@
 		"purchaseDate": "Fecha de compra",
 		"addAnimal": "Añadir animal"
 	},
+	"addHealthRecord": {
+		"title": "Añade registro de salud",
+		"reason": "Razón",
+		"type": "Tipo",
+		"reviewedBy": "Revisado por",
+		"date": "Fecha",
+		"weight": "Peso",
+		"temperature": "Temperatura",
+		"medication": "Medicación",
+		"dosage": "Dosis",
+		"frequency": "Frecuencia",
+		"duration": "Duración",
+		"notes": "Notas",
+		"addHealthRecord": "Añadir registro de salud"
+	},
 	"dropzone": {
 		"nonDrag": "Suelta tu imagen aquí o haz click para seleccionarla",
 		"drag": "Suelta tu imagen aquí",

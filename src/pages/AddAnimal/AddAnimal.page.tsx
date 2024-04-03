@@ -161,9 +161,9 @@ export const AddAnimal = () => {
 	)
 }
 
-const species = ['Cow', 'Sheep', 'Goat', 'Chicken']
+const species: Species[] = ['Cow', 'Sheep', 'Goat', 'Chicken']
 
-const genders = ['Male', 'Female']
+const genders: Gender[] = ['Male', 'Female']
 
 const INITIAL_ANIMAL_FORM: AnimalForm = {
 	uuid: crypto.randomUUID(),

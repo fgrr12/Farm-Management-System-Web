@@ -1,6 +1,6 @@
 import { firestore } from '@/config/environment'
 import storageHandler from '@/config/persistence/storageHandler'
-import dayjs, { type Dayjs } from 'dayjs'
+import dayjs from 'dayjs'
 import { collection, doc, getDoc, getDocs, orderBy, query, setDoc, where } from 'firebase/firestore'
 import type { GetAnimalProps, GetAnimalResponse, GetAnimalsProps, SetAnimalProps } from './types'
 
@@ -82,7 +82,7 @@ export module AnimalsService {
 		await setDoc(document, animalData, { merge: true })
 	}
 
-	const formatDate = (date: Dayjs | string) => {
+	const formatDate = (date: dayjs.Dayjs | string) => {
 		return dayjs(date).format('YYYY-MM-DD')
 	}
 }

@@ -1,4 +1,6 @@
+import { AppRoutes } from '@/config/constants/routes'
 import dayjs from 'dayjs'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 // Components
 import { ActionButton } from '@/components/ui/ActionButton'
@@ -11,12 +13,24 @@ import type { HealthRecordsTableProps } from './HealthRecordsTable.types'
 import * as S from './HealthRecordsTable.styles'
 
 export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({ healthRecords, user }) => {
+	const location = useLocation()
+	const navigate = useNavigate()
+
+	const handleAddHealthRecord = () => {
+		const animalUuid = location.pathname.split('/').pop()
+		const path = AppRoutes.ADD_HEALTH_RECORD.replace(':animalUuid', animalUuid || '')
+		navigate(path)
+	}
 	return (
 		<S.TableContainer>
 			<S.CenterTitle>
 				<S.Label>Health Records</S.Label>
 				{user && (
-					<ActionButton title="Add Health Record" icon="i-material-symbols-add-circle-outline" />
+					<ActionButton
+						title="Add Health Record"
+						icon="i-material-symbols-add-circle-outline"
+						onClick={handleAddHealthRecord}
+					/>
 				)}
 			</S.CenterTitle>
 			<Table>

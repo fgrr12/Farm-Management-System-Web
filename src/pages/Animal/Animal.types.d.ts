@@ -1,21 +1,12 @@
 import type dayjs from 'dayjs'
 
-declare type healthRecordType =
-	| 'Checkup'
-	| 'Vaccination'
-	| 'Medication'
-	| 'Surgery'
-	| 'Pregnant'
-	| 'Deworming'
-	| 'Birth'
-
 export interface AnimalHealthRecord {
-	animalId: number
+	animalUuid: string
 	reason: string
 	notes: string
 	type: string
 	reviewedBy: string
-	date: dayjs.Dayjs
+	date: dayjs.Dayjs | string
 	weight?: number
 	temperature?: number
 	medication?: string

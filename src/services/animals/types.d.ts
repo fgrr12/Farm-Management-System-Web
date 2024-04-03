@@ -38,12 +38,12 @@ declare type healthRecordType =
 	| 'Birth'
 
 declare interface AnimalHealthRecord {
-	animalId: number
+	animalUuid: string
 	reason: string
 	notes: string
 	type: string
 	reviewedBy: string
-	date: dayjs.Dayjs
+	date: dayjs.Dayjs | string
 	weight?: number
 	temperature?: number
 	medication?: string

@@ -5,4 +5,5 @@ export enum AppRoutes {
 	ANIMALS = '/animals',
 	ANIMAL = '/animals/:animalUuid',
 	ADD_ANIMAL = '/add-animal',
+	ADD_HEALTH_RECORD = '/add-health-record/:animalUuid',
 }

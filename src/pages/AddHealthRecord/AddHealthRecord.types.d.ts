@@ -1,11 +1,7 @@
 import type dayjs from 'dayjs'
 
-export interface HealthRecordsTableProps {
-	healthRecords: HealthRecord[]
-	user: boolean
-}
-
-declare interface HealthRecord {
+export interface HealthRecordForm {
+	uuid: string
 	animalUuid: string
 	reason: string
 	notes: string

@@ -27,6 +27,21 @@
 		"purchaseDate": "Purchase Date",
 		"addAnimal": "Add Animal"
 	},
+	"addHealthRecord": {
+		"title": "Add Health Record",
+		"reason": "Reason",
+		"type": "Type",
+		"reviewedBy": "Reviewed By",
+		"date": "Date",
+		"weight": "Weight",
+		"temperature": "Temperature",
+		"medication": "Medication",
+		"dosage": "Dosage",
+		"frequency": "Frequency",
+		"duration": "Duration",
+		"notes": "Notes",
+		"addHealthRecord": "Add Health Record"
+	},
 	"dropzone": {
 		"nonDrag": "Drop your image here or click to select it",
 		"drag": "Drag and drop your image here",

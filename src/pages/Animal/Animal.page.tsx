@@ -13,13 +13,14 @@ import type { AnimalInformation } from './Animal.types'
 
 import { HealthRecordsTable } from '@/components/business/Animal/HealthRecordsTable'
 import { ProductionRecordsTable } from '@/components/business/Animal/ProductionRecordsTable'
+import { HealthRecordsService } from '@/services/healthRecords'
 import * as S from './Animal.styles'
 
 export const Animal: FC = () => {
 	const location = useLocation()
 	const { defaultModalData, setLoading, setModalData } = useAppStore()
 	const [animal, setAnimal] = useState<AnimalInformation>(ANIMAL_INITIAL_STATE)
-	const [user] = useState<boolean>(false) // useState<UserInformation>(USER_INITIAL_STATE)
+	const [user] = useState<boolean>(true) // useState<UserInformation>(USER_INITIAL_STATE)
 
 	const getAnimal = async () => {
 		// const parents = animalMock.relatedAnimals.parents?.map((parent) => ({
@@ -67,9 +68,12 @@ export const Animal: FC = () => {
 			const { pathname } = location
 			const animalId = pathname.split('/').pop()
 
-			const dbData = await AnimalsService.getAnimal({ animalUuid: animalId! })
+			const dbAnimal = await AnimalsService.getAnimal({ animalUuid: animalId! })
+			const dbHealthRecords = await HealthRecordsService.getHealthRecords({ animalUuid: animalId! })
 
-			setAnimal(dbData)
+			dbAnimal.healthRecords = dbHealthRecords
+
+			setAnimal(dbAnimal)
 		} catch (error) {
 			setModalData({
 				open: true,
