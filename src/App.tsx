@@ -14,6 +14,7 @@ import { Loading } from './components/layout/Loading'
 import { Modal } from './components/layout/Modal'
 
 // Styles
+import { AddRelatedAnimals } from './pages/AddRelatedAnimals'
 import { AppContainer } from './styles/root'
 
 export const App: FC = () => {
@@ -29,6 +30,7 @@ export const App: FC = () => {
 					<Route path={AppRoutes.ADD_ANIMAL} element={<AddAnimal />} />
 					<Route path={AppRoutes.ADD_HEALTH_RECORD} element={<AddHealthRecord />} />
 					<Route path={AppRoutes.ADD_PRODUCTION_RECORD} element={<AddProductionRecord />} />
+					<Route path={AppRoutes.ADD_RELATED_ANIMALS} element={<AddRelatedAnimals />} />
 
 					<Route path={AppRoutes.LOGIN} element={<Animals />} />
 					<Route path={AppRoutes.REGISTER} element={<Animals />} />

@@ -1,3 +1,6 @@
+import { AppRoutes } from '@/config/constants/routes'
+import { useLocation, useNavigate } from 'react-router-dom'
+
 // Components
 import { ActionButton } from '@/components/ui/ActionButton'
 import { Table } from '@/components/ui/Table'
@@ -9,6 +12,14 @@ import type { RelatedAnimalsTableProps } from './RelatedAnimalsTable.types'
 import * as S from './RelatedAnimalsTable.styles'
 
 export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({ title, animals, user }) => {
+	const location = useLocation()
+	const navigate = useNavigate()
+
+	const handleAddRelatedAnimals = () => {
+		const animalUuid = location.pathname.split('/').pop()
+		const path = AppRoutes.ADD_RELATED_ANIMALS.replace(':animalUuid', animalUuid || '')
+		navigate(path)
+	}
 	return (
 		<S.TableContainer>
 			<S.CenterTitle>
@@ -17,6 +28,7 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({ title, anima
 					<ActionButton
 						title={title.startsWith('Parents') ? 'Add Parent' : 'Add Child'}
 						icon="i-material-symbols-add-circle-outline"
+						onClick={handleAddRelatedAnimals}
 					/>
 				)}
 			</S.CenterTitle>
