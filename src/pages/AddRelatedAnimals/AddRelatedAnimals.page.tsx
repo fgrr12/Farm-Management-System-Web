@@ -30,7 +30,7 @@ export const AddRelatedAnimals: FC = () => {
 		dragOverItem.type = type
 	}
 
-	const handleDrop = async () => {
+	const handleDrop = () => {
 		if (dragItem.type === 'animal' && dragOverItem.type) {
 			const animal = animalsLists.animals.find((animal) => animal.uuid === dragItem.current)
 			if (!animal) return
@@ -74,12 +74,15 @@ export const AddRelatedAnimals: FC = () => {
 		}
 	}
 
-	const setRelatedToAnimal = async (animalArray: 'children' | 'parent') => {
+	const handleClicDropzone = (type: DragType) => {
+		handleDragEnter(type)
+		dragItem.type !== dragOverItem.type && handleDrop()
+	}
+
+	const setRelatedToAnimal = (animalArray: 'children' | 'parent') => {
 		const animal = animalsLists[animalArray].find((animal) => animal.uuid === dragItem.current)
 
 		if (!animal) return
-
-		console.log(animal)
 
 		setAnimalsLists((prev) => ({
 			...prev,
@@ -131,7 +134,10 @@ export const AddRelatedAnimals: FC = () => {
 	return (
 		<S.Container>
 			<PageHeader onBack={handleBack}>Add Related Animals</PageHeader>
-			<S.AnimalsContainer onDragEnter={() => handleDragEnter('animal')}>
+			<S.AnimalsContainer
+				onDragEnter={() => handleDragEnter('animal')}
+				onClick={() => handleClicDropzone('animal')}
+			>
 				{animalsLists.animals.map((animal) => (
 					<RelatedAnimalCard
 						key={animal.animalId}
@@ -142,13 +148,17 @@ export const AddRelatedAnimals: FC = () => {
 						draggable
 						onDragStart={() => handleDragStart(animal.uuid, 'animal')}
 						onDragEnd={handleDrop}
+						onClick={() => handleDragStart(animal.uuid, 'animal')}
 					/>
 				))}
 			</S.AnimalsContainer>
 			<S.RelatedAnimalsContainer>
 				<div>
 					<S.Title>Parents</S.Title>
-					<S.DragZone onDragEnter={() => handleDragEnter('parent')}>
+					<S.DragZone
+						onDragEnter={() => handleDragEnter('parent')}
+						onClick={() => handleClicDropzone('parent')}
+					>
 						{animalsLists.parent.map((animal) => (
 							<RelatedAnimalCard
 								key={animal.animalId}
@@ -159,13 +169,17 @@ export const AddRelatedAnimals: FC = () => {
 								draggable
 								onDragStart={() => handleDragStart(animal.uuid, 'parent')}
 								onDragEnd={handleDrop}
+								onClick={() => handleDragStart(animal.uuid, 'parent')}
 							/>
 						))}
 					</S.DragZone>
 				</div>
 				<div>
 					<S.Title>Children</S.Title>
-					<S.DragZone onDragEnter={() => handleDragEnter('child')}>
+					<S.DragZone
+						onDragEnter={() => handleDragEnter('child')}
+						onClick={() => handleClicDropzone('child')}
+					>
 						{animalsLists.children.map((animal) => (
 							<RelatedAnimalCard
 								key={animal.animalId}
@@ -176,6 +190,7 @@ export const AddRelatedAnimals: FC = () => {
 								draggable
 								onDragStart={() => handleDragStart(animal.uuid, 'child')}
 								onDragEnd={handleDrop}
+								onClick={() => handleDragStart(animal.uuid, 'child')}
 							/>
 						))}
 					</S.DragZone>
