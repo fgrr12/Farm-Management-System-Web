@@ -46,6 +46,7 @@ export const DragZone = styled.div`
     height: 100%;
     border: 2px dashed ${colors.primary[200]};
     border-radius: 0.5rem;
+    padding: 1rem;
 
     & > div {
         width: calc(50% - 1rem);
@@ -55,6 +56,7 @@ export const DragZone = styled.div`
     @media (max-width: 768px) {
         flex-direction: column;
         gap: 1rem;
+        padding: 0.5rem;
 
         & > div {
             width: 100%;
