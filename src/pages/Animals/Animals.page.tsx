@@ -45,7 +45,6 @@ export const Animals = () => {
 
 	const getAnimals = async () => {
 		try {
-			setLoading(true)
 			const { selectedSpecies, search } = filters
 			const dbAnimals = await AnimalsService.getAnimals({ selectedSpecies, search })
 
@@ -78,6 +77,7 @@ export const Animals = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: This error is due to withFetching HOF
 	useEffect(() => {
+		setLoading(true)
 		i18n.changeLanguage('esp')
 		getSpecies()
 		getAnimals()
