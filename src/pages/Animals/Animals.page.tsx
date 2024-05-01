@@ -73,8 +73,6 @@ export const Animals = () => {
 				message: 'Ocurrió un error al obtener las especies',
 				onAccept: () => setModalData(defaultModalData),
 			})
-		} finally {
-			setLoading(false)
 		}
 	}
 
