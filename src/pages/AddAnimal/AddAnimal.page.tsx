@@ -12,11 +12,11 @@ import { Select } from '@/components/ui/Select'
 import { TextField } from '@/components/ui/TextField'
 
 import { AppRoutes } from '@/config/constants/routes'
+import { AnimalsService } from '@/services/animals'
 import { useAppStore } from '@/store/useAppStore'
 
 import type { AnimalForm } from './AddAnimal.types'
 
-import { AnimalsService } from '@/services/animals'
 import * as S from './AddAnimal.styles'
 
 export const AddAnimal = () => {
@@ -49,25 +49,6 @@ export const AddAnimal = () => {
 		try {
 			setLoading(true)
 			event.preventDefault()
-			// const image = await storageHandler.setPicture(
-			// 	`animals/${animalForm.uuid}`,
-			// 	animalForm.picture!
-			// )
-
-			// await firestoreHandler.setDocument('animals', animalForm.uuid, {
-			// 	animalId: animalForm.animalId,
-			// 	species: animalForm.species,
-			// 	breed: animalForm.breed,
-			// 	gender: animalForm.gender,
-			// 	color: animalForm.color,
-			// 	weight: animalForm.weight,
-			// 	picture: image.metadata.fullPath,
-			// 	birthDate: animalForm.birthDate?.format('YYYY-MM-DD'),
-			// 	purchaseDate: animalForm.purchaseDate?.format('YYYY-MM-DD'),
-			// 	relatedAnimals: { children: [], parents: [] },
-			// 	healthRecords: [],
-			// 	productionRecords: [],
-			// })
 
 			await AnimalsService.setAnimal(animalForm)
 
@@ -110,7 +91,7 @@ export const AddAnimal = () => {
 				<Select name="species" label={t('addAnimal.species')} onChange={handleSelectChange}>
 					{species.map((species) => (
 						<option key={species} value={species}>
-							{species}
+							{t(`species.${species.toLowerCase()}`)}
 						</option>
 					))}
 				</Select>
@@ -125,7 +106,7 @@ export const AddAnimal = () => {
 				<Select name="gender" label={t('addAnimal.gender')} onChange={handleSelectChange}>
 					{genders.map((gender) => (
 						<option key={gender} value={gender}>
-							{gender}
+							{t(`gender.${gender.toLowerCase()}`)}
 						</option>
 					))}
 				</Select>

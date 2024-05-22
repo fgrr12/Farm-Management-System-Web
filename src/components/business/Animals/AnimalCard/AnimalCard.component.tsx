@@ -28,7 +28,7 @@ export const AnimalCard: FC<CardProps> = ({
 					{t('animalCard.birthDate')}: {dayjs(animalBirthDate).format('DD/MM/YYYY')}
 				</p>
 				<p>
-					{t('animalCard.gender')}: {t(`gender.${animalGender.toLocaleLowerCase()}`)}
+					{t('animalCard.gender')}: {t(`gender.${animalGender.toLowerCase()}`)}
 				</p>
 				<p>
 					{t('animalCard.color')}: {animalColor}
