@@ -67,9 +67,9 @@
 		"invalid": "Invalid file type"
 	},
 	"species": {
-		"Chicken": "Pollos",
-		"Cow": "Cattle",
-		"Goat": "Goats",
-		"Sheep": "Sheep"
+		"chicken": "Pollos",
+		"cow": "Cattle",
+		"goat": "Goats",
+		"sheep": "Sheep"
 	}
 }

@@ -67,9 +67,9 @@
 		"invalid": "Solo se permiten imágenes"
 	},
 	"species": {
-		"Chicken": "Pollos",
-		"Cow": "Ganado",
-		"Goat": "Cabras",
-		"Sheep": "Ovejas"
+		"chicken": "Pollos",
+		"cow": "Ganado",
+		"goat": "Cabras",
+		"sheep": "Ovejas"
 	}
 }

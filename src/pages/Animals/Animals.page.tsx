@@ -100,7 +100,7 @@ export const Animals = () => {
 					{species.length > 0 &&
 						species.map((specie) => (
 							<option key={specie} value={specie}>
-								{t(`species.${specie}`)}
+								{t(`species.${specie.toLowerCase()}`)}
 							</option>
 						))}
 				</Select>
