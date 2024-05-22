@@ -99,7 +99,7 @@ export const AddHealthRecord = () => {
 				<Select name="type" label={t('addHealthRecord.type')} onChange={handleSelectChange}>
 					{healthRecordTypes.map((type) => (
 						<option key={type} value={type}>
-							{type}
+							{t(`healthRecordType.${type.toLowerCase()}`)}
 						</option>
 					))}
 				</Select>

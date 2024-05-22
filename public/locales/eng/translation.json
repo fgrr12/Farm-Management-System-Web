@@ -75,5 +75,14 @@
 	"gender": {
 		"male": "Male",
 		"female": "Female"
+	},
+	"healthRecordType": {
+		"checkup": "Checkup",
+		"vaccination": "Vaccination",
+		"medication": "Medication",
+		"surgery": "Surgery",
+		"pregnant": "Pregnant",
+		"deworming": "Deworming",
+		"birth": "Birth"
 	}
 }

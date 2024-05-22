@@ -75,5 +75,14 @@
 	"gender": {
 		"male": "Macho",
 		"female": "Hembra"
+	},
+	"healthRecordType": {
+		"checkup": "Revision",
+		"vaccination": "Vacunación",
+		"medication": "Medicación",
+		"surgery": "Cirugía",
+		"pregnant": "Embarazada",
+		"deworming": "Desparasitación",
+		"birth": "Nacimiento/Parto"
 	}
 }
