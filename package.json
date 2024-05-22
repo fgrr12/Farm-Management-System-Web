@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "dotenv -e .env.local vite -- --mode local-develop",
 		"build:production": "tsc && dotenv -e .env.production vite build -- --mode production",
-		"build:develop": "tsc && dotenv -e .env.develop vite build -- --mode develop",
+		"build:develop": "tsc && dotenv -e .env.local vite build -- --mode develop",
 		"preview": "vite preview",
 		"lint": "biome check . --apply",
 		"format": "biome format --write .",
