@@ -7,7 +7,7 @@ import { AnimalCard } from '@/components/business/Animals/AnimalCard'
 import { PageHeader } from '@/components/ui/PageHeader'
 
 //Types
-import type { AnimalCardInformation, AnimalsFilters, SpeciesList } from './Animals.types'
+import type { AnimalCardInformation, AnimalsFilters } from './Animals.types'
 
 // Styles
 import { Button } from '@/components/ui/Button'
@@ -23,7 +23,7 @@ export const Animals = () => {
 	const { t, i18n } = useTranslation()
 	const { defaultModalData, setLoading, setModalData } = useAppStore()
 	const [animals, setAnimals] = useState<AnimalCardInformation[]>([])
-	const [species, setSpecies] = useState<SpeciesList[]>([])
+	const [species, setSpecies] = useState<string[]>([])
 	const [filters, setFilters] = useState<AnimalsFilters>(INITIAL_FILTERS)
 
 	const navigateToAnimal = (uuid: string) => {
@@ -65,13 +65,8 @@ export const Animals = () => {
 	const getSpecies = async () => {
 		try {
 			const dbSpecies = await AnimalsService.getSpecies()
-			const dbSpeciesList: SpeciesList[] = []
 
-			for (const bdSpecie of dbSpecies) {
-				dbSpeciesList.push({ title: t(`species.${bdSpecie}`), value: bdSpecie })
-			}
-
-			setSpecies(dbSpeciesList)
+			setSpecies(dbSpecies)
 		} catch (error) {
 			setModalData({
 				open: true,
@@ -104,8 +99,8 @@ export const Animals = () => {
 					<option value="all">{t('animals.all')}</option>
 					{species.length > 0 &&
 						species.map((specie) => (
-							<option key={specie.value} value={specie.value}>
-								{specie.title}
+							<option key={specie} value={specie}>
+								{t(`species.${specie}`)}
 							</option>
 						))}
 				</Select>
