@@ -65,5 +65,11 @@
 		"drag": "Suelta tu imagen aquí",
 		"selected": "Imagen seleccionada:",
 		"invalid": "Solo se permiten imágenes"
+	},
+	"species": {
+		"Chicken": "Pollos",
+		"Cow": "Ganado",
+		"Goat": "Cabras",
+		"Sheep": "Ovejas"
 	}
 }

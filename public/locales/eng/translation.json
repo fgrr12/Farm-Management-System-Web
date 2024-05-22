@@ -65,5 +65,11 @@
 		"drag": "Drag and drop your image here",
 		"selected": "Selected file",
 		"invalid": "Invalid file type"
+	},
+	"species": {
+		"Chicken": "Pollos",
+		"Cow": "Cattle",
+		"Goat": "Goats",
+		"Sheep": "Sheep"
 	}
 }

@@ -7,7 +7,7 @@ import { AnimalCard } from '@/components/business/Animals/AnimalCard'
 import { PageHeader } from '@/components/ui/PageHeader'
 
 //Types
-import type { AnimalCardInformation, AnimalsFilters } from './Animals.types'
+import type { AnimalCardInformation, AnimalsFilters, SpeciesList } from './Animals.types'
 
 // Styles
 import { Button } from '@/components/ui/Button'
@@ -23,7 +23,7 @@ export const Animals = () => {
 	const { t, i18n } = useTranslation()
 	const { defaultModalData, setLoading, setModalData } = useAppStore()
 	const [animals, setAnimals] = useState<AnimalCardInformation[]>([])
-	const [species, setSpecies] = useState<string[]>([])
+	const [species, setSpecies] = useState<SpeciesList[]>([])
 	const [filters, setFilters] = useState<AnimalsFilters>(INITIAL_FILTERS)
 
 	const navigateToAnimal = (uuid: string) => {
@@ -45,6 +45,7 @@ export const Animals = () => {
 
 	const getAnimals = async () => {
 		try {
+			setLoading(true)
 			const { selectedSpecies, search } = filters
 			const dbAnimals = await AnimalsService.getAnimals({ selectedSpecies, search })
 
@@ -64,7 +65,13 @@ export const Animals = () => {
 	const getSpecies = async () => {
 		try {
 			const dbSpecies = await AnimalsService.getSpecies()
-			setSpecies(dbSpecies)
+			const dbSpeciesList: SpeciesList[] = []
+
+			for (const bdSpecie of dbSpecies) {
+				dbSpeciesList.push({ title: t(`species.${bdSpecie}`), value: bdSpecie })
+			}
+
+			setSpecies(dbSpeciesList)
 		} catch (error) {
 			setModalData({
 				open: true,
@@ -88,8 +95,6 @@ export const Animals = () => {
 		getAnimals()
 	}, [filters])
 
-	//! Añadir tabla de producción (x fecha el animal produce x cantidad de leche)
-
 	return (
 		<S.Container>
 			<PageHeader>{t('animals.title')}</PageHeader>
@@ -97,11 +102,12 @@ export const Animals = () => {
 				<Search placeholder={t('animals.search')} onKeyDown={handleSearchKeyPress} />
 				<Select name="selectedSpecies" label={t('animals.species')} onChange={handleSelectChange}>
 					<option value="all">{t('animals.all')}</option>
-					{species.map((specie) => (
-						<option key={specie} value={specie}>
-							{specie}
-						</option>
-					))}
+					{species.length > 0 &&
+						species.map((specie) => (
+							<option key={specie.value} value={specie.value}>
+								{specie.title}
+							</option>
+						))}
 				</Select>
 				<Button onClick={() => navigation(AppRoutes.ADD_ANIMAL)}>{t('animals.addAnimal')}</Button>
 			</S.ButtonContainer>

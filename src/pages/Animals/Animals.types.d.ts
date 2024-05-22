@@ -5,6 +5,11 @@ export interface AnimalsFilters {
 	search: string
 }
 
+export interface SpeciesList {
+	title: string
+	value: string
+}
+
 declare interface AnimalHealthRecord {
 	animalUuid: string
 	reason: string
