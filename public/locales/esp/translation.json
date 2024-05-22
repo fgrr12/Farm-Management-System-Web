@@ -27,6 +27,26 @@
 		"purchaseDate": "Fecha de compra",
 		"addAnimal": "Añadir animal"
 	},
+	"animal": {
+		"animalId": "ID del animal",
+		"species": "Especie",
+		"breed": "Raza",
+		"gender": "Género",
+		"color": "Color",
+		"weight": "Peso",
+		"birthDate": "Fecha de nacimiento",
+		"purchaseDate": "Fecha de compra",
+		"saleDate": "Fecha de venta",
+		"deathDate": "Fecha de fallecimiento",
+		"speciesList": {
+			"chicken": "Pollo",
+			"cow": "Ganado",
+			"goat": "Cabra",
+			"sheep": "Oveja"
+		},
+		"parentsTitle": "Padres",
+		"childrenTitle": "Hijos"
+	},
 	"addHealthRecord": {
 		"title": "Añade registro de salud",
 		"reason": "Razón",

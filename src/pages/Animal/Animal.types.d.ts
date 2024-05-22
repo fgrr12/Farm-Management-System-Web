@@ -47,6 +47,6 @@ export interface AnimalInformation {
 	productionRecords: ProductionRecord[]
 	birthDate?: dayjs.Dayjs | string
 	purchaseDate?: dayjs.Dayjs | string
-	soldDate?: dayjs.Dayjs | string
+	saleDate?: dayjs.Dayjs | string
 	deathDate?: dayjs.Dayjs | string
 }

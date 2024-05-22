@@ -10,7 +10,7 @@
 		"addAnimal": "Add Animal"
 	},
 	"animalCard": {
-		"birthDate": "Date of Birth",
+		"birthDate": "Birth Date",
 		"gender": "Gender",
 		"color": "Color",
 		"view": "View"
@@ -23,9 +23,29 @@
 		"gender": "Gender",
 		"color": "Color",
 		"weight": "Weight",
-		"birthDate": "Date of Birth",
+		"birthDate": "Birth Date",
 		"purchaseDate": "Purchase Date",
 		"addAnimal": "Add Animal"
+	},
+	"animal": {
+		"animalId": "Animal ID",
+		"species": "Species",
+		"breed": "Breed",
+		"gender": "Gender",
+		"color": "Color",
+		"weight": "Weight",
+		"birthDate": "Birth Date",
+		"purchaseDate": "Purchase Date",
+		"saleDate": "Sale Date",
+		"deathDate": "Death Date",
+		"speciesList": {
+			"chicken": "Chicken",
+			"cow": "Cattle",
+			"goat": "Goat",
+			"sheep": "Sheep"
+		},
+		"parentsTitle": "Parents",
+		"childrenTitle": "Children"
 	},
 	"addHealthRecord": {
 		"title": "Add Health Record",
