@@ -63,11 +63,12 @@ export const Dropzone: FC<DropzoneProps> = ({ onFile, cleanFile, ...rest }) => {
 		setUrl('')
 	}
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: This error is due to withFetching HOF
 	useEffect(() => {
 		if (cleanFile) {
 			removeImage()
 		}
-	}, [cleanFile, removeImage])
+	}, [cleanFile])
 
 	return (
 		<S.DropzoneContainer>
