@@ -25,7 +25,7 @@ export const BillingCard: FC = () => {
 					<S.H3>Dirección:</S.H3>
 					<label>La Union de Venecia, San Carlos</label>
 				</S.DataContainer>
-				<S.Img src="../../../public/_b8bbe6dc-dce3-45ef-886a-f3a7a93dd0a5.jpeg" alt="Logo" />
+				<S.Img src="/_b8bbe6dc-dce3-45ef-886a-f3a7a93dd0a5.jpeg" alt="Logo" />
 			</S.Card>
 		</S.Container>
 	)
