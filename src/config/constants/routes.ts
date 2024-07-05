@@ -8,4 +8,7 @@ export enum AppRoutes {
 	ADD_HEALTH_RECORD = '/add-health-record/:animalUuid',
 	ADD_PRODUCTION_RECORD = '/add-production-record/:animalUuid',
 	ADD_RELATED_ANIMALS = '/add-related-animals/:animalUuid',
+
+	// Billing Card
+	BILLING_CARD = '/billing-card',
 }
