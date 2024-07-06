@@ -29,8 +29,12 @@ export const DataContainer = styled.div`
     align-items: center;
     gap: 5px;
 
+    h3 {
+        font-size: 18px;
+    }
+
     label {
-        font-size: 16px;
+        font-size: 18px;
         font-weight: 500;
 
     }
@@ -39,7 +43,7 @@ export const DataContainer = styled.div`
 export const Img = styled.img`
     position: absolute;
     bottom: 45px;
-    right: 20px;
+    right: 15px;
     width: 25%;
     height: auto;
     border-radius: 10px;
