@@ -1,9 +1,5 @@
 import type dayjs from 'dayjs'
 
-export interface GetHealthRecordsProps {
-	animalUuid: string
-}
-
 export interface SetHealthRecordProps {
 	uuid: string
 	animalUuid: string

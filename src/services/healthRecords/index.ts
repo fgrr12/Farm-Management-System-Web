@@ -1,7 +1,7 @@
 import { firestore } from '@/config/environment'
 import dayjs from 'dayjs'
 import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore'
-import type { GetHealthRecordResponse, GetHealthRecordsProps, SetHealthRecordProps } from './types'
+import type { GetHealthRecordResponse, SetHealthRecordProps } from './types'
 
 const collectionName = 'healthRecords'
 
@@ -9,9 +9,8 @@ export module HealthRecordsService {
 	// Gets
 
 	export const getHealthRecords = async (
-		getHealthRecordsProps: GetHealthRecordsProps
+		animalUuid: string
 	): Promise<GetHealthRecordResponse[]> => {
-		const { animalUuid } = getHealthRecordsProps
 		const healthRecords = await getDocs(
 			query(
 				collection(firestore, collectionName),

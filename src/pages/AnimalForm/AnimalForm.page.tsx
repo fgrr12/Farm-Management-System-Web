@@ -1,8 +1,8 @@
 import { fileToBase64 } from '@/utils/fileToBase64'
 import dayjs from 'dayjs'
-import { useState, type ChangeEvent, type FormEvent } from 'react'
+import { useCallback, useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { Button } from '@/components/ui/Button'
 import { DatePicker } from '@/components/ui/DatePicker'
@@ -21,6 +21,7 @@ import * as S from './AnimalForm.styles'
 
 export const AnimalForm = () => {
 	const navigate = useNavigate()
+	const params = useParams()
 	const { t } = useTranslation()
 
 	const { defaultModalData, setLoading, setModalData } = useAppStore()
@@ -45,6 +46,24 @@ export const AnimalForm = () => {
 
 		setAnimalForm((prev) => ({ ...prev, picture: picture.data }))
 	}
+
+	const getAnimal = useCallback(async () => {
+		try {
+			setLoading(true)
+			const animalUuid = params.animalUuid as string
+			const dbAnimal = await AnimalsService.getAnimal(animalUuid)
+			setAnimalForm(dbAnimal)
+		} catch (error) {
+			setModalData({
+				open: true,
+				title: 'Error',
+				message: 'There was an error getting the animal',
+				onAccept: () => setModalData(defaultModalData),
+			})
+		} finally {
+			setLoading(false)
+		}
+	}, [params.animalUuid, setModalData, defaultModalData, setLoading])
 
 	const handleSubmit = async (event: FormEvent) => {
 		try {
@@ -74,6 +93,11 @@ export const AnimalForm = () => {
 		}
 	}
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
+	useEffect(() => {
+		getAnimal()
+	}, [])
+
 	return (
 		<S.Container>
 			<PageHeader>{t('addAnimal.title')}</PageHeader>
@@ -83,13 +107,24 @@ export const AnimalForm = () => {
 					type="text"
 					placeholder={t('addAnimal.animalId')}
 					label={t('addAnimal.animalId')}
+					value={animalForm.animalId}
 					onChange={handleTextChange}
 					required
 				/>
 				<S.DropzoneContainer>
-					<Dropzone className="dropzone" cleanFile={false} onFile={handleFile} />
+					<Dropzone
+						className="dropzone"
+						cleanFile={false}
+						pictureUrl={animalForm.picture}
+						onFile={handleFile}
+					/>
 				</S.DropzoneContainer>
-				<Select name="species" label={t('addAnimal.species')} onChange={handleSelectChange}>
+				<Select
+					name="species"
+					label={t('addAnimal.species')}
+					value={animalForm.species}
+					onChange={handleSelectChange}
+				>
 					{species.map((species) => (
 						<option key={species} value={species}>
 							{t(`species.${species.toLowerCase()}`)}
@@ -101,10 +136,16 @@ export const AnimalForm = () => {
 					type="text"
 					placeholder={t('addAnimal.breed')}
 					label={t('addAnimal.breed')}
+					value={animalForm.breed}
 					onChange={handleTextChange}
 					required
 				/>
-				<Select name="gender" label={t('addAnimal.gender')} onChange={handleSelectChange}>
+				<Select
+					name="gender"
+					label={t('addAnimal.gender')}
+					value={animalForm.gender}
+					onChange={handleSelectChange}
+				>
 					{genders.map((gender) => (
 						<option key={gender} value={gender}>
 							{t(`gender.${gender.toLowerCase()}`)}
@@ -116,6 +157,7 @@ export const AnimalForm = () => {
 					type="text"
 					placeholder={t('addAnimal.color')}
 					label={t('addAnimal.color')}
+					value={animalForm.color}
 					onChange={handleTextChange}
 					required
 				/>
@@ -124,17 +166,18 @@ export const AnimalForm = () => {
 					type="text"
 					placeholder={t('addAnimal.weight')}
 					label={t('addAnimal.weight')}
+					value={animalForm.weight}
 					onChange={handleTextChange}
 					required
 				/>
 				<DatePicker
 					label={t('addAnimal.birthDate')}
-					date={dayjs()}
+					date={dayjs(animalForm.birthDate)}
 					onDateChange={handleDateChange('birthDate')}
 				/>
 				<DatePicker
 					label={t('addAnimal.purchaseDate')}
-					date={dayjs()}
+					date={dayjs(animalForm.purchaseDate)}
 					onDateChange={handleDateChange('purchaseDate')}
 				/>
 				<Button type="submit">{t('addAnimal.addAnimal')}</Button>
@@ -158,7 +201,4 @@ const INITIAL_ANIMAL_FORM: Animal = {
 	picture: '',
 	birthDate: dayjs(),
 	purchaseDate: dayjs(),
-	relatedAnimals: { children: [], parents: [] },
-	healthRecords: [],
-	productionRecords: [],
 }

@@ -11,10 +11,4 @@ export interface Animal {
 	picture?: string
 	birthDate?: dayjs.Dayjs
 	purchaseDate?: dayjs.Dayjs
-	relatedAnimals: {
-		children: []
-		parents: []
-	}
-	healthRecords: []
-	productionRecords: []
 }

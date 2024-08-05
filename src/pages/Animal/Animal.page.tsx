@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { HealthRecordsTable } from '@/components/business/Animal/HealthRecordsTable'
 import { ProductionRecordsTable } from '@/components/business/Animal/ProductionRecordsTable'
@@ -9,22 +9,29 @@ import { RelatedAnimalsTable } from '@/components/business/Animal/RelatedAnimals
 import { ActionButton } from '@/components/ui/ActionButton'
 import { PageHeader } from '@/components/ui/PageHeader'
 
+import { AppRoutes } from '@/config/constants/routes'
 import { AnimalsService } from '@/services/animals'
 import { HealthRecordsService } from '@/services/healthRecords'
 import { ProductionRecordsService } from '@/services/productionRecords'
+import { RelatedAnimalsService } from '@/services/relatedAnimals'
 import { useAppStore } from '@/store/useAppStore'
 
 import type { AnimalInformation } from './Animal.types'
 
-import { RelatedAnimalsService } from '@/services/relatedAnimals'
 import * as S from './Animal.styles'
 
 export const Animal: FC = () => {
+	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation()
+
 	const { defaultModalData, setLoading, setModalData } = useAppStore()
 	const [animal, setAnimal] = useState<AnimalInformation>(ANIMAL_INITIAL_STATE)
 	const [user] = useState<boolean>(true) // useState<UserInformation>(USER_INITIAL_STATE)
+
+	const handleEditAnimal = () => {
+		navigate(AppRoutes.EDIT_ANIMAL.replace(':animalUuid', animal.uuid))
+	}
 
 	const handleRemoveRelation = (uuid: string) => {
 		const updateParents = animal.relatedAnimals.parents.filter((related) => related.uuid !== uuid)
@@ -53,8 +60,8 @@ export const Animal: FC = () => {
 			const { pathname } = location
 			const animalId = pathname.split('/').pop()
 
-			const dbAnimal = await AnimalsService.getAnimal({ animalUuid: animalId! })
-			const dbHealthRecords = await HealthRecordsService.getHealthRecords({ animalUuid: animalId! })
+			const dbAnimal = await AnimalsService.getAnimal(animalId!)
+			const dbHealthRecords = await HealthRecordsService.getHealthRecords(animalId!)
 			const dbRelatedAnimals = await RelatedAnimalsService.getRelatedAnimals(animalId!)
 			const dbProductionRecords = await ProductionRecordsService.getProductionRecords({
 				animalUuid: animalId!,
@@ -95,7 +102,13 @@ export const Animal: FC = () => {
 					<S.InfoContainer>
 						<S.CenterTitle>
 							<S.Label>{t('animal.animalId')}</S.Label>
-							{user && <ActionButton title="Edit" icon="i-material-symbols-edit-square-outline" />}
+							{user && (
+								<ActionButton
+									title="Edit"
+									icon="i-material-symbols-edit-square-outline"
+									onClick={handleEditAnimal}
+								/>
+							)}
 							{user && <ActionButton title="Delete" icon="i-material-symbols-delete-outline" />}
 						</S.CenterTitle>
 						<S.AnimalInfo>

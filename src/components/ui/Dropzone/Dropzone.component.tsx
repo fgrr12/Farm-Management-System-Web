@@ -14,7 +14,7 @@ import type { DropEvent, DropzoneProps } from './Dropzone.types'
 // Styles
 import * as S from './Dropzone.styles'
 
-export const Dropzone: FC<DropzoneProps> = ({ onFile, cleanFile, ...rest }) => {
+export const Dropzone: FC<DropzoneProps> = ({ cleanFile, pictureUrl, onFile, ...rest }) => {
 	const { t } = useTranslation()
 	const inputRef = useRef<HTMLInputElement>(null)
 	const [labelText, setLabelText] = useState<string>(t('dropzone.nonDrag'))
@@ -67,6 +67,14 @@ export const Dropzone: FC<DropzoneProps> = ({ onFile, cleanFile, ...rest }) => {
 			removeImage()
 		}
 	}, [cleanFile])
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
+	useEffect(() => {
+		if (pictureUrl) {
+			setHasImg(true)
+			setUrl(pictureUrl)
+		}
+	}, [])
 
 	return (
 		<S.DropzoneContainer>

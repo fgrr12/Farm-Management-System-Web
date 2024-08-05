@@ -2,7 +2,7 @@ import { firestore } from '@/config/environment'
 import storageHandler from '@/config/persistence/storageHandler'
 import dayjs from 'dayjs'
 import { collection, doc, getDoc, getDocs, orderBy, query, setDoc, where } from 'firebase/firestore'
-import type { GetAnimalProps, GetAnimalResponse, GetAnimalsProps, SetAnimalProps } from './types'
+import type { GetAnimalResponse, GetAnimalsProps, SetAnimalProps } from './types'
 
 const collectionName = 'animals'
 
@@ -52,8 +52,7 @@ export module AnimalsService {
 		return uniqueSpecies
 	}
 
-	export const getAnimal = async (getAnimalProps: GetAnimalProps): Promise<GetAnimalResponse> => {
-		const { animalUuid } = getAnimalProps
+	export const getAnimal = async (animalUuid: string): Promise<GetAnimalResponse> => {
 		const docRef = doc(firestore, collectionName, animalUuid)
 		const animalDoc = await getDoc(docRef)
 		const animalData = animalDoc.data()
@@ -68,7 +67,7 @@ export module AnimalsService {
 	// Sets
 
 	export const setAnimal = async (animalData: SetAnimalProps) => {
-		if (animalData.picture) {
+		if (animalData.picture && !animalData.picture.includes('firebasestorage')) {
 			const image = await storageHandler.setPicture(
 				`animals/${animalData.uuid}`,
 				animalData.picture
