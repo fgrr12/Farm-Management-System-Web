@@ -14,19 +14,17 @@ import { Textarea } from '@/components/ui/Textarea'
 import { HealthRecordsService } from '@/services/healthRecords'
 import { useAppStore } from '@/store/useAppStore'
 
-import type { HealthRecordForm } from './AddHealthRecord.types'
+import type { HealthRecord } from './HealthRecordForm.types'
 
-import * as S from './AddHealthRecord.styles'
+import * as S from './HealthRecordForm.styles'
 
-export const AddHealthRecord = () => {
+export const HealthRecordForm = () => {
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation()
 
 	const { defaultModalData, setLoading, setModalData } = useAppStore()
-	const [healthRecordForm, setHealthRecordForm] = useState<HealthRecordForm>(
-		INITIAL_HEALTH_RECORD_FORM
-	)
+	const [healthRecordForm, setHealthRecordForm] = useState<HealthRecord>(INITIAL_HEALTH_RECORD_FORM)
 
 	const handleBack = () => {
 		navigate(AppRoutes.ANIMAL.replace(':animalUuid', healthRecordForm.animalUuid))
@@ -221,7 +219,7 @@ const healthRecordTypes: HealthRecordType[] = [
 	'Birth',
 ]
 
-const INITIAL_HEALTH_RECORD_FORM: HealthRecordForm = {
+const INITIAL_HEALTH_RECORD_FORM: HealthRecord = {
 	uuid: crypto.randomUUID(),
 	animalUuid: '',
 	reason: '',

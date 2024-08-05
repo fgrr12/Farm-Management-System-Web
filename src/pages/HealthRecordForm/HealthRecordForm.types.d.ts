@@ -1,6 +1,6 @@
 import type dayjs from 'dayjs'
 
-export interface HealthRecordForm {
+export interface HealthRecord {
 	uuid: string
 	animalUuid: string
 	reason: string
