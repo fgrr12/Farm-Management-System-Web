@@ -1,6 +1,6 @@
 import type dayjs from 'dayjs'
 
-export interface AnimalForm {
+export interface Animal {
 	uuid: string
 	animalId: number
 	species: Species

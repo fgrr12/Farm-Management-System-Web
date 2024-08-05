@@ -2,9 +2,9 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AppRoutes } from './config/constants/routes'
 import { useAppStore } from './store/useAppStore'
 
-import { AddAnimal } from './pages/AddAnimal'
 import { AddRelatedAnimals } from './pages/AddRelatedAnimals'
 import { Animal } from './pages/Animal'
+import { AnimalForm } from './pages/AnimalForm'
 import { Animals } from './pages/Animals'
 import { BillingCard } from './pages/BillingCard'
 import { HealthRecordForm } from './pages/HealthRecordForm'
@@ -25,8 +25,8 @@ export const App: FC = () => {
 					<Route path="/" element={<Navigate to={AppRoutes.ANIMALS} />} />
 					<Route path={AppRoutes.ANIMALS} element={<Animals />} />
 					<Route path={AppRoutes.ANIMAL} element={<Animal />} />
-					<Route path={AppRoutes.ADD_ANIMAL} element={<AddAnimal />} />
-					<Route path={AppRoutes.EDIT_ANIMAL} element={<AddAnimal />} />
+					<Route path={AppRoutes.ADD_ANIMAL} element={<AnimalForm />} />
+					<Route path={AppRoutes.EDIT_ANIMAL} element={<AnimalForm />} />
 					<Route path={AppRoutes.ADD_HEALTH_RECORD} element={<HealthRecordForm />} />
 					<Route path={AppRoutes.EDIT_HEALTH_RECORD} element={<HealthRecordForm />} />
 					<Route path={AppRoutes.ADD_PRODUCTION_RECORD} element={<ProductionRecordForm />} />

@@ -15,15 +15,16 @@ import { AppRoutes } from '@/config/constants/routes'
 import { AnimalsService } from '@/services/animals'
 import { useAppStore } from '@/store/useAppStore'
 
-import type { AnimalForm } from './AddAnimal.types'
+import type { Animal } from './AnimalForm.types'
 
-import * as S from './AddAnimal.styles'
+import * as S from './AnimalForm.styles'
 
-export const AddAnimal = () => {
+export const AnimalForm = () => {
 	const navigate = useNavigate()
 	const { t } = useTranslation()
+
 	const { defaultModalData, setLoading, setModalData } = useAppStore()
-	const [animalForm, setAnimalForm] = useState<AnimalForm>(INITIAL_ANIMAL_FORM)
+	const [animalForm, setAnimalForm] = useState<Animal>(INITIAL_ANIMAL_FORM)
 
 	const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target
@@ -146,7 +147,7 @@ const species: Species[] = ['Cow', 'Sheep', 'Goat', 'Chicken']
 
 const genders: Gender[] = ['Male', 'Female']
 
-const INITIAL_ANIMAL_FORM: AnimalForm = {
+const INITIAL_ANIMAL_FORM: Animal = {
 	uuid: crypto.randomUUID(),
 	animalId: 0,
 	species: 'Cow',
