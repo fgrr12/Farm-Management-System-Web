@@ -2,13 +2,13 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AppRoutes } from './config/constants/routes'
 import { useAppStore } from './store/useAppStore'
 
-import { AddRelatedAnimals } from './pages/AddRelatedAnimals'
 import { Animal } from './pages/Animal'
 import { AnimalForm } from './pages/AnimalForm'
 import { Animals } from './pages/Animals'
 import { BillingCard } from './pages/BillingCard'
 import { HealthRecordForm } from './pages/HealthRecordForm'
 import { ProductionRecordForm } from './pages/ProductionRecordForm'
+import { RelatedAnimalsForm } from './pages/RelatedAnimalsForm'
 
 import { Loading } from './components/layout/Loading'
 import { Modal } from './components/layout/Modal'
@@ -31,7 +31,7 @@ export const App: FC = () => {
 					<Route path={AppRoutes.EDIT_HEALTH_RECORD} element={<HealthRecordForm />} />
 					<Route path={AppRoutes.ADD_PRODUCTION_RECORD} element={<ProductionRecordForm />} />
 					<Route path={AppRoutes.EDIT_PRODUCTION_RECORD} element={<ProductionRecordForm />} />
-					<Route path={AppRoutes.RELATED_ANIMALS} element={<AddRelatedAnimals />} />
+					<Route path={AppRoutes.RELATED_ANIMALS} element={<RelatedAnimalsForm />} />
 
 					<Route path={AppRoutes.BILLING_CARD} element={<BillingCard />} />
 

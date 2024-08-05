@@ -13,14 +13,15 @@ import type {
 	RelatedAnimalInformation,
 	RelatedAnimalsList,
 	RelatedAnimalsLists,
-} from './AddRelatedAnimals.types'
+} from './RelatedAnimalsForm.types'
 
-import * as S from './AddRelatedAnimals.styles'
+import * as S from './RelatedAnimalsForm.styles'
 
-export const AddRelatedAnimals: FC = () => {
+export const RelatedAnimalsForm: FC = () => {
 	const navigate = useNavigate()
 	const params = useParams()
 	// const { t } = useTranslation()
+
 	const { defaultModalData, setLoading, setModalData } = useAppStore()
 	const dragItem: any = useRef()
 	const dragOverItem: any = useRef()
