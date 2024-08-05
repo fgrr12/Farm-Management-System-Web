@@ -56,6 +56,11 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({ title, anima
 							)}
 						</Table.Row>
 					))}
+					{animals.length === 0 && (
+						<Table.Row>
+							<Table.Cell colSpan={user ? 12 : 11}>No related animals found</Table.Cell>
+						</Table.Row>
+					)}
 				</Table.Body>
 			</Table>
 		</S.TableContainer>

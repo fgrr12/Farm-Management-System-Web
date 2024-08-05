@@ -74,6 +74,11 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({ healthRecords,
 							)}
 						</Table.Row>
 					))}
+					{healthRecords.length === 0 && (
+						<Table.Row>
+							<Table.Cell colSpan={user ? 12 : 11}>No health records found</Table.Cell>
+						</Table.Row>
+					)}
 				</Table.Body>
 			</Table>
 		</S.TableContainer>

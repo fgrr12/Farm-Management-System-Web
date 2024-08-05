@@ -58,6 +58,11 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 							)}
 						</Table.Row>
 					))}
+					{productionRecords.length === 0 && (
+						<Table.Row>
+							<Table.Cell colSpan={user ? 12 : 11}>No production records found</Table.Cell>
+						</Table.Row>
+					)}
 				</Table.Body>
 			</Table>
 		</S.TableContainer>
