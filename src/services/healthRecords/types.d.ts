@@ -28,6 +28,7 @@ export interface GetHealthRecordResponse {
 	type: string
 	reviewedBy: string
 	date: dayjs.Dayjs | string
+	status: boolean
 	weight?: number
 	temperature?: number
 	medication?: string

@@ -1,6 +1,6 @@
 import { AppRoutes } from '@/config/constants/routes'
 import dayjs from 'dayjs'
-import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
+import { useCallback, useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -22,6 +22,7 @@ export const AddHealthRecord = () => {
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation()
+
 	const { defaultModalData, setLoading, setModalData } = useAppStore()
 	const [healthRecordForm, setHealthRecordForm] = useState<HealthRecordForm>(
 		INITIAL_HEALTH_RECORD_FORM
@@ -49,6 +50,24 @@ export const AddHealthRecord = () => {
 	const handleDateChange = () => (newDate: dayjs.Dayjs) => {
 		setHealthRecordForm((prev) => ({ ...prev, date: dayjs(newDate).format('YYYY-MM-DD') }))
 	}
+
+	const getHealthRecord = useCallback(async () => {
+		try {
+			setLoading(true)
+			const healthRecordUuid = params.healthRecordUuid as string
+			const dbHealthRecord = await HealthRecordsService.getHealthRecord(healthRecordUuid)
+			setHealthRecordForm(dbHealthRecord)
+		} catch (error) {
+			setModalData({
+				open: true,
+				title: 'Error',
+				message: 'There was an error getting the health record',
+				onAccept: () => setModalData(defaultModalData),
+			})
+		} finally {
+			setLoading(false)
+		}
+	}, [defaultModalData, params.healthRecordUuid, setModalData, setLoading])
 
 	const handleSubmit = async (event: FormEvent) => {
 		try {
@@ -86,8 +105,7 @@ export const AddHealthRecord = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		const animalUuid = params.animalUuid ?? ''
-		setHealthRecordForm((prev) => ({ ...prev, animalUuid }))
+		getHealthRecord()
 	}, [])
 
 	return (
@@ -99,10 +117,16 @@ export const AddHealthRecord = () => {
 					type="text"
 					placeholder={t('addHealthRecord.reason')}
 					label={t('addHealthRecord.reason')}
+					value={healthRecordForm.reason}
 					onChange={handleTextChange}
 					required
 				/>
-				<Select name="type" label={t('addHealthRecord.type')} onChange={handleSelectChange}>
+				<Select
+					name="type"
+					label={t('addHealthRecord.type')}
+					value={healthRecordForm.type}
+					onChange={handleSelectChange}
+				>
 					{healthRecordTypes.map((type) => (
 						<option key={type} value={type}>
 							{t(`healthRecordType.${type.toLowerCase()}`)}
@@ -114,12 +138,13 @@ export const AddHealthRecord = () => {
 					type="text"
 					placeholder={t('addHealthRecord.reviewedBy')}
 					label={t('addHealthRecord.reviewedBy')}
+					value={healthRecordForm.reviewedBy}
 					onChange={handleTextChange}
 					required
 				/>
 				<DatePicker
 					label={t('addHealthRecord.date')}
-					date={dayjs()}
+					date={dayjs(healthRecordForm.date)}
 					onDateChange={handleDateChange()}
 				/>
 				<TextField
@@ -127,6 +152,7 @@ export const AddHealthRecord = () => {
 					type="text"
 					placeholder={t('addHealthRecord.weight')}
 					label={t('addHealthRecord.weight')}
+					value={healthRecordForm.weight}
 					onChange={handleTextChange}
 				/>
 				<TextField
@@ -134,6 +160,7 @@ export const AddHealthRecord = () => {
 					type="text"
 					placeholder={t('addHealthRecord.temperature')}
 					label={t('addHealthRecord.temperature')}
+					value={healthRecordForm.temperature}
 					onChange={handleTextChange}
 				/>
 				<TextField
@@ -141,6 +168,7 @@ export const AddHealthRecord = () => {
 					type="text"
 					placeholder={t('addHealthRecord.medication')}
 					label={t('addHealthRecord.medication')}
+					value={healthRecordForm.medication}
 					onChange={handleTextChange}
 				/>
 				<TextField
@@ -148,6 +176,7 @@ export const AddHealthRecord = () => {
 					type="text"
 					placeholder={t('addHealthRecord.dosage')}
 					label={t('addHealthRecord.dosage')}
+					value={healthRecordForm.dosage}
 					onChange={handleTextChange}
 				/>
 				<TextField
@@ -155,6 +184,7 @@ export const AddHealthRecord = () => {
 					type="text"
 					placeholder={t('addHealthRecord.frequency')}
 					label={t('addHealthRecord.frequency')}
+					value={healthRecordForm.frequency}
 					onChange={handleTextChange}
 				/>
 				<TextField
@@ -162,6 +192,7 @@ export const AddHealthRecord = () => {
 					type="text"
 					placeholder={t('addHealthRecord.duration')}
 					label={t('addHealthRecord.duration')}
+					value={healthRecordForm.duration}
 					onChange={handleTextChange}
 				/>
 				<S.TextareaContainer>
@@ -169,6 +200,7 @@ export const AddHealthRecord = () => {
 						name="notes"
 						placeholder={t('addHealthRecord.notes')}
 						label={t('addHealthRecord.notes')}
+						value={healthRecordForm.notes}
 						onChange={handleTextareaChange}
 						required
 					/>
