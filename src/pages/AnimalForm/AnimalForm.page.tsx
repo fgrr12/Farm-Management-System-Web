@@ -27,6 +27,15 @@ export const AnimalForm = () => {
 	const { defaultModalData, setLoading, setModalData } = useAppStore()
 	const [animalForm, setAnimalForm] = useState<Animal>(INITIAL_ANIMAL_FORM)
 
+	const handleReturn = () => {
+		const animalUuid = params.animalUuid as string
+		if (animalUuid) {
+			navigate(AppRoutes.ANIMAL.replace(':animalUuid', animalUuid))
+		} else {
+			navigate(AppRoutes.ANIMALS)
+		}
+	}
+
 	const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target
 		setAnimalForm((prev) => ({ ...prev, [name]: value }))
@@ -43,7 +52,6 @@ export const AnimalForm = () => {
 
 	const handleFile = async (file: File) => {
 		const picture = await fileToBase64(file)
-
 		setAnimalForm((prev) => ({ ...prev, picture: picture.data }))
 	}
 
@@ -70,7 +78,7 @@ export const AnimalForm = () => {
 			setLoading(true)
 			event.preventDefault()
 			const animalUuid = params.animalUuid as string
-
+			animalForm.uuid = animalUuid ?? crypto.randomUUID()
 			await AnimalsService.setAnimal(animalForm)
 
 			if (animalUuid) {
@@ -90,6 +98,7 @@ export const AnimalForm = () => {
 					message: 'The animal was added successfully',
 					onAccept: () => {
 						setModalData(defaultModalData)
+						setAnimalForm(INITIAL_ANIMAL_FORM)
 					},
 				})
 			}
@@ -114,7 +123,7 @@ export const AnimalForm = () => {
 
 	return (
 		<S.Container>
-			<PageHeader>{t('addAnimal.title')}</PageHeader>
+			<PageHeader onBack={handleReturn}>{t('addAnimal.title')}</PageHeader>
 			<S.Form onSubmit={handleSubmit} autoComplete="off">
 				<TextField
 					name="animalId"
@@ -205,7 +214,7 @@ const species: Species[] = ['Cow', 'Sheep', 'Goat', 'Chicken']
 const genders: Gender[] = ['Male', 'Female']
 
 const INITIAL_ANIMAL_FORM: Animal = {
-	uuid: crypto.randomUUID(),
+	uuid: '',
 	animalId: 0,
 	species: 'Cow',
 	breed: '',

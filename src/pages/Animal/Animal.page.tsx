@@ -34,8 +34,6 @@ export const Animal: FC = () => {
 	}
 
 	const handleRemoveAnimal = async () => {
-		console.log(animal)
-
 		await AnimalsService.deleteAnimal(animal.uuid, false)
 
 		setModalData({
@@ -79,19 +77,16 @@ export const Animal: FC = () => {
 			const dbAnimal = await AnimalsService.getAnimal(animalId!)
 			const dbHealthRecords = await HealthRecordsService.getHealthRecords(animalId!)
 			const dbRelatedAnimals = await RelatedAnimalsService.getRelatedAnimals(animalId!)
-			const dbProductionRecords = await ProductionRecordsService.getProductionRecords({
-				animalUuid: animalId!,
-			})
+			const dbProductionRecords = await ProductionRecordsService.getProductionRecords(animalId!)
 
 			dbAnimal.healthRecords = dbHealthRecords
-			dbAnimal.relatedAnimals.parents = dbRelatedAnimals.filter(
-				(related) => related.child.animalUuid === animalId
-			)
-			dbAnimal.relatedAnimals.children = dbRelatedAnimals.filter(
-				(related) => related.parent.animalUuid === animalId
-			)
 			dbAnimal.productionRecords = dbProductionRecords
-
+			if (dbRelatedAnimals.length !== 0) {
+				dbAnimal.relatedAnimals = {
+					parents: dbRelatedAnimals.filter((related) => related.parent.animalUuid !== animalId),
+					children: dbRelatedAnimals.filter((related) => related.child.animalUuid !== animalId),
+				}
+			}
 			setAnimal(dbAnimal)
 		} catch (error) {
 			setModalData({
@@ -187,21 +182,21 @@ export const Animal: FC = () => {
 				</S.AnimalContainer>
 
 				<HealthRecordsTable
-					healthRecords={animal.healthRecords}
+					healthRecords={animal?.healthRecords || []}
 					user={user}
 					removeHealthRecord={handleRemoveHealthRecord}
 				/>
 
 				<S.InfoTableContainer>
 					<ProductionRecordsTable
-						productionRecords={animal.productionRecords}
+						productionRecords={animal?.productionRecords || []}
 						user={user}
 						removeProductionRecord={handleRemoveProductionRecord}
 					/>
 
 					<RelatedAnimalsTable
 						title={t('animal.parentsTitle')}
-						animals={animal.relatedAnimals.parents!}
+						animals={animal?.relatedAnimals?.parents || []}
 						user={user}
 						type="parent"
 						removeRelation={handleRemoveRelation}
@@ -209,7 +204,7 @@ export const Animal: FC = () => {
 
 					<RelatedAnimalsTable
 						title={t('animal.childrenTitle')}
-						animals={animal.relatedAnimals.children!}
+						animals={animal?.relatedAnimals?.children || []}
 						user={user}
 						type="child"
 						removeRelation={handleRemoveRelation}

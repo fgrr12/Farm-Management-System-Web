@@ -13,7 +13,7 @@ import type {
 	RelatedAnimalInformation,
 	RelatedAnimalsList,
 	RelatedAnimalsLists,
-} from './AddRelatedAnimals.types'
+} from './RelatedAnimalsForm.types'
 
 import * as S from './RelatedAnimalsForm.styles'
 
@@ -73,7 +73,7 @@ export const RelatedAnimalsForm: FC = () => {
 							animalUuid: animal.uuid,
 							animalId: animal.animalId,
 							breed: animal.breed,
-							relation: animal!.gender.toLowerCase() === 'female' ? 'Mother' : 'Father',
+							relation: animal.gender.toLowerCase() === 'female' ? 'Mother' : 'Father',
 						},
 					})
 				}
@@ -101,7 +101,7 @@ export const RelatedAnimalsForm: FC = () => {
 							animalUuid: animal.uuid,
 							animalId: animal.animalId,
 							breed: animal.breed,
-							relation: animal!.gender.toLowerCase() === 'female' ? 'Daughter' : 'Son',
+							relation: animal.gender.toLowerCase() === 'female' ? 'Daughter' : 'Son',
 						},
 						parent: {
 							animalUuid: animalsLists.animalUuid,
