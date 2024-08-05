@@ -34,8 +34,6 @@ export const Dropzone: FC<DropzoneProps> = ({ onFile, cleanFile, ...rest }) => {
 			onFile(files[0], event)
 			setLabelText(t('dropzone.selected'))
 			setHasImg(true)
-			console.log(URL.createObjectURL(files[0]))
-
 			setUrl(URL.createObjectURL(files[0]))
 		} else {
 			setLabelText(t('dropzone.invalid'))

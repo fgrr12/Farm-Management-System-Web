@@ -66,14 +66,13 @@ export const AddRelatedAnimals: FC = () => {
 							animalUuid: animalsLists.animalUuid,
 							animalId: currentAnimal!.animalId,
 							breed: currentAnimal!.breed,
-							relation: currentAnimal!.gender.toLowerCase() === 'male' ? 'Son' : 'Daughter',
+							relation: currentAnimal!.gender.toLowerCase() === 'female' ? 'Daughter' : 'Son',
 						},
 						parent: {
 							animalUuid: animal.uuid,
-
 							animalId: animal.animalId,
 							breed: animal.breed,
-							relation: currentAnimal!.gender.toLowerCase() === 'male' ? 'Father' : 'Mother',
+							relation: animal!.gender.toLowerCase() === 'female' ? 'Mother' : 'Father',
 						},
 					})
 				}
@@ -101,13 +100,13 @@ export const AddRelatedAnimals: FC = () => {
 							animalUuid: animal.uuid,
 							animalId: animal.animalId,
 							breed: animal.breed,
-							relation: animal.gender.toLowerCase() === 'male' ? 'Son' : 'Daughter',
+							relation: animal!.gender.toLowerCase() === 'female' ? 'Daughter' : 'Son',
 						},
 						parent: {
 							animalUuid: animalsLists.animalUuid,
 							animalId: currentAnimal!.animalId,
 							breed: currentAnimal!.breed,
-							relation: animal.gender.toLowerCase() === 'male' ? 'Father' : 'Mother',
+							relation: currentAnimal!.gender.toLowerCase() === 'female' ? 'Mother' : 'Father',
 						},
 					})
 				}
