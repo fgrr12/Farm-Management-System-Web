@@ -1,12 +1,21 @@
-import { RelatedAnimalCard } from '@/components/business/RelatedAnimals/RelatedAnimalCard'
-import { PageHeader } from '@/components/ui/PageHeader'
-import { AppRoutes } from '@/config/constants/routes'
-import { AnimalsService } from '@/services/animals'
-import { useAppStore } from '@/store/useAppStore'
 import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+
+import { RelatedAnimalCard } from '@/components/business/RelatedAnimals/RelatedAnimalCard'
+import { PageHeader } from '@/components/ui/PageHeader'
+
+import { AppRoutes } from '@/config/constants/routes'
+import { AnimalsService } from '@/services/animals'
+import { RelatedAnimalsService } from '@/services/relatedAnimals'
+import { useAppStore } from '@/store/useAppStore'
+
+import type {
+	RelatedAnimalInformation,
+	RelatedAnimalsList,
+	RelatedAnimalsLists,
+} from './AddRelatedAnimals.types'
+
 import * as S from './AddRelatedAnimals.styles'
-import type { RelatedAnimalsLists } from './AddRelatedAnimals.types'
 
 export const AddRelatedAnimals: FC = () => {
 	const navigate = useNavigate()
@@ -16,6 +25,8 @@ export const AddRelatedAnimals: FC = () => {
 	const dragItem: any = useRef()
 	const dragOverItem: any = useRef()
 	const [animalsLists, setAnimalsLists] = useState<RelatedAnimalsLists>(INITIAL_ANIMALS_LISTS)
+	const [animalsRelated, setAnimalsRelated] = useState<RelatedAnimalsList[]>([])
+	const [currentAnimal, setCurrentAnimal] = useState<RelatedAnimalInformation | null>(null)
 
 	const handleBack = () => {
 		navigate(AppRoutes.ANIMAL.replace(':animalUuid', animalsLists.animalUuid))
@@ -30,7 +41,7 @@ export const AddRelatedAnimals: FC = () => {
 		dragOverItem.type = type
 	}
 
-	const handleDrop = () => {
+	const handleDrop = async () => {
 		if (dragItem.type === 'animal' && dragOverItem.type) {
 			const animal = animalsLists.animals.find((animal) => animal.uuid === dragItem.current)
 			if (!animal) return
@@ -41,6 +52,30 @@ export const AddRelatedAnimals: FC = () => {
 						...prev,
 						parent: [...prev.parent, animal],
 					}))
+					const exist = animalsRelated.find(
+						(related) =>
+							related.parent.animalUuid === animalsLists.animalUuid &&
+							related.child.animalUuid === animal.uuid
+					)
+					if (exist) {
+						await RelatedAnimalsService.deleteProductionRecord(exist.uuid)
+					}
+					await RelatedAnimalsService.setProductionRecord({
+						uuid: crypto.randomUUID(),
+						child: {
+							animalUuid: animalsLists.animalUuid,
+							animalId: currentAnimal!.animalId,
+							breed: currentAnimal!.breed,
+							relation: currentAnimal!.gender.toLowerCase() === 'male' ? 'Son' : 'Daughter',
+						},
+						parent: {
+							animalUuid: animal.uuid,
+
+							animalId: animal.animalId,
+							breed: animal.breed,
+							relation: currentAnimal!.gender.toLowerCase() === 'male' ? 'Father' : 'Mother',
+						},
+					})
 				}
 				setAnimalsLists((prev) => ({
 					...prev,
@@ -52,6 +87,29 @@ export const AddRelatedAnimals: FC = () => {
 						...prev,
 						children: [...prev.children, animal],
 					}))
+					const exist = animalsRelated.find(
+						(related) =>
+							related.child.animalUuid === animalsLists.animalUuid &&
+							related.parent.animalUuid === animal.uuid
+					)
+					if (exist) {
+						await RelatedAnimalsService.deleteProductionRecord(exist.uuid)
+					}
+					await RelatedAnimalsService.setProductionRecord({
+						uuid: crypto.randomUUID(),
+						child: {
+							animalUuid: animal.uuid,
+							animalId: animal.animalId,
+							breed: animal.breed,
+							relation: animal.gender.toLowerCase() === 'male' ? 'Son' : 'Daughter',
+						},
+						parent: {
+							animalUuid: animalsLists.animalUuid,
+							animalId: currentAnimal!.animalId,
+							breed: currentAnimal!.breed,
+							relation: animal.gender.toLowerCase() === 'male' ? 'Father' : 'Mother',
+						},
+					})
 				}
 				setAnimalsLists((prev) => ({
 					...prev,
@@ -66,10 +124,29 @@ export const AddRelatedAnimals: FC = () => {
 		}
 
 		if (dragItem.type === 'parent' && dragOverItem.type === 'animal') {
+			const exist = animalsRelated.find(
+				(related) =>
+					related.parent.animalUuid === dragItem.current &&
+					related.child.animalUuid === animalsLists.animalUuid
+			)
+			if (exist) {
+				await RelatedAnimalsService.deleteProductionRecord(exist.uuid)
+			}
 			setRelatedToAnimal('parent')
 		}
 
 		if (dragItem.type === 'child' && dragOverItem.type === 'animal') {
+			const exist = animalsRelated.find(
+				(related) =>
+					related.child.animalUuid === dragItem.current &&
+					related.parent.animalUuid === animalsLists.animalUuid
+			)
+			if (exist) {
+				await RelatedAnimalsService.deleteProductionRecord(exist.uuid)
+			}
+			await RelatedAnimalsService.deleteProductionRecord(
+				animalsRelated.find((related) => related.child.animalUuid === dragItem.current)!.uuid
+			)
 			setRelatedToAnimal('children')
 		}
 	}
@@ -95,24 +172,52 @@ export const AddRelatedAnimals: FC = () => {
 		try {
 			setLoading(true)
 			const animalUuid = location.pathname.split('/').pop() ?? ''
+			const relatedAnimals = await RelatedAnimalsService.getRelatedAnimals(animalUuid)
 			const animals = await AnimalsService.getAnimals({
 				selectedSpecies: 'all',
 				search: '',
 			})
 
-			const animalsData = animals.map((animal) => ({
-				uuid: animal.uuid,
-				animalId: animal.animalId,
-				breed: animal.breed,
-				gender: animal.gender,
-				picture: animal.picture,
-			}))
-
+			const animalsData = animals
+				.filter((animal) => animal.uuid !== animalUuid)
+				.filter(
+					(animal) =>
+						!relatedAnimals.some(
+							(related) =>
+								related.child.animalUuid === animal.uuid ||
+								related.parent.animalUuid === animal.uuid
+						)
+				)
+				.map((animal) => ({
+					uuid: animal.uuid,
+					animalId: animal.animalId,
+					breed: animal.breed,
+					gender: animal.gender,
+					picture: animal.picture,
+				}))
+			setAnimalsRelated(relatedAnimals)
+			const selectedAnimal = animals.find((animal) => animal.uuid === animalUuid)
+			setCurrentAnimal({
+				uuid: selectedAnimal!.uuid,
+				animalId: selectedAnimal!.animalId,
+				breed: selectedAnimal!.breed,
+				gender: selectedAnimal!.gender,
+			})
 			setAnimalsLists({
 				animalUuid,
 				animals: animalsData,
-				parent: [],
-				children: [],
+				parent: animals.filter((animal) =>
+					relatedAnimals.some(
+						(related) =>
+							related.parent.animalUuid === animal.uuid && related.child.animalUuid === animalUuid
+					)
+				),
+				children: animals.filter((animal) =>
+					relatedAnimals.some(
+						(related) =>
+							related.child.animalUuid === animal.uuid && related.parent.animalUuid === animalUuid
+					)
+				),
 			})
 		} catch (error) {
 			setModalData({

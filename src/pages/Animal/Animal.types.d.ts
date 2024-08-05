@@ -22,15 +22,27 @@ export interface ProductionRecord {
 	notes: string
 }
 
-export interface RelatedAnimal {
-	animalId: number
-	breed: string
-	relation: Relation
+interface RelatedAnimal {
+	uuid: string
+	parent: {
+		animalUuid: string
+		animalId: number
+		breed: string
+		relation: string
+	}
+	child: {
+		animalUuid: string
+		animalId: number
+		breed: string
+		relation: string
+	}
+	createdAt?: dayjs.Dayjs | string
+	updatedAt?: dayjs.Dayjs | string
 }
 
-export interface RelatedAnimals {
-	children: RelatedAnimal[]
+interface RelatedAnimalList {
 	parents: RelatedAnimal[]
+	children: RelatedAnimal[]
 }
 
 export interface AnimalInformation {
@@ -41,7 +53,7 @@ export interface AnimalInformation {
 	gender: Gender
 	color: string
 	weight: number
-	relatedAnimals: RelatedAnimals
+	relatedAnimals: RelatedAnimalList
 	picture?: string
 	healthRecords: AnimalHealthRecord[]
 	productionRecords: ProductionRecord[]

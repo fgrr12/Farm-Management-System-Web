@@ -16,6 +16,7 @@ import { useAppStore } from '@/store/useAppStore'
 
 import type { AnimalInformation } from './Animal.types'
 
+import { RelatedAnimalsService } from '@/services/relatedAnimals'
 import * as S from './Animal.styles'
 
 export const Animal: FC = () => {
@@ -33,12 +34,19 @@ export const Animal: FC = () => {
 
 			const dbAnimal = await AnimalsService.getAnimal({ animalUuid: animalId! })
 			const dbHealthRecords = await HealthRecordsService.getHealthRecords({ animalUuid: animalId! })
-			const bdProductionRecords = await ProductionRecordsService.getProductionRecords({
+			const dbRelatedAnimals = await RelatedAnimalsService.getRelatedAnimals(animalId!)
+			const dbProductionRecords = await ProductionRecordsService.getProductionRecords({
 				animalUuid: animalId!,
 			})
 
 			dbAnimal.healthRecords = dbHealthRecords
-			dbAnimal.productionRecords = bdProductionRecords
+			dbAnimal.relatedAnimals.parents = dbRelatedAnimals.filter(
+				(related) => related.child.animalUuid === animalId
+			)
+			dbAnimal.relatedAnimals.children = dbRelatedAnimals.filter(
+				(related) => related.parent.animalUuid === animalId
+			)
+			dbAnimal.productionRecords = dbProductionRecords
 
 			setAnimal(dbAnimal)
 		} catch (error) {
@@ -131,12 +139,14 @@ export const Animal: FC = () => {
 						title={t('animal.parentsTitle')}
 						animals={animal.relatedAnimals.parents!}
 						user={user}
+						type="parent"
 					/>
 
 					<RelatedAnimalsTable
 						title={t('animal.childrenTitle')}
 						animals={animal.relatedAnimals.children!}
 						user={user}
+						type="child"
 					/>
 				</S.InfoTableContainer>
 			</S.Container>

@@ -59,15 +59,27 @@ declare interface ProductionRecord {
 	notes: string
 }
 
-declare interface RelatedAnimal {
-	animalId: number
-	breed: string
-	relation: Relation
+interface RelatedAnimal {
+	uuid: string
+	parent: {
+		animalUuid: string
+		animalId: number
+		breed: string
+		relation: string
+	}
+	child: {
+		animalUuid: string
+		animalId: number
+		breed: string
+		relation: string
+	}
+	createdAt?: dayjs.Dayjs | string
+	updatedAt?: dayjs.Dayjs | string
 }
 
-declare interface RelatedAnimals {
-	children: RelatedAnimal[]
+interface RelatedAnimalList {
 	parents: RelatedAnimal[]
+	children: RelatedAnimal[]
 }
 
 export interface GetAnimalResponse {
@@ -78,7 +90,7 @@ export interface GetAnimalResponse {
 	gender: Gender
 	color: string
 	weight: number
-	relatedAnimals: RelatedAnimals
+	relatedAnimals: RelatedAnimalList
 	picture?: string
 	healthRecords: AnimalHealthRecord[]
 	productionRecords: ProductionRecord[]
