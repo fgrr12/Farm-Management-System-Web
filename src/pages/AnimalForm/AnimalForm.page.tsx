@@ -69,18 +69,30 @@ export const AnimalForm = () => {
 		try {
 			setLoading(true)
 			event.preventDefault()
+			const animalUuid = params.animalUuid as string
 
 			await AnimalsService.setAnimal(animalForm)
 
-			setModalData({
-				open: true,
-				title: 'Animal Added',
-				message: 'The animal was added successfully',
-				onAccept: () => {
-					setModalData(defaultModalData)
-					navigate(AppRoutes.ANIMALS)
-				},
-			})
+			if (animalUuid) {
+				setModalData({
+					open: true,
+					title: 'Animal Added',
+					message: 'The animal was edited successfully',
+					onAccept: () => {
+						setModalData(defaultModalData)
+						navigate(AppRoutes.ANIMAL.replace(':animalUuid', animalUuid))
+					},
+				})
+			} else {
+				setModalData({
+					open: true,
+					title: 'Animal Added',
+					message: 'The animal was added successfully',
+					onAccept: () => {
+						setModalData(defaultModalData)
+					},
+				})
+			}
 		} catch (error) {
 			setModalData({
 				open: true,
@@ -95,7 +107,9 @@ export const AnimalForm = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		getAnimal()
+		if (params.animalUuid) {
+			getAnimal()
+		}
 	}, [])
 
 	return (

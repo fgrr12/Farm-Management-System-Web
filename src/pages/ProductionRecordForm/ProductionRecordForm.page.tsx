@@ -1,6 +1,6 @@
 import { AppRoutes } from '@/config/constants/routes'
 import dayjs from 'dayjs'
-import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
+import { useCallback, useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -72,10 +72,36 @@ export const ProductionRecordForm = () => {
 		}
 	}
 
+	const getProductionRecord = useCallback(async () => {
+		try {
+			setLoading(true)
+			const productionRecordUuid = params.productionRecordUuid as string
+			const dbProductionRecord =
+				await ProductionRecordsService.getProductionRecord(productionRecordUuid)
+			setProductionRecordForm(dbProductionRecord)
+		} catch (error) {
+			setModalData({
+				open: true,
+				title: 'Error',
+				message: 'There was an error getting the health record',
+				onAccept: () => setModalData(defaultModalData),
+			})
+		} finally {
+			setLoading(false)
+		}
+	}, [defaultModalData, params.productionRecordUuid, setModalData, setLoading])
+
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		const animalUuid = params.animalUuid as string
 		setProductionRecordForm((prev) => ({ ...prev, animalUuid }))
+	}, [])
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
+	useEffect(() => {
+		if (params.productionRecordUuid) {
+			getProductionRecord()
+		}
 	}, [])
 
 	return (
@@ -87,12 +113,13 @@ export const ProductionRecordForm = () => {
 					type="number"
 					placeholder={t('addProductionRecord.quantity')}
 					label={t('addProductionRecord.quantity')}
+					value={productionRecordForm.quantity}
 					onChange={handleTextChange}
 					required
 				/>
 				<DatePicker
 					label={t('addProductionRecord.date')}
-					date={dayjs()}
+					date={dayjs(productionRecordForm.date)}
 					onDateChange={handleDateChange()}
 				/>
 				<S.TextareaContainer>
@@ -100,6 +127,7 @@ export const ProductionRecordForm = () => {
 						name="notes"
 						placeholder={t('addProductionRecord.notes')}
 						label={t('addProductionRecord.notes')}
+						value={productionRecordForm.notes}
 						onChange={handleTextareaChange}
 						required
 					/>

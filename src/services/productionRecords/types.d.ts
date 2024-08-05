@@ -18,4 +18,5 @@ export interface GetProductionRecordResponse {
 	quantity: number
 	date: dayjs.Dayjs | string
 	notes: string
+	status: boolean
 }

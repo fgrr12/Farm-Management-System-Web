@@ -1,6 +1,6 @@
 import { firestore } from '@/config/environment'
 import dayjs from 'dayjs'
-import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore'
+import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore'
 import type {
 	GetProductionRecordResponse,
 	GetProductionRecordsProps,
@@ -26,6 +26,13 @@ export module ProductionRecordsService {
 		const response = productionRecords.docs.map((doc) => ({ ...doc.data(), uuid: doc.id }))
 
 		return response as GetProductionRecordResponse[]
+	}
+
+	export const getProductionRecord = async (uuid: string): Promise<GetProductionRecordResponse> => {
+		const document = doc(firestore, collectionName, uuid)
+		const productionRecord = await getDoc(document)
+
+		return productionRecord.data() as GetProductionRecordResponse
 	}
 
 	// Sets

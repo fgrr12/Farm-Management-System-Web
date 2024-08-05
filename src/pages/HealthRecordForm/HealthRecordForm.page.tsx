@@ -103,7 +103,9 @@ export const HealthRecordForm = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		getHealthRecord()
+		if (params.healthRecordUuid) {
+			getHealthRecord()
+		}
 	}, [])
 
 	return (
