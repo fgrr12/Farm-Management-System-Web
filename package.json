@@ -14,29 +14,29 @@
 		"format:check": "biome format ."
 	},
 	"dependencies": {
-		"axios": "1.7.2",
-		"dayjs": "^1.11.11",
-		"firebase": "^10.12.3",
-		"i18next": "^23.11.5",
+		"axios": "1.7.3",
+		"dayjs": "^1.11.12",
+		"firebase": "^10.12.5",
+		"i18next": "^23.12.2",
 		"i18next-browser-languagedetector": "^8.0.0",
 		"i18next-http-backend": "^2.5.2",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
-		"react-i18next": "^14.1.2",
-		"react-router-dom": "6.24.1",
-		"styled-components": "^6.1.11",
+		"react-i18next": "^15.0.0",
+		"react-router-dom": "6.26.0",
+		"styled-components": "^6.1.12",
 		"zustand": "4.5.4"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.8.3",
-		"@types/node": "20.14.9",
+		"@types/node": "22.1.0",
 		"@types/react": "^18.3.3",
 		"@types/react-dom": "^18.3.0",
 		"@vitejs/plugin-react": "4.3.1",
 		"@vitejs/plugin-react-swc": "^3.7.0",
 		"dotenv-cli": "7.4.2",
-		"typescript": "^5.5.3",
-		"unocss": "^0.61.0",
-		"vite": "^5.3.3"
+		"typescript": "^5.5.4",
+		"unocss": "^0.61.9",
+		"vite": "^5.3.5"
 	}
 }
