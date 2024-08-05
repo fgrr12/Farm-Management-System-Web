@@ -2,7 +2,7 @@ import { firestore } from '@/config/environment'
 import dayjs from 'dayjs'
 import { collection, deleteDoc, doc, getDocs, query, setDoc, where } from 'firebase/firestore'
 
-import type { GetRelatedAnimalsResponse, SetRelatedAnimalProps } from '../types'
+import type { GetRelatedAnimalsResponse, SetRelatedAnimalProps } from './types'
 
 const collectionName = 'relatedAnimals'
 
