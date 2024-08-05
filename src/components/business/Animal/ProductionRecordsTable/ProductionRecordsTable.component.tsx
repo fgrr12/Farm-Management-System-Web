@@ -24,14 +24,14 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 		navigate(path)
 	}
 
-	// const handleEditHealthRecord = (uuid: string) => {
-	// 	const animalUuid = location.pathname.split('/').pop()
-	// 	const path = AppRoutes.EDIT_PRODUCTION_RECORD.replace(':animalUuid', animalUuid || '').replace(
-	// 		':productionRecordUuid',
-	// 		uuid
-	// 	)
-	// 	navigate(path)
-	// }
+	const handleEditHealthRecord = (uuid: string) => () => {
+		const animalUuid = location.pathname.split('/').pop()
+		const path = AppRoutes.EDIT_PRODUCTION_RECORD.replace(':animalUuid', animalUuid || '').replace(
+			':productionRecordUuid',
+			uuid
+		)
+		navigate(path)
+	}
 
 	const handleDeleteHealthRecord = (uuid: string) => async () => {
 		await ProductionRecordsService.updateProductionRecordsStatus(uuid, false)
@@ -68,7 +68,11 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 							<Table.Cell data-title="Notes">{productionRecord.notes}</Table.Cell>
 							{user && (
 								<Table.Cell data-title="Actions">
-									<ActionButton title="Edit" icon="i-material-symbols-edit-square-outline" />
+									<ActionButton
+										title="Edit"
+										icon="i-material-symbols-edit-square-outline"
+										onClick={handleEditHealthRecord(productionRecord.uuid)}
+									/>
 									<ActionButton
 										title="Delete"
 										icon="i-material-symbols-delete-outline"

@@ -22,7 +22,7 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 
 	const handleAddRelatedAnimals = () => {
 		const animalUuid = location.pathname.split('/').pop()
-		const path = AppRoutes.ADD_RELATED_ANIMALS.replace(':animalUuid', animalUuid || '')
+		const path = AppRoutes.RELATED_ANIMALS.replace(':animalUuid', animalUuid || '')
 		navigate(path)
 	}
 

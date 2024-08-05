@@ -25,14 +25,14 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 		navigate(path)
 	}
 
-	// const handleEditHealthRecord = (uuid: string) => {
-	// 	const animalUuid = location.pathname.split('/').pop()
-	// 	const path = AppRoutes.EDIT_HEALTH_RECORD.replace(':animalUuid', animalUuid || '').replace(
-	// 		':healthRecordUuid',
-	// 		uuid
-	// 	)
-	// 	navigate(path)
-	// }
+	const handleEditHealthRecord = (uuid: string) => () => {
+		const animalUuid = location.pathname.split('/').pop()
+		const path = AppRoutes.EDIT_HEALTH_RECORD.replace(':animalUuid', animalUuid || '').replace(
+			':healthRecordUuid',
+			uuid
+		)
+		navigate(path)
+	}
 
 	const handleDeleteHealthRecord = (uuid: string) => async () => {
 		await HealthRecordsService.updateHealthRecordsStatus(uuid, false)
@@ -85,7 +85,11 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 							<Table.Cell data-title="Duration">{healthRecord.duration}</Table.Cell>
 							{user && (
 								<Table.Cell data-title="Actions">
-									<ActionButton title="Edit" icon="i-material-symbols-edit-square-outline" />
+									<ActionButton
+										title="Edit"
+										icon="i-material-symbols-edit-square-outline"
+										onClick={handleEditHealthRecord(healthRecord.uuid)}
+									/>
 									<ActionButton
 										title="Delete"
 										icon="i-material-symbols-delete-outline"

@@ -26,9 +26,13 @@ export const App: FC = () => {
 					<Route path={AppRoutes.ANIMALS} element={<Animals />} />
 					<Route path={AppRoutes.ANIMAL} element={<Animal />} />
 					<Route path={AppRoutes.ADD_ANIMAL} element={<AddAnimal />} />
+					<Route path={AppRoutes.EDIT_ANIMAL} element={<AddAnimal />} />
 					<Route path={AppRoutes.ADD_HEALTH_RECORD} element={<AddHealthRecord />} />
+					<Route path={AppRoutes.EDIT_HEALTH_RECORD} element={<AddHealthRecord />} />
 					<Route path={AppRoutes.ADD_PRODUCTION_RECORD} element={<AddProductionRecord />} />
-					<Route path={AppRoutes.ADD_RELATED_ANIMALS} element={<AddRelatedAnimals />} />
+					<Route path={AppRoutes.EDIT_PRODUCTION_RECORD} element={<AddProductionRecord />} />
+					<Route path={AppRoutes.RELATED_ANIMALS} element={<AddRelatedAnimals />} />
+
 					<Route path={AppRoutes.BILLING_CARD} element={<BillingCard />} />
 
 					<Route path={AppRoutes.LOGIN} element={<Animals />} />
