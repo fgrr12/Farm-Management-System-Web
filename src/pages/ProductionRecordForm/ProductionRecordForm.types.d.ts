@@ -1,6 +1,6 @@
 import type dayjs from 'dayjs'
 
-export interface ProductionRecordForm {
+export interface ProductionRecord {
 	uuid: string
 	animalUuid: string
 	quantity: number

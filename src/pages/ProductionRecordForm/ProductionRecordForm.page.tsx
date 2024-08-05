@@ -13,16 +13,16 @@ import { Textarea } from '@/components/ui/Textarea'
 import { ProductionRecordsService } from '@/services/productionRecords'
 import { useAppStore } from '@/store/useAppStore'
 
-import type { ProductionRecordForm } from './AddProductionRecord.types'
+import type { ProductionRecord } from './ProductionRecordForm.types'
 
-import * as S from './AddProductionRecord.styles'
+import * as S from './ProductionRecordForm.styles'
 
-export const AddProductionRecord = () => {
+export const ProductionRecordForm = () => {
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation()
 	const { defaultModalData, setLoading, setModalData } = useAppStore()
-	const [productionRecordForm, setProductionRecordForm] = useState<ProductionRecordForm>(
+	const [productionRecordForm, setProductionRecordForm] = useState<ProductionRecord>(
 		INITIAL_PRODUCTION_RECORD_FORM
 	)
 
@@ -110,7 +110,7 @@ export const AddProductionRecord = () => {
 	)
 }
 
-const INITIAL_PRODUCTION_RECORD_FORM: ProductionRecordForm = {
+const INITIAL_PRODUCTION_RECORD_FORM: ProductionRecord = {
 	uuid: crypto.randomUUID(),
 	animalUuid: '',
 	quantity: 0,
