@@ -17,7 +17,11 @@ export module ProductionRecordsService {
 	): Promise<GetProductionRecordResponse[]> => {
 		const { animalUuid } = getProductionRecordsProps
 		const productionRecords = await getDocs(
-			query(collection(firestore, collectionName), where('animalUuid', '==', animalUuid))
+			query(
+				collection(firestore, collectionName),
+				where('animalUuid', '==', animalUuid),
+				where('status', '==', true)
+			)
 		)
 		const response = productionRecords.docs.map((doc) => ({ ...doc.data(), uuid: doc.id }))
 
@@ -35,5 +39,12 @@ export module ProductionRecordsService {
 
 	const formatDate = (date: dayjs.Dayjs | string) => {
 		return dayjs(date).format('YYYY-MM-DD')
+	}
+
+	// Update
+
+	export const updateProductionRecordsStatus = async (uuid: string, status: boolean) => {
+		const document = doc(firestore, collectionName, uuid)
+		await setDoc(document, { status }, { merge: true })
 	}
 }

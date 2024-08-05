@@ -2,17 +2,20 @@ import { AppRoutes } from '@/config/constants/routes'
 import dayjs from 'dayjs'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-// Components
 import { ActionButton } from '@/components/ui/ActionButton'
 import { Table } from '@/components/ui/Table'
 
-// Types
+import { HealthRecordsService } from '@/services/healthRecords'
+
 import type { HealthRecordsTableProps } from './HealthRecordsTable.types'
 
-// Styles
 import * as S from './HealthRecordsTable.styles'
 
-export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({ healthRecords, user }) => {
+export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
+	healthRecords,
+	user,
+	removeHealthRecord,
+}) => {
 	const location = useLocation()
 	const navigate = useNavigate()
 
@@ -20,6 +23,20 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({ healthRecords,
 		const animalUuid = location.pathname.split('/').pop()
 		const path = AppRoutes.ADD_HEALTH_RECORD.replace(':animalUuid', animalUuid || '')
 		navigate(path)
+	}
+
+	// const handleEditHealthRecord = (uuid: string) => {
+	// 	const animalUuid = location.pathname.split('/').pop()
+	// 	const path = AppRoutes.EDIT_HEALTH_RECORD.replace(':animalUuid', animalUuid || '').replace(
+	// 		':healthRecordUuid',
+	// 		uuid
+	// 	)
+	// 	navigate(path)
+	// }
+
+	const handleDeleteHealthRecord = (uuid: string) => async () => {
+		await HealthRecordsService.updateHealthRecordsStatus(uuid, false)
+		removeHealthRecord(uuid)
 	}
 	return (
 		<S.TableContainer>
@@ -69,7 +86,11 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({ healthRecords,
 							{user && (
 								<Table.Cell data-title="Actions">
 									<ActionButton title="Edit" icon="i-material-symbols-edit-square-outline" />
-									<ActionButton title="Delete" icon="i-material-symbols-delete-outline" />
+									<ActionButton
+										title="Delete"
+										icon="i-material-symbols-delete-outline"
+										onClick={handleDeleteHealthRecord(healthRecord.uuid)}
+									/>
 								</Table.Cell>
 							)}
 						</Table.Row>

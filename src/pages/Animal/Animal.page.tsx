@@ -35,6 +35,18 @@ export const Animal: FC = () => {
 		}))
 	}
 
+	const handleRemoveHealthRecord = (uuid: string) => {
+		const updateHealthRecords = animal.healthRecords.filter((record) => record.uuid !== uuid)
+		setAnimal((prev) => ({ ...prev, healthRecords: updateHealthRecords }))
+	}
+
+	const handleRemoveProductionRecord = (uuid: string) => {
+		const updateProductionRecords = animal.productionRecords.filter(
+			(record) => record.uuid !== uuid
+		)
+		setAnimal((prev) => ({ ...prev, productionRecords: updateProductionRecords }))
+	}
+
 	const getInitialData = async () => {
 		try {
 			setLoading(true)
@@ -139,10 +151,18 @@ export const Animal: FC = () => {
 					</S.ImageContainer>
 				</S.AnimalContainer>
 
-				<HealthRecordsTable healthRecords={animal.healthRecords} user={user} />
+				<HealthRecordsTable
+					healthRecords={animal.healthRecords}
+					user={user}
+					removeHealthRecord={handleRemoveHealthRecord}
+				/>
 
 				<S.InfoTableContainer>
-					<ProductionRecordsTable productionRecords={animal.productionRecords} user={user} />
+					<ProductionRecordsTable
+						productionRecords={animal.productionRecords}
+						user={user}
+						removeProductionRecord={handleRemoveProductionRecord}
+					/>
 
 					<RelatedAnimalsTable
 						title={t('animal.parentsTitle')}

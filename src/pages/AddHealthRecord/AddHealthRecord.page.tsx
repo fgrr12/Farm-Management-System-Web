@@ -197,4 +197,5 @@ const INITIAL_HEALTH_RECORD_FORM: HealthRecordForm = {
 	dosage: '-',
 	frequency: '-',
 	duration: '-',
+	status: true,
 }

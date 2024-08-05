@@ -7,11 +7,13 @@ import { Table } from '@/components/ui/Table'
 
 import type { ProductionRecordsTableProps } from './ProductionRecordsTable.types'
 
+import { ProductionRecordsService } from '@/services/productionRecords'
 import * as S from './ProductionRecordsTable.styles'
 
 export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 	productionRecords,
 	user,
+	removeProductionRecord,
 }) => {
 	const location = useLocation()
 	const navigate = useNavigate()
@@ -20,6 +22,20 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 		const animalUuid = location.pathname.split('/').pop()
 		const path = AppRoutes.ADD_PRODUCTION_RECORD.replace(':animalUuid', animalUuid || '')
 		navigate(path)
+	}
+
+	// const handleEditHealthRecord = (uuid: string) => {
+	// 	const animalUuid = location.pathname.split('/').pop()
+	// 	const path = AppRoutes.EDIT_PRODUCTION_RECORD.replace(':animalUuid', animalUuid || '').replace(
+	// 		':productionRecordUuid',
+	// 		uuid
+	// 	)
+	// 	navigate(path)
+	// }
+
+	const handleDeleteHealthRecord = (uuid: string) => async () => {
+		await ProductionRecordsService.updateProductionRecordsStatus(uuid, false)
+		removeProductionRecord(uuid)
 	}
 	return (
 		<S.TableContainer>
@@ -53,7 +69,11 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 							{user && (
 								<Table.Cell data-title="Actions">
 									<ActionButton title="Edit" icon="i-material-symbols-edit-square-outline" />
-									<ActionButton title="Delete" icon="i-material-symbols-delete-outline" />
+									<ActionButton
+										title="Delete"
+										icon="i-material-symbols-delete-outline"
+										onClick={handleDeleteHealthRecord(productionRecord.uuid)}
+									/>
 								</Table.Cell>
 							)}
 						</Table.Row>

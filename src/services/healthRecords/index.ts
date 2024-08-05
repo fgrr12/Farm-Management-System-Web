@@ -13,7 +13,11 @@ export module HealthRecordsService {
 	): Promise<GetHealthRecordResponse[]> => {
 		const { animalUuid } = getHealthRecordsProps
 		const healthRecords = await getDocs(
-			query(collection(firestore, collectionName), where('animalUuid', '==', animalUuid))
+			query(
+				collection(firestore, collectionName),
+				where('animalUuid', '==', animalUuid),
+				where('status', '==', true)
+			)
 		)
 		const response = healthRecords.docs.map((doc) => ({ ...doc.data() }))
 
@@ -31,5 +35,12 @@ export module HealthRecordsService {
 
 	const formatDate = (date: dayjs.Dayjs | string) => {
 		return dayjs(date).format('YYYY-MM-DD')
+	}
+
+	// Update
+
+	export const updateHealthRecordsStatus = async (uuid: string, status: boolean) => {
+		const document = doc(firestore, collectionName, uuid)
+		await setDoc(document, { status }, { merge: true })
 	}
 }

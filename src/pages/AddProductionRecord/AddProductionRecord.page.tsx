@@ -10,11 +10,11 @@ import { PageHeader } from '@/components/ui/PageHeader'
 import { TextField } from '@/components/ui/TextField'
 import { Textarea } from '@/components/ui/Textarea'
 
+import { ProductionRecordsService } from '@/services/productionRecords'
 import { useAppStore } from '@/store/useAppStore'
 
 import type { ProductionRecordForm } from './AddProductionRecord.types'
 
-import { ProductionRecordsService } from '@/services/productionRecords'
 import * as S from './AddProductionRecord.styles'
 
 export const AddProductionRecord = () => {
@@ -116,4 +116,5 @@ const INITIAL_PRODUCTION_RECORD_FORM: ProductionRecordForm = {
 	quantity: 0,
 	date: dayjs(),
 	notes: '',
+	status: true,
 }

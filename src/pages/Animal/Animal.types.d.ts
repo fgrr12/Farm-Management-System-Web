@@ -1,6 +1,7 @@
 import type dayjs from 'dayjs'
 
 export interface AnimalHealthRecord {
+	uuid: string
 	animalUuid: string
 	reason: string
 	notes: string
@@ -16,6 +17,7 @@ export interface AnimalHealthRecord {
 }
 
 export interface ProductionRecord {
+	uuid: string
 	animalUuid: string
 	date: dayjs.Dayjs | string
 	quantity: number

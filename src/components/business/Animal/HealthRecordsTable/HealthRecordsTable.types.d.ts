@@ -3,9 +3,11 @@ import type dayjs from 'dayjs'
 export interface HealthRecordsTableProps {
 	healthRecords: HealthRecord[]
 	user: boolean
+	removeHealthRecord: (uuid: string) => void
 }
 
 declare interface HealthRecord {
+	uuid: string
 	animalUuid: string
 	reason: string
 	notes: string
