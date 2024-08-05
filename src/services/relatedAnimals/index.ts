@@ -26,7 +26,7 @@ export module RelatedAnimalsService {
 
 	// Sets
 
-	export const setProductionRecord = async (relatedAnimalData: SetRelatedAnimalProps) => {
+	export const setRelatedAnimal = async (relatedAnimalData: SetRelatedAnimalProps) => {
 		const { uuid, parent, child } = relatedAnimalData
 		const createdAt = dayjs().format()
 
@@ -36,7 +36,7 @@ export module RelatedAnimalsService {
 
 	// Delete
 
-	export const deleteProductionRecord = async (uuid: string) => {
+	export const deleteRelatedAnimal = async (uuid: string) => {
 		const relatedAnimalDocument = doc(firestore, collectionName, uuid)
 		await deleteDoc(relatedAnimalDocument)
 	}

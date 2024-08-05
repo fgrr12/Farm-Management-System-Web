@@ -26,7 +26,16 @@ export const Animal: FC = () => {
 	const [animal, setAnimal] = useState<AnimalInformation>(ANIMAL_INITIAL_STATE)
 	const [user] = useState<boolean>(true) // useState<UserInformation>(USER_INITIAL_STATE)
 
-	const getAnimal = async () => {
+	const handleRemoveRelation = (uuid: string) => {
+		const updateParents = animal.relatedAnimals.parents.filter((related) => related.uuid !== uuid)
+		const updateChildren = animal.relatedAnimals.children.filter((related) => related.uuid !== uuid)
+		setAnimal((prev) => ({
+			...prev,
+			relatedAnimals: { parents: updateParents, children: updateChildren },
+		}))
+	}
+
+	const getInitialData = async () => {
 		try {
 			setLoading(true)
 			const { pathname } = location
@@ -63,8 +72,8 @@ export const Animal: FC = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: This error is due to withFetching HOF
 	useEffect(() => {
-		getAnimal()
-	}, [])
+		getInitialData()
+	}, [location.pathname])
 
 	return (
 		<>
@@ -140,6 +149,7 @@ export const Animal: FC = () => {
 						animals={animal.relatedAnimals.parents!}
 						user={user}
 						type="parent"
+						removeRelation={handleRemoveRelation}
 					/>
 
 					<RelatedAnimalsTable
@@ -147,6 +157,7 @@ export const Animal: FC = () => {
 						animals={animal.relatedAnimals.children!}
 						user={user}
 						type="child"
+						removeRelation={handleRemoveRelation}
 					/>
 				</S.InfoTableContainer>
 			</S.Container>

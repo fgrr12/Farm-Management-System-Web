@@ -5,6 +5,7 @@ export interface RelatedAnimalsTableProps {
 	animals: RelatedAnimal[]
 	user: boolean
 	type: 'parent' | 'child'
+	removeRelation: (uuid: string) => void
 }
 
 interface RelatedAnimal {

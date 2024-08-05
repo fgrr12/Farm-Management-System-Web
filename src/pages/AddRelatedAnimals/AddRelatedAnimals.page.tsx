@@ -58,9 +58,9 @@ export const AddRelatedAnimals: FC = () => {
 							related.child.animalUuid === animal.uuid
 					)
 					if (exist) {
-						await RelatedAnimalsService.deleteProductionRecord(exist.uuid)
+						await RelatedAnimalsService.deleteRelatedAnimal(exist.uuid)
 					}
-					await RelatedAnimalsService.setProductionRecord({
+					await RelatedAnimalsService.setRelatedAnimal({
 						uuid: crypto.randomUUID(),
 						child: {
 							animalUuid: animalsLists.animalUuid,
@@ -92,9 +92,9 @@ export const AddRelatedAnimals: FC = () => {
 							related.parent.animalUuid === animal.uuid
 					)
 					if (exist) {
-						await RelatedAnimalsService.deleteProductionRecord(exist.uuid)
+						await RelatedAnimalsService.deleteRelatedAnimal(exist.uuid)
 					}
-					await RelatedAnimalsService.setProductionRecord({
+					await RelatedAnimalsService.setRelatedAnimal({
 						uuid: crypto.randomUUID(),
 						child: {
 							animalUuid: animal.uuid,
@@ -129,7 +129,7 @@ export const AddRelatedAnimals: FC = () => {
 					related.child.animalUuid === animalsLists.animalUuid
 			)
 			if (exist) {
-				await RelatedAnimalsService.deleteProductionRecord(exist.uuid)
+				await RelatedAnimalsService.deleteRelatedAnimal(exist.uuid)
 			}
 			setRelatedToAnimal('parent')
 		}
@@ -141,9 +141,9 @@ export const AddRelatedAnimals: FC = () => {
 					related.parent.animalUuid === animalsLists.animalUuid
 			)
 			if (exist) {
-				await RelatedAnimalsService.deleteProductionRecord(exist.uuid)
+				await RelatedAnimalsService.deleteRelatedAnimal(exist.uuid)
 			}
-			await RelatedAnimalsService.deleteProductionRecord(
+			await RelatedAnimalsService.deleteRelatedAnimal(
 				animalsRelated.find((related) => related.child.animalUuid === dragItem.current)!.uuid
 			)
 			setRelatedToAnimal('children')

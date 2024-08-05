@@ -1,14 +1,13 @@
 import { AppRoutes } from '@/config/constants/routes'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-// Components
 import { ActionButton } from '@/components/ui/ActionButton'
 import { Table } from '@/components/ui/Table'
 
-// Types
+import { RelatedAnimalsService } from '@/services/relatedAnimals'
+
 import type { RelatedAnimalsTableProps } from './RelatedAnimalsTable.types'
 
-// Styles
 import * as S from './RelatedAnimalsTable.styles'
 
 export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
@@ -16,6 +15,7 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 	animals,
 	user,
 	type,
+	removeRelation,
 }) => {
 	const location = useLocation()
 	const navigate = useNavigate()
@@ -25,6 +25,18 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 		const path = AppRoutes.ADD_RELATED_ANIMALS.replace(':animalUuid', animalUuid || '')
 		navigate(path)
 	}
+
+	const handleViewRelatedAnimal = (animalUuid: string) => () => {
+		const path = AppRoutes.ANIMAL.replace(':animalUuid', animalUuid)
+		navigate(path)
+	}
+
+	const handleDeleteRelatedAnimal = (animalUuid: string) => async () => {
+		await RelatedAnimalsService.deleteRelatedAnimal(animalUuid)
+		animals = animals.filter((animal) => animal.uuid !== animalUuid)
+		removeRelation(animalUuid)
+	}
+
 	return (
 		<S.TableContainer>
 			<S.CenterTitle>
@@ -54,9 +66,16 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 							<Table.Cell data-title="Relation">{animal[type].relation}</Table.Cell>
 							{user && (
 								<Table.Cell data-title="Actions">
-									<ActionButton title="View" icon="i-material-symbols-visibility-outline" />
-									<ActionButton title="Edit" icon="i-material-symbols-edit-square-outline" />
-									<ActionButton title="Delete" icon="i-material-symbols-delete-outline" />
+									<ActionButton
+										title="View"
+										icon="i-material-symbols-visibility-outline"
+										onClick={handleViewRelatedAnimal(animal[type].animalUuid)}
+									/>
+									<ActionButton
+										title="Delete"
+										icon="i-material-symbols-delete-outline"
+										onClick={handleDeleteRelatedAnimal(animal.uuid)}
+									/>
 								</Table.Cell>
 							)}
 						</Table.Row>
