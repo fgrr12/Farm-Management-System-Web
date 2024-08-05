@@ -8,6 +8,7 @@ export interface Animal {
 	gender: Gender
 	color: string
 	weight: number
+	status: boolean
 	picture?: string
 	birthDate?: dayjs.Dayjs
 	purchaseDate?: dayjs.Dayjs

@@ -13,7 +13,7 @@ import type {
 	RelatedAnimalInformation,
 	RelatedAnimalsList,
 	RelatedAnimalsLists,
-} from './RelatedAnimalsForm.types'
+} from './AddRelatedAnimals.types'
 
 import * as S from './RelatedAnimalsForm.styles'
 

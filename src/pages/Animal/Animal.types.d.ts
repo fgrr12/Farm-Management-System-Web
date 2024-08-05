@@ -56,6 +56,7 @@ export interface AnimalInformation {
 	color: string
 	weight: number
 	relatedAnimals: RelatedAnimalList
+	status: boolean
 	picture?: string
 	healthRecords: AnimalHealthRecord[]
 	productionRecords: ProductionRecord[]

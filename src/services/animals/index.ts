@@ -1,7 +1,7 @@
 import { firestore } from '@/config/environment'
 import storageHandler from '@/config/persistence/storageHandler'
 import dayjs from 'dayjs'
-import { collection, doc, getDoc, getDocs, orderBy, query, setDoc, where } from 'firebase/firestore'
+import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore'
 import type { GetAnimalResponse, GetAnimalsProps, SetAnimalProps } from './types'
 
 const collectionName = 'animals'
@@ -18,12 +18,16 @@ export module AnimalsService {
 
 		if (selectedSpecies !== 'all') {
 			const animals = await getDocs(
-				query(collection(firestore, collectionName), where('species', '==', selectedSpecies))
+				query(
+					collection(firestore, collectionName),
+					where('species', '==', selectedSpecies),
+					where('status', '==', true)
+				)
 			)
 			response = animals.docs.map((doc) => doc.data())
 		} else {
 			const animals = await getDocs(
-				query(collection(firestore, collectionName), orderBy('animalId'))
+				query(collection(firestore, collectionName), where('status', '==', true))
 			)
 			response = animals.docs.map((doc) => ({ ...doc.data(), uuid: doc.id })) as GetAnimalResponse[]
 		}
@@ -34,11 +38,7 @@ export module AnimalsService {
 			)
 		}
 
-		for (const animal of response) {
-			if (animal.picture) {
-				animal.picture = await storageHandler.getPicture(animal.picture)
-			}
-		}
+		response = response.sort((a, b) => a.animalId - b.animalId)
 
 		return response as GetAnimalResponse[]
 	}
@@ -57,10 +57,6 @@ export module AnimalsService {
 		const animalDoc = await getDoc(docRef)
 		const animalData = animalDoc.data()
 
-		if (animalData?.picture) {
-			animalData!.picture = await storageHandler.getPicture(animalData?.picture)
-		}
-
 		return animalData as GetAnimalResponse
 	}
 
@@ -72,7 +68,7 @@ export module AnimalsService {
 				`animals/${animalData.uuid}`,
 				animalData.picture
 			)
-			animalData.picture = image.metadata.fullPath
+			animalData.picture = await storageHandler.getPicture(image.metadata.fullPath)
 		}
 
 		if (animalData.birthDate) {
@@ -89,5 +85,12 @@ export module AnimalsService {
 
 	const formatDate = (date: dayjs.Dayjs | string) => {
 		return dayjs(date).format('YYYY-MM-DD')
+	}
+
+	// Delete
+
+	export const deleteAnimal = async (uuid: string, status: boolean) => {
+		const document = doc(firestore, collectionName, uuid)
+		await setDoc(document, { status }, { merge: true })
 	}
 }

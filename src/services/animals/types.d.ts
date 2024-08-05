@@ -13,6 +13,7 @@ export interface SetAnimalProps {
 	gender: string
 	color: string
 	weight: number
+	status: boolean
 	picture?: string
 	birthDate?: dayjs.Dayjs | string
 	purchaseDate?: dayjs.Dayjs | string
@@ -83,9 +84,10 @@ export interface GetAnimalResponse {
 	color: string
 	weight: number
 	relatedAnimals: RelatedAnimalList
-	picture?: string
+	status: boolean
 	healthRecords: AnimalHealthRecord[]
 	productionRecords: ProductionRecord[]
+	picture?: string
 	birthDate?: dayjs.Dayjs
 	purchaseDate?: dayjs.Dayjs
 	soldDate?: dayjs.Dayjs

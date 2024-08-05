@@ -213,6 +213,7 @@ const INITIAL_ANIMAL_FORM: Animal = {
 	color: '',
 	weight: 0,
 	picture: '',
+	status: true,
 	birthDate: dayjs(),
 	purchaseDate: dayjs(),
 }

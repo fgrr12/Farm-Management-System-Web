@@ -33,6 +33,22 @@ export const Animal: FC = () => {
 		navigate(AppRoutes.EDIT_ANIMAL.replace(':animalUuid', animal.uuid))
 	}
 
+	const handleRemoveAnimal = async () => {
+		console.log(animal)
+
+		await AnimalsService.deleteAnimal(animal.uuid, false)
+
+		setModalData({
+			open: true,
+			title: 'Animal Removed',
+			message: 'The animal has been removed successfully',
+			onAccept: () => {
+				setModalData(defaultModalData)
+				navigate(AppRoutes.ANIMALS)
+			},
+		})
+	}
+
 	const handleRemoveRelation = (uuid: string) => {
 		const updateParents = animal.relatedAnimals.parents.filter((related) => related.uuid !== uuid)
 		const updateChildren = animal.relatedAnimals.children.filter((related) => related.uuid !== uuid)
@@ -109,7 +125,13 @@ export const Animal: FC = () => {
 									onClick={handleEditAnimal}
 								/>
 							)}
-							{user && <ActionButton title="Delete" icon="i-material-symbols-delete-outline" />}
+							{user && (
+								<ActionButton
+									title="Delete"
+									icon="i-material-symbols-delete-outline"
+									onClick={handleRemoveAnimal}
+								/>
+							)}
 						</S.CenterTitle>
 						<S.AnimalInfo>
 							<div>
@@ -207,6 +229,7 @@ const ANIMAL_INITIAL_STATE: AnimalInformation = {
 	color: '',
 	weight: 0,
 	picture: '',
+	status: true,
 	relatedAnimals: {
 		parents: [],
 		children: [],
