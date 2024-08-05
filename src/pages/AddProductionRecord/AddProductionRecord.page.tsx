@@ -2,7 +2,7 @@ import { AppRoutes } from '@/config/constants/routes'
 import dayjs from 'dayjs'
 import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { Button } from '@/components/ui/Button'
 import { DatePicker } from '@/components/ui/DatePicker'
@@ -19,7 +19,7 @@ import * as S from './AddProductionRecord.styles'
 
 export const AddProductionRecord = () => {
 	const navigate = useNavigate()
-	const location = useLocation()
+	const params = useParams()
 	const { t } = useTranslation()
 	const { defaultModalData, setLoading, setModalData } = useAppStore()
 	const [productionRecordForm, setProductionRecordForm] = useState<ProductionRecordForm>(
@@ -72,9 +72,9 @@ export const AddProductionRecord = () => {
 		}
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: This error is due to withFetching HOF
+	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		const animalUuid = location.pathname.split('/').pop() ?? ''
+		const animalUuid = params.animalUuid as string
 		setProductionRecordForm((prev) => ({ ...prev, animalUuid }))
 	}, [])
 

@@ -61,7 +61,7 @@ export const Dropzone: FC<DropzoneProps> = ({ onFile, cleanFile, ...rest }) => {
 		setUrl('')
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: This error is due to withFetching HOF
+	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		if (cleanFile) {
 			removeImage()

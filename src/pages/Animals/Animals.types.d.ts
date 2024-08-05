@@ -6,6 +6,7 @@ export interface AnimalsFilters {
 }
 
 declare interface AnimalHealthRecord {
+	uuid: string
 	animalUuid: string
 	reason: string
 	notes: string
@@ -21,16 +22,29 @@ declare interface AnimalHealthRecord {
 }
 
 declare interface ProductionRecord {
+	uuid: string
 	animalUuid: string
 	date: dayjs.Dayjs | string
 	quantity: number
 	notes: string
 }
 
-declare interface RelatedAnimal {
-	animalId: number
-	breed: string
-	relation: Relation
+interface RelatedAnimal {
+	uuid: string
+	parent: {
+		animalUuid: string
+		animalId: number
+		breed: string
+		relation: string
+	}
+	child: {
+		animalUuid: string
+		animalId: number
+		breed: string
+		relation: string
+	}
+	createdAt?: dayjs.Dayjs | string
+	updatedAt?: dayjs.Dayjs | string
 }
 
 declare interface RelatedAnimals {

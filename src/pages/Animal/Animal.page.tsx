@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useLocation } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 import { HealthRecordsTable } from '@/components/business/Animal/HealthRecordsTable'
 import { ProductionRecordsTable } from '@/components/business/Animal/ProductionRecordsTable'
@@ -20,7 +20,7 @@ import { RelatedAnimalsService } from '@/services/relatedAnimals'
 import * as S from './Animal.styles'
 
 export const Animal: FC = () => {
-	const location = useLocation()
+	const params = useParams()
 	const { t } = useTranslation()
 	const { defaultModalData, setLoading, setModalData } = useAppStore()
 	const [animal, setAnimal] = useState<AnimalInformation>(ANIMAL_INITIAL_STATE)
@@ -82,10 +82,10 @@ export const Animal: FC = () => {
 		}
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: This error is due to withFetching HOF
+	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		getInitialData()
-	}, [location.pathname])
+	}, [params.animalUuid])
 
 	return (
 		<>

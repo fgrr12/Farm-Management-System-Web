@@ -1,6 +1,6 @@
 import { AppRoutes } from '@/config/constants/routes'
 import dayjs from 'dayjs'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { ActionButton } from '@/components/ui/ActionButton'
 import { Table } from '@/components/ui/Table'
@@ -16,18 +16,18 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 	user,
 	removeHealthRecord,
 }) => {
-	const location = useLocation()
 	const navigate = useNavigate()
+	const params = useParams()
 
 	const handleAddHealthRecord = () => {
-		const animalUuid = location.pathname.split('/').pop()
-		const path = AppRoutes.ADD_HEALTH_RECORD.replace(':animalUuid', animalUuid || '')
+		const animalUuid = params.animalUuid as string
+		const path = AppRoutes.ADD_HEALTH_RECORD.replace(':animalUuid', animalUuid)
 		navigate(path)
 	}
 
 	const handleEditHealthRecord = (uuid: string) => () => {
-		const animalUuid = location.pathname.split('/').pop()
-		const path = AppRoutes.EDIT_HEALTH_RECORD.replace(':animalUuid', animalUuid || '').replace(
+		const animalUuid = params.animalUuid as string
+		const path = AppRoutes.EDIT_HEALTH_RECORD.replace(':animalUuid', animalUuid).replace(
 			':healthRecordUuid',
 			uuid
 		)

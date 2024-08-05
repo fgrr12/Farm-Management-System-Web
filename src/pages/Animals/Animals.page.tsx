@@ -77,7 +77,7 @@ export const Animals = () => {
 		}
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: This error is due to withFetching HOF
+	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		setLoading(true)
 		i18n.changeLanguage('esp')
@@ -85,7 +85,7 @@ export const Animals = () => {
 		getAnimals()
 	}, [])
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: This error is due to withFetching HOF
+	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		getAnimals()
 	}, [filters])

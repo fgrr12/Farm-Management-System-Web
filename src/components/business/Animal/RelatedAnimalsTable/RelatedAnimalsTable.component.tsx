@@ -1,5 +1,5 @@
 import { AppRoutes } from '@/config/constants/routes'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { ActionButton } from '@/components/ui/ActionButton'
 import { Table } from '@/components/ui/Table'
@@ -17,12 +17,12 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 	type,
 	removeRelation,
 }) => {
-	const location = useLocation()
+	const params = useParams()
 	const navigate = useNavigate()
 
 	const handleAddRelatedAnimals = () => {
-		const animalUuid = location.pathname.split('/').pop()
-		const path = AppRoutes.RELATED_ANIMALS.replace(':animalUuid', animalUuid || '')
+		const animalUuid = params.animalUuid as string
+		const path = AppRoutes.RELATED_ANIMALS.replace(':animalUuid', animalUuid)
 		navigate(path)
 	}
 

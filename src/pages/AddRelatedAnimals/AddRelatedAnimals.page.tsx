@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { RelatedAnimalCard } from '@/components/business/RelatedAnimals/RelatedAnimalCard'
 import { PageHeader } from '@/components/ui/PageHeader'
@@ -19,7 +19,7 @@ import * as S from './AddRelatedAnimals.styles'
 
 export const AddRelatedAnimals: FC = () => {
 	const navigate = useNavigate()
-	const location = useLocation()
+	const params = useParams()
 	// const { t } = useTranslation()
 	const { defaultModalData, setLoading, setModalData } = useAppStore()
 	const dragItem: any = useRef()
@@ -170,7 +170,7 @@ export const AddRelatedAnimals: FC = () => {
 	const getAnimals = async () => {
 		try {
 			setLoading(true)
-			const animalUuid = location.pathname.split('/').pop() ?? ''
+			const animalUuid = params.animalUuid as string
 			const relatedAnimals = await RelatedAnimalsService.getRelatedAnimals(animalUuid)
 			const animals = await AnimalsService.getAnimals({
 				selectedSpecies: 'all',
@@ -231,7 +231,7 @@ export const AddRelatedAnimals: FC = () => {
 		}
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: This error is due to withFetching HOF
+	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		getAnimals()
 	}, [])
