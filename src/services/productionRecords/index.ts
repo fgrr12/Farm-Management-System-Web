@@ -34,9 +34,10 @@ export module ProductionRecordsService {
 
 	export const setProductionRecord = async (productionRecordData: SetProductionRecordProps) => {
 		productionRecordData.date = formatDate(productionRecordData.date)
+		const createdAt = dayjs().toISOString()
 
 		const document = doc(firestore, collectionName, productionRecordData.uuid)
-		await setDoc(document, productionRecordData, { merge: true })
+		await setDoc(document, { ...productionRecordData, createdAt }, { merge: true })
 	}
 
 	const formatDate = (date: dayjs.Dayjs | string) => {
@@ -47,6 +48,8 @@ export module ProductionRecordsService {
 
 	export const updateProductionRecordsStatus = async (uuid: string, status: boolean) => {
 		const document = doc(firestore, collectionName, uuid)
-		await setDoc(document, { status }, { merge: true })
+		const updateAt = dayjs().toISOString()
+
+		await setDoc(document, { status, updateAt }, { merge: true })
 	}
 }

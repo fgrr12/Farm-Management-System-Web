@@ -98,7 +98,8 @@ export const HealthRecordForm = () => {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		const animalUuid = params.animalUuid ?? ''
-		setHealthRecordForm((prev) => ({ ...prev, animalUuid }))
+		const type = healthRecordTypes[0]
+		setHealthRecordForm((prev) => ({ ...prev, animalUuid, type }))
 	}, [])
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once

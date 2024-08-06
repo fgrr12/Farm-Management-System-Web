@@ -79,6 +79,7 @@ export const Animal: FC = () => {
 			const dbRelatedAnimals = await RelatedAnimalsService.getRelatedAnimals(animalId!)
 			const dbProductionRecords = await ProductionRecordsService.getProductionRecords(animalId!)
 
+			dbAnimal.weight = dbHealthRecords[dbHealthRecords.length - 1]?.weight ?? dbAnimal.weight
 			dbAnimal.healthRecords = dbHealthRecords
 			dbAnimal.productionRecords = dbProductionRecords
 			if (dbRelatedAnimals.length !== 0) {

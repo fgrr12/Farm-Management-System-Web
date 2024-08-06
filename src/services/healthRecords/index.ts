@@ -18,7 +18,11 @@ export module HealthRecordsService {
 				where('status', '==', true)
 			)
 		)
-		const response = healthRecords.docs.map((doc) => ({ ...doc.data() }))
+		const response = healthRecords.docs
+			.map((doc) => ({ ...doc.data() }))
+			.sort((a, b) => {
+				return dayjs(b.date).diff(dayjs(a.date))
+			})
 
 		return response as GetHealthRecordResponse[]
 	}
@@ -34,9 +38,10 @@ export module HealthRecordsService {
 
 	export const setHealthRecord = async (healthRecordData: SetHealthRecordProps) => {
 		healthRecordData.date = formatDate(healthRecordData.date)
+		const createdAt = dayjs().toISOString()
 
 		const document = doc(firestore, collectionName, healthRecordData.uuid)
-		await setDoc(document, healthRecordData, { merge: true })
+		await setDoc(document, { ...healthRecordData, createdAt }, { merge: true })
 	}
 
 	const formatDate = (date: dayjs.Dayjs | string) => {
@@ -47,6 +52,8 @@ export module HealthRecordsService {
 
 	export const updateHealthRecordsStatus = async (uuid: string, status: boolean) => {
 		const document = doc(firestore, collectionName, uuid)
-		await setDoc(document, { status }, { merge: true })
+		const updateAt = dayjs().toISOString()
+
+		await setDoc(document, { status, updateAt }, { merge: true })
 	}
 }
