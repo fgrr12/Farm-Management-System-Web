@@ -12,6 +12,6 @@ export interface Animal {
 	picture?: string
 	birthDate?: dayjs.Dayjs
 	purchaseDate?: dayjs.Dayjs
-	soldDate?: dayjs.Dayjs
-	deathDate?: dayjs.Dayjs
+	soldDate?: dayjs.Dayjs | null
+	deathDate?: dayjs.Dayjs | null
 }

@@ -17,8 +17,8 @@ export interface SetAnimalProps {
 	picture?: string
 	birthDate?: dayjs.Dayjs | string
 	purchaseDate?: dayjs.Dayjs | string
-	soldDate?: dayjs.Dayjs | string
-	deathDate?: dayjs.Dayjs | string
+	soldDate?: dayjs.Dayjs | string | null
+	deathDate?: dayjs.Dayjs | string | null
 }
 
 declare type healthRecordType =

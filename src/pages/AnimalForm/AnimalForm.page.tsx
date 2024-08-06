@@ -105,6 +105,8 @@ export const AnimalForm = () => {
 				})
 			}
 		} catch (error) {
+			console.log(error)
+
 			setModalData({
 				open: true,
 				title: 'Error',
@@ -241,6 +243,6 @@ const INITIAL_ANIMAL_FORM: Animal = {
 	status: true,
 	birthDate: dayjs(),
 	purchaseDate: dayjs(),
-	soldDate: undefined,
-	deathDate: undefined,
+	soldDate: null,
+	deathDate: null,
 }

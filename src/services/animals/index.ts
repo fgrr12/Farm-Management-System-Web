@@ -63,11 +63,12 @@ export module AnimalsService {
 	// Sets
 
 	export const setAnimal = async (animalData: SetAnimalProps) => {
-		if (animalData.picture) {
+		if (animalData.picture && !animalData.picture.includes('firebasestorage')) {
 			const image = await storageHandler.setPicture(
 				`animals/${animalData.uuid}`,
 				animalData.picture
 			)
+
 			animalData.picture = await storageHandler.getPicture(image.metadata.fullPath)
 		}
 
@@ -99,7 +100,7 @@ export module AnimalsService {
 		const document = doc(firestore, collectionName, animalData.uuid)
 		const updateAt = dayjs().toISOString()
 
-		await setDoc(document, { status: animalData.status, updateAt }, { merge: true })
+		await setDoc(document, { ...animalData, updateAt }, { merge: true })
 	}
 
 	// Delete
