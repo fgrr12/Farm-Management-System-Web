@@ -25,6 +25,8 @@
 		"weight": "Peso",
 		"birthDate": "Fecha de nacimiento",
 		"purchaseDate": "Fecha de compra",
+		"saleDate": "Fecha de venta",
+		"deathDate": "Fecha de fallecimiento",
 		"addAnimal": "Añadir animal"
 	},
 	"animal": {

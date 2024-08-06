@@ -25,6 +25,8 @@
 		"weight": "Weight",
 		"birthDate": "Birth Date",
 		"purchaseDate": "Purchase Date",
+		"saleDate": "Sale Date",
+		"deathDate": "Death Date",
 		"addAnimal": "Add Animal"
 	},
 	"animal": {

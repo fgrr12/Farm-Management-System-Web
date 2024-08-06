@@ -46,9 +46,10 @@ export const AnimalForm = () => {
 		setAnimalForm((prev) => ({ ...prev, [name]: value }))
 	}
 
-	const handleDateChange = (key: 'birthDate' | 'purchaseDate') => (newDate: dayjs.Dayjs) => {
-		setAnimalForm((prev) => ({ ...prev, [key]: newDate.format('YYYY-MM-DD') }))
-	}
+	const handleDateChange =
+		(key: 'birthDate' | 'purchaseDate' | 'saleDate' | 'deathDate') => (newDate: dayjs.Dayjs) => {
+			setAnimalForm((prev) => ({ ...prev, [key]: newDate.format('YYYY-MM-DD') }))
+		}
 
 	const handleFile = async (file: File) => {
 		const picture = await fileToBase64(file)
@@ -203,6 +204,20 @@ export const AnimalForm = () => {
 					date={dayjs(animalForm.purchaseDate)}
 					onDateChange={handleDateChange('purchaseDate')}
 				/>
+				{params.animalUuid && (
+					<DatePicker
+						label={t('addAnimal.saleDate')}
+						date={dayjs(animalForm.saleDate)}
+						onDateChange={handleDateChange('saleDate')}
+					/>
+				)}
+				{params.animalUuid && (
+					<DatePicker
+						label={t('addAnimal.deathDate')}
+						date={dayjs(animalForm.deathDate)}
+						onDateChange={handleDateChange('deathDate')}
+					/>
+				)}
 				<Button type="submit">{t('addAnimal.addAnimal')}</Button>
 			</S.Form>
 		</S.Container>
@@ -225,4 +240,6 @@ const INITIAL_ANIMAL_FORM: Animal = {
 	status: true,
 	birthDate: dayjs(),
 	purchaseDate: dayjs(),
+	saleDate: undefined,
+	deathDate: undefined,
 }
