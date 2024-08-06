@@ -25,7 +25,7 @@
 		"weight": "Weight",
 		"birthDate": "Birth Date",
 		"purchaseDate": "Purchase Date",
-		"saleDate": "Sale Date",
+		"soldDate": "Sold Date",
 		"deathDate": "Death Date",
 		"addAnimal": "Add Animal"
 	},
@@ -38,7 +38,7 @@
 		"weight": "Weight",
 		"birthDate": "Birth Date",
 		"purchaseDate": "Purchase Date",
-		"saleDate": "Sale Date",
+		"soldDate": "Sold Date",
 		"deathDate": "Death Date",
 		"speciesList": {
 			"chicken": "Chicken",

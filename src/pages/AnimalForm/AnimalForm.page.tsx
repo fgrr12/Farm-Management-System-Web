@@ -47,7 +47,7 @@ export const AnimalForm = () => {
 	}
 
 	const handleDateChange =
-		(key: 'birthDate' | 'purchaseDate' | 'saleDate' | 'deathDate') => (newDate: dayjs.Dayjs) => {
+		(key: 'birthDate' | 'purchaseDate' | 'soldDate' | 'deathDate') => (newDate: dayjs.Dayjs) => {
 			setAnimalForm((prev) => ({ ...prev, [key]: newDate.format('YYYY-MM-DD') }))
 		}
 
@@ -206,9 +206,9 @@ export const AnimalForm = () => {
 				/>
 				{params.animalUuid && (
 					<DatePicker
-						label={t('addAnimal.saleDate')}
-						date={dayjs(animalForm.saleDate)}
-						onDateChange={handleDateChange('saleDate')}
+						label={t('addAnimal.soldDate')}
+						date={dayjs(animalForm.soldDate)}
+						onDateChange={handleDateChange('soldDate')}
 					/>
 				)}
 				{params.animalUuid && (
@@ -240,6 +240,6 @@ const INITIAL_ANIMAL_FORM: Animal = {
 	status: true,
 	birthDate: dayjs(),
 	purchaseDate: dayjs(),
-	saleDate: undefined,
+	soldDate: undefined,
 	deathDate: undefined,
 }

@@ -162,10 +162,10 @@ export const Animal: FC = () => {
 								<S.Label>{t('animal.purchaseDate')}</S.Label>
 								<S.Value>{dayjs(animal.purchaseDate).format('MM/DD/YYYY')}</S.Value>
 							</div>
-							{animal.saleDate && (
+							{animal.soldDate && (
 								<div>
-									<S.Label>{t('animal.saleDate')}</S.Label>
-									<S.Value>{dayjs(animal.saleDate).format('MM/DD/YYYY')}</S.Value>
+									<S.Label>{t('animal.soldDate')}</S.Label>
+									<S.Value>{dayjs(animal.soldDate).format('MM/DD/YYYY')}</S.Value>
 								</div>
 							)}
 							{animal.deathDate && (
@@ -234,6 +234,6 @@ const ANIMAL_INITIAL_STATE: AnimalInformation = {
 	productionRecords: [],
 	birthDate: undefined,
 	purchaseDate: undefined,
-	saleDate: undefined,
+	soldDate: undefined,
 	deathDate: undefined,
 }

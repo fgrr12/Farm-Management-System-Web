@@ -79,6 +79,14 @@ export module AnimalsService {
 			animalData.purchaseDate = formatDate(animalData.purchaseDate)
 		}
 
+		if (animalData.soldDate) {
+			animalData.soldDate = formatDate(animalData.soldDate)
+		}
+
+		if (animalData.deathDate) {
+			animalData.deathDate = formatDate(animalData.deathDate)
+		}
+
 		const createdAt = dayjs().toISOString()
 
 		const document = doc(firestore, collectionName, animalData.uuid)
