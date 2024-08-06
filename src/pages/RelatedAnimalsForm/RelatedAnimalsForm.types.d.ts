@@ -11,7 +11,7 @@ export interface RelatedAnimalInformation {
 export interface RelatedAnimalsLists {
 	animalUuid: string
 	animals: RelatedAnimalInformation[]
-	parent: RelatedAnimalInformation[]
+	parents: RelatedAnimalInformation[]
 	children: RelatedAnimalInformation[]
 }
 

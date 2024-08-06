@@ -48,10 +48,10 @@ export const RelatedAnimalsForm: FC = () => {
 			if (!animal) return
 
 			if (dragOverItem.type === 'parent') {
-				if (!animalsLists.parent.includes(animal)) {
+				if (!animalsLists.parents.includes(animal)) {
 					setAnimalsLists((prev) => ({
 						...prev,
-						parent: [...prev.parent, animal],
+						parents: [...prev.parents, animal],
 					}))
 					const exist = animalsRelated.find(
 						(related) =>
@@ -113,7 +113,7 @@ export const RelatedAnimalsForm: FC = () => {
 				}
 				setAnimalsLists((prev) => ({
 					...prev,
-					parent: prev.parent.filter((parent) => parent.uuid !== dragItem.current),
+					parent: prev.parents.filter((parent) => parent.uuid !== dragItem.current),
 				}))
 			}
 
@@ -134,7 +134,7 @@ export const RelatedAnimalsForm: FC = () => {
 			if (exist) {
 				await RelatedAnimalsService.deleteRelatedAnimal(exist.uuid)
 			}
-			setRelatedToAnimal('parent')
+			setRelatedToAnimal('parents')
 		}
 
 		if (dragItem.type === 'child' && dragOverItem.type === 'animal') {
@@ -146,9 +146,6 @@ export const RelatedAnimalsForm: FC = () => {
 			if (exist) {
 				await RelatedAnimalsService.deleteRelatedAnimal(exist.uuid)
 			}
-			await RelatedAnimalsService.deleteRelatedAnimal(
-				animalsRelated.find((related) => related.child.animalUuid === dragItem.current)!.uuid
-			)
 			setRelatedToAnimal('children')
 		}
 	}
@@ -158,7 +155,7 @@ export const RelatedAnimalsForm: FC = () => {
 		dragItem.type !== dragOverItem.type && handleDrop()
 	}
 
-	const setRelatedToAnimal = (animalArray: 'children' | 'parent') => {
+	const setRelatedToAnimal = (animalArray: 'children' | 'parents') => {
 		const animal = animalsLists[animalArray].find((animal) => animal.uuid === dragItem.current)
 
 		if (!animal) return
@@ -208,7 +205,7 @@ export const RelatedAnimalsForm: FC = () => {
 			setAnimalsLists({
 				animalUuid,
 				animals: animalsData,
-				parent: animals.filter((animal) =>
+				parents: animals.filter((animal) =>
 					relatedAnimals.some(
 						(related) =>
 							related.parent.animalUuid === animal.uuid && related.child.animalUuid === animalUuid
@@ -266,7 +263,7 @@ export const RelatedAnimalsForm: FC = () => {
 						onDragEnter={() => handleDragEnter('parent')}
 						onClick={() => handleClicDropzone('parent')}
 					>
-						{animalsLists.parent.map((animal) => (
+						{animalsLists.parents.map((animal) => (
 							<RelatedAnimalCard
 								key={animal.animalId}
 								animalId={animal.animalId}
@@ -312,6 +309,6 @@ type DragType = 'animal' | 'parent' | 'child'
 const INITIAL_ANIMALS_LISTS: RelatedAnimalsLists = {
 	animalUuid: '',
 	animals: [],
-	parent: [],
+	parents: [],
 	children: [],
 }
