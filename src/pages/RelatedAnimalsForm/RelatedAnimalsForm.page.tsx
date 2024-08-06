@@ -10,6 +10,8 @@ import { RelatedAnimalsService } from '@/services/relatedAnimals'
 import { useAppStore } from '@/store/useAppStore'
 
 import type {
+	DragRelationTypes,
+	DragSingularRelation,
 	RelatedAnimalInformation,
 	RelatedAnimalsList,
 	RelatedAnimalsLists,
@@ -26,221 +28,192 @@ export const RelatedAnimalsForm: FC = () => {
 	const dragItem: any = useRef()
 	const dragOverItem: any = useRef()
 	const [animalsLists, setAnimalsLists] = useState<RelatedAnimalsLists>(INITIAL_ANIMALS_LISTS)
-	const [animalsRelated, setAnimalsRelated] = useState<RelatedAnimalsList[]>([])
+	const [relatedAnimals, setRelatedAnimals] = useState<RelatedAnimalsList[]>([])
 	const [currentAnimal, setCurrentAnimal] = useState<RelatedAnimalInformation | null>(null)
 
 	const handleBack = () => {
-		navigate(AppRoutes.ANIMAL.replace(':animalUuid', animalsLists.animalUuid))
+		const animalUuid = params.animalUuid as string
+		navigate(AppRoutes.ANIMAL.replace(':animalUuid', animalUuid))
 	}
 
-	const handleDragStart = (position: any, type: DragType) => {
+	const handleDragStart = (position: any, type: DragRelationTypes) => {
 		dragItem.current = position
 		dragItem.type = type
 	}
 
-	const handleDragEnter = (type: DragType) => {
+	const handleDragEnter = (type: DragRelationTypes) => {
 		dragOverItem.type = type
 	}
 
 	const handleDrop = async () => {
-		if (dragItem.type === 'animal' && dragOverItem.type) {
+		if (dragItem.type === DragRelations.ANIMALS && dragOverItem.type) {
 			const animal = animalsLists.animals.find((animal) => animal.uuid === dragItem.current)
 			if (!animal) return
 
-			if (dragOverItem.type === 'parent') {
-				if (!animalsLists.parents.includes(animal)) {
-					setAnimalsLists((prev) => ({
-						...prev,
-						parents: [...prev.parents, animal],
-					}))
-					const exist = animalsRelated.find(
-						(related) =>
-							related.parent.animalUuid === animalsLists.animalUuid &&
-							related.child.animalUuid === animal.uuid
-					)
-					if (exist) {
-						await RelatedAnimalsService.deleteRelatedAnimal(exist.uuid)
-					}
-					await RelatedAnimalsService.setRelatedAnimal({
-						uuid: crypto.randomUUID(),
-						child: {
-							animalUuid: animalsLists.animalUuid,
-							animalId: currentAnimal!.animalId,
-							breed: currentAnimal!.breed,
-							relation: currentAnimal!.gender.toLowerCase() === 'female' ? 'Daughter' : 'Son',
-						},
-						parent: {
-							animalUuid: animal.uuid,
-							animalId: animal.animalId,
-							breed: animal.breed,
-							relation: animal.gender.toLowerCase() === 'female' ? 'Mother' : 'Father',
-						},
-					})
-				}
-				setAnimalsLists((prev) => ({
-					...prev,
-					children: prev.children.filter((child) => child.uuid !== dragItem.current),
-				}))
-			} else if (dragOverItem.type === 'child') {
-				if (!animalsLists.children.includes(animal)) {
-					setAnimalsLists((prev) => ({
-						...prev,
-						children: [...prev.children, animal],
-					}))
-					const exist = animalsRelated.find(
-						(related) =>
-							related.child.animalUuid === animalsLists.animalUuid &&
-							related.parent.animalUuid === animal.uuid
-					)
-					if (exist) {
-						await RelatedAnimalsService.deleteRelatedAnimal(exist.uuid)
-					}
-					await RelatedAnimalsService.setRelatedAnimal({
-						uuid: crypto.randomUUID(),
-						child: {
-							animalUuid: animal.uuid,
-							animalId: animal.animalId,
-							breed: animal.breed,
-							relation: animal.gender.toLowerCase() === 'female' ? 'Daughter' : 'Son',
-						},
-						parent: {
-							animalUuid: animalsLists.animalUuid,
-							animalId: currentAnimal!.animalId,
-							breed: currentAnimal!.breed,
-							relation: currentAnimal!.gender.toLowerCase() === 'female' ? 'Mother' : 'Father',
-						},
-					})
-				}
-				setAnimalsLists((prev) => ({
-					...prev,
-					parent: prev.parents.filter((parent) => parent.uuid !== dragItem.current),
-				}))
-			}
-
-			if (dragOverItem.type !== 'animal') {
-				setAnimalsLists((prev) => ({
-					...prev,
-					animals: prev.animals.filter((animal) => animal.uuid !== dragItem.current),
-				}))
+			if (dragOverItem.type === DragRelations.PARENTS) {
+				await moveToRelations(animal.uuid, 'parent', 'child')
+				await handleAddRelatedAnimal(currentAnimal!, animal)
+			} else if (dragOverItem.type === DragRelations.CHILDREN) {
+				await moveToRelations(animal.uuid, 'child', 'parent')
+				await handleAddRelatedAnimal(animal, currentAnimal!)
 			}
 		}
 
-		if (dragItem.type === 'parent' && dragOverItem.type === 'animal') {
-			const exist = animalsRelated.find(
-				(related) =>
-					related.parent.animalUuid === dragItem.current &&
-					related.child.animalUuid === animalsLists.animalUuid
-			)
-			if (exist) {
-				await RelatedAnimalsService.deleteRelatedAnimal(exist.uuid)
-			}
-			setRelatedToAnimal('parents')
+		if (dragItem.type === DragRelations.PARENTS && dragOverItem.type === DragRelations.ANIMALS) {
+			await moveToAnimals(dragItem.current, 'parent', 'child')
 		}
 
-		if (dragItem.type === 'child' && dragOverItem.type === 'animal') {
-			const exist = animalsRelated.find(
-				(related) =>
-					related.child.animalUuid === dragItem.current &&
-					related.parent.animalUuid === animalsLists.animalUuid
-			)
-			if (exist) {
-				await RelatedAnimalsService.deleteRelatedAnimal(exist.uuid)
-			}
-			setRelatedToAnimal('children')
+		if (dragItem.type === DragRelations.CHILDREN && dragOverItem.type === DragRelations.ANIMALS) {
+			await moveToAnimals(dragItem.current, 'child', 'parent')
 		}
 	}
 
-	const handleClicDropzone = (type: DragType) => {
+	const moveToAnimals = async (
+		dragItemUuid: string,
+		firstType: DragSingularRelation,
+		secondType: DragSingularRelation
+	) => {
+		const animalUuid = params.animalUuid as string
+		const exist = relatedAnimals.find(
+			(related) =>
+				related[firstType].animalUuid === dragItemUuid &&
+				related[secondType].animalUuid === animalUuid
+		)
+		if (exist) {
+			await RelatedAnimalsService.deleteRelatedAnimal(exist.uuid)
+		}
+	}
+
+	const moveToRelations = async (
+		relatedAnimalUuid: string,
+		firstType: DragSingularRelation,
+		secondType: DragSingularRelation
+	) => {
+		const animalUuid = params.animalUuid as string
+		const exist = relatedAnimals.find(
+			(related) =>
+				related[firstType].animalUuid === animalUuid &&
+				related[secondType].animalUuid === relatedAnimalUuid
+		)
+		if (exist) {
+			await RelatedAnimalsService.deleteRelatedAnimal(exist.uuid)
+		}
+	}
+
+	const handleAddRelatedAnimal = async (
+		child: RelatedAnimalInformation,
+		parent: RelatedAnimalInformation
+	) => {
+		await RelatedAnimalsService.setRelatedAnimal({
+			uuid: crypto.randomUUID(),
+			child: {
+				animalUuid: child.uuid,
+				animalId: child.animalId,
+				breed: child.breed,
+				relation: child.gender.toLowerCase() === Gender.FEMALE ? Relation.DAUGHTER : Relation.SON,
+			},
+			parent: {
+				animalUuid: parent.uuid,
+				animalId: parent.animalId,
+				breed: parent.breed,
+				relation: parent.gender.toLowerCase() === Gender.FEMALE ? Relation.MOTHER : Relation.FATHER,
+			},
+		})
+	}
+
+	const handleClicDropzone = (type: DragRelationTypes) => {
 		handleDragEnter(type)
 		dragItem.type !== dragOverItem.type && handleDrop()
 	}
 
-	const setRelatedToAnimal = (animalArray: 'children' | 'parents') => {
-		const animal = animalsLists[animalArray].find((animal) => animal.uuid === dragItem.current)
-
-		if (!animal) return
-
-		setAnimalsLists((prev) => ({
-			...prev,
-			animals: [...prev.animals, animal],
-			[animalArray]: prev[animalArray].filter((value) => value.uuid !== dragItem.current),
-		}))
-	}
-
-	const getAnimals = async () => {
-		try {
-			setLoading(true)
-			const animalUuid = params.animalUuid as string
-			const relatedAnimals = await RelatedAnimalsService.getRelatedAnimals(animalUuid)
-			const animals = await AnimalsService.getAnimals({
-				selectedSpecies: 'all',
-				search: '',
-			})
-
-			const animalsData = animals
-				.filter((animal) => animal.uuid !== animalUuid)
-				.filter(
-					(animal) =>
-						!relatedAnimals.some(
-							(related) =>
-								related.child.animalUuid === animal.uuid ||
-								related.parent.animalUuid === animal.uuid
-						)
-				)
-				.map((animal) => ({
-					uuid: animal.uuid,
-					animalId: animal.animalId,
-					breed: animal.breed,
-					gender: animal.gender,
-					picture: animal.picture,
-				}))
-			setAnimalsRelated(relatedAnimals)
-			const selectedAnimal = animals.find((animal) => animal.uuid === animalUuid)
-			setCurrentAnimal({
-				uuid: selectedAnimal!.uuid,
-				animalId: selectedAnimal!.animalId,
-				breed: selectedAnimal!.breed,
-				gender: selectedAnimal!.gender,
-			})
-			setAnimalsLists({
-				animalUuid,
-				animals: animalsData,
-				parents: animals.filter((animal) =>
-					relatedAnimals.some(
-						(related) =>
-							related.parent.animalUuid === animal.uuid && related.child.animalUuid === animalUuid
-					)
-				),
-				children: animals.filter((animal) =>
-					relatedAnimals.some(
-						(related) =>
-							related.child.animalUuid === animal.uuid && related.parent.animalUuid === animalUuid
-					)
-				),
-			})
-		} catch (error) {
-			setModalData({
-				...defaultModalData,
-				open: true,
-				title: 'Error',
-				message: 'An error occurred while fetching the animals',
-				onAccept: () => setModalData({ ...defaultModalData }),
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
-
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		getAnimals()
+		let unsubscribe: (() => void) | undefined
+
+		const initialData = async () => {
+			try {
+				setLoading(true)
+				const animalUuid = params.animalUuid as string
+				unsubscribe = RelatedAnimalsService.getRealTimeRelatedAnimals(
+					animalUuid,
+					async (data) => {
+						const animals = await AnimalsService.getAnimals({
+							selectedSpecies: 'all',
+							search: '',
+						})
+						const selectedAnimal = animals.find((animal) => animal.uuid === animalUuid)
+						const animalsData = animals
+							.filter((animal) => animal.uuid !== animalUuid)
+							.filter(
+								(animal) =>
+									!data.some(
+										(related) =>
+											related.child.animalUuid === animal.uuid ||
+											related.parent.animalUuid === animal.uuid
+									)
+							)
+							.map((animal) => ({
+								uuid: animal.uuid,
+								animalId: animal.animalId,
+								breed: animal.breed,
+								gender: animal.gender,
+								picture: animal.picture,
+							}))
+
+						setRelatedAnimals(data)
+						setCurrentAnimal({
+							uuid: selectedAnimal!.uuid,
+							animalId: selectedAnimal!.animalId,
+							breed: selectedAnimal!.breed,
+							gender: selectedAnimal!.gender,
+						})
+						setAnimalsLists({
+							animals: animalsData,
+							parents: animals.filter((animal) =>
+								data.some(
+									(related) =>
+										related.parent.animalUuid === animal.uuid &&
+										related.child.animalUuid === animalUuid
+								)
+							),
+							children: animals.filter((animal) =>
+								data.some(
+									(related) =>
+										related.child.animalUuid === animal.uuid &&
+										related.parent.animalUuid === animalUuid
+								)
+							),
+						})
+					},
+					(error) => console.error('Error fetching related animals: ', error)
+				)
+			} catch (error) {
+				setModalData({
+					...defaultModalData,
+					open: true,
+					title: 'Error',
+					message: 'An error occurred while fetching the animals',
+					onAccept: () => setModalData({ ...defaultModalData }),
+				})
+			} finally {
+				setLoading(false)
+			}
+		}
+
+		initialData()
+
+		return () => {
+			if (unsubscribe) {
+				unsubscribe()
+			}
+		}
 	}, [])
 	return (
 		<S.Container>
 			<PageHeader onBack={handleBack}>Add Related Animals</PageHeader>
 			<S.AnimalsContainer
-				onDragEnter={() => handleDragEnter('animal')}
-				onClick={() => handleClicDropzone('animal')}
+				onDragEnter={() => handleDragEnter(DragRelations.ANIMALS)}
+				onClick={() => handleClicDropzone(DragRelations.ANIMALS)}
 			>
 				{animalsLists.animals.map((animal) => (
 					<RelatedAnimalCard
@@ -250,9 +223,9 @@ export const RelatedAnimalsForm: FC = () => {
 						gender={animal.gender}
 						picture={animal.picture}
 						draggable
-						onDragStart={() => handleDragStart(animal.uuid, 'animal')}
+						onDragStart={() => handleDragStart(animal.uuid, DragRelations.ANIMALS)}
 						onDragEnd={handleDrop}
-						onClick={() => handleDragStart(animal.uuid, 'animal')}
+						onClick={() => handleDragStart(animal.uuid, DragRelations.ANIMALS)}
 					/>
 				))}
 			</S.AnimalsContainer>
@@ -260,8 +233,8 @@ export const RelatedAnimalsForm: FC = () => {
 				<div>
 					<S.Title>Parents</S.Title>
 					<S.DragZone
-						onDragEnter={() => handleDragEnter('parent')}
-						onClick={() => handleClicDropzone('parent')}
+						onDragEnter={() => handleDragEnter(DragRelations.PARENTS)}
+						onClick={() => handleClicDropzone(DragRelations.PARENTS)}
 					>
 						{animalsLists.parents.map((animal) => (
 							<RelatedAnimalCard
@@ -271,9 +244,9 @@ export const RelatedAnimalsForm: FC = () => {
 								gender={animal.gender}
 								picture={animal.picture}
 								draggable
-								onDragStart={() => handleDragStart(animal.uuid, 'parent')}
+								onDragStart={() => handleDragStart(animal.uuid, DragRelations.PARENTS)}
 								onDragEnd={handleDrop}
-								onClick={() => handleDragStart(animal.uuid, 'parent')}
+								onClick={() => handleDragStart(animal.uuid, DragRelations.PARENTS)}
 							/>
 						))}
 					</S.DragZone>
@@ -281,8 +254,8 @@ export const RelatedAnimalsForm: FC = () => {
 				<div>
 					<S.Title>Children</S.Title>
 					<S.DragZone
-						onDragEnter={() => handleDragEnter('child')}
-						onClick={() => handleClicDropzone('child')}
+						onDragEnter={() => handleDragEnter(DragRelations.CHILDREN)}
+						onClick={() => handleClicDropzone(DragRelations.CHILDREN)}
 					>
 						{animalsLists.children.map((animal) => (
 							<RelatedAnimalCard
@@ -292,9 +265,9 @@ export const RelatedAnimalsForm: FC = () => {
 								gender={animal.gender}
 								picture={animal.picture}
 								draggable
-								onDragStart={() => handleDragStart(animal.uuid, 'child')}
+								onDragStart={() => handleDragStart(animal.uuid, DragRelations.CHILDREN)}
 								onDragEnd={handleDrop}
-								onClick={() => handleDragStart(animal.uuid, 'child')}
+								onClick={() => handleDragStart(animal.uuid, DragRelations.CHILDREN)}
 							/>
 						))}
 					</S.DragZone>
@@ -304,11 +277,26 @@ export const RelatedAnimalsForm: FC = () => {
 	)
 }
 
-type DragType = 'animal' | 'parent' | 'child'
-
 const INITIAL_ANIMALS_LISTS: RelatedAnimalsLists = {
-	animalUuid: '',
 	animals: [],
 	parents: [],
 	children: [],
+}
+
+enum DragRelations {
+	ANIMALS = 'animals',
+	PARENTS = 'parents',
+	CHILDREN = 'children',
+}
+
+enum Gender {
+	FEMALE = 'female',
+	MALE = 'male',
+}
+
+enum Relation {
+	MOTHER = 'Mother',
+	FATHER = 'Father',
+	SON = 'Son',
+	DAUGHTER = 'Daughter',
 }
