@@ -117,10 +117,12 @@ export const RelatedAnimalsForm: FC = () => {
 				}))
 			}
 
-			setAnimalsLists((prev) => ({
-				...prev,
-				animals: prev.animals.filter((animal) => animal.uuid !== dragItem.current),
-			}))
+			if (dragOverItem.type !== 'animal') {
+				setAnimalsLists((prev) => ({
+					...prev,
+					animals: prev.animals.filter((animal) => animal.uuid !== dragItem.current),
+				}))
+			}
 		}
 
 		if (dragItem.type === 'parent' && dragOverItem.type === 'animal') {
