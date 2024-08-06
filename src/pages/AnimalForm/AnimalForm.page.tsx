@@ -80,12 +80,12 @@ export const AnimalForm = () => {
 			event.preventDefault()
 			const animalUuid = params.animalUuid as string
 			animalForm.uuid = animalUuid ?? crypto.randomUUID()
-			await AnimalsService.setAnimal(animalForm)
 
 			if (animalUuid) {
+				await AnimalsService.updateAnimal(animalForm)
 				setModalData({
 					open: true,
-					title: 'Animal Added',
+					title: 'Animal Edited',
 					message: 'The animal was edited successfully',
 					onAccept: () => {
 						setModalData(defaultModalData)
@@ -93,6 +93,7 @@ export const AnimalForm = () => {
 					},
 				})
 			} else {
+				await AnimalsService.setAnimal(animalForm)
 				setModalData({
 					open: true,
 					title: 'Animal Added',

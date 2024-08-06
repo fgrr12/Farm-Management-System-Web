@@ -63,7 +63,7 @@ export module AnimalsService {
 	// Sets
 
 	export const setAnimal = async (animalData: SetAnimalProps) => {
-		if (animalData.picture && !animalData.picture.includes('firebasestorage')) {
+		if (animalData.picture) {
 			const image = await storageHandler.setPicture(
 				`animals/${animalData.uuid}`,
 				animalData.picture
@@ -93,8 +93,13 @@ export module AnimalsService {
 		await setDoc(document, { ...animalData, createdAt }, { merge: true })
 	}
 
-	const formatDate = (date: dayjs.Dayjs | string) => {
-		return dayjs(date).format('YYYY-MM-DD')
+	// Update
+
+	export const updateAnimal = async (animalData: SetAnimalProps) => {
+		const document = doc(firestore, collectionName, animalData.uuid)
+		const updateAt = dayjs().toISOString()
+
+		await setDoc(document, { status: animalData.status, updateAt }, { merge: true })
 	}
 
 	// Delete
@@ -105,4 +110,8 @@ export module AnimalsService {
 
 		await setDoc(document, { status, updateAt }, { merge: true })
 	}
+}
+
+const formatDate = (date: dayjs.Dayjs | string) => {
+	return dayjs(date).toISOString()
 }

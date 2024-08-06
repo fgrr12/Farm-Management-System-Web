@@ -71,18 +71,31 @@ export const HealthRecordForm = () => {
 		try {
 			setLoading(true)
 			event.preventDefault()
+			const healthRecordUuid = params.healthRecordUuid as string
 
-			HealthRecordsService.setHealthRecord(healthRecordForm)
-
-			setModalData({
-				open: true,
-				title: 'Animal Added',
-				message: 'The health record has been added successfully',
-				onAccept: () => {
-					setModalData(defaultModalData)
-					navigate(AppRoutes.ANIMAL.replace(':animalUuid', healthRecordForm.animalUuid))
-				},
-			})
+			if (healthRecordUuid) {
+				await HealthRecordsService.updateHealthRecord(healthRecordForm)
+				setModalData({
+					open: true,
+					title: 'Health Record Updated',
+					message: 'The health record has been updated successfully',
+					onAccept: () => {
+						setModalData(defaultModalData)
+						navigate(AppRoutes.ANIMAL.replace(':animalUuid', healthRecordForm.animalUuid))
+					},
+				})
+			} else {
+				await HealthRecordsService.setHealthRecord(healthRecordForm)
+				setModalData({
+					open: true,
+					title: 'Animal Added',
+					message: 'The health record has been added successfully',
+					onAccept: () => {
+						setModalData(defaultModalData)
+						navigate(AppRoutes.ANIMAL.replace(':animalUuid', healthRecordForm.animalUuid))
+					},
+				})
+			}
 		} catch (error) {
 			setModalData({
 				open: true,

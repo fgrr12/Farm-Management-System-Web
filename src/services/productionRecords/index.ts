@@ -40,11 +40,17 @@ export module ProductionRecordsService {
 		await setDoc(document, { ...productionRecordData, createdAt }, { merge: true })
 	}
 
-	const formatDate = (date: dayjs.Dayjs | string) => {
-		return dayjs(date).format('YYYY-MM-DD')
+	// Update
+
+	export const updateProductionRecord = async (productionRecordData: SetProductionRecordProps) => {
+		productionRecordData.date = formatDate(productionRecordData.date)
+		const updateAt = dayjs().toISOString()
+
+		const document = doc(firestore, collectionName, productionRecordData.uuid)
+		await setDoc(document, { ...productionRecordData, updateAt }, { merge: true })
 	}
 
-	// Update
+	// Delete
 
 	export const updateProductionRecordsStatus = async (uuid: string, status: boolean) => {
 		const document = doc(firestore, collectionName, uuid)
@@ -52,4 +58,8 @@ export module ProductionRecordsService {
 
 		await setDoc(document, { status, updateAt }, { merge: true })
 	}
+}
+
+const formatDate = (date: dayjs.Dayjs | string) => {
+	return dayjs(date).toISOString()
 }

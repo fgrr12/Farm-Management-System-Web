@@ -48,18 +48,31 @@ export const ProductionRecordForm = () => {
 		try {
 			setLoading(true)
 			event.preventDefault()
+			const productionRecordUuid = params.productionRecordUuid as string
 
-			ProductionRecordsService.setProductionRecord(productionRecordForm)
-
-			setModalData({
-				open: true,
-				title: 'Animal Added',
-				message: 'The production record has been added successfully',
-				onAccept: () => {
-					setModalData(defaultModalData)
-					navigate(AppRoutes.ANIMAL.replace(':animalUuid', productionRecordForm.animalUuid))
-				},
-			})
+			if (productionRecordUuid) {
+				await ProductionRecordsService.updateProductionRecord(productionRecordForm)
+				setModalData({
+					open: true,
+					title: 'Production Record Updated',
+					message: 'The production record has been updated successfully',
+					onAccept: () => {
+						setModalData(defaultModalData)
+						navigate(AppRoutes.ANIMAL.replace(':animalUuid', productionRecordForm.animalUuid))
+					},
+				})
+			} else {
+				ProductionRecordsService.setProductionRecord(productionRecordForm)
+				setModalData({
+					open: true,
+					title: 'Animal Added',
+					message: 'The production record has been added successfully',
+					onAccept: () => {
+						setModalData(defaultModalData)
+						navigate(AppRoutes.ANIMAL.replace(':animalUuid', productionRecordForm.animalUuid))
+					},
+				})
+			}
 		} catch (error) {
 			setModalData({
 				open: true,

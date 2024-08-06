@@ -44,11 +44,17 @@ export module HealthRecordsService {
 		await setDoc(document, { ...healthRecordData, createdAt }, { merge: true })
 	}
 
-	const formatDate = (date: dayjs.Dayjs | string) => {
-		return dayjs(date).format('YYYY-MM-DD')
+	// Update
+
+	export const updateHealthRecord = async (healthRecordData: SetHealthRecordProps) => {
+		healthRecordData.date = formatDate(healthRecordData.date)
+		const updateAt = dayjs().toISOString()
+
+		const document = doc(firestore, collectionName, healthRecordData.uuid)
+		await setDoc(document, { ...healthRecordData, updateAt }, { merge: true })
 	}
 
-	// Update
+	// Delete
 
 	export const updateHealthRecordsStatus = async (uuid: string, status: boolean) => {
 		const document = doc(firestore, collectionName, uuid)
@@ -56,4 +62,8 @@ export module HealthRecordsService {
 
 		await setDoc(document, { status, updateAt }, { merge: true })
 	}
+}
+
+const formatDate = (date: dayjs.Dayjs | string) => {
+	return dayjs(date).toISOString()
 }
