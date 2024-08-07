@@ -134,14 +134,21 @@ export const RelatedAnimalsForm: FC = () => {
 			try {
 				setLoading(true)
 				const animalUuid = params.animalUuid as string
+				const selectedAnimal = await AnimalsService.getAnimal(animalUuid)
+
+				setCurrentAnimal({
+					uuid: selectedAnimal.uuid,
+					animalId: selectedAnimal.animalId,
+					breed: selectedAnimal.breed,
+					gender: selectedAnimal.gender,
+				})
 				unsubscribe = RelatedAnimalsService.getRealTimeRelatedAnimals(
 					animalUuid,
 					async (data) => {
 						const animals = await AnimalsService.getAnimals({
-							selectedSpecies: 'all',
+							selectedSpecies: selectedAnimal.species,
 							search: '',
 						})
-						const selectedAnimal = animals.find((animal) => animal.uuid === animalUuid)
 						const animalsData = animals
 							.filter((animal) => animal.uuid !== animalUuid)
 							.filter(
@@ -161,12 +168,6 @@ export const RelatedAnimalsForm: FC = () => {
 							}))
 
 						setRelatedAnimals(data)
-						setCurrentAnimal({
-							uuid: selectedAnimal!.uuid,
-							animalId: selectedAnimal!.animalId,
-							breed: selectedAnimal!.breed,
-							gender: selectedAnimal!.gender,
-						})
 						setAnimalsLists({
 							animals: animalsData,
 							parents: animals.filter((animal) =>
