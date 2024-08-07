@@ -7,6 +7,7 @@ import { AnimalForm } from './pages/AnimalForm'
 import { Animals } from './pages/Animals'
 import { BillingCard } from './pages/BillingCard'
 import { HealthRecordForm } from './pages/HealthRecordForm'
+import { LoginForm } from './pages/LoginForm'
 import { ProductionRecordForm } from './pages/ProductionRecordForm'
 import { RelatedAnimalsForm } from './pages/RelatedAnimalsForm'
 
@@ -35,7 +36,7 @@ export const App: FC = () => {
 
 					<Route path={AppRoutes.BILLING_CARD} element={<BillingCard />} />
 
-					<Route path={AppRoutes.LOGIN} element={<Animals />} />
+					<Route path={AppRoutes.LOGIN} element={<LoginForm />} />
 					<Route path={AppRoutes.REGISTER} element={<Animals />} />
 					<Route path={AppRoutes.CHANGE_PASSWORD} element={<Animals />} />
 				</Routes>
