@@ -64,28 +64,7 @@ export module AnimalsService {
 
 	export const setAnimal = async (animalData: SetAnimalProps) => {
 		if (animalData.picture && !animalData.picture.includes('firebasestorage')) {
-			const image = await storageHandler.setPicture(
-				`animals/${animalData.uuid}`,
-				animalData.picture
-			)
-
-			animalData.picture = await storageHandler.getPicture(image.metadata.fullPath)
-		}
-
-		if (animalData.birthDate) {
-			animalData.birthDate = formatDate(animalData.birthDate)
-		}
-
-		if (animalData.purchaseDate) {
-			animalData.purchaseDate = formatDate(animalData.purchaseDate)
-		}
-
-		if (animalData.soldDate) {
-			animalData.soldDate = formatDate(animalData.soldDate)
-		}
-
-		if (animalData.deathDate) {
-			animalData.deathDate = formatDate(animalData.deathDate)
+			animalData.picture = await savePicture(animalData.uuid, animalData.picture)
 		}
 
 		const createdAt = dayjs().toISOString()
@@ -97,9 +76,13 @@ export module AnimalsService {
 	// Update
 
 	export const updateAnimal = async (animalData: SetAnimalProps) => {
-		const document = doc(firestore, collectionName, animalData.uuid)
+		if (animalData.picture && !animalData.picture.includes('firebasestorage')) {
+			animalData.picture = await savePicture(animalData.uuid, animalData.picture)
+		}
+
 		const updateAt = dayjs().toISOString()
 
+		const document = doc(firestore, collectionName, animalData.uuid)
 		await setDoc(document, { ...animalData, updateAt }, { merge: true })
 	}
 
@@ -111,8 +94,11 @@ export module AnimalsService {
 
 		await setDoc(document, { status, updateAt }, { merge: true })
 	}
-}
 
-const formatDate = (date: dayjs.Dayjs | string) => {
-	return dayjs(date).toISOString()
+	// Constants
+
+	const savePicture = async (uuid: string, picture: string) => {
+		const image = await storageHandler.setPicture(`animals/${uuid}`, picture)
+		return await storageHandler.getPicture(image.metadata.fullPath)
+	}
 }

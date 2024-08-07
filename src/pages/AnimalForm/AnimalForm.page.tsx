@@ -81,6 +81,22 @@ export const AnimalForm = () => {
 			const animalUuid = params.animalUuid as string
 			animalForm.uuid = animalUuid ?? crypto.randomUUID()
 
+			if (animalForm.birthDate) {
+				animalForm.birthDate = formatDate(animalForm.birthDate)
+			}
+
+			if (animalForm.purchaseDate) {
+				animalForm.purchaseDate = formatDate(animalForm.purchaseDate)
+			}
+
+			if (animalForm.soldDate) {
+				animalForm.soldDate = formatDate(animalForm.soldDate)
+			}
+
+			if (animalForm.deathDate) {
+				animalForm.deathDate = formatDate(animalForm.deathDate)
+			}
+
 			if (animalUuid) {
 				await AnimalsService.updateAnimal(animalForm)
 				setModalData({
@@ -245,4 +261,8 @@ const INITIAL_ANIMAL_FORM: Animal = {
 	purchaseDate: dayjs(),
 	soldDate: null,
 	deathDate: null,
+}
+
+const formatDate = (date: dayjs.Dayjs | string) => {
+	return dayjs(date).toISOString()
 }

@@ -10,8 +10,8 @@ export interface Animal {
 	weight: number
 	status: boolean
 	picture?: string
-	birthDate?: dayjs.Dayjs
-	purchaseDate?: dayjs.Dayjs
-	soldDate?: dayjs.Dayjs | null
-	deathDate?: dayjs.Dayjs | null
+	birthDate?: dayjs.Dayjs | string
+	purchaseDate?: dayjs.Dayjs | string
+	soldDate?: dayjs.Dayjs | string | null
+	deathDate?: dayjs.Dayjs | string | null
 }
