@@ -13,14 +13,15 @@ import { TextField } from '@/components/ui/TextField'
 
 import { AppRoutes } from '@/config/constants/routes'
 import { AnimalsService } from '@/services/animals'
-import { UserService } from '@/services/user'
 import { useAppStore } from '@/store/useAppStore'
+import { useUserStore } from '@/store/useUserStore'
 
 import type { Animal } from './AnimalForm.types'
 
 import * as S from './AnimalForm.styles'
 
 export const AnimalForm = () => {
+	const { user } = useUserStore()
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation()
@@ -122,8 +123,6 @@ export const AnimalForm = () => {
 				})
 			}
 		} catch (error) {
-			console.log(error)
-
 			setModalData({
 				open: true,
 				title: 'Error',
@@ -137,7 +136,7 @@ export const AnimalForm = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		if (!UserService.isAuthenticated()) {
+		if (!user) {
 			navigate(AppRoutes.LOGIN)
 			return
 		}

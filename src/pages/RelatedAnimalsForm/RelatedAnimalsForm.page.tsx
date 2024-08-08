@@ -7,8 +7,8 @@ import { PageHeader } from '@/components/ui/PageHeader'
 import { AppRoutes } from '@/config/constants/routes'
 import { AnimalsService } from '@/services/animals'
 import { RelatedAnimalsService } from '@/services/relatedAnimals'
-import { UserService } from '@/services/user'
 import { useAppStore } from '@/store/useAppStore'
+import { useUserStore } from '@/store/useUserStore'
 
 import type {
 	DragRelationTypes,
@@ -21,6 +21,7 @@ import type {
 import * as S from './RelatedAnimalsForm.styles'
 
 export const RelatedAnimalsForm: FC = () => {
+	const { user } = useUserStore()
 	const navigate = useNavigate()
 	const params = useParams()
 	// const { t } = useTranslation()
@@ -131,7 +132,7 @@ export const RelatedAnimalsForm: FC = () => {
 	useEffect(() => {
 		let unsubscribe: (() => void) | undefined
 
-		if (!UserService.isAuthenticated()) {
+		if (!user) {
 			navigate(AppRoutes.LOGIN)
 			return
 		}

@@ -13,13 +13,14 @@ import { Textarea } from '@/components/ui/Textarea'
 
 import { HealthRecordsService } from '@/services/healthRecords'
 import { useAppStore } from '@/store/useAppStore'
+import { useUserStore } from '@/store/useUserStore'
 
 import type { HealthRecord } from './HealthRecordForm.types'
 
-import { UserService } from '@/services/user'
 import * as S from './HealthRecordForm.styles'
 
 export const HealthRecordForm = () => {
+	const { user } = useUserStore()
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation()
@@ -111,7 +112,7 @@ export const HealthRecordForm = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		if (!UserService.isAuthenticated()) {
+		if (!user) {
 			navigate(AppRoutes.LOGIN)
 			return
 		}

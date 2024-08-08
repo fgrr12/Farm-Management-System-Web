@@ -13,16 +13,16 @@ import * as S from './LoginForm.styles'
 
 export const LoginForm: FC = () => {
 	const navigate = useNavigate()
-	const [user, setUser] = useState(INITIAL_CREDENTIALS)
+	const [credentials, setCredentials] = useState(INITIAL_CREDENTIALS)
 
 	const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target
-		setUser((prev) => ({ ...prev, [name]: value }))
+		setCredentials((prev) => ({ ...prev, [name]: value }))
 	}
 
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault()
-		const { email, password } = user
+		const { email, password } = credentials
 		await UserService.loginWithEmailAndPassword(email, password)
 		navigate(AppRoutes.ANIMALS)
 	}
@@ -30,10 +30,6 @@ export const LoginForm: FC = () => {
 	const handleGoogleLogin = async () => {
 		await UserService.loginWithGoogle()
 		navigate(AppRoutes.ANIMALS)
-	}
-
-	const logout = async () => {
-		await UserService.logout()
 	}
 
 	return (
@@ -65,7 +61,6 @@ export const LoginForm: FC = () => {
 				</S.Form>
 				<S.Or>Or</S.Or>
 				<Button onClick={handleGoogleLogin}>Login with Google</Button>
-				<Button onClick={logout}>Logout</Button>
 			</S.Card>
 		</S.Container>
 	)

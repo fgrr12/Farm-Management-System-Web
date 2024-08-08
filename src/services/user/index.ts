@@ -5,20 +5,23 @@ import {
 	signInWithEmailAndPassword,
 	signInWithPopup,
 } from 'firebase/auth'
-import { doc, setDoc } from 'firebase/firestore'
+import { doc, getDoc, setDoc } from 'firebase/firestore'
 import type { UserCredentials } from './types'
 
 const collectionName = 'users'
+const SPANISH = 'spa'
 
 export module UserService {
 	export const registerUser = async ({ email, password }: UserCredentials, name: string) => {
 		const result = await createUserWithEmailAndPassword(auth, email, password)
-		const user = result.user
+		const { user } = result
 		const userDocument = doc(firestore, collectionName, user.uid)
 		setDoc(userDocument, {
+			uuid: user.uid,
 			email: user.email,
 			name,
-			photo: user.photoURL,
+			photoUrl: user.photoURL,
+			language: SPANISH,
 		})
 	}
 
@@ -31,17 +34,21 @@ export module UserService {
 		provider.addScope('profile')
 		provider.addScope('email')
 		const result = await signInWithPopup(auth, provider)
-		const user = result.user
+		const { user } = result
 		const userDocument = doc(firestore, collectionName, user.uid)
 		setDoc(userDocument, {
+			uuid: user.uid,
 			email: user.email,
 			name: user.displayName,
-			photo: user.photoURL,
+			photoUrl: user.photoURL,
+			language: SPANISH,
 		})
 	}
 
-	export const isAuthenticated = () => {
-		return auth.currentUser !== null
+	export const getUser = async (uuid: string) => {
+		const userDocument = doc(firestore, collectionName, uuid)
+		const userDoc = await getDoc(userDocument)
+		return userDoc.data()
 	}
 
 	export const logout = async () => {

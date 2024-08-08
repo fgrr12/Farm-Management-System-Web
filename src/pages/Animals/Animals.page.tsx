@@ -10,16 +10,17 @@ import { Search } from '@/components/ui/Search'
 import { Select } from '@/components/ui/Select'
 
 import { AnimalsService } from '@/services/animals'
-import { UserService } from '@/services/user'
 import { useAppStore } from '@/store/useAppStore'
+import { useUserStore } from '@/store/useUserStore'
 
 import type { AnimalCardInformation, AnimalsFilters } from './Animals.types'
 
 import * as S from './Animals.styles'
 
 export const Animals = () => {
+	const { user } = useUserStore()
 	const navigation = useNavigate()
-	const { t, i18n } = useTranslation()
+	const { t } = useTranslation()
 	const { defaultModalData, setLoading, setModalData } = useAppStore()
 	const [animals, setAnimals] = useState<AnimalCardInformation[]>([])
 	const [species, setSpecies] = useState<string[]>([])
@@ -78,12 +79,11 @@ export const Animals = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		if (!UserService.isAuthenticated()) {
+		if (!user) {
 			navigation(AppRoutes.LOGIN)
 			return
 		}
 		setLoading(true)
-		i18n.changeLanguage('esp')
 		getSpecies()
 		getAnimals()
 	}, [])

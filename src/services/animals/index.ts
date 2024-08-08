@@ -1,4 +1,4 @@
-import { firestore } from '@/config/environment'
+import { auth, firestore } from '@/config/environment'
 import storageHandler from '@/config/persistence/storageHandler'
 import dayjs from 'dayjs'
 import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore'
@@ -14,6 +14,7 @@ export module AnimalsService {
 		getAnimalsProps: GetAnimalsProps
 	): Promise<GetAnimalResponse[]> => {
 		const { selectedSpecies, search } = getAnimalsProps
+		const user = auth.currentUser
 		let response = []
 
 		if (selectedSpecies !== 'all') {
@@ -21,7 +22,8 @@ export module AnimalsService {
 				query(
 					collection(firestore, collectionName),
 					where('species', '==', selectedSpecies),
-					where('status', '==', true)
+					where('status', '==', true),
+					where('userId', '==', user?.uid)
 				)
 			)
 			response = animals.docs.map((doc) => doc.data())

@@ -11,14 +11,15 @@ import { TextField } from '@/components/ui/TextField'
 import { Textarea } from '@/components/ui/Textarea'
 
 import { ProductionRecordsService } from '@/services/productionRecords'
-import { UserService } from '@/services/user'
 import { useAppStore } from '@/store/useAppStore'
+import { useUserStore } from '@/store/useUserStore'
 
 import type { ProductionRecord } from './ProductionRecordForm.types'
 
 import * as S from './ProductionRecordForm.styles'
 
 export const ProductionRecordForm = () => {
+	const { user } = useUserStore()
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation()
@@ -107,7 +108,7 @@ export const ProductionRecordForm = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		if (!UserService.isAuthenticated()) {
+		if (!user) {
 			navigate(AppRoutes.LOGIN)
 			return
 		}
