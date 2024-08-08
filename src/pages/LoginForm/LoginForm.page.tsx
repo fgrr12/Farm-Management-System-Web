@@ -1,17 +1,19 @@
-import { AppRoutes } from '@/config/constants/routes'
-import { useState, type ChangeEvent, type FormEvent } from 'react'
+import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { Button } from '@/components/ui/Button'
 import { TextField } from '@/components/ui/TextField'
 
+import { AppRoutes } from '@/config/constants/routes'
 import { UserService } from '@/services/user'
+import { useUserStore } from '@/store/useUserStore'
 
 import type { LoginCredentials } from './LoginForm.types'
 
 import * as S from './LoginForm.styles'
 
 export const LoginForm: FC = () => {
+	const { user } = useUserStore()
 	const navigate = useNavigate()
 	const [credentials, setCredentials] = useState(INITIAL_CREDENTIALS)
 
@@ -31,6 +33,12 @@ export const LoginForm: FC = () => {
 		await UserService.loginWithGoogle()
 		navigate(AppRoutes.ANIMALS)
 	}
+
+	useEffect(() => {
+		if (user) {
+			navigate(AppRoutes.ANIMALS)
+		}
+	}, [user, navigate])
 
 	return (
 		<S.Container>
