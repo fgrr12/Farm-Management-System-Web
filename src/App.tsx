@@ -10,6 +10,7 @@ import { HealthRecordForm } from './pages/HealthRecordForm'
 import { LoginForm } from './pages/LoginForm'
 import { ProductionRecordForm } from './pages/ProductionRecordForm'
 import { RelatedAnimalsForm } from './pages/RelatedAnimalsForm'
+import { SignUpForm } from './pages/SignUpForm'
 
 import { Loading } from './components/layout/Loading'
 import { Modal } from './components/layout/Modal'
@@ -37,7 +38,7 @@ export const App: FC = () => {
 					<Route path={AppRoutes.BILLING_CARD} element={<BillingCard />} />
 
 					<Route path={AppRoutes.LOGIN} element={<LoginForm />} />
-					<Route path={AppRoutes.REGISTER} element={<Animals />} />
+					<Route path={AppRoutes.REGISTER} element={<SignUpForm />} />
 					<Route path={AppRoutes.CHANGE_PASSWORD} element={<Animals />} />
 				</Routes>
 			</BrowserRouter>

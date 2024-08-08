@@ -1,4 +1,3 @@
-import { AppRoutes } from '@/config/constants/routes'
 import { useState, type ChangeEvent, type FormEvent } from 'react'
 
 import { Button } from '@/components/ui/Button'
@@ -6,12 +5,12 @@ import { TextField } from '@/components/ui/TextField'
 
 import { UserService } from '@/services/user'
 
-import type { LoginCredentials } from './LoginForm.types'
+import type { SingUpUser } from './SignUpForm.types'
 
-import * as S from './LoginForm.styles'
+import * as S from './SignUpForm.styles'
 
-export const LoginForm: FC = () => {
-	const [user, setUser] = useState(INITIAL_CREDENTIALS)
+export const SignUpForm: FC = () => {
+	const [user, setUser] = useState(USER_INITIAL_STATE)
 
 	const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target
@@ -20,26 +19,27 @@ export const LoginForm: FC = () => {
 
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault()
-		const { email, password } = user
-		await UserService.loginWithEmailAndPassword(email, password)
+		const { email, password, name } = user
+		await UserService.registerUser({ email, password }, name)
 	}
 
 	const handleGoogleLogin = async () => {
 		await UserService.loginWithGoogle()
 	}
 
-	const logout = async () => {
-		await UserService.logout()
-	}
-
 	return (
 		<S.Container>
-			<S.Card onSubmit={handleSubmit}>
-				<S.Title>Login</S.Title>
-				<span>
-					New user? <S.ForgotPassword to={AppRoutes.REGISTER}>Create an account</S.ForgotPassword>
-				</span>
+			<S.Card>
+				<S.Title>Sign Up</S.Title>
 				<S.Form onSubmit={handleSubmit}>
+					<TextField
+						name="name"
+						type="text"
+						placeholder="Name"
+						label="Name"
+						onChange={handleTextChange}
+						required
+					/>
 					<TextField
 						name="email"
 						type="email"
@@ -56,18 +56,17 @@ export const LoginForm: FC = () => {
 						onChange={handleTextChange}
 						required
 					/>
-					<S.ForgotPassword to={AppRoutes.REGISTER}>Forgot your password?</S.ForgotPassword>
-					<Button type="submit">Login</Button>
+					<Button type="submit">Sign Up</Button>
 				</S.Form>
 				<S.Or>Or</S.Or>
-				<Button onClick={handleGoogleLogin}>Login with Google</Button>
-				<Button onClick={logout}>Logout</Button>
+				<Button onClick={handleGoogleLogin}>Sign up with Google</Button>
 			</S.Card>
 		</S.Container>
 	)
 }
 
-const INITIAL_CREDENTIALS: LoginCredentials = {
+const USER_INITIAL_STATE: SingUpUser = {
 	email: '',
 	password: '',
+	name: '',
 }
