@@ -3,6 +3,7 @@ import type dayjs from 'dayjs'
 export interface GetAnimalsProps {
 	selectedSpecies: string
 	search: string
+	userUuid: string | null
 }
 
 export interface SetAnimalProps {

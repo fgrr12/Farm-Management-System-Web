@@ -1,4 +1,4 @@
-import { auth, firestore } from '@/config/environment'
+import { firestore } from '@/config/environment'
 import storageHandler from '@/config/persistence/storageHandler'
 import dayjs from 'dayjs'
 import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore'
@@ -13,8 +13,7 @@ export module AnimalsService {
 	export const getAnimals = async (
 		getAnimalsProps: GetAnimalsProps
 	): Promise<GetAnimalResponse[]> => {
-		const { selectedSpecies, search } = getAnimalsProps
-		const user = auth.currentUser
+		const { selectedSpecies, search, userUuid } = getAnimalsProps
 		let response = []
 
 		if (selectedSpecies !== 'all') {
@@ -23,13 +22,17 @@ export module AnimalsService {
 					collection(firestore, collectionName),
 					where('species', '==', selectedSpecies),
 					where('status', '==', true),
-					where('userId', '==', user?.uid)
+					where('userUuid', '==', userUuid)
 				)
 			)
 			response = animals.docs.map((doc) => doc.data())
 		} else {
 			const animals = await getDocs(
-				query(collection(firestore, collectionName), where('status', '==', true))
+				query(
+					collection(firestore, collectionName),
+					where('status', '==', true),
+					where('userUuid', '==', userUuid)
+				)
 			)
 			response = animals.docs.map((doc) => ({ ...doc.data(), uuid: doc.id })) as GetAnimalResponse[]
 		}
@@ -46,8 +49,14 @@ export module AnimalsService {
 	}
 
 	// This function is responsible for getting all the species from the database
-	export const getSpecies = async (): Promise<string[]> => {
-		const animals = await getDocs(collection(firestore, collectionName))
+	export const getSpecies = async (userUuid: string | null): Promise<string[]> => {
+		const animals = await getDocs(
+			query(
+				collection(firestore, collectionName),
+				where('status', '==', true),
+				where('userUuid', '==', userUuid)
+			)
+		)
 		const species = animals.docs.map((doc) => doc.data().species)
 		const uniqueSpecies = Array.from(new Set(species))
 

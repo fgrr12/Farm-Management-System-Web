@@ -47,7 +47,11 @@ export const Animals = () => {
 		try {
 			setLoading(true)
 			const { selectedSpecies, search } = filters
-			const dbAnimals = await AnimalsService.getAnimals({ selectedSpecies, search })
+			const dbAnimals = await AnimalsService.getAnimals({
+				selectedSpecies,
+				search,
+				userUuid: user!.uuid,
+			})
 
 			setAnimals(dbAnimals)
 		} catch (error) {
@@ -64,7 +68,7 @@ export const Animals = () => {
 
 	const getSpecies = async () => {
 		try {
-			const dbSpecies = await AnimalsService.getSpecies()
+			const dbSpecies = await AnimalsService.getSpecies(user!.uuid)
 
 			setSpecies(dbSpecies)
 		} catch (error) {
