@@ -2,7 +2,7 @@ import type dayjs from 'dayjs'
 
 export interface ProductionRecordsTableProps {
 	productionRecords: ProductionRecord[]
-	user: boolean
+	user: User | null
 	removeProductionRecord: (uuid: string) => void
 }
 

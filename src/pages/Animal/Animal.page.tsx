@@ -15,19 +15,20 @@ import { HealthRecordsService } from '@/services/healthRecords'
 import { ProductionRecordsService } from '@/services/productionRecords'
 import { RelatedAnimalsService } from '@/services/relatedAnimals'
 import { useAppStore } from '@/store/useAppStore'
+import { useUserStore } from '@/store/useUserStore'
 
 import type { AnimalInformation } from './Animal.types'
 
 import * as S from './Animal.styles'
 
 export const Animal: FC = () => {
+	const { user } = useUserStore()
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation()
 
 	const { defaultModalData, setLoading, setModalData } = useAppStore()
 	const [animal, setAnimal] = useState<AnimalInformation>(ANIMAL_INITIAL_STATE)
-	const [user] = useState<boolean>(true) // useState<UserInformation>(USER_INITIAL_STATE)
 
 	const handleEditAnimal = () => {
 		navigate(AppRoutes.EDIT_ANIMAL.replace(':animalUuid', animal.uuid))
