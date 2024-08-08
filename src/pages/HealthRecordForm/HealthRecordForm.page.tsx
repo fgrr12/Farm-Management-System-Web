@@ -16,6 +16,7 @@ import { useAppStore } from '@/store/useAppStore'
 
 import type { HealthRecord } from './HealthRecordForm.types'
 
+import { UserService } from '@/services/user'
 import * as S from './HealthRecordForm.styles'
 
 export const HealthRecordForm = () => {
@@ -110,13 +111,13 @@ export const HealthRecordForm = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
+		if (!UserService.isAuthenticated()) {
+			navigate(AppRoutes.LOGIN)
+			return
+		}
 		const animalUuid = params.animalUuid ?? ''
 		const type = healthRecordTypes[0]
 		setHealthRecordForm((prev) => ({ ...prev, animalUuid, type }))
-	}, [])
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
-	useEffect(() => {
 		if (params.healthRecordUuid) {
 			getHealthRecord()
 		}

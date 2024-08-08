@@ -1,21 +1,20 @@
 import { AppRoutes } from '@/config/constants/routes'
 import { useEffect, useState, type ChangeEvent, type KeyboardEvent } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-// Components
 import { AnimalCard } from '@/components/business/Animals/AnimalCard'
-import { PageHeader } from '@/components/ui/PageHeader'
-
-//Types
-import type { AnimalCardInformation, AnimalsFilters } from './Animals.types'
-
-// Styles
 import { Button } from '@/components/ui/Button'
+import { PageHeader } from '@/components/ui/PageHeader'
 import { Search } from '@/components/ui/Search'
 import { Select } from '@/components/ui/Select'
+
 import { AnimalsService } from '@/services/animals'
+import { UserService } from '@/services/user'
 import { useAppStore } from '@/store/useAppStore'
-import { useTranslation } from 'react-i18next'
+
+import type { AnimalCardInformation, AnimalsFilters } from './Animals.types'
+
 import * as S from './Animals.styles'
 
 export const Animals = () => {
@@ -79,6 +78,10 @@ export const Animals = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
+		if (!UserService.isAuthenticated()) {
+			navigation(AppRoutes.LOGIN)
+			return
+		}
 		setLoading(true)
 		i18n.changeLanguage('esp')
 		getSpecies()

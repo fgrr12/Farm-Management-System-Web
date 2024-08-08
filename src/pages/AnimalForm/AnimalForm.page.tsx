@@ -13,6 +13,7 @@ import { TextField } from '@/components/ui/TextField'
 
 import { AppRoutes } from '@/config/constants/routes'
 import { AnimalsService } from '@/services/animals'
+import { UserService } from '@/services/user'
 import { useAppStore } from '@/store/useAppStore'
 
 import type { Animal } from './AnimalForm.types'
@@ -136,6 +137,10 @@ export const AnimalForm = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
+		if (!UserService.isAuthenticated()) {
+			navigate(AppRoutes.LOGIN)
+			return
+		}
 		if (params.animalUuid) {
 			getAnimal()
 		}

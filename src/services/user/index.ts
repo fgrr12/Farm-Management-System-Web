@@ -14,9 +14,6 @@ export module UserService {
 	export const registerUser = async ({ email, password }: UserCredentials, name: string) => {
 		const result = await createUserWithEmailAndPassword(auth, email, password)
 		const user = result.user
-		const token = await user.getIdToken()
-		sessionStorage.setItem('token', token)
-
 		const userDocument = doc(firestore, collectionName, user.uid)
 		setDoc(userDocument, {
 			email: user.email,
@@ -26,10 +23,7 @@ export module UserService {
 	}
 
 	export const loginWithEmailAndPassword = async (email: string, password: string) => {
-		const result = await signInWithEmailAndPassword(auth, email, password)
-		const user = result.user
-		const token = await user.getIdToken()
-		sessionStorage.setItem('token', token)
+		await signInWithEmailAndPassword(auth, email, password)
 	}
 
 	export const loginWithGoogle = async () => {
@@ -38,12 +32,6 @@ export module UserService {
 		provider.addScope('email')
 		const result = await signInWithPopup(auth, provider)
 		const user = result.user
-
-		const credential = GoogleAuthProvider.credentialFromResult(result)
-		const token = credential?.accessToken
-
-		sessionStorage.setItem('token', token!)
-
 		const userDocument = doc(firestore, collectionName, user.uid)
 		setDoc(userDocument, {
 			email: user.email,
@@ -52,8 +40,11 @@ export module UserService {
 		})
 	}
 
+	export const isAuthenticated = () => {
+		return auth.currentUser !== null
+	}
+
 	export const logout = async () => {
 		await auth.signOut()
-		sessionStorage.removeItem('token')
 	}
 }

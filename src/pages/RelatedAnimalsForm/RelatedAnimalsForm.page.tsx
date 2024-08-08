@@ -7,6 +7,7 @@ import { PageHeader } from '@/components/ui/PageHeader'
 import { AppRoutes } from '@/config/constants/routes'
 import { AnimalsService } from '@/services/animals'
 import { RelatedAnimalsService } from '@/services/relatedAnimals'
+import { UserService } from '@/services/user'
 import { useAppStore } from '@/store/useAppStore'
 
 import type {
@@ -129,6 +130,11 @@ export const RelatedAnimalsForm: FC = () => {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		let unsubscribe: (() => void) | undefined
+
+		if (!UserService.isAuthenticated()) {
+			navigate(AppRoutes.LOGIN)
+			return
+		}
 
 		const initialData = async () => {
 			try {

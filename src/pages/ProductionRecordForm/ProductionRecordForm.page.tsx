@@ -11,6 +11,7 @@ import { TextField } from '@/components/ui/TextField'
 import { Textarea } from '@/components/ui/Textarea'
 
 import { ProductionRecordsService } from '@/services/productionRecords'
+import { UserService } from '@/services/user'
 import { useAppStore } from '@/store/useAppStore'
 
 import type { ProductionRecord } from './ProductionRecordForm.types'
@@ -106,12 +107,12 @@ export const ProductionRecordForm = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
+		if (!UserService.isAuthenticated()) {
+			navigate(AppRoutes.LOGIN)
+			return
+		}
 		const animalUuid = params.animalUuid as string
 		setProductionRecordForm((prev) => ({ ...prev, animalUuid }))
-	}, [])
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
-	useEffect(() => {
 		if (params.productionRecordUuid) {
 			getProductionRecord()
 		}

@@ -1,5 +1,6 @@
 import { AppRoutes } from '@/config/constants/routes'
 import { useState, type ChangeEvent, type FormEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import { Button } from '@/components/ui/Button'
 import { TextField } from '@/components/ui/TextField'
@@ -11,6 +12,7 @@ import type { LoginCredentials } from './LoginForm.types'
 import * as S from './LoginForm.styles'
 
 export const LoginForm: FC = () => {
+	const navigate = useNavigate()
 	const [user, setUser] = useState(INITIAL_CREDENTIALS)
 
 	const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -22,10 +24,12 @@ export const LoginForm: FC = () => {
 		e.preventDefault()
 		const { email, password } = user
 		await UserService.loginWithEmailAndPassword(email, password)
+		navigate(AppRoutes.ANIMALS)
 	}
 
 	const handleGoogleLogin = async () => {
 		await UserService.loginWithGoogle()
+		navigate(AppRoutes.ANIMALS)
 	}
 
 	const logout = async () => {
