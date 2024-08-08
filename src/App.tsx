@@ -35,7 +35,6 @@ export const App: FC = () => {
 				setUser(null)
 				return
 			}
-
 			const user = await UserService.getUser(authUser!.uid)
 			i18n.changeLanguage(user?.language || 'esp')
 			setUser({
