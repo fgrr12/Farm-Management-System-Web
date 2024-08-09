@@ -24,8 +24,8 @@ export const SignUpForm: FC = () => {
 
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault()
-		const { email, password, name } = userInfo
-		await UserService.registerUser({ email, password }, name)
+		const { email, password } = userInfo
+		await UserService.registerUser({ email, password })
 		navigate(AppRoutes.ANIMALS)
 	}
 
@@ -43,14 +43,6 @@ export const SignUpForm: FC = () => {
 			<S.Card>
 				<S.Title>Sign Up</S.Title>
 				<S.Form onSubmit={handleSubmit}>
-					<TextField
-						name="name"
-						type="text"
-						placeholder="Name"
-						label="Name"
-						onChange={handleTextChange}
-						required
-					/>
 					<TextField
 						name="email"
 						type="email"
@@ -79,5 +71,4 @@ export const SignUpForm: FC = () => {
 const USER_INITIAL_STATE: SingUpUser = {
 	email: '',
 	password: '',
-	name: '',
 }

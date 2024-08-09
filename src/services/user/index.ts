@@ -12,14 +12,13 @@ const collectionName = 'users'
 const SPANISH = 'spa'
 
 export module UserService {
-	export const registerUser = async ({ email, password }: UserCredentials, name: string) => {
+	export const registerUser = async ({ email, password }: UserCredentials) => {
 		const result = await createUserWithEmailAndPassword(auth, email, password)
 		const { user } = result
 		const userDocument = doc(firestore, collectionName, user.uid)
 		setDoc(userDocument, {
 			uuid: user.uid,
 			email: user.email,
-			name,
 			photoUrl: user.photoURL,
 			language: SPANISH,
 		})
