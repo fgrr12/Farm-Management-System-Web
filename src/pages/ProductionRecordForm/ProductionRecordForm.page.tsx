@@ -53,7 +53,7 @@ export const ProductionRecordForm = () => {
 			const productionRecordUuid = params.productionRecordUuid as string
 
 			if (productionRecordUuid) {
-				await ProductionRecordsService.updateProductionRecord(productionRecordForm)
+				await ProductionRecordsService.updateProductionRecord(productionRecordForm, user!.uuid)
 				setModalData({
 					open: true,
 					title: 'Production Record Updated',
@@ -64,7 +64,7 @@ export const ProductionRecordForm = () => {
 					},
 				})
 			} else {
-				ProductionRecordsService.setProductionRecord(productionRecordForm)
+				ProductionRecordsService.setProductionRecord(productionRecordForm, user!.uuid)
 				setModalData({
 					open: true,
 					title: 'Animal Added',

@@ -76,7 +76,7 @@ export const HealthRecordForm = () => {
 			const healthRecordUuid = params.healthRecordUuid as string
 
 			if (healthRecordUuid) {
-				await HealthRecordsService.updateHealthRecord(healthRecordForm)
+				await HealthRecordsService.updateHealthRecord(healthRecordForm, user!.uuid)
 				setModalData({
 					open: true,
 					title: 'Health Record Updated',
@@ -87,7 +87,7 @@ export const HealthRecordForm = () => {
 					},
 				})
 			} else {
-				await HealthRecordsService.setHealthRecord(healthRecordForm)
+				await HealthRecordsService.setHealthRecord(healthRecordForm, user!.uuid)
 				setModalData({
 					open: true,
 					title: 'Animal Added',

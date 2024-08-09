@@ -88,6 +88,7 @@ export const CenterTitle = styled.div`
 export const InfoTableContainer = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    align-items: flex-start;
     gap: 2rem;
 
     @media (max-width: 768px) {

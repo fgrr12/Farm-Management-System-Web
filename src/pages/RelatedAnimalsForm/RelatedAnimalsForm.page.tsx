@@ -106,21 +106,25 @@ export const RelatedAnimalsForm: FC = () => {
 		child: RelatedAnimalInformation,
 		parent: RelatedAnimalInformation
 	) => {
-		await RelatedAnimalsService.setRelatedAnimal({
-			uuid: crypto.randomUUID(),
-			child: {
-				animalUuid: child.uuid,
-				animalId: child.animalId,
-				breed: child.breed,
-				relation: child.gender.toLowerCase() === Gender.FEMALE ? Relation.DAUGHTER : Relation.SON,
+		await RelatedAnimalsService.setRelatedAnimal(
+			{
+				uuid: crypto.randomUUID(),
+				child: {
+					animalUuid: child.uuid,
+					animalId: child.animalId,
+					breed: child.breed,
+					relation: child.gender.toLowerCase() === Gender.FEMALE ? Relation.DAUGHTER : Relation.SON,
+				},
+				parent: {
+					animalUuid: parent.uuid,
+					animalId: parent.animalId,
+					breed: parent.breed,
+					relation:
+						parent.gender.toLowerCase() === Gender.FEMALE ? Relation.MOTHER : Relation.FATHER,
+				},
 			},
-			parent: {
-				animalUuid: parent.uuid,
-				animalId: parent.animalId,
-				breed: parent.breed,
-				relation: parent.gender.toLowerCase() === Gender.FEMALE ? Relation.MOTHER : Relation.FATHER,
-			},
-		})
+			user!.uuid
+		)
 	}
 
 	const handleClicDropzone = (type: DragRelationTypes) => {

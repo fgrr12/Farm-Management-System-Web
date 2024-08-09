@@ -32,22 +32,28 @@ export module ProductionRecordsService {
 
 	// Sets
 
-	export const setProductionRecord = async (productionRecordData: SetProductionRecordProps) => {
+	export const setProductionRecord = async (
+		productionRecordData: SetProductionRecordProps,
+		createdBy: string | null
+	) => {
 		productionRecordData.date = formatDate(productionRecordData.date)
 		const createdAt = dayjs().toISOString()
 
 		const document = doc(firestore, collectionName, productionRecordData.uuid)
-		await setDoc(document, { ...productionRecordData, createdAt }, { merge: true })
+		await setDoc(document, { ...productionRecordData, createdAt, createdBy }, { merge: true })
 	}
 
 	// Update
 
-	export const updateProductionRecord = async (productionRecordData: SetProductionRecordProps) => {
+	export const updateProductionRecord = async (
+		productionRecordData: SetProductionRecordProps,
+		updatedBy: string | null
+	) => {
 		productionRecordData.date = formatDate(productionRecordData.date)
 		const updateAt = dayjs().toISOString()
 
 		const document = doc(firestore, collectionName, productionRecordData.uuid)
-		await setDoc(document, { ...productionRecordData, updateAt }, { merge: true })
+		await setDoc(document, { ...productionRecordData, updateAt, updatedBy }, { merge: true })
 	}
 
 	// Delete

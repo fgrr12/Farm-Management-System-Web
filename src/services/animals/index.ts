@@ -73,7 +73,11 @@ export module AnimalsService {
 
 	// Sets
 
-	export const setAnimal = async (animalData: SetAnimalProps) => {
+	export const setAnimal = async (
+		animalData: SetAnimalProps,
+		createdBy: string | null,
+		userUuid: string | null
+	) => {
 		if (animalData.picture && !animalData.picture.includes('firebasestorage')) {
 			animalData.picture = await savePicture(animalData.uuid, animalData.picture)
 		}
@@ -81,12 +85,12 @@ export module AnimalsService {
 		const createdAt = dayjs().toISOString()
 
 		const document = doc(firestore, collectionName, animalData.uuid)
-		await setDoc(document, { ...animalData, createdAt }, { merge: true })
+		await setDoc(document, { ...animalData, createdAt, createdBy, userUuid }, { merge: true })
 	}
 
 	// Update
 
-	export const updateAnimal = async (animalData: SetAnimalProps) => {
+	export const updateAnimal = async (animalData: SetAnimalProps, editedBy: string | null) => {
 		if (animalData.picture && !animalData.picture.includes('firebasestorage')) {
 			animalData.picture = await savePicture(animalData.uuid, animalData.picture)
 		}
@@ -94,7 +98,7 @@ export module AnimalsService {
 		const updateAt = dayjs().toISOString()
 
 		const document = doc(firestore, collectionName, animalData.uuid)
-		await setDoc(document, { ...animalData, updateAt }, { merge: true })
+		await setDoc(document, { ...animalData, updateAt, editedBy }, { merge: true })
 	}
 
 	// Delete

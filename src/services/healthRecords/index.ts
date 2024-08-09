@@ -36,22 +36,28 @@ export module HealthRecordsService {
 
 	// Sets
 
-	export const setHealthRecord = async (healthRecordData: SetHealthRecordProps) => {
+	export const setHealthRecord = async (
+		healthRecordData: SetHealthRecordProps,
+		createdBy: string | null
+	) => {
 		healthRecordData.date = formatDate(healthRecordData.date)
 		const createdAt = dayjs().toISOString()
 
 		const document = doc(firestore, collectionName, healthRecordData.uuid)
-		await setDoc(document, { ...healthRecordData, createdAt }, { merge: true })
+		await setDoc(document, { ...healthRecordData, createdAt, createdBy }, { merge: true })
 	}
 
 	// Update
 
-	export const updateHealthRecord = async (healthRecordData: SetHealthRecordProps) => {
+	export const updateHealthRecord = async (
+		healthRecordData: SetHealthRecordProps,
+		editedBy: string | null
+	) => {
 		healthRecordData.date = formatDate(healthRecordData.date)
 		const updateAt = dayjs().toISOString()
 
 		const document = doc(firestore, collectionName, healthRecordData.uuid)
-		await setDoc(document, { ...healthRecordData, updateAt }, { merge: true })
+		await setDoc(document, { ...healthRecordData, updateAt, editedBy }, { merge: true })
 	}
 
 	// Delete

@@ -100,7 +100,7 @@ export const AnimalForm = () => {
 			}
 
 			if (animalUuid) {
-				await AnimalsService.updateAnimal(animalForm)
+				await AnimalsService.updateAnimal(animalForm, user!.uuid)
 				setModalData({
 					open: true,
 					title: 'Animal Edited',
@@ -111,7 +111,7 @@ export const AnimalForm = () => {
 					},
 				})
 			} else {
-				await AnimalsService.setAnimal(animalForm)
+				await AnimalsService.setAnimal(animalForm, user!.uuid, user!.uuid)
 				setModalData({
 					open: true,
 					title: 'Animal Added',
