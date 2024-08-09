@@ -68,6 +68,7 @@ export const Animals = () => {
 
 	const getSpecies = async () => {
 		try {
+			setLoading(true)
 			const dbSpecies = await AnimalsService.getSpecies(user!.uuid)
 
 			setSpecies(dbSpecies)
@@ -78,6 +79,8 @@ export const Animals = () => {
 				message: 'Ocurrió un error al obtener las especies',
 				onAccept: () => setModalData(defaultModalData),
 			})
+		} finally {
+			setLoading(false)
 		}
 	}
 
@@ -87,14 +90,14 @@ export const Animals = () => {
 			navigation(AppRoutes.LOGIN)
 			return
 		}
-		setLoading(true)
 		getSpecies()
-		getAnimals()
 	}, [])
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		getAnimals()
+		if (user) {
+			getAnimals()
+		}
 	}, [filters])
 
 	return (

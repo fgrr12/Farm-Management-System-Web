@@ -30,6 +30,7 @@ export const App: FC = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
+		i18n.changeLanguage(navigator.language === 'en' ? 'eng' : 'esp')
 		onAuthStateChanged(auth, async (authUser) => {
 			if (!authUser) {
 				setUser(null)
@@ -46,11 +47,6 @@ export const App: FC = () => {
 			})
 		})
 	}, [setUser])
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
-	useEffect(() => {
-		i18n.changeLanguage(navigator.language === 'en' ? 'eng' : 'esp')
-	}, [])
 	return (
 		<AppContainer className="app">
 			<BrowserRouter>
