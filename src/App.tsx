@@ -30,14 +30,14 @@ export const App: FC = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		i18n.changeLanguage(navigator.language === 'en' ? 'eng' : 'esp')
+		i18n.changeLanguage(navigator.language === 'en' ? 'eng' : 'spa')
 		onAuthStateChanged(auth, async (authUser) => {
 			if (!authUser) {
 				setUser(null)
 				return
 			}
 			const user = await UserService.getUser(authUser!.uid)
-			i18n.changeLanguage(user?.language || 'esp')
+			i18n.changeLanguage(user?.language || 'spa')
 			setUser({
 				email: user!.email,
 				name: user!.name,
