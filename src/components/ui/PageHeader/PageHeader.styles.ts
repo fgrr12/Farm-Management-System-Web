@@ -40,13 +40,14 @@ export const Sidebar = styled.div<CollapsePageStyleProps>`
     }
 
     @media (max-width: 768px) {
-        position: absolute;
+        position: fixed;
         top: 0;
         left: 0;
         z-index: 1000;
-        transition: width 0.3s;
-        height: 3rem;
+        height: ${({ $backButtonHidden }) => ($backButtonHidden ? '3rem' : '5.5rem')};
         width: ${({ $collapse }) => ($collapse ? '3rem' : '15rem')};
+        transition: width 0.3s;
+        background-color: ${({ $collapse }) => ($collapse ? 'transparent' : colors.white)};
     }
 `
 

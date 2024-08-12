@@ -8,9 +8,12 @@ import * as S from './Sidebar.styles'
 
 export const Sidebar: FC = () => {
 	const navigate = useNavigate()
-	const { collapseSidebar } = useAppStore()
+	const { collapseSidebar, setCollapseSidebar } = useAppStore()
 
 	const handleGoTo = (path: string) => {
+		if (window.innerWidth <= 768) {
+			setCollapseSidebar(true)
+		}
 		navigate(path)
 	}
 

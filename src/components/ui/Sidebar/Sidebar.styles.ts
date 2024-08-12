@@ -12,7 +12,7 @@ export const Sidebar = styled.aside<CollapseStyleProps>`
 
     @media (max-width: 768px) {
         position: fixed;
-        top: 76px;
+        top: auto;
         left: 0;
         z-index: 1000;
         transition: width 0.3s;
