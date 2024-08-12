@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { RelatedAnimalCard } from '@/components/business/RelatedAnimals/RelatedAnimalCard'
-import { PageHeader } from '@/components/ui/PageHeader'
 
 import { AppRoutes } from '@/config/constants/routes'
 import { AnimalsService } from '@/services/animals'
@@ -26,17 +25,12 @@ export const RelatedAnimalsForm: FC = () => {
 	const params = useParams()
 	// const { t } = useTranslation()
 
-	const { defaultModalData, setLoading, setModalData } = useAppStore()
+	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
 	const dragItem: any = useRef()
 	const dragOverItem: any = useRef()
 	const [animalsLists, setAnimalsLists] = useState<RelatedAnimalsLists>(INITIAL_ANIMALS_LISTS)
 	const [relatedAnimals, setRelatedAnimals] = useState<RelatedAnimalsList[]>([])
 	const [currentAnimal, setCurrentAnimal] = useState<RelatedAnimalInformation | null>(null)
-
-	const handleBack = () => {
-		const animalUuid = params.animalUuid as string
-		navigate(AppRoutes.ANIMAL.replace(':animalUuid', animalUuid))
-	}
 
 	const handleDragStart = (position: any, type: DragRelationTypes) => {
 		dragItem.current = position
@@ -134,6 +128,7 @@ export const RelatedAnimalsForm: FC = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
+		setHeaderTitle('Add Related Animals')
 		let unsubscribe: (() => void) | undefined
 
 		if (!user) {
@@ -223,7 +218,6 @@ export const RelatedAnimalsForm: FC = () => {
 	}, [])
 	return (
 		<S.Container>
-			<PageHeader onBack={handleBack}>Add Related Animals</PageHeader>
 			<S.AnimalsContainer
 				onDragEnter={() => handleDragEnter(DragRelations.ANIMALS)}
 				onClick={() => handleClicDropzone(DragRelations.ANIMALS)}

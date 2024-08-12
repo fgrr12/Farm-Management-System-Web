@@ -6,7 +6,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { Button } from '@/components/ui/Button'
 import { DatePicker } from '@/components/ui/DatePicker'
-import { PageHeader } from '@/components/ui/PageHeader'
 import { TextField } from '@/components/ui/TextField'
 import { Textarea } from '@/components/ui/Textarea'
 
@@ -23,14 +22,10 @@ export const ProductionRecordForm = () => {
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation()
-	const { defaultModalData, setLoading, setModalData } = useAppStore()
+	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
 	const [productionRecordForm, setProductionRecordForm] = useState<ProductionRecord>(
 		INITIAL_PRODUCTION_RECORD_FORM
 	)
-
-	const handleBack = () => {
-		navigate(AppRoutes.ANIMAL.replace(':animalUuid', productionRecordForm.animalUuid))
-	}
 
 	const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target
@@ -108,6 +103,7 @@ export const ProductionRecordForm = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
+		setHeaderTitle(t('addProductionRecord.title'))
 		if (!user) {
 			navigate(AppRoutes.LOGIN)
 			return
@@ -121,7 +117,6 @@ export const ProductionRecordForm = () => {
 
 	return (
 		<S.Container>
-			<PageHeader onBack={handleBack}>{t('addProductionRecord.title')}</PageHeader>
 			<S.Form onSubmit={handleSubmit} autoComplete="off">
 				<TextField
 					name="quantity"

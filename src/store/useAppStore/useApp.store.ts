@@ -10,8 +10,10 @@ const DEFAULT_MODAL_DATA: AppModalData = {
 export const useAppStore = create<AppStore & AppStoreActions>((set) => ({
 	loading: false,
 	defaultModalData: DEFAULT_MODAL_DATA,
+	headerTitle: '',
 	setLoading: (loading) => set({ loading }),
 	setModalData: (modalData) => set({ defaultModalData: modalData }),
+	setHeaderTitle: (title) => set({ headerTitle: title }),
 }))
 
 export const GENERIC_MODAL_DATA: AppModalData = {

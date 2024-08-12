@@ -6,7 +6,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { Button } from '@/components/ui/Button'
 import { DatePicker } from '@/components/ui/DatePicker'
-import { PageHeader } from '@/components/ui/PageHeader'
 import { Select } from '@/components/ui/Select'
 import { TextField } from '@/components/ui/TextField'
 import { Textarea } from '@/components/ui/Textarea'
@@ -25,12 +24,8 @@ export const HealthRecordForm = () => {
 	const params = useParams()
 	const { t } = useTranslation()
 
-	const { defaultModalData, setLoading, setModalData } = useAppStore()
+	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
 	const [healthRecordForm, setHealthRecordForm] = useState<HealthRecord>(INITIAL_HEALTH_RECORD_FORM)
-
-	const handleBack = () => {
-		navigate(AppRoutes.ANIMAL.replace(':animalUuid', healthRecordForm.animalUuid))
-	}
 
 	const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target
@@ -112,6 +107,7 @@ export const HealthRecordForm = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
+		setHeaderTitle(t('addHealthRecord.title'))
 		if (!user) {
 			navigate(AppRoutes.LOGIN)
 			return
@@ -126,7 +122,6 @@ export const HealthRecordForm = () => {
 
 	return (
 		<S.Container>
-			<PageHeader onBack={handleBack}>{t('addHealthRecord.title')}</PageHeader>
 			<S.Form onSubmit={handleSubmit} autoComplete="off">
 				<TextField
 					name="reason"

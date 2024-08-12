@@ -7,7 +7,6 @@ import { HealthRecordsTable } from '@/components/business/Animal/HealthRecordsTa
 import { ProductionRecordsTable } from '@/components/business/Animal/ProductionRecordsTable'
 import { RelatedAnimalsTable } from '@/components/business/Animal/RelatedAnimalsTable'
 import { ActionButton } from '@/components/ui/ActionButton'
-import { PageHeader } from '@/components/ui/PageHeader'
 
 import { AppRoutes } from '@/config/constants/routes'
 import { AnimalsService } from '@/services/animals'
@@ -27,7 +26,7 @@ export const Animal: FC = () => {
 	const params = useParams()
 	const { t } = useTranslation()
 
-	const { defaultModalData, setLoading, setModalData } = useAppStore()
+	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
 	const [animal, setAnimal] = useState<AnimalInformation>(ANIMAL_INITIAL_STATE)
 
 	const handleEditAnimal = () => {
@@ -80,6 +79,7 @@ export const Animal: FC = () => {
 			const dbRelatedAnimals = await RelatedAnimalsService.getRelatedAnimals(animalId!)
 			const dbProductionRecords = await ProductionRecordsService.getProductionRecords(animalId!)
 
+			setHeaderTitle(`Animal ${dbAnimal.animalId}`)
 			dbAnimal.weight = dbHealthRecords[dbHealthRecords.length - 1]?.weight ?? dbAnimal.weight
 			dbAnimal.healthRecords = dbHealthRecords
 			dbAnimal.productionRecords = dbProductionRecords
@@ -108,112 +108,109 @@ export const Animal: FC = () => {
 	}, [params.animalUuid])
 
 	return (
-		<>
-			<PageHeader>Animal {animal.animalId}</PageHeader>
-			<S.Container>
-				<S.AnimalContainer>
-					<S.InfoContainer>
-						<S.CenterTitle>
-							<S.Label>{t('animal.animalId')}</S.Label>
-							{user && (
-								<ActionButton
-									title="Edit"
-									icon="i-material-symbols-edit-square-outline"
-									onClick={handleEditAnimal}
-								/>
-							)}
-							{user && (
-								<ActionButton
-									title="Delete"
-									icon="i-material-symbols-delete-outline"
-									onClick={handleRemoveAnimal}
-								/>
-							)}
-						</S.CenterTitle>
-						<S.AnimalInfo>
+		<S.Container>
+			<S.AnimalContainer>
+				<S.InfoContainer>
+					<S.CenterTitle>
+						<S.Label>{t('animal.animalId')}</S.Label>
+						{user && (
+							<ActionButton
+								title="Edit"
+								icon="i-material-symbols-edit-square-outline"
+								onClick={handleEditAnimal}
+							/>
+						)}
+						{user && (
+							<ActionButton
+								title="Delete"
+								icon="i-material-symbols-delete-outline"
+								onClick={handleRemoveAnimal}
+							/>
+						)}
+					</S.CenterTitle>
+					<S.AnimalInfo>
+						<div>
+							<S.Label>ID</S.Label>
+							<S.Value>{animal.animalId}</S.Value>
+						</div>
+						<div>
+							<S.Label>{t('animal.species')}</S.Label>
+							<S.Value>{t(`animal.speciesList.${animal.species.toLowerCase()}`)}</S.Value>
+						</div>
+						<div>
+							<S.Label>{t('animal.breed')}</S.Label>
+							<S.Value>{animal.breed}</S.Value>
+						</div>
+						<div>
+							<S.Label>{t('animal.gender')}</S.Label>
+							<S.Value>{animal.gender}</S.Value>
+						</div>
+						<div>
+							<S.Label>{t('animal.color')}</S.Label>
+							<S.Value>{animal.color}</S.Value>
+						</div>
+						<div>
+							<S.Label>{t('animal.weight')}</S.Label>
+							<S.Value>{animal.weight}</S.Value>
+						</div>
+						<div>
+							<S.Label>{t('animal.birthDate')}</S.Label>
+							<S.Value>{dayjs(animal.birthDate).format('MM/DD/YYYY')}</S.Value>
+						</div>
+						<div>
+							<S.Label>{t('animal.purchaseDate')}</S.Label>
+							<S.Value>{dayjs(animal.purchaseDate).format('MM/DD/YYYY')}</S.Value>
+						</div>
+						{animal.soldDate && (
 							<div>
-								<S.Label>ID</S.Label>
-								<S.Value>{animal.animalId}</S.Value>
+								<S.Label>{t('animal.soldDate')}</S.Label>
+								<S.Value>{dayjs(animal.soldDate).format('MM/DD/YYYY')}</S.Value>
 							</div>
+						)}
+						{animal.deathDate && (
 							<div>
-								<S.Label>{t('animal.species')}</S.Label>
-								<S.Value>{t(`animal.speciesList.${animal.species.toLowerCase()}`)}</S.Value>
+								<S.Label>{t('animal.deathDate')}</S.Label>
+								<S.Value>{dayjs(animal.deathDate).format('MM/DD/YYYY')}</S.Value>
 							</div>
-							<div>
-								<S.Label>{t('animal.breed')}</S.Label>
-								<S.Value>{animal.breed}</S.Value>
-							</div>
-							<div>
-								<S.Label>{t('animal.gender')}</S.Label>
-								<S.Value>{animal.gender}</S.Value>
-							</div>
-							<div>
-								<S.Label>{t('animal.color')}</S.Label>
-								<S.Value>{animal.color}</S.Value>
-							</div>
-							<div>
-								<S.Label>{t('animal.weight')}</S.Label>
-								<S.Value>{animal.weight}</S.Value>
-							</div>
-							<div>
-								<S.Label>{t('animal.birthDate')}</S.Label>
-								<S.Value>{dayjs(animal.birthDate).format('MM/DD/YYYY')}</S.Value>
-							</div>
-							<div>
-								<S.Label>{t('animal.purchaseDate')}</S.Label>
-								<S.Value>{dayjs(animal.purchaseDate).format('MM/DD/YYYY')}</S.Value>
-							</div>
-							{animal.soldDate && (
-								<div>
-									<S.Label>{t('animal.soldDate')}</S.Label>
-									<S.Value>{dayjs(animal.soldDate).format('MM/DD/YYYY')}</S.Value>
-								</div>
-							)}
-							{animal.deathDate && (
-								<div>
-									<S.Label>{t('animal.deathDate')}</S.Label>
-									<S.Value>{dayjs(animal.deathDate).format('MM/DD/YYYY')}</S.Value>
-								</div>
-							)}
-						</S.AnimalInfo>
-					</S.InfoContainer>
+						)}
+					</S.AnimalInfo>
+				</S.InfoContainer>
 
-					<S.ImageContainer>
-						<S.Image src={animal.picture} alt={animal.species} />
-					</S.ImageContainer>
-				</S.AnimalContainer>
+				<S.ImageContainer>
+					<S.Image src={animal.picture} alt={animal.species} />
+				</S.ImageContainer>
+			</S.AnimalContainer>
 
-				<HealthRecordsTable
-					healthRecords={animal?.healthRecords || []}
+			<HealthRecordsTable
+				healthRecords={animal?.healthRecords || []}
+				user={user}
+				removeHealthRecord={handleRemoveHealthRecord}
+			/>
+
+			<S.InfoTableContainer>
+				<ProductionRecordsTable
+					productionRecords={animal?.productionRecords || []}
 					user={user}
-					removeHealthRecord={handleRemoveHealthRecord}
+					removeProductionRecord={handleRemoveProductionRecord}
 				/>
 
-				<S.InfoTableContainer>
-					<ProductionRecordsTable
-						productionRecords={animal?.productionRecords || []}
-						user={user}
-						removeProductionRecord={handleRemoveProductionRecord}
-					/>
+				<RelatedAnimalsTable
+					title={t('animal.parentsTitle')}
+					animals={animal?.relatedAnimals?.parents || []}
+					user={user}
+					type="parent"
+					removeRelation={handleRemoveRelation}
+				/>
 
-					<RelatedAnimalsTable
-						title={t('animal.parentsTitle')}
-						animals={animal?.relatedAnimals?.parents || []}
-						user={user}
-						type="parent"
-						removeRelation={handleRemoveRelation}
-					/>
-
-					<RelatedAnimalsTable
-						title={t('animal.childrenTitle')}
-						animals={animal?.relatedAnimals?.children || []}
-						user={user}
-						type="child"
-						removeRelation={handleRemoveRelation}
-					/>
-				</S.InfoTableContainer>
-			</S.Container>
-		</>
+				<RelatedAnimalsTable
+					title={t('animal.childrenTitle')}
+					animals={animal?.relatedAnimals?.children || []}
+					user={user}
+					type="child"
+					removeRelation={handleRemoveRelation}
+				/>
+			</S.InfoTableContainer>
+		</S.Container>
 	)
 }
 

@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom'
 
 import { AnimalCard } from '@/components/business/Animals/AnimalCard'
 import { Button } from '@/components/ui/Button'
-import { PageHeader } from '@/components/ui/PageHeader'
 import { Search } from '@/components/ui/Search'
 import { Select } from '@/components/ui/Select'
 
@@ -21,7 +20,7 @@ export const Animals = () => {
 	const { user } = useUserStore()
 	const navigation = useNavigate()
 	const { t } = useTranslation()
-	const { defaultModalData, setLoading, setModalData } = useAppStore()
+	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
 	const [animals, setAnimals] = useState<AnimalCardInformation[]>([])
 	const [species, setSpecies] = useState<string[]>([])
 	const [filters, setFilters] = useState<AnimalsFilters>(INITIAL_FILTERS)
@@ -86,6 +85,7 @@ export const Animals = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
+		setHeaderTitle(t('animals.title'))
 		if (!user) {
 			navigation(AppRoutes.LOGIN)
 			return
@@ -102,7 +102,6 @@ export const Animals = () => {
 
 	return (
 		<S.Container>
-			<PageHeader>{t('animals.title')}</PageHeader>
 			<S.ButtonContainer>
 				<Search placeholder={t('animals.search')} onKeyDown={handleSearchKeyPress} />
 				<Select name="selectedSpecies" label={t('animals.species')} onChange={handleSelectChange}>

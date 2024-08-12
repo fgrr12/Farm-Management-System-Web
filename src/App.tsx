@@ -1,7 +1,7 @@
 import { onAuthStateChanged } from 'firebase/auth'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppRoutes } from './config/constants/routes'
 import { auth } from './config/environment'
 import { useAppStore } from './store/useAppStore'
@@ -20,11 +20,13 @@ import { SignUpForm } from './pages/SignUpForm'
 import { Loading } from './components/layout/Loading'
 import { Modal } from './components/layout/Modal'
 
+import { PageHeader } from './components/ui/PageHeader'
+import { Sidebar } from './components/ui/Sidebar'
 import { UserService } from './services/user'
-import { AppContainer } from './styles/root'
+import { AppContainer, AppContent } from './styles/root'
 
 export const App: FC = () => {
-	const { setUser } = useUserStore()
+	const { user, setUser } = useUserStore()
 	const { loading: appLoading, defaultModalData: modalData } = useAppStore()
 	const { i18n } = useTranslation()
 
@@ -49,7 +51,9 @@ export const App: FC = () => {
 	}, [setUser])
 	return (
 		<AppContainer className="app">
-			<BrowserRouter>
+			{user && <Sidebar />}
+			<AppContent>
+				{user && <PageHeader />}
 				<Routes>
 					<Route path="/" element={<Navigate to={AppRoutes.ANIMALS} />} />
 					<Route path={AppRoutes.ANIMALS} element={<Animals />} />
@@ -68,15 +72,16 @@ export const App: FC = () => {
 					<Route path={AppRoutes.REGISTER} element={<SignUpForm />} />
 					<Route path={AppRoutes.CHANGE_PASSWORD} element={<Animals />} />
 				</Routes>
-			</BrowserRouter>
-			<Modal
-				title={modalData.title}
-				message={modalData.message}
-				open={modalData.open}
-				onAccept={modalData.onAccept}
-				onCancel={modalData.onCancel}
-			/>
-			<Loading open={appLoading} />
+
+				<Modal
+					title={modalData.title}
+					message={modalData.message}
+					open={modalData.open}
+					onAccept={modalData.onAccept}
+					onCancel={modalData.onCancel}
+				/>
+				<Loading open={appLoading} />
+			</AppContent>
 		</AppContainer>
 	)
 }

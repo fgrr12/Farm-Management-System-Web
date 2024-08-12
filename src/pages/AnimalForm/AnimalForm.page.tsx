@@ -7,7 +7,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { DatePicker } from '@/components/ui/DatePicker'
 import { Dropzone } from '@/components/ui/Dropzone'
-import { PageHeader } from '@/components/ui/PageHeader'
 import { Select } from '@/components/ui/Select'
 import { TextField } from '@/components/ui/TextField'
 
@@ -26,17 +25,8 @@ export const AnimalForm = () => {
 	const params = useParams()
 	const { t } = useTranslation()
 
-	const { defaultModalData, setLoading, setModalData } = useAppStore()
+	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
 	const [animalForm, setAnimalForm] = useState<Animal>(INITIAL_ANIMAL_FORM)
-
-	const handleReturn = () => {
-		const animalUuid = params.animalUuid as string
-		if (animalUuid) {
-			navigate(AppRoutes.ANIMAL.replace(':animalUuid', animalUuid))
-		} else {
-			navigate(AppRoutes.ANIMALS)
-		}
-	}
 
 	const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target
@@ -78,6 +68,7 @@ export const AnimalForm = () => {
 
 	const handleSubmit = async (event: FormEvent) => {
 		try {
+			setHeaderTitle(t('addAnimal.title'))
 			setLoading(true)
 			event.preventDefault()
 			const animalUuid = params.animalUuid as string
@@ -147,7 +138,6 @@ export const AnimalForm = () => {
 
 	return (
 		<S.Container>
-			<PageHeader onBack={handleReturn}>{t('addAnimal.title')}</PageHeader>
 			<S.Form onSubmit={handleSubmit} autoComplete="off">
 				<TextField
 					name="animalId"
