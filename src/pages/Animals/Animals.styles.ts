@@ -5,6 +5,7 @@ export const Container = styled.div`
     flex-direction: column;
     align-items: center;
     height: 100%;
+    width: 100%;
 `
 
 export const ButtonContainer = styled.div`

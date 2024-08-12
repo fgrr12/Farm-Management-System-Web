@@ -19,10 +19,11 @@ import { SignUpForm } from './pages/SignUpForm'
 
 import { Loading } from './components/layout/Loading'
 import { Modal } from './components/layout/Modal'
-
 import { PageHeader } from './components/ui/PageHeader'
 import { Sidebar } from './components/ui/Sidebar'
+
 import { UserService } from './services/user'
+
 import { AppContainer, AppContent } from './styles/root'
 
 export const App: FC = () => {
@@ -51,9 +52,9 @@ export const App: FC = () => {
 	}, [setUser])
 	return (
 		<AppContainer className="app">
-			{user && <Sidebar />}
+			{user && <PageHeader />}
 			<AppContent>
-				{user && <PageHeader />}
+				{user && <Sidebar />}
 				<Routes>
 					<Route path="/" element={<Navigate to={AppRoutes.ANIMALS} />} />
 					<Route path={AppRoutes.ANIMALS} element={<Animals />} />

@@ -1,29 +1,23 @@
+import type { CollapseStyleProps } from './Sidebar.types'
+
 import styled from 'styled-components'
 
-export const Sidebar = styled.aside`
+export const Sidebar = styled.aside<CollapseStyleProps>`
     display: flex;
     flex-direction: column;
-    width: 15rem;
-    height: 100vh;
+    width: ${({ $collapse }) => ($collapse ? '5rem' : '15rem')};
+    min-height: 100%;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-`
 
-export const SidebarHeader = styled.header`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem;
-    border-bottom: 1px solid #f0f0f0;
-`
-
-export const SidebarTitle = styled.h1`
-    font-size: 1.5rem;
-    font-weight: 500;
-`
-
-export const SidebarCloseButton = styled.div`
-    cursor: pointer;
+    @media (max-width: 768px) {
+        position: fixed;
+        top: 76px;
+        left: 0;
+        z-index: 1000;
+        transition: width 0.3s;
+        width: ${({ $collapse }) => ($collapse ? '0' : '15rem')};
+    }
 `
 
 export const SidebarContent = styled.div`
@@ -37,18 +31,27 @@ export const SidebarMenu = styled.ul`
     margin: 0;
 `
 
-export const SidebarMenuItem = styled.li`
+export const SidebarMenuItem = styled.li<CollapseStyleProps>`
     display: flex;
     align-items: center;
+    ${({ $collapse }) => $collapse && 'justify-content: center;'}
+    gap: 1rem;
     padding: 1rem;
     cursor: pointer;
+    ${({ $selected }) => $selected && 'background-color: #f0f0f0;'}
 
     &:hover {
         background-color: #f0f0f0;
     }
 `
 
-export const Icon = styled.i`
-    font-size: 1.25rem;
-    margin-right: 1rem;
+export const Icon = styled.i<CollapseStyleProps>`
+    font-size: ${({ $collapse }) => ($collapse ? '2rem' : '1.5rem')};
+`
+
+export const Divider = styled.hr`
+    margin: 0;
+    border: none;
+    border-top: 1px solid #f0f0f0;
+    margin: 1rem 0;
 `

@@ -2,14 +2,14 @@ import styled from 'styled-components'
 
 export const AppContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   width: 100%;
-  height: 100%;
+  height: 100vh;
 `
 
 export const AppContent = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   width: 100%;
   height: 100%;
 `
