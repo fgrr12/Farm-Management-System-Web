@@ -92,8 +92,7 @@ export const InfoTableContainer = styled.div`
     gap: 2rem;
 
     @media (max-width: 768px) {
-        display: flex;
-        flex-direction: column;
+        grid-template-columns: 1fr;
         gap: 1rem;
     }
 `

@@ -39,7 +39,7 @@ export const Sidebar = styled.div<CollapsePageStyleProps>`
     }
 
     @media (max-width: 768px) {
-        position: fixed;
+        position: absolute;
         top: 0;
         left: 0;
         z-index: 1000;
