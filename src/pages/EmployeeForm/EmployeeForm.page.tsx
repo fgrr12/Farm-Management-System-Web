@@ -68,6 +68,7 @@ export const EmployeeForm: FC = () => {
 			return
 		}
 		if (params.employeeUuid) {
+			setHeaderTitle('Edit Employee')
 			initialData()
 		}
 	}, [])

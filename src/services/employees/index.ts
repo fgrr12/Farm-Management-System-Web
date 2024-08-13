@@ -1,6 +1,6 @@
-import { auth, firestore } from '@/config/environment'
+import { firestore, signUpAuth } from '@/config/environment'
 import dayjs from 'dayjs'
-import { createUserWithEmailAndPassword, signInWithCustomToken } from 'firebase/auth'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore'
 import type { GetEmployeesResponse, SetEmployeeProps } from './types'
 
@@ -41,14 +41,13 @@ export module EmployeesService {
 	}
 
 	export const setEmployee = async (data: SetEmployeeProps): Promise<void> => {
-		const user = auth.currentUser
-		const document = doc(firestore, collectionName, data.uuid)
+		const psw = 'Pass123!'
+		const response = await createUserWithEmailAndPassword(signUpAuth, data.email, psw)
+		const { user } = response
 
-		await createUserWithEmailAndPassword(auth, data.email, 'Pass123!')
 		const createdAt = dayjs().toISOString()
-		await setDoc(document, { ...data, createdAt })
-
-		await signInWithCustomToken(auth, user!.refreshToken)
+		const document = doc(firestore, collectionName, user.uid)
+		await setDoc(document, { ...data, createdAt, uuid: user.uid })
 	}
 
 	export const updateEmployee = async (data: SetEmployeeProps): Promise<void> => {

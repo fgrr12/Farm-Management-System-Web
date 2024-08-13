@@ -13,12 +13,14 @@ const firebaseConfig = {
 }
 
 const app = initializeApp(firebaseConfig)
+const signUpApp = initializeApp(firebaseConfig, 'signUp')
 
 const auth = getAuth(app)
+const signUpAuth = getAuth(signUpApp)
 const firestore = getFirestore(app)
 const storage = getStorage(app)
 
 auth.useDeviceLanguage()
 auth.settings.appVerificationDisabledForTesting = true
 
-export { auth, firestore, storage }
+export { auth, firestore, signUpAuth, storage }
