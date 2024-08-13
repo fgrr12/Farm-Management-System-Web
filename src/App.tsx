@@ -5,6 +5,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppRoutes } from './config/constants/routes'
 import { auth } from './config/environment'
 import { useAppStore } from './store/useAppStore'
+import { useFarmStore } from './store/useFarmStore'
 import { useUserStore } from './store/useUserStore'
 
 import { Animal } from './pages/Animal'
@@ -15,6 +16,7 @@ import { EmployeeForm } from './pages/EmployeeForm'
 import { Employees } from './pages/Employees'
 import { HealthRecordForm } from './pages/HealthRecordForm'
 import { LoginForm } from './pages/LoginForm'
+import { MyAccount } from './pages/MyAccount'
 import { ProductionRecordForm } from './pages/ProductionRecordForm'
 import { RelatedAnimalsForm } from './pages/RelatedAnimalsForm'
 
@@ -23,12 +25,14 @@ import { Modal } from './components/layout/Modal'
 import { PageHeader } from './components/ui/PageHeader'
 import { Sidebar } from './components/ui/Sidebar'
 
+import { FarmsService } from './services/farms'
 import { UserService } from './services/user'
 
 import { AppContainer, AppContent } from './styles/root'
 
 export const App: FC = () => {
 	const { user, setUser } = useUserStore()
+	const { setFarm } = useFarmStore()
 	const { loading: appLoading, defaultModalData: modalData } = useAppStore()
 	const { i18n } = useTranslation()
 
@@ -41,19 +45,10 @@ export const App: FC = () => {
 				return
 			}
 			const user = await UserService.getUser(authUser!.uid)
+			const farm = await FarmsService.getFarm(user!.farmUuid)
 			i18n.changeLanguage(user?.language || 'spa')
-			setUser({
-				email: user!.email,
-				name: user!.name,
-				lastName: user!.lastName,
-				photoUrl: user!.photoUrl,
-				uuid: user!.uuid,
-				language: user!.language,
-				role: user!.role,
-				phone: user!.phone,
-				status: user!.status,
-				farmUuid: user!.farmUuid,
-			})
+			setUser(user)
+			setFarm(farm)
 		})
 	}, [setUser])
 	return (
@@ -85,7 +80,7 @@ export const App: FC = () => {
 						</>
 					)}
 
-					<Route path={AppRoutes.MY_ACCOUNT} element={<div>My Account</div>} />
+					<Route path={AppRoutes.MY_ACCOUNT} element={<MyAccount />} />
 
 					<Route path={AppRoutes.BILLING_CARD} element={<BillingCard />} />
 				</Routes>

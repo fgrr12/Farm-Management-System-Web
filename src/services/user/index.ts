@@ -7,7 +7,7 @@ import {
 	signInWithPopup,
 } from 'firebase/auth'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
-import type { UserCredentials } from './types'
+import type { GetUserResponse, UserCredentials } from './types'
 
 const collectionName = 'users'
 const SPANISH = 'spa'
@@ -42,10 +42,10 @@ export module UserService {
 		}
 	}
 
-	export const getUser = async (uuid: string) => {
+	export const getUser = async (uuid: string): Promise<GetUserResponse> => {
 		const userDocument = doc(firestore, collectionName, uuid)
 		const userDoc = await getDoc(userDocument)
-		return userDoc.data()
+		return userDoc.data() as GetUserResponse
 	}
 
 	export const logout = async () => {
