@@ -22,13 +22,13 @@ export module AnimalsService {
 	export const getAnimals = async (
 		getAnimalsProps: GetAnimalsProps
 	): Promise<GetAnimalResponse[]> => {
-		const { selectedSpecies, search, userUuid } = getAnimalsProps
+		const { selectedSpecies, search, farmUuid } = getAnimalsProps
 		let response = []
 		let animals: QuerySnapshot<DocumentData, DocumentData>
 		const queryBase = query(
 			collection(firestore, collectionName),
 			where('status', '==', true),
-			where('userUuid', '==', userUuid)
+			where('farmUuid', '==', farmUuid)
 		)
 
 		if (selectedSpecies !== 'all') {
@@ -50,12 +50,12 @@ export module AnimalsService {
 		return response as GetAnimalResponse[]
 	}
 
-	export const getSpecies = async (userUuid: string | null): Promise<string[]> => {
+	export const getSpecies = async (farmUuid: string | null): Promise<string[]> => {
 		const animals = await getDocs(
 			query(
 				collection(firestore, collectionName),
 				where('status', '==', true),
-				where('userUuid', '==', userUuid)
+				where('farmUuid', '==', farmUuid)
 			)
 		)
 		const species = animals.docs.map((doc) => doc.data().species)
@@ -77,7 +77,7 @@ export module AnimalsService {
 	export const setAnimal = async (
 		animalData: SetAnimalProps,
 		createdBy: string | null,
-		userUuid: string | null
+		farmUuid: string | null
 	) => {
 		if (animalData.picture && !animalData.picture.includes('firebasestorage')) {
 			animalData.picture = await savePicture(animalData.uuid, animalData.picture)
@@ -86,7 +86,7 @@ export module AnimalsService {
 		const createdAt = dayjs().toISOString()
 
 		const document = doc(firestore, collectionName, animalData.uuid)
-		await setDoc(document, { ...animalData, createdAt, createdBy, userUuid }, { merge: true })
+		await setDoc(document, { ...animalData, createdAt, createdBy, farmUuid }, { merge: true })
 	}
 
 	// Update

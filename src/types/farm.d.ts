@@ -4,5 +4,6 @@ interface Farm {
 	address: string
 	measureLiquid: string
 	measureSolid: string
+	measureTemperature: string
 	species: string[]
 }

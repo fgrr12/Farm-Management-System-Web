@@ -21,6 +21,7 @@ export const Animals = () => {
 	const navigation = useNavigate()
 	const { t } = useTranslation()
 	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
+
 	const [animals, setAnimals] = useState<AnimalCardInformation[]>([])
 	const [species, setSpecies] = useState<string[]>([])
 	const [filters, setFilters] = useState<AnimalsFilters>(INITIAL_FILTERS)
@@ -45,13 +46,14 @@ export const Animals = () => {
 	const getAnimals = async () => {
 		try {
 			setLoading(true)
+			console.log(user!.farmUuid)
+
 			const { selectedSpecies, search } = filters
 			const dbAnimals = await AnimalsService.getAnimals({
 				selectedSpecies,
 				search,
-				userUuid: user!.uuid,
+				farmUuid: user!.farmUuid,
 			})
-
 			setAnimals(dbAnimals)
 		} catch (error) {
 			setModalData({
@@ -68,7 +70,7 @@ export const Animals = () => {
 	const getSpecies = async () => {
 		try {
 			setLoading(true)
-			const dbSpecies = await AnimalsService.getSpecies(user!.uuid)
+			const dbSpecies = await AnimalsService.getSpecies(user!.farmUuid)
 
 			setSpecies(dbSpecies)
 		} catch (error) {

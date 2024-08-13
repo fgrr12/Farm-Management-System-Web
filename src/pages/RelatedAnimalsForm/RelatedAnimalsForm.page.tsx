@@ -154,7 +154,7 @@ export const RelatedAnimalsForm: FC = () => {
 						const animals = await AnimalsService.getAnimals({
 							selectedSpecies: selectedAnimal.species,
 							search: '',
-							userUuid: user.uuid,
+							farmUuid: user.farmUuid,
 						})
 						const animalsData = animals
 							.filter((animal) => animal.uuid !== animalUuid)

@@ -1,5 +1,5 @@
 import { firestore } from '@/config/environment'
-import { doc, getDoc } from 'firebase/firestore'
+import { doc, getDoc, setDoc } from 'firebase/firestore'
 
 import type { GetFarmResponse } from './types'
 
@@ -9,5 +9,10 @@ export module FarmsService {
 		const document = doc(firestore, collectionName, uuid)
 		const farm = await getDoc(document)
 		return farm.data() as GetFarmResponse
+	}
+
+	export const updateFarm = async (farm: GetFarmResponse) => {
+		const document = doc(firestore, collectionName, farm.uuid)
+		await setDoc(document, farm, { merge: true })
 	}
 }

@@ -48,6 +48,11 @@ export module UserService {
 		return userDoc.data() as GetUserResponse
 	}
 
+	export const updateUser = async (user: GetUserResponse) => {
+		const userDocument = doc(firestore, collectionName, user.uuid)
+		await setDoc(userDocument, user, { merge: true })
+	}
+
 	export const logout = async () => {
 		await auth.signOut()
 	}

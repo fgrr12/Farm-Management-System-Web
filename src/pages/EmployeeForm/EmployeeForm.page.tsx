@@ -36,8 +36,6 @@ export const EmployeeForm: FC = () => {
 		try {
 			const employeeUuid = params.employeeUuid as string
 			const employeeData = await EmployeesService.getEmployee(employeeUuid)
-			console.log(employeeData)
-
 			setEmployee(employeeData)
 		} catch (error) {
 			console.error(error)
@@ -64,7 +62,7 @@ export const EmployeeForm: FC = () => {
 	useEffect(() => {
 		setHeaderTitle('Add Employee')
 		if (!user) {
-			navigate('/')
+			navigate(AppRoutes.LOGIN)
 			return
 		}
 		if (params.employeeUuid) {

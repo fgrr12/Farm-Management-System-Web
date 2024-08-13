@@ -102,7 +102,7 @@ export const AnimalForm = () => {
 					},
 				})
 			} else {
-				await AnimalsService.setAnimal(animalForm, user!.uuid, user!.uuid)
+				await AnimalsService.setAnimal(animalForm, user!.uuid, user!.farmUuid)
 				setModalData({
 					open: true,
 					title: 'Animal Added',
