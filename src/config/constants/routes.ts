@@ -15,6 +15,14 @@ export enum AppRoutes {
 	EDIT_PRODUCTION_RECORD = '/animals/:animalUuid/edit-production-record/:productionRecordUuid',
 	RELATED_ANIMALS = '/animals/:animalUuid/related-animals',
 
+	// Employees
+	EMPLOYEES = '/employees',
+	ADD_EMPLOYEE = '/employees/add-employee',
+	EDIT_EMPLOYEE = '/employees/:employeeUuid/edit-employee',
+
+	// My Account
+	MY_ACCOUNT = '/my-account',
+
 	// Billing Card
 	BILLING_CARD = '/billing-card',
 }

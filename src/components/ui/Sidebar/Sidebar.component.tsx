@@ -39,8 +39,8 @@ export const Sidebar: FC = () => {
 					</S.SidebarMenuItem>
 					<S.SidebarMenuItem
 						$collapse={collapseSidebar}
-						$selected={handleCheckPath(AppRoutes.ANIMALS)}
-						onClick={() => handleGoTo(AppRoutes.ANIMALS)}
+						$selected={handleCheckPath(AppRoutes.EMPLOYEES)}
+						onClick={() => handleGoTo(AppRoutes.EMPLOYEES)}
 					>
 						<S.Icon className="i-clarity-employee-group-solid" $collapse={collapseSidebar} />
 						{!collapseSidebar && 'Employees'}
@@ -48,8 +48,8 @@ export const Sidebar: FC = () => {
 					<S.Divider />
 					<S.SidebarMenuItem
 						$collapse={collapseSidebar}
-						$selected={handleCheckPath(AppRoutes.ANIMALS)}
-						onClick={() => handleGoTo(AppRoutes.ANIMALS)}
+						$selected={handleCheckPath(AppRoutes.MY_ACCOUNT)}
+						onClick={() => handleGoTo(AppRoutes.MY_ACCOUNT)}
 					>
 						<S.Icon className="i-material-symbols-account-circle" $collapse={collapseSidebar} />
 						{!collapseSidebar && 'My Account'}
