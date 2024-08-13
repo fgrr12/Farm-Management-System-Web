@@ -92,14 +92,16 @@ export const Employees: FC = () => {
 					{employees &&
 						employees.map((employee) => (
 							<Table.Row key={employee.uuid}>
-								<Table.Cell>
+								<Table.Cell data-title="Employee">
 									{employee.name} {employee.lastName}
 								</Table.Cell>
-								<Table.Cell>{employee.role}</Table.Cell>
-								<Table.Cell>{employee.phone}</Table.Cell>
-								<Table.Cell>{employee.email}</Table.Cell>
-								<Table.Cell>{employee.status ? 'Active' : 'Inactive'}</Table.Cell>
-								<Table.Cell>
+								<Table.Cell data-title="Role">{employee.role}</Table.Cell>
+								<Table.Cell data-title="Phone">{employee.phone}</Table.Cell>
+								<Table.Cell data-title="Email">{employee.email}</Table.Cell>
+								<Table.Cell data-title="Status">
+									{employee.status ? 'Active' : 'Inactive'}
+								</Table.Cell>
+								<Table.Cell data-title="Actions">
 									<ActionButton
 										title="Edit"
 										icon="i-material-symbols-edit-square-outline"

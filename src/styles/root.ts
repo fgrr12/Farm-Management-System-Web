@@ -7,8 +7,13 @@ export const AppContainer = styled.div`
   height: 100vh;
 `
 
-export const AppContent = styled.div`
+export const AppContent = styled.div<{ $topHeaderHeight: number }>`
   display: flex;
   flex-direction: row;
   width: 100%;
+  height: calc(100% - ${({ $topHeaderHeight }) => $topHeaderHeight}px);
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `

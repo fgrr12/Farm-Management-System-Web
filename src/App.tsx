@@ -33,7 +33,7 @@ import { AppContainer, AppContent } from './styles/root'
 export const App: FC = () => {
 	const { user, setUser } = useUserStore()
 	const { setFarm } = useFarmStore()
-	const { loading: appLoading, defaultModalData: modalData } = useAppStore()
+	const { loading: appLoading, defaultModalData: modalData, topHeaderHeight } = useAppStore()
 	const { i18n } = useTranslation()
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
@@ -54,7 +54,7 @@ export const App: FC = () => {
 	return (
 		<AppContainer className="app">
 			{user && <PageHeader />}
-			<AppContent>
+			<AppContent $topHeaderHeight={topHeaderHeight}>
 				{user && <Sidebar />}
 				<Routes>
 					<Route path="/" element={<Navigate to={AppRoutes.ANIMALS} />} />

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { ActionButton } from '../ActionButton'
 import { BackButton } from '../Button'
@@ -7,12 +7,14 @@ import { BackButton } from '../Button'
 import { AppRoutes } from '@/config/constants/routes'
 import { useAppStore } from '@/store/useAppStore'
 
+import { useEffect } from 'react'
 import * as S from './PageHeader.styles'
 
 export const PageHeader: FC = () => {
 	const { t } = useTranslation()
 	const navigate = useNavigate()
-	const { headerTitle, collapseSidebar, setCollapseSidebar } = useAppStore()
+	const location = useLocation()
+	const { headerTitle, collapseSidebar, setCollapseSidebar, setTopHeaderHeight } = useAppStore()
 
 	const backButtonHidden =
 		location.pathname === AppRoutes.ANIMALS ||
@@ -23,8 +25,15 @@ export const PageHeader: FC = () => {
 		navigate(-1)
 	}
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect every time location changes
+	useEffect(() => {
+		const element = document.getElementById('pageHeader')
+		const height = element?.clientHeight
+		setTopHeaderHeight(height || 0)
+	}, [location])
+
 	return (
-		<S.PageHeader $backButtonHidden={backButtonHidden}>
+		<S.PageHeader id="pageHeader" $backButtonHidden={backButtonHidden}>
 			<S.Sidebar
 				$collapse={collapseSidebar}
 				$backButtonHidden={backButtonHidden}
