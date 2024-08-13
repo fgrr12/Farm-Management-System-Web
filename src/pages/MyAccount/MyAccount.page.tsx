@@ -158,85 +158,87 @@ export const MyAccount: FC = () => {
 					</S.Form>
 				</S.MyAccountBodyContent>
 			</S.MyAccountBody>
-			<S.MyAccountBody>
-				<S.MyAccountBodyContent>
-					<S.MyAccountBodyTitle>
-						My Farm
-						<ActionButton
-							title="Edit"
-							icon="i-material-symbols-edit-square-outline"
-							onClick={handleEdit('farm')}
-						/>
-					</S.MyAccountBodyTitle>
-					<S.MyAccountBodySubtitle>Manage your farm settings</S.MyAccountBodySubtitle>
-					<S.Form onSubmit={handleSubmitFarm} autoComplete="off">
-						<S.ContainerOf3>
-							<TextField
-								name="name"
-								label="Name"
-								value={farm!.name}
-								onChange={handleTextChange()}
-								disabled={!edit.farm}
-								required
+			{(user.role === 'admin' || user.role === 'owner') && (
+				<S.MyAccountBody>
+					<S.MyAccountBodyContent>
+						<S.MyAccountBodyTitle>
+							My Farm
+							<ActionButton
+								title="Edit"
+								icon="i-material-symbols-edit-square-outline"
+								onClick={handleEdit('farm')}
 							/>
-							<TextField
-								name="address"
-								label="address"
-								value={farm!.address}
-								onChange={handleTextChange()}
-								disabled={!edit.farm}
-								required
-							/>
-							<TextField
-								name="species"
-								label="Species"
-								value={farm!.species}
-								onChange={handleTextChange()}
-								disabled={!edit.farm}
-								required
-							/>
-						</S.ContainerOf3>
-						<S.ContainerOf3>
-							<Select
-								name="liquidUnit"
-								label="Measure Liquid"
-								value={farm!.liquidUnit}
-								onChange={handleSelectChange(false)}
-								disabled={!edit.farm}
-								required
-							>
-								<option value="L">Liters</option>
-								<option value="Gal">Gallons</option>
-							</Select>
-							<Select
-								name="weightUnit"
-								label="Measure Solid"
-								value={farm!.weightUnit}
-								onChange={handleSelectChange(false)}
-								disabled={!edit.farm}
-								required
-							>
-								<option value="Kg">Kilograms</option>
-								<option value="Lb">Pounds</option>
-							</Select>
-							<Select
-								name="temperatureUnit"
-								label="Measure Temperature"
-								value={farm!.temperatureUnit}
-								onChange={handleSelectChange(false)}
-								disabled={!edit.farm}
-								required
-							>
-								<option value="°C">Celsius</option>
-								<option value="°F">Fahrenheit</option>
-							</Select>
-						</S.ContainerOf3>
-						<Button type="submit" disabled={!edit.farm}>
-							Update My Farm
-						</Button>
-					</S.Form>
-				</S.MyAccountBodyContent>
-			</S.MyAccountBody>
+						</S.MyAccountBodyTitle>
+						<S.MyAccountBodySubtitle>Manage your farm settings</S.MyAccountBodySubtitle>
+						<S.Form onSubmit={handleSubmitFarm} autoComplete="off">
+							<S.ContainerOf3>
+								<TextField
+									name="name"
+									label="Name"
+									value={farm!.name}
+									onChange={handleTextChange()}
+									disabled={!edit.farm}
+									required
+								/>
+								<TextField
+									name="address"
+									label="address"
+									value={farm!.address}
+									onChange={handleTextChange()}
+									disabled={!edit.farm}
+									required
+								/>
+								<TextField
+									name="species"
+									label="Species"
+									value={farm!.species}
+									onChange={handleTextChange()}
+									disabled={!edit.farm}
+									required
+								/>
+							</S.ContainerOf3>
+							<S.ContainerOf3>
+								<Select
+									name="liquidUnit"
+									label="Measure Liquid"
+									value={farm!.liquidUnit}
+									onChange={handleSelectChange(false)}
+									disabled={!edit.farm}
+									required
+								>
+									<option value="L">Liters</option>
+									<option value="Gal">Gallons</option>
+								</Select>
+								<Select
+									name="weightUnit"
+									label="Measure Solid"
+									value={farm!.weightUnit}
+									onChange={handleSelectChange(false)}
+									disabled={!edit.farm}
+									required
+								>
+									<option value="Kg">Kilograms</option>
+									<option value="Lb">Pounds</option>
+								</Select>
+								<Select
+									name="temperatureUnit"
+									label="Measure Temperature"
+									value={farm!.temperatureUnit}
+									onChange={handleSelectChange(false)}
+									disabled={!edit.farm}
+									required
+								>
+									<option value="°C">Celsius</option>
+									<option value="°F">Fahrenheit</option>
+								</Select>
+							</S.ContainerOf3>
+							<Button type="submit" disabled={!edit.farm}>
+								Update My Farm
+							</Button>
+						</S.Form>
+					</S.MyAccountBodyContent>
+				</S.MyAccountBody>
+			)}
 		</S.MyAccount>
 	)
 }
