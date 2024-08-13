@@ -1,16 +1,26 @@
 import { auth, firestore } from '@/config/environment'
 import dayjs from 'dayjs'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { collection, doc, getDocs, query, setDoc } from 'firebase/firestore'
+import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore'
 import type { GetEmployeesResponse, SetEmployeeProps } from './types'
 
-const collectionName = 'employees'
+const collectionName = 'users'
 
 export module EmployeesService {
-	export const getEmployees = async (search: string | null): Promise<GetEmployeesResponse[]> => {
+	export const getEmployees = async (
+		search: string | null,
+		farmUuid: string
+	): Promise<GetEmployeesResponse[]> => {
 		let response = []
 
-		const animalsDocs = await getDocs(query(collection(firestore, collectionName)))
+		const animalsDocs = await getDocs(
+			query(
+				collection(firestore, collectionName),
+				where('role', 'in', ['employee', 'owner']),
+				where('farmUuid', '==', farmUuid),
+				where('status', '==', true)
+			)
+		)
 
 		if (search) {
 			response = animalsDocs.docs

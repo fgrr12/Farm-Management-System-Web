@@ -45,9 +45,14 @@ export const App: FC = () => {
 			setUser({
 				email: user!.email,
 				name: user!.name,
+				lastName: user!.lastName,
 				photoUrl: user!.photoUrl,
 				uuid: user!.uuid,
 				language: user!.language,
+				role: user!.role,
+				phone: user!.phone,
+				status: user!.status,
+				farmUuid: user!.farmUuid,
 			})
 		})
 	}, [setUser])
@@ -73,7 +78,9 @@ export const App: FC = () => {
 					<Route path={AppRoutes.EDIT_PRODUCTION_RECORD} element={<ProductionRecordForm />} />
 					<Route path={AppRoutes.RELATED_ANIMALS} element={<RelatedAnimalsForm />} />
 
-					<Route path={AppRoutes.EMPLOYEES} element={<Employees />} />
+					{(user?.role === 'admin' || user?.role === 'owner') && (
+						<Route path={AppRoutes.EMPLOYEES} element={<Employees />} />
+					)}
 
 					<Route path={AppRoutes.MY_ACCOUNT} element={<div>My Account</div>} />
 

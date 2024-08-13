@@ -29,7 +29,7 @@ export const Employees: FC = () => {
 	const initialData = async () => {
 		try {
 			setLoading(true)
-			const data = await EmployeesService.getEmployees(null)
+			const data = await EmployeesService.getEmployees(null, user!.farmUuid!)
 			setEmployees(data)
 		} catch (error) {
 			console.error(error)
@@ -39,7 +39,7 @@ export const Employees: FC = () => {
 	}
 
 	const getEmployees = async () => {
-		const data = await EmployeesService.getEmployees(search)
+		const data = await EmployeesService.getEmployees(search, user!.farmUuid!)
 		setEmployees(data)
 	}
 

@@ -1,6 +1,7 @@
 import { auth, firestore } from '@/config/environment'
 import {
 	createUserWithEmailAndPassword,
+	deleteUser,
 	GoogleAuthProvider,
 	signInWithEmailAndPassword,
 	signInWithPopup,
@@ -35,13 +36,10 @@ export module UserService {
 		const result = await signInWithPopup(auth, provider)
 		const { user } = result
 		const userDocument = doc(firestore, collectionName, user.uid)
-		setDoc(userDocument, {
-			uuid: user.uid,
-			email: user.email,
-			name: user.displayName,
-			photoUrl: user.photoURL,
-			language: SPANISH,
-		})
+		const userDoc = await getDoc(userDocument)
+		if (!userDoc.exists()) {
+			deleteUser(user)
+		}
 	}
 
 	export const getUser = async (uuid: string) => {
