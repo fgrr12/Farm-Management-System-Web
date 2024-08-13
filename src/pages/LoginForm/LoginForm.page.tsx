@@ -44,9 +44,6 @@ export const LoginForm: FC = () => {
 		<S.Container>
 			<S.Card onSubmit={handleSubmit}>
 				<S.Title>Login</S.Title>
-				<span>
-					New user? <S.ForgotPassword to={AppRoutes.REGISTER}>Create an account</S.ForgotPassword>
-				</span>
 				<S.Form onSubmit={handleSubmit}>
 					<TextField
 						name="email"
@@ -64,7 +61,7 @@ export const LoginForm: FC = () => {
 						onChange={handleTextChange}
 						required
 					/>
-					<S.ForgotPassword to={AppRoutes.REGISTER}>Forgot your password?</S.ForgotPassword>
+					<S.ForgotPassword to={AppRoutes.LOGIN}>Forgot your password?</S.ForgotPassword>
 					<Button type="submit">Login</Button>
 				</S.Form>
 				<S.Or>Or</S.Or>

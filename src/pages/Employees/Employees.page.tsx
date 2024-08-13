@@ -12,6 +12,7 @@ import { useUserStore } from '@/store/useUserStore'
 
 import type { Employee } from './Employees.types'
 
+import { AppRoutes } from '@/config/constants/routes'
 import * as S from './Employees.styles'
 
 export const Employees: FC = () => {
@@ -21,6 +22,15 @@ export const Employees: FC = () => {
 
 	const [employees, setEmployees] = useState<Employee[]>([])
 	const [search, setSearch] = useState('')
+
+	const handleAddEmployee = () => {
+		navigate(AppRoutes.ADD_EMPLOYEE)
+	}
+
+	const handleEditEmployee = (employeeUuid: string) => () => {
+		const path = AppRoutes.EDIT_EMPLOYEE.replace(':employeeUuid', employeeUuid)
+		navigate(path)
+	}
 
 	const handleDebounceSearch = (event: ChangeEvent<HTMLInputElement>) => {
 		setSearch(event.target.value)
@@ -65,7 +75,7 @@ export const Employees: FC = () => {
 		<S.Container>
 			<S.HeaderContainer>
 				<Search placeholder="Search employees" value={search} onChange={handleDebounceSearch} />
-				<Button onClick={() => console.log('Add employee')}>Add employee</Button>
+				<Button onClick={handleAddEmployee}>Add employee</Button>
 			</S.HeaderContainer>
 			<Table>
 				<Table.Head>
@@ -90,7 +100,11 @@ export const Employees: FC = () => {
 								<Table.Cell>{employee.email}</Table.Cell>
 								<Table.Cell>{employee.status ? 'Active' : 'Inactive'}</Table.Cell>
 								<Table.Cell>
-									<ActionButton title="Edit" icon="i-material-symbols-edit-square-outline" />
+									<ActionButton
+										title="Edit"
+										icon="i-material-symbols-edit-square-outline"
+										onClick={handleEditEmployee(employee.uuid)}
+									/>
 									<ActionButton title="Delete" icon="i-material-symbols-delete-outline" />
 								</Table.Cell>
 							</Table.Row>

@@ -25,6 +25,7 @@ export const Sidebar: FC = () => {
 
 	const handleLogout = async () => {
 		await UserService.logout()
+		navigate(AppRoutes.LOGIN)
 	}
 
 	return (

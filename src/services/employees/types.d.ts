@@ -6,6 +6,8 @@ export interface GetEmployeesResponse {
 	phone: string
 	email: string
 	status: boolean
+	farmUuid: string
+	createdBy: string
 }
 
 export interface SetEmployeeProps {
@@ -16,4 +18,6 @@ export interface SetEmployeeProps {
 	phone: string
 	email: string
 	status: boolean
+	farmUuid: string
+	createdBy: string
 }

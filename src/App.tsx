@@ -11,11 +11,12 @@ import { Animal } from './pages/Animal'
 import { AnimalForm } from './pages/AnimalForm'
 import { Animals } from './pages/Animals'
 import { BillingCard } from './pages/BillingCard'
+import { EmployeeForm } from './pages/EmployeeForm'
+import { Employees } from './pages/Employees'
 import { HealthRecordForm } from './pages/HealthRecordForm'
 import { LoginForm } from './pages/LoginForm'
 import { ProductionRecordForm } from './pages/ProductionRecordForm'
 import { RelatedAnimalsForm } from './pages/RelatedAnimalsForm'
-import { SignUpForm } from './pages/SignUpForm'
 
 import { Loading } from './components/layout/Loading'
 import { Modal } from './components/layout/Modal'
@@ -24,7 +25,6 @@ import { Sidebar } from './components/ui/Sidebar'
 
 import { UserService } from './services/user'
 
-import { Employees } from './pages/Employees'
 import { AppContainer, AppContent } from './styles/root'
 
 export const App: FC = () => {
@@ -65,7 +65,6 @@ export const App: FC = () => {
 					<Route path="/" element={<Navigate to={AppRoutes.ANIMALS} />} />
 
 					<Route path={AppRoutes.LOGIN} element={<LoginForm />} />
-					<Route path={AppRoutes.REGISTER} element={<SignUpForm />} />
 					<Route path={AppRoutes.CHANGE_PASSWORD} element={<Animals />} />
 
 					<Route path={AppRoutes.ANIMALS} element={<Animals />} />
@@ -79,7 +78,11 @@ export const App: FC = () => {
 					<Route path={AppRoutes.RELATED_ANIMALS} element={<RelatedAnimalsForm />} />
 
 					{(user?.role === 'admin' || user?.role === 'owner') && (
-						<Route path={AppRoutes.EMPLOYEES} element={<Employees />} />
+						<>
+							<Route path={AppRoutes.EMPLOYEES} element={<Employees />} />
+							<Route path={AppRoutes.ADD_EMPLOYEE} element={<EmployeeForm />} />
+							<Route path={AppRoutes.EDIT_EMPLOYEE} element={<EmployeeForm />} />
+						</>
 					)}
 
 					<Route path={AppRoutes.MY_ACCOUNT} element={<div>My Account</div>} />

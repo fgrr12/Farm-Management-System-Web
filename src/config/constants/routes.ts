@@ -1,7 +1,6 @@
 export enum AppRoutes {
 	// Auth
 	LOGIN = '/login',
-	REGISTER = '/register',
 	CHANGE_PASSWORD = '/change-password',
 
 	// Animals
