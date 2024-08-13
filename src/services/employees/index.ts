@@ -13,7 +13,7 @@ export module EmployeesService {
 	): Promise<GetEmployeesResponse[]> => {
 		let response = []
 
-		const animalsDocs = await getDocs(
+		const employeesDocs = await getDocs(
 			query(
 				collection(firestore, collectionName),
 				where('role', 'in', ['employee', 'owner']),
@@ -21,14 +21,14 @@ export module EmployeesService {
 				where('status', '==', true)
 			)
 		)
-		response = animalsDocs.docs.map((doc) => doc.data()) as GetEmployeesResponse[]
+		response = employeesDocs.docs.map((doc) => doc.data()) as GetEmployeesResponse[]
 
 		if (search) {
 			response = response.filter(
-				(animal) =>
-					animal.name.toLowerCase().includes(search.toLowerCase()) ||
-					animal.lastName.toLowerCase().includes(search.toLowerCase()) ||
-					animal.email.toLowerCase().includes(search.toLowerCase())
+				(employee) =>
+					employee.name.toLowerCase().includes(search.toLowerCase()) ||
+					employee.lastName.toLowerCase().includes(search.toLowerCase()) ||
+					employee.email.toLowerCase().includes(search.toLowerCase())
 			) as GetEmployeesResponse[]
 		}
 		return response

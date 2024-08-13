@@ -20,7 +20,7 @@ import * as S from './MyAccount.styles'
 export const MyAccount: FC = () => {
 	const { user: currentUser, setUser: updateUser } = useUserStore()
 	const { farm: currentFarm, setFarm: updateFarm } = useFarmStore()
-	const { setHeaderTitle } = useAppStore()
+	const { defaultModalData, setHeaderTitle, setModalData } = useAppStore()
 	const navigate = useNavigate()
 
 	const [user, setUser] = useState<User>(INITIAL_USER_DATA)
@@ -53,6 +53,15 @@ export const MyAccount: FC = () => {
 		e.preventDefault()
 		await UserService.updateUser(user)
 		updateUser(user)
+		setEdit((prev) => ({ ...prev, user: false }))
+		setModalData({
+			open: true,
+			title: 'User Updated',
+			message: 'Your user has been updated successfully',
+			onAccept: () => {
+				setModalData(defaultModalData)
+			},
+		})
 	}
 
 	const handleSubmitFarm = async (e: FormEvent) => {
@@ -60,6 +69,15 @@ export const MyAccount: FC = () => {
 		const species = farm.species.split(',')
 		await FarmsService.updateFarm({ ...farm, species })
 		updateFarm({ ...farm, species })
+		setEdit((prev) => ({ ...prev, farm: false }))
+		setModalData({
+			open: true,
+			title: 'Farm Updated',
+			message: 'Your farm has been updated successfully',
+			onAccept: () => {
+				setModalData(defaultModalData)
+			},
+		})
 	}
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: useEffect is only called once

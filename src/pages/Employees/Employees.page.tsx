@@ -40,7 +40,7 @@ export const Employees: FC = () => {
 		try {
 			setLoading(true)
 			const data = await EmployeesService.getEmployees(null, user!.farmUuid!)
-			setEmployees(data)
+			setEmployees(data.filter((employee) => employee.uuid !== user!.uuid))
 		} catch (error) {
 			console.error(error)
 		} finally {
@@ -50,7 +50,7 @@ export const Employees: FC = () => {
 
 	const getEmployees = async () => {
 		const data = await EmployeesService.getEmployees(search, user!.farmUuid!)
-		setEmployees(data)
+		setEmployees(data.filter((employee) => employee.uuid !== user!.uuid))
 	}
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
