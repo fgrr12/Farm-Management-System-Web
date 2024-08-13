@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/Textarea'
 
 import { ProductionRecordsService } from '@/services/productionRecords'
 import { useAppStore } from '@/store/useAppStore'
+import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
 import type { ProductionRecord } from './ProductionRecordForm.types'
@@ -19,6 +20,7 @@ import * as S from './ProductionRecordForm.styles'
 
 export const ProductionRecordForm = () => {
 	const { user } = useUserStore()
+	const { farm } = useFarmStore()
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation()
@@ -121,10 +123,11 @@ export const ProductionRecordForm = () => {
 				<TextField
 					name="quantity"
 					type="number"
-					placeholder={t('addProductionRecord.quantity')}
-					label={t('addProductionRecord.quantity')}
+					placeholder={`${t('addProductionRecord.quantity')} (${farm?.liquidUnit})`}
+					label={`${t('addProductionRecord.quantity')} (${farm?.liquidUnit})`}
 					value={productionRecordForm.quantity}
 					onChange={handleTextChange}
+					onWheel={(e) => e.currentTarget.blur()}
 					required
 				/>
 				<DatePicker

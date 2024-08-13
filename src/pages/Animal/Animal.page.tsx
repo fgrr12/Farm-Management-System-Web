@@ -14,6 +14,7 @@ import { HealthRecordsService } from '@/services/healthRecords'
 import { ProductionRecordsService } from '@/services/productionRecords'
 import { RelatedAnimalsService } from '@/services/relatedAnimals'
 import { useAppStore } from '@/store/useAppStore'
+import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
 import type { AnimalInformation } from './Animal.types'
@@ -22,6 +23,7 @@ import * as S from './Animal.styles'
 
 export const Animal: FC = () => {
 	const { user } = useUserStore()
+	const { farm } = useFarmStore()
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation()
@@ -151,7 +153,10 @@ export const Animal: FC = () => {
 						</div>
 						<div>
 							<S.Label>{t('animal.weight')}</S.Label>
-							<S.Value>{animal.weight}</S.Value>
+							<S.Value>
+								{animal.weight}
+								{farm?.weightUnit}
+							</S.Value>
 						</div>
 						<div>
 							<S.Label>{t('animal.birthDate')}</S.Label>

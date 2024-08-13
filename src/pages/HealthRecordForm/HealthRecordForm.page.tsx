@@ -12,6 +12,7 @@ import { Textarea } from '@/components/ui/Textarea'
 
 import { HealthRecordsService } from '@/services/healthRecords'
 import { useAppStore } from '@/store/useAppStore'
+import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
 import type { HealthRecord } from './HealthRecordForm.types'
@@ -20,6 +21,7 @@ import * as S from './HealthRecordForm.styles'
 
 export const HealthRecordForm = () => {
 	const { user } = useUserStore()
+	const { farm } = useFarmStore()
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation()
@@ -160,17 +162,18 @@ export const HealthRecordForm = () => {
 				/>
 				<TextField
 					name="weight"
-					type="text"
-					placeholder={t('addHealthRecord.weight')}
-					label={t('addHealthRecord.weight')}
+					type="number"
+					placeholder={`${t('addHealthRecord.weight')} (${farm?.weightUnit})`}
+					label={`${t('addHealthRecord.weight')} (${farm?.weightUnit})`}
 					value={healthRecordForm.weight}
 					onChange={handleTextChange}
+					onWheel={(e) => e.currentTarget.blur()}
 				/>
 				<TextField
 					name="temperature"
-					type="text"
-					placeholder={t('addHealthRecord.temperature')}
-					label={t('addHealthRecord.temperature')}
+					type="number"
+					placeholder={`${t('addHealthRecord.temperature')} (${farm?.temperatureUnit})`}
+					label={`${t('addHealthRecord.temperature')} (${farm?.temperatureUnit})`}
 					value={healthRecordForm.temperature}
 					onChange={handleTextChange}
 				/>

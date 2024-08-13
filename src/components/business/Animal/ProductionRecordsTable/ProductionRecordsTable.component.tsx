@@ -5,9 +5,11 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { ActionButton } from '@/components/ui/ActionButton'
 import { Table } from '@/components/ui/Table'
 
+import { ProductionRecordsService } from '@/services/productionRecords'
+import { useFarmStore } from '@/store/useFarmStore'
+
 import type { ProductionRecordsTableProps } from './ProductionRecordsTable.types'
 
-import { ProductionRecordsService } from '@/services/productionRecords'
 import * as S from './ProductionRecordsTable.styles'
 
 export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
@@ -15,6 +17,7 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 	user,
 	removeProductionRecord,
 }) => {
+	const { farm } = useFarmStore()
 	const navigate = useNavigate()
 	const params = useParams()
 
@@ -64,7 +67,10 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 							<Table.Cell data-title="Date">
 								{dayjs(productionRecord.date).format('MM/DD/YYYY')}
 							</Table.Cell>
-							<Table.Cell data-title="Type">{productionRecord.quantity}</Table.Cell>
+							<Table.Cell data-title="Quantity">
+								{productionRecord.quantity}
+								{farm!.liquidUnit}
+							</Table.Cell>
 							<Table.Cell data-title="Notes">{productionRecord.notes}</Table.Cell>
 							{user && (
 								<Table.Cell data-title="Actions">

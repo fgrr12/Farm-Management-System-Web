@@ -46,8 +46,6 @@ export const Animals = () => {
 	const getAnimals = async () => {
 		try {
 			setLoading(true)
-			console.log(user!.farmUuid)
-
 			const { selectedSpecies, search } = filters
 			const dbAnimals = await AnimalsService.getAnimals({
 				selectedSpecies,

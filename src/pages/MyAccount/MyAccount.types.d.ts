@@ -2,8 +2,8 @@ export interface FarmData {
 	uuid: string
 	name: string
 	address: string
-	measureLiquid: string
-	measureSolid: string
-	measureTemperature: string
+	liquidUnit: string
+	weightUnit: string
+	temperatureUnit: string
 	species: string
 }

@@ -6,6 +6,7 @@ import { ActionButton } from '@/components/ui/ActionButton'
 import { Table } from '@/components/ui/Table'
 
 import { HealthRecordsService } from '@/services/healthRecords'
+import { useFarmStore } from '@/store/useFarmStore'
 
 import type { HealthRecordsTableProps } from './HealthRecordsTable.types'
 
@@ -16,6 +17,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 	user,
 	removeHealthRecord,
 }) => {
+	const { farm } = useFarmStore()
 	const navigate = useNavigate()
 	const params = useParams()
 
@@ -77,8 +79,14 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 							<Table.Cell data-title="Date">
 								{dayjs(healthRecord.date).format('MM/DD/YYYY')}
 							</Table.Cell>
-							<Table.Cell data-title="Weight">{healthRecord.weight}</Table.Cell>
-							<Table.Cell data-title="Temperature">{healthRecord.temperature}</Table.Cell>
+							<Table.Cell data-title="Weight">
+								{healthRecord.weight}
+								{farm!.weightUnit}
+							</Table.Cell>
+							<Table.Cell data-title="Temperature">
+								{healthRecord.temperature}
+								{farm!.temperatureUnit}
+							</Table.Cell>
 							<Table.Cell data-title="Medication">{healthRecord.medication}</Table.Cell>
 							<Table.Cell data-title="Dosage">{healthRecord.dosage}</Table.Cell>
 							<Table.Cell data-title="Frequency">{healthRecord.frequency}</Table.Cell>

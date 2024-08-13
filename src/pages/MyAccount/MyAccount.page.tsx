@@ -18,8 +18,8 @@ import type { FarmData } from './MyAccount.types'
 import * as S from './MyAccount.styles'
 
 export const MyAccount: FC = () => {
-	const { user: currentUser } = useUserStore()
-	const { farm: currentFarm } = useFarmStore()
+	const { user: currentUser, setUser: updateUser } = useUserStore()
+	const { farm: currentFarm, setFarm: updateFarm } = useFarmStore()
 	const { setHeaderTitle } = useAppStore()
 	const navigate = useNavigate()
 
@@ -52,13 +52,14 @@ export const MyAccount: FC = () => {
 	const handleSubmitUser = async (e: FormEvent) => {
 		e.preventDefault()
 		await UserService.updateUser(user)
+		updateUser(user)
 	}
 
 	const handleSubmitFarm = async (e: FormEvent) => {
 		e.preventDefault()
 		const species = farm.species.split(',')
-
 		await FarmsService.updateFarm({ ...farm, species })
+		updateFarm({ ...farm, species })
 	}
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: useEffect is only called once
@@ -179,9 +180,9 @@ export const MyAccount: FC = () => {
 						</S.ContainerOf3>
 						<S.ContainerOf3>
 							<Select
-								name="measureLiquid"
+								name="liquidUnit"
 								label="Measure Liquid"
-								value={farm!.measureLiquid}
+								value={farm!.liquidUnit}
 								onChange={handleSelectChange(false)}
 								disabled={!edit.farm}
 								required
@@ -190,9 +191,9 @@ export const MyAccount: FC = () => {
 								<option value="Gal">Gallons</option>
 							</Select>
 							<Select
-								name="measureSolid"
+								name="weightUnit"
 								label="Measure Solid"
-								value={farm!.measureSolid}
+								value={farm!.weightUnit}
 								onChange={handleSelectChange(false)}
 								disabled={!edit.farm}
 								required
@@ -201,9 +202,9 @@ export const MyAccount: FC = () => {
 								<option value="Lb">Pounds</option>
 							</Select>
 							<Select
-								name="measureTemperature"
+								name="temperatureUnit"
 								label="Measure Temperature"
-								value={farm!.measureTemperature}
+								value={farm!.temperatureUnit}
 								onChange={handleSelectChange(false)}
 								disabled={!edit.farm}
 								required
@@ -241,9 +242,9 @@ const INITIAL_FARM_DATA: FarmData = {
 	name: '',
 	address: '',
 	species: '',
-	measureLiquid: 'L',
-	measureSolid: 'Kg',
-	measureTemperature: '°C',
+	liquidUnit: 'L',
+	weightUnit: 'Kg',
+	temperatureUnit: '°C',
 }
 
 const INITIAL_EDIT = {

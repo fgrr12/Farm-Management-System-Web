@@ -13,6 +13,7 @@ import { TextField } from '@/components/ui/TextField'
 import { AppRoutes } from '@/config/constants/routes'
 import { AnimalsService } from '@/services/animals'
 import { useAppStore } from '@/store/useAppStore'
+import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
 import type { Animal } from './AnimalForm.types'
@@ -21,6 +22,7 @@ import * as S from './AnimalForm.styles'
 
 export const AnimalForm = () => {
 	const { user } = useUserStore()
+	const { farm } = useFarmStore()
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation()
@@ -200,11 +202,12 @@ export const AnimalForm = () => {
 				/>
 				<TextField
 					name="weight"
-					type="text"
-					placeholder={t('addAnimal.weight')}
-					label={t('addAnimal.weight')}
+					type="number"
+					placeholder={`${t('addAnimal.weight')} (${farm?.weightUnit})`}
+					label={`${t('addAnimal.weight')} (${farm?.weightUnit})`}
 					value={animalForm.weight}
 					onChange={handleTextChange}
+					onWheel={(e) => e.currentTarget.blur()}
 					required
 				/>
 				<DatePicker
