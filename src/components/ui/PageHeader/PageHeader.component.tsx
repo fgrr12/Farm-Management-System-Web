@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -6,11 +7,12 @@ import { BackButton } from '../Button'
 
 import { AppRoutes } from '@/config/constants/routes'
 import { useAppStore } from '@/store/useAppStore'
+import { useFarmStore } from '@/store/useFarmStore'
 
-import { useEffect } from 'react'
 import * as S from './PageHeader.styles'
 
 export const PageHeader: FC = () => {
+	const { farm } = useFarmStore()
 	const { t } = useTranslation()
 	const navigate = useNavigate()
 	const location = useLocation()
@@ -39,7 +41,7 @@ export const PageHeader: FC = () => {
 				$backButtonHidden={backButtonHidden}
 				onClick={() => setCollapseSidebar(!collapseSidebar)}
 			>
-				{!collapseSidebar && <S.SidebarTitle>My Farm</S.SidebarTitle>}
+				{!collapseSidebar && <S.SidebarTitle>{farm!.name}</S.SidebarTitle>}
 				<S.SidebarCloseButton>
 					<ActionButton
 						icon={
