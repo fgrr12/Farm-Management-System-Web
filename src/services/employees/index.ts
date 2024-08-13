@@ -21,15 +21,15 @@ export module EmployeesService {
 				where('status', '==', true)
 			)
 		)
+		response = animalsDocs.docs.map((doc) => doc.data()) as GetEmployeesResponse[]
 
 		if (search) {
-			response = animalsDocs.docs
-				.map((doc) => doc.data())
-				.filter((animal) =>
-					animal.name.toLowerCase().includes(search.toLowerCase())
-				) as GetEmployeesResponse[]
-		} else {
-			response = animalsDocs.docs.map((doc) => doc.data()) as GetEmployeesResponse[]
+			response = response.filter(
+				(animal) =>
+					animal.name.toLowerCase().includes(search.toLowerCase()) ||
+					animal.lastName.toLowerCase().includes(search.toLowerCase()) ||
+					animal.email.toLowerCase().includes(search.toLowerCase())
+			) as GetEmployeesResponse[]
 		}
 		return response
 	}

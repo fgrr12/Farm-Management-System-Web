@@ -82,7 +82,9 @@ export const Employees: FC = () => {
 					{employees &&
 						employees.map((employee) => (
 							<Table.Row key={employee.uuid}>
-								<Table.Cell>{employee.name}</Table.Cell>
+								<Table.Cell>
+									{employee.name} {employee.lastName}
+								</Table.Cell>
 								<Table.Cell>{employee.role}</Table.Cell>
 								<Table.Cell>{employee.phone}</Table.Cell>
 								<Table.Cell>{employee.email}</Table.Cell>

@@ -1,7 +1,17 @@
 import { firestore } from '@/config/environment'
 import storageHandler from '@/config/persistence/storageHandler'
 import dayjs from 'dayjs'
-import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore'
+import {
+	collection,
+	doc,
+	type DocumentData,
+	getDoc,
+	getDocs,
+	query,
+	type QuerySnapshot,
+	setDoc,
+	where,
+} from 'firebase/firestore'
 import type { GetAnimalResponse, GetAnimalsProps, SetAnimalProps } from './types'
 
 const collectionName = 'animals'
@@ -9,33 +19,25 @@ const collectionName = 'animals'
 export module AnimalsService {
 	// Gets
 
-	// This function is responsible for getting all the animals from the database
 	export const getAnimals = async (
 		getAnimalsProps: GetAnimalsProps
 	): Promise<GetAnimalResponse[]> => {
 		const { selectedSpecies, search, userUuid } = getAnimalsProps
 		let response = []
+		let animals: QuerySnapshot<DocumentData, DocumentData>
+		const queryBase = query(
+			collection(firestore, collectionName),
+			where('status', '==', true),
+			where('userUuid', '==', userUuid)
+		)
 
 		if (selectedSpecies !== 'all') {
-			const animals = await getDocs(
-				query(
-					collection(firestore, collectionName),
-					where('species', '==', selectedSpecies),
-					where('status', '==', true),
-					where('userUuid', '==', userUuid)
-				)
-			)
+			animals = await getDocs(query(queryBase, where('species', '==', selectedSpecies)))
 			response = animals.docs.map((doc) => doc.data())
 		} else {
-			const animals = await getDocs(
-				query(
-					collection(firestore, collectionName),
-					where('status', '==', true),
-					where('userUuid', '==', userUuid)
-				)
-			)
-			response = animals.docs.map((doc) => ({ ...doc.data(), uuid: doc.id })) as GetAnimalResponse[]
+			animals = await getDocs(query(queryBase))
 		}
+		response = animals.docs.map((doc) => doc.data())
 
 		if (search) {
 			response = response.filter((animal) =>
@@ -48,7 +50,6 @@ export module AnimalsService {
 		return response as GetAnimalResponse[]
 	}
 
-	// This function is responsible for getting all the species from the database
 	export const getSpecies = async (userUuid: string | null): Promise<string[]> => {
 		const animals = await getDocs(
 			query(
