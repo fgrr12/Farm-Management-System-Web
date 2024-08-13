@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import { AppRoutes } from '@/config/constants/routes'
 import { UserService } from '@/services/user'
 import { useAppStore } from '@/store/useAppStore'
+import { useUserStore } from '@/store/useUserStore'
 
 import * as S from './Sidebar.styles'
 
 export const Sidebar: FC = () => {
+	const { user } = useUserStore()
 	const navigate = useNavigate()
 	const { collapseSidebar, setCollapseSidebar } = useAppStore()
 
@@ -37,14 +39,16 @@ export const Sidebar: FC = () => {
 						<S.Icon className="i-healthicons-animal-cow" $collapse={collapseSidebar} />
 						{!collapseSidebar && 'Animals'}
 					</S.SidebarMenuItem>
-					<S.SidebarMenuItem
-						$collapse={collapseSidebar}
-						$selected={handleCheckPath(AppRoutes.EMPLOYEES)}
-						onClick={() => handleGoTo(AppRoutes.EMPLOYEES)}
-					>
-						<S.Icon className="i-clarity-employee-group-solid" $collapse={collapseSidebar} />
-						{!collapseSidebar && 'Employees'}
-					</S.SidebarMenuItem>
+					{(user?.role === 'admin' || user?.role === 'owner') && (
+						<S.SidebarMenuItem
+							$collapse={collapseSidebar}
+							$selected={handleCheckPath(AppRoutes.EMPLOYEES)}
+							onClick={() => handleGoTo(AppRoutes.EMPLOYEES)}
+						>
+							<S.Icon className="i-clarity-employee-group-solid" $collapse={collapseSidebar} />
+							{!collapseSidebar && 'Employees'}
+						</S.SidebarMenuItem>
+					)}
 					<S.Divider />
 					<S.SidebarMenuItem
 						$collapse={collapseSidebar}
