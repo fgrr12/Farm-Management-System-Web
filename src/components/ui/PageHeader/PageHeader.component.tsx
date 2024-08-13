@@ -14,7 +14,10 @@ export const PageHeader: FC = () => {
 	const navigate = useNavigate()
 	const { headerTitle, collapseSidebar, setCollapseSidebar } = useAppStore()
 
-	const backButtonHidden = location.pathname === AppRoutes.ANIMALS
+	const backButtonHidden =
+		location.pathname === AppRoutes.ANIMALS ||
+		location.pathname === AppRoutes.EMPLOYEES ||
+		location.pathname === AppRoutes.MY_ACCOUNT
 
 	const handleBack = () => {
 		navigate(-1)

@@ -24,6 +24,7 @@ import { Sidebar } from './components/ui/Sidebar'
 
 import { UserService } from './services/user'
 
+import { Employees } from './pages/Employees'
 import { AppContainer, AppContent } from './styles/root'
 
 export const App: FC = () => {
@@ -57,6 +58,11 @@ export const App: FC = () => {
 				{user && <Sidebar />}
 				<Routes>
 					<Route path="/" element={<Navigate to={AppRoutes.ANIMALS} />} />
+
+					<Route path={AppRoutes.LOGIN} element={<LoginForm />} />
+					<Route path={AppRoutes.REGISTER} element={<SignUpForm />} />
+					<Route path={AppRoutes.CHANGE_PASSWORD} element={<Animals />} />
+
 					<Route path={AppRoutes.ANIMALS} element={<Animals />} />
 					<Route path={AppRoutes.ANIMAL} element={<Animal />} />
 					<Route path={AppRoutes.ADD_ANIMAL} element={<AnimalForm />} />
@@ -67,11 +73,11 @@ export const App: FC = () => {
 					<Route path={AppRoutes.EDIT_PRODUCTION_RECORD} element={<ProductionRecordForm />} />
 					<Route path={AppRoutes.RELATED_ANIMALS} element={<RelatedAnimalsForm />} />
 
-					<Route path={AppRoutes.BILLING_CARD} element={<BillingCard />} />
+					<Route path={AppRoutes.EMPLOYEES} element={<Employees />} />
 
-					<Route path={AppRoutes.LOGIN} element={<LoginForm />} />
-					<Route path={AppRoutes.REGISTER} element={<SignUpForm />} />
-					<Route path={AppRoutes.CHANGE_PASSWORD} element={<Animals />} />
+					<Route path={AppRoutes.MY_ACCOUNT} element={<div>My Account</div>} />
+
+					<Route path={AppRoutes.BILLING_CARD} element={<BillingCard />} />
 				</Routes>
 
 				<Modal
