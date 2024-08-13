@@ -16,7 +16,7 @@ import * as S from './Employees.styles'
 
 export const Employees: FC = () => {
 	const { user } = useUserStore()
-	const { setHeaderTitle } = useAppStore()
+	const { setLoading, setHeaderTitle } = useAppStore()
 	const navigate = useNavigate()
 
 	const [employees, setEmployees] = useState<Employee[]>([])
@@ -27,8 +27,15 @@ export const Employees: FC = () => {
 	}
 
 	const initialData = async () => {
-		const data = await EmployeesService.getEmployees(null)
-		setEmployees(data)
+		try {
+			setLoading(true)
+			const data = await EmployeesService.getEmployees(null)
+			setEmployees(data)
+		} catch (error) {
+			console.error(error)
+		} finally {
+			setLoading(false)
+		}
 	}
 
 	const getEmployees = async () => {

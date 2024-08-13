@@ -10,7 +10,6 @@ export const PageHeader = styled.header<BackButtonHiddenProps>`
     align-items: center;
     grid-template-columns: ${({ $backButtonHidden }) => ($backButtonHidden ? 'auto 1fr' : 'auto auto 1fr')};
     padding: 1rem;
-    border-bottom: 1px solid ${colors.primary[600]};
     background-color: ${colors.white};
     box-shadow: ${shadows.container};
     width: 100%;

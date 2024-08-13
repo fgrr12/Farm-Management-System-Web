@@ -1,5 +1,6 @@
 import type { CollapseStyleProps } from './Sidebar.types'
 
+import { colors } from '@/styles/variables'
 import styled from 'styled-components'
 
 export const Sidebar = styled.aside<CollapseStyleProps>`
@@ -7,8 +8,8 @@ export const Sidebar = styled.aside<CollapseStyleProps>`
     flex-direction: column;
     width: ${({ $collapse }) => ($collapse ? '5rem' : '15rem')};
     min-height: 100%;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: ${colors.white};
+    box-shadow:  0 10px 10px rgba(0, 0, 0, 0.1);
 
     @media (max-width: 768px) {
         position: fixed;
