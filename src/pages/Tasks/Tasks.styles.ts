@@ -34,8 +34,7 @@ export const Filters = styled.div`
 
 export const TasksList = styled.div`
     display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
+    flex-direction: column;
     gap: 1rem;
     padding-bottom: 1rem;
 `
@@ -54,11 +53,7 @@ export const TaskCard = styled.div`
     padding: 1rem;
     border-radius: 0.5rem;
     border: 1px solid #ccc;
-    width: 320px;
-
-    @media (max-width: 768px) {
-        width: 100%;
-    }
+    width: 100%;
 `
 
 export const Checkbox = styled.input.attrs({ type: 'checkbox' })`
@@ -69,6 +64,11 @@ export const Checkbox = styled.input.attrs({ type: 'checkbox' })`
 export const Task = styled.div`
     display: flex;
     flex-direction: column;
+    width: 90%;
+
+    @media (max-width: 768px) {
+        width: 85%;
+    }
 `
 
 export const TaskTitle = styled.h3`
@@ -79,7 +79,6 @@ export const TaskTitle = styled.h3`
 export const TaskDescription = styled.p`
     font-size: 1rem;
     font-weight: 400;
-    padding-right: 1.5rem;
 `
 
 export const PriorityColor = styled.div<{ $priority?: string }>`
