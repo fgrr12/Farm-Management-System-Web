@@ -1,13 +1,16 @@
-import { type ChangeEvent, type FormEvent, useState } from 'react'
+import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
 
 import { Button } from '@/components/ui/Button'
 import { Select } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
+import { useAppStore } from '@/store/useAppStore'
+
 import * as S from './TaskForm.styles'
 
 export const TaskForm = () => {
+	const { setHeaderTitle } = useAppStore()
 	const [task, setTask] = useState(INITIAL_TASK)
 
 	const handleTextChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -24,6 +27,11 @@ export const TaskForm = () => {
 		event.preventDefault()
 		console.log(task)
 	}
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
+	useEffect(() => {
+		setHeaderTitle('Add Task')
+	}, [])
 
 	return (
 		<S.Container>

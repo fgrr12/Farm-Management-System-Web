@@ -74,14 +74,9 @@ export const App: FC = () => {
 					<Route path={AppRoutes.EDIT_PRODUCTION_RECORD} element={<ProductionRecordForm />} />
 					<Route path={AppRoutes.RELATED_ANIMALS} element={<RelatedAnimalsForm />} />
 
-					{(user?.role === 'admin' || user?.role === 'owner') && (
-						<>
-							<Route path={AppRoutes.EMPLOYEES} element={<Employees />} />
-							<Route path={AppRoutes.ADD_EMPLOYEE} element={<EmployeeForm />} />
-							<Route path={AppRoutes.EDIT_EMPLOYEE} element={<EmployeeForm />} />
-						</>
-					)}
-
+					<Route path={AppRoutes.EMPLOYEES} element={<Employees />} />
+					<Route path={AppRoutes.ADD_EMPLOYEE} element={<EmployeeForm />} />
+					<Route path={AppRoutes.EDIT_EMPLOYEE} element={<EmployeeForm />} />
 					<Route path={AppRoutes.MY_ACCOUNT} element={<MyAccount />} />
 
 					<Route path={AppRoutes.TASKS} element={<Tasks />} />

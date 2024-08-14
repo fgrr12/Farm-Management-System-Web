@@ -55,11 +55,11 @@ export const Employees: FC = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		if (!user) {
-			navigate('/')
+		setHeaderTitle('Employees')
+		if (!user || user.role === 'employee') {
+			navigate(AppRoutes.LOGIN)
 			return
 		}
-		setHeaderTitle('Employees')
 		initialData()
 	}, [])
 
