@@ -19,11 +19,12 @@ import { useUserStore } from '@/store/useUserStore'
 
 import type { AnimalInformation } from './Animal.types'
 
+import { FarmsService } from '@/services/farms'
 import * as S from './Animal.styles'
 
 export const Animal: FC = () => {
 	const { user } = useUserStore()
-	const { farm } = useFarmStore()
+	const { farm, setFarm } = useFarmStore()
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation()
@@ -80,6 +81,11 @@ export const Animal: FC = () => {
 			const dbHealthRecords = await HealthRecordsService.getHealthRecords(animalId!)
 			const dbRelatedAnimals = await RelatedAnimalsService.getRelatedAnimals(animalId!)
 			const dbProductionRecords = await ProductionRecordsService.getProductionRecords(animalId!)
+
+			if (!farm) {
+				const farmData = await FarmsService.getFarm(dbAnimal!.farmUuid)
+				setFarm(farmData)
+			}
 
 			setHeaderTitle(`Animal ${dbAnimal.animalId}`)
 			dbAnimal.weight = dbHealthRecords[dbHealthRecords.length - 1]?.weight ?? dbAnimal.weight

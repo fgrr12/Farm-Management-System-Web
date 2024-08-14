@@ -88,6 +88,7 @@ export interface GetAnimalResponse {
 	weight: number
 	relatedAnimals: RelatedAnimalList
 	status: boolean
+	farmUuid: string
 	healthRecords: AnimalHealthRecord[]
 	productionRecords: ProductionRecord[]
 	picture?: string
