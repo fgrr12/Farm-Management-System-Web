@@ -1,16 +1,25 @@
+import { AppRoutes } from '@/config/constants/routes'
 import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import { Button } from '@/components/ui/Button'
 import { Select } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
+import { TasksService } from '@/services/tasks'
 import { useAppStore } from '@/store/useAppStore'
+import { useFarmStore } from '@/store/useFarmStore'
+import { useUserStore } from '@/store/useUserStore'
 
 import * as S from './TaskForm.styles'
 
 export const TaskForm = () => {
+	const { user } = useUserStore()
+	const { farm } = useFarmStore()
 	const { setHeaderTitle } = useAppStore()
+	const navigate = useNavigate()
+
 	const [task, setTask] = useState(INITIAL_TASK)
 
 	const handleTextChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -23,9 +32,11 @@ export const TaskForm = () => {
 		setTask((prev) => ({ ...prev, [name]: value }))
 	}
 
-	const handleSubmit = (event: FormEvent) => {
+	const handleSubmit = async (event: FormEvent) => {
 		event.preventDefault()
-		console.log(task)
+		task.uuid = task.uuid || crypto.randomUUID()
+		await TasksService.setTask(task, user!.uuid, farm!.uuid)
+		navigate(AppRoutes.TASKS)
 	}
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
@@ -60,9 +71,26 @@ export const TaskForm = () => {
 					onChange={handleSelectChange}
 					required
 				>
+					<option value="">Select a priority</option>
 					<option value="low">Low</option>
 					<option value="medium">Medium</option>
 					<option value="high">High</option>
+				</Select>
+				<Select
+					name="species"
+					label="Species"
+					value={task.species}
+					onChange={handleSelectChange}
+					required
+				>
+					<option value="" disabled>
+						Select a species
+					</option>
+					{farm?.species.map((species, index) => (
+						<option key={index} value={species}>
+							{species}
+						</option>
+					))}
 				</Select>
 				<Button type="submit">Add Task</Button>
 			</S.Form>
@@ -74,6 +102,8 @@ const INITIAL_TASK: Task = {
 	uuid: '',
 	title: '',
 	description: '',
-	priority: 'low',
-	status: 'pending',
+	priority: '',
+	status: '',
+	species: '',
+	farmUuid: '',
 }

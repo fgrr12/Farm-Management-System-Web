@@ -4,6 +4,8 @@ interface Task {
 	description: string
 	status: string
 	priority: string
+	species: string
+	farmUuid: string
 	createdAt?: string
 	updatedAt?: string
 }

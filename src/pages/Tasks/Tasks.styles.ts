@@ -36,7 +36,9 @@ export const TasksList = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    padding-bottom: 1rem;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
 `
 
 export const StatusTitle = styled.h2`
@@ -101,4 +103,10 @@ export const PriorityColor = styled.div<{ $priority?: string }>`
 					return 'gray'
 			}
 		}};
+`
+
+export const NoTasks = styled.p`
+    font-size: 1.5rem;
+    font-weight: 500;
+    text-align: center;
 `

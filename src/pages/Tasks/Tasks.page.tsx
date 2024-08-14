@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { type ChangeEvent, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { Button } from '@/components/ui/Button'
@@ -7,116 +7,144 @@ import { Select } from '@/components/ui/Select'
 
 import { AppRoutes } from '@/config/constants/routes'
 import { useAppStore } from '@/store/useAppStore'
+import { useFarmStore } from '@/store/useFarmStore'
+import { useUserStore } from '@/store/useUserStore'
+
+import { TasksService } from '@/services/tasks'
+
+import type { DividedTasks, TaskFilters } from './Tasks.types'
 
 import * as S from './Tasks.styles'
 
 export const Tasks = () => {
 	const { setHeaderTitle } = useAppStore()
+	const { user } = useUserStore()
+	const { farm } = useFarmStore()
 	const navigate = useNavigate()
+
+	const [tasks, setTasks] = useState(INITIAL_TASKS)
+	const [filters, setFilters] = useState(INITIAL_FILTERS)
 
 	const handleAddTask = () => {
 		navigate(AppRoutes.ADD_TASK)
 	}
 
+	const handleDebounceSearch = (event: ChangeEvent<HTMLInputElement>) => {
+		setFilters((prev) => ({ ...prev, search: event.target.value }))
+	}
+
+	const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
+		const { name, value } = event.target
+		setFilters((prev) => ({ ...prev, [name]: value }))
+	}
+
+	const handleUpdateTask = (task: Task) => async () => {
+		const status = task.status === 'COMPLETED' ? 'PENDING' : 'COMPLETED'
+		await TasksService.updateTaskStatus(task.uuid, status)
+		await getTasks()
+	}
+
+	const getTasks = async () => {
+		try {
+			const { search, status, priority, species } = filters
+			const farmUuid = farm!.uuid
+			const tasks = await TasksService.getTasks({ search, status, priority, species, farmUuid })
+			const pendingTasks = tasks.filter((task) => task.status === 'PENDING')
+			const completedTasks = tasks.filter((task) => task.status === 'COMPLETED')
+			setTasks({ pending: pendingTasks, completed: completedTasks })
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		setHeaderTitle('Tasks')
+		if (!user) {
+			navigate(AppRoutes.LOGIN)
+			return
+		}
 	}, [])
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect used to update tasks list
+	useEffect(() => {
+		if (user) {
+			getTasks()
+		}
+	}, [filters])
 
 	return (
 		<S.Container>
 			<S.Filters>
-				<Search placeholder="Search tasks" />
-				<Select label="Status">
-					<option value="all">All</option>
-					<option value="completed">Completed</option>
-					<option value="pending">Pending</option>
+				<Search placeholder="Search tasks" onChange={handleDebounceSearch} />
+				<Select name="status" label="Status" onChange={handleSelectChange}>
+					<option value="">All</option>
+					<option value="COMPLETED">Completed</option>
+					<option value="PENDING">Pending</option>
 				</Select>
-				<Select label="Priority">
-					<option value="all">All</option>
+				<Select name="priority" label="Priority" onChange={handleSelectChange}>
+					<option value="">All</option>
 					<option value="high">High</option>
 					<option value="medium">Medium</option>
 					<option value="low">Low</option>
 				</Select>
-				<Select label="Species">
-					<option value="all">All</option>
-					<option value="cow">Cow</option>
-					<option value="pig">Pig</option>
-					<option value="chicken">Chicken</option>
+				<Select name="species" label="Species" onChange={handleSelectChange}>
+					<option value="">All</option>
+					{farm?.species.map((species, index) => (
+						<option key={index} value={species}>
+							{species}
+						</option>
+					))}
 				</Select>
 				<Button onClick={handleAddTask}>Add Task</Button>
 			</S.Filters>
-			<S.StatusTitle>Pending</S.StatusTitle>
-			<S.TasksList>
-				<S.TaskCard>
-					<S.Checkbox />
-					<S.Task>
-						<S.TaskTitle>Task Title</S.TaskTitle>
-						<S.TaskDescription>
-							Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
-							has been the industry's standard dummy text ever since the 1500s, when an unknown
-							printer took a galley of type and scrambled it to make a type specimen book. It has
-							survived not only five centuries, but also the leap into electronic typesetting,
-							remaining essentially unchanged. It was popularised in the 1960s with the release of
-							Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
-							publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-						</S.TaskDescription>
-					</S.Task>
-					<S.PriorityColor $priority="high" />
-				</S.TaskCard>
-				<S.TaskCard>
-					<S.Checkbox />
-					<S.Task>
-						<S.TaskTitle>Task Title</S.TaskTitle>
-						<S.TaskDescription>Task Description</S.TaskDescription>
-					</S.Task>
-					<S.PriorityColor $priority="medium" />
-				</S.TaskCard>
-				<S.TaskCard>
-					<S.Checkbox />
-					<S.Task>
-						<S.TaskTitle>Task Title</S.TaskTitle>
-						<S.TaskDescription>Task Description</S.TaskDescription>
-					</S.Task>
-					<S.PriorityColor />
-				</S.TaskCard>
-				<S.TaskCard>
-					<S.Checkbox />
-					<S.Task>
-						<S.TaskTitle>Task Title</S.TaskTitle>
-						<S.TaskDescription>Task Description</S.TaskDescription>
-					</S.Task>
-					<S.PriorityColor $priority="low" />
-				</S.TaskCard>
-				<S.TaskCard>
-					<S.Checkbox />
-					<S.Task>
-						<S.TaskTitle>Task Title</S.TaskTitle>
-						<S.TaskDescription>Task Description</S.TaskDescription>
-					</S.Task>
-					<S.PriorityColor $priority="high" />
-				</S.TaskCard>
-			</S.TasksList>
 
-			<S.StatusTitle>Completed</S.StatusTitle>
-			<S.TasksList>
-				<S.TaskCard>
-					<S.Checkbox />
-					<S.Task>
-						<S.TaskTitle>Task Title</S.TaskTitle>
-						<S.TaskDescription>Task Description</S.TaskDescription>
-					</S.Task>
-					<S.PriorityColor $priority="high" />
-				</S.TaskCard>
-				<S.TaskCard>
-					<S.Checkbox />
-					<S.Task>
-						<S.TaskTitle>Task Title</S.TaskTitle>
-						<S.TaskDescription>Task Description</S.TaskDescription>
-					</S.Task>
-					<S.PriorityColor $priority="medium" />
-				</S.TaskCard>
-			</S.TasksList>
+			{filters.status !== 'COMPLETED' && (
+				<>
+					<S.StatusTitle>Pending</S.StatusTitle>
+					<S.TasksList>
+						{tasks.pending.map((task) => (
+							<S.TaskCard key={task.uuid}>
+								<S.Checkbox onChange={handleUpdateTask(task)} />
+								<S.Task>
+									<S.TaskTitle>{task.title}</S.TaskTitle>
+									<S.TaskDescription>{task.description}</S.TaskDescription>
+								</S.Task>
+								<S.PriorityColor $priority={task.priority} />
+							</S.TaskCard>
+						))}
+						{tasks && tasks.pending.length === 0 && <S.NoTasks>No tasks found</S.NoTasks>}
+					</S.TasksList>
+				</>
+			)}
+
+			{filters.status !== 'PENDING' && (
+				<>
+					<S.StatusTitle>Completed</S.StatusTitle>
+					<S.TasksList>
+						{tasks.completed.map((task) => (
+							<S.TaskCard key={task.uuid}>
+								<S.Checkbox onChange={handleUpdateTask(task)} checked />
+								<S.Task>
+									<S.TaskTitle>{task.title}</S.TaskTitle>
+									<S.TaskDescription>{task.description}</S.TaskDescription>
+								</S.Task>
+								<S.PriorityColor $priority={task.priority} />
+							</S.TaskCard>
+						))}
+						{tasks && tasks.completed.length === 0 && <S.NoTasks>No tasks found</S.NoTasks>}
+					</S.TasksList>
+				</>
+			)}
 		</S.Container>
 	)
+}
+
+const INITIAL_TASKS: DividedTasks = { pending: [], completed: [] }
+
+const INITIAL_FILTERS: TaskFilters = {
+	search: '',
+	status: '',
+	priority: '',
+	species: '',
 }
