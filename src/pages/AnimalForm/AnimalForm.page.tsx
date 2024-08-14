@@ -1,6 +1,6 @@
 import { fileToBase64 } from '@/utils/fileToBase64'
 import dayjs from 'dayjs'
-import { useCallback, useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
+import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -29,6 +29,7 @@ export const AnimalForm = () => {
 
 	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
 	const [animalForm, setAnimalForm] = useState<Animal>(INITIAL_ANIMAL_FORM)
+	const [species, setSpecies] = useState<string[]>([])
 
 	const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target
@@ -50,7 +51,7 @@ export const AnimalForm = () => {
 		setAnimalForm((prev) => ({ ...prev, picture: picture.data }))
 	}
 
-	const getAnimal = useCallback(async () => {
+	const getAnimal = async () => {
 		try {
 			setLoading(true)
 			const animalUuid = params.animalUuid as string
@@ -66,11 +67,10 @@ export const AnimalForm = () => {
 		} finally {
 			setLoading(false)
 		}
-	}, [params.animalUuid, setModalData, defaultModalData, setLoading])
+	}
 
 	const handleSubmit = async (event: FormEvent) => {
 		try {
-			setHeaderTitle(t('addAnimal.title'))
 			setLoading(true)
 			event.preventDefault()
 			const animalUuid = params.animalUuid as string
@@ -129,10 +129,12 @@ export const AnimalForm = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
+		setHeaderTitle(t('addAnimal.title'))
 		if (!user) {
 			navigate(AppRoutes.LOGIN)
 			return
 		}
+		setSpecies(farm!.species)
 		if (params.animalUuid) {
 			getAnimal()
 		}
@@ -163,10 +165,14 @@ export const AnimalForm = () => {
 					label={t('addAnimal.species')}
 					value={animalForm.species}
 					onChange={handleSelectChange}
+					required
 				>
-					{species.map((species) => (
-						<option key={species} value={species}>
-							{t(`species.${species.toLowerCase()}`)}
+					<option value="" disabled>
+						{t('addAnimal.species')}
+					</option>
+					{species.map((species, index) => (
+						<option key={index} value={species}>
+							{species}
 						</option>
 					))}
 				</Select>
@@ -185,6 +191,9 @@ export const AnimalForm = () => {
 					value={animalForm.gender}
 					onChange={handleSelectChange}
 				>
+					<option value="" disabled>
+						{t('addAnimal.gender')}
+					</option>
 					{genders.map((gender) => (
 						<option key={gender} value={gender}>
 							{t(`gender.${gender.toLowerCase()}`)}
@@ -240,14 +249,12 @@ export const AnimalForm = () => {
 	)
 }
 
-const species: Species[] = ['Cow', 'Sheep', 'Goat', 'Chicken']
-
 const genders: Gender[] = ['Male', 'Female']
 
 const INITIAL_ANIMAL_FORM: Animal = {
 	uuid: '',
-	animalId: 0,
-	species: 'Cow',
+	animalId: '',
+	species: '',
 	breed: '',
 	gender: 'Male',
 	color: '',

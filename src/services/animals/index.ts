@@ -37,20 +37,6 @@ export module AnimalsService {
 		return response as GetAnimalResponse[]
 	}
 
-	export const getSpecies = async (farmUuid: string | null): Promise<string[]> => {
-		const animals = await getDocs(
-			query(
-				collection(firestore, collectionName),
-				where('status', '==', true),
-				where('farmUuid', '==', farmUuid)
-			)
-		)
-		const species = animals.docs.map((doc) => doc.data().species)
-		const uniqueSpecies = Array.from(new Set(species))
-
-		return uniqueSpecies
-	}
-
 	export const getAnimal = async (animalUuid: string): Promise<GetAnimalResponse> => {
 		const docRef = doc(firestore, collectionName, animalUuid)
 		const animalDoc = await getDoc(docRef)

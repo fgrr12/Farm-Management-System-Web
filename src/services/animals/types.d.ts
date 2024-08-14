@@ -8,7 +8,7 @@ export interface GetAnimalsProps {
 
 export interface SetAnimalProps {
 	uuid: string
-	animalId: number
+	animalId: string
 	species: string
 	breed: string
 	gender: string
@@ -80,8 +80,8 @@ interface RelatedAnimalList {
 
 export interface GetAnimalResponse {
 	uuid: string
-	animalId: number
-	species: Species
+	animalId: string
+	species: string
 	breed: string
 	gender: Gender
 	color: string

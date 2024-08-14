@@ -2,7 +2,7 @@ import type dayjs from 'dayjs'
 import type { HTMLAttributes } from 'react'
 
 export type CardProps = HTMLAttributes<HTMLDivElement> & {
-	animalId: number
+	animalId: string
 	species: string
 	breed: string
 	birthDate?: dayjs.Dayjs

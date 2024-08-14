@@ -39,6 +39,11 @@ export const TasksList = styled.div`
     padding: 1rem;
     border: 1px solid #ccc;
     border-radius: 0.5rem;
+
+    @media (max-width: 768px) {
+        padding: 0;
+        border: none;
+    }
 `
 
 export const StatusTitle = styled.h2`

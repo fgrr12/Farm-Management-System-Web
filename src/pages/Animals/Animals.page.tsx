@@ -10,6 +10,7 @@ import { Select } from '@/components/ui/Select'
 
 import { AnimalsService } from '@/services/animals'
 import { useAppStore } from '@/store/useAppStore'
+import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
 import type { AnimalCardInformation, AnimalsFilters } from './Animals.types'
@@ -18,6 +19,7 @@ import * as S from './Animals.styles'
 
 export const Animals = () => {
 	const { user } = useUserStore()
+	const { farm } = useFarmStore()
 	const navigation = useNavigate()
 	const { t } = useTranslation()
 	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
@@ -66,21 +68,8 @@ export const Animals = () => {
 	}
 
 	const getSpecies = async () => {
-		try {
-			setLoading(true)
-			const dbSpecies = await AnimalsService.getSpecies(user!.farmUuid)
-
-			setSpecies(dbSpecies)
-		} catch (error) {
-			setModalData({
-				open: true,
-				title: 'Error',
-				message: 'Ocurrió un error al obtener las especies',
-				onAccept: () => setModalData(defaultModalData),
-			})
-		} finally {
-			setLoading(false)
-		}
+		setLoading(true)
+		setSpecies(farm!.species)
 	}
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
@@ -107,9 +96,9 @@ export const Animals = () => {
 				<Select name="selectedSpecies" label={t('animals.species')} onChange={handleSelectChange}>
 					<option value="all">{t('animals.all')}</option>
 					{species.length > 0 &&
-						species.map((specie) => (
-							<option key={specie} value={specie}>
-								{t(`species.${specie.toLowerCase()}`)}
+						species.map((specie, index) => (
+							<option key={index} value={specie}>
+								{specie}
 							</option>
 						))}
 				</Select>

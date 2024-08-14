@@ -2,8 +2,8 @@ import type dayjs from 'dayjs'
 
 export interface Animal {
 	uuid: string
-	animalId: number
-	species: Species
+	animalId: string
+	species: string
 	breed: string
 	gender: Gender
 	color: string

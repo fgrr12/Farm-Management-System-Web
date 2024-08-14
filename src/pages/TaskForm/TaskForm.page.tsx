@@ -71,7 +71,9 @@ export const TaskForm = () => {
 					onChange={handleSelectChange}
 					required
 				>
-					<option value="">Select a priority</option>
+					<option value="" disabled>
+						Select a priority
+					</option>
 					<option value="low">Low</option>
 					<option value="medium">Medium</option>
 					<option value="high">High</option>

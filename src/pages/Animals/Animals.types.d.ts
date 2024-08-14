@@ -54,8 +54,8 @@ declare interface RelatedAnimals {
 
 export interface AnimalCardInformation {
 	uuid: string
-	animalId: number
-	species: Species
+	animalId: string
+	species: string
 	breed: string
 	gender: Gender
 	color: string
