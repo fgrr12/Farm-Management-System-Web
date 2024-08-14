@@ -19,6 +19,8 @@ import { LoginForm } from './pages/LoginForm'
 import { MyAccount } from './pages/MyAccount'
 import { ProductionRecordForm } from './pages/ProductionRecordForm'
 import { RelatedAnimalsForm } from './pages/RelatedAnimalsForm'
+import { TaskForm } from './pages/TaskForm'
+import { Tasks } from './pages/Tasks'
 
 import { Loading } from './components/layout/Loading'
 import { Modal } from './components/layout/Modal'
@@ -81,6 +83,9 @@ export const App: FC = () => {
 					)}
 
 					<Route path={AppRoutes.MY_ACCOUNT} element={<MyAccount />} />
+
+					<Route path={AppRoutes.TASKS} element={<Tasks />} />
+					<Route path={AppRoutes.ADD_TASK} element={<TaskForm />} />
 
 					<Route path={AppRoutes.BILLING_CARD} element={<BillingCard />} />
 				</Routes>

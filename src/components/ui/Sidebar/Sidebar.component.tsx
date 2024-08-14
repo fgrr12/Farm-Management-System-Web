@@ -40,6 +40,14 @@ export const Sidebar: FC = () => {
 						<S.Icon className="i-healthicons-animal-cow" $collapse={collapseSidebar} />
 						{!collapseSidebar && 'Animals'}
 					</S.SidebarMenuItem>
+					<S.SidebarMenuItem
+						$collapse={collapseSidebar}
+						$selected={handleCheckPath(AppRoutes.TASKS)}
+						onClick={() => handleGoTo(AppRoutes.TASKS)}
+					>
+						<S.Icon className="i-material-symbols-task" $collapse={collapseSidebar} />
+						{!collapseSidebar && 'Tasks'}
+					</S.SidebarMenuItem>
 					{(user?.role === 'admin' || user?.role === 'owner') && (
 						<S.SidebarMenuItem
 							$collapse={collapseSidebar}

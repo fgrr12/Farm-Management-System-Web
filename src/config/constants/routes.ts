@@ -22,6 +22,10 @@ export enum AppRoutes {
 	// My Account
 	MY_ACCOUNT = '/my-account',
 
+	// Tasks
+	TASKS = '/tasks',
+	ADD_TASK = '/tasks/add-task',
+
 	// Billing Card
 	BILLING_CARD = '/billing-card',
 }

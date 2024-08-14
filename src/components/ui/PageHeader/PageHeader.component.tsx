@@ -21,7 +21,8 @@ export const PageHeader: FC = () => {
 	const backButtonHidden =
 		location.pathname === AppRoutes.ANIMALS ||
 		location.pathname === AppRoutes.EMPLOYEES ||
-		location.pathname === AppRoutes.MY_ACCOUNT
+		location.pathname === AppRoutes.MY_ACCOUNT ||
+		location.pathname === AppRoutes.TASKS
 
 	const handleBack = () => {
 		navigate(-1)
