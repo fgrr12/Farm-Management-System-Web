@@ -67,11 +67,6 @@ export const Animals = () => {
 		}
 	}
 
-	const getSpecies = async () => {
-		setLoading(true)
-		setSpecies(farm!.species)
-	}
-
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		setHeaderTitle(t('animals.title'))
@@ -79,14 +74,8 @@ export const Animals = () => {
 			navigation(AppRoutes.LOGIN)
 			return
 		}
-		getSpecies()
-	}, [])
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
-	useEffect(() => {
-		if (user) {
-			getAnimals()
-		}
+		setSpecies(farm!.species)
+		getAnimals()
 	}, [filters])
 
 	return (
