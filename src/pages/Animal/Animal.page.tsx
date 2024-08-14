@@ -227,7 +227,7 @@ export const Animal: FC = () => {
 
 const ANIMAL_INITIAL_STATE: AnimalInformation = {
 	uuid: '',
-	animalId: 0,
+	animalId: '0',
 	species: 'Cow',
 	breed: '',
 	gender: 'Male',

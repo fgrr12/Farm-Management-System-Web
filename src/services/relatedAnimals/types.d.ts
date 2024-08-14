@@ -18,7 +18,7 @@ export interface SetRelatedAnimalProps {
 
 interface SelectedAnimal {
 	animalUuid: string
-	animalId: number
+	animalId: string
 	breed: string
 	relation: string
 }

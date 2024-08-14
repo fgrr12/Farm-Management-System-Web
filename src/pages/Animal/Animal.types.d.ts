@@ -28,13 +28,13 @@ interface RelatedAnimal {
 	uuid: string
 	parent: {
 		animalUuid: string
-		animalId: number
+		animalId: string
 		breed: string
 		relation: string
 	}
 	child: {
 		animalUuid: string
-		animalId: number
+		animalId: string
 		breed: string
 		relation: string
 	}
@@ -49,8 +49,8 @@ interface RelatedAnimalList {
 
 export interface AnimalInformation {
 	uuid: string
-	animalId: number
-	species: Species
+	animalId: string
+	species: string
 	breed: string
 	gender: Gender
 	color: string

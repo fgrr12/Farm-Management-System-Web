@@ -33,13 +33,13 @@ interface RelatedAnimal {
 	uuid: string
 	parent: {
 		animalUuid: string
-		animalId: number
+		animalId: string
 		breed: string
 		relation: string
 	}
 	child: {
 		animalUuid: string
-		animalId: number
+		animalId: string
 		breed: string
 		relation: string
 	}
