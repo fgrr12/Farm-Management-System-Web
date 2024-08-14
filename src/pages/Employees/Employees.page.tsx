@@ -66,7 +66,6 @@ export const Employees: FC = () => {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		const debounceId = setTimeout(() => {
-			setSearch(search)
 			getEmployees()
 		}, 500)
 		return () => clearTimeout(debounceId)

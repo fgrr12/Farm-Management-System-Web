@@ -53,7 +53,7 @@ export const Tasks = () => {
 			const completedTasks = tasks.filter((task) => task.status === 'COMPLETED')
 			setTasks({ pending: pendingTasks, completed: completedTasks })
 		} catch (error) {
-			console.log(error)
+			console.error(error)
 		}
 	}
 
@@ -71,7 +71,15 @@ export const Tasks = () => {
 		if (user) {
 			getTasks()
 		}
-	}, [filters])
+	}, [filters.priority, filters.species, filters.status])
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
+	useEffect(() => {
+		const debounceId = setTimeout(() => {
+			getTasks()
+		}, 500)
+		return () => clearTimeout(debounceId)
+	}, [filters.search])
 
 	return (
 		<S.Container>

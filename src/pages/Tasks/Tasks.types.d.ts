@@ -3,8 +3,8 @@ export interface DividedTasks {
 	completed: Task[]
 }
 export interface TaskFilters {
-	search?: string
-	status?: string
-	priority?: string
-	species?: string
+	search: string
+	status: string
+	priority: string
+	species: string
 }

@@ -1,17 +1,7 @@
 import { firestore } from '@/config/environment'
 import storageHandler from '@/config/persistence/storageHandler'
 import dayjs from 'dayjs'
-import {
-	collection,
-	doc,
-	type DocumentData,
-	getDoc,
-	getDocs,
-	query,
-	type QuerySnapshot,
-	setDoc,
-	where,
-} from 'firebase/firestore'
+import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore'
 import type { GetAnimalResponse, GetAnimalsProps, SetAnimalProps } from './types'
 
 const collectionName = 'animals'
@@ -24,28 +14,25 @@ export module AnimalsService {
 	): Promise<GetAnimalResponse[]> => {
 		const { selectedSpecies, search, farmUuid } = getAnimalsProps
 		let response = []
-		let animals: QuerySnapshot<DocumentData, DocumentData>
-		const queryBase = query(
+		let queryBase = query(
 			collection(firestore, collectionName),
 			where('status', '==', true),
 			where('farmUuid', '==', farmUuid)
 		)
 
-		if (selectedSpecies !== 'all') {
-			animals = await getDocs(query(queryBase, where('species', '==', selectedSpecies)))
-			response = animals.docs.map((doc) => doc.data())
-		} else {
-			animals = await getDocs(query(queryBase))
-		}
-		response = animals.docs.map((doc) => doc.data())
+		if (selectedSpecies !== 'all')
+			queryBase = query(queryBase, where('species', '==', selectedSpecies))
+
+		const animalsDocs = await getDocs(queryBase)
+		response = animalsDocs.docs
+			.map((doc) => doc.data())
+			.sort((a, b) => a.animalId - b.animalId) as GetAnimalResponse[]
 
 		if (search) {
 			response = response.filter((animal) =>
-				animal.animalId.toLowerCase().includes(search.toLowerCase())
+				animal.animalId.toString().includes(search.toLowerCase())
 			)
 		}
-
-		response = response.sort((a, b) => a.animalId - b.animalId)
 
 		return response as GetAnimalResponse[]
 	}

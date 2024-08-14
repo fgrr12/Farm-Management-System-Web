@@ -19,24 +19,14 @@ export module TasksService {
 		let queryBase = query(collection(firestore, collectionName), where('farmUuid', '==', farmUuid))
 
 		if (status !== '') queryBase = query(queryBase, where('status', '==', status))
-
-		if (priority !== '') {
-			queryBase = query(queryBase, where('priority', '==', priority))
-		}
-
-		if (species !== '') {
-			queryBase = query(queryBase, where('species', '==', species))
-		}
+		if (priority !== '') queryBase = query(queryBase, where('priority', '==', priority))
+		if (species !== '') queryBase = query(queryBase, where('species', '==', species))
 
 		const tasksDocs = await getDocs(queryBase)
 		response = tasksDocs.docs.map((doc) => doc.data()) as GetTasksResponse[]
 
 		if (search) {
-			response = response.filter((task) => {
-				const searchValue = search.toLowerCase()
-				const taskValues = Object.values(task).join(' ').toLowerCase()
-				return taskValues.includes(searchValue)
-			})
+			response = response.filter((task) => task.title.toLowerCase().includes(search.toLowerCase()))
 		}
 
 		return response

@@ -45,7 +45,7 @@ export const Sidebar: FC = () => {
 						$selected={handleCheckPath(AppRoutes.TASKS)}
 						onClick={() => handleGoTo(AppRoutes.TASKS)}
 					>
-						<S.Icon className="i-material-symbols-task" $collapse={collapseSidebar} />
+						<S.Icon className="i-fluent-tasks-app-24-filled" $collapse={collapseSidebar} />
 						{!collapseSidebar && 'Tasks'}
 					</S.SidebarMenuItem>
 					{(user?.role === 'admin' || user?.role === 'owner') && (
