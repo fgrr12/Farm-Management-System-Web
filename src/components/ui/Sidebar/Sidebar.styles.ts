@@ -44,6 +44,8 @@ export const SidebarMenuItem = styled.li<CollapseStyleProps>`
     &:hover {
         background-color: #f0f0f0;
     }
+
+    ${({ $disabled }) => $disabled && 'opacity: 0.5;'}
 `
 
 export const Icon = styled.i<CollapseStyleProps>`

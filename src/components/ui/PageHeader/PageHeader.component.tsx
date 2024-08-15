@@ -8,10 +8,12 @@ import { BackButton } from '../Button'
 import { AppRoutes } from '@/config/constants/routes'
 import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
+import { useUserStore } from '@/store/useUserStore'
 
 import * as S from './PageHeader.styles'
 
 export const PageHeader: FC = () => {
+	const { user } = useUserStore()
 	const { farm } = useFarmStore()
 	const { t } = useTranslation()
 	const navigate = useNavigate()
@@ -33,18 +35,20 @@ export const PageHeader: FC = () => {
 		const element = document.getElementById('pageHeader')
 		const height = element?.clientHeight
 		setTopHeaderHeight(height || 0)
-	}, [farm, location])
+	}, [user, location])
 
 	return (
 		<S.PageHeader id="pageHeader" $backButtonHidden={backButtonHidden}>
 			<S.Sidebar
 				$collapse={collapseSidebar}
 				$backButtonHidden={backButtonHidden}
+				// $disabled={!user}
 				onClick={() => setCollapseSidebar(!collapseSidebar)}
 			>
 				{!collapseSidebar && <S.SidebarTitle>{farm!.name}</S.SidebarTitle>}
 				<S.SidebarCloseButton>
 					<ActionButton
+						disabled={!user}
 						icon={
 							collapseSidebar
 								? 'i-material-symbols-right-panel-close'
@@ -53,7 +57,11 @@ export const PageHeader: FC = () => {
 					/>
 				</S.SidebarCloseButton>
 			</S.Sidebar>
-			{!backButtonHidden && <BackButton onClick={handleBack}>{t('header.return')}</BackButton>}
+			{!backButtonHidden && (
+				<BackButton disabled={!user} onClick={handleBack}>
+					{t('header.return')}
+				</BackButton>
+			)}
 			<S.Title>{headerTitle}</S.Title>
 		</S.PageHeader>
 	)

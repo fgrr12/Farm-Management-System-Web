@@ -1,7 +1,7 @@
 import { onAuthStateChanged } from 'firebase/auth'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation, useMatch, useNavigate } from 'react-router-dom'
 import { AppRoutes } from './config/constants/routes'
 import { auth } from './config/environment'
 import { useAppStore } from './store/useAppStore'
@@ -44,6 +44,7 @@ export const App: FC = () => {
 	const { i18n } = useTranslation()
 	const navigate = useNavigate()
 	const location = useLocation()
+	const match = useMatch(AppRoutes.ANIMAL)
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
@@ -54,7 +55,7 @@ export const App: FC = () => {
 				setUser(null)
 				setFarm(null)
 				setLoading(false)
-				if (location.pathname !== AppRoutes.ANIMAL) {
+				if (match?.pattern.path !== AppRoutes.ANIMAL) {
 					navigate(AppRoutes.LOGIN)
 				}
 				return
