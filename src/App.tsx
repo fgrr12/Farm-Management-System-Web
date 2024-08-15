@@ -1,7 +1,7 @@
 import { onAuthStateChanged } from 'firebase/auth'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { AppRoutes } from './config/constants/routes'
 import { auth } from './config/environment'
 import { useAppStore } from './store/useAppStore'
@@ -33,10 +33,12 @@ import { UserService } from './services/user'
 import { AppContainer, AppContent } from './styles/root'
 
 export const App: FC = () => {
-	const { user, setUser } = useUserStore()
+	const { setUser } = useUserStore()
 	const { setFarm } = useFarmStore()
 	const { loading: appLoading, defaultModalData: modalData, topHeaderHeight } = useAppStore()
 	const { i18n } = useTranslation()
+	const navigate = useNavigate()
+	const location = useLocation()
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
@@ -44,6 +46,10 @@ export const App: FC = () => {
 		onAuthStateChanged(auth, async (authUser) => {
 			if (!authUser) {
 				setUser(null)
+				if (location.pathname !== AppRoutes.ANIMAL) {
+					navigate(AppRoutes.LOGIN)
+				}
+
 				return
 			}
 			const user = await UserService.getUser(authUser!.uid)
@@ -55,9 +61,9 @@ export const App: FC = () => {
 	}, [setUser])
 	return (
 		<AppContainer className="app">
-			{user && <PageHeader />}
+			{location.pathname !== AppRoutes.LOGIN && <PageHeader />}
 			<AppContent $topHeaderHeight={topHeaderHeight}>
-				{user && <Sidebar />}
+				{location.pathname !== AppRoutes.LOGIN && <Sidebar />}
 				<Routes>
 					<Route path="/" element={<Navigate to={AppRoutes.ANIMALS} />} />
 

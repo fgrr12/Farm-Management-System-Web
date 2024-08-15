@@ -52,7 +52,7 @@ export const Animals = () => {
 			const dbAnimals = await AnimalsService.getAnimals({
 				selectedSpecies,
 				search,
-				farmUuid: user!.farmUuid,
+				farmUuid: farm!.uuid,
 			})
 			setAnimals(dbAnimals)
 		} catch (error) {
@@ -69,14 +69,13 @@ export const Animals = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
+		setLoading(true)
 		setHeaderTitle(t('animals.title'))
-		if (!user) {
-			navigation(AppRoutes.LOGIN)
-			return
+		if (user) {
+			setSpecies(farm!.species)
+			getAnimals()
 		}
-		setSpecies(farm!.species)
-		getAnimals()
-	}, [filters])
+	}, [filters, user])
 
 	return (
 		<S.Container>

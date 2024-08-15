@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 import { RelatedAnimalCard } from '@/components/business/RelatedAnimals/RelatedAnimalCard'
 
-import { AppRoutes } from '@/config/constants/routes'
 import { AnimalsService } from '@/services/animals'
 import { RelatedAnimalsService } from '@/services/relatedAnimals'
 import { useAppStore } from '@/store/useAppStore'
@@ -21,7 +20,6 @@ import * as S from './RelatedAnimalsForm.styles'
 
 export const RelatedAnimalsForm: FC = () => {
 	const { user } = useUserStore()
-	const navigate = useNavigate()
 	const params = useParams()
 	// const { t } = useTranslation()
 
@@ -131,10 +129,7 @@ export const RelatedAnimalsForm: FC = () => {
 		setHeaderTitle('Add Related Animals')
 		let unsubscribe: (() => void) | undefined
 
-		if (!user) {
-			navigate(AppRoutes.LOGIN)
-			return
-		}
+		if (!user) return
 
 		const initialData = async () => {
 			try {
@@ -154,7 +149,7 @@ export const RelatedAnimalsForm: FC = () => {
 						const animals = await AnimalsService.getAnimals({
 							selectedSpecies: selectedAnimal.species,
 							search: '',
-							farmUuid: user.farmUuid,
+							farmUuid: user!.farmUuid,
 						})
 						const animalsData = animals
 							.filter((animal) => animal.uuid !== animalUuid)
@@ -215,7 +210,7 @@ export const RelatedAnimalsForm: FC = () => {
 				unsubscribe()
 			}
 		}
-	}, [])
+	}, [user])
 	return (
 		<S.Container>
 			<S.AnimalsContainer

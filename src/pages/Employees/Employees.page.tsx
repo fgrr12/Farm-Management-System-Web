@@ -56,16 +56,18 @@ export const Employees: FC = () => {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		setHeaderTitle('Employees')
-		if (!user || user.role === 'employee') {
+		if (!user) return
+		if (user && user.role === 'employee') {
 			navigate(AppRoutes.LOGIN)
 			return
 		}
 		initialData()
-	}, [])
+	}, [user])
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		const debounceId = setTimeout(() => {
+			if (!user) return
 			getEmployees()
 		}, 500)
 		return () => clearTimeout(debounceId)

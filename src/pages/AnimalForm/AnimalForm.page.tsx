@@ -130,15 +130,13 @@ export const AnimalForm = () => {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		setHeaderTitle(t('addAnimal.title'))
-		if (!user) {
-			navigate(AppRoutes.LOGIN)
-			return
+		if (user) {
+			setSpecies(farm!.species)
+			if (params.animalUuid) {
+				getAnimal()
+			}
 		}
-		setSpecies(farm!.species)
-		if (params.animalUuid) {
-			getAnimal()
-		}
-	}, [])
+	}, [user])
 
 	return (
 		<S.Container>

@@ -1,6 +1,4 @@
-import { AppRoutes } from '@/config/constants/routes'
 import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 import { ActionButton } from '@/components/ui/ActionButton'
 import { Button } from '@/components/ui/Button'
@@ -21,7 +19,6 @@ export const MyAccount: FC = () => {
 	const { user: currentUser, setUser: updateUser } = useUserStore()
 	const { farm: currentFarm, setFarm: updateFarm } = useFarmStore()
 	const { defaultModalData, setHeaderTitle, setModalData } = useAppStore()
-	const navigate = useNavigate()
 
 	const [user, setUser] = useState<User>(INITIAL_USER_DATA)
 	const [farm, setFarm] = useState<FarmData>(INITIAL_FARM_DATA)
@@ -83,14 +80,12 @@ export const MyAccount: FC = () => {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: useEffect is only called once
 	useEffect(() => {
 		setHeaderTitle('My Account')
-		if (!user || !currentFarm) {
-			navigate(AppRoutes.LOGIN)
-			return
-		}
+		if (!user || !currentFarm) return
+
 		const species = currentFarm!.species.join(',') || ''
 		setUser(currentUser!)
 		setFarm({ ...currentFarm!, species })
-	}, [])
+	}, [user, currentFarm])
 	return (
 		<S.MyAccount>
 			<S.MyAccountBody>

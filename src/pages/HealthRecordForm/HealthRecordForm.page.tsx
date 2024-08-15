@@ -110,17 +110,15 @@ export const HealthRecordForm = () => {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		setHeaderTitle(t('addHealthRecord.title'))
-		if (!user) {
-			navigate(AppRoutes.LOGIN)
-			return
+		if (user) {
+			const animalUuid = params.animalUuid ?? ''
+			const type = healthRecordTypes[0]
+			setHealthRecordForm((prev) => ({ ...prev, animalUuid, type }))
+			if (params.healthRecordUuid) {
+				getHealthRecord()
+			}
 		}
-		const animalUuid = params.animalUuid ?? ''
-		const type = healthRecordTypes[0]
-		setHealthRecordForm((prev) => ({ ...prev, animalUuid, type }))
-		if (params.healthRecordUuid) {
-			getHealthRecord()
-		}
-	}, [])
+	}, [user])
 
 	return (
 		<S.Container>

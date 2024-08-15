@@ -56,26 +56,16 @@ export const Tasks = () => {
 			console.error(error)
 		}
 	}
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
-	useEffect(() => {
-		setHeaderTitle('Tasks')
-		if (!user) {
-			navigate(AppRoutes.LOGIN)
-			return
-		}
-	}, [])
-
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect used to update tasks list
 	useEffect(() => {
-		if (user) {
-			getTasks()
-		}
-	}, [filters.priority, filters.species, filters.status])
+		setHeaderTitle('Tasks')
+		if (user) getTasks()
+	}, [user, filters.priority, filters.species, filters.status])
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		const debounceId = setTimeout(() => {
+			if (!user) return
 			getTasks()
 		}, 500)
 		return () => clearTimeout(debounceId)
