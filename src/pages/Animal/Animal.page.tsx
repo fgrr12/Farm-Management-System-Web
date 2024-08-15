@@ -117,6 +117,7 @@ export const Animal: FC = () => {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		setMobile(window.innerWidth <= 768)
+		setHeaderTitle('Animal')
 		getInitialData()
 	}, [params.animalUuid])
 

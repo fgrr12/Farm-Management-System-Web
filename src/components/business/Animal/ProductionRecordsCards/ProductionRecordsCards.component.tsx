@@ -57,7 +57,10 @@ export const ProductionRecordsCards: FC<ProductionRecordsCardsProps> = ({
 					<S.CardContent>
 						<div>
 							<S.CardLabel>Quantity</S.CardLabel>
-							<S.CardValue>{productionRecord.quantity}</S.CardValue>
+							<S.CardValue>
+								{productionRecord.quantity}
+								{farm?.liquidUnit}
+							</S.CardValue>
 						</div>
 						<div>
 							<S.CardLabel>Notes</S.CardLabel>

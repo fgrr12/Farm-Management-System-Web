@@ -86,7 +86,7 @@ export const HealthRecordsCards: FC<HealthRecordsCardsProps> = ({
 									<S.CardLabel>Temperature</S.CardLabel>
 									<S.CardValue>
 										{healthRecord.temperature}
-										°F
+										{farm?.temperatureUnit}
 									</S.CardValue>
 								</div>
 							)}
