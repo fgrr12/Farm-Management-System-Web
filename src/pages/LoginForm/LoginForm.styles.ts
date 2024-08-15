@@ -60,3 +60,21 @@ export const Or = styled.p`
         background-color: #333;
     }
 `
+
+export const GoogleButton = styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+        background-color: #f1f1f1;
+    }
+`

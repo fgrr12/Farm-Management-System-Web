@@ -69,7 +69,10 @@ export const LoginForm: FC = () => {
 					<Button type="submit">Login</Button>
 				</S.Form>
 				<S.Or>Or</S.Or>
-				<Button onClick={handleGoogleLogin}>Login with Google</Button>
+				<S.GoogleButton onClick={handleGoogleLogin}>
+					<i className="i-logos-google-icon" />
+					Login with Google
+				</S.GoogleButton>
 			</S.Card>
 		</S.Container>
 	)
