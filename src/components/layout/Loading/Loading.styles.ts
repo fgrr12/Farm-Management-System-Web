@@ -1,5 +1,14 @@
 import { colors } from '@/styles/variables'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
+
+const BackgroundTransparency = keyframes`
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0.9;
+	}
+`
 
 export const Loading = styled.dialog`
 	position: fixed;
@@ -10,15 +19,89 @@ export const Loading = styled.dialog`
 	border: none;
 	overflow: hidden;
 	&::backdrop {
-		background-color: rgba(0, 0, 0, 0.35);
+		background-color: ${colors.primary[400]};
+		animation: ${BackgroundTransparency} 2s ease infinite;
+		animation-direction: alternate;
 	}
 `
 
-export const Spinner = styled.div`
-	width: 5rem;
-	height: 5rem;
-	border: 0.5rem solid ${colors.primary[600]};
-	border-top-color: transparent;
-	border-radius: 50%;
-	animation: spin 1.5s linear infinite;
+export const XSpinner = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100px;
+	padding: 70px;
+	perspective: 1000px;
+`
+
+const slideInLeft = keyframes`
+	from {
+		transform: translateX(-100%);
+	}
+	to {
+		transform: translateX(0);
+	}
+`
+
+export const Icon = styled.i`
+	width: 4rem;
+	height: 4rem;
+	margin: 0 10px;
+	animation: ${slideInLeft} 1s ease infinite;
+	animation-direction: alternate;
+
+	&:nth-child(1) {
+		animation-delay: 0s;
+	}
+	&:nth-child(2) {
+		animation-delay: 0.1s;
+	}
+	&:nth-child(3) {
+		animation-delay: 0.2s;
+	}
+	&:nth-child(4) {
+		animation-delay: 0.3s;
+	}
+`
+
+const enlargeEveryLetter = keyframes`
+	from {
+		transform: scale(1);
+	}
+	to {
+		transform: scale(1.2);
+	}
+`
+
+export const TextContainer = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 50px;
+`
+
+export const Letter = styled.h2`
+	color: ${colors.white};
+	font-size: 2rem;
+	margin: 0 5px;
+`
+
+export const Dot = styled.span`
+	color: ${colors.white};
+	text-align: center;
+	font-size: 3rem;
+	margin: 0 5px;
+	animation: ${enlargeEveryLetter} 1s ease infinite;
+	animation-direction: alternate;
+
+	&:nth-child(1) {
+		animation-delay: 0s;
+	}
+	&:nth-child(2) {
+		animation-delay: 0.1s;
+	}
+	&:nth-child(3) {
+		animation-delay: 0.2s;
+	}
 `
