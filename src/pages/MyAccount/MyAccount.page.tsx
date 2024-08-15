@@ -18,7 +18,7 @@ import * as S from './MyAccount.styles'
 export const MyAccount: FC = () => {
 	const { user: currentUser, setUser: updateUser } = useUserStore()
 	const { farm: currentFarm, setFarm: updateFarm } = useFarmStore()
-	const { defaultModalData, setHeaderTitle, setModalData } = useAppStore()
+	const { defaultModalData, setHeaderTitle, setModalData, setLoading } = useAppStore()
 
 	const [user, setUser] = useState<User>(INITIAL_USER_DATA)
 	const [farm, setFarm] = useState<FarmData>(INITIAL_FARM_DATA)
@@ -48,33 +48,60 @@ export const MyAccount: FC = () => {
 
 	const handleSubmitUser = async (e: FormEvent) => {
 		e.preventDefault()
-		await UserService.updateUser(user)
-		updateUser(user)
-		setEdit((prev) => ({ ...prev, user: false }))
-		setModalData({
-			open: true,
-			title: 'User Updated',
-			message: 'Your user has been updated successfully',
-			onAccept: () => {
-				setModalData(defaultModalData)
-			},
-		})
+		try {
+			await UserService.updateUser(user)
+			updateUser(user)
+			setEdit((prev) => ({ ...prev, user: false }))
+			setModalData({
+				open: true,
+				title: 'User Updated',
+				message: 'Your user has been updated successfully',
+				onAccept: () => {
+					setModalData(defaultModalData)
+				},
+			})
+		} catch (error) {
+			setModalData({
+				open: true,
+				title: 'Error',
+				message: 'There was an error updating the user',
+				onAccept: () => {
+					setModalData(defaultModalData)
+				},
+			})
+		} finally {
+			setLoading(false)
+		}
 	}
 
 	const handleSubmitFarm = async (e: FormEvent) => {
 		e.preventDefault()
-		const species = farm.species.split(',')
-		await FarmsService.updateFarm({ ...farm, species })
-		updateFarm({ ...farm, species })
-		setEdit((prev) => ({ ...prev, farm: false }))
-		setModalData({
-			open: true,
-			title: 'Farm Updated',
-			message: 'Your farm has been updated successfully',
-			onAccept: () => {
-				setModalData(defaultModalData)
-			},
-		})
+		try {
+			setLoading(true)
+			const species = farm.species.split(',')
+			await FarmsService.updateFarm({ ...farm, species })
+			updateFarm({ ...farm, species })
+			setEdit((prev) => ({ ...prev, farm: false }))
+			setModalData({
+				open: true,
+				title: 'Farm Updated',
+				message: 'Your farm has been updated successfully',
+				onAccept: () => {
+					setModalData(defaultModalData)
+				},
+			})
+		} catch (error) {
+			setModalData({
+				open: true,
+				title: 'Error',
+				message: 'There was an error updating the farm',
+				onAccept: () => {
+					setModalData(defaultModalData)
+				},
+			})
+		} finally {
+			setLoading(false)
+		}
 	}
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: useEffect is only called once

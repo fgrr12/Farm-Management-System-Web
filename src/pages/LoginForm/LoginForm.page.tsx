@@ -6,6 +6,7 @@ import { TextField } from '@/components/ui/TextField'
 
 import { AppRoutes } from '@/config/constants/routes'
 import { UserService } from '@/services/user'
+import { useAppStore } from '@/store/useAppStore'
 import { useUserStore } from '@/store/useUserStore'
 
 import type { LoginCredentials } from './LoginForm.types'
@@ -14,6 +15,7 @@ import * as S from './LoginForm.styles'
 
 export const LoginForm: FC = () => {
 	const { user } = useUserStore()
+	const { setLoading } = useAppStore()
 	const navigate = useNavigate()
 	const [credentials, setCredentials] = useState(INITIAL_CREDENTIALS)
 
@@ -34,7 +36,9 @@ export const LoginForm: FC = () => {
 		navigate(AppRoutes.ANIMALS)
 	}
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
+		setLoading(false)
 		if (user) {
 			navigate(AppRoutes.ANIMALS)
 		}

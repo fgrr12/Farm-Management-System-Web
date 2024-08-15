@@ -17,7 +17,7 @@ import type { DividedTasks, TaskFilters } from './Tasks.types'
 import * as S from './Tasks.styles'
 
 export const Tasks = () => {
-	const { setHeaderTitle } = useAppStore()
+	const { setHeaderTitle, setLoading } = useAppStore()
 	const { user } = useUserStore()
 	const { farm } = useFarmStore()
 	const navigate = useNavigate()
@@ -46,6 +46,7 @@ export const Tasks = () => {
 
 	const getTasks = async () => {
 		try {
+			setLoading(true)
 			const { search, status, priority, species } = filters
 			const farmUuid = farm!.uuid
 			const tasks = await TasksService.getTasks({ search, status, priority, species, farmUuid })
@@ -54,6 +55,8 @@ export const Tasks = () => {
 			setTasks({ pending: pendingTasks, completed: completedTasks })
 		} catch (error) {
 			console.error(error)
+		} finally {
+			setLoading(false)
 		}
 	}
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect used to update tasks list
@@ -62,11 +65,10 @@ export const Tasks = () => {
 		if (user) getTasks()
 	}, [user, filters.priority, filters.species, filters.status])
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
+	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only watching for search changes
 	useEffect(() => {
 		const debounceId = setTimeout(() => {
-			if (!user) return
-			getTasks()
+			if (user && (tasks.pending || tasks.completed)) getTasks()
 		}, 500)
 		return () => clearTimeout(debounceId)
 	}, [filters.search])

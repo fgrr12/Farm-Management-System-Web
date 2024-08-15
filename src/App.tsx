@@ -35,7 +35,12 @@ import { AppContainer, AppContent } from './styles/root'
 export const App: FC = () => {
 	const { setUser } = useUserStore()
 	const { setFarm } = useFarmStore()
-	const { loading: appLoading, defaultModalData: modalData, topHeaderHeight } = useAppStore()
+	const {
+		loading: appLoading,
+		defaultModalData: modalData,
+		topHeaderHeight,
+		setLoading,
+	} = useAppStore()
 	const { i18n } = useTranslation()
 	const navigate = useNavigate()
 	const location = useLocation()
@@ -44,12 +49,14 @@ export const App: FC = () => {
 	useEffect(() => {
 		i18n.changeLanguage(navigator.language === 'en' ? 'eng' : 'spa')
 		onAuthStateChanged(auth, async (authUser) => {
+			setLoading(true)
 			if (!authUser) {
 				setUser(null)
+				setFarm(null)
+				setLoading(false)
 				if (location.pathname !== AppRoutes.ANIMAL) {
 					navigate(AppRoutes.LOGIN)
 				}
-
 				return
 			}
 			const user = await UserService.getUser(authUser!.uid)
@@ -57,6 +64,7 @@ export const App: FC = () => {
 			i18n.changeLanguage(user?.language || 'spa')
 			setUser(user)
 			setFarm(farm)
+			setLoading(false)
 		})
 	}, [setUser])
 	return (
