@@ -29,6 +29,13 @@ export module TasksService {
 			response = response.filter((task) => task.title.toLowerCase().includes(search.toLowerCase()))
 		}
 
+		response = response.sort(
+			(a, b) =>
+				dayjs(b.createdAt).diff(dayjs(a.createdAt)) &&
+				['high', 'medium', 'low'].indexOf(a.priority) -
+					['high', 'medium', 'low'].indexOf(b.priority)
+		)
+
 		return response
 	}
 

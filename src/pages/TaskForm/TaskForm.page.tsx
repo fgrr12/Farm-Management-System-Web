@@ -74,9 +74,9 @@ export const TaskForm = () => {
 					<option value="" disabled>
 						Select a priority
 					</option>
-					<option value="low">Low</option>
-					<option value="medium">Medium</option>
-					<option value="high">High</option>
+					<S.PriorityOption $priority="low">Low</S.PriorityOption>
+					<S.PriorityOption $priority="medium">Medium</S.PriorityOption>
+					<S.PriorityOption $priority="high">High</S.PriorityOption>
 				</Select>
 				<Select
 					name="species"
@@ -105,7 +105,7 @@ const INITIAL_TASK: Task = {
 	title: '',
 	description: '',
 	priority: '',
-	status: '',
+	status: 'PENDING',
 	species: '',
 	farmUuid: '',
 }

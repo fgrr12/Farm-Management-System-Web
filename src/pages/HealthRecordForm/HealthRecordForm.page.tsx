@@ -174,6 +174,7 @@ export const HealthRecordForm = () => {
 					label={`${t('addHealthRecord.temperature')} (${farm?.temperatureUnit})`}
 					value={healthRecordForm.temperature}
 					onChange={handleTextChange}
+					onWheel={(e) => e.currentTarget.blur()}
 				/>
 				<TextField
 					name="medication"

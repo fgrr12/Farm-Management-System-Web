@@ -24,3 +24,18 @@ export const Form = styled.form`
         border: none;
     }
 `
+
+export const PriorityOption = styled.option<{ $priority: string }>`
+    background-color: ${({ $priority }) => {
+			switch ($priority) {
+				case 'low':
+					return 'green'
+				case 'medium':
+					return 'orange'
+				case 'high':
+					return 'red'
+				default:
+					return 'grey'
+			}
+		}};
+`
