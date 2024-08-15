@@ -7,18 +7,18 @@ export const Loading: FC<LoadingProps> = ({ open, ...rest }) => {
 
 	return (
 		<S.Loading ref={loadingRef} {...rest}>
-			<S.XSpinner>
-				<S.Icon className="i-fluent-emoji-flat-cow" />
-				<S.Icon className="i-emojione-chicken" />
-				<S.Icon className="i-fxemoji-sheep" />
-				<S.Icon className="i-emojione-goat" />
-			</S.XSpinner>
 			<S.TextContainer>
 				<S.Letter>Loading</S.Letter>
 				<S.Dot>.</S.Dot>
 				<S.Dot>.</S.Dot>
 				<S.Dot>.</S.Dot>
 			</S.TextContainer>
+			<S.XSpinner>
+				<S.Icon className="i-fluent-emoji-flat-cow" />
+				<S.Icon className="i-emojione-chicken" />
+				<S.Icon className="i-fxemoji-sheep" />
+				<S.Icon className="i-emojione-goat" />
+			</S.XSpinner>
 		</S.Loading>
 	)
 }

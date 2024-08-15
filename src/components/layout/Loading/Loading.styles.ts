@@ -25,13 +25,55 @@ export const Loading = styled.dialog`
 	}
 `
 
+const enlargeEveryLetter = keyframes`
+	from {
+		transform: scale(1);
+	}
+	to {
+		transform: scale(1.2);
+	}
+`
+
+export const TextContainer = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 50px;
+	margin-bottom: 20px;
+`
+
+export const Letter = styled.h2`
+	color: ${colors.white};
+	font-size: 2rem;
+	margin: 0 5px;
+`
+
+export const Dot = styled.span`
+	color: ${colors.white};
+	text-align: center;
+	font-size: 3rem;
+	margin: 0 5px;
+	animation: ${enlargeEveryLetter} 1s ease infinite;
+	animation-direction: alternate;
+
+	&:nth-child(1) {
+		animation-delay: 0s;
+	}
+	&:nth-child(2) {
+		animation-delay: 0.1s;
+	}
+	&:nth-child(3) {
+		animation-delay: 0.2s;
+	}
+`
+
 export const XSpinner = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	width: 100%;
 	height: 100px;
-	padding: 70px;
+	padding: 0 70px;
 	perspective: 1000px;
 `
 
@@ -62,46 +104,5 @@ export const Icon = styled.i`
 	}
 	&:nth-child(4) {
 		animation-delay: 0.3s;
-	}
-`
-
-const enlargeEveryLetter = keyframes`
-	from {
-		transform: scale(1);
-	}
-	to {
-		transform: scale(1.2);
-	}
-`
-
-export const TextContainer = styled.div`
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 50px;
-`
-
-export const Letter = styled.h2`
-	color: ${colors.white};
-	font-size: 2rem;
-	margin: 0 5px;
-`
-
-export const Dot = styled.span`
-	color: ${colors.white};
-	text-align: center;
-	font-size: 3rem;
-	margin: 0 5px;
-	animation: ${enlargeEveryLetter} 1s ease infinite;
-	animation-direction: alternate;
-
-	&:nth-child(1) {
-		animation-delay: 0s;
-	}
-	&:nth-child(2) {
-		animation-delay: 0.1s;
-	}
-	&:nth-child(3) {
-		animation-delay: 0.2s;
 	}
 `
