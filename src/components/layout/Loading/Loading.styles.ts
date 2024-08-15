@@ -71,18 +71,16 @@ export const XSpinner = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	width: 100%;
+	width: 100vw;
 	height: 100px;
-	padding: 0 70px;
-	perspective: 1000px;
 `
 
 const slideInLeft = keyframes`
 	from {
-		transform: translateX(-100%);
+		transform: translateX(4rem);
 	}
 	to {
-		transform: translateX(0);
+		transform: translateX(-6rem); 
 	}
 `
 
