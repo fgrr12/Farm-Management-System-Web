@@ -64,16 +64,14 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 				<Table.Body>
 					{productionRecords.map((productionRecord) => (
 						<Table.Row key={crypto.randomUUID()}>
-							<Table.Cell data-title="Date">
-								{dayjs(productionRecord.date).format('MM/DD/YYYY')}
-							</Table.Cell>
-							<Table.Cell data-title="Quantity">
+							<Table.Cell>{dayjs(productionRecord.date).format('MM/DD/YYYY')}</Table.Cell>
+							<Table.Cell>
 								{productionRecord.quantity}
 								{farm!.liquidUnit}
 							</Table.Cell>
-							<Table.Cell data-title="Notes">{productionRecord.notes}</Table.Cell>
+							<Table.Cell>{productionRecord.notes}</Table.Cell>
 							{user && (
-								<Table.Cell data-title="Actions">
+								<Table.Cell>
 									<ActionButton
 										title="Edit"
 										icon="i-material-symbols-edit-square-outline"

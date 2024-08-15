@@ -72,27 +72,25 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 				<Table.Body>
 					{healthRecords.map((healthRecord) => (
 						<Table.Row key={crypto.randomUUID()}>
-							<Table.Cell data-title="Reason">{healthRecord.reason}</Table.Cell>
-							<Table.Cell data-title="Notes">{healthRecord.notes}</Table.Cell>
-							<Table.Cell data-title="Type">{healthRecord.type}</Table.Cell>
-							<Table.Cell data-title="Reviewed By">{healthRecord.reviewedBy}</Table.Cell>
-							<Table.Cell data-title="Date">
-								{dayjs(healthRecord.date).format('MM/DD/YYYY')}
-							</Table.Cell>
-							<Table.Cell data-title="Weight">
+							<Table.Cell>{healthRecord.reason}</Table.Cell>
+							<Table.Cell>{healthRecord.notes}</Table.Cell>
+							<Table.Cell>{healthRecord.type}</Table.Cell>
+							<Table.Cell>{healthRecord.reviewedBy}</Table.Cell>
+							<Table.Cell>{dayjs(healthRecord.date).format('MM/DD/YYYY')}</Table.Cell>
+							<Table.Cell>
 								{healthRecord.weight}
 								{farm!.weightUnit}
 							</Table.Cell>
-							<Table.Cell data-title="Temperature">
+							<Table.Cell>
 								{healthRecord.temperature}
 								{farm!.temperatureUnit}
 							</Table.Cell>
-							<Table.Cell data-title="Medication">{healthRecord.medication}</Table.Cell>
-							<Table.Cell data-title="Dosage">{healthRecord.dosage}</Table.Cell>
-							<Table.Cell data-title="Frequency">{healthRecord.frequency}</Table.Cell>
-							<Table.Cell data-title="Duration">{healthRecord.duration}</Table.Cell>
+							<Table.Cell>{healthRecord.medication}</Table.Cell>
+							<Table.Cell>{healthRecord.dosage}</Table.Cell>
+							<Table.Cell>{healthRecord.frequency}</Table.Cell>
+							<Table.Cell>{healthRecord.duration}</Table.Cell>
 							{user && (
-								<Table.Cell data-title="Actions">
+								<Table.Cell>
 									<ActionButton
 										title="Edit"
 										icon="i-material-symbols-edit-square-outline"

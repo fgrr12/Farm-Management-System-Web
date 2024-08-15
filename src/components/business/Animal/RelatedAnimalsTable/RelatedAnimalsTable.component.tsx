@@ -61,11 +61,11 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 				<Table.Body>
 					{animals?.map((animal) => (
 						<Table.Row key={crypto.randomUUID()}>
-							<Table.Cell data-title="Animal ID">{animal[type].animalId}</Table.Cell>
-							<Table.Cell data-title="Breed">{animal[type].breed}</Table.Cell>
-							<Table.Cell data-title="Relation">{animal[type].relation}</Table.Cell>
+							<Table.Cell>{animal[type].animalId}</Table.Cell>
+							<Table.Cell>{animal[type].breed}</Table.Cell>
+							<Table.Cell>{animal[type].relation}</Table.Cell>
 							{user && (
-								<Table.Cell data-title="Actions">
+								<Table.Cell>
 									<ActionButton
 										title="View"
 										icon="i-material-symbols-visibility-outline"

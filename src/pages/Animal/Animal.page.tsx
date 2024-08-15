@@ -19,6 +19,9 @@ import { useUserStore } from '@/store/useUserStore'
 
 import type { AnimalInformation } from './Animal.types'
 
+import { HealthRecordsCards } from '@/components/business/Animal/HealthRecordsCards'
+import { ProductionRecordsCards } from '@/components/business/Animal/ProductionRecordsCards'
+import { RelatedAnimalsCards } from '@/components/business/Animal/RelatedAnimalsCards'
 import { FarmsService } from '@/services/farms'
 import * as S from './Animal.styles'
 
@@ -31,6 +34,7 @@ export const Animal: FC = () => {
 
 	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
 	const [animal, setAnimal] = useState<AnimalInformation>(ANIMAL_INITIAL_STATE)
+	const [mobile, setMobile] = useState(false)
 
 	const handleEditAnimal = () => {
 		navigate(AppRoutes.EDIT_ANIMAL.replace(':animalUuid', animal.uuid))
@@ -112,6 +116,7 @@ export const Animal: FC = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
+		setMobile(window.innerWidth <= 768)
 		getInitialData()
 	}, [params.animalUuid])
 
@@ -192,34 +197,70 @@ export const Animal: FC = () => {
 				</S.ImageContainer>
 			</S.AnimalContainer>
 
-			<HealthRecordsTable
-				healthRecords={animal?.healthRecords || []}
-				user={user}
-				removeHealthRecord={handleRemoveHealthRecord}
-			/>
+			{mobile ? (
+				<HealthRecordsCards
+					healthRecords={animal?.healthRecords || []}
+					user={user}
+					removeHealthRecord={handleRemoveHealthRecord}
+				/>
+			) : (
+				<HealthRecordsTable
+					healthRecords={animal?.healthRecords || []}
+					user={user}
+					removeHealthRecord={handleRemoveHealthRecord}
+				/>
+			)}
 
 			<S.InfoTableContainer>
-				<ProductionRecordsTable
-					productionRecords={animal?.productionRecords || []}
-					user={user}
-					removeProductionRecord={handleRemoveProductionRecord}
-				/>
+				{mobile ? (
+					<ProductionRecordsCards
+						productionRecords={animal?.productionRecords || []}
+						user={user}
+						removeProductionRecord={handleRemoveProductionRecord}
+					/>
+				) : (
+					<ProductionRecordsTable
+						productionRecords={animal?.productionRecords || []}
+						user={user}
+						removeProductionRecord={handleRemoveProductionRecord}
+					/>
+				)}
 
-				<RelatedAnimalsTable
-					title={t('animal.parentsTitle')}
-					animals={animal?.relatedAnimals?.parents || []}
-					user={user}
-					type="parent"
-					removeRelation={handleRemoveRelation}
-				/>
-
-				<RelatedAnimalsTable
-					title={t('animal.childrenTitle')}
-					animals={animal?.relatedAnimals?.children || []}
-					user={user}
-					type="child"
-					removeRelation={handleRemoveRelation}
-				/>
+				{mobile ? (
+					<>
+						<RelatedAnimalsCards
+							title={t('animal.parentsTitle')}
+							animals={animal?.relatedAnimals?.parents || []}
+							user={user}
+							type="parent"
+							removeRelation={handleRemoveRelation}
+						/>
+						<RelatedAnimalsCards
+							title={t('animal.childrenTitle')}
+							animals={animal?.relatedAnimals?.children || []}
+							user={user}
+							type="child"
+							removeRelation={handleRemoveRelation}
+						/>
+					</>
+				) : (
+					<>
+						<RelatedAnimalsTable
+							title={t('animal.parentsTitle')}
+							animals={animal?.relatedAnimals?.parents || []}
+							user={user}
+							type="parent"
+							removeRelation={handleRemoveRelation}
+						/>
+						<RelatedAnimalsTable
+							title={t('animal.childrenTitle')}
+							animals={animal?.relatedAnimals?.children || []}
+							user={user}
+							type="child"
+							removeRelation={handleRemoveRelation}
+						/>
+					</>
+				)}
 			</S.InfoTableContainer>
 		</S.Container>
 	)

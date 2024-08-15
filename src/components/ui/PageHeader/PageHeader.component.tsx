@@ -33,7 +33,7 @@ export const PageHeader: FC = () => {
 		const element = document.getElementById('pageHeader')
 		const height = element?.clientHeight
 		setTopHeaderHeight(height || 0)
-	}, [location])
+	}, [farm, location])
 
 	return (
 		<S.PageHeader id="pageHeader" $backButtonHidden={backButtonHidden}>
