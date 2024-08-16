@@ -85,8 +85,8 @@ const slideInLeft = keyframes`
 `
 
 export const Icon = styled.i`
-	width: 4rem;
-	height: 4rem;
+	width: 3rem;
+	height: 3rem;
 	margin: 0 10px;
 	animation: ${slideInLeft} 1s ease infinite;
 	animation-direction: alternate;
