@@ -28,8 +28,8 @@ export const PasswordField: FC<TextFieldProps> = ({ className, label, ...rest })
 				}
 				onClick={handleClick}
 			/>
-			<S.TextField id="textfield-input" type={showPassword ? 'text' : 'password'} {...rest} />
-			{label && <S.Label htmlFor="textfield-input">{label}</S.Label>}
+			<S.TextField id="passwordField-input" type={showPassword ? 'text' : 'password'} {...rest} />
+			{label && <S.Label htmlFor="passwordField-input">{label}</S.Label>}
 		</S.TextFieldContainer>
 	)
 }

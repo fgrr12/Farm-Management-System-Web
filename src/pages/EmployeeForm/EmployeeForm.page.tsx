@@ -136,4 +136,6 @@ const INITIAL_EMPLOYEE_DATA: RegisterEmployeeForm = {
 	status: true,
 	farmUuid: '',
 	createdBy: '',
+	photoUrl: '',
+	language: 'spa',
 }
