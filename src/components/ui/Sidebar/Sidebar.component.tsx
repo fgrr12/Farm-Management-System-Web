@@ -4,12 +4,14 @@ import { useNavigate } from 'react-router-dom'
 import { AppRoutes } from '@/config/constants/routes'
 import { UserService } from '@/services/user'
 import { useAppStore } from '@/store/useAppStore'
+import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
 import * as S from './Sidebar.styles'
 
 export const Sidebar: FC = () => {
-	const { user } = useUserStore()
+	const { user, setUser } = useUserStore()
+	const { setFarm } = useFarmStore()
 	const navigate = useNavigate()
 	const { collapseSidebar, setCollapseSidebar } = useAppStore()
 	const { t } = useTranslation('common')
@@ -29,6 +31,8 @@ export const Sidebar: FC = () => {
 	const handleLogout = async () => {
 		if (!user) return
 		await UserService.logout()
+		setUser(null)
+		setFarm(null)
 		navigate(AppRoutes.LOGIN)
 	}
 
