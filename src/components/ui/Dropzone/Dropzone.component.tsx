@@ -8,16 +8,15 @@ import {
 } from 'react'
 import { useTranslation } from 'react-i18next'
 
-// Types
 import type { DropEvent, DropzoneProps } from './Dropzone.types'
 
-// Styles
 import * as S from './Dropzone.styles'
 
 export const Dropzone: FC<DropzoneProps> = ({ cleanFile, pictureUrl, onFile, ...rest }) => {
-	const { t } = useTranslation()
+	const { t } = useTranslation(['dropzone'])
+
 	const inputRef = useRef<HTMLInputElement>(null)
-	const [labelText, setLabelText] = useState<string>(t('dropzone.nonDrag'))
+	const [labelText, setLabelText] = useState<string>(t('nonDrag'))
 	const [url, setUrl] = useState<string>('')
 	const [hasImg, setHasImg] = useState<boolean>(false)
 
@@ -32,22 +31,22 @@ export const Dropzone: FC<DropzoneProps> = ({ cleanFile, pictureUrl, onFile, ...
 		const files = getFileList(event)
 		if (files.length && isImage(files[0])) {
 			onFile(files[0], event)
-			setLabelText(t('dropzone.selected'))
+			setLabelText(t('selected'))
 			setHasImg(true)
 			setUrl(URL.createObjectURL(files[0]))
 		} else {
-			setLabelText(t('dropzone.invalid'))
+			setLabelText(t('invalid'))
 		}
 	}
 
 	const handleDragEnter = (event: MouseEvent<HTMLDivElement>) => {
 		event.preventDefault()
-		setLabelText(t('dropzone.drag'))
+		setLabelText(t('drag'))
 	}
 
 	const handleDragLeave = (event: MouseEvent<HTMLDivElement>) => {
 		event.preventDefault()
-		setLabelText(t('dropzone.nonDrag'))
+		setLabelText(t('nonDrag'))
 	}
 
 	const handleStopPropagation = (event: MouseEvent<HTMLDivElement>) => {
@@ -56,7 +55,7 @@ export const Dropzone: FC<DropzoneProps> = ({ cleanFile, pictureUrl, onFile, ...
 
 	const removeImage = () => {
 		inputRef.current!.value = ''
-		setLabelText(t('dropzone.nonDrag'))
+		setLabelText(t('nonDrag'))
 		setHasImg(false)
 		setUrl('')
 	}

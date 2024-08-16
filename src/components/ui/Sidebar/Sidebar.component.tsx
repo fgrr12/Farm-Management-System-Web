@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
@@ -11,6 +12,7 @@ export const Sidebar: FC = () => {
 	const { user } = useUserStore()
 	const navigate = useNavigate()
 	const { collapseSidebar, setCollapseSidebar } = useAppStore()
+	const { t } = useTranslation('common')
 
 	const handleCheckPath = (path: string) => {
 		return location.pathname.includes(path)
@@ -41,7 +43,7 @@ export const Sidebar: FC = () => {
 						onClick={() => handleGoTo(AppRoutes.ANIMALS)}
 					>
 						<S.Icon className="i-healthicons-animal-cow" $collapse={collapseSidebar} />
-						{!collapseSidebar && 'Animals'}
+						{!collapseSidebar && t('sidebar.animals')}
 					</S.SidebarMenuItem>
 					<S.SidebarMenuItem
 						$collapse={collapseSidebar}
@@ -50,7 +52,7 @@ export const Sidebar: FC = () => {
 						onClick={() => handleGoTo(AppRoutes.TASKS)}
 					>
 						<S.Icon className="i-fluent-tasks-app-24-filled" $collapse={collapseSidebar} />
-						{!collapseSidebar && 'Tasks'}
+						{!collapseSidebar && t('sidebar.tasks')}
 					</S.SidebarMenuItem>
 					{(user?.role === 'admin' || user?.role === 'owner') && (
 						<S.SidebarMenuItem
@@ -60,7 +62,7 @@ export const Sidebar: FC = () => {
 							onClick={() => handleGoTo(AppRoutes.EMPLOYEES)}
 						>
 							<S.Icon className="i-clarity-employee-group-solid" $collapse={collapseSidebar} />
-							{!collapseSidebar && 'Employees'}
+							{!collapseSidebar && t('sidebar.employees')}
 						</S.SidebarMenuItem>
 					)}
 					<S.Divider />
@@ -71,11 +73,11 @@ export const Sidebar: FC = () => {
 						onClick={() => handleGoTo(AppRoutes.MY_ACCOUNT)}
 					>
 						<S.Icon className="i-material-symbols-account-circle" $collapse={collapseSidebar} />
-						{!collapseSidebar && 'My Account'}
+						{!collapseSidebar && t('sidebar.myAccount')}
 					</S.SidebarMenuItem>
 					<S.SidebarMenuItem $collapse={collapseSidebar} $disabled={!user} onClick={handleLogout}>
 						<S.Icon className="i-material-symbols-logout" $collapse={collapseSidebar} />
-						{!collapseSidebar && 'Logout'}
+						{!collapseSidebar && t('sidebar.logout')}
 					</S.SidebarMenuItem>
 				</S.SidebarMenu>
 			</S.SidebarContent>

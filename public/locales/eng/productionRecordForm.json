@@ -1,0 +1,25 @@
+{
+	"title": "Add Production Record",
+	"quantity": "Quantity",
+	"date": "Date",
+	"notes": "Notes",
+	"addProductionRecord": "Add Production Record",
+	"modal": {
+		"addProductionRecord": {
+			"title": "Production Record Added",
+			"message": "The production record has been added successfully"
+		},
+		"editProductionRecord": {
+			"title": "Production Record Edited",
+			"message": "The production record has been edited successfully"
+		},
+		"errorGettingProductionRecord": {
+			"title": "Error",
+			"message": "There was an error getting the production record"
+		},
+		"errorAddingProductionRecord": {
+			"title": "Error",
+			"message": "There was an error adding the production record"
+		}
+	}
+}

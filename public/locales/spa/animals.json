@@ -1,0 +1,13 @@
+{
+	"title": "Animales",
+	"search": "Buscar",
+	"species": "Especies",
+	"all": "Todos",
+	"addAnimal": "Añadir animal",
+	"modal": {
+		"errorGettingAnimals": {
+			"title": "Error",
+			"message": "Ocurrió un error al obtener los animales"
+		}
+	}
+}

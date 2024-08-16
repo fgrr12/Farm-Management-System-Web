@@ -1,4 +1,5 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { Button } from '@/components/ui/Button'
@@ -15,9 +16,10 @@ import * as S from './LoginForm.styles'
 
 export const LoginForm: FC = () => {
 	const { user } = useUserStore()
-	const { setLoading } = useAppStore()
+	const { defaultModalData, setModalData, setLoading } = useAppStore()
 	const navigate = useNavigate()
 	const [credentials, setCredentials] = useState(INITIAL_CREDENTIALS)
+	const { t } = useTranslation(['loginForm'])
 
 	const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target
@@ -26,14 +28,38 @@ export const LoginForm: FC = () => {
 
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault()
-		const { email, password } = credentials
-		await UserService.loginWithEmailAndPassword(email, password)
-		navigate(AppRoutes.ANIMALS)
+		try {
+			setLoading(true)
+			const { email, password } = credentials
+			await UserService.loginWithEmailAndPassword(email, password)
+			navigate(AppRoutes.ANIMALS)
+		} catch (error) {
+			setModalData({
+				open: true,
+				title: t('modal.errorLoggingIn.title'),
+				message: t('modal.errorLoggingIn.message'),
+				onAccept: () => setModalData(defaultModalData),
+			})
+		} finally {
+			setLoading(false)
+		}
 	}
 
 	const handleGoogleLogin = async () => {
-		await UserService.loginWithGoogle()
-		navigate(AppRoutes.ANIMALS)
+		try {
+			setLoading(true)
+			await UserService.loginWithGoogle()
+			navigate(AppRoutes.ANIMALS)
+		} catch (error) {
+			setModalData({
+				open: true,
+				title: t('modal.errorLoggingIn.title'),
+				message: t('modal.errorLoggingIn.message'),
+				onAccept: () => setModalData(defaultModalData),
+			})
+		} finally {
+			setLoading(false)
+		}
 	}
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
@@ -47,30 +73,30 @@ export const LoginForm: FC = () => {
 	return (
 		<S.Container>
 			<S.Card onSubmit={handleSubmit}>
-				<S.Title>Login</S.Title>
+				<S.Title>{t('title')}</S.Title>
 				<S.Form onSubmit={handleSubmit}>
 					<TextField
 						name="email"
 						type="email"
-						placeholder="Email"
-						label="Email"
+						placeholder={t('email')}
+						label={t('email')}
 						onChange={handleTextChange}
 						required
 					/>
 					<PasswordField
 						name="password"
-						placeholder="Password"
-						label="Password"
+						placeholder={t('password')}
+						label={t('password')}
 						onChange={handleTextChange}
 						required
 					/>
-					<S.ForgotPassword to={AppRoutes.LOGIN}>Forgot your password?</S.ForgotPassword>
-					<Button type="submit">Login</Button>
+					<S.ForgotPassword to={AppRoutes.LOGIN}>{t('forgotPassword')}</S.ForgotPassword>
+					<Button type="submit">{t('login')}</Button>
 				</S.Form>
-				<S.Or>Or</S.Or>
+				<S.Or>{t('or')}</S.Or>
 				<S.GoogleButton onClick={handleGoogleLogin}>
 					<i className="i-logos-google-icon" />
-					Login with Google
+					{t('google')}
 				</S.GoogleButton>
 			</S.Card>
 		</S.Container>

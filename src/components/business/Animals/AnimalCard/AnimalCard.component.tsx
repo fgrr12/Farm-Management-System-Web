@@ -16,7 +16,7 @@ export const AnimalCard: FC<CardProps> = ({
 	color: animalColor,
 	...props
 }) => {
-	const { t } = useTranslation()
+	const { t } = useTranslation(['animalCard'])
 	return (
 		<S.Card {...props}>
 			<S.TopInfoContainer>
@@ -25,16 +25,16 @@ export const AnimalCard: FC<CardProps> = ({
 			</S.TopInfoContainer>
 			<S.MiddleInfoContainer>
 				<p>
-					{t('animalCard.birthDate')}: {dayjs(animalBirthDate).format('DD/MM/YYYY')}
+					{t('birthDate')}: {dayjs(animalBirthDate).format('DD/MM/YYYY')}
 				</p>
 				<p>
-					{t('animalCard.gender')}: {t(`gender.${animalGender.toLowerCase()}`)}
+					{t('gender')}: {t(`genderList.${animalGender.toLowerCase()}`)}
 				</p>
 				<p>
-					{t('animalCard.color')}: {animalColor}
+					{t('color')}: {animalColor}
 				</p>
 			</S.MiddleInfoContainer>
-			<Button>{t('animalCard.view')}</Button>
+			<Button>{t('view')}</Button>
 		</S.Card>
 	)
 }

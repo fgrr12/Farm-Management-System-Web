@@ -1,0 +1,11 @@
+{
+	"title": "Crear relaciones",
+	"parentsTitle": "Padres",
+	"childrenTitle": "Hijos",
+	"modal": {
+		"errorGettingAnimals": {
+			"title": "Error",
+			"message": "Ocurrió un error al obtener los animales"
+		}
+	}
+}

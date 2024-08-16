@@ -1,0 +1,10 @@
+{
+	"birthDate": "Fecha de nacimiento",
+	"gender": "Género",
+	"color": "Color",
+	"view": "Ver",
+	"genderList": {
+		"male": "Macho",
+		"female": "Hembra"
+	}
+}

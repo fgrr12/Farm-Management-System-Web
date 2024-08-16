@@ -30,7 +30,7 @@ export const Animal: FC = () => {
 	const { farm, setFarm } = useFarmStore()
 	const navigate = useNavigate()
 	const params = useParams()
-	const { t } = useTranslation()
+	const { t } = useTranslation(['animal'])
 
 	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
 	const [animal, setAnimal] = useState<AnimalInformation>(ANIMAL_INITIAL_STATE)
@@ -43,8 +43,8 @@ export const Animal: FC = () => {
 	const handleRemoveAnimal = async () => {
 		setModalData({
 			open: true,
-			title: 'Do you want to delete this animal?',
-			message: 'This action cannot be undone.',
+			title: t('modal.removeAnimal.title'),
+			message: t('modal.removeAnimal.message'),
 			onAccept: async () => {
 				setLoading(true)
 				await AnimalsService.deleteAnimal(animal.uuid, false)
@@ -106,8 +106,8 @@ export const Animal: FC = () => {
 		} catch (error) {
 			setModalData({
 				open: true,
-				title: 'Error',
-				message: 'Ocurrió un error al obtener el animal',
+				title: t('modal.errorGettingAnimal.title'),
+				message: t('modal.errorGettingAnimal.message'),
 				onAccept: () => defaultModalData,
 			})
 		} finally {
@@ -127,7 +127,7 @@ export const Animal: FC = () => {
 			<S.AnimalContainer>
 				<S.InfoContainer>
 					<S.CenterTitle>
-						<S.Label>{t('animal.animalId')}</S.Label>
+						<S.Label>{t('animalId')}</S.Label>
 						{user && (
 							<ActionButton
 								title="Edit"
@@ -149,45 +149,45 @@ export const Animal: FC = () => {
 							<S.Value>{animal.animalId}</S.Value>
 						</div>
 						<div>
-							<S.Label>{t('animal.species')}</S.Label>
-							<S.Value>{t(`animal.speciesList.${animal.species.toLowerCase()}`)}</S.Value>
+							<S.Label>{t('species')}</S.Label>
+							<S.Value>{animal.species}</S.Value>
 						</div>
 						<div>
-							<S.Label>{t('animal.breed')}</S.Label>
+							<S.Label>{t('breed')}</S.Label>
 							<S.Value>{animal.breed}</S.Value>
 						</div>
 						<div>
-							<S.Label>{t('animal.gender')}</S.Label>
-							<S.Value>{animal.gender}</S.Value>
+							<S.Label>{t('gender')}</S.Label>
+							<S.Value>{t(`genderList.${animal.gender.toLowerCase()}`)}</S.Value>
 						</div>
 						<div>
-							<S.Label>{t('animal.color')}</S.Label>
+							<S.Label>{t('color')}</S.Label>
 							<S.Value>{animal.color}</S.Value>
 						</div>
 						<div>
-							<S.Label>{t('animal.weight')}</S.Label>
+							<S.Label>{t('weight')}</S.Label>
 							<S.Value>
 								{animal.weight}
 								{farm?.weightUnit}
 							</S.Value>
 						</div>
 						<div>
-							<S.Label>{t('animal.birthDate')}</S.Label>
+							<S.Label>{t('birthDate')}</S.Label>
 							<S.Value>{dayjs(animal.birthDate).format('MM/DD/YYYY')}</S.Value>
 						</div>
 						<div>
-							<S.Label>{t('animal.purchaseDate')}</S.Label>
+							<S.Label>{t('purchaseDate')}</S.Label>
 							<S.Value>{dayjs(animal.purchaseDate).format('MM/DD/YYYY')}</S.Value>
 						</div>
 						{animal.soldDate && (
 							<div>
-								<S.Label>{t('animal.soldDate')}</S.Label>
+								<S.Label>{t('soldDate')}</S.Label>
 								<S.Value>{dayjs(animal.soldDate).format('MM/DD/YYYY')}</S.Value>
 							</div>
 						)}
 						{animal.deathDate && (
 							<div>
-								<S.Label>{t('animal.deathDate')}</S.Label>
+								<S.Label>{t('deathDate')}</S.Label>
 								<S.Value>{dayjs(animal.deathDate).format('MM/DD/YYYY')}</S.Value>
 							</div>
 						)}
@@ -231,14 +231,14 @@ export const Animal: FC = () => {
 				{mobile ? (
 					<>
 						<RelatedAnimalsCards
-							title={t('animal.parentsTitle')}
+							title={t('parentsTitle')}
 							animals={animal?.relatedAnimals?.parents || []}
 							user={user}
 							type="parent"
 							removeRelation={handleRemoveRelation}
 						/>
 						<RelatedAnimalsCards
-							title={t('animal.childrenTitle')}
+							title={t('childrenTitle')}
 							animals={animal?.relatedAnimals?.children || []}
 							user={user}
 							type="child"
@@ -248,14 +248,14 @@ export const Animal: FC = () => {
 				) : (
 					<>
 						<RelatedAnimalsTable
-							title={t('animal.parentsTitle')}
+							title={t('parentsTitle')}
 							animals={animal?.relatedAnimals?.parents || []}
 							user={user}
 							type="parent"
 							removeRelation={handleRemoveRelation}
 						/>
 						<RelatedAnimalsTable
-							title={t('animal.childrenTitle')}
+							title={t('childrenTitle')}
 							animals={animal?.relatedAnimals?.children || []}
 							user={user}
 							type="child"

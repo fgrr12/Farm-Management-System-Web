@@ -15,7 +15,7 @@ import * as S from './PageHeader.styles'
 export const PageHeader: FC = () => {
 	const { user } = useUserStore()
 	const { farm } = useFarmStore()
-	const { t } = useTranslation()
+	const { t } = useTranslation('common')
 	const navigate = useNavigate()
 	const location = useLocation()
 	const { headerTitle, collapseSidebar, setCollapseSidebar, setTopHeaderHeight } = useAppStore()

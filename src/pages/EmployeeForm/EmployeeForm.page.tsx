@@ -1,4 +1,5 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { Button } from '@/components/ui/Button'
@@ -16,9 +17,10 @@ import * as S from './EmployeeForm.styles'
 
 export const EmployeeForm: FC = () => {
 	const { user } = useUserStore()
-	const { setHeaderTitle } = useAppStore()
+	const { defaultModalData, setHeaderTitle, setModalData, setLoading } = useAppStore()
 	const navigate = useNavigate()
 	const params = useParams()
+	const { t } = useTranslation(['employeeForm'])
 
 	const [employee, setEmployee] = useState(INITIAL_EMPLOYEE_DATA)
 
@@ -44,23 +46,53 @@ export const EmployeeForm: FC = () => {
 
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault()
-		employee.farmUuid = user!.farmUuid!
-		employee.uuid = employee.uuid ?? crypto.randomUUID()
+		try {
+			setLoading(true)
+			employee.farmUuid = user!.farmUuid!
+			employee.uuid = employee.uuid ?? crypto.randomUUID()
 
-		if (params.employeeUuid) {
-			await EmployeesService.updateEmployee(employee)
-			navigate(AppRoutes.EMPLOYEES)
-			return
+			if (params.employeeUuid) {
+				await EmployeesService.updateEmployee(employee)
+
+				setModalData({
+					open: true,
+					title: t('modal.editEmployee.title'),
+					message: t('modal.editEmployee.message'),
+					onAccept: () => {
+						setModalData(defaultModalData)
+						navigate(AppRoutes.EMPLOYEES)
+					},
+				})
+
+				return
+			}
+
+			employee.createdBy = user!.uuid || ''
+			await EmployeesService.setEmployee(employee)
+			setModalData({
+				open: true,
+				title: t('modal.addEmployee.title'),
+				message: t('modal.addEmployee.message'),
+				onAccept: () => {
+					setModalData(defaultModalData)
+					navigate(AppRoutes.EMPLOYEES)
+				},
+			})
+		} catch (error) {
+			setModalData({
+				open: true,
+				title: t('modal.errorAddingEmployee.title'),
+				message: t('modal.errorAddingEmployee.message'),
+				onAccept: () => setModalData(defaultModalData),
+			})
+		} finally {
+			setLoading(false)
 		}
-
-		employee.createdBy = user!.uuid || ''
-		await EmployeesService.setEmployee(employee)
-		navigate(AppRoutes.EMPLOYEES)
 	}
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		setHeaderTitle('Add Employee')
+		setHeaderTitle(t('title'))
 		if (user && user.role === 'employee') {
 			navigate(AppRoutes.LOGIN)
 			return
@@ -77,8 +109,8 @@ export const EmployeeForm: FC = () => {
 				<TextField
 					name="name"
 					type="text"
-					placeholder="Name"
-					label="Name"
+					placeholder={t('name')}
+					label={t('name')}
 					value={employee.name}
 					onChange={handleTextChange}
 					required
@@ -86,8 +118,8 @@ export const EmployeeForm: FC = () => {
 				<TextField
 					name="lastName"
 					type="text"
-					placeholder="Last Name"
-					label="Last Name"
+					placeholder={t('lastName')}
+					label={t('lastName')}
 					value={employee.lastName}
 					onChange={handleTextChange}
 					required
@@ -95,8 +127,8 @@ export const EmployeeForm: FC = () => {
 				<TextField
 					name="email"
 					type="email"
-					placeholder="Email"
-					label="Email"
+					placeholder={t('email')}
+					label={t('email')}
 					value={employee.email}
 					onChange={handleTextChange}
 					required
@@ -104,23 +136,23 @@ export const EmployeeForm: FC = () => {
 				<TextField
 					name="phone"
 					type="tel"
-					placeholder="Phone"
-					label="Phone"
+					placeholder={t('phone')}
+					label={t('phone')}
 					value={employee.phone}
 					onChange={handleTextChange}
 					required
 				/>
 				<Select
 					name="role"
-					label="Role"
+					label={t('role')}
 					value={employee.role}
 					onChange={handleSelectChange}
 					required
 				>
-					<option value="employee">Employee</option>
-					<option value="owner">Owner</option>
+					<option value="employee">{t('employee')}</option>
+					<option value="owner">{t('owner')}</option>
 				</Select>
-				<Button type="submit">Register Employee</Button>
+				<Button type="submit">{t('registerEmployee')}</Button>
 			</S.Form>
 		</S.Container>
 	)

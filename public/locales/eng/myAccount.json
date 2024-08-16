@@ -1,0 +1,60 @@
+{
+	"title": "My Account",
+	"myProfile": {
+		"title": "My Profile",
+		"subtitle": "Manage your account settings",
+		"name": "Name",
+		"lastName": "Last Name",
+		"email": "Email",
+		"phone": "Phone",
+		"language": "Language",
+		"languageList": {
+			"spa": "Spanish",
+			"eng": "English"
+		},
+		"edit": "Update My Profile",
+		"modal": {
+			"editMyAccount": {
+				"title": "Profile Updated",
+				"message": "Your profile has been updated successfully"
+			},
+			"errorEditingMyAccount": {
+				"title": "Error",
+				"message": "There was an error updating your profile"
+			}
+		}
+	},
+	"myFarm": {
+		"title": "My Farm",
+		"subtitle": "Manage your farm settings",
+		"name": "Name",
+		"address": "Address",
+		"species": "Species",
+		"liquidUnit": "Measure Liquid",
+		"liquidUnitList": {
+			"L": "Liters",
+			"Gal": "Gallons"
+		},
+		"weightUnit": "Measure Solid",
+		"weightUnitList": {
+			"Kg": "Kilograms",
+			"Lb": "Pounds"
+		},
+		"temperatureUnit": "Measure Temperature",
+		"temperatureUnitList": {
+			"°C": "Celsius",
+			"°F": "Fahrenheit"
+		},
+		"edit": "Update My Farm",
+		"modal": {
+			"editMyFarm": {
+				"title": "Farm Updated",
+				"message": "Your farm has been updated successfully"
+			},
+			"errorMyFarm": {
+				"title": "Error",
+				"message": "There was an error updating your farm"
+			}
+		}
+	}
+}

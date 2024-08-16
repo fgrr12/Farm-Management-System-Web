@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
 import { RelatedAnimalCard } from '@/components/business/RelatedAnimals/RelatedAnimalCard'
@@ -21,7 +22,7 @@ import * as S from './RelatedAnimalsForm.styles'
 export const RelatedAnimalsForm: FC = () => {
 	const { user } = useUserStore()
 	const params = useParams()
-	// const { t } = useTranslation()
+	const { t } = useTranslation(['relatedAnimals'])
 
 	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
 	const dragItem: any = useRef()
@@ -126,7 +127,7 @@ export const RelatedAnimalsForm: FC = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		setHeaderTitle('Add Related Animals')
+		setHeaderTitle(t('title'))
 		let unsubscribe: (() => void) | undefined
 
 		if (!user) return
@@ -194,8 +195,8 @@ export const RelatedAnimalsForm: FC = () => {
 				setModalData({
 					...defaultModalData,
 					open: true,
-					title: 'Error',
-					message: 'An error occurred while fetching the animals',
+					title: t('modal.errorGettingAnimals.title'),
+					message: t('modal.errorGettingAnimals.message'),
 					onAccept: () => setModalData({ ...defaultModalData }),
 				})
 			} finally {
@@ -233,7 +234,7 @@ export const RelatedAnimalsForm: FC = () => {
 			</S.AnimalsContainer>
 			<S.RelatedAnimalsContainer>
 				<div>
-					<S.Title>Parents</S.Title>
+					<S.Title>{t('parentsTitle')}</S.Title>
 					<S.DragZone
 						onDragEnter={() => handleDragEnter(DragRelations.PARENTS)}
 						onClick={() => handleClicDropzone(DragRelations.PARENTS)}
@@ -254,7 +255,7 @@ export const RelatedAnimalsForm: FC = () => {
 					</S.DragZone>
 				</div>
 				<div>
-					<S.Title>Children</S.Title>
+					<S.Title>{t('childrenTitle')}</S.Title>
 					<S.DragZone
 						onDragEnter={() => handleDragEnter(DragRelations.CHILDREN)}
 						onClick={() => handleClicDropzone(DragRelations.CHILDREN)}

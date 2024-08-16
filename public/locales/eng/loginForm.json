@@ -1,0 +1,15 @@
+{
+	"title": "Login",
+	"email": "Email",
+	"password": "Password",
+	"login": "Login",
+	"forgotPassword": "Forgot your password?",
+	"or": "Or",
+	"google": "Login with Google",
+	"modal": {
+		"errorLoggingIn": {
+			"title": "Error",
+			"message": "There was an error logging in"
+		}
+	}
+}

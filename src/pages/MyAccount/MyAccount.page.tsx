@@ -1,4 +1,5 @@
 import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { ActionButton } from '@/components/ui/ActionButton'
 import { Button } from '@/components/ui/Button'
@@ -19,6 +20,7 @@ export const MyAccount: FC = () => {
 	const { user: currentUser, setUser: updateUser } = useUserStore()
 	const { farm: currentFarm, setFarm: updateFarm } = useFarmStore()
 	const { defaultModalData, setHeaderTitle, setModalData, setLoading } = useAppStore()
+	const { t } = useTranslation(['myAccount'])
 
 	const [user, setUser] = useState<User>(INITIAL_USER_DATA)
 	const [farm, setFarm] = useState<FarmData>(INITIAL_FARM_DATA)
@@ -54,8 +56,8 @@ export const MyAccount: FC = () => {
 			setEdit((prev) => ({ ...prev, user: false }))
 			setModalData({
 				open: true,
-				title: 'User Updated',
-				message: 'Your user has been updated successfully',
+				title: t('myProfile.modal.editMyAccount.title'),
+				message: t('myProfile.modal.editMyAccount.message'),
 				onAccept: () => {
 					setModalData(defaultModalData)
 				},
@@ -63,8 +65,8 @@ export const MyAccount: FC = () => {
 		} catch (error) {
 			setModalData({
 				open: true,
-				title: 'Error',
-				message: 'There was an error updating the user',
+				title: t('myProfile.modal.errorEditingMyAccount.title'),
+				message: t('myProfile.modal.errorEditingMyAccount.message'),
 				onAccept: () => {
 					setModalData(defaultModalData)
 				},
@@ -84,8 +86,8 @@ export const MyAccount: FC = () => {
 			setEdit((prev) => ({ ...prev, farm: false }))
 			setModalData({
 				open: true,
-				title: 'Farm Updated',
-				message: 'Your farm has been updated successfully',
+				title: t('myFarm.modal.editMyFarm.title'),
+				message: t('myFarm.modal.editMyFarm.message'),
 				onAccept: () => {
 					setModalData(defaultModalData)
 				},
@@ -93,8 +95,8 @@ export const MyAccount: FC = () => {
 		} catch (error) {
 			setModalData({
 				open: true,
-				title: 'Error',
-				message: 'There was an error updating the farm',
+				title: t('myFarm.modal.errorMyFarm.title'),
+				message: t('myFarm.modal.errorMyFarm.message'),
 				onAccept: () => {
 					setModalData(defaultModalData)
 				},
@@ -106,7 +108,7 @@ export const MyAccount: FC = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: useEffect is only called once
 	useEffect(() => {
-		setHeaderTitle('My Account')
+		setHeaderTitle(t('title'))
 		if (!user || !currentFarm) return
 
 		const species = currentFarm!.species.join(',') || ''
@@ -118,19 +120,20 @@ export const MyAccount: FC = () => {
 			<S.MyAccountBody>
 				<S.MyAccountBodyContent>
 					<S.MyAccountBodyTitle>
-						My Account
+						{t('myProfile.title')}
 						<ActionButton
 							title="Edit"
 							icon="i-material-symbols-edit-square-outline"
 							onClick={handleEdit('user')}
 						/>
 					</S.MyAccountBodyTitle>
-					<S.MyAccountBodySubtitle>Manage your account settings</S.MyAccountBodySubtitle>
+					<S.MyAccountBodySubtitle>{t('myProfile.subtitle')}</S.MyAccountBodySubtitle>
 					<S.Form onSubmit={handleSubmitUser} autoComplete="off">
 						<S.ContainerOf3>
 							<TextField
 								name="name"
-								label="Name"
+								label={t('myProfile.name')}
+								placeholder={t('myProfile.name')}
 								value={user!.name}
 								onChange={handleTextChange(true)}
 								disabled={!edit.user}
@@ -138,7 +141,8 @@ export const MyAccount: FC = () => {
 							/>
 							<TextField
 								name="lastName"
-								label="Last Name"
+								label={t('myProfile.lastName')}
+								placeholder={t('myProfile.lastName')}
 								value={user!.lastName}
 								onChange={handleTextChange(true)}
 								disabled={!edit.user}
@@ -146,7 +150,8 @@ export const MyAccount: FC = () => {
 							/>
 							<TextField
 								name="email"
-								label="Email"
+								label={t('myProfile.email')}
+								placeholder={t('myProfile.email')}
 								value={user!.email}
 								onChange={handleTextChange(true)}
 								disabled={!edit.user}
@@ -156,7 +161,8 @@ export const MyAccount: FC = () => {
 						<S.ContainerOf3>
 							<TextField
 								name="phone"
-								label="Phone"
+								label={t('myProfile.phone')}
+								placeholder={t('myProfile.phone')}
 								value={user!.phone}
 								onChange={handleTextChange(true)}
 								disabled={!edit.user}
@@ -164,18 +170,18 @@ export const MyAccount: FC = () => {
 							/>
 							<Select
 								name="language"
-								label="Language"
+								label={t('myProfile.language')}
 								value={user!.language}
 								onChange={handleSelectChange(true)}
 								disabled={!edit.user}
 								required
 							>
-								<option value="spa">Spanish</option>
-								<option value="eng">English</option>
+								<option value="spa">{t('myProfile.languageList.spa')}</option>
+								<option value="eng">{t('myProfile.languageList.eng')}</option>
 							</Select>
 						</S.ContainerOf3>
 						<Button type="submit" disabled={!edit.user}>
-							Update My Account
+							{t('myProfile.edit')}
 						</Button>
 					</S.Form>
 				</S.MyAccountBodyContent>
@@ -184,19 +190,20 @@ export const MyAccount: FC = () => {
 				<S.MyAccountBody>
 					<S.MyAccountBodyContent>
 						<S.MyAccountBodyTitle>
-							My Farm
+							{t('myFarm.title')}
 							<ActionButton
 								title="Edit"
 								icon="i-material-symbols-edit-square-outline"
 								onClick={handleEdit('farm')}
 							/>
 						</S.MyAccountBodyTitle>
-						<S.MyAccountBodySubtitle>Manage your farm settings</S.MyAccountBodySubtitle>
+						<S.MyAccountBodySubtitle>{t('myFarm.subtitle')}</S.MyAccountBodySubtitle>
 						<S.Form onSubmit={handleSubmitFarm} autoComplete="off">
 							<S.ContainerOf3>
 								<TextField
 									name="name"
-									label="Name"
+									label={t('myFarm.name')}
+									placeholder={t('myFarm.name')}
 									value={farm!.name}
 									onChange={handleTextChange()}
 									disabled={!edit.farm}
@@ -204,7 +211,8 @@ export const MyAccount: FC = () => {
 								/>
 								<TextField
 									name="address"
-									label="address"
+									label={t('myFarm.address')}
+									placeholder={t('myFarm.address')}
 									value={farm!.address}
 									onChange={handleTextChange()}
 									disabled={!edit.farm}
@@ -212,7 +220,8 @@ export const MyAccount: FC = () => {
 								/>
 								<TextField
 									name="species"
-									label="Species"
+									label={t('myFarm.species')}
+									placeholder={t('myFarm.species')}
 									value={farm!.species}
 									onChange={handleTextChange()}
 									disabled={!edit.farm}
@@ -222,40 +231,40 @@ export const MyAccount: FC = () => {
 							<S.ContainerOf3>
 								<Select
 									name="liquidUnit"
-									label="Measure Liquid"
+									label={t('myFarm.liquidUnit')}
 									value={farm!.liquidUnit}
 									onChange={handleSelectChange(false)}
 									disabled={!edit.farm}
 									required
 								>
-									<option value="L">Liters</option>
-									<option value="Gal">Gallons</option>
+									<option value="L">{t('myFarm.liquidUnitList.L')}</option>
+									<option value="Gal">{t('myFarm.liquidUnitList.Gal')}</option>
 								</Select>
 								<Select
 									name="weightUnit"
-									label="Measure Solid"
+									label={t('myFarm.weightUnit')}
 									value={farm!.weightUnit}
 									onChange={handleSelectChange(false)}
 									disabled={!edit.farm}
 									required
 								>
-									<option value="Kg">Kilograms</option>
-									<option value="Lb">Pounds</option>
+									<option value="Kg">{t('myFarm.weightUnitList.Kg')}</option>
+									<option value="Lb">{t('myFarm.weightUnitList.Lb')}</option>
 								</Select>
 								<Select
 									name="temperatureUnit"
-									label="Measure Temperature"
+									label={t('myFarm.temperatureUnit')}
 									value={farm!.temperatureUnit}
 									onChange={handleSelectChange(false)}
 									disabled={!edit.farm}
 									required
 								>
-									<option value="°C">Celsius</option>
-									<option value="°F">Fahrenheit</option>
+									<option value="°C">{t('myFarm.temperatureUnitList.°C')}</option>
+									<option value="°F">{t('myFarm.temperatureUnitList.°F')}</option>
 								</Select>
 							</S.ContainerOf3>
 							<Button type="submit" disabled={!edit.farm}>
-								Update My Farm
+								{t('myFarm.edit')}
 							</Button>
 						</S.Form>
 					</S.MyAccountBodyContent>

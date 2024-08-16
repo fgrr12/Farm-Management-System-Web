@@ -1,4 +1,5 @@
 import { type ChangeEvent, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { EmployeesCards } from '@/components/business/Employees/EmployeesCards'
@@ -15,8 +16,9 @@ import * as S from './Employees.styles'
 
 export const Employees: FC = () => {
 	const { user } = useUserStore()
-	const { setLoading, setHeaderTitle } = useAppStore()
+	const { defaultModalData, setHeaderTitle, setModalData, setLoading } = useAppStore()
 	const navigate = useNavigate()
+	const { t } = useTranslation(['employees'])
 
 	const [employees, setEmployees] = useState<User[]>([])
 	const [search, setSearch] = useState('')
@@ -40,7 +42,12 @@ export const Employees: FC = () => {
 			const data = await EmployeesService.getEmployees(null, user!.farmUuid!)
 			setEmployees(data.filter((employee) => employee.uuid !== user!.uuid))
 		} catch (error) {
-			console.error(error)
+			setModalData({
+				open: true,
+				title: t('modal.errorGettingEmployees.title'),
+				message: t('modal.errorGettingEmployees.message'),
+				onAccept: () => setModalData(defaultModalData),
+			})
 		} finally {
 			setLoading(false)
 		}
@@ -54,7 +61,7 @@ export const Employees: FC = () => {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		setMobile(window.innerWidth <= 768)
-		setHeaderTitle('Employees')
+		setHeaderTitle(t('title'))
 		if (!user) return
 		if (user && user.role === 'employee') {
 			navigate(AppRoutes.LOGIN)
@@ -76,8 +83,8 @@ export const Employees: FC = () => {
 	return (
 		<S.Container>
 			<S.HeaderContainer>
-				<Search placeholder="Search employees" value={search} onChange={handleDebounceSearch} />
-				<Button onClick={handleAddEmployee}>Add employee</Button>
+				<Search placeholder={t('search')} value={search} onChange={handleDebounceSearch} />
+				<Button onClick={handleAddEmployee}>{t('addEmployee')}</Button>
 			</S.HeaderContainer>
 			{!mobile ? (
 				<EmployeesTable employees={employees} user={user} removeEmployee={handleRemoveEmployee} />

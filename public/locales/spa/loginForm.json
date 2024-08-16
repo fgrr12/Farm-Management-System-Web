@@ -1,0 +1,15 @@
+{
+	"title": "Iniciar sesión",
+	"email": "Email",
+	"password": "Contraseña",
+	"login": "Iniciar sesión",
+	"forgotPassword": "¿Olvidaste tu contraseña?",
+	"or": "O",
+	"google": "Iniciar sesión con Google",
+	"modal": {
+		"errorLoggingIn": {
+			"title": "Error",
+			"message": "Ocurrió un error al iniciar sesión"
+		}
+	}
+}

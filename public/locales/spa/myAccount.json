@@ -1,0 +1,60 @@
+{
+	"title": "Mi Cuenta",
+	"myProfile": {
+		"title": "Mi Perfil",
+		"subtitle": "Gestiona tu cuenta de usuario",
+		"name": "Nombre",
+		"lastName": "Apellido",
+		"email": "Email",
+		"phone": "Teléfono",
+		"language": "Idioma",
+		"languageList": {
+			"spa": "Español",
+			"eng": "Inglés"
+		},
+		"edit": "Actualizar Mi Perfil",
+		"modal": {
+			"editMyAccount": {
+				"title": "Perfil Actualizado",
+				"message": "Tu perfil ha sido actualizado exitosamente"
+			},
+			"errorEditingMyAccount": {
+				"title": "Error",
+				"message": "Ocurrió un error al actualizar tu perfil"
+			}
+		}
+	},
+	"myFarm": {
+		"title": "Mi Granja",
+		"subtitle": "Gestiona tu granja",
+		"name": "Nombre",
+		"address": "Dirección",
+		"species": "Especies",
+		"liquidUnit": "Medida de Líquido",
+		"liquidUnitList": {
+			"L": "Litros",
+			"Gal": "Galones"
+		},
+		"weightUnit": "Medida de Peso",
+		"weightUnitList": {
+			"Kg": "Kilogramos",
+			"Lb": "Libras"
+		},
+		"temperatureUnit": "Medida de Temperatura",
+		"temperatureUnitList": {
+			"°C": "Celsius",
+			"°F": "Fahrenheit"
+		},
+		"edit": "Actualizar Mi Granja",
+		"modal": {
+			"editMyFarm": {
+				"title": "Granja Actualizada",
+				"message": "Tu granja ha sido actualizada exitosamente"
+			},
+			"errorMyFarm": {
+				"title": "Error",
+				"message": "Ocurrió un error al actualizar tu granja"
+			}
+		}
+	}
+}

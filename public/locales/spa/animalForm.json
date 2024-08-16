@@ -1,0 +1,32 @@
+{
+	"title": "Añade animal",
+	"animalId": "ID del animal",
+	"species": "Especie",
+	"breed": "Raza",
+	"gender": "Género",
+	"color": "Color",
+	"weight": "Peso",
+	"birthDate": "Fecha de nacimiento",
+	"purchaseDate": "Fecha de compra",
+	"soldDate": "Fecha de venta",
+	"deathDate": "Fecha de fallecimiento",
+	"addAnimal": "Añadir animal",
+	"modal": {
+		"addAnimal": {
+			"title": "Animal añadido",
+			"message": "El animal ha sido añadido con éxito"
+		},
+		"editAnimal": {
+			"title": "Editar animal",
+			"message": "El animal ha sido editado con éxito"
+		},
+		"errorAddingAnimal": {
+			"title": "Error",
+			"message": "Ocurrió un error al añadir el animal"
+		},
+		"errorGettingAnimal": {
+			"title": "Error",
+			"message": "Ocurrió un error al obtener el animal"
+		}
+	}
+}

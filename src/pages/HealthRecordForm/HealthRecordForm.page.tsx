@@ -1,6 +1,6 @@
 import { AppRoutes } from '@/config/constants/routes'
 import dayjs from 'dayjs'
-import { useCallback, useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
+import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -24,7 +24,7 @@ export const HealthRecordForm = () => {
 	const { farm } = useFarmStore()
 	const navigate = useNavigate()
 	const params = useParams()
-	const { t } = useTranslation()
+	const { t } = useTranslation(['healthRecordForm'])
 
 	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
 	const [healthRecordForm, setHealthRecordForm] = useState<HealthRecord>(INITIAL_HEALTH_RECORD_FORM)
@@ -48,7 +48,7 @@ export const HealthRecordForm = () => {
 		setHealthRecordForm((prev) => ({ ...prev, date: dayjs(newDate).format('YYYY-MM-DD') }))
 	}
 
-	const getHealthRecord = useCallback(async () => {
+	const getHealthRecord = async () => {
 		try {
 			setLoading(true)
 			const healthRecordUuid = params.healthRecordUuid as string
@@ -57,14 +57,14 @@ export const HealthRecordForm = () => {
 		} catch (error) {
 			setModalData({
 				open: true,
-				title: 'Error',
-				message: 'There was an error getting the health record',
+				title: t('modal.errorGettingHealthRecord.title'),
+				message: t('modal.errorGettingHealthRecord.message'),
 				onAccept: () => setModalData(defaultModalData),
 			})
 		} finally {
 			setLoading(false)
 		}
-	}, [defaultModalData, params.healthRecordUuid, setModalData, setLoading])
+	}
 
 	const handleSubmit = async (event: FormEvent) => {
 		try {
@@ -76,8 +76,8 @@ export const HealthRecordForm = () => {
 				await HealthRecordsService.updateHealthRecord(healthRecordForm, user!.uuid)
 				setModalData({
 					open: true,
-					title: 'Health Record Updated',
-					message: 'The health record has been updated successfully',
+					title: t('modal.editHealthRecord.title'),
+					message: t('modal.editHealthRecord.message'),
 					onAccept: () => {
 						setModalData(defaultModalData)
 						navigate(AppRoutes.ANIMAL.replace(':animalUuid', healthRecordForm.animalUuid))
@@ -87,8 +87,8 @@ export const HealthRecordForm = () => {
 				await HealthRecordsService.setHealthRecord(healthRecordForm, user!.uuid)
 				setModalData({
 					open: true,
-					title: 'Animal Added',
-					message: 'The health record has been added successfully',
+					title: t('modal.addHealthRecord.title'),
+					message: t('modal.addHealthRecord.message'),
 					onAccept: () => {
 						setModalData(defaultModalData)
 						navigate(AppRoutes.ANIMAL.replace(':animalUuid', healthRecordForm.animalUuid))
@@ -98,8 +98,8 @@ export const HealthRecordForm = () => {
 		} catch (error) {
 			setModalData({
 				open: true,
-				title: 'Error',
-				message: 'There was an error adding the health record',
+				title: t('modal.errorAddingHealthRecord.title'),
+				message: t('modal.errorAddingHealthRecord.message'),
 				onAccept: () => setModalData(defaultModalData),
 			})
 		} finally {
@@ -109,7 +109,7 @@ export const HealthRecordForm = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		setHeaderTitle(t('addHealthRecord.title'))
+		setHeaderTitle(t('title'))
 		if (user) {
 			const animalUuid = params.animalUuid ?? ''
 			const type = healthRecordTypes[0]
@@ -126,15 +126,15 @@ export const HealthRecordForm = () => {
 				<TextField
 					name="reason"
 					type="text"
-					placeholder={t('addHealthRecord.reason')}
-					label={t('addHealthRecord.reason')}
+					placeholder={t('reason')}
+					label={t('reason')}
 					value={healthRecordForm.reason}
 					onChange={handleTextChange}
 					required
 				/>
 				<Select
 					name="type"
-					label={t('addHealthRecord.type')}
+					label={t('type')}
 					value={healthRecordForm.type}
 					onChange={handleSelectChange}
 				>
@@ -147,22 +147,22 @@ export const HealthRecordForm = () => {
 				<TextField
 					name="reviewedBy"
 					type="text"
-					placeholder={t('addHealthRecord.reviewedBy')}
-					label={t('addHealthRecord.reviewedBy')}
+					placeholder={t('reviewedBy')}
+					label={t('reviewedBy')}
 					value={healthRecordForm.reviewedBy}
 					onChange={handleTextChange}
 					required
 				/>
 				<DatePicker
-					label={t('addHealthRecord.date')}
+					label={t('date')}
 					date={dayjs(healthRecordForm.date)}
 					onDateChange={handleDateChange()}
 				/>
 				<TextField
 					name="weight"
 					type="number"
-					placeholder={`${t('addHealthRecord.weight')} (${farm?.weightUnit})`}
-					label={`${t('addHealthRecord.weight')} (${farm?.weightUnit})`}
+					placeholder={`${t('weight')} (${farm?.weightUnit})`}
+					label={`${t('weight')} (${farm?.weightUnit})`}
 					value={healthRecordForm.weight}
 					onChange={handleTextChange}
 					onWheel={(e) => e.currentTarget.blur()}
@@ -170,8 +170,8 @@ export const HealthRecordForm = () => {
 				<TextField
 					name="temperature"
 					type="number"
-					placeholder={`${t('addHealthRecord.temperature')} (${farm?.temperatureUnit})`}
-					label={`${t('addHealthRecord.temperature')} (${farm?.temperatureUnit})`}
+					placeholder={`${t('temperature')} (${farm?.temperatureUnit})`}
+					label={`${t('temperature')} (${farm?.temperatureUnit})`}
 					value={healthRecordForm.temperature}
 					onChange={handleTextChange}
 					onWheel={(e) => e.currentTarget.blur()}
@@ -179,46 +179,46 @@ export const HealthRecordForm = () => {
 				<TextField
 					name="medication"
 					type="text"
-					placeholder={t('addHealthRecord.medication')}
-					label={t('addHealthRecord.medication')}
+					placeholder={t('medication')}
+					label={t('medication')}
 					value={healthRecordForm.medication}
 					onChange={handleTextChange}
 				/>
 				<TextField
 					name="dosage"
 					type="text"
-					placeholder={t('addHealthRecord.dosage')}
-					label={t('addHealthRecord.dosage')}
+					placeholder={t('dosage')}
+					label={t('dosage')}
 					value={healthRecordForm.dosage}
 					onChange={handleTextChange}
 				/>
 				<TextField
 					name="frequency"
 					type="text"
-					placeholder={t('addHealthRecord.frequency')}
-					label={t('addHealthRecord.frequency')}
+					placeholder={t('frequency')}
+					label={t('frequency')}
 					value={healthRecordForm.frequency}
 					onChange={handleTextChange}
 				/>
 				<TextField
 					name="duration"
 					type="text"
-					placeholder={t('addHealthRecord.duration')}
-					label={t('addHealthRecord.duration')}
+					placeholder={t('duration')}
+					label={t('duration')}
 					value={healthRecordForm.duration}
 					onChange={handleTextChange}
 				/>
 				<S.TextareaContainer>
 					<Textarea
 						name="notes"
-						placeholder={t('addHealthRecord.notes')}
-						label={t('addHealthRecord.notes')}
+						placeholder={t('notes')}
+						label={t('notes')}
 						value={healthRecordForm.notes}
 						onChange={handleTextareaChange}
 						required
 					/>
 				</S.TextareaContainer>
-				<Button type="submit">{t('addHealthRecord.addHealthRecord')}</Button>
+				<Button type="submit">{t('addHealthRecord')}</Button>
 			</S.Form>
 		</S.Container>
 	)

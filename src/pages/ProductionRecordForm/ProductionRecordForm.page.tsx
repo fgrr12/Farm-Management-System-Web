@@ -1,6 +1,6 @@
 import { AppRoutes } from '@/config/constants/routes'
 import dayjs from 'dayjs'
-import { useCallback, useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
+import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -23,7 +23,7 @@ export const ProductionRecordForm = () => {
 	const { farm } = useFarmStore()
 	const navigate = useNavigate()
 	const params = useParams()
-	const { t } = useTranslation()
+	const { t } = useTranslation(['productionRecordForm'])
 	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
 	const [productionRecordForm, setProductionRecordForm] = useState<ProductionRecord>(
 		INITIAL_PRODUCTION_RECORD_FORM
@@ -53,8 +53,8 @@ export const ProductionRecordForm = () => {
 				await ProductionRecordsService.updateProductionRecord(productionRecordForm, user!.uuid)
 				setModalData({
 					open: true,
-					title: 'Production Record Updated',
-					message: 'The production record has been updated successfully',
+					title: t('modal.editProductionRecord.title'),
+					message: t('modal.editProductionRecord.message'),
 					onAccept: () => {
 						setModalData(defaultModalData)
 						navigate(AppRoutes.ANIMAL.replace(':animalUuid', productionRecordForm.animalUuid))
@@ -64,8 +64,8 @@ export const ProductionRecordForm = () => {
 				ProductionRecordsService.setProductionRecord(productionRecordForm, user!.uuid)
 				setModalData({
 					open: true,
-					title: 'Animal Added',
-					message: 'The production record has been added successfully',
+					title: t('modal.addProductionRecord.title'),
+					message: t('modal.addProductionRecord.message'),
 					onAccept: () => {
 						setModalData(defaultModalData)
 						navigate(AppRoutes.ANIMAL.replace(':animalUuid', productionRecordForm.animalUuid))
@@ -75,8 +75,8 @@ export const ProductionRecordForm = () => {
 		} catch (error) {
 			setModalData({
 				open: true,
-				title: 'Error',
-				message: 'There was an error adding the production record',
+				title: t('modal.errorAddingProductionRecord.title'),
+				message: t('modal.errorAddingProductionRecord.message'),
 				onAccept: () => setModalData(defaultModalData),
 			})
 		} finally {
@@ -84,7 +84,7 @@ export const ProductionRecordForm = () => {
 		}
 	}
 
-	const getProductionRecord = useCallback(async () => {
+	const getProductionRecord = async () => {
 		try {
 			setLoading(true)
 			const productionRecordUuid = params.productionRecordUuid as string
@@ -94,18 +94,18 @@ export const ProductionRecordForm = () => {
 		} catch (error) {
 			setModalData({
 				open: true,
-				title: 'Error',
-				message: 'There was an error getting the health record',
+				title: t('modal.errorGettingProductionRecord.title'),
+				message: t('modal.errorGettingProductionRecord.message'),
 				onAccept: () => setModalData(defaultModalData),
 			})
 		} finally {
 			setLoading(false)
 		}
-	}, [defaultModalData, params.productionRecordUuid, setModalData, setLoading])
+	}
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		setHeaderTitle(t('addProductionRecord.title'))
+		setHeaderTitle(t('title'))
 		if (user) {
 			const animalUuid = params.animalUuid as string
 			setProductionRecordForm((prev) => ({ ...prev, animalUuid }))
@@ -121,29 +121,29 @@ export const ProductionRecordForm = () => {
 				<TextField
 					name="quantity"
 					type="number"
-					placeholder={`${t('addProductionRecord.quantity')} (${farm?.liquidUnit})`}
-					label={`${t('addProductionRecord.quantity')} (${farm?.liquidUnit})`}
+					placeholder={`${t('quantity')} (${farm?.liquidUnit})`}
+					label={`${t('quantity')} (${farm?.liquidUnit})`}
 					value={productionRecordForm.quantity}
 					onChange={handleTextChange}
 					onWheel={(e) => e.currentTarget.blur()}
 					required
 				/>
 				<DatePicker
-					label={t('addProductionRecord.date')}
+					label={t('date')}
 					date={dayjs(productionRecordForm.date)}
 					onDateChange={handleDateChange()}
 				/>
 				<S.TextareaContainer>
 					<Textarea
 						name="notes"
-						placeholder={t('addProductionRecord.notes')}
-						label={t('addProductionRecord.notes')}
+						placeholder={t('notes')}
+						label={t('notes')}
 						value={productionRecordForm.notes}
 						onChange={handleTextareaChange}
 						required
 					/>
 				</S.TextareaContainer>
-				<Button type="submit">{t('addProductionRecord.addProductionRecord')}</Button>
+				<Button type="submit">{t('addProductionRecord')}</Button>
 			</S.Form>
 		</S.Container>
 	)

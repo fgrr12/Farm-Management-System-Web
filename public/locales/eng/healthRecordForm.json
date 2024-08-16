@@ -1,0 +1,38 @@
+{
+	"title": "Add Health Record",
+	"reason": "Razón",
+	"type": "Tipo",
+	"reviewedBy": "Revisado por",
+	"date": "Fecha",
+	"weight": "Peso",
+	"temperature": "Temperatura",
+	"medication": "Medicación",
+	"dosage": "Dosis",
+	"frequency": "Frecuencia",
+	"duration": "Duración",
+	"notes": "Notas",
+	"addHealthRecord": "Añadir registro de salud",
+	"healthRecordType": {
+		"checkup": "Revision",
+		"vaccination": "Vacunación",
+		"medication": "Medicación",
+		"surgery": "Cirugía",
+		"pregnant": "Embarazada",
+		"deworming": "Desparasitación",
+		"birth": "Nacimiento/Parto"
+	},
+	"modal": {
+		"addHealthRecord": {
+			"title": "Registro de salud añadido",
+			"message": "El registro de salud ha sido añadido exitosamente"
+		},
+		"editHealthRecord": {
+			"title": "Registro de salud editado",
+			"message": "El registro de salud ha sido editado exitosamente"
+		},
+		"errorAddingHealthRecord": {
+			"title": "Error",
+			"message": "Ocurrió un error al añadir el registro de salud"
+		}
+	}
+}

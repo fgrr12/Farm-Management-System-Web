@@ -1,0 +1,11 @@
+{
+	"title": "Employees",
+	"search": "Search",
+	"addEmployee": "Add employee",
+	"modal": {
+		"errorGettingEmployees": {
+			"title": "Error",
+			"message": "There was an error getting the employees"
+		}
+	}
+}

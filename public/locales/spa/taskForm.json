@@ -1,0 +1,21 @@
+{
+	"title": "Añade tarea",
+	"name": "Nombre",
+	"description": "Descripción",
+	"priority": "Prioridad",
+	"priorities": {
+		"default": "Selecciona una prioridad",
+		"low": "Baja",
+		"medium": "Media",
+		"high": "Alta"
+	},
+	"species": "Especie",
+	"selectSpecies": "Selecciona una especie",
+	"addTask": "Añadir tarea",
+	"modal": {
+		"errorAddingTask": {
+			"title": "Error",
+			"message": "Ocurrió un error al añadir la tarea"
+		}
+	}
+}

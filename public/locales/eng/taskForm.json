@@ -1,0 +1,21 @@
+{
+	"title": "Add Task",
+	"name": "Name",
+	"description": "Description",
+	"priority": "Priority",
+	"priorities": {
+		"default": "Select a priority",
+		"low": "Low",
+		"medium": "Medium",
+		"high": "High"
+	},
+	"species": "Species",
+	"selectSpecies": "Select a species",
+	"addTask": "Add Task",
+	"modal": {
+		"errorAddingTask": {
+			"title": "Error",
+			"message": "There was an error adding the task"
+		}
+	}
+}

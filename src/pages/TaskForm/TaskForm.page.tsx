@@ -1,5 +1,6 @@
 import { AppRoutes } from '@/config/constants/routes'
 import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { Button } from '@/components/ui/Button'
@@ -17,8 +18,9 @@ import * as S from './TaskForm.styles'
 export const TaskForm = () => {
 	const { user } = useUserStore()
 	const { farm } = useFarmStore()
-	const { setHeaderTitle } = useAppStore()
+	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
 	const navigate = useNavigate()
+	const { t } = useTranslation(['taskForm'])
 
 	const [task, setTask] = useState(INITIAL_TASK)
 
@@ -34,14 +36,26 @@ export const TaskForm = () => {
 
 	const handleSubmit = async (event: FormEvent) => {
 		event.preventDefault()
-		task.uuid = task.uuid || crypto.randomUUID()
-		await TasksService.setTask(task, user!.uuid, farm!.uuid)
-		navigate(AppRoutes.TASKS)
+		try {
+			setLoading(true)
+			task.uuid = task.uuid || crypto.randomUUID()
+			await TasksService.setTask(task, user!.uuid, farm!.uuid)
+			navigate(AppRoutes.TASKS)
+		} catch (error) {
+			setModalData({
+				open: true,
+				title: t('modal.errorAddingTask.title'),
+				message: t('modal.errorAddingTask.message'),
+				onAccept: () => setModalData(defaultModalData),
+			})
+		} finally {
+			setLoading(false)
+		}
 	}
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		setHeaderTitle('Add Task')
+		setHeaderTitle(t('title'))
 	}, [])
 
 	return (
@@ -50,43 +64,43 @@ export const TaskForm = () => {
 				<TextField
 					name="title"
 					type="text"
-					placeholder="Task Title"
-					label="Task Title"
+					placeholder={t('name')}
+					label={t('name')}
 					value={task.title}
 					onChange={handleTextChange}
 					required
 				/>
 				<Textarea
 					name="description"
-					placeholder="Task Description"
-					label="Task Description"
+					placeholder={t('description')}
+					label={t('description')}
 					value={task.description}
 					onChange={handleTextChange}
 					required
 				/>
 				<Select
 					name="priority"
-					label="Priority"
+					label={t('priority')}
 					value={task.priority}
 					onChange={handleSelectChange}
 					required
 				>
 					<option value="" disabled>
-						Select a priority
+						{t('priorities.default')}
 					</option>
-					<S.PriorityOption $priority="low">Low</S.PriorityOption>
-					<S.PriorityOption $priority="medium">Medium</S.PriorityOption>
-					<S.PriorityOption $priority="high">High</S.PriorityOption>
+					<S.PriorityOption $priority="low">{t('priorities.low')}</S.PriorityOption>
+					<S.PriorityOption $priority="medium">{t('priorities.medium')}</S.PriorityOption>
+					<S.PriorityOption $priority="high">{t('priorities.high')}</S.PriorityOption>
 				</Select>
 				<Select
 					name="species"
-					label="Species"
+					label={t('species')}
 					value={task.species}
 					onChange={handleSelectChange}
 					required
 				>
 					<option value="" disabled>
-						Select a species
+						{t('selectSpecies')}
 					</option>
 					{farm?.species.map((species, index) => (
 						<option key={index} value={species}>
@@ -94,7 +108,7 @@ export const TaskForm = () => {
 						</option>
 					))}
 				</Select>
-				<Button type="submit">Add Task</Button>
+				<Button type="submit">{t('addTask')}</Button>
 			</S.Form>
 		</S.Container>
 	)

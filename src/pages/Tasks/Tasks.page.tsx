@@ -1,4 +1,5 @@
 import { type ChangeEvent, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { Button } from '@/components/ui/Button'
@@ -17,10 +18,11 @@ import type { DividedTasks, TaskFilters } from './Tasks.types'
 import * as S from './Tasks.styles'
 
 export const Tasks = () => {
-	const { setHeaderTitle, setLoading } = useAppStore()
 	const { user } = useUserStore()
 	const { farm } = useFarmStore()
+	const { setHeaderTitle, setLoading } = useAppStore()
 	const navigate = useNavigate()
+	const { t } = useTranslation(['tasks'])
 
 	const [tasks, setTasks] = useState(INITIAL_TASKS)
 	const [filters, setFilters] = useState(INITIAL_FILTERS)
@@ -61,7 +63,7 @@ export const Tasks = () => {
 	}
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect used to update tasks list
 	useEffect(() => {
-		setHeaderTitle('Tasks')
+		setHeaderTitle(t('title'))
 		if (user) getTasks()
 	}, [user, filters.priority, filters.species, filters.status])
 
@@ -76,32 +78,32 @@ export const Tasks = () => {
 	return (
 		<S.Container>
 			<S.Filters>
-				<Search placeholder="Search tasks" onChange={handleDebounceSearch} />
-				<Select name="status" label="Status" onChange={handleSelectChange}>
-					<option value="">All</option>
-					<option value="COMPLETED">Completed</option>
-					<option value="PENDING">Pending</option>
+				<Search placeholder={t('search')} onChange={handleDebounceSearch} />
+				<Select name="status" label={t('status')} onChange={handleSelectChange}>
+					<option value="">{t('all')}</option>
+					<option value="COMPLETED">{t('completed')}</option>
+					<option value="PENDING">{t('pending')}</option>
 				</Select>
-				<Select name="priority" label="Priority" onChange={handleSelectChange}>
-					<option value="">All</option>
-					<option value="high">High</option>
-					<option value="medium">Medium</option>
-					<option value="low">Low</option>
+				<Select name="priority" label={t('priority')} onChange={handleSelectChange}>
+					<option value="">{t('all')}</option>
+					<option value="high">{t('high')}</option>
+					<option value="medium">{t('medium')}</option>
+					<option value="low">{t('low')}</option>
 				</Select>
-				<Select name="species" label="Species" onChange={handleSelectChange}>
-					<option value="">All</option>
+				<Select name="species" label={t('species')} onChange={handleSelectChange}>
+					<option value="">{t('all')}</option>
 					{farm?.species.map((species, index) => (
 						<option key={index} value={species}>
 							{species}
 						</option>
 					))}
 				</Select>
-				<Button onClick={handleAddTask}>Add Task</Button>
+				<Button onClick={handleAddTask}>{t('addTask')}</Button>
 			</S.Filters>
 
 			{filters.status !== 'COMPLETED' && (
 				<>
-					<S.StatusTitle>Pending</S.StatusTitle>
+					<S.StatusTitle>{t('pending')}</S.StatusTitle>
 					<S.TasksList>
 						{tasks.pending.map((task) => (
 							<S.TaskCard key={task.uuid}>
@@ -113,14 +115,14 @@ export const Tasks = () => {
 								<S.PriorityColor $priority={task.priority} />
 							</S.TaskCard>
 						))}
-						{tasks && tasks.pending.length === 0 && <S.NoTasks>No tasks found</S.NoTasks>}
+						{tasks && tasks.pending.length === 0 && <S.NoTasks>{t('noTasks')}</S.NoTasks>}
 					</S.TasksList>
 				</>
 			)}
 
 			{filters.status !== 'PENDING' && (
 				<>
-					<S.StatusTitle>Completed</S.StatusTitle>
+					<S.StatusTitle>{t('completed')}</S.StatusTitle>
 					<S.TasksList>
 						{tasks.completed.map((task) => (
 							<S.TaskCard key={task.uuid}>
@@ -132,7 +134,7 @@ export const Tasks = () => {
 								<S.PriorityColor $priority={task.priority} />
 							</S.TaskCard>
 						))}
-						{tasks && tasks.completed.length === 0 && <S.NoTasks>No tasks found</S.NoTasks>}
+						{tasks && tasks.completed.length === 0 && <S.NoTasks>{t('noTasks')}</S.NoTasks>}
 					</S.TasksList>
 				</>
 			)}

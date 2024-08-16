@@ -21,7 +21,7 @@ export const Animals = () => {
 	const { user } = useUserStore()
 	const { farm } = useFarmStore()
 	const navigation = useNavigate()
-	const { t } = useTranslation()
+	const { t } = useTranslation(['animals'])
 	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
 
 	const [animals, setAnimals] = useState<AnimalCardInformation[]>([])
@@ -58,8 +58,8 @@ export const Animals = () => {
 		} catch (error) {
 			setModalData({
 				open: true,
-				title: 'Error',
-				message: 'Ocurrió un error al obtener los animales',
+				title: t('modal.errorGettingAnimals.title'),
+				message: t('modal.errorGettingAnimals.message'),
 				onAccept: () => setModalData(defaultModalData),
 			})
 		} finally {
@@ -70,7 +70,7 @@ export const Animals = () => {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		setLoading(true)
-		setHeaderTitle(t('animals.title'))
+		setHeaderTitle(t('title'))
 		if (user) {
 			setSpecies(farm!.species)
 			getAnimals()
@@ -80,9 +80,9 @@ export const Animals = () => {
 	return (
 		<S.Container>
 			<S.ButtonContainer>
-				<Search placeholder={t('animals.search')} onKeyDown={handleSearchKeyPress} />
-				<Select name="selectedSpecies" label={t('animals.species')} onChange={handleSelectChange}>
-					<option value="all">{t('animals.all')}</option>
+				<Search placeholder={t('search')} onKeyDown={handleSearchKeyPress} />
+				<Select name="selectedSpecies" label={t('species')} onChange={handleSelectChange}>
+					<option value="all">{t('all')}</option>
 					{species.length > 0 &&
 						species.map((specie, index) => (
 							<option key={index} value={specie}>
@@ -90,7 +90,7 @@ export const Animals = () => {
 							</option>
 						))}
 				</Select>
-				<Button onClick={() => navigation(AppRoutes.ADD_ANIMAL)}>{t('animals.addAnimal')}</Button>
+				<Button onClick={() => navigation(AppRoutes.ADD_ANIMAL)}>{t('addAnimal')}</Button>
 			</S.ButtonContainer>
 			<S.AnimalsContainer>
 				{animals.map((animal) => (

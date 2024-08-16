@@ -1,0 +1,32 @@
+{
+	"title": "Add Animal",
+	"animalId": "Animal ID",
+	"species": "Species",
+	"breed": "Breed",
+	"gender": "Gender",
+	"color": "Color",
+	"weight": "Weight",
+	"birthDate": "Birth Date",
+	"purchaseDate": "Purchase Date",
+	"soldDate": "Sold Date",
+	"deathDate": "Death Date",
+	"addAnimal": "Add Animal",
+	"modal": {
+		"addAnimal": {
+			"title": "Animal Added",
+			"message": "The animal was added successfully"
+		},
+		"editAnimal": {
+			"title": "Edit Animal",
+			"message": "The animal was edited successfully"
+		},
+		"errorAddingAnimal": {
+			"title": "Error",
+			"message": "There was an error adding the animal"
+		},
+		"errorGettingAnimal": {
+			"title": "Error",
+			"message": "There was an error getting the animal"
+		}
+	}
+}

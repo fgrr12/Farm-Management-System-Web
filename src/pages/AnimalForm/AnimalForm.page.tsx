@@ -25,7 +25,7 @@ export const AnimalForm = () => {
 	const { farm } = useFarmStore()
 	const navigate = useNavigate()
 	const params = useParams()
-	const { t } = useTranslation()
+	const { t } = useTranslation(['animalForm'])
 
 	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
 	const [animalForm, setAnimalForm] = useState<Animal>(INITIAL_ANIMAL_FORM)
@@ -60,8 +60,8 @@ export const AnimalForm = () => {
 		} catch (error) {
 			setModalData({
 				open: true,
-				title: 'Error',
-				message: 'There was an error getting the animal',
+				title: t('modal.errorGettingAnimal.title'),
+				message: t('modal.errorGettingAnimal.message'),
 				onAccept: () => setModalData(defaultModalData),
 			})
 		} finally {
@@ -96,8 +96,8 @@ export const AnimalForm = () => {
 				await AnimalsService.updateAnimal(animalForm, user!.uuid)
 				setModalData({
 					open: true,
-					title: 'Animal Edited',
-					message: 'The animal was edited successfully',
+					title: t('modal.editAnimal.title'),
+					message: t('modal.editAnimal.message'),
 					onAccept: () => {
 						setModalData(defaultModalData)
 						navigate(AppRoutes.ANIMAL.replace(':animalUuid', animalUuid))
@@ -107,8 +107,8 @@ export const AnimalForm = () => {
 				await AnimalsService.setAnimal(animalForm, user!.uuid, user!.farmUuid)
 				setModalData({
 					open: true,
-					title: 'Animal Added',
-					message: 'The animal was added successfully',
+					title: t('modal.addAnimal.title'),
+					message: t('modal.addAnimal.message'),
 					onAccept: () => {
 						setModalData(defaultModalData)
 						setAnimalForm(INITIAL_ANIMAL_FORM)
@@ -118,8 +118,8 @@ export const AnimalForm = () => {
 		} catch (error) {
 			setModalData({
 				open: true,
-				title: 'Error',
-				message: 'There was an error adding the animal',
+				title: t('modal.errorAddingAnimal.title'),
+				message: t('modal.errorAddingAnimal.message'),
 				onAccept: () => setModalData(defaultModalData),
 			})
 		} finally {
@@ -129,7 +129,7 @@ export const AnimalForm = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		setHeaderTitle(t('addAnimal.title'))
+		setHeaderTitle(t('title'))
 		if (user) {
 			setSpecies(farm!.species)
 			if (params.animalUuid) {
@@ -144,8 +144,8 @@ export const AnimalForm = () => {
 				<TextField
 					name="animalId"
 					type="text"
-					placeholder={t('addAnimal.animalId')}
-					label={t('addAnimal.animalId')}
+					placeholder={t('animalId')}
+					label={t('animalId')}
 					value={animalForm.animalId}
 					onChange={handleTextChange}
 					required
@@ -160,13 +160,13 @@ export const AnimalForm = () => {
 				</S.DropzoneContainer>
 				<Select
 					name="species"
-					label={t('addAnimal.species')}
+					label={t('species')}
 					value={animalForm.species}
 					onChange={handleSelectChange}
 					required
 				>
 					<option value="" disabled>
-						{t('addAnimal.species')}
+						{t('species')}
 					</option>
 					{species.map((species, index) => (
 						<option key={index} value={species}>
@@ -177,20 +177,20 @@ export const AnimalForm = () => {
 				<TextField
 					name="breed"
 					type="text"
-					placeholder={t('addAnimal.breed')}
-					label={t('addAnimal.breed')}
+					placeholder={t('breed')}
+					label={t('breed')}
 					value={animalForm.breed}
 					onChange={handleTextChange}
 					required
 				/>
 				<Select
 					name="gender"
-					label={t('addAnimal.gender')}
+					label={t('gender')}
 					value={animalForm.gender}
 					onChange={handleSelectChange}
 				>
 					<option value="" disabled>
-						{t('addAnimal.gender')}
+						{t('gender')}
 					</option>
 					{genders.map((gender) => (
 						<option key={gender} value={gender}>
@@ -201,8 +201,8 @@ export const AnimalForm = () => {
 				<TextField
 					name="color"
 					type="text"
-					placeholder={t('addAnimal.color')}
-					label={t('addAnimal.color')}
+					placeholder={t('color')}
+					label={t('color')}
 					value={animalForm.color}
 					onChange={handleTextChange}
 					required
@@ -210,38 +210,38 @@ export const AnimalForm = () => {
 				<TextField
 					name="weight"
 					type="number"
-					placeholder={`${t('addAnimal.weight')} (${farm?.weightUnit})`}
-					label={`${t('addAnimal.weight')} (${farm?.weightUnit})`}
+					placeholder={`${t('weight')} (${farm?.weightUnit})`}
+					label={`${t('weight')} (${farm?.weightUnit})`}
 					value={animalForm.weight}
 					onChange={handleTextChange}
 					onWheel={(e) => e.currentTarget.blur()}
 					required
 				/>
 				<DatePicker
-					label={t('addAnimal.birthDate')}
+					label={t('birthDate')}
 					date={dayjs(animalForm.birthDate)}
 					onDateChange={handleDateChange('birthDate')}
 				/>
 				<DatePicker
-					label={t('addAnimal.purchaseDate')}
+					label={t('purchaseDate')}
 					date={dayjs(animalForm.purchaseDate)}
 					onDateChange={handleDateChange('purchaseDate')}
 				/>
 				{params.animalUuid && (
 					<DatePicker
-						label={t('addAnimal.soldDate')}
+						label={t('soldDate')}
 						date={dayjs(animalForm.soldDate)}
 						onDateChange={handleDateChange('soldDate')}
 					/>
 				)}
 				{params.animalUuid && (
 					<DatePicker
-						label={t('addAnimal.deathDate')}
+						label={t('deathDate')}
 						date={dayjs(animalForm.deathDate)}
 						onDateChange={handleDateChange('deathDate')}
 					/>
 				)}
-				<Button type="submit">{t('addAnimal.addAnimal')}</Button>
+				<Button type="submit">{t('addAnimal')}</Button>
 			</S.Form>
 		</S.Container>
 	)
