@@ -27,7 +27,6 @@ export const Sidebar = styled.div<CollapsePageStyleProps>`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-right: 1px solid ${colors.primary[600]};
     width: ${({ $collapse }) => ($collapse ? '4rem' : '12rem')};
     height: 100%;
     cursor: pointer;
@@ -47,6 +46,7 @@ export const Sidebar = styled.div<CollapsePageStyleProps>`
         width: ${({ $collapse }) => ($collapse ? '3rem' : '15rem')};
         transition: width 0.3s;
         background-color: ${({ $collapse }) => ($collapse ? 'transparent' : colors.white)};
+        padding-left: 10px;
     }
 `
 

@@ -49,11 +49,7 @@ export const PageHeader: FC = () => {
 				<S.SidebarCloseButton>
 					<ActionButton
 						disabled={!user}
-						icon={
-							collapseSidebar
-								? 'i-material-symbols-right-panel-close'
-								: 'i-material-symbols-left-panel-close-rounded'
-						}
+						icon={collapseSidebar ? 'i-ic-baseline-menu' : 'i-ic-baseline-menu-open'}
 					/>
 				</S.SidebarCloseButton>
 			</S.Sidebar>
