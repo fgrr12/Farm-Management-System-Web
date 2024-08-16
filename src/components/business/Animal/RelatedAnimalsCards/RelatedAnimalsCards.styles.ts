@@ -1,3 +1,4 @@
+import { colors } from '@/styles/variables'
 import styled from 'styled-components'
 
 export const CardsContainer = styled.div`
@@ -64,7 +65,7 @@ export const CardTitle = styled.span`
 export const CardContent = styled.div`
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
     gap: 1rem;
 
@@ -74,6 +75,9 @@ export const CardContent = styled.div`
         justify-content: center;
         align-items: center;
         gap: 0.5rem;
+        border: 1px solid ${colors.primary[200]};
+        border-radius: 0.5rem;
+        padding: 0.5rem;
     }
 `
 
