@@ -68,7 +68,7 @@ export const Tasks = () => {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only watching for search changes
 	useEffect(() => {
 		const debounceId = setTimeout(() => {
-			if (user && (tasks.pending || tasks.completed)) getTasks()
+			if (filters.search !== '') getTasks()
 		}, 500)
 		return () => clearTimeout(debounceId)
 	}, [filters.search])
