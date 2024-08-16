@@ -6,6 +6,7 @@ import { ActionButton } from '@/components/ui/ActionButton'
 import { Table } from '@/components/ui/Table'
 
 import { HealthRecordsService } from '@/services/healthRecords'
+import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 
 import type { HealthRecordsTableProps } from './HealthRecordsTable.types'
@@ -18,6 +19,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 	removeHealthRecord,
 }) => {
 	const { farm } = useFarmStore()
+	const { defaultModalData, setModalData, setLoading } = useAppStore()
 	const navigate = useNavigate()
 	const params = useParams()
 
@@ -37,8 +39,19 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 	}
 
 	const handleDeleteHealthRecord = (uuid: string) => async () => {
-		await HealthRecordsService.updateHealthRecordsStatus(uuid, false)
-		removeHealthRecord(uuid)
+		setModalData({
+			open: true,
+			title: 'Do you want to delete this health record?',
+			message: 'This action cannot be undone.',
+			onAccept: async () => {
+				setLoading(true)
+				await HealthRecordsService.updateHealthRecordsStatus(uuid, false)
+				removeHealthRecord(uuid)
+				setModalData(defaultModalData)
+				setLoading(false)
+			},
+			onCancel: () => setModalData(defaultModalData),
+		})
 	}
 	return (
 		<S.TableContainer>

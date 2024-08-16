@@ -41,16 +41,17 @@ export const Animal: FC = () => {
 	}
 
 	const handleRemoveAnimal = async () => {
-		await AnimalsService.deleteAnimal(animal.uuid, false)
-
 		setModalData({
 			open: true,
-			title: 'Animal Removed',
-			message: 'The animal has been removed successfully',
-			onAccept: () => {
+			title: 'Do you want to delete this animal?',
+			message: 'This action cannot be undone.',
+			onAccept: async () => {
+				setLoading(true)
+				await AnimalsService.deleteAnimal(animal.uuid, false)
 				setModalData(defaultModalData)
-				navigate(AppRoutes.ANIMALS)
+				setLoading(false)
 			},
+			onCancel: () => setModalData(defaultModalData),
 		})
 	}
 

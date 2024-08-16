@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { ActionButton } from '@/components/ui/ActionButton'
 
 import { HealthRecordsService } from '@/services/healthRecords'
+import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 
 import type { HealthRecordsCardsProps } from './HealthRecordsCards.types'
@@ -17,6 +18,7 @@ export const HealthRecordsCards: FC<HealthRecordsCardsProps> = ({
 	removeHealthRecord,
 }) => {
 	const { farm } = useFarmStore()
+	const { defaultModalData, setModalData, setLoading } = useAppStore()
 	const navigate = useNavigate()
 	const params = useParams()
 
@@ -36,8 +38,19 @@ export const HealthRecordsCards: FC<HealthRecordsCardsProps> = ({
 	}
 
 	const handleDeleteHealthRecord = (uuid: string) => async () => {
-		await HealthRecordsService.updateHealthRecordsStatus(uuid, false)
-		removeHealthRecord(uuid)
+		setModalData({
+			open: true,
+			title: 'Do you want to delete this health record?',
+			message: 'This action cannot be undone.',
+			onAccept: async () => {
+				setLoading(true)
+				await HealthRecordsService.updateHealthRecordsStatus(uuid, false)
+				removeHealthRecord(uuid)
+				setModalData(defaultModalData)
+				setLoading(false)
+			},
+			onCancel: () => setModalData(defaultModalData),
+		})
 	}
 	return (
 		<S.CardsContainer>

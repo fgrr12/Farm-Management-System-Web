@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { ActionButton } from '@/components/ui/ActionButton'
 
 import { RelatedAnimalsService } from '@/services/relatedAnimals'
+import { useAppStore } from '@/store/useAppStore'
 
 import type { RelatedAnimalsCardsProps } from './RelatedAnimalsCards.types'
 
@@ -16,6 +17,7 @@ export const RelatedAnimalsCards: FC<RelatedAnimalsCardsProps> = ({
 	type,
 	removeRelation,
 }) => {
+	const { defaultModalData, setModalData, setLoading } = useAppStore()
 	const params = useParams()
 	const navigate = useNavigate()
 
@@ -31,9 +33,20 @@ export const RelatedAnimalsCards: FC<RelatedAnimalsCardsProps> = ({
 	}
 
 	const handleDeleteRelatedAnimal = (animalUuid: string) => async () => {
-		await RelatedAnimalsService.deleteRelatedAnimal(animalUuid)
-		animals = animals.filter((animal) => animal.uuid !== animalUuid)
-		removeRelation(animalUuid)
+		setModalData({
+			open: true,
+			title: 'Do you want to delete this animal?',
+			message: 'This action cannot be undone.',
+			onAccept: async () => {
+				setLoading(true)
+				await RelatedAnimalsService.deleteRelatedAnimal(animalUuid)
+				animals = animals.filter((animal) => animal.uuid !== animalUuid)
+				removeRelation(animalUuid)
+				setModalData(defaultModalData)
+				setLoading(false)
+			},
+			onCancel: () => setModalData(defaultModalData),
+		})
 	}
 
 	return (

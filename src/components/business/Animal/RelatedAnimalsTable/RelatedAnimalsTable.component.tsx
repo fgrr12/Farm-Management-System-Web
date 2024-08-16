@@ -5,6 +5,7 @@ import { ActionButton } from '@/components/ui/ActionButton'
 import { Table } from '@/components/ui/Table'
 
 import { RelatedAnimalsService } from '@/services/relatedAnimals'
+import { useAppStore } from '@/store/useAppStore'
 
 import type { RelatedAnimalsTableProps } from './RelatedAnimalsTable.types'
 
@@ -17,6 +18,7 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 	type,
 	removeRelation,
 }) => {
+	const { defaultModalData, setModalData, setLoading } = useAppStore()
 	const params = useParams()
 	const navigate = useNavigate()
 
@@ -32,9 +34,20 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 	}
 
 	const handleDeleteRelatedAnimal = (animalUuid: string) => async () => {
-		await RelatedAnimalsService.deleteRelatedAnimal(animalUuid)
-		animals = animals.filter((animal) => animal.uuid !== animalUuid)
-		removeRelation(animalUuid)
+		setModalData({
+			open: true,
+			title: 'Do you want to delete this animal?',
+			message: 'This action cannot be undone.',
+			onAccept: async () => {
+				setLoading(true)
+				await RelatedAnimalsService.deleteRelatedAnimal(animalUuid)
+				animals = animals.filter((animal) => animal.uuid !== animalUuid)
+				removeRelation(animalUuid)
+				setModalData(defaultModalData)
+				setLoading(false)
+			},
+			onCancel: () => setModalData(defaultModalData),
+		})
 	}
 
 	return (
