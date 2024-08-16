@@ -1,0 +1,16 @@
+{
+	"title": "Relaciones con animales",
+	"animalId": "ID del animal",
+	"breed": "Raza",
+	"relation": "Relación",
+	"addParent": "Añadir padre",
+	"addChild": "Añadir hijo",
+	"actions": "Acciones",
+	"noRelatedAnimals": "No hay animales relacionados",
+	"modal": {
+		"deleteRelatedAnimal": {
+			"title": "¿Quieres eliminar este animal?",
+			"message": "Esta acción no se puede deshacer."
+		}
+	}
+}

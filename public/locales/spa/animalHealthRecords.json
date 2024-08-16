@@ -1,0 +1,31 @@
+{
+	"title": "Registros de salud",
+	"reason": "Razón",
+	"notes": "Notas",
+	"type": "Tipo",
+	"reviewedBy": "Revisado por",
+	"date": "Fecha",
+	"weight": "Peso",
+	"temperature": "Temperatura",
+	"medication": "Medicación",
+	"dosage": "Dosis",
+	"frequency": "Frecuencia",
+	"duration": "Duración",
+	"actions": "Acciones",
+	"noHealthRecords": "No hay registros de salud",
+	"healthRecordType": {
+		"checkup": "Revision",
+		"vaccination": "Vacunación",
+		"medication": "Medicación",
+		"surgery": "Cirugía",
+		"pregnant": "Embarazada",
+		"deworming": "Desparasitación",
+		"birth": "Nacimiento/Parto"
+	},
+	"modal": {
+		"deleteHealthRecord": {
+			"title": "¿Quieres eliminar este registro de salud?",
+			"message": "Esta acción no se puede deshacer."
+		}
+	}
+}

@@ -1,20 +1,20 @@
 {
-    "title": "Tareas",
-    "search": "Buscar",
-    "status": "Estado",
-    "all": "Todos",
-    "completed": "Completadas",
-    "pending": "Pendientes",
-    "high": "Alta",
-    "medium": "Media",
-    "low": "Baja",
-    "species": "Especie",
-    "addTask": "Añadir tarea",
-    "noTasks": "No se encontraron tareas",
-    "modal": {
-        "errorGettingTasks": {
-            "title": "Error",
-            "message": "Ocurrió un error al obtener las tareas"
-        }
-    }
+	"title": "Tareas",
+	"search": "Buscar",
+	"status": "Estado",
+	"all": "Todos",
+	"completed": "Completadas",
+	"pending": "Pendientes",
+	"high": "Alta",
+	"medium": "Media",
+	"low": "Baja",
+	"species": "Especie",
+	"addTask": "Añadir tarea",
+	"noTasks": "No se encontraron tareas",
+	"modal": {
+		"errorGettingTasks": {
+			"title": "Error",
+			"message": "Ocurrió un error al obtener las tareas"
+		}
+	}
 }

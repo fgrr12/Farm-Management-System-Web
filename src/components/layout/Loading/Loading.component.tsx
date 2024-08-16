@@ -1,14 +1,16 @@
 import { useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import * as S from './Loading.styles'
 import type { LoadingProps, LoadingRef } from './Loading.types'
 
 export const Loading: FC<LoadingProps> = ({ open, ...rest }) => {
+	const { t } = useTranslation(['common'])
 	const { loadingRef } = useLoading(open)
 
 	return (
 		<S.Loading ref={loadingRef} {...rest}>
 			<S.TextContainer>
-				<S.Letter>Loading</S.Letter>
+				<S.Letter>{t('loading')}</S.Letter>
 				<S.Dot>.</S.Dot>
 				<S.Dot>.</S.Dot>
 				<S.Dot>.</S.Dot>

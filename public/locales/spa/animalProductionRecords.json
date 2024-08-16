@@ -1,0 +1,14 @@
+{
+	"title": "Registros de producción",
+	"date": "Fecha",
+	"quantity": "Cantidad",
+	"notes": "Notas",
+	"actions": "Acciones",
+	"noProductionRecords": "No hay registros de producción",
+	"modal": {
+		"deleteProductionRecord": {
+			"title": "¿Quieres eliminar este registro de producción?",
+			"message": "Esta acción no se puede deshacer."
+		}
+	}
+}

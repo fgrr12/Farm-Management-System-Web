@@ -1,5 +1,6 @@
 import { AppRoutes } from '@/config/constants/routes'
 import dayjs from 'dayjs'
+import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { ActionButton } from '@/components/ui/ActionButton'
@@ -21,6 +22,7 @@ export const HealthRecordsCards: FC<HealthRecordsCardsProps> = ({
 	const { defaultModalData, setModalData, setLoading } = useAppStore()
 	const navigate = useNavigate()
 	const params = useParams()
+	const { t } = useTranslation(['animalHealthRecords'])
 
 	const handleAddHealthRecord = () => {
 		const animalUuid = params.animalUuid as string
@@ -40,8 +42,8 @@ export const HealthRecordsCards: FC<HealthRecordsCardsProps> = ({
 	const handleDeleteHealthRecord = (uuid: string) => async () => {
 		setModalData({
 			open: true,
-			title: 'Do you want to delete this health record?',
-			message: 'This action cannot be undone.',
+			title: t('modal.deleteHealthRecord.title'),
+			message: t('modal.deleteHealthRecord.message'),
 			onAccept: async () => {
 				setLoading(true)
 				await HealthRecordsService.updateHealthRecordsStatus(uuid, false)
@@ -55,7 +57,7 @@ export const HealthRecordsCards: FC<HealthRecordsCardsProps> = ({
 	return (
 		<S.CardsContainer>
 			<S.CenterTitle>
-				<S.Label>Health Records</S.Label>
+				<S.Label>{t('title')}</S.Label>
 				{user && (
 					<ActionButton
 						title="Add Health Record"
@@ -70,24 +72,24 @@ export const HealthRecordsCards: FC<HealthRecordsCardsProps> = ({
 						<S.CardTitle>{healthRecord.reason}</S.CardTitle>
 						<S.CardContent>
 							<div>
-								<S.CardLabel>Notes</S.CardLabel>
+								<S.CardLabel>{t('notes')}</S.CardLabel>
 								<S.CardValue>{healthRecord.notes}</S.CardValue>
 							</div>
 							<div>
-								<S.CardLabel>Date</S.CardLabel>
+								<S.CardLabel>{t('date')}</S.CardLabel>
 								<S.CardValue>{dayjs(healthRecord.date).format('MM/DD/YYYY')}</S.CardValue>
 							</div>
 							<div>
-								<S.CardLabel>Reviewed By</S.CardLabel>
+								<S.CardLabel>{t('reviewedBy')}</S.CardLabel>
 								<S.CardValue>{healthRecord.reviewedBy}</S.CardValue>
 							</div>
 							<div>
-								<S.CardLabel>Type</S.CardLabel>
+								<S.CardLabel>{t('type')}</S.CardLabel>
 								<S.CardValue>{healthRecord.type}</S.CardValue>
 							</div>
 							{healthRecord.weight !== 0 && (
 								<div>
-									<S.CardLabel>Weight</S.CardLabel>
+									<S.CardLabel>{t('weight')}</S.CardLabel>
 									<S.CardValue>
 										{healthRecord.weight}
 										{farm?.weightUnit}
@@ -96,7 +98,7 @@ export const HealthRecordsCards: FC<HealthRecordsCardsProps> = ({
 							)}
 							{healthRecord.temperature !== 0 && (
 								<div>
-									<S.CardLabel>Temperature</S.CardLabel>
+									<S.CardLabel>{t('temperature')}</S.CardLabel>
 									<S.CardValue>
 										{healthRecord.temperature}
 										{farm?.temperatureUnit}
@@ -105,25 +107,25 @@ export const HealthRecordsCards: FC<HealthRecordsCardsProps> = ({
 							)}
 							{healthRecord.medication !== '-' && (
 								<div>
-									<S.CardLabel>Medication</S.CardLabel>
+									<S.CardLabel>{t('medication')}</S.CardLabel>
 									<S.CardValue>{healthRecord.medication}</S.CardValue>
 								</div>
 							)}
 							{healthRecord.dosage !== '-' && (
 								<div>
-									<S.CardLabel>Dosage</S.CardLabel>
+									<S.CardLabel>{t('dosage')}</S.CardLabel>
 									<S.CardValue>{healthRecord.dosage}</S.CardValue>
 								</div>
 							)}
 							{healthRecord.frequency !== '-' && (
 								<div>
-									<S.CardLabel>Frequency</S.CardLabel>
+									<S.CardLabel>{t('frequency')}</S.CardLabel>
 									<S.CardValue>{healthRecord.frequency}</S.CardValue>
 								</div>
 							)}
 							{healthRecord.duration !== '-' && (
 								<div>
-									<S.CardLabel>Duration</S.CardLabel>
+									<S.CardLabel>{t('duration')}</S.CardLabel>
 									<S.CardValue>{healthRecord.duration}</S.CardValue>
 								</div>
 							)}
@@ -146,7 +148,7 @@ export const HealthRecordsCards: FC<HealthRecordsCardsProps> = ({
 				))}
 				{healthRecords.length === 0 && (
 					<S.Card>
-						<S.CardTitle>No Health Records</S.CardTitle>
+						<S.CardTitle>{t('noHealthRecords')}</S.CardTitle>
 					</S.Card>
 				)}
 			</S.CardContainer>

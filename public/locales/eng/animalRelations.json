@@ -1,0 +1,16 @@
+{
+	"title": "Animal Relations",
+	"animalId": "Animal ID",
+	"breed": "Breed",
+	"relation": "Relation",
+	"addParent": "Add Parent",
+	"addChild": "Add Child",
+	"actions": "Actions",
+	"noRelatedAnimals": "No related animals",
+	"modal": {
+		"deleteRelatedAnimal": {
+			"title": "Do you want to delete this animal?",
+			"message": "This action cannot be undone."
+		}
+	}
+}

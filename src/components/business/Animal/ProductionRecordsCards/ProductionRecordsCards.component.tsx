@@ -1,5 +1,6 @@
 import { AppRoutes } from '@/config/constants/routes'
 import dayjs from 'dayjs'
+import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { ActionButton } from '@/components/ui/ActionButton'
@@ -21,6 +22,7 @@ export const ProductionRecordsCards: FC<ProductionRecordsCardsProps> = ({
 	const { defaultModalData, setModalData, setLoading } = useAppStore()
 	const navigate = useNavigate()
 	const params = useParams()
+	const { t } = useTranslation(['animalProductionRecords'])
 
 	const handleAddHealthRecord = () => {
 		const animalUuid = params.animalUuid as string
@@ -40,8 +42,8 @@ export const ProductionRecordsCards: FC<ProductionRecordsCardsProps> = ({
 	const handleDeleteHealthRecord = (uuid: string) => async () => {
 		setModalData({
 			open: true,
-			title: 'Do you want to delete this production record?',
-			message: 'This action cannot be undone.',
+			title: t('modal.deleteProductionRecord.title'),
+			message: t('modal.deleteProductionRecord.message'),
 			onAccept: async () => {
 				setLoading(true)
 				await ProductionRecordsService.updateProductionRecordsStatus(uuid, false)
@@ -55,7 +57,7 @@ export const ProductionRecordsCards: FC<ProductionRecordsCardsProps> = ({
 	return (
 		<S.CardsContainer>
 			<S.CenterTitle>
-				<S.Label>Production Records</S.Label>
+				<S.Label>{t('title')}</S.Label>
 				{user && (
 					<ActionButton
 						title="Add Production Record"
@@ -69,14 +71,14 @@ export const ProductionRecordsCards: FC<ProductionRecordsCardsProps> = ({
 					<S.CardTitle>{dayjs(productionRecord.date).format('DD/MM/YYYY')}</S.CardTitle>
 					<S.CardContent>
 						<div>
-							<S.CardLabel>Quantity</S.CardLabel>
+							<S.CardLabel>{t('quantity')}</S.CardLabel>
 							<S.CardValue>
 								{productionRecord.quantity}
 								{farm?.liquidUnit}
 							</S.CardValue>
 						</div>
 						<div>
-							<S.CardLabel>Notes</S.CardLabel>
+							<S.CardLabel>{t('notes')}</S.CardLabel>
 							<S.CardValue>{productionRecord.notes}</S.CardValue>
 						</div>
 					</S.CardContent>
@@ -98,7 +100,7 @@ export const ProductionRecordsCards: FC<ProductionRecordsCardsProps> = ({
 			))}
 			{productionRecords.length === 0 && (
 				<S.Card>
-					<S.CardTitle>No production records</S.CardTitle>
+					<S.CardTitle>{t('noProductionRecords')}</S.CardTitle>
 				</S.Card>
 			)}
 		</S.CardsContainer>

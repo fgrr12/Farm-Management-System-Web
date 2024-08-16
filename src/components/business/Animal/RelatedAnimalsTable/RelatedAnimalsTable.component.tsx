@@ -1,4 +1,5 @@
 import { AppRoutes } from '@/config/constants/routes'
+import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { ActionButton } from '@/components/ui/ActionButton'
@@ -21,6 +22,7 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 	const { defaultModalData, setModalData, setLoading } = useAppStore()
 	const params = useParams()
 	const navigate = useNavigate()
+	const { t } = useTranslation(['animalRelations'])
 
 	const handleAddRelatedAnimals = () => {
 		const animalUuid = params.animalUuid as string
@@ -36,8 +38,8 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 	const handleDeleteRelatedAnimal = (animalUuid: string) => async () => {
 		setModalData({
 			open: true,
-			title: 'Do you want to delete this animal?',
-			message: 'This action cannot be undone.',
+			title: t('modal.deleteRelatedAnimal.title'),
+			message: t('modal.deleteRelatedAnimal.message'),
 			onAccept: async () => {
 				setLoading(true)
 				await RelatedAnimalsService.deleteRelatedAnimal(animalUuid)
@@ -56,7 +58,7 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 				<S.Label>{title}</S.Label>
 				{user && (
 					<ActionButton
-						title={title.startsWith('Parents') ? 'Add Parent' : 'Add Child'}
+						title={title.startsWith('Parents') ? t('addParent') : t('addChild')}
 						icon="i-material-symbols-add-circle-outline"
 						onClick={handleAddRelatedAnimals}
 					/>
@@ -65,10 +67,10 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 			<Table>
 				<Table.Head>
 					<Table.Row>
-						<Table.HeadCell>Animal ID</Table.HeadCell>
-						<Table.HeadCell>Breed</Table.HeadCell>
-						<Table.HeadCell>Relation</Table.HeadCell>
-						{user && <Table.HeadCell>Actions</Table.HeadCell>}
+						<Table.HeadCell>{t('animalId')}</Table.HeadCell>
+						<Table.HeadCell>{t('breed')}</Table.HeadCell>
+						<Table.HeadCell>{t('relation')}</Table.HeadCell>
+						{user && <Table.HeadCell>{t('actions')}</Table.HeadCell>}
 					</Table.Row>
 				</Table.Head>
 				<Table.Body>
@@ -95,7 +97,7 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 					))}
 					{animals.length === 0 && (
 						<Table.Row>
-							<Table.Cell colSpan={user ? 12 : 11}>No related animals found</Table.Cell>
+							<Table.Cell colSpan={user ? 12 : 11}>{t('noRelatedAnimals')}</Table.Cell>
 						</Table.Row>
 					)}
 				</Table.Body>

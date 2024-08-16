@@ -1,5 +1,6 @@
 import { AppRoutes } from '@/config/constants/routes'
 import dayjs from 'dayjs'
+import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { ActionButton } from '@/components/ui/ActionButton'
@@ -22,6 +23,7 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 	const { defaultModalData, setModalData, setLoading } = useAppStore()
 	const navigate = useNavigate()
 	const params = useParams()
+	const { t } = useTranslation(['animalProductionRecords'])
 
 	const handleAddHealthRecord = () => {
 		const animalUuid = params.animalUuid as string
@@ -41,8 +43,8 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 	const handleDeleteHealthRecord = (uuid: string) => async () => {
 		setModalData({
 			open: true,
-			title: 'Do you want to delete this production record?',
-			message: 'This action cannot be undone.',
+			title: t('modal.deleteProductionRecord.title'),
+			message: t('modal.deleteProductionRecord.message'),
 			onAccept: async () => {
 				setLoading(true)
 				await ProductionRecordsService.updateProductionRecordsStatus(uuid, false)
@@ -56,7 +58,7 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 	return (
 		<S.TableContainer>
 			<S.CenterTitle>
-				<S.Label>Production Records</S.Label>
+				<S.Label>{t('title')}</S.Label>
 				{user && (
 					<ActionButton
 						title="Add Production Record"
@@ -68,10 +70,10 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 			<Table>
 				<Table.Head>
 					<Table.Row>
-						<Table.HeadCell>Date</Table.HeadCell>
-						<Table.HeadCell>Quantity</Table.HeadCell>
-						<Table.HeadCell>Notes</Table.HeadCell>
-						{user && <Table.HeadCell>Actions</Table.HeadCell>}
+						<Table.HeadCell>{t('date')}</Table.HeadCell>
+						<Table.HeadCell>{t('quantity')}</Table.HeadCell>
+						<Table.HeadCell>{t('notes')}</Table.HeadCell>
+						{user && <Table.HeadCell>{t('actions')}</Table.HeadCell>}
 					</Table.Row>
 				</Table.Head>
 				<Table.Body>
@@ -101,7 +103,7 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 					))}
 					{productionRecords.length === 0 && (
 						<Table.Row>
-							<Table.Cell colSpan={user ? 12 : 11}>No production records found</Table.Cell>
+							<Table.Cell colSpan={user ? 12 : 11}>{t('noProductionRecords')}</Table.Cell>
 						</Table.Row>
 					)}
 				</Table.Body>

@@ -1,12 +1,13 @@
 {
-    "header": {
-        "return": "Volver"
-    },
-    "sidebar": {
-        "animals": "Animales",
-        "tasks": "Tareas",
-        "employees": "Empleados",
-        "myAccount": "Mi Cuenta",
-        "logout": "Cerrar Sesión"
-    }
+	"header": {
+		"return": "Volver"
+	},
+	"sidebar": {
+		"animals": "Animales",
+		"tasks": "Tareas",
+		"employees": "Empleados",
+		"myAccount": "Mi Cuenta",
+		"logout": "Cerrar Sesión"
+	},
+	"loading": "Cargando"
 }

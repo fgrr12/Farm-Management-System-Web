@@ -1,5 +1,6 @@
 import { AppRoutes } from '@/config/constants/routes'
 import dayjs from 'dayjs'
+import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { ActionButton } from '@/components/ui/ActionButton'
@@ -22,6 +23,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 	const { defaultModalData, setModalData, setLoading } = useAppStore()
 	const navigate = useNavigate()
 	const params = useParams()
+	const { t } = useTranslation(['animalHealthRecords'])
 
 	const handleAddHealthRecord = () => {
 		const animalUuid = params.animalUuid as string
@@ -41,8 +43,8 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 	const handleDeleteHealthRecord = (uuid: string) => async () => {
 		setModalData({
 			open: true,
-			title: 'Do you want to delete this health record?',
-			message: 'This action cannot be undone.',
+			title: t('modal.deleteHealthRecord.title'),
+			message: t('modal.deleteHealthRecord.message'),
 			onAccept: async () => {
 				setLoading(true)
 				await HealthRecordsService.updateHealthRecordsStatus(uuid, false)
@@ -56,7 +58,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 	return (
 		<S.TableContainer>
 			<S.CenterTitle>
-				<S.Label>Health Records</S.Label>
+				<S.Label>{t('title')}</S.Label>
 				{user && (
 					<ActionButton
 						title="Add Health Record"
@@ -68,18 +70,18 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 			<Table>
 				<Table.Head>
 					<Table.Row>
-						<Table.HeadCell>Reason</Table.HeadCell>
-						<Table.HeadCell>Notes</Table.HeadCell>
-						<Table.HeadCell>Type</Table.HeadCell>
-						<Table.HeadCell>Reviewed By</Table.HeadCell>
-						<Table.HeadCell>Date</Table.HeadCell>
-						<Table.HeadCell>Weight</Table.HeadCell>
-						<Table.HeadCell>Temperature</Table.HeadCell>
-						<Table.HeadCell>Medication</Table.HeadCell>
-						<Table.HeadCell>Dosage</Table.HeadCell>
-						<Table.HeadCell>Frequency</Table.HeadCell>
-						<Table.HeadCell>Duration</Table.HeadCell>
-						{user && <Table.HeadCell>Actions</Table.HeadCell>}
+						<Table.HeadCell>{t('reason')}</Table.HeadCell>
+						<Table.HeadCell>{t('notes')}</Table.HeadCell>
+						<Table.HeadCell>{t('type')}</Table.HeadCell>
+						<Table.HeadCell>{t('reviewedBy')}</Table.HeadCell>
+						<Table.HeadCell>{t('date')}</Table.HeadCell>
+						<Table.HeadCell>{t('weight')}</Table.HeadCell>
+						<Table.HeadCell>{t('temperature')}</Table.HeadCell>
+						<Table.HeadCell>{t('medication')}</Table.HeadCell>
+						<Table.HeadCell>{t('dosage')}</Table.HeadCell>
+						<Table.HeadCell>{t('frequency')}</Table.HeadCell>
+						<Table.HeadCell>{t('duration')}</Table.HeadCell>
+						{user && <Table.HeadCell>{t('actions')}</Table.HeadCell>}
 					</Table.Row>
 				</Table.Head>
 				<Table.Body>
@@ -87,7 +89,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 						<Table.Row key={crypto.randomUUID()}>
 							<Table.Cell>{healthRecord.reason}</Table.Cell>
 							<Table.Cell>{healthRecord.notes}</Table.Cell>
-							<Table.Cell>{healthRecord.type}</Table.Cell>
+							<Table.Cell>{t(`healthRecordType.${healthRecord.type.toLowerCase()}`)}</Table.Cell>
 							<Table.Cell>{healthRecord.reviewedBy}</Table.Cell>
 							<Table.Cell>{dayjs(healthRecord.date).format('MM/DD/YYYY')}</Table.Cell>
 							<Table.Cell>
@@ -120,7 +122,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 					))}
 					{healthRecords.length === 0 && (
 						<Table.Row>
-							<Table.Cell colSpan={user ? 12 : 11}>No health records found</Table.Cell>
+							<Table.Cell colSpan={user ? 12 : 11}>{t('noHealthRecords')}</Table.Cell>
 						</Table.Row>
 					)}
 				</Table.Body>

@@ -1,4 +1,5 @@
 import { AppRoutes } from '@/config/constants/routes'
+import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { ActionButton } from '@/components/ui/ActionButton'
@@ -20,6 +21,7 @@ export const RelatedAnimalsCards: FC<RelatedAnimalsCardsProps> = ({
 	const { defaultModalData, setModalData, setLoading } = useAppStore()
 	const params = useParams()
 	const navigate = useNavigate()
+	const { t } = useTranslation(['animalRelations'])
 
 	const handleAddRelatedAnimals = () => {
 		const animalUuid = params.animalUuid as string
@@ -35,8 +37,8 @@ export const RelatedAnimalsCards: FC<RelatedAnimalsCardsProps> = ({
 	const handleDeleteRelatedAnimal = (animalUuid: string) => async () => {
 		setModalData({
 			open: true,
-			title: 'Do you want to delete this animal?',
-			message: 'This action cannot be undone.',
+			title: t('modal.deleteRelatedAnimal.title'),
+			message: t('modal.deleteRelatedAnimal.message'),
 			onAccept: async () => {
 				setLoading(true)
 				await RelatedAnimalsService.deleteRelatedAnimal(animalUuid)
@@ -55,7 +57,7 @@ export const RelatedAnimalsCards: FC<RelatedAnimalsCardsProps> = ({
 				<S.Label>{title}</S.Label>
 				{user && (
 					<ActionButton
-						title={title.startsWith('Parents') ? 'Add Parent' : 'Add Child'}
+						title={title.startsWith('Parents') ? t('addParent') : t('addChild')}
 						icon="i-material-symbols-add-circle-outline"
 						onClick={handleAddRelatedAnimals}
 					/>
@@ -65,15 +67,15 @@ export const RelatedAnimalsCards: FC<RelatedAnimalsCardsProps> = ({
 				<S.Card key={animal.uuid}>
 					<S.CardContent>
 						<div>
-							<S.CardLabel>Animal ID</S.CardLabel>
+							<S.CardLabel>{t('animalId')}</S.CardLabel>
 							<S.CardValue>{animal[type].animalId}</S.CardValue>
 						</div>
 						<div>
-							<S.CardLabel>Breed</S.CardLabel>
+							<S.CardLabel>{t('breed')}</S.CardLabel>
 							<S.CardValue>{animal[type].breed}</S.CardValue>
 						</div>
 						<div>
-							<S.CardLabel>Relation</S.CardLabel>
+							<S.CardLabel>{t('relation')}</S.CardLabel>
 							<S.CardValue>{animal[type].relation}</S.CardValue>
 						</div>
 					</S.CardContent>
@@ -95,7 +97,7 @@ export const RelatedAnimalsCards: FC<RelatedAnimalsCardsProps> = ({
 			))}
 			{animals.length === 0 && (
 				<S.Card>
-					<S.CardTitle>No related animals</S.CardTitle>
+					<S.CardTitle>{t('noRelatedAnimals')}</S.CardTitle>
 				</S.Card>
 			)}
 		</S.CardsContainer>
