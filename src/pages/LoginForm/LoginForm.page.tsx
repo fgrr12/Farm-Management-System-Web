@@ -2,7 +2,7 @@ import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { Button } from '@/components/ui/Button'
-import { TextField } from '@/components/ui/TextField'
+import { PasswordField, TextField } from '@/components/ui/TextField'
 
 import { AppRoutes } from '@/config/constants/routes'
 import { UserService } from '@/services/user'
@@ -57,9 +57,8 @@ export const LoginForm: FC = () => {
 						onChange={handleTextChange}
 						required
 					/>
-					<TextField
+					<PasswordField
 						name="password"
-						type="text"
 						placeholder="Password"
 						label="Password"
 						onChange={handleTextChange}

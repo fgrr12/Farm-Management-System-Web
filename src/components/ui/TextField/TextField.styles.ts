@@ -48,3 +48,15 @@ export const Label = styled.label`
   border-radius: 6px;
   padding: 0 0.3rem;
 `
+
+export const PasswordIcon = styled.div`
+  position: absolute;
+  top: 50%;
+  right: 0.3rem;
+  transform: translateY(-50%);
+  width: 2rem;
+  height: 2rem;
+  background-color: ${colors.primary[600]};
+  filter: drop-shadow(0 0 10px ${colors.shadowBasic});
+  cursor: pointer;
+`
