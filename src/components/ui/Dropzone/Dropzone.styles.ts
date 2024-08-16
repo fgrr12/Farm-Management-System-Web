@@ -31,6 +31,7 @@ export const Label = styled.label`
     font-size: 1.5rem;
     color: ${colors.primary[600]};
     cursor: pointer;
+    padding: 0 2rem;
 `
 
 export const DropzoneInput = styled.input`
