@@ -9,4 +9,5 @@ interface User {
 	photoUrl: string
 	language: string
 	farmUuid: string
+	createdBy?: string
 }
