@@ -7,7 +7,6 @@ import { ActionButton } from '@/components/ui/ActionButton'
 
 import { ProductionRecordsService } from '@/services/productionRecords'
 import { useAppStore } from '@/store/useAppStore'
-import { useFarmStore } from '@/store/useFarmStore'
 
 import type { ProductionRecordsCardsProps } from './ProductionRecordsCards.types'
 
@@ -15,10 +14,10 @@ import * as S from './ProductionRecordsCards.styles'
 
 export const ProductionRecordsCards: FC<ProductionRecordsCardsProps> = ({
 	productionRecords,
-	user,
+	haveUser,
+	farm,
 	removeProductionRecord,
 }) => {
-	const { farm } = useFarmStore()
 	const { defaultModalData, setModalData, setLoading } = useAppStore()
 	const navigate = useNavigate()
 	const params = useParams()
@@ -58,7 +57,7 @@ export const ProductionRecordsCards: FC<ProductionRecordsCardsProps> = ({
 		<S.CardsContainer>
 			<S.CenterTitle>
 				<S.Label>{t('title')}</S.Label>
-				{user && (
+				{haveUser && (
 					<ActionButton
 						title="Add Production Record"
 						icon="i-material-symbols-add-circle-outline"
@@ -82,7 +81,7 @@ export const ProductionRecordsCards: FC<ProductionRecordsCardsProps> = ({
 							<S.CardValue>{productionRecord.notes}</S.CardValue>
 						</div>
 					</S.CardContent>
-					{user && (
+					{haveUser && (
 						<S.CardActions>
 							<ActionButton
 								title="Edit"

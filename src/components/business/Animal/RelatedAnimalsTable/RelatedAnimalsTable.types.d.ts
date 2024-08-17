@@ -3,7 +3,7 @@ import type dayjs from 'dayjs'
 export interface RelatedAnimalsTableProps {
 	title: string
 	animals: RelatedAnimal[]
-	user: User | null
+	haveUser: boolean
 	type: 'parent' | 'child'
 	removeRelation: (uuid: string) => void
 }

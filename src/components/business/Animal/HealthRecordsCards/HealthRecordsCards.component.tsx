@@ -7,7 +7,6 @@ import { ActionButton } from '@/components/ui/ActionButton'
 
 import { HealthRecordsService } from '@/services/healthRecords'
 import { useAppStore } from '@/store/useAppStore'
-import { useFarmStore } from '@/store/useFarmStore'
 
 import type { HealthRecordsCardsProps } from './HealthRecordsCards.types'
 
@@ -15,10 +14,10 @@ import * as S from './HealthRecordsCards.styles'
 
 export const HealthRecordsCards: FC<HealthRecordsCardsProps> = ({
 	healthRecords,
-	user,
+	haveUser,
+	farm,
 	removeHealthRecord,
 }) => {
-	const { farm } = useFarmStore()
 	const { defaultModalData, setModalData, setLoading } = useAppStore()
 	const navigate = useNavigate()
 	const params = useParams()
@@ -58,7 +57,7 @@ export const HealthRecordsCards: FC<HealthRecordsCardsProps> = ({
 		<S.CardsContainer>
 			<S.CenterTitle>
 				<S.Label>{t('title')}</S.Label>
-				{user && (
+				{haveUser && (
 					<ActionButton
 						title="Add Health Record"
 						icon="i-material-symbols-add-circle-outline"
@@ -130,7 +129,7 @@ export const HealthRecordsCards: FC<HealthRecordsCardsProps> = ({
 								</div>
 							)}
 						</S.CardContent>
-						{user && (
+						{haveUser && (
 							<S.CardActions>
 								<ActionButton
 									title="Edit"

@@ -2,7 +2,8 @@ import type dayjs from 'dayjs'
 
 export interface ProductionRecordsCardsProps {
 	productionRecords: ProductionRecord[]
-	user: User | null
+	haveUser: boolean
+	farm: Farm | null
 	removeProductionRecord: (uuid: string) => void
 }
 

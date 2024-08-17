@@ -8,7 +8,6 @@ import { Table } from '@/components/ui/Table'
 
 import { ProductionRecordsService } from '@/services/productionRecords'
 import { useAppStore } from '@/store/useAppStore'
-import { useFarmStore } from '@/store/useFarmStore'
 
 import type { ProductionRecordsTableProps } from './ProductionRecordsTable.types'
 
@@ -16,10 +15,10 @@ import * as S from './ProductionRecordsTable.styles'
 
 export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 	productionRecords,
-	user,
+	haveUser,
+	farm,
 	removeProductionRecord,
 }) => {
-	const { farm } = useFarmStore()
 	const { defaultModalData, setModalData, setLoading } = useAppStore()
 	const navigate = useNavigate()
 	const params = useParams()
@@ -59,7 +58,7 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 		<S.TableContainer>
 			<S.CenterTitle>
 				<S.Label>{t('title')}</S.Label>
-				{user && (
+				{haveUser && (
 					<ActionButton
 						title="Add Production Record"
 						icon="i-material-symbols-add-circle-outline"
@@ -73,7 +72,7 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 						<Table.HeadCell>{t('date')}</Table.HeadCell>
 						<Table.HeadCell>{t('quantity')}</Table.HeadCell>
 						<Table.HeadCell>{t('notes')}</Table.HeadCell>
-						{user && <Table.HeadCell>{t('actions')}</Table.HeadCell>}
+						{haveUser && <Table.HeadCell>{t('actions')}</Table.HeadCell>}
 					</Table.Row>
 				</Table.Head>
 				<Table.Body>
@@ -85,7 +84,7 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 								{farm!.liquidUnit}
 							</Table.Cell>
 							<Table.Cell>{productionRecord.notes}</Table.Cell>
-							{user && (
+							{haveUser && (
 								<Table.Cell>
 									<ActionButton
 										title="Edit"
@@ -103,7 +102,7 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 					))}
 					{productionRecords.length === 0 && (
 						<Table.Row>
-							<Table.Cell colSpan={user ? 12 : 11}>{t('noProductionRecords')}</Table.Cell>
+							<Table.Cell colSpan={haveUser ? 12 : 11}>{t('noProductionRecords')}</Table.Cell>
 						</Table.Row>
 					)}
 				</Table.Body>

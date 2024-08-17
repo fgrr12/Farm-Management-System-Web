@@ -8,7 +8,6 @@ import { Table } from '@/components/ui/Table'
 
 import { HealthRecordsService } from '@/services/healthRecords'
 import { useAppStore } from '@/store/useAppStore'
-import { useFarmStore } from '@/store/useFarmStore'
 
 import type { HealthRecordsTableProps } from './HealthRecordsTable.types'
 
@@ -16,10 +15,10 @@ import * as S from './HealthRecordsTable.styles'
 
 export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 	healthRecords,
-	user,
+	haveUser,
+	farm,
 	removeHealthRecord,
 }) => {
-	const { farm } = useFarmStore()
 	const { defaultModalData, setModalData, setLoading } = useAppStore()
 	const navigate = useNavigate()
 	const params = useParams()
@@ -59,7 +58,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 		<S.TableContainer>
 			<S.CenterTitle>
 				<S.Label>{t('title')}</S.Label>
-				{user && (
+				{haveUser && (
 					<ActionButton
 						title="Add Health Record"
 						icon="i-material-symbols-add-circle-outline"
@@ -81,7 +80,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 						<Table.HeadCell>{t('dosage')}</Table.HeadCell>
 						<Table.HeadCell>{t('frequency')}</Table.HeadCell>
 						<Table.HeadCell>{t('duration')}</Table.HeadCell>
-						{user && <Table.HeadCell>{t('actions')}</Table.HeadCell>}
+						{haveUser && <Table.HeadCell>{t('actions')}</Table.HeadCell>}
 					</Table.Row>
 				</Table.Head>
 				<Table.Body>
@@ -104,7 +103,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 							<Table.Cell>{healthRecord.dosage}</Table.Cell>
 							<Table.Cell>{healthRecord.frequency}</Table.Cell>
 							<Table.Cell>{healthRecord.duration}</Table.Cell>
-							{user && (
+							{haveUser && (
 								<Table.Cell>
 									<ActionButton
 										title="Edit"
@@ -122,7 +121,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 					))}
 					{healthRecords.length === 0 && (
 						<Table.Row>
-							<Table.Cell colSpan={user ? 12 : 11}>{t('noHealthRecords')}</Table.Cell>
+							<Table.Cell colSpan={haveUser ? 12 : 11}>{t('noHealthRecords')}</Table.Cell>
 						</Table.Row>
 					)}
 				</Table.Body>

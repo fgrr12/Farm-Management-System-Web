@@ -202,13 +202,15 @@ export const Animal: FC = () => {
 			{mobile ? (
 				<HealthRecordsCards
 					healthRecords={animal?.healthRecords || []}
-					user={user}
+					haveUser={user !== null}
+					farm={farm}
 					removeHealthRecord={handleRemoveHealthRecord}
 				/>
 			) : (
 				<HealthRecordsTable
 					healthRecords={animal?.healthRecords || []}
-					user={user}
+					haveUser={user !== null}
+					farm={farm}
 					removeHealthRecord={handleRemoveHealthRecord}
 				/>
 			)}
@@ -217,13 +219,15 @@ export const Animal: FC = () => {
 				{mobile ? (
 					<ProductionRecordsCards
 						productionRecords={animal?.productionRecords || []}
-						user={user}
+						haveUser={user !== null}
+						farm={farm}
 						removeProductionRecord={handleRemoveProductionRecord}
 					/>
 				) : (
 					<ProductionRecordsTable
 						productionRecords={animal?.productionRecords || []}
-						user={user}
+						haveUser={user !== null}
+						farm={farm}
 						removeProductionRecord={handleRemoveProductionRecord}
 					/>
 				)}
@@ -233,14 +237,14 @@ export const Animal: FC = () => {
 						<RelatedAnimalsCards
 							title={t('parentsTitle')}
 							animals={animal?.relatedAnimals?.parents || []}
-							user={user}
+							haveUser={user !== null}
 							type="parent"
 							removeRelation={handleRemoveRelation}
 						/>
 						<RelatedAnimalsCards
 							title={t('childrenTitle')}
 							animals={animal?.relatedAnimals?.children || []}
-							user={user}
+							haveUser={user !== null}
 							type="child"
 							removeRelation={handleRemoveRelation}
 						/>
@@ -250,14 +254,14 @@ export const Animal: FC = () => {
 						<RelatedAnimalsTable
 							title={t('parentsTitle')}
 							animals={animal?.relatedAnimals?.parents || []}
-							user={user}
+							haveUser={user !== null}
 							type="parent"
 							removeRelation={handleRemoveRelation}
 						/>
 						<RelatedAnimalsTable
 							title={t('childrenTitle')}
 							animals={animal?.relatedAnimals?.children || []}
-							user={user}
+							haveUser={user !== null}
 							type="child"
 							removeRelation={handleRemoveRelation}
 						/>

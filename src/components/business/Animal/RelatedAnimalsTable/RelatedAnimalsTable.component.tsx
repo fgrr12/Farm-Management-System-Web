@@ -15,7 +15,7 @@ import * as S from './RelatedAnimalsTable.styles'
 export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 	title,
 	animals,
-	user,
+	haveUser,
 	type,
 	removeRelation,
 }) => {
@@ -56,7 +56,7 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 		<S.TableContainer>
 			<S.CenterTitle>
 				<S.Label>{title}</S.Label>
-				{user && (
+				{haveUser && (
 					<ActionButton
 						title={title.startsWith('Parents') ? t('addParent') : t('addChild')}
 						icon="i-material-symbols-add-circle-outline"
@@ -70,7 +70,7 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 						<Table.HeadCell>{t('animalId')}</Table.HeadCell>
 						<Table.HeadCell>{t('breed')}</Table.HeadCell>
 						<Table.HeadCell>{t('relation')}</Table.HeadCell>
-						{user && <Table.HeadCell>{t('actions')}</Table.HeadCell>}
+						{haveUser && <Table.HeadCell>{t('actions')}</Table.HeadCell>}
 					</Table.Row>
 				</Table.Head>
 				<Table.Body>
@@ -79,7 +79,7 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 							<Table.Cell>{animal[type].animalId}</Table.Cell>
 							<Table.Cell>{animal[type].breed}</Table.Cell>
 							<Table.Cell>{animal[type].relation}</Table.Cell>
-							{user && (
+							{haveUser && (
 								<Table.Cell>
 									<ActionButton
 										title="View"
@@ -97,7 +97,7 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 					))}
 					{animals.length === 0 && (
 						<Table.Row>
-							<Table.Cell colSpan={user ? 12 : 11}>{t('noRelatedAnimals')}</Table.Cell>
+							<Table.Cell colSpan={haveUser ? 12 : 11}>{t('noRelatedAnimals')}</Table.Cell>
 						</Table.Row>
 					)}
 				</Table.Body>

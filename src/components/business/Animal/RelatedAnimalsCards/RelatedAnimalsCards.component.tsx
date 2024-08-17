@@ -14,7 +14,7 @@ import * as S from './RelatedAnimalsCards.styles'
 export const RelatedAnimalsCards: FC<RelatedAnimalsCardsProps> = ({
 	title,
 	animals,
-	user,
+	haveUser,
 	type,
 	removeRelation,
 }) => {
@@ -55,7 +55,7 @@ export const RelatedAnimalsCards: FC<RelatedAnimalsCardsProps> = ({
 		<S.CardsContainer>
 			<S.CenterTitle>
 				<S.Label>{title}</S.Label>
-				{user && (
+				{haveUser && (
 					<ActionButton
 						title={title.startsWith('Parents') ? t('addParent') : t('addChild')}
 						icon="i-material-symbols-add-circle-outline"
@@ -79,7 +79,7 @@ export const RelatedAnimalsCards: FC<RelatedAnimalsCardsProps> = ({
 							<S.CardValue>{animal[type].relation}</S.CardValue>
 						</div>
 					</S.CardContent>
-					{user && (
+					{haveUser && (
 						<S.CardActions>
 							<ActionButton
 								title="View"

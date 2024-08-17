@@ -2,7 +2,8 @@ import type dayjs from 'dayjs'
 
 export interface HealthRecordsTableProps {
 	healthRecords: HealthRecord[]
-	user: User | null
+	haveUser: boolean
+	farm: Farm | null
 	removeHealthRecord: (uuid: string) => void
 }
 
