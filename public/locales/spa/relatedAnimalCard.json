@@ -1,0 +1,10 @@
+{
+	"animalId": "ID",
+	"breed": "Raza",
+	"gender": "Género",
+	"picture": "Imagen",
+	"genderList": {
+		"male": "Macho",
+		"female": "Hembra"
+	}
+}

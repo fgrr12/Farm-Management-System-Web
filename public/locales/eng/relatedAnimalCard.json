@@ -1,0 +1,10 @@
+{
+	"animalId": "ID",
+	"breed": "Breed",
+	"gender": "Gender",
+	"picture": "Picture",
+	"genderList": {
+		"male": "Male",
+		"female": "Female"
+	}
+}

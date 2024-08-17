@@ -11,7 +11,7 @@ export const RelatedAnimalCard: FC<CardProps> = ({
 	picture,
 	...props
 }) => {
-	const { t } = useTranslation()
+	const { t } = useTranslation(['relatedAnimalCard'])
 	return (
 		<S.Card {...props}>
 			<S.ImageContainer>
@@ -19,13 +19,13 @@ export const RelatedAnimalCard: FC<CardProps> = ({
 			</S.ImageContainer>
 			<S.MiddleInfoContainer>
 				<p>
-					{t('relatedAnimalCard.animalId')}: {animalId}
+					{t('animalId')}: {animalId}
 				</p>
 				<p>
-					{t('relatedAnimalCard.breed')}: {breed}
+					{t('breed')}: {breed}
 				</p>
 				<p>
-					{t('relatedAnimalCard.gender')}: {gender}
+					{t('gender')}: {t(`genderList.${gender.toLowerCase()}`)}
 				</p>
 			</S.MiddleInfoContainer>
 		</S.Card>

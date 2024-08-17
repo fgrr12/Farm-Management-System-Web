@@ -87,9 +87,9 @@ export const Employees: FC = () => {
 				<Button onClick={handleAddEmployee}>{t('addEmployee')}</Button>
 			</S.HeaderContainer>
 			{!mobile ? (
-				<EmployeesTable employees={employees} user={user} removeEmployee={handleRemoveEmployee} />
+				<EmployeesTable employees={employees} removeEmployee={handleRemoveEmployee} />
 			) : (
-				<EmployeesCards employees={employees} user={user} removeEmployee={handleRemoveEmployee} />
+				<EmployeesCards employees={employees} removeEmployee={handleRemoveEmployee} />
 			)}
 		</S.Container>
 	)
