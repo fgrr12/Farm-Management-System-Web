@@ -4,6 +4,7 @@
 	"email": "Email",
 	"phone": "Phone",
 	"role": "Role",
+	"noEmployees": "No employees",
 	"roleList": {
 		"employee": "Employee",
 		"owner": "Owner"

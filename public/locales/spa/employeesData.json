@@ -5,6 +5,7 @@
 	"phone": "Teléfono",
 	"role": "Rol",
 	"actions": "Acciones",
+	"noEmployees": "No hay empleados",
 	"roleList": {
 		"employee": "Empleado",
 		"owner": "Propietario"
