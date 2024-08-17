@@ -11,6 +11,10 @@
 	"soldDate": "Sold Date",
 	"deathDate": "Death Date",
 	"addAnimal": "Add Animal",
+	"genderList": {
+		"male": "Male",
+		"female": "Female"
+	},
 	"modal": {
 		"addAnimal": {
 			"title": "Animal Added",

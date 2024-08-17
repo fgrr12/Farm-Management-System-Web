@@ -194,7 +194,7 @@ export const AnimalForm = () => {
 					</option>
 					{genders.map((gender) => (
 						<option key={gender} value={gender}>
-							{t(`gender.${gender.toLowerCase()}`)}
+							{t(`genderList.${gender.toLowerCase()}`)}
 						</option>
 					))}
 				</Select>

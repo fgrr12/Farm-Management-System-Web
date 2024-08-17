@@ -5,6 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "dotenv -e .env.local vite -- --mode local-develop",
+		"prod": "dotenv -e .env.production vite -- --mode production",
 		"build:production": "tsc && dotenv -e .env.production vite build -- --mode production",
 		"build:develop": "tsc && dotenv -e .env.local vite build -- --mode develop",
 		"preview": "vite preview",

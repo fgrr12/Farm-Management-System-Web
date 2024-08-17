@@ -11,6 +11,10 @@
 	"soldDate": "Fecha de venta",
 	"deathDate": "Fecha de fallecimiento",
 	"addAnimal": "Añadir animal",
+	"genderList": {
+		"male": "Masculino",
+		"female": "Femenino"
+	},
 	"modal": {
 		"addAnimal": {
 			"title": "Animal añadido",
