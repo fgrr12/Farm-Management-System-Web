@@ -67,13 +67,12 @@ export const Dropzone: FC<DropzoneProps> = ({ cleanFile, pictureUrl, onFile, ...
 		}
 	}, [cleanFile])
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		if (pictureUrl) {
 			setHasImg(true)
 			setUrl(pictureUrl)
 		}
-	}, [])
+	}, [pictureUrl])
 
 	return (
 		<S.DropzoneContainer>
