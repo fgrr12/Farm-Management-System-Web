@@ -1,11 +1,13 @@
 {
-	"title": "Añade empleado",
+	"addEmployee": "Añadir empleado",
+	"editEmployee": "Editar empleado",
 	"name": "Nombre",
 	"lastName": "Apellido",
 	"email": "Email",
 	"phone": "Teléfono",
 	"role": "Rol",
-	"registerEmployee": "Registrar empleado",
+	"addButton": "Añadir",
+	"editButton": "Editar",
 	"employee": "Empleado",
 	"owner": "Propietario",
 	"modal": {

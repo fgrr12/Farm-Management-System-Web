@@ -1,5 +1,5 @@
 {
-	"title": "Añade tarea",
+	"title": "Añadir tarea",
 	"name": "Nombre",
 	"description": "Descripción",
 	"priority": "Prioridad",
@@ -11,7 +11,7 @@
 	},
 	"species": "Especie",
 	"selectSpecies": "Selecciona una especie",
-	"addTask": "Añadir tarea",
+	"addTask": "Añadir",
 	"modal": {
 		"errorAddingTask": {
 			"title": "Error",

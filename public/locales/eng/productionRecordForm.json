@@ -1,9 +1,11 @@
 {
-	"title": "Add Production Record",
+	"addProductionRecord": "Add Production Record",
+	"editProductionRecord": "Edit Production Record",
 	"quantity": "Quantity",
 	"date": "Date",
 	"notes": "Notes",
-	"addProductionRecord": "Add Production Record",
+	"addButton": "Add",
+	"editButton": "Edit",
 	"modal": {
 		"addProductionRecord": {
 			"title": "Production Record Added",

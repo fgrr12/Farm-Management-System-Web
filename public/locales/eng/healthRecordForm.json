@@ -1,5 +1,6 @@
 {
-	"title": "Add Health Record",
+	"addHealthRecord": "Añadir registro de salud",
+	"editHealthRecord": "Editar registro de salud",
 	"reason": "Razón",
 	"type": "Tipo",
 	"reviewedBy": "Revisado por",
@@ -11,7 +12,8 @@
 	"frequency": "Frecuencia",
 	"duration": "Duración",
 	"notes": "Notas",
-	"addHealthRecord": "Añadir registro de salud",
+	"addButton": "Añadir",
+	"editButton": "Editar",
 	"healthRecordType": {
 		"checkup": "Revision",
 		"vaccination": "Vacunación",

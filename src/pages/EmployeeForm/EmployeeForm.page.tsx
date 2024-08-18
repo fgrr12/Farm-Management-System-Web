@@ -103,8 +103,9 @@ export const EmployeeForm: FC = () => {
 	}, [user])
 
 	useEffect(() => {
-		setHeaderTitle(t('title'))
-	}, [setHeaderTitle, t])
+		const title = params.employeeUuid ? t('editEmployee') : t('addEmployee')
+		setHeaderTitle(title)
+	}, [setHeaderTitle, t, params.employeeUuid])
 
 	return (
 		<S.Container>
@@ -155,7 +156,7 @@ export const EmployeeForm: FC = () => {
 					<option value="employee">{t('employee')}</option>
 					<option value="owner">{t('owner')}</option>
 				</Select>
-				<Button type="submit">{t('registerEmployee')}</Button>
+				<Button type="submit">{params.employeeUuid ? t('editButton') : t('addButton')}</Button>
 			</S.Form>
 		</S.Container>
 	)

@@ -1,0 +1,20 @@
+{
+	"title": "Tasks",
+	"search": "Search",
+	"status": "Status",
+	"all": "All",
+	"completed": "Completed",
+	"pending": "Pending",
+	"high": "High",
+	"medium": "Medium",
+	"low": "Low",
+	"species": "Species",
+	"addTask": "Add Task",
+	"noTasks": "No tasks found",
+	"modal": {
+		"errorGettingTasks": {
+			"title": "Error",
+			"message": "There was an error getting the tasks"
+		}
+	}
+}

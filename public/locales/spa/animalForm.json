@@ -1,5 +1,6 @@
 {
-	"title": "Añade animal",
+	"addAnimal": "Añadir animal",
+	"editAnimal": "Editar animal",
 	"animalId": "ID del animal",
 	"species": "Especie",
 	"breed": "Raza",
@@ -10,7 +11,8 @@
 	"purchaseDate": "Fecha de compra",
 	"soldDate": "Fecha de venta",
 	"deathDate": "Fecha de fallecimiento",
-	"addAnimal": "Añadir animal",
+	"addButton": "Añadir",
+	"editButton": "Editar",
 	"genderList": {
 		"male": "Masculino",
 		"female": "Femenino"

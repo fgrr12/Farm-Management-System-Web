@@ -1,11 +1,13 @@
 {
-	"title": "Add Employee",
+	"addEmployee": "Add Employee",
+	"editEmployee": "Edit Employee",
 	"name": "Name",
 	"lastName": "Last Name",
 	"email": "Email",
 	"phone": "Phone",
 	"role": "Role",
-	"registerEmployee": "Register Employee",
+	"addButton": "Add",
+	"editButton": "Edit",
 	"employee": "Employee",
 	"owner": "Owner",
 	"modal": {

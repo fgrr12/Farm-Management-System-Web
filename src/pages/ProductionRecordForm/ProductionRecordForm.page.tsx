@@ -115,8 +115,9 @@ export const ProductionRecordForm = () => {
 	}, [user])
 
 	useEffect(() => {
-		setHeaderTitle(t('title'))
-	}, [setHeaderTitle, t])
+		const title = params.productionRecordUuid ? t('editProductionRecord') : t('addProductionRecord')
+		setHeaderTitle(title)
+	}, [setHeaderTitle, t, params.productionRecordUuid])
 
 	return (
 		<S.Container>
@@ -146,7 +147,9 @@ export const ProductionRecordForm = () => {
 						required
 					/>
 				</S.TextareaContainer>
-				<Button type="submit">{t('addProductionRecord')}</Button>
+				<Button type="submit">
+					{params.productionRecordUuid ? t('editButton') : t('addButton')}
+				</Button>
 			</S.Form>
 		</S.Container>
 	)

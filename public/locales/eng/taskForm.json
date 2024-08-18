@@ -11,7 +11,7 @@
 	},
 	"species": "Species",
 	"selectSpecies": "Select a species",
-	"addTask": "Add Task",
+	"addTask": "Add",
 	"modal": {
 		"errorAddingTask": {
 			"title": "Error",

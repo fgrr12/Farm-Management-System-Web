@@ -120,8 +120,9 @@ export const HealthRecordForm = () => {
 	}, [user])
 
 	useEffect(() => {
-		setHeaderTitle(t('title'))
-	}, [setHeaderTitle, t])
+		const title = params.healthRecordUuid ? t('editHealthRecord') : t('addHealthRecord')
+		setHeaderTitle(title)
+	}, [setHeaderTitle, t, params.healthRecordUuid])
 
 	return (
 		<S.Container>
@@ -221,7 +222,7 @@ export const HealthRecordForm = () => {
 						required
 					/>
 				</S.TextareaContainer>
-				<Button type="submit">{t('addHealthRecord')}</Button>
+				<Button type="submit">{params.healthRecordUuid ? t('editButton') : t('addButton')}</Button>
 			</S.Form>
 		</S.Container>
 	)

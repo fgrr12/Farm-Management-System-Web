@@ -1,5 +1,6 @@
 {
-	"title": "Add Animal",
+	"addAnimal": "Add Animal",
+	"editAnimal": "Edit Animal",
 	"animalId": "Animal ID",
 	"species": "Species",
 	"breed": "Breed",
@@ -10,7 +11,8 @@
 	"purchaseDate": "Purchase Date",
 	"soldDate": "Sold Date",
 	"deathDate": "Death Date",
-	"addAnimal": "Add Animal",
+	"addButton": "Add",
+	"editButton": "Edit",
 	"genderList": {
 		"male": "Male",
 		"female": "Female"

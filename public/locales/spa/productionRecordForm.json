@@ -1,9 +1,11 @@
 {
-	"title": "Añade registro de producción",
+	"addProductionRecord": "Añadir registro de producción",
+	"editProductionRecord": "Editar registro de producción",
 	"quantity": "Cantidad",
 	"date": "Fecha",
 	"notes": "Notas",
-	"addProductionRecord": "Añadir registro de producción",
+	"addButton": "Añadir",
+	"editButton": "Editar",
 	"modal": {
 		"addProductionRecord": {
 			"title": "Registro de producción añadido",

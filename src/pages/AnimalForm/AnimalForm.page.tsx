@@ -138,8 +138,9 @@ export const AnimalForm = () => {
 	}, [user])
 
 	useEffect(() => {
-		setHeaderTitle(t('title'))
-	}, [setHeaderTitle, t])
+		const title = params.animalUuid ? t('editAnimal') : t('addAnimal')
+		setHeaderTitle(title)
+	}, [setHeaderTitle, t, params.animalUuid])
 
 	return (
 		<S.Container>
@@ -244,7 +245,7 @@ export const AnimalForm = () => {
 						onDateChange={handleDateChange('deathDate')}
 					/>
 				)}
-				<Button type="submit">{t('addAnimal')}</Button>
+				<Button type="submit">{params.animalUuid ? t('editButton') : t('addButton')}</Button>
 			</S.Form>
 		</S.Container>
 	)
