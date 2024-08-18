@@ -11,6 +11,9 @@
 	"deathDate": "Fecha de fallecimiento",
 	"parentsTitle": "Padres",
 	"childrenTitle": "Hijos",
+	"healthRecords": "Registros de salud",
+	"productionRecords": "Registros de producción",
+	"relatedAnimals": "Animales relacionados",
 	"genderList": {
 		"male": "Macho",
 		"female": "Hembra"

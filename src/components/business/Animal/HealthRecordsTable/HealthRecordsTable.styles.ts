@@ -6,6 +6,7 @@ export const TableContainer = styled.div`
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
+    width: 100%;
 
     & > table {
         max-height: 50vh;

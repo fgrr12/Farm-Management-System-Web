@@ -96,3 +96,32 @@ export const InfoTableContainer = styled.div`
         gap: 1rem;
     }
 `
+
+export const TabsContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 2rem;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 1rem;
+    }
+`
+
+export const Tabs = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+`
+
+export const Tab = styled.button<{ $active: boolean }>`
+    ${({ $active }) => $active && `background-color: ${colors.primary[400]};`}
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+`

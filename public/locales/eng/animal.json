@@ -11,6 +11,9 @@
 	"deathDate": "Death Date",
 	"parentsTitle": "Parents",
 	"childrenTitle": "Children",
+	"healthRecords": "Health Records",
+	"productionRecords": "Production Records",
+	"relatedAnimals": "Related Animals",
 	"genderList": {
 		"male": "Male",
 		"female": "Female"

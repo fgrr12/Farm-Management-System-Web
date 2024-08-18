@@ -35,6 +35,9 @@ export const Animal: FC = () => {
 	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
 	const [animal, setAnimal] = useState<AnimalInformation>(ANIMAL_INITIAL_STATE)
 	const [mobile, setMobile] = useState(false)
+	const [activeTab, setActiveTab] = useState<
+		'healthRecords' | 'productionRecords' | 'relatedAnimals'
+	>('healthRecords')
 
 	const handleEditAnimal = () => {
 		navigate(AppRoutes.EDIT_ANIMAL.replace(':animalUuid', animal.uuid))
@@ -199,75 +202,96 @@ export const Animal: FC = () => {
 				</S.ImageContainer>
 			</S.AnimalContainer>
 
-			{mobile ? (
-				<HealthRecordsCards
-					healthRecords={animal?.healthRecords || []}
-					haveUser={user !== null}
-					farm={farm}
-					removeHealthRecord={handleRemoveHealthRecord}
-				/>
-			) : (
-				<HealthRecordsTable
-					healthRecords={animal?.healthRecords || []}
-					haveUser={user !== null}
-					farm={farm}
-					removeHealthRecord={handleRemoveHealthRecord}
-				/>
-			)}
-
-			<S.InfoTableContainer>
-				{mobile ? (
-					<ProductionRecordsCards
-						productionRecords={animal?.productionRecords || []}
-						haveUser={user !== null}
-						farm={farm}
-						removeProductionRecord={handleRemoveProductionRecord}
-					/>
-				) : (
-					<ProductionRecordsTable
-						productionRecords={animal?.productionRecords || []}
-						haveUser={user !== null}
-						farm={farm}
-						removeProductionRecord={handleRemoveProductionRecord}
-					/>
-				)}
-
-				{mobile ? (
-					<>
-						<RelatedAnimalsCards
-							title={t('parentsTitle')}
-							animals={animal?.relatedAnimals?.parents || []}
+			<S.TabsContainer>
+				<S.Tabs>
+					<S.Tab
+						$active={activeTab === 'healthRecords'}
+						onClick={() => setActiveTab('healthRecords')}
+					>
+						{t('healthRecords')}
+					</S.Tab>
+					<S.Tab
+						$active={activeTab === 'productionRecords'}
+						onClick={() => setActiveTab('productionRecords')}
+					>
+						{t('productionRecords')}
+					</S.Tab>
+					<S.Tab
+						$active={activeTab === 'relatedAnimals'}
+						onClick={() => setActiveTab('relatedAnimals')}
+					>
+						{t('relatedAnimals')}
+					</S.Tab>
+				</S.Tabs>
+				{activeTab === 'healthRecords' &&
+					(mobile ? (
+						<HealthRecordsCards
+							healthRecords={animal?.healthRecords || []}
 							haveUser={user !== null}
-							type="parent"
-							removeRelation={handleRemoveRelation}
+							farm={farm}
+							removeHealthRecord={handleRemoveHealthRecord}
 						/>
-						<RelatedAnimalsCards
-							title={t('childrenTitle')}
-							animals={animal?.relatedAnimals?.children || []}
+					) : (
+						<HealthRecordsTable
+							healthRecords={animal?.healthRecords || []}
 							haveUser={user !== null}
-							type="child"
-							removeRelation={handleRemoveRelation}
+							farm={farm}
+							removeHealthRecord={handleRemoveHealthRecord}
 						/>
-					</>
-				) : (
-					<>
-						<RelatedAnimalsTable
-							title={t('parentsTitle')}
-							animals={animal?.relatedAnimals?.parents || []}
+					))}
+				{activeTab === 'productionRecords' &&
+					(mobile ? (
+						<ProductionRecordsCards
+							productionRecords={animal?.productionRecords || []}
 							haveUser={user !== null}
-							type="parent"
-							removeRelation={handleRemoveRelation}
+							farm={farm}
+							removeProductionRecord={handleRemoveProductionRecord}
 						/>
-						<RelatedAnimalsTable
-							title={t('childrenTitle')}
-							animals={animal?.relatedAnimals?.children || []}
+					) : (
+						<ProductionRecordsTable
+							productionRecords={animal?.productionRecords || []}
 							haveUser={user !== null}
-							type="child"
-							removeRelation={handleRemoveRelation}
+							farm={farm}
+							removeProductionRecord={handleRemoveProductionRecord}
 						/>
-					</>
-				)}
-			</S.InfoTableContainer>
+					))}
+				{activeTab === 'relatedAnimals' &&
+					(mobile ? (
+						<>
+							<RelatedAnimalsCards
+								title={t('parentsTitle')}
+								animals={animal?.relatedAnimals?.parents || []}
+								haveUser={user !== null}
+								type="parent"
+								removeRelation={handleRemoveRelation}
+							/>
+							<RelatedAnimalsCards
+								title={t('childrenTitle')}
+								animals={animal?.relatedAnimals?.children || []}
+								haveUser={user !== null}
+								type="child"
+								removeRelation={handleRemoveRelation}
+							/>
+						</>
+					) : (
+						<>
+							<RelatedAnimalsTable
+								title={t('parentsTitle')}
+								animals={animal?.relatedAnimals?.parents || []}
+								haveUser={user !== null}
+								type="parent"
+								removeRelation={handleRemoveRelation}
+							/>
+							<RelatedAnimalsTable
+								title={t('childrenTitle')}
+								animals={animal?.relatedAnimals?.children || []}
+								haveUser={user !== null}
+								type="child"
+								removeRelation={handleRemoveRelation}
+							/>
+						</>
+					))}
+			</S.TabsContainer>
 		</S.Container>
 	)
 }
