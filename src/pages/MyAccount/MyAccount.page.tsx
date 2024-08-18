@@ -108,13 +108,16 @@ export const MyAccount: FC = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: useEffect is only called once
 	useEffect(() => {
-		setHeaderTitle(t('title'))
 		if (!user || !currentFarm) return
 
 		const species = currentFarm!.species.join(',') || ''
 		setUser(currentUser!)
 		setFarm({ ...currentFarm!, species })
 	}, [user, currentFarm])
+
+	useEffect(() => {
+		setHeaderTitle(t('title'))
+	}, [setHeaderTitle, t])
 	return (
 		<S.MyAccount>
 			<S.MyAccountBody>

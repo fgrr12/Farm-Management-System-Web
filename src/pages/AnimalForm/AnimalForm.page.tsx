@@ -129,7 +129,6 @@ export const AnimalForm = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		setHeaderTitle(t('title'))
 		if (user) {
 			setSpecies(farm!.species)
 			if (params.animalUuid) {
@@ -137,6 +136,10 @@ export const AnimalForm = () => {
 			}
 		}
 	}, [user])
+
+	useEffect(() => {
+		setHeaderTitle(t('title'))
+	}, [setHeaderTitle, t])
 
 	return (
 		<S.Container>

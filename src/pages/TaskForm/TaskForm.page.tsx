@@ -53,10 +53,9 @@ export const TaskForm = () => {
 		}
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		setHeaderTitle(t('title'))
-	}, [])
+	}, [setHeaderTitle, t])
 
 	return (
 		<S.Container>

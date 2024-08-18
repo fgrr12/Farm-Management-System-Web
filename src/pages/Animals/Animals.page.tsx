@@ -70,12 +70,15 @@ export const Animals = () => {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		setLoading(true)
-		setHeaderTitle(t('title'))
 		if (user) {
 			setSpecies(farm!.species)
 			getAnimals()
 		}
 	}, [filters, user])
+
+	useEffect(() => {
+		setHeaderTitle(t('title'))
+	}, [setHeaderTitle, t])
 
 	return (
 		<S.Container>

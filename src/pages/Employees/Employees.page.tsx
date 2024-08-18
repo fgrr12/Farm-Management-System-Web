@@ -61,7 +61,6 @@ export const Employees: FC = () => {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		setMobile(window.innerWidth <= 768)
-		setHeaderTitle(t('title'))
 		if (!user) return
 		if (user && user.role === 'employee') {
 			navigate(AppRoutes.LOGIN)
@@ -79,7 +78,9 @@ export const Employees: FC = () => {
 		return () => clearTimeout(debounceId)
 	}, [search])
 
-	//
+	useEffect(() => {
+		setHeaderTitle(t('title'))
+	}, [setHeaderTitle, t])
 	return (
 		<S.Container>
 			<S.HeaderContainer>

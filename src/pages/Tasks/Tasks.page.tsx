@@ -63,7 +63,6 @@ export const Tasks = () => {
 	}
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect used to update tasks list
 	useEffect(() => {
-		setHeaderTitle(t('title'))
 		if (user) getTasks()
 	}, [user, filters.priority, filters.species, filters.status])
 
@@ -74,6 +73,10 @@ export const Tasks = () => {
 		}, 500)
 		return () => clearTimeout(debounceId)
 	}, [filters.search])
+
+	useEffect(() => {
+		setHeaderTitle(t('title'))
+	}, [setHeaderTitle, t])
 
 	return (
 		<S.Container>

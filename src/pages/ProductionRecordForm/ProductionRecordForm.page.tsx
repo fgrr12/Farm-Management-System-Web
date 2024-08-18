@@ -105,7 +105,6 @@ export const ProductionRecordForm = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		setHeaderTitle(t('title'))
 		if (user) {
 			const animalUuid = params.animalUuid as string
 			setProductionRecordForm((prev) => ({ ...prev, animalUuid }))
@@ -114,6 +113,10 @@ export const ProductionRecordForm = () => {
 			}
 		}
 	}, [user])
+
+	useEffect(() => {
+		setHeaderTitle(t('title'))
+	}, [setHeaderTitle, t])
 
 	return (
 		<S.Container>

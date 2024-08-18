@@ -127,10 +127,8 @@ export const RelatedAnimalsForm: FC = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		setHeaderTitle(t('title'))
-		let unsubscribe: (() => void) | undefined
-
 		if (!user) return
+		let unsubscribe: (() => void) | undefined
 
 		const initialData = async () => {
 			try {
@@ -212,6 +210,10 @@ export const RelatedAnimalsForm: FC = () => {
 			}
 		}
 	}, [user])
+
+	useEffect(() => {
+		setHeaderTitle(t('title'))
+	}, [setHeaderTitle, t])
 	return (
 		<S.Container>
 			<S.AnimalsContainer

@@ -92,7 +92,6 @@ export const EmployeeForm: FC = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		setHeaderTitle(t('title'))
 		if (user && user.role === 'employee') {
 			navigate(AppRoutes.LOGIN)
 			return
@@ -102,6 +101,10 @@ export const EmployeeForm: FC = () => {
 			initialData()
 		}
 	}, [user])
+
+	useEffect(() => {
+		setHeaderTitle(t('title'))
+	}, [setHeaderTitle, t])
 
 	return (
 		<S.Container>
