@@ -108,6 +108,12 @@ export const Animals = () => {
 					/>
 				))}
 			</S.AnimalsContainer>
+			{animals.length === 0 && (
+				<S.NoAnimals>
+					<S.NoAnimalsTitle>{t('noAnimals')}</S.NoAnimalsTitle>
+					<S.NoAnimalsSubtitle>{t('noAnimalsSubtitle')}</S.NoAnimalsSubtitle>
+				</S.NoAnimals>
+			)}
 		</S.Container>
 	)
 }

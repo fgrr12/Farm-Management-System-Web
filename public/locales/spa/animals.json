@@ -4,6 +4,8 @@
 	"species": "Especies",
 	"all": "Todos",
 	"addAnimal": "Añadir animal",
+	"noAnimals": "No hay animales",
+	"noAnimalsSubtitle": "Agrega un animal a tu granja para comenzar",
 	"modal": {
 		"errorGettingAnimals": {
 			"title": "Error",
