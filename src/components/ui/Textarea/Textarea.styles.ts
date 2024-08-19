@@ -1,4 +1,4 @@
-import { colors } from '@/styles/variables'
+import { colors, shadows } from '@/styles/variables'
 import styled from 'styled-components'
 
 export const TextareaContainer = styled.div`
@@ -18,7 +18,7 @@ export const Textarea = styled.textarea`
   resize: vertical;
   border: 1px solid ${colors.primary[500]};
   border-radius: 0.5rem;
-  box-shadow: ${colors.shadowBasic};
+  box-shadow: ${shadows.container};
   -ms-overflow-style: none;
   scrollbar-width: none;
 

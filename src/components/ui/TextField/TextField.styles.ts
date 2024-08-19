@@ -1,4 +1,4 @@
-import { colors } from '@/styles/variables'
+import { colors, shadows } from '@/styles/variables'
 import styled from 'styled-components'
 
 export const TextFieldContainer = styled.div`
@@ -13,21 +13,18 @@ export const TextField = styled.input`
   width: 100%;
   height: 100%;
   padding: 1rem;
-  padding-right: '3.5rem';
   font-size: 1rem;
   border: 1px solid;
   border-color: ${colors.primary[500]};
   border-radius: 0.5rem;
-  box-shadow: ${colors.shadowBasic};
+  box-shadow: ${shadows.container};
 
   &:hover {
-    border: 2px solid;
-    border-color: ${colors.primary[500]};
+    border: 2px solid ${colors.primary[500]};
   }
 
   &:focus, &:active {
-    border: 2px solid;
-    border-color:${colors.primary[600]};
+    border: 2px solid ${colors.primary[600]};
   }
 
   &:disabled {
