@@ -131,7 +131,7 @@ export const Animal: FC = () => {
 				open: true,
 				title: t('modal.errorGettingAnimal.title'),
 				message: t('modal.errorGettingAnimal.message'),
-				onAccept: () => defaultModalData,
+				onAccept: () => setModalData(defaultModalData),
 			})
 		} finally {
 			setLoading(false)
