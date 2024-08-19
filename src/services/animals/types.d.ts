@@ -27,7 +27,7 @@ declare type healthRecordType =
 	| 'Vaccination'
 	| 'Medication'
 	| 'Surgery'
-	| 'Pregnant'
+	| 'Pregnancy'
 	| 'Deworming'
 	| 'Birth'
 

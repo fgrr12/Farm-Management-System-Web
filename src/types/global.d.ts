@@ -9,6 +9,6 @@ type HealthRecordType =
 	| 'Vaccination'
 	| 'Medication'
 	| 'Surgery'
-	| 'Pregnant'
+	| 'Pregnancy'
 	| 'Deworming'
 	| 'Birth'
