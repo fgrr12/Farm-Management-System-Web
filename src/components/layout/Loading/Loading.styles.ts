@@ -77,10 +77,10 @@ export const XSpinner = styled.div`
 
 const slideInLeft = keyframes`
 	from {
-		transform: translateX(4rem);
+		transform: translateX(2rem);
 	}
 	to {
-		transform: translateX(-6rem); 
+		transform: translateX(-4rem); 
 	}
 `
 
