@@ -6,6 +6,7 @@
 	"email": "Email",
 	"phone": "Teléfono",
 	"role": "Rol",
+	"selectRole": "Selecciona un rol",
 	"addButton": "Añadir",
 	"editButton": "Editar",
 	"employee": "Empleado",

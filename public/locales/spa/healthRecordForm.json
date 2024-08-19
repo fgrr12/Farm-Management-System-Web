@@ -3,6 +3,7 @@
 	"editHealthRecord": "Editar registro de salud",
 	"reason": "Razón",
 	"type": "Tipo",
+	"selectType": "Selecciona un tipo",
 	"reviewedBy": "Revisado por",
 	"date": "Fecha",
 	"weight": "Peso",

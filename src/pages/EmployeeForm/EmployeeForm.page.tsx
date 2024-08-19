@@ -149,7 +149,7 @@ export const EmployeeForm: FC = () => {
 				<Select
 					name="role"
 					label={t('role')}
-					defaultLabel={t('role')}
+					defaultLabel={t('selectRole')}
 					value={employee.role}
 					items={[
 						{ value: 'employee', name: t('employee') },

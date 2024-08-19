@@ -1,0 +1,13 @@
+{
+	"title": "Animals",
+	"search": "Search",
+	"species": "Species",
+	"all": "All",
+	"addAnimal": "Add Animal",
+	"modal": {
+		"errorGettingAnimals": {
+			"title": "Error",
+			"message": "There was an error getting the animals"
+		}
+	}
+}

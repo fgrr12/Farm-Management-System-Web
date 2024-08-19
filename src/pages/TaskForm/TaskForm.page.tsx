@@ -86,7 +86,7 @@ export const TaskForm = () => {
 				<Select
 					name="priority"
 					label={t('priority')}
-					defaultLabel={t('priority')}
+					defaultLabel={t('selectPriority')}
 					value={task.priority}
 					items={[
 						{ value: 'low', name: t('priorities.low') },

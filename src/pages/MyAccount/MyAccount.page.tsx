@@ -20,7 +20,7 @@ export const MyAccount: FC = () => {
 	const { user: currentUser, setUser: updateUser } = useUserStore()
 	const { farm: currentFarm, setFarm: updateFarm } = useFarmStore()
 	const { defaultModalData, setHeaderTitle, setModalData, setLoading } = useAppStore()
-	const { t } = useTranslation(['myAccount'])
+	const { t, i18n } = useTranslation(['myAccount'])
 
 	const [user, setUser] = useState<User>(INITIAL_USER_DATA)
 	const [farm, setFarm] = useState<FarmData>(INITIAL_FARM_DATA)
@@ -31,10 +31,10 @@ export const MyAccount: FC = () => {
 		{ value: 'eng', name: t('myProfile.languageList.eng') },
 	]
 
-	const species = [
-		{ value: 'Cow', name: 'Cow' },
-		{ value: 'Sheep', name: 'Sheep' },
-	]
+	// const species = [
+	// 	{ value: 'Cow', name: 'Cow' },
+	// 	{ value: 'Sheep', name: 'Sheep' },
+	// ]
 
 	const liquidUnit = [
 		{ value: 'L', name: t('myFarm.liquidUnitList.L') },
@@ -78,6 +78,7 @@ export const MyAccount: FC = () => {
 		e.preventDefault()
 		try {
 			await UserService.updateUser(user)
+			i18n.changeLanguage(user.language)
 			updateUser(user)
 			setEdit((prev) => ({ ...prev, user: false }))
 			setModalData({
@@ -245,18 +246,15 @@ export const MyAccount: FC = () => {
 									disabled={!edit.farm}
 									required
 								/>
-								{/* <Select
+								<TextField
 									name="species"
 									label={t('myFarm.species')}
+									placeholder={t('myFarm.species')}
 									value={farm!.species}
-									onChange={handleSelectChange()}
+									onChange={handleTextChange()}
 									disabled={!edit.farm}
-									multiple={true}
 									required
-								>
-									<option value="Cow">Cow</option>
-									<option value="Sheep">Sheep</option>
-								</Select> */}
+								/>
 							</S.ContainerOf3>
 							<S.ContainerOf3>
 								<Select
@@ -264,7 +262,7 @@ export const MyAccount: FC = () => {
 									label={t('myFarm.liquidUnit')}
 									value={farm!.liquidUnit}
 									items={liquidUnit}
-									onChange={handleSelectChange(false)}
+									onChange={handleSelectChange()}
 									disabled={!edit.farm}
 									required
 								/>
@@ -273,7 +271,7 @@ export const MyAccount: FC = () => {
 									label={t('myFarm.weightUnit')}
 									value={farm!.weightUnit}
 									items={weightUnit}
-									onChange={handleSelectChange(false)}
+									onChange={handleSelectChange()}
 									disabled={!edit.farm}
 									required
 								/>
@@ -282,7 +280,7 @@ export const MyAccount: FC = () => {
 									label={t('myFarm.temperatureUnit')}
 									value={farm!.temperatureUnit}
 									items={temperatureUnit}
-									onChange={handleSelectChange(false)}
+									onChange={handleSelectChange()}
 									disabled={!edit.farm}
 									required
 								/>

@@ -165,7 +165,7 @@ export const AnimalForm = () => {
 				<Select
 					name="species"
 					label={t('species')}
-					defaultLabel={t('species')}
+					defaultLabel={t('selectSpecies')}
 					value={animalForm.species}
 					items={species}
 					onChange={handleSelectChange}
@@ -183,7 +183,7 @@ export const AnimalForm = () => {
 				<Select
 					name="gender"
 					label={t('gender')}
-					defaultLabel={t('gender')}
+					defaultLabel={t('selectGender')}
 					value={animalForm.gender}
 					items={[
 						{ value: 'Male', name: t('genderList.male') },

@@ -3,6 +3,7 @@
 	"name": "Nombre",
 	"description": "Descripción",
 	"priority": "Prioridad",
+	"selectPriority": "Selecciona una prioridad",
 	"priorities": {
 		"default": "Selecciona una prioridad",
 		"low": "Baja",
