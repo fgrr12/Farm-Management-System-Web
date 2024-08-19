@@ -104,25 +104,25 @@ export const HealthRecordsCards: FC<HealthRecordsCardsProps> = ({
 									</S.CardValue>
 								</div>
 							)}
-							{healthRecord.medication !== '-' && (
+							{healthRecord.medication && (
 								<div>
 									<S.CardLabel>{t('medication')}</S.CardLabel>
 									<S.CardValue>{healthRecord.medication}</S.CardValue>
 								</div>
 							)}
-							{healthRecord.dosage !== '-' && (
+							{healthRecord.dosage && (
 								<div>
 									<S.CardLabel>{t('dosage')}</S.CardLabel>
 									<S.CardValue>{healthRecord.dosage}</S.CardValue>
 								</div>
 							)}
-							{healthRecord.frequency !== '-' && (
+							{healthRecord.frequency && (
 								<div>
 									<S.CardLabel>{t('frequency')}</S.CardLabel>
 									<S.CardValue>{healthRecord.frequency}</S.CardValue>
 								</div>
 							)}
-							{healthRecord.duration !== '-' && (
+							{healthRecord.duration && (
 								<div>
 									<S.CardLabel>{t('duration')}</S.CardLabel>
 									<S.CardValue>{healthRecord.duration}</S.CardValue>

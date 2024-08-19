@@ -183,7 +183,7 @@ export const HealthRecordForm = () => {
 				<TextField
 					name="medication"
 					type="text"
-					placeholder={t('medication')}
+					placeholder="-"
 					label={t('medication')}
 					value={healthRecordForm.medication}
 					onChange={handleTextChange}
@@ -191,7 +191,7 @@ export const HealthRecordForm = () => {
 				<TextField
 					name="dosage"
 					type="text"
-					placeholder={t('dosage')}
+					placeholder="-"
 					label={t('dosage')}
 					value={healthRecordForm.dosage}
 					onChange={handleTextChange}
@@ -199,7 +199,7 @@ export const HealthRecordForm = () => {
 				<TextField
 					name="frequency"
 					type="text"
-					placeholder={t('frequency')}
+					placeholder="-"
 					label={t('frequency')}
 					value={healthRecordForm.frequency}
 					onChange={handleTextChange}
@@ -207,7 +207,7 @@ export const HealthRecordForm = () => {
 				<TextField
 					name="duration"
 					type="text"
-					placeholder={t('duration')}
+					placeholder="-"
 					label={t('duration')}
 					value={healthRecordForm.duration}
 					onChange={handleTextChange}
@@ -248,9 +248,9 @@ const INITIAL_HEALTH_RECORD_FORM: HealthRecord = {
 	date: dayjs(),
 	weight: 0,
 	temperature: 0,
-	medication: '-',
-	dosage: '-',
-	frequency: '-',
-	duration: '-',
+	medication: '',
+	dosage: '',
+	frequency: '',
+	duration: '',
 	status: true,
 }
