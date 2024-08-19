@@ -51,6 +51,7 @@ export const Arrow = styled.div`
 
 export const Label = styled.label`
     position: absolute;
+    top: 0rem;
     left: 0.6rem;
     font-size: 0.8rem;
     transform: translateY(-.5rem);
