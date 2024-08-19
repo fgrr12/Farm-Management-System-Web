@@ -6,7 +6,6 @@ export const Container = styled.div`
     flex-direction: column;
     align-items: center;
     background-color: ${colors.primary[50]};
-    min-height: 100%;
     width: 100%;
 `
 
@@ -25,6 +24,8 @@ export const Form = styled.form`
     @media (max-width: 768px) {
         padding: 1rem;
         grid-template-columns: 1fr;
+        width: 80%;
+        margin: 0 auto;
 
         & > button {
             grid-column: 1;
