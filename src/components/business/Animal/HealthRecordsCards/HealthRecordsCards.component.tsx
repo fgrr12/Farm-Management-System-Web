@@ -76,7 +76,7 @@ export const HealthRecordsCards: FC<HealthRecordsCardsProps> = ({
 							</div>
 							<div>
 								<S.CardLabel>{t('date')}</S.CardLabel>
-								<S.CardValue>{dayjs(healthRecord.date).format('MM/DD/YYYY')}</S.CardValue>
+								<S.CardValue>{dayjs(healthRecord.date).format('DD/MM/YYYY')}</S.CardValue>
 							</div>
 							<div>
 								<S.CardLabel>{t('reviewedBy')}</S.CardLabel>

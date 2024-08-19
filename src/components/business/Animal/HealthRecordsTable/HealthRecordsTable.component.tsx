@@ -90,7 +90,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 							<Table.Cell>{healthRecord.notes}</Table.Cell>
 							<Table.Cell>{t(`healthRecordType.${healthRecord.type.toLowerCase()}`)}</Table.Cell>
 							<Table.Cell>{healthRecord.reviewedBy}</Table.Cell>
-							<Table.Cell>{dayjs(healthRecord.date).format('MM/DD/YYYY')}</Table.Cell>
+							<Table.Cell>{dayjs(healthRecord.date).format('DD/MM/YYYY')}</Table.Cell>
 							<Table.Cell>
 								{healthRecord.weight}
 								{farm!.weightUnit}

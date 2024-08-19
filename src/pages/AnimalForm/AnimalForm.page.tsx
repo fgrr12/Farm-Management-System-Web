@@ -234,14 +234,14 @@ export const AnimalForm = () => {
 				{params.animalUuid && (
 					<DatePicker
 						label={t('soldDate')}
-						date={dayjs(animalForm.soldDate)}
+						date={animalForm.soldDate ? dayjs(animalForm.soldDate) : null}
 						onDateChange={handleDateChange('soldDate')}
 					/>
 				)}
 				{params.animalUuid && (
 					<DatePicker
 						label={t('deathDate')}
-						date={dayjs(animalForm.deathDate)}
+						date={animalForm.deathDate ? dayjs(animalForm.deathDate) : null}
 						onDateChange={handleDateChange('deathDate')}
 					/>
 				)}

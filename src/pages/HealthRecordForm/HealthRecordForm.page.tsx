@@ -45,7 +45,7 @@ export const HealthRecordForm = () => {
 	}
 
 	const handleDateChange = () => (newDate: dayjs.Dayjs) => {
-		setHealthRecordForm((prev) => ({ ...prev, date: dayjs(newDate).format('YYYY-MM-DD') }))
+		setHealthRecordForm((prev) => ({ ...prev, date: dayjs(newDate).toISOString() }))
 	}
 
 	const getHealthRecord = async () => {

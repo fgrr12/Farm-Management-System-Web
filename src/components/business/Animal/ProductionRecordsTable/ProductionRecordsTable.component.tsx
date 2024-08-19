@@ -78,7 +78,7 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 				<Table.Body>
 					{productionRecords.map((productionRecord) => (
 						<Table.Row key={crypto.randomUUID()}>
-							<Table.Cell>{dayjs(productionRecord.date).format('MM/DD/YYYY')}</Table.Cell>
+							<Table.Cell>{dayjs(productionRecord.date).format('DD/MM/YYYY')}</Table.Cell>
 							<Table.Cell>
 								{productionRecord.quantity}
 								{farm!.liquidUnit}
