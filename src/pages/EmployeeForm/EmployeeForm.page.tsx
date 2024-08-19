@@ -149,13 +149,15 @@ export const EmployeeForm: FC = () => {
 				<Select
 					name="role"
 					label={t('role')}
+					defaultLabel={t('role')}
 					value={employee.role}
+					items={[
+						{ value: 'employee', name: t('employee') },
+						{ value: 'owner', name: t('owner') },
+					]}
 					onChange={handleSelectChange}
 					required
-				>
-					<option value="employee">{t('employee')}</option>
-					<option value="owner">{t('owner')}</option>
-				</Select>
+				/>
 				<Button type="submit">{params.employeeUuid ? t('editButton') : t('addButton')}</Button>
 			</S.Form>
 		</S.Container>
@@ -168,7 +170,7 @@ const INITIAL_EMPLOYEE_DATA: RegisterEmployeeForm = {
 	lastName: '',
 	email: '',
 	phone: '',
-	role: 'employee',
+	role: '',
 	status: true,
 	farmUuid: '',
 	createdBy: '',

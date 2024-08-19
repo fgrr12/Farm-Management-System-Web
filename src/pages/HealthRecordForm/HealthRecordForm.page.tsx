@@ -15,7 +15,7 @@ import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
-import type { HealthRecord } from './HealthRecordForm.types'
+import type { HealthRecord, HealthRecordFormType } from './HealthRecordForm.types'
 
 import * as S from './HealthRecordForm.styles'
 
@@ -28,6 +28,16 @@ export const HealthRecordForm = () => {
 
 	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
 	const [healthRecordForm, setHealthRecordForm] = useState<HealthRecord>(INITIAL_HEALTH_RECORD_FORM)
+
+	const healthRecordTypes: HealthRecordFormType[] = [
+		{ value: 'Checkup', name: t('healthRecordType.checkup') },
+		{ value: 'Vaccination', name: t('healthRecordType.vaccination') },
+		{ value: 'Medication', name: t('healthRecordType.medication') },
+		{ value: 'Surgery', name: t('healthRecordType.surgery') },
+		{ value: 'Pregnancy', name: t('healthRecordType.pregnancy') },
+		{ value: 'Deworming', name: t('healthRecordType.deworming') },
+		{ value: 'Birth', name: t('healthRecordType.birth') },
+	]
 
 	const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target
@@ -111,8 +121,7 @@ export const HealthRecordForm = () => {
 	useEffect(() => {
 		if (user) {
 			const animalUuid = params.animalUuid ?? ''
-			const type = healthRecordTypes[0]
-			setHealthRecordForm((prev) => ({ ...prev, animalUuid, type }))
+			setHealthRecordForm((prev) => ({ ...prev, animalUuid }))
 			if (params.healthRecordUuid) {
 				getHealthRecord()
 			}
@@ -140,14 +149,11 @@ export const HealthRecordForm = () => {
 					name="type"
 					label={t('type')}
 					value={healthRecordForm.type}
+					items={healthRecordTypes}
 					onChange={handleSelectChange}
-				>
-					{healthRecordTypes.map((type) => (
-						<option key={type} value={type}>
-							{t(`healthRecordType.${type.toLowerCase()}`)}
-						</option>
-					))}
-				</Select>
+					required
+				/>
+
 				<TextField
 					name="reviewedBy"
 					type="text"
@@ -227,16 +233,6 @@ export const HealthRecordForm = () => {
 		</S.Container>
 	)
 }
-
-const healthRecordTypes: HealthRecordType[] = [
-	'Checkup',
-	'Vaccination',
-	'Medication',
-	'Surgery',
-	'Pregnancy',
-	'Deworming',
-	'Birth',
-]
 
 const INITIAL_HEALTH_RECORD_FORM: HealthRecord = {
 	uuid: crypto.randomUUID(),

@@ -29,7 +29,7 @@ export const AnimalForm = () => {
 
 	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
 	const [animalForm, setAnimalForm] = useState<Animal>(INITIAL_ANIMAL_FORM)
-	const [species, setSpecies] = useState<string[]>([])
+	const [species, setSpecies] = useState(INITIAL_SPECIES)
 
 	const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target
@@ -130,7 +130,7 @@ export const AnimalForm = () => {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		if (user) {
-			setSpecies(farm!.species)
+			setSpecies(farm!.species.map((specie) => ({ value: specie, name: specie })))
 			if (params.animalUuid) {
 				getAnimal()
 			}
@@ -165,19 +165,12 @@ export const AnimalForm = () => {
 				<Select
 					name="species"
 					label={t('species')}
+					defaultLabel={t('species')}
 					value={animalForm.species}
+					items={species}
 					onChange={handleSelectChange}
 					required
-				>
-					<option value="" disabled>
-						{t('species')}
-					</option>
-					{species.map((species, index) => (
-						<option key={index} value={species}>
-							{species}
-						</option>
-					))}
-				</Select>
+				/>
 				<TextField
 					name="breed"
 					type="text"
@@ -190,18 +183,15 @@ export const AnimalForm = () => {
 				<Select
 					name="gender"
 					label={t('gender')}
+					defaultLabel={t('gender')}
 					value={animalForm.gender}
+					items={[
+						{ value: 'Male', name: t('genderList.male') },
+						{ value: 'Female', name: t('genderList.female') },
+					]}
 					onChange={handleSelectChange}
-				>
-					<option value="" disabled>
-						{t('gender')}
-					</option>
-					{genders.map((gender) => (
-						<option key={gender} value={gender}>
-							{t(`genderList.${gender.toLowerCase()}`)}
-						</option>
-					))}
-				</Select>
+					required
+				/>
 				<TextField
 					name="color"
 					type="text"
@@ -251,14 +241,12 @@ export const AnimalForm = () => {
 	)
 }
 
-const genders: Gender[] = ['Male', 'Female']
-
 const INITIAL_ANIMAL_FORM: Animal = {
 	uuid: '',
 	animalId: '',
 	species: '',
 	breed: '',
-	gender: 'Male',
+	gender: '',
 	color: '',
 	weight: 0,
 	picture: '',
@@ -268,6 +256,8 @@ const INITIAL_ANIMAL_FORM: Animal = {
 	soldDate: null,
 	deathDate: null,
 }
+
+const INITIAL_SPECIES = [{ value: '', name: '' }]
 
 const formatDate = (date: dayjs.Dayjs | string) => {
 	return dayjs(date).toISOString()

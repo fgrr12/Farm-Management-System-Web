@@ -84,15 +84,14 @@ export const Animals = () => {
 		<S.Container>
 			<S.ButtonContainer>
 				<Search placeholder={t('search')} onKeyDown={handleSearchKeyPress} />
-				<Select name="selectedSpecies" label={t('species')} onChange={handleSelectChange}>
-					<option value="all">{t('all')}</option>
-					{species.length > 0 &&
-						species.map((specie, index) => (
-							<option key={index} value={specie}>
-								{specie}
-							</option>
-						))}
-				</Select>
+				<Select
+					name="selectedSpecies"
+					label={t('species')}
+					defaultLabel={t('all')}
+					value={filters.selectedSpecies}
+					items={[...species.map((specie) => ({ value: specie, name: specie }))]}
+					onChange={handleSelectChange}
+				/>
 				<Button onClick={() => navigation(AppRoutes.ADD_ANIMAL)}>{t('addAnimal')}</Button>
 			</S.ButtonContainer>
 			<S.AnimalsContainer>
@@ -114,6 +113,6 @@ export const Animals = () => {
 }
 
 const INITIAL_FILTERS: AnimalsFilters = {
-	selectedSpecies: 'all',
+	selectedSpecies: '',
 	search: '',
 }

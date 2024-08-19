@@ -40,6 +40,30 @@ export const Dropdown = styled.select`
   }
 `
 
+export const ClearButton = styled.button`
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  width: 1.8rem;
+  height: 1.8rem;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+`
+
+export const CircleX = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: ${colors.primary[600]};
+  filter: drop-shadow(${shadows.container});
+  pointer-events: none;
+`
+
 export const Arrow = styled.div`
   position: absolute;
   top: 50%;
@@ -47,7 +71,7 @@ export const Arrow = styled.div`
   transform: translateY(-50%);
   width: 1.8rem;
   height: 1.8rem;
-  background-color: ${colors.primary[700]};
+  background-color: ${colors.primary[600]};
   filter: drop-shadow(${shadows.container});
   pointer-events: none;
 `
@@ -64,4 +88,10 @@ export const Label = styled.label`
   border-radius: 5px;
   user-select: none;
   z-index: 99;
+`
+
+export const Checkbox = styled.input.attrs({ type: 'checkbox' })`
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-right: 0.5rem;
 `

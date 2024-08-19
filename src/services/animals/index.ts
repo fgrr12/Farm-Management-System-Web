@@ -20,7 +20,7 @@ export module AnimalsService {
 			where('farmUuid', '==', farmUuid)
 		)
 
-		if (selectedSpecies !== 'all')
+		if (selectedSpecies !== '')
 			queryBase = query(queryBase, where('species', '==', selectedSpecies))
 
 		const animalsDocs = await getDocs(queryBase)

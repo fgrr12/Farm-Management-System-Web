@@ -17,6 +17,7 @@ export const Form = styled.form`
     gap: 1rem;
     margin-top: 2rem;
     padding: 0 20rem;
+    width: 100%;
 
     & > button {
         grid-column: span 2;

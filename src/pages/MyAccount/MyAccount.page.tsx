@@ -26,12 +26,38 @@ export const MyAccount: FC = () => {
 	const [farm, setFarm] = useState<FarmData>(INITIAL_FARM_DATA)
 	const [edit, setEdit] = useState(INITIAL_EDIT)
 
+	const languages = [
+		{ value: 'spa', name: t('myProfile.languageList.spa') },
+		{ value: 'eng', name: t('myProfile.languageList.eng') },
+	]
+
+	const species = [
+		{ value: 'Cow', name: 'Cow' },
+		{ value: 'Sheep', name: 'Sheep' },
+	]
+
+	const liquidUnit = [
+		{ value: 'L', name: t('myFarm.liquidUnitList.L') },
+		{ value: 'Gal', name: t('myFarm.liquidUnitList.Gal') },
+	]
+
+	const weightUnit = [
+		{ value: 'Kg', name: t('myFarm.weightUnitList.Kg') },
+		{ value: 'Lb', name: t('myFarm.weightUnitList.Lb') },
+	]
+
+	const temperatureUnit = [
+		{ value: '°C', name: t('myFarm.temperatureUnitList.°C') },
+		{ value: '°F', name: t('myFarm.temperatureUnitList.°F') },
+	]
+
 	const handleEdit = (key: 'farm' | 'user') => () => {
 		setEdit((prev) => ({ ...prev, [key]: !prev[key] }))
 	}
 
 	const handleTextChange = (isUser?: boolean) => (event: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target
+
 		if (isUser) {
 			setUser((prev) => ({ ...prev, [name]: value }))
 		} else {
@@ -113,7 +139,7 @@ export const MyAccount: FC = () => {
 		const species = currentFarm!.species.join(',') || ''
 		setUser(currentUser!)
 		setFarm({ ...currentFarm!, species })
-	}, [user, currentFarm])
+	}, [currentUser, currentFarm])
 
 	useEffect(() => {
 		setHeaderTitle(t('title'))
@@ -175,13 +201,11 @@ export const MyAccount: FC = () => {
 								name="language"
 								label={t('myProfile.language')}
 								value={user!.language}
+								items={languages}
 								onChange={handleSelectChange(true)}
 								disabled={!edit.user}
 								required
-							>
-								<option value="spa">{t('myProfile.languageList.spa')}</option>
-								<option value="eng">{t('myProfile.languageList.eng')}</option>
-							</Select>
+							/>
 						</S.ContainerOf3>
 						<Button type="submit" disabled={!edit.user}>
 							{t('myProfile.edit')}
@@ -221,50 +245,47 @@ export const MyAccount: FC = () => {
 									disabled={!edit.farm}
 									required
 								/>
-								<TextField
+								{/* <Select
 									name="species"
 									label={t('myFarm.species')}
-									placeholder={t('myFarm.species')}
 									value={farm!.species}
-									onChange={handleTextChange()}
+									onChange={handleSelectChange()}
 									disabled={!edit.farm}
+									multiple={true}
 									required
-								/>
+								>
+									<option value="Cow">Cow</option>
+									<option value="Sheep">Sheep</option>
+								</Select> */}
 							</S.ContainerOf3>
 							<S.ContainerOf3>
 								<Select
 									name="liquidUnit"
 									label={t('myFarm.liquidUnit')}
 									value={farm!.liquidUnit}
+									items={liquidUnit}
 									onChange={handleSelectChange(false)}
 									disabled={!edit.farm}
 									required
-								>
-									<option value="L">{t('myFarm.liquidUnitList.L')}</option>
-									<option value="Gal">{t('myFarm.liquidUnitList.Gal')}</option>
-								</Select>
+								/>
 								<Select
 									name="weightUnit"
 									label={t('myFarm.weightUnit')}
 									value={farm!.weightUnit}
+									items={weightUnit}
 									onChange={handleSelectChange(false)}
 									disabled={!edit.farm}
 									required
-								>
-									<option value="Kg">{t('myFarm.weightUnitList.Kg')}</option>
-									<option value="Lb">{t('myFarm.weightUnitList.Lb')}</option>
-								</Select>
+								/>
 								<Select
 									name="temperatureUnit"
 									label={t('myFarm.temperatureUnit')}
 									value={farm!.temperatureUnit}
+									items={temperatureUnit}
 									onChange={handleSelectChange(false)}
 									disabled={!edit.farm}
 									required
-								>
-									<option value="°C">{t('myFarm.temperatureUnitList.°C')}</option>
-									<option value="°F">{t('myFarm.temperatureUnitList.°F')}</option>
-								</Select>
+								/>
 							</S.ContainerOf3>
 							<Button type="submit" disabled={!edit.farm}>
 								{t('myFarm.edit')}
@@ -277,19 +298,18 @@ export const MyAccount: FC = () => {
 	)
 }
 
-const INITIAL_USER_DATA: User =
-	{
-		uuid: '',
-		name: '',
-		lastName: '',
-		email: '',
-		phone: '',
-		status: true,
-		role: 'employee',
-		photoUrl: '',
-		language: 'spa',
-		farmUuid: '',
-	} || null
+const INITIAL_USER_DATA: User = {
+	uuid: '',
+	name: '',
+	lastName: '',
+	email: '',
+	phone: '',
+	status: true,
+	role: 'employee',
+	photoUrl: '',
+	language: 'spa',
+	farmUuid: '',
+}
 
 const INITIAL_FARM_DATA: FarmData = {
 	uuid: '',

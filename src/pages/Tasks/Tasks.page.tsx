@@ -25,6 +25,7 @@ export const Tasks = () => {
 	const { t } = useTranslation(['tasks'])
 
 	const [tasks, setTasks] = useState(INITIAL_TASKS)
+	const [species, setSpecies] = useState(INITIAL_SPECIES)
 	const [filters, setFilters] = useState(INITIAL_FILTERS)
 
 	const handleAddTask = () => {
@@ -63,7 +64,9 @@ export const Tasks = () => {
 	}
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect used to update tasks list
 	useEffect(() => {
-		if (user) getTasks()
+		if (!user) return
+		getTasks()
+		setSpecies(farm!.species.map((specie) => ({ value: specie, name: specie })))
 	}, [user, filters.priority, filters.species, filters.status])
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only watching for search changes
@@ -82,25 +85,37 @@ export const Tasks = () => {
 		<S.Container>
 			<S.Filters>
 				<Search placeholder={t('search')} onChange={handleDebounceSearch} />
-				<Select name="status" label={t('status')} onChange={handleSelectChange}>
-					<option value="">{t('all')}</option>
-					<option value="COMPLETED">{t('completed')}</option>
-					<option value="PENDING">{t('pending')}</option>
-				</Select>
-				<Select name="priority" label={t('priority')} onChange={handleSelectChange}>
-					<option value="">{t('all')}</option>
-					<option value="high">{t('high')}</option>
-					<option value="medium">{t('medium')}</option>
-					<option value="low">{t('low')}</option>
-				</Select>
-				<Select name="species" label={t('species')} onChange={handleSelectChange}>
-					<option value="">{t('all')}</option>
-					{farm?.species.map((species, index) => (
-						<option key={index} value={species}>
-							{species}
-						</option>
-					))}
-				</Select>
+				<Select
+					name="status"
+					label={t('status')}
+					defaultLabel={t('all')}
+					value={filters.status}
+					items={[
+						{ value: 'COMPLETED', name: t('completed') },
+						{ value: 'PENDING', name: t('pending') },
+					]}
+					onChange={handleSelectChange}
+				/>
+				<Select
+					name="priority"
+					label={t('priority')}
+					defaultLabel={t('all')}
+					value={filters.priority}
+					items={[
+						{ value: 'high', name: t('high') },
+						{ value: 'medium', name: t('medium') },
+						{ value: 'low', name: t('low') },
+					]}
+					onChange={handleSelectChange}
+				/>
+				<Select
+					name="species"
+					label={t('species')}
+					defaultLabel={t('all')}
+					value={filters.species}
+					items={species}
+					onChange={handleSelectChange}
+				/>
 				<Button onClick={handleAddTask}>{t('addTask')}</Button>
 			</S.Filters>
 
@@ -153,3 +168,5 @@ const INITIAL_FILTERS: TaskFilters = {
 	priority: '',
 	species: '',
 }
+
+const INITIAL_SPECIES = [{ value: '', name: '' }]

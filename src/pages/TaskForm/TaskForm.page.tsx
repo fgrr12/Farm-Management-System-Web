@@ -23,6 +23,7 @@ export const TaskForm = () => {
 	const { t } = useTranslation(['taskForm'])
 
 	const [task, setTask] = useState(INITIAL_TASK)
+	const [species, setSpecies] = useState(INITIAL_SPECIES)
 
 	const handleTextChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		const { name, value } = event.target
@@ -57,6 +58,11 @@ export const TaskForm = () => {
 		setHeaderTitle(t('title'))
 	}, [setHeaderTitle, t])
 
+	useEffect(() => {
+		if (!farm) return
+		setSpecies(farm!.species.map((specie) => ({ value: specie, name: specie })))
+	}, [farm])
+
 	return (
 		<S.Container>
 			<S.Form onSubmit={handleSubmit} autoComplete="off">
@@ -80,33 +86,25 @@ export const TaskForm = () => {
 				<Select
 					name="priority"
 					label={t('priority')}
+					defaultLabel={t('priority')}
 					value={task.priority}
+					items={[
+						{ value: 'low', name: t('priorities.low') },
+						{ value: 'medium', name: t('priorities.medium') },
+						{ value: 'high', name: t('priorities.high') },
+					]}
 					onChange={handleSelectChange}
 					required
-				>
-					<option value="" disabled>
-						{t('priorities.default')}
-					</option>
-					<S.PriorityOption $priority="low">{t('priorities.low')}</S.PriorityOption>
-					<S.PriorityOption $priority="medium">{t('priorities.medium')}</S.PriorityOption>
-					<S.PriorityOption $priority="high">{t('priorities.high')}</S.PriorityOption>
-				</Select>
+				/>
 				<Select
 					name="species"
 					label={t('species')}
+					defaultLabel={t('selectSpecies')}
 					value={task.species}
+					items={species}
 					onChange={handleSelectChange}
 					required
-				>
-					<option value="" disabled>
-						{t('selectSpecies')}
-					</option>
-					{farm?.species.map((species, index) => (
-						<option key={index} value={species}>
-							{species}
-						</option>
-					))}
-				</Select>
+				/>
 				<Button type="submit">{t('addTask')}</Button>
 			</S.Form>
 		</S.Container>
@@ -122,3 +120,5 @@ const INITIAL_TASK: Task = {
 	species: '',
 	farmUuid: '',
 }
+
+const INITIAL_SPECIES = [{ value: '', name: '' }]

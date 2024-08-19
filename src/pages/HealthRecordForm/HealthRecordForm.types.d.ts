@@ -16,3 +16,8 @@ export interface HealthRecord {
 	frequency?: string
 	duration?: string
 }
+
+export interface HealthRecordFormType {
+	value: string
+	name: string
+}

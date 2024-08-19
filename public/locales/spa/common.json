@@ -9,5 +9,8 @@
 		"myAccount": "Mi Cuenta",
 		"logout": "Cerrar Sesión"
 	},
-	"loading": "Cargando"
+	"loading": "Cargando",
+	"select": {
+		"default": "Selecciona una opción"
+	}
 }
