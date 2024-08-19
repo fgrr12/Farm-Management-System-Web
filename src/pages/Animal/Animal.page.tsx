@@ -79,16 +79,43 @@ export const Animal: FC = () => {
 		setAnimal((prev) => ({ ...prev, productionRecords: updateProductionRecords }))
 	}
 
+	const getHealthRecords = async () => {
+		if (activeTab === 'healthRecords') return
+		setActiveTab('healthRecords')
+		const dbHealthRecords = await HealthRecordsService.getHealthRecords(animal.uuid)
+		animal.weight = dbHealthRecords[0]?.weight ?? animal.weight
+		setAnimal((prev) => ({ ...prev, healthRecords: dbHealthRecords, weight: animal.weight }))
+	}
+
+	const getProductionRecords = async () => {
+		if (activeTab === 'productionRecords') return
+		setActiveTab('productionRecords')
+		const dbProductionRecords = await ProductionRecordsService.getProductionRecords(animal.uuid)
+		setAnimal((prev) => ({ ...prev, productionRecords: dbProductionRecords }))
+	}
+
+	const getRelatedAnimals = async () => {
+		if (activeTab === 'relatedAnimals') return
+		setActiveTab('relatedAnimals')
+		const dbRelatedAnimals = await RelatedAnimalsService.getRelatedAnimals(animal.uuid)
+		if (dbRelatedAnimals.length !== 0) {
+			setAnimal((prev) => ({
+				...prev,
+				relatedAnimals: {
+					parents: dbRelatedAnimals.filter((related) => related.parent.animalUuid !== animal.uuid),
+					children: dbRelatedAnimals.filter((related) => related.child.animalUuid !== animal.uuid),
+				},
+			}))
+		}
+	}
+
 	const getInitialData = async () => {
 		try {
 			setLoading(true)
-			const { pathname } = location
-			const animalId = pathname.split('/').pop()
+			const animalId = params.animalUuid as string
 
 			const dbAnimal = await AnimalsService.getAnimal(animalId!)
 			const dbHealthRecords = await HealthRecordsService.getHealthRecords(animalId!)
-			const dbRelatedAnimals = await RelatedAnimalsService.getRelatedAnimals(animalId!)
-			const dbProductionRecords = await ProductionRecordsService.getProductionRecords(animalId!)
 
 			if (!farm) {
 				const farmData = await FarmsService.getFarm(dbAnimal!.farmUuid)
@@ -96,15 +123,8 @@ export const Animal: FC = () => {
 			}
 
 			setHeaderTitle(`Animal ${dbAnimal.animalId}`)
-			dbAnimal.weight = dbHealthRecords[dbHealthRecords.length - 1]?.weight ?? dbAnimal.weight
+			dbAnimal.weight = dbHealthRecords[0]?.weight ?? dbAnimal.weight
 			dbAnimal.healthRecords = dbHealthRecords
-			dbAnimal.productionRecords = dbProductionRecords
-			if (dbRelatedAnimals.length !== 0) {
-				dbAnimal.relatedAnimals = {
-					parents: dbRelatedAnimals.filter((related) => related.parent.animalUuid !== animalId),
-					children: dbRelatedAnimals.filter((related) => related.child.animalUuid !== animalId),
-				}
-			}
 			setAnimal(dbAnimal)
 		} catch (error) {
 			setModalData({
@@ -204,22 +224,13 @@ export const Animal: FC = () => {
 
 			<S.TabsContainer>
 				<S.Tabs>
-					<S.Tab
-						$active={activeTab === 'healthRecords'}
-						onClick={() => setActiveTab('healthRecords')}
-					>
+					<S.Tab $active={activeTab === 'healthRecords'} onClick={getHealthRecords}>
 						{t('healthRecords')}
 					</S.Tab>
-					<S.Tab
-						$active={activeTab === 'productionRecords'}
-						onClick={() => setActiveTab('productionRecords')}
-					>
+					<S.Tab $active={activeTab === 'productionRecords'} onClick={getProductionRecords}>
 						{t('productionRecords')}
 					</S.Tab>
-					<S.Tab
-						$active={activeTab === 'relatedAnimals'}
-						onClick={() => setActiveTab('relatedAnimals')}
-					>
+					<S.Tab $active={activeTab === 'relatedAnimals'} onClick={getRelatedAnimals}>
 						{t('relatedAnimals')}
 					</S.Tab>
 				</S.Tabs>
