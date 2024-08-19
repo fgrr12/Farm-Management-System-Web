@@ -15,5 +15,6 @@ export const AppContent = styled.div<{ $topHeaderHeight: number }>`
 
   @media (max-width: 768px) {
     flex-direction: column;
+    height: auto;
   }
 `
