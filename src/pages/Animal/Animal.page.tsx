@@ -142,6 +142,7 @@ export const Animal: FC = () => {
 	useEffect(() => {
 		setMobile(window.innerWidth <= 768)
 		setHeaderTitle('Animal')
+		setActiveTab('healthRecords')
 		getInitialData()
 	}, [params.animalUuid])
 
