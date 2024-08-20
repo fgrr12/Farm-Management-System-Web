@@ -81,6 +81,7 @@ export const HealthRecordForm = () => {
 			setLoading(true)
 			event.preventDefault()
 			const healthRecordUuid = params.healthRecordUuid as string
+			healthRecordForm.uuid = healthRecordUuid ?? crypto.randomUUID()
 
 			if (healthRecordUuid) {
 				await HealthRecordsService.updateHealthRecord(healthRecordForm, user!.uuid)

@@ -48,6 +48,7 @@ export const ProductionRecordForm = () => {
 			setLoading(true)
 			event.preventDefault()
 			const productionRecordUuid = params.productionRecordUuid as string
+			productionRecordForm.uuid = productionRecordUuid ?? crypto.randomUUID()
 
 			if (productionRecordUuid) {
 				await ProductionRecordsService.updateProductionRecord(productionRecordForm, user!.uuid)

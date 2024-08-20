@@ -67,7 +67,7 @@ export const EmployeeForm: FC = () => {
 				return
 			}
 
-			employee.createdBy = user!.uuid || ''
+			employee.createdBy = user!.uuid
 			await EmployeesService.setEmployee(employee)
 			setModalData({
 				open: true,
