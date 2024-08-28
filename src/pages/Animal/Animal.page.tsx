@@ -182,7 +182,13 @@ export const Animal: FC = () => {
 						</div>
 						<div>
 							<S.Label>{t('gender')}</S.Label>
-							<S.Value>{t(`genderList.${animal.gender.toLowerCase()}`)}</S.Value>
+							<S.Value>
+								{t(`genderList.${animal.gender.toLowerCase()}`)}
+								<S.GenderIcon
+									className={`i-mdi-gender-${animal.gender.toLowerCase()}`}
+									$gender={animal.gender}
+								/>
+							</S.Value>
 						</div>
 						<div>
 							<S.Label>{t('color')}</S.Label>

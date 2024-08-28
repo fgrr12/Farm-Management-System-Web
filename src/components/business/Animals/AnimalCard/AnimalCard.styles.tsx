@@ -61,3 +61,18 @@ export const MiddleInfoContainer = styled.div`
         text-align: center;
     }
 `
+
+export const GenderIcon = styled.i<{ $gender: Gender }>`
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: ${({ $gender }) => {
+			switch ($gender) {
+				case 'Male':
+					return colors.male
+				case 'Female':
+					return colors.female
+				default:
+					return colors.primary[500]
+			}
+		}};
+`

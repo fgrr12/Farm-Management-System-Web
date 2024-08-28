@@ -30,6 +30,9 @@ export const colors = {
 	black: '#000',
 	white: '#fff',
 
+	male: '#6cbdfc',
+	female: '#fc6cb0',
+
 	// Shadows
 	shadowBasic: 'rgba(0, 0, 0, 0.1)',
 	shadowLight: 'rgba(0, 0, 0, 0.05)',

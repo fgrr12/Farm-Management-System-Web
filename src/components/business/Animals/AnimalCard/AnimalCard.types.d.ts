@@ -6,6 +6,6 @@ export type CardProps = HTMLAttributes<HTMLDivElement> & {
 	species: string
 	breed: string
 	birthDate?: dayjs.Dayjs
-	gender: string
+	gender: Gender
 	color: string
 }

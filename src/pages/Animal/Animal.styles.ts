@@ -125,3 +125,18 @@ export const Tab = styled.button<{ $active: boolean }>`
     border-radius: 0.5rem;
     cursor: pointer;
 `
+
+export const GenderIcon = styled.i<{ $gender: Gender }>`
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: ${({ $gender }) => {
+			switch ($gender) {
+				case 'Male':
+					return colors.male
+				case 'Female':
+					return colors.female
+				default:
+					return colors.primary[500]
+			}
+		}};
+`

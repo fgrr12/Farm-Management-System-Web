@@ -29,6 +29,10 @@ export const AnimalCard: FC<CardProps> = ({
 				</p>
 				<p>
 					{t('gender')}: {t(`genderList.${animalGender.toLowerCase()}`)}
+					<S.GenderIcon
+						className={`i-mdi-gender-${animalGender.toLowerCase()}`}
+						$gender={animalGender}
+					/>
 				</p>
 				<p>
 					{t('color')}: {animalColor}
