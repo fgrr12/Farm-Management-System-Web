@@ -16,8 +16,8 @@
 	"addButton": "Añadir",
 	"editButton": "Editar",
 	"genderList": {
-		"male": "Masculino",
-		"female": "Femenino"
+		"male": "Macho",
+		"female": "Hembra"
 	},
 	"modal": {
 		"addAnimal": {
