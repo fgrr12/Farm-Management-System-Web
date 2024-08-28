@@ -20,7 +20,8 @@
 		"surgery": "Cirugía",
 		"pregnancy": "Embarazo/Preñes",
 		"deworming": "Desparasitación",
-		"birth": "Nacimiento/Parto"
+		"birth": "Nacimiento/Parto",
+		"drying": "Secado"
 	},
 	"modal": {
 		"deleteHealthRecord": {

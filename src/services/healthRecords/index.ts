@@ -45,6 +45,60 @@ export module HealthRecordsService {
 
 		const document = doc(firestore, collectionName, healthRecordData.uuid)
 		await setDoc(document, { ...healthRecordData, createdAt, createdBy }, { merge: true })
+
+		if (healthRecordData.type === 'Pregnancy') {
+			setHealthRecordGiveBirth(healthRecordData.animalUuid, createdBy)
+		}
+
+		if (healthRecordData.type === 'Birth') {
+			setHealthRecordDrying(healthRecordData.animalUuid, createdBy)
+		}
+	}
+
+	const setHealthRecordGiveBirth = async (animalUuid: string, createdBy: string | null) => {
+		const healthRecordData: SetHealthRecordProps = {
+			reason: 'Posible fecha de nacimiento',
+			type: 'Birth',
+			date: dayjs().add(279, 'days').toISOString(),
+			reviewedBy: '',
+			weight: 0,
+			temperature: 0,
+			medication: '',
+			dosage: '',
+			frequency: '',
+			duration: '',
+			notes: '',
+			animalUuid,
+			uuid: crypto.randomUUID(),
+			status: true,
+		}
+		const createdAt = dayjs().toISOString()
+
+		const document = doc(firestore, collectionName, healthRecordData.uuid)
+		await setDoc(document, { ...healthRecordData, createdAt, createdBy }, { merge: true })
+	}
+
+	const setHealthRecordDrying = async (animalUuid: string, createdBy: string | null) => {
+		const healthRecordData: SetHealthRecordProps = {
+			reason: 'Posible fecha de secado',
+			type: 'Drying',
+			date: dayjs().add(9, 'month').toISOString(),
+			reviewedBy: '',
+			weight: 0,
+			temperature: 0,
+			medication: '',
+			dosage: '',
+			frequency: '',
+			duration: '',
+			notes: '',
+			animalUuid,
+			uuid: crypto.randomUUID(),
+			status: true,
+		}
+		const createdAt = dayjs().toISOString()
+
+		const document = doc(firestore, collectionName, healthRecordData.uuid)
+		await setDoc(document, { ...healthRecordData, createdAt, createdBy }, { merge: true })
 	}
 
 	// Update

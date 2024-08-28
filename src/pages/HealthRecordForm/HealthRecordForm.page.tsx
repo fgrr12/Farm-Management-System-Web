@@ -37,6 +37,7 @@ export const HealthRecordForm = () => {
 		{ value: 'Pregnancy', name: t('healthRecordType.pregnancy') },
 		{ value: 'Deworming', name: t('healthRecordType.deworming') },
 		{ value: 'Birth', name: t('healthRecordType.birth') },
+		{ value: 'Drying', name: t('healthRecordType.drying') },
 	]
 
 	const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {

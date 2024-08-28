@@ -20,7 +20,8 @@
 		"surgery": "Surgery",
 		"pregnancy": "Pregnancy",
 		"deworming": "Deworming",
-		"birth": "Birth"
+		"birth": "Birth",
+		"drying": "Drying"
 	},
 	"modal": {
 		"deleteHealthRecord": {

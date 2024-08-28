@@ -12,3 +12,4 @@ type HealthRecordType =
 	| 'Pregnancy'
 	| 'Deworming'
 	| 'Birth'
+	| 'Drying'

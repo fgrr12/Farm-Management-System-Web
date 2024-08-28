@@ -14,6 +14,7 @@ export interface SetHealthRecordProps {
 	dosage?: string
 	frequency?: string
 	duration?: string
+	status: boolean
 }
 
 export interface GetHealthRecordResponse {
