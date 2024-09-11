@@ -18,13 +18,13 @@
 		"axios": "1.7.7",
 		"dayjs": "^1.11.13",
 		"firebase": "^10.13.1",
-		"i18next": "^23.14.0",
+		"i18next": "^23.15.1",
 		"i18next-browser-languagedetector": "^8.0.0",
 		"i18next-http-backend": "^2.6.1",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
 		"react-i18next": "^15.0.1",
-		"react-router-dom": "6.26.1",
+		"react-router-dom": "6.26.2",
 		"styled-components": "^6.1.13",
 		"zustand": "4.5.5"
 	},
@@ -36,8 +36,8 @@
 		"@vitejs/plugin-react": "4.3.1",
 		"@vitejs/plugin-react-swc": "^3.7.0",
 		"dotenv-cli": "7.4.2",
-		"typescript": "^5.5.4",
+		"typescript": "^5.6.2",
 		"unocss": "^0.62.3",
-		"vite": "^5.4.3"
+		"vite": "^5.4.4"
 	}
 }
