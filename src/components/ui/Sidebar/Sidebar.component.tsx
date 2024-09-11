@@ -79,6 +79,15 @@ export const Sidebar: FC = () => {
 						<S.Icon className="i-material-symbols-account-circle" $collapse={collapseSidebar} />
 						{!collapseSidebar && t('sidebar.myAccount')}
 					</S.SidebarMenuItem>
+					<S.SidebarMenuItem
+						$collapse={collapseSidebar}
+						$selected={handleCheckPath(AppRoutes.MY_SPECIES)}
+						$disabled={!user}
+						onClick={() => handleGoTo(AppRoutes.MY_SPECIES)}
+					>
+						<S.Icon className="i-solar-dna-bold-duotone" $collapse={collapseSidebar} />
+						{!collapseSidebar && t('sidebar.mySpecies')}
+					</S.SidebarMenuItem>
 					<S.SidebarMenuItem $collapse={collapseSidebar} $disabled={!user} onClick={handleLogout}>
 						<S.Icon className="i-material-symbols-logout" $collapse={collapseSidebar} />
 						{!collapseSidebar && t('sidebar.logout')}

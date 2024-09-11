@@ -5,5 +5,6 @@ interface Farm {
 	liquidUnit: string
 	weightUnit: string
 	temperatureUnit: string
-	species: string[]
+	species?: Species[]
+	status: boolean
 }

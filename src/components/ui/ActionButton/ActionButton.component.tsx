@@ -9,7 +9,7 @@ import type { ActionButtonProps } from './ActionButton.types'
 export const ActionButton: FC<ActionButtonProps> = ({ icon, ...rest }) => {
 	return (
 		<S.ActionButton {...rest}>
-			<S.Icon className={icon} />
+			<S.Icon className={icon} $icon={icon} />
 		</S.ActionButton>
 	)
 }

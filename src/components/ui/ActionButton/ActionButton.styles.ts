@@ -30,6 +30,16 @@ export const IconStyles = css`
 	background-color: ${colors.primary[600]};
 `
 
-export const Icon = styled.span`
+export const Icon = styled.span<{ $icon: string | undefined }>`
 	${IconStyles}
+	background-color: ${({ $icon }) => {
+		switch ($icon) {
+			case 'i-material-symbols-delete-outline':
+				return colors.red
+			case 'i-material-symbols-add-circle-outline':
+				return colors.secondary[600]
+			default:
+				return colors.primary[600]
+		}
+	}};
 `

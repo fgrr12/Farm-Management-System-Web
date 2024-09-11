@@ -21,6 +21,7 @@ export enum AppRoutes {
 
 	// My Account
 	MY_ACCOUNT = '/my-account',
+	MY_SPECIES = '/my-species',
 
 	// Tasks
 	TASKS = '/tasks',

@@ -107,9 +107,8 @@ export const MyAccount: FC = () => {
 		e.preventDefault()
 		try {
 			setLoading(true)
-			const species = farm.species.split(',')
-			await FarmsService.updateFarm({ ...farm, species })
-			updateFarm({ ...farm, species })
+			await FarmsService.updateFarm({ ...farm })
+			updateFarm({ ...farm })
 			setEdit((prev) => ({ ...prev, farm: false }))
 			setModalData({
 				open: true,
@@ -137,9 +136,8 @@ export const MyAccount: FC = () => {
 	useEffect(() => {
 		if (!user || !currentFarm) return
 
-		const species = currentFarm!.species.join(',') || ''
 		setUser(currentUser!)
-		setFarm({ ...currentFarm!, species })
+		setFarm({ ...currentFarm! })
 	}, [currentUser, currentFarm])
 
 	useEffect(() => {
@@ -246,15 +244,6 @@ export const MyAccount: FC = () => {
 									disabled={!edit.farm}
 									required
 								/>
-								<TextField
-									name="species"
-									label={t('myFarm.species')}
-									placeholder={t('myFarm.species')}
-									value={farm!.species}
-									onChange={handleTextChange()}
-									disabled={!edit.farm}
-									required
-								/>
 							</S.ContainerOf3>
 							<S.ContainerOf3>
 								<Select
@@ -313,10 +302,10 @@ const INITIAL_FARM_DATA: FarmData = {
 	uuid: '',
 	name: '',
 	address: '',
-	species: '',
 	liquidUnit: 'L',
 	weightUnit: 'Kg',
 	temperatureUnit: '°C',
+	status: true,
 }
 
 const INITIAL_EDIT = {

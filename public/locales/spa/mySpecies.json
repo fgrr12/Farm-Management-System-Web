@@ -1,0 +1,29 @@
+{
+	"title": "Mis especies",
+	"subtitle": "Gestiona tus especies",
+	"search": "Buscar",
+	"addButton": "Añadir",
+	"editButton": "Editar",
+	"saveButton": "Guardar",
+	"deleteButton": "Eliminar",
+	"breed": "Raza",
+	"gestationPeriod": "Periodo de gestación",
+	"modal": {
+		"deleteSpecies": {
+			"title": "¿Quieres eliminar esta especie?",
+			"message": "Esta acción se guardara hasta que presiones el botón de guardar."
+		},
+		"deleteBreed": {
+			"title": "¿Quieres eliminar esta raza?",
+			"message": "Esta acción se guardara hasta que presiones el botón de guardar."
+		},
+		"saveSpecies": {
+			"title": "Especie guardada",
+			"message": "La especie ha sido guardada exitosamente"
+		},
+		"errorEditingSpecies": {
+			"title": "Error",
+			"message": "Ocurrió un error al editar la especie"
+		}
+	}
+}

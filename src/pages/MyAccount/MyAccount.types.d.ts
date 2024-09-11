@@ -5,5 +5,5 @@ export interface FarmData {
 	liquidUnit: string
 	weightUnit: string
 	temperatureUnit: string
-	species: string
+	status: boolean
 }

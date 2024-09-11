@@ -17,6 +17,7 @@ import { Employees } from './pages/Employees'
 import { HealthRecordForm } from './pages/HealthRecordForm'
 import { LoginForm } from './pages/LoginForm'
 import { MyAccount } from './pages/MyAccount'
+import { MySpecies } from './pages/MySpecies'
 import { ProductionRecordForm } from './pages/ProductionRecordForm'
 import { RelatedAnimalsForm } from './pages/RelatedAnimalsForm'
 import { TaskForm } from './pages/TaskForm'
@@ -92,7 +93,9 @@ export const App: FC = () => {
 					<Route path={AppRoutes.EMPLOYEES} element={<Employees />} />
 					<Route path={AppRoutes.ADD_EMPLOYEE} element={<EmployeeForm />} />
 					<Route path={AppRoutes.EDIT_EMPLOYEE} element={<EmployeeForm />} />
+
 					<Route path={AppRoutes.MY_ACCOUNT} element={<MyAccount />} />
+					<Route path={AppRoutes.MY_SPECIES} element={<MySpecies />} />
 
 					<Route path={AppRoutes.TASKS} element={<Tasks />} />
 					<Route path={AppRoutes.ADD_TASK} element={<TaskForm />} />
