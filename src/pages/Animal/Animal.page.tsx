@@ -125,7 +125,9 @@ export const Animal: FC = () => {
 			setHeaderTitle(`Animal ${dbAnimal.animalId}`)
 			dbAnimal.weight = dbHealthRecords[0]?.weight ?? dbAnimal.weight
 			dbAnimal.healthRecords = dbHealthRecords
-			setAnimal(dbAnimal)
+			const species = farm!.species!.find((sp) => sp.uuid === dbAnimal.species)
+			const breed = species!.breeds.find((breed) => breed.uuid === dbAnimal.breed)
+			setAnimal({ ...dbAnimal, species: species!.name, breed: breed!.name })
 		} catch (error) {
 			setModalData({
 				open: true,

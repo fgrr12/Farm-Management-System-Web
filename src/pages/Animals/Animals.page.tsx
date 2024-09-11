@@ -25,7 +25,7 @@ export const Animals = () => {
 	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
 
 	const [animals, setAnimals] = useState<AnimalCardInformation[]>([])
-	const [species, setSpecies] = useState<string[]>([])
+	const [species, setSpecies] = useState<Species[]>([])
 	const [filters, setFilters] = useState<AnimalsFilters>(INITIAL_FILTERS)
 
 	const navigateToAnimal = (uuid: string) => {
@@ -54,7 +54,14 @@ export const Animals = () => {
 				search,
 				farmUuid: farm!.uuid,
 			})
-			setAnimals(dbAnimals)
+
+			const dbAnimalsBreeds = dbAnimals.map((animal) => {
+				const breedName = farm!
+					.species!.find((sp) => sp.uuid === animal.species)
+					?.breeds.find((breed) => breed.uuid === animal.breed)?.name
+				return { ...animal, breed: breedName! }
+			})
+			setAnimals(dbAnimalsBreeds)
 		} catch (error) {
 			setModalData({
 				open: true,
@@ -71,7 +78,7 @@ export const Animals = () => {
 	useEffect(() => {
 		setLoading(true)
 		if (user) {
-			setSpecies(farm!.species)
+			setSpecies(farm!.species!)
 			getAnimals()
 		}
 	}, [filters, user])
@@ -89,7 +96,7 @@ export const Animals = () => {
 					label={t('species')}
 					defaultLabel={t('all')}
 					value={filters.selectedSpecies}
-					items={[...species.map((specie) => ({ value: specie, name: specie }))]}
+					items={[...species.map((specie) => ({ value: specie.uuid, name: specie.name }))]}
 					onChange={handleSelectChange}
 				/>
 				<Button onClick={() => navigation(AppRoutes.ADD_ANIMAL)}>{t('addAnimal')}</Button>

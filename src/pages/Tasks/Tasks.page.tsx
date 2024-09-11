@@ -66,7 +66,7 @@ export const Tasks = () => {
 	useEffect(() => {
 		if (!user) return
 		getTasks()
-		setSpecies(farm!.species.map((specie) => ({ value: specie, name: specie })))
+		setSpecies(farm!.species!)
 	}, [user, filters.priority, filters.species, filters.status])
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only watching for search changes
@@ -112,6 +112,8 @@ export const Tasks = () => {
 					name="species"
 					label={t('species')}
 					defaultLabel={t('all')}
+					optionValue="uuid"
+					optionLabel="name"
 					value={filters.species}
 					items={species}
 					onChange={handleSelectChange}
@@ -169,4 +171,17 @@ const INITIAL_FILTERS: TaskFilters = {
 	species: '',
 }
 
-const INITIAL_SPECIES = [{ value: '', name: '' }]
+const INITIAL_SPECIES: Species[] = [
+	{
+		uuid: crypto.randomUUID(),
+		name: '',
+		breeds: [
+			{
+				uuid: crypto.randomUUID(),
+				name: '',
+				gestationPeriod: 0,
+			},
+		],
+		status: true,
+	},
+]

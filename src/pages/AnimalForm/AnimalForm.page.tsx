@@ -30,6 +30,7 @@ export const AnimalForm = () => {
 	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
 	const [animalForm, setAnimalForm] = useState<Animal>(INITIAL_ANIMAL_FORM)
 	const [species, setSpecies] = useState(INITIAL_SPECIES)
+	const [breeds, setBreeds] = useState<Breed[]>([])
 
 	const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target
@@ -39,6 +40,10 @@ export const AnimalForm = () => {
 	const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
 		const { name, value } = event.target
 		setAnimalForm((prev) => ({ ...prev, [name]: value }))
+		if (name === 'species') {
+			const breeds = species.find((sp) => sp.uuid === value)?.breeds
+			setBreeds(breeds ?? [])
+		}
 	}
 
 	const handleDateChange =
@@ -56,6 +61,8 @@ export const AnimalForm = () => {
 			setLoading(true)
 			const animalUuid = params.animalUuid as string
 			const dbAnimal = await AnimalsService.getAnimal(animalUuid)
+			const species = farm!.species!.find((sp) => sp.uuid === dbAnimal.species)
+			setBreeds(species!.breeds)
 			setAnimalForm(dbAnimal)
 		} catch (error) {
 			setModalData({
@@ -130,7 +137,7 @@ export const AnimalForm = () => {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		if (user) {
-			setSpecies(farm!.species.map((specie) => ({ value: specie, name: specie })))
+			setSpecies(farm!.species!)
 			if (params.animalUuid) {
 				getAnimal()
 			}
@@ -166,18 +173,23 @@ export const AnimalForm = () => {
 					name="species"
 					label={t('species')}
 					defaultLabel={t('selectSpecies')}
+					optionValue="uuid"
+					optionLabel="name"
 					value={animalForm.species}
 					items={species}
 					onChange={handleSelectChange}
 					required
 				/>
-				<TextField
+				<Select
 					name="breed"
-					type="text"
-					placeholder={t('breed')}
 					label={t('breed')}
+					defaultLabel={t('selectBreed')}
+					optionValue="uuid"
+					optionLabel="name"
 					value={animalForm.breed}
-					onChange={handleTextChange}
+					items={breeds}
+					onChange={handleSelectChange}
+					disabled={!breeds.length}
 					required
 				/>
 				<Select
@@ -257,7 +269,20 @@ const INITIAL_ANIMAL_FORM: Animal = {
 	deathDate: null,
 }
 
-const INITIAL_SPECIES = [{ value: '', name: '' }]
+const INITIAL_SPECIES: Species[] = [
+	{
+		uuid: crypto.randomUUID(),
+		name: '',
+		breeds: [
+			{
+				uuid: crypto.randomUUID(),
+				name: '',
+				gestationPeriod: 0,
+			},
+		],
+		status: true,
+	},
+]
 
 const formatDate = (date: dayjs.Dayjs | string) => {
 	return dayjs(date).toISOString()

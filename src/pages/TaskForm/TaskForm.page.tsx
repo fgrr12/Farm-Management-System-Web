@@ -60,7 +60,7 @@ export const TaskForm = () => {
 
 	useEffect(() => {
 		if (!farm) return
-		setSpecies(farm!.species.map((specie) => ({ value: specie, name: specie })))
+		setSpecies(farm!.species!)
 	}, [farm])
 
 	return (
@@ -100,6 +100,8 @@ export const TaskForm = () => {
 					name="species"
 					label={t('species')}
 					defaultLabel={t('selectSpecies')}
+					optionValue="uuid"
+					optionLabel="name"
 					value={task.species}
 					items={species}
 					onChange={handleSelectChange}
@@ -121,4 +123,17 @@ const INITIAL_TASK: Task = {
 	farmUuid: '',
 }
 
-const INITIAL_SPECIES = [{ value: '', name: '' }]
+const INITIAL_SPECIES: Species[] = [
+	{
+		uuid: crypto.randomUUID(),
+		name: '',
+		breeds: [
+			{
+				uuid: crypto.randomUUID(),
+				name: '',
+				gestationPeriod: 0,
+			},
+		],
+		status: true,
+	},
+]
