@@ -1,0 +1,29 @@
+{
+	"title": "My Species",
+	"subtitle": "Manage your species",
+	"search": "Search",
+	"addButton": "Add",
+	"editButton": "Edit",
+	"saveButton": "Save",
+	"deleteButton": "Delete",
+	"breed": "Breed",
+	"gestationPeriod": "Gestation Period",
+	"modal": {
+		"deleteSpecies": {
+			"title": "Do you want to delete this species?",
+			"message": "This action cannot be undone."
+		},
+		"deleteBreed": {
+			"title": "Do you want to delete this breed?",
+			"message": "This action cannot be undone."
+		},
+		"saveSpecies": {
+			"title": "Species Saved",
+			"message": "The species has been saved successfully"
+		},
+		"errorEditingSpecies": {
+			"title": "Error",
+			"message": "There was an error editing the species"
+		}
+	}
+}
