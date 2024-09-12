@@ -7,6 +7,7 @@ import { RelatedAnimalCard } from '@/components/business/RelatedAnimals/RelatedA
 import { AnimalsService } from '@/services/animals'
 import { RelatedAnimalsService } from '@/services/relatedAnimals'
 import { useAppStore } from '@/store/useAppStore'
+import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
 import type {
@@ -21,6 +22,7 @@ import * as S from './RelatedAnimalsForm.styles'
 
 export const RelatedAnimalsForm: FC = () => {
 	const { user } = useUserStore()
+	const { farm } = useFarmStore()
 	const params = useParams()
 	const { t } = useTranslation(['relatedAnimals'])
 
@@ -135,11 +137,13 @@ export const RelatedAnimalsForm: FC = () => {
 				setLoading(true)
 				const animalUuid = params.animalUuid as string
 				const selectedAnimal = await AnimalsService.getAnimal(animalUuid)
+				const species = farm!.species!.find((sp) => sp.uuid === selectedAnimal.species)
+				const breed = species!.breeds.find((breed) => breed.uuid === selectedAnimal.breed)
 
 				setCurrentAnimal({
 					uuid: selectedAnimal.uuid,
 					animalId: selectedAnimal.animalId,
-					breed: selectedAnimal.breed,
+					breed: breed!.name,
 					gender: selectedAnimal.gender,
 				})
 				unsubscribe = RelatedAnimalsService.getRealTimeRelatedAnimals(
@@ -163,7 +167,7 @@ export const RelatedAnimalsForm: FC = () => {
 							.map((animal) => ({
 								uuid: animal.uuid,
 								animalId: animal.animalId,
-								breed: animal.breed,
+								breed: species!.breeds.find((breed) => breed.uuid === animal.breed)!.name,
 								gender: animal.gender,
 								picture: animal.picture,
 							}))

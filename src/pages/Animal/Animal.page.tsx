@@ -98,12 +98,32 @@ export const Animal: FC = () => {
 		if (activeTab === 'relatedAnimals') return
 		setActiveTab('relatedAnimals')
 		const dbRelatedAnimals = await RelatedAnimalsService.getRelatedAnimals(animal.uuid)
+		const species = farm!.species!.find((sp) => sp.uuid === animal.species)
+		const dbRelatedAnimalsBreeds = dbRelatedAnimals.map((related) => {
+			const parentBreed = species!.breeds.find((breed) => breed.uuid === related.parent.breed)
+			const childBreed = species!.breeds.find((breed) => breed.uuid === related.child.breed)
+			return {
+				...related,
+				parent: {
+					...related.parent,
+					breed: parentBreed!.name,
+				},
+				child: {
+					...related.child,
+					breed: childBreed!.name,
+				},
+			}
+		})
 		if (dbRelatedAnimals.length !== 0) {
 			setAnimal((prev) => ({
 				...prev,
 				relatedAnimals: {
-					parents: dbRelatedAnimals.filter((related) => related.parent.animalUuid !== animal.uuid),
-					children: dbRelatedAnimals.filter((related) => related.child.animalUuid !== animal.uuid),
+					parents: dbRelatedAnimalsBreeds.filter(
+						(related) => related.parent.animalUuid !== animal.uuid
+					),
+					children: dbRelatedAnimalsBreeds.filter(
+						(related) => related.child.animalUuid !== animal.uuid
+					),
 				},
 			}))
 		}
@@ -144,9 +164,9 @@ export const Animal: FC = () => {
 	useEffect(() => {
 		setMobile(window.innerWidth <= 768)
 		setHeaderTitle('Animal')
-		setActiveTab('healthRecords')
-		getInitialData()
-	}, [params.animalUuid])
+		farm && setActiveTab('healthRecords')
+		farm && getInitialData()
+	}, [params.animalUuid, farm])
 
 	return (
 		<S.Container>
