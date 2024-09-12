@@ -9,11 +9,11 @@ import * as S from './AnimalCard.styles'
 
 export const AnimalCard: FC<CardProps> = ({
 	animalId,
-	species: animalKind,
-	breed: animalBreed,
-	birthDate: animalBirthDate,
-	gender: animalGender,
-	color: animalColor,
+	species,
+	breed,
+	birthDate,
+	gender,
+	color,
 	...props
 }) => {
 	const { t } = useTranslation(['animalCard'])
@@ -21,21 +21,18 @@ export const AnimalCard: FC<CardProps> = ({
 		<S.Card {...props}>
 			<S.TopInfoContainer>
 				<h2>{animalId}</h2>
-				<h5>{animalBreed}</h5>
+				<h5>{breed.name}</h5>
 			</S.TopInfoContainer>
 			<S.MiddleInfoContainer>
 				<p>
-					{t('birthDate')}: {dayjs(animalBirthDate).format('DD/MM/YYYY')}
+					{t('birthDate')}: {dayjs(birthDate).format('DD/MM/YYYY')}
 				</p>
 				<p>
-					{t('gender')}: {t(`genderList.${animalGender.toLowerCase()}`)}
-					<S.GenderIcon
-						className={`i-mdi-gender-${animalGender.toLowerCase()}`}
-						$gender={animalGender}
-					/>
+					{t('gender')}: {t(`genderList.${gender.toLowerCase()}`)}
+					<S.GenderIcon className={`i-mdi-gender-${gender.toLowerCase()}`} $gender={gender} />
 				</p>
 				<p>
-					{t('color')}: {animalColor}
+					{t('color')}: {color}
 				</p>
 			</S.MiddleInfoContainer>
 			<Button>{t('view')}</Button>

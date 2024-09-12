@@ -1,5 +1,3 @@
-import type dayjs from 'dayjs'
-
 export type DragRelationTypes = 'animals' | 'parents' | 'children'
 
 export type DragSingularRelation = 'parent' | 'child'
@@ -7,8 +5,7 @@ export type DragSingularRelation = 'parent' | 'child'
 export interface RelatedAnimalInformation {
 	uuid: string
 	animalId: string
-	breed: string
-	breedUuid: string
+	breed: Breed
 	gender: Gender
 	picture?: string
 }
@@ -23,13 +20,13 @@ export interface RelatedAnimalsList {
 	uuid: string
 	parent: SelectedAnimal
 	child: SelectedAnimal
-	createdAt?: dayjs.Dayjs | string
-	updatedAt?: dayjs.Dayjs | string
+	createdAt?: string
+	updatedAt?: string
 }
 
 interface SelectedAnimal {
 	animalUuid: string
 	animalId: string
-	breed: string
+	breed: Breed
 	relation: string
 }

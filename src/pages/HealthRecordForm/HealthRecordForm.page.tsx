@@ -15,7 +15,7 @@ import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
-import type { HealthRecord, HealthRecordFormType } from './HealthRecordForm.types'
+import type { HealthRecordFormType } from './HealthRecordForm.types'
 
 import * as S from './HealthRecordForm.styles'
 
@@ -27,7 +27,7 @@ export const HealthRecordForm = () => {
 	const { t } = useTranslation(['healthRecordForm'])
 
 	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
-	const [healthRecordForm, setHealthRecordForm] = useState<HealthRecord>(INITIAL_HEALTH_RECORD_FORM)
+	const [healthRecordForm, setHealthRecordForm] = useState(INITIAL_HEALTH_RECORD_FORM)
 
 	const healthRecordTypes: HealthRecordFormType[] = [
 		{ value: 'Checkup', name: t('healthRecordType.checkup') },
@@ -237,14 +237,14 @@ export const HealthRecordForm = () => {
 	)
 }
 
-const INITIAL_HEALTH_RECORD_FORM: HealthRecord = {
+const INITIAL_HEALTH_RECORD_FORM: AnimalHealthRecord = {
 	uuid: crypto.randomUUID(),
 	animalUuid: '',
 	reason: '',
 	notes: '',
 	type: '',
 	reviewedBy: '',
-	date: dayjs(),
+	date: dayjs().toISOString(),
 	weight: 0,
 	temperature: 0,
 	medication: '',

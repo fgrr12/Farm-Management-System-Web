@@ -72,7 +72,7 @@ export const RelatedAnimalsCards: FC<RelatedAnimalsCardsProps> = ({
 						</div>
 						<div>
 							<S.CardLabel>{t('breed')}</S.CardLabel>
-							<S.CardValue>{animal[type].breed}</S.CardValue>
+							<S.CardValue>{animal[type].breed.name}</S.CardValue>
 						</div>
 						<div>
 							<S.CardLabel>{t('relation')}</S.CardLabel>

@@ -3,13 +3,17 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
+import { HealthRecordsCards } from '@/components/business/Animal/HealthRecordsCards'
 import { HealthRecordsTable } from '@/components/business/Animal/HealthRecordsTable'
+import { ProductionRecordsCards } from '@/components/business/Animal/ProductionRecordsCards'
 import { ProductionRecordsTable } from '@/components/business/Animal/ProductionRecordsTable'
+import { RelatedAnimalsCards } from '@/components/business/Animal/RelatedAnimalsCards'
 import { RelatedAnimalsTable } from '@/components/business/Animal/RelatedAnimalsTable'
 import { ActionButton } from '@/components/ui/ActionButton'
 
 import { AppRoutes } from '@/config/constants/routes'
 import { AnimalsService } from '@/services/animals'
+import { FarmsService } from '@/services/farms'
 import { HealthRecordsService } from '@/services/healthRecords'
 import { ProductionRecordsService } from '@/services/productionRecords'
 import { RelatedAnimalsService } from '@/services/relatedAnimals'
@@ -17,12 +21,6 @@ import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
-import type { AnimalInformation } from './Animal.types'
-
-import { HealthRecordsCards } from '@/components/business/Animal/HealthRecordsCards'
-import { ProductionRecordsCards } from '@/components/business/Animal/ProductionRecordsCards'
-import { RelatedAnimalsCards } from '@/components/business/Animal/RelatedAnimalsCards'
-import { FarmsService } from '@/services/farms'
 import * as S from './Animal.styles'
 
 export const Animal: FC = () => {
@@ -33,7 +31,7 @@ export const Animal: FC = () => {
 	const { t } = useTranslation(['animal'])
 
 	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
-	const [animal, setAnimal] = useState<AnimalInformation>(ANIMAL_INITIAL_STATE)
+	const [animal, setAnimal] = useState(ANIMAL_INITIAL_STATE)
 	const [mobile, setMobile] = useState(false)
 	const [activeTab, setActiveTab] = useState<
 		'healthRecords' | 'productionRecords' | 'relatedAnimals'
@@ -59,8 +57,10 @@ export const Animal: FC = () => {
 	}
 
 	const handleRemoveRelation = (uuid: string) => {
-		const updateParents = animal.relatedAnimals.parents.filter((related) => related.uuid !== uuid)
-		const updateChildren = animal.relatedAnimals.children.filter((related) => related.uuid !== uuid)
+		const updateParents = animal.relatedAnimals!.parents.filter((related) => related.uuid !== uuid)
+		const updateChildren = animal.relatedAnimals!.children.filter(
+			(related) => related.uuid !== uuid
+		)
 		setAnimal((prev) => ({
 			...prev,
 			relatedAnimals: { parents: updateParents, children: updateChildren },
@@ -68,12 +68,12 @@ export const Animal: FC = () => {
 	}
 
 	const handleRemoveHealthRecord = (uuid: string) => {
-		const updateHealthRecords = animal.healthRecords.filter((record) => record.uuid !== uuid)
+		const updateHealthRecords = animal.healthRecords!.filter((record) => record.uuid !== uuid)
 		setAnimal((prev) => ({ ...prev, healthRecords: updateHealthRecords }))
 	}
 
 	const handleRemoveProductionRecord = (uuid: string) => {
-		const updateProductionRecords = animal.productionRecords.filter(
+		const updateProductionRecords = animal.productionRecords!.filter(
 			(record) => record.uuid !== uuid
 		)
 		setAnimal((prev) => ({ ...prev, productionRecords: updateProductionRecords }))
@@ -98,34 +98,21 @@ export const Animal: FC = () => {
 		if (activeTab === 'relatedAnimals') return
 		setActiveTab('relatedAnimals')
 		const dbRelatedAnimals = await RelatedAnimalsService.getRelatedAnimals(animal.uuid)
-		const species = farm!.species!.find((sp) => sp.uuid === animal.species)
-		const dbRelatedAnimalsBreeds = dbRelatedAnimals.map((related) => {
-			const parentBreed = species!.breeds.find((breed) => breed.uuid === related.parent.breed)
-			const childBreed = species!.breeds.find((breed) => breed.uuid === related.child.breed)
-			return {
-				...related,
-				parent: {
-					...related.parent,
-					breed: parentBreed!.name,
-				},
-				child: {
-					...related.child,
-					breed: childBreed!.name,
-				},
-			}
-		})
 		if (dbRelatedAnimals.length !== 0) {
-			setAnimal((prev) => ({
-				...prev,
-				relatedAnimals: {
-					parents: dbRelatedAnimalsBreeds.filter(
-						(related) => related.parent.animalUuid !== animal.uuid
-					),
-					children: dbRelatedAnimalsBreeds.filter(
-						(related) => related.child.animalUuid !== animal.uuid
-					),
-				},
-			}))
+			setAnimal(
+				(prev) =>
+					({
+						...prev,
+						relatedAnimals: {
+							parents: dbRelatedAnimals.filter(
+								(related) => related.parent.animalUuid !== animal.uuid
+							),
+							children: dbRelatedAnimals.filter(
+								(related) => related.child.animalUuid !== animal.uuid
+							),
+						},
+					}) as Animal
+			)
 		}
 	}
 
@@ -143,11 +130,12 @@ export const Animal: FC = () => {
 			}
 
 			setHeaderTitle(`Animal ${dbAnimal.animalId}`)
-			const weight = dbHealthRecords[0]!.weight! > 0 ? dbHealthRecords[0]!.weight : dbAnimal.weight
+			const weight =
+				dbHealthRecords.length > 0 && dbHealthRecords[0]!.weight! > 0
+					? dbHealthRecords[0]!.weight
+					: dbAnimal.weight
 			dbAnimal.healthRecords = dbHealthRecords
-			const species = farm!.species!.find((sp) => sp.uuid === dbAnimal.species)
-			const breed = species!.breeds.find((breed) => breed.uuid === dbAnimal.breed)
-			setAnimal({ ...dbAnimal, species: species!.name, breed: breed!.name, weight: weight! })
+			setAnimal({ ...dbAnimal, weight: weight! })
 		} catch (error) {
 			setModalData({
 				open: true,
@@ -196,11 +184,11 @@ export const Animal: FC = () => {
 						</div>
 						<div>
 							<S.Label>{t('species')}</S.Label>
-							<S.Value>{animal.species}</S.Value>
+							<S.Value>{animal.species.name}</S.Value>
 						</div>
 						<div>
 							<S.Label>{t('breed')}</S.Label>
-							<S.Value>{animal.breed}</S.Value>
+							<S.Value>{animal.breed.name}</S.Value>
 						</div>
 						<div>
 							<S.Label>{t('gender')}</S.Label>
@@ -247,7 +235,7 @@ export const Animal: FC = () => {
 				</S.InfoContainer>
 
 				<S.ImageContainer>
-					<S.Image src={animal.picture} alt={animal.species} />
+					<S.Image src={animal.picture} alt={animal.species.name} />
 				</S.ImageContainer>
 			</S.AnimalContainer>
 
@@ -336,16 +324,24 @@ export const Animal: FC = () => {
 	)
 }
 
-const ANIMAL_INITIAL_STATE: AnimalInformation = {
+const ANIMAL_INITIAL_STATE: Animal = {
 	uuid: '',
 	animalId: '0',
-	species: 'Cow',
-	breed: '',
+	species: {
+		uuid: '',
+		name: '',
+	},
+	breed: {
+		uuid: '',
+		name: '',
+		gestationPeriod: 0,
+	},
 	gender: 'Male',
 	color: '',
 	weight: 0,
 	picture: '',
 	status: true,
+	farmUuid: '',
 	relatedAnimals: {
 		parents: [],
 		children: [],

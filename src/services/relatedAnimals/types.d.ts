@@ -1,24 +1,22 @@
-import type dayjs from 'dayjs'
-
 export interface GetRelatedAnimalsResponse {
 	uuid: string
 	parent: SelectedAnimal
 	child: SelectedAnimal
-	createdAt?: dayjs.Dayjs | string
-	updatedAt?: dayjs.Dayjs | string
+	createdAt?: string
+	updatedAt?: string
 }
 
 export interface SetRelatedAnimalProps {
 	uuid: string
 	parent: SelectedAnimal | null
 	child: SelectedAnimal | null
-	createdAt?: dayjs.Dayjs | string
-	updatedAt?: dayjs.Dayjs | string
+	createdAt?: string
+	updatedAt?: string
 }
 
 interface SelectedAnimal {
 	animalUuid: string
 	animalId: string
-	breed: string
+	breed: Breed
 	relation: string
 }

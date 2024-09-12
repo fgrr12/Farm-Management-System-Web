@@ -13,7 +13,7 @@ import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
-import type { AnimalCardInformation, AnimalsFilters } from './Animals.types'
+import type { AnimalsFilters } from './Animals.types'
 
 import * as S from './Animals.styles'
 
@@ -24,7 +24,7 @@ export const Animals = () => {
 	const { t } = useTranslation(['animals'])
 	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
 
-	const [animals, setAnimals] = useState<AnimalCardInformation[]>([])
+	const [animals, setAnimals] = useState<Animal[]>([])
 	const [species, setSpecies] = useState<Species[]>([])
 	const [filters, setFilters] = useState<AnimalsFilters>(INITIAL_FILTERS)
 
@@ -54,14 +54,7 @@ export const Animals = () => {
 				search,
 				farmUuid: farm!.uuid,
 			})
-
-			const dbAnimalsBreeds = dbAnimals.map((animal) => {
-				const breedName = farm!
-					.species!.find((sp) => sp.uuid === animal.species)
-					?.breeds.find((breed) => breed.uuid === animal.breed)?.name
-				return { ...animal, breed: breedName! }
-			})
-			setAnimals(dbAnimalsBreeds)
+			setAnimals(dbAnimals)
 		} catch (error) {
 			setModalData({
 				open: true,
@@ -95,7 +88,7 @@ export const Animals = () => {
 					name="selectedSpecies"
 					label={t('species')}
 					defaultLabel={t('all')}
-					value={filters.selectedSpecies}
+					value={filters.selectedSpecies.uuid}
 					items={[...species.map((specie) => ({ value: specie.uuid, name: specie.name }))]}
 					onChange={handleSelectChange}
 				/>
@@ -126,6 +119,10 @@ export const Animals = () => {
 }
 
 const INITIAL_FILTERS: AnimalsFilters = {
-	selectedSpecies: '',
+	selectedSpecies: {
+		uuid: '',
+		name: '',
+		gestationPeriod: 0,
+	},
 	search: '',
 }

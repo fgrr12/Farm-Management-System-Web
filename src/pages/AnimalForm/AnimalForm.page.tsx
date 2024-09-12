@@ -16,8 +16,6 @@ import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
-import type { Animal } from './AnimalForm.types'
-
 import * as S from './AnimalForm.styles'
 
 export const AnimalForm = () => {
@@ -39,10 +37,16 @@ export const AnimalForm = () => {
 
 	const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
 		const { name, value } = event.target
-		setAnimalForm((prev) => ({ ...prev, [name]: value }))
 		if (name === 'species') {
-			const breeds = species.find((sp) => sp.uuid === value)?.breeds
-			setBreeds(breeds ?? [])
+			const species = farm!.species!.find((sp) => sp.uuid === value)
+			setAnimalForm((prev) => ({ ...prev, species: { uuid: value, name: species!.name! } }))
+			setBreeds(species!.breeds)
+		} else if (name === 'breed') {
+			const breed = breeds.find((breed) => breed.uuid === value)
+			setAnimalForm((prev) => ({
+				...prev,
+				breed: { uuid: value, name: breed!.name!, gestationPeriod: 0 },
+			}))
 		}
 	}
 
@@ -61,9 +65,9 @@ export const AnimalForm = () => {
 			setLoading(true)
 			const animalUuid = params.animalUuid as string
 			const dbAnimal = await AnimalsService.getAnimal(animalUuid)
-			const species = farm!.species!.find((sp) => sp.uuid === dbAnimal.species)
-			setBreeds(species!.breeds)
+			const species = farm!.species!.find((sp) => sp.uuid === dbAnimal.species.uuid)
 			setAnimalForm(dbAnimal)
+			setBreeds(species!.breeds)
 		} catch (error) {
 			setModalData({
 				open: true,
@@ -136,12 +140,9 @@ export const AnimalForm = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		if (user) {
-			setSpecies(farm!.species!)
-			if (params.animalUuid) {
-				getAnimal()
-			}
-		}
+		if (!user) return
+		setSpecies(farm!.species!)
+		if (params.animalUuid) getAnimal()
 	}, [user])
 
 	useEffect(() => {
@@ -175,7 +176,7 @@ export const AnimalForm = () => {
 					defaultLabel={t('selectSpecies')}
 					optionValue="uuid"
 					optionLabel="name"
-					value={animalForm.species}
+					value={animalForm.species.uuid}
 					items={species}
 					onChange={handleSelectChange}
 					required
@@ -186,7 +187,7 @@ export const AnimalForm = () => {
 					defaultLabel={t('selectBreed')}
 					optionValue="uuid"
 					optionLabel="name"
-					value={animalForm.breed}
+					value={animalForm.breed.uuid}
 					items={breeds}
 					onChange={handleSelectChange}
 					disabled={!breeds.length}
@@ -256,15 +257,23 @@ export const AnimalForm = () => {
 const INITIAL_ANIMAL_FORM: Animal = {
 	uuid: '',
 	animalId: '',
-	species: '',
-	breed: '',
+	species: {
+		uuid: '',
+		name: '',
+	},
+	breed: {
+		uuid: '',
+		name: '',
+		gestationPeriod: 0,
+	},
 	gender: '',
 	color: '',
 	weight: 0,
 	picture: '',
 	status: true,
-	birthDate: dayjs(),
-	purchaseDate: dayjs(),
+	farmUuid: '',
+	birthDate: dayjs().toISOString(),
+	purchaseDate: dayjs().toISOString(),
 	soldDate: null,
 	deathDate: null,
 }

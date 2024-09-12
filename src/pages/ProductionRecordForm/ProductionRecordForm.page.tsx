@@ -14,8 +14,6 @@ import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
-import type { ProductionRecord } from './ProductionRecordForm.types'
-
 import * as S from './ProductionRecordForm.styles'
 
 export const ProductionRecordForm = () => {
@@ -160,7 +158,7 @@ const INITIAL_PRODUCTION_RECORD_FORM: ProductionRecord = {
 	uuid: crypto.randomUUID(),
 	animalUuid: '',
 	quantity: 0,
-	date: dayjs(),
+	date: dayjs().toISOString(),
 	notes: '',
 	status: true,
 }

@@ -7,7 +7,6 @@ import { RelatedAnimalCard } from '@/components/business/RelatedAnimals/RelatedA
 import { AnimalsService } from '@/services/animals'
 import { RelatedAnimalsService } from '@/services/relatedAnimals'
 import { useAppStore } from '@/store/useAppStore'
-import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
 import type {
@@ -22,7 +21,6 @@ import * as S from './RelatedAnimalsForm.styles'
 
 export const RelatedAnimalsForm: FC = () => {
 	const { user } = useUserStore()
-	const { farm } = useFarmStore()
 	const params = useParams()
 	const { t } = useTranslation(['relatedAnimals'])
 
@@ -107,13 +105,13 @@ export const RelatedAnimalsForm: FC = () => {
 				child: {
 					animalUuid: child.uuid,
 					animalId: child.animalId,
-					breed: child.breedUuid,
+					breed: child.breed,
 					relation: child.gender.toLowerCase() === Gender.FEMALE ? Relation.DAUGHTER : Relation.SON,
 				},
 				parent: {
 					animalUuid: parent.uuid,
 					animalId: parent.animalId,
-					breed: parent.breedUuid,
+					breed: parent.breed,
 					relation:
 						parent.gender.toLowerCase() === Gender.FEMALE ? Relation.MOTHER : Relation.FATHER,
 				},
@@ -137,28 +135,27 @@ export const RelatedAnimalsForm: FC = () => {
 				setLoading(true)
 				const animalUuid = params.animalUuid as string
 				const selectedAnimal = await AnimalsService.getAnimal(animalUuid)
-				const species = farm!.species!.find((sp) => sp.uuid === selectedAnimal.species)
-				const breed = species!.breeds.find((breed) => breed.uuid === selectedAnimal.breed)
 
 				setCurrentAnimal({
 					uuid: selectedAnimal.uuid,
 					animalId: selectedAnimal.animalId,
-					breed: breed!.name,
-					breedUuid: selectedAnimal.breed,
+					breed: selectedAnimal.breed,
 					gender: selectedAnimal.gender,
 				})
 				unsubscribe = RelatedAnimalsService.getRealTimeRelatedAnimals(
 					animalUuid,
 					async (data) => {
+						console.log(data)
+
 						const animals = await AnimalsService.getAnimals({
 							selectedSpecies: selectedAnimal.species,
 							search: '',
 							farmUuid: user!.farmUuid,
 						})
 						const animalsData = animals
-							.filter((animal) => animal.uuid !== animalUuid)
 							.filter(
 								(animal) =>
+									animal.uuid !== animalUuid &&
 									!data.some(
 										(related) =>
 											related.child.animalUuid === animal.uuid ||
@@ -168,45 +165,26 @@ export const RelatedAnimalsForm: FC = () => {
 							.map((animal) => ({
 								uuid: animal.uuid,
 								animalId: animal.animalId,
-								breed: species!.breeds.find((breed) => breed.uuid === animal.breed)!.name,
-								breedUuid: animal.breed,
+								breed: animal.breed,
 								gender: animal.gender,
 								picture: animal.picture,
 							}))
 
-						const parents = animals
-							.filter((animal) =>
-								data.some(
-									(related) =>
-										related.parent.animalUuid === animal.uuid &&
-										related.child.animalUuid === animalUuid
-								)
+						const parents = animals.filter((animal) =>
+							data.some(
+								(related) =>
+									related.parent.animalUuid === animal.uuid &&
+									related.child.animalUuid === animalUuid
 							)
-							.map((animal) => ({
-								uuid: animal.uuid,
-								animalId: animal.animalId,
-								breed: species!.breeds.find((breed) => breed.uuid === animal.breed)!.name,
-								breedUuid: animal.breed,
-								gender: animal.gender,
-								picture: animal.picture,
-							}))
+						)
 
-						const children = animals
-							.filter((animal) =>
-								data.some(
-									(related) =>
-										related.child.animalUuid === animal.uuid &&
-										related.parent.animalUuid === animalUuid
-								)
+						const children = animals.filter((animal) =>
+							data.some(
+								(related) =>
+									related.child.animalUuid === animal.uuid &&
+									related.parent.animalUuid === animalUuid
 							)
-							.map((animal) => ({
-								uuid: animal.uuid,
-								animalId: animal.animalId,
-								breed: species!.breeds.find((breed) => breed.uuid === animal.breed)!.name,
-								breedUuid: animal.breed,
-								gender: animal.gender,
-								picture: animal.picture,
-							}))
+						)
 
 						setRelatedAnimals(data)
 						setAnimalsLists({
@@ -252,7 +230,7 @@ export const RelatedAnimalsForm: FC = () => {
 					<RelatedAnimalCard
 						key={animal.animalId}
 						animalId={animal.animalId}
-						breed={animal.breed}
+						breed={animal.breed.name}
 						gender={animal.gender}
 						picture={animal.picture}
 						draggable
@@ -273,7 +251,7 @@ export const RelatedAnimalsForm: FC = () => {
 							<RelatedAnimalCard
 								key={animal.animalId}
 								animalId={animal.animalId}
-								breed={animal.breed}
+								breed={animal.breed.name}
 								gender={animal.gender}
 								picture={animal.picture}
 								draggable
@@ -294,7 +272,7 @@ export const RelatedAnimalsForm: FC = () => {
 							<RelatedAnimalCard
 								key={animal.animalId}
 								animalId={animal.animalId}
-								breed={animal.breed}
+								breed={animal.breed.name}
 								gender={animal.gender}
 								picture={animal.picture}
 								draggable
