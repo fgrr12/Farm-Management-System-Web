@@ -62,8 +62,6 @@ export const Card = styled.div<{ $type?: string }>`
 					return colors.pink
 				case 'Drying':
 					return colors.yellow
-				default:
-					return colors.primary[100]
 			}
 		}};
 `

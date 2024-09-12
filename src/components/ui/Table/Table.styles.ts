@@ -81,7 +81,7 @@ export const Body = styled.tbody`
   height: 100%;
 `
 
-export const Row = styled.tr`
+export const Row = styled.tr<{ $type?: string }>`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(1rem, 1fr));
   grid-auto-flow: column;
@@ -106,8 +106,26 @@ export const Row = styled.tr`
     }
 
     &:nth-child(odd) {
-      background-color: ${colors.primary[100]};
+      background-color: ${({ $type }) => {
+				switch ($type) {
+					case 'Birth':
+						return colors.pink
+					case 'Drying':
+						return colors.yellow
+					default:
+						return colors.primary[100]
+				}
+			}};
     }
+    
+    background-color: ${({ $type }) => {
+			switch ($type) {
+				case 'Birth':
+					return colors.pink
+				case 'Drying':
+					return colors.yellow
+			}
+		}};
   }
 `
 

@@ -85,7 +85,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 				</Table.Head>
 				<Table.Body>
 					{healthRecords.map((healthRecord) => (
-						<Table.Row key={crypto.randomUUID()}>
+						<Table.Row key={crypto.randomUUID()} $type={healthRecord.type}>
 							<Table.Cell>{healthRecord.reason}</Table.Cell>
 							<Table.Cell>{healthRecord.notes}</Table.Cell>
 							<Table.Cell>{t(`healthRecordType.${healthRecord.type.toLowerCase()}`)}</Table.Cell>
