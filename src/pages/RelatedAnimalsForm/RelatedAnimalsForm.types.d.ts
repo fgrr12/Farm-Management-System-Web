@@ -8,6 +8,7 @@ export interface RelatedAnimalInformation {
 	uuid: string
 	animalId: string
 	breed: string
+	breedUuid: string
 	gender: Gender
 	picture?: string
 }

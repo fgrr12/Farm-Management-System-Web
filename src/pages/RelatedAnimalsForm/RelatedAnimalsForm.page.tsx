@@ -107,13 +107,13 @@ export const RelatedAnimalsForm: FC = () => {
 				child: {
 					animalUuid: child.uuid,
 					animalId: child.animalId,
-					breed: child.breed,
+					breed: child.breedUuid,
 					relation: child.gender.toLowerCase() === Gender.FEMALE ? Relation.DAUGHTER : Relation.SON,
 				},
 				parent: {
 					animalUuid: parent.uuid,
 					animalId: parent.animalId,
-					breed: parent.breed,
+					breed: parent.breedUuid,
 					relation:
 						parent.gender.toLowerCase() === Gender.FEMALE ? Relation.MOTHER : Relation.FATHER,
 				},
@@ -144,6 +144,7 @@ export const RelatedAnimalsForm: FC = () => {
 					uuid: selectedAnimal.uuid,
 					animalId: selectedAnimal.animalId,
 					breed: breed!.name,
+					breedUuid: selectedAnimal.breed,
 					gender: selectedAnimal.gender,
 				})
 				unsubscribe = RelatedAnimalsService.getRealTimeRelatedAnimals(
@@ -168,6 +169,41 @@ export const RelatedAnimalsForm: FC = () => {
 								uuid: animal.uuid,
 								animalId: animal.animalId,
 								breed: species!.breeds.find((breed) => breed.uuid === animal.breed)!.name,
+								breedUuid: animal.breed,
+								gender: animal.gender,
+								picture: animal.picture,
+							}))
+
+						const parents = animals
+							.filter((animal) =>
+								data.some(
+									(related) =>
+										related.parent.animalUuid === animal.uuid &&
+										related.child.animalUuid === animalUuid
+								)
+							)
+							.map((animal) => ({
+								uuid: animal.uuid,
+								animalId: animal.animalId,
+								breed: species!.breeds.find((breed) => breed.uuid === animal.breed)!.name,
+								breedUuid: animal.breed,
+								gender: animal.gender,
+								picture: animal.picture,
+							}))
+
+						const children = animals
+							.filter((animal) =>
+								data.some(
+									(related) =>
+										related.child.animalUuid === animal.uuid &&
+										related.parent.animalUuid === animalUuid
+								)
+							)
+							.map((animal) => ({
+								uuid: animal.uuid,
+								animalId: animal.animalId,
+								breed: species!.breeds.find((breed) => breed.uuid === animal.breed)!.name,
+								breedUuid: animal.breed,
 								gender: animal.gender,
 								picture: animal.picture,
 							}))
@@ -175,20 +211,8 @@ export const RelatedAnimalsForm: FC = () => {
 						setRelatedAnimals(data)
 						setAnimalsLists({
 							animals: animalsData,
-							parents: animals.filter((animal) =>
-								data.some(
-									(related) =>
-										related.parent.animalUuid === animal.uuid &&
-										related.child.animalUuid === animalUuid
-								)
-							),
-							children: animals.filter((animal) =>
-								data.some(
-									(related) =>
-										related.child.animalUuid === animal.uuid &&
-										related.parent.animalUuid === animalUuid
-								)
-							),
+							parents,
+							children,
 						})
 					},
 					(error) => console.error('Error fetching related animals: ', error)
