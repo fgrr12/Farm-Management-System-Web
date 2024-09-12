@@ -12,7 +12,7 @@ export module AnimalsService {
 	export const getAnimals = async (
 		getAnimalsProps: GetAnimalsProps
 	): Promise<GetAnimalResponse[]> => {
-		const { selectedSpecies, search, farmUuid } = getAnimalsProps
+		const { speciesUuid, search, farmUuid } = getAnimalsProps
 		let response = []
 		let queryBase = query(
 			collection(firestore, collectionName),
@@ -20,8 +20,7 @@ export module AnimalsService {
 			where('farmUuid', '==', farmUuid)
 		)
 
-		if (selectedSpecies.uuid !== '')
-			queryBase = query(queryBase, where('species', '==', selectedSpecies))
+		if (speciesUuid) queryBase = query(queryBase, where('species.uuid', '==', speciesUuid))
 
 		const animalsDocs = await getDocs(queryBase)
 		response = animalsDocs.docs

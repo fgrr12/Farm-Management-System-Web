@@ -1,22 +1,25 @@
 import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { AnimalsService } from '@/services/animals'
 import { FarmsService } from '@/services/farms'
 import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
+import { useUserStore } from '@/store/useUserStore'
 
 import { ActionButton } from '@/components/ui/ActionButton'
+import { Button } from '@/components/ui/Button'
 import { Search } from '@/components/ui/Search'
 import { TextField } from '@/components/ui/TextField'
 
 import type { MySpeciesI } from './MySpecies.types'
 
-import { Button } from '@/components/ui/Button'
 import * as S from './MySpecies.styles'
 
 export const MySpecies: FC = () => {
 	const { t } = useTranslation(['mySpecies'])
-	const { farm } = useFarmStore()
+	const { user } = useUserStore()
+	const { setFarm, farm } = useFarmStore()
 	const { defaultModalData, setModalData, setLoading, setHeaderTitle } = useAppStore()
 
 	const [species, setSpecies] = useState<MySpeciesI[]>(INITIAL_SPECIES)
@@ -113,6 +116,32 @@ export const MySpecies: FC = () => {
 				status: specie.status,
 			}))
 			await FarmsService.updateFarm({ ...farm!, species: data })
+			setFarm({ ...farm!, species: data })
+			species
+				.filter((specie) => specie.editable)
+				.forEach(async (specie) => {
+					const animals = await AnimalsService.getAnimals({
+						speciesUuid: specie.uuid,
+						search: '',
+						farmUuid: farm!.uuid,
+					})
+					animals.forEach(async (animal) => {
+						const species = {
+							uuid: specie.uuid,
+							name: specie.name,
+						}
+						const breed = specie!.breeds.find((breed) => breed.uuid === animal.breed.uuid)
+						animal.breed = breed!
+						animal.species = species!
+
+						await AnimalsService.updateAnimal(animal, user!.uuid)
+					})
+				})
+			const sps = farm!.species!.map((specie) => ({
+				...specie,
+				editable: false,
+			}))
+			setSpecies(sps)
 			setModalData({
 				open: true,
 				title: t('modal.saveSpecies.title'),

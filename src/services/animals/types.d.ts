@@ -8,10 +8,7 @@ declare type healthRecordType =
 	| 'Birth'
 
 export interface GetAnimalsProps {
-	selectedSpecies: {
-		uuid: string
-		name: string
-	}
+	speciesUuid: string
 	search: string
 	farmUuid: string | null
 }

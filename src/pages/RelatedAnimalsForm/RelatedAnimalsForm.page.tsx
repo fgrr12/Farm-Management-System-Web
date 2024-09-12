@@ -145,10 +145,8 @@ export const RelatedAnimalsForm: FC = () => {
 				unsubscribe = RelatedAnimalsService.getRealTimeRelatedAnimals(
 					animalUuid,
 					async (data) => {
-						console.log(data)
-
 						const animals = await AnimalsService.getAnimals({
-							selectedSpecies: selectedAnimal.species,
+							speciesUuid: selectedAnimal.species.uuid,
 							search: '',
 							farmUuid: user!.farmUuid,
 						})

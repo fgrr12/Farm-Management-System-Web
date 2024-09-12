@@ -38,10 +38,19 @@ export const AnimalForm = () => {
 	const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
 		const { name, value } = event.target
 		if (name === 'species') {
+			if (value === '') {
+				setAnimalForm((prev) => ({ ...prev, species: { uuid: '', name: '' } }))
+				setBreeds([])
+				return
+			}
 			const species = farm!.species!.find((sp) => sp.uuid === value)
 			setAnimalForm((prev) => ({ ...prev, species: { uuid: value, name: species!.name! } }))
 			setBreeds(species!.breeds)
 		} else if (name === 'breed') {
+			if (value === '') {
+				setAnimalForm((prev) => ({ ...prev, breed: { uuid: '', name: '', gestationPeriod: 0 } }))
+				return
+			}
 			const breed = breeds.find((breed) => breed.uuid === value)
 			setAnimalForm((prev) => ({
 				...prev,
