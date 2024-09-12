@@ -48,9 +48,9 @@ export const Animals = () => {
 	const getAnimals = async () => {
 		try {
 			setLoading(true)
-			const { selectedSpecies, search } = filters
+			const { speciesUuid, search } = filters
 			const dbAnimals = await AnimalsService.getAnimals({
-				selectedSpecies,
+				speciesUuid,
 				search,
 				farmUuid: farm!.uuid,
 			})
@@ -88,7 +88,7 @@ export const Animals = () => {
 					name="selectedSpecies"
 					label={t('species')}
 					defaultLabel={t('all')}
-					value={filters.selectedSpecies.uuid}
+					value={filters.speciesUuid}
 					items={[...species.map((specie) => ({ value: specie.uuid, name: specie.name }))]}
 					onChange={handleSelectChange}
 				/>
@@ -119,10 +119,6 @@ export const Animals = () => {
 }
 
 const INITIAL_FILTERS: AnimalsFilters = {
-	selectedSpecies: {
-		uuid: '',
-		name: '',
-		gestationPeriod: 0,
-	},
+	speciesUuid: '',
 	search: '',
 }

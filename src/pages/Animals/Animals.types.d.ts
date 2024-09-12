@@ -1,4 +1,4 @@
 export interface AnimalsFilters {
-	selectedSpecies: Breed
+	speciesUuid: string
 	search: string
 }
