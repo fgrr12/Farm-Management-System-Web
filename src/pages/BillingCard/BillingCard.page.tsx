@@ -7,23 +7,23 @@ export const BillingCard: FC = () => {
 				<S.H3>DATOS PARA FACTURA ELECTRÓNICA</S.H3>
 				<S.DataContainer>
 					<S.H3>Nombre:</S.H3>
-					<label>Avícola Gerardo RyR S.R.L</label>
+					<span>Avícola Gerardo RyR S.R.L</span>
 				</S.DataContainer>
 				<S.DataContainer>
 					<S.H3>Teléfono:</S.H3>
-					<label>8835-1681</label>
+					<span>8835-1681</span>
 				</S.DataContainer>
 				<S.DataContainer>
 					<S.H3>Cédula Jurídica:</S.H3>
-					<label>3-102-906893</label>
+					<span>3-102-906893</span>
 				</S.DataContainer>
 				<S.DataContainer>
 					<S.H3>Correo:</S.H3>
-					<label>rovica64@gmail.com</label>
+					<span>rovica64@gmail.com</span>
 				</S.DataContainer>
 				<S.DataContainer>
 					<S.H3>Dirección:</S.H3>
-					<label>La Union de Venecia, San Carlos</label>
+					<span>La Union de Venecia, San Carlos</span>
 				</S.DataContainer>
 				<S.Img src="/assets/billing/hen.jpeg" alt="Logo" />
 			</S.Card>

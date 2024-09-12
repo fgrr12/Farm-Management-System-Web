@@ -33,7 +33,7 @@ export const DataContainer = styled.div`
         font-size: 18px;
     }
 
-    label {
+    span {
         font-size: 18px;
         font-weight: 500;
 
