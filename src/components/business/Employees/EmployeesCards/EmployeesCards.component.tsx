@@ -65,7 +65,7 @@ export const EmployeesCards: FC<EmployeesCardsProps> = ({ employees, removeEmplo
 						/>
 						<ActionButton
 							title="Delete"
-							icon="i-material-symbols-delete"
+							icon="i-material-symbols-delete-outline"
 							onClick={handleDeleteEmployee(employee)}
 						/>
 					</S.CardActions>

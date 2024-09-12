@@ -46,7 +46,7 @@ export const CardContainer = styled.div`
     gap: 1rem;
 `
 
-export const Card = styled.div`
+export const Card = styled.div<{ $type?: string }>`
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -56,6 +56,16 @@ export const Card = styled.div`
     border: 1px solid #ccc;
     border-radius: 5px;
     width: 100%;
+    background-color: ${({ $type }) => {
+			switch ($type) {
+				case 'Birth':
+					return colors.pink
+				case 'Drying':
+					return colors.yellow
+				default:
+					return colors.primary[100]
+			}
+		}};
 `
 
 export const CardTitle = styled.span`

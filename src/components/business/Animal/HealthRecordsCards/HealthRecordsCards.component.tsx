@@ -67,7 +67,7 @@ export const HealthRecordsCards: FC<HealthRecordsCardsProps> = ({
 			</S.CenterTitle>
 			<S.CardContainer>
 				{healthRecords.map((healthRecord) => (
-					<S.Card key={healthRecord.uuid}>
+					<S.Card key={healthRecord.uuid} $type={healthRecord.type}>
 						<S.CardTitle>{healthRecord.reason}</S.CardTitle>
 						<S.CardContent>
 							<div>
@@ -138,7 +138,7 @@ export const HealthRecordsCards: FC<HealthRecordsCardsProps> = ({
 								/>
 								<ActionButton
 									title="Delete"
-									icon="i-material-symbols-delete"
+									icon="i-material-symbols-delete-outline"
 									onClick={handleDeleteHealthRecord(healthRecord.uuid)}
 								/>
 							</S.CardActions>

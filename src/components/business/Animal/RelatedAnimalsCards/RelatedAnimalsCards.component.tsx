@@ -88,7 +88,7 @@ export const RelatedAnimalsCards: FC<RelatedAnimalsCardsProps> = ({
 							/>
 							<ActionButton
 								title="Delete"
-								icon="i-material-symbols-delete"
+								icon="i-material-symbols-delete-outline"
 								onClick={handleDeleteRelatedAnimal(animal.uuid)}
 							/>
 						</S.CardActions>

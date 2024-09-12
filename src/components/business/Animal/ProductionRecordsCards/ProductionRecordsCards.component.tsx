@@ -90,7 +90,7 @@ export const ProductionRecordsCards: FC<ProductionRecordsCardsProps> = ({
 							/>
 							<ActionButton
 								title="Delete"
-								icon="i-material-symbols-delete"
+								icon="i-material-symbols-delete-outline"
 								onClick={handleDeleteHealthRecord(productionRecord.uuid)}
 							/>
 						</S.CardActions>

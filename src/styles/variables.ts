@@ -30,6 +30,8 @@ export const colors = {
 	black: '#000',
 	white: '#fff',
 	red: '#ff6565',
+	yellow: '#fbf9b7',
+	pink: '#fbb7d2',
 
 	male: '#6cbdfc',
 	female: '#fc6cb0',
