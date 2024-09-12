@@ -1,6 +1,8 @@
 import { firestore } from '@/config/environment'
 import dayjs from 'dayjs'
 import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore'
+import { AnimalsService } from '../animals'
+
 import type { GetHealthRecordResponse, SetHealthRecordProps } from './types'
 
 const collectionName = 'healthRecords'
@@ -56,10 +58,12 @@ export module HealthRecordsService {
 	}
 
 	const setHealthRecordGiveBirth = async (animalUuid: string, createdBy: string | null) => {
+		const dbAnimal = await AnimalsService.getAnimal(animalUuid)
+
 		const healthRecordData: SetHealthRecordProps = {
 			reason: 'Posible fecha de nacimiento',
 			type: 'Birth',
-			date: dayjs().add(279, 'days').toISOString(),
+			date: dayjs().add(dbAnimal.breed.gestationPeriod, 'days').toISOString(),
 			reviewedBy: '',
 			weight: 0,
 			temperature: 0,

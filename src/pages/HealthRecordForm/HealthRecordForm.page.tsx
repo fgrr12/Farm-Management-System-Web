@@ -25,8 +25,8 @@ export const HealthRecordForm = () => {
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation(['healthRecordForm'])
-
 	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
+
 	const [healthRecordForm, setHealthRecordForm] = useState(INITIAL_HEALTH_RECORD_FORM)
 
 	const healthRecordTypes: HealthRecordFormType[] = [
