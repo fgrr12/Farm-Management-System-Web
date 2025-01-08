@@ -25,8 +25,8 @@ export const RelatedAnimalsForm: FC = () => {
 	const { t } = useTranslation(['relatedAnimals'])
 
 	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
-	const dragItem: any = useRef()
-	const dragOverItem: any = useRef()
+	const dragItem: any = useRef(null!)
+	const dragOverItem: any = useRef(null!)
 	const [animalsLists, setAnimalsLists] = useState<RelatedAnimalsLists>(INITIAL_ANIMALS_LISTS)
 	const [relatedAnimals, setRelatedAnimals] = useState<RelatedAnimalsList[]>([])
 	const [currentAnimal, setCurrentAnimal] = useState<RelatedAnimalInformation | null>(null)

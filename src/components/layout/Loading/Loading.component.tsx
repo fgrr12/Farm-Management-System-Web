@@ -26,7 +26,7 @@ export const Loading: FC<LoadingProps> = ({ open, ...rest }) => {
 }
 
 const useLoading = (open?: boolean) => {
-	const loadingRef: LoadingRef = useRef(null)
+	const loadingRef: LoadingRef = useRef(null!)
 
 	useEffect(() => {
 		if (!loadingRef.current) return
