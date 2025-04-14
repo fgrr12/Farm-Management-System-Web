@@ -20,7 +20,7 @@ export const MyAccount: FC = () => {
 	const { user: currentUser, setUser: updateUser } = useUserStore()
 	const { farm: currentFarm, setFarm: updateFarm } = useFarmStore()
 	const { defaultModalData, setHeaderTitle, setModalData, setLoading } = useAppStore()
-	const { t, i18n } = useTranslation(['myAccount'])
+	const { t } = useTranslation(['myAccount'])
 
 	const [user, setUser] = useState<User>(INITIAL_USER_DATA)
 	const [farm, setFarm] = useState<FarmData>(INITIAL_FARM_DATA)
