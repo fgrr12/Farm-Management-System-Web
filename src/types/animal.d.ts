@@ -13,7 +13,7 @@ interface Animal {
 	farmUuid: string
 	picture?: string
 	birthDate?: string
-	purchaseDate?: string
+	purchaseDate?: string | null
 	soldDate?: string | null
 	deathDate?: string | null
 	relatedAnimals?: RelatedAnimalList

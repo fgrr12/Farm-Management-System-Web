@@ -7,6 +7,8 @@ export const Container = styled.div`
     align-items: center;
     background-color: ${colors.primary[50]};
     width: 100%;
+    height: 100%;
+    min-height: calc(100dvh - 76px);
 `
 
 export const Form = styled.form`

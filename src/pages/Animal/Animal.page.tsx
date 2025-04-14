@@ -215,10 +215,12 @@ export const Animal: FC = () => {
 							<S.Label>{t('birthDate')}</S.Label>
 							<S.Value>{dayjs(animal.birthDate).format('DD/MM/YYYY')}</S.Value>
 						</div>
-						<div>
-							<S.Label>{t('purchaseDate')}</S.Label>
-							<S.Value>{dayjs(animal.purchaseDate).format('DD/MM/YYYY')}</S.Value>
-						</div>
+						{animal.purchaseDate && (
+							<div>
+								<S.Label>{t('purchaseDate')}</S.Label>
+								<S.Value>{dayjs(animal.purchaseDate).format('DD/MM/YYYY')}</S.Value>
+							</div>
+						)}
 						{animal.soldDate && (
 							<div>
 								<S.Label>{t('soldDate')}</S.Label>

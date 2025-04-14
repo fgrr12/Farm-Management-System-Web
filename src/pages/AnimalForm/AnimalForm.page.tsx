@@ -56,6 +56,8 @@ export const AnimalForm = () => {
 				...prev,
 				breed: { uuid: value, name: breed!.name!, gestationPeriod: 0 },
 			}))
+		} else if (name === 'gender') {
+			setAnimalForm((prev) => ({ ...prev, gender: value as Gender }))
 		}
 	}
 
@@ -206,6 +208,8 @@ export const AnimalForm = () => {
 					name="gender"
 					label={t('gender')}
 					defaultLabel={t('selectGender')}
+					optionValue="value"
+					optionLabel="name"
 					value={animalForm.gender}
 					items={[
 						{ value: 'Male', name: t('genderList.male') },
@@ -282,7 +286,7 @@ const INITIAL_ANIMAL_FORM: Animal = {
 	status: true,
 	farmUuid: '',
 	birthDate: dayjs().toISOString(),
-	purchaseDate: dayjs().toISOString(),
+	purchaseDate: null,
 	soldDate: null,
 	deathDate: null,
 }

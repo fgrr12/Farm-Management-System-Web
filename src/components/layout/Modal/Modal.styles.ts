@@ -22,7 +22,7 @@ export const ModalDialog = styled.dialog`
 `
 
 export const Modal = styled.main`
-  ${Box}
+  	${Box}
 	display: flex;
 	flex-direction: column;
 	background-color: ${colors.white};
