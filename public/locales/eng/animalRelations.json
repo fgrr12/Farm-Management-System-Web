@@ -6,6 +6,10 @@
 	"addParent": "Add Parent",
 	"addChild": "Add Child",
 	"actions": "Actions",
+	"mother": "Mother",
+	"father": "Father",
+	"son": "Son",
+	"daughter": "Daughter",
 	"noRelatedAnimals": "No related animals",
 	"modal": {
 		"deleteRelatedAnimal": {

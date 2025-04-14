@@ -78,7 +78,7 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 						<Table.Row key={crypto.randomUUID()}>
 							<Table.Cell>{animal[type].animalId}</Table.Cell>
 							<Table.Cell>{animal[type].breed.name}</Table.Cell>
-							<Table.Cell>{animal[type].relation}</Table.Cell>
+							<Table.Cell>{t(animal[type].relation.toLowerCase())}</Table.Cell>
 							{haveUser && (
 								<Table.Cell>
 									<ActionButton

@@ -76,7 +76,7 @@ export const RelatedAnimalsCards: FC<RelatedAnimalsCardsProps> = ({
 						</div>
 						<div>
 							<S.CardLabel>{t('relation')}</S.CardLabel>
-							<S.CardValue>{animal[type].relation}</S.CardValue>
+							<S.CardValue>{t(animal[type].relation.toLowerCase())}</S.CardValue>
 						</div>
 					</S.CardContent>
 					{haveUser && (
