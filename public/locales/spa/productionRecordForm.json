@@ -5,7 +5,7 @@
 	"date": "Fecha",
 	"notes": "Notas",
 	"addButton": "Añadir",
-	"editButton": "Editar",
+	"editButton": "Guardar",
 	"modal": {
 		"addProductionRecord": {
 			"title": "Registro de producción añadido",

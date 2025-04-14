@@ -14,7 +14,7 @@
 	"duration": "Duración",
 	"notes": "Notas",
 	"addButton": "Añadir",
-	"editButton": "Editar",
+	"editButton": "Guardar",
 	"healthRecordType": {
 		"checkup": "Revision",
 		"vaccination": "Vacunación",

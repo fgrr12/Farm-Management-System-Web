@@ -15,7 +15,7 @@
 	"soldDate": "Sold Date",
 	"deathDate": "Death Date",
 	"addButton": "Add",
-	"editButton": "Edit",
+	"editButton": "Save",
 	"genderList": {
 		"male": "Male",
 		"female": "Female"

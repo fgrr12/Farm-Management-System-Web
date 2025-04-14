@@ -5,7 +5,7 @@
 	"date": "Date",
 	"notes": "Notes",
 	"addButton": "Add",
-	"editButton": "Edit",
+	"editButton": "Save",
 	"modal": {
 		"addProductionRecord": {
 			"title": "Production Record Added",

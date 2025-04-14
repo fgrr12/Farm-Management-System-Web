@@ -8,7 +8,7 @@
 	"role": "Rol",
 	"selectRole": "Selecciona un rol",
 	"addButton": "Añadir",
-	"editButton": "Editar",
+	"editButton": "Guardar",
 	"employee": "Empleado",
 	"owner": "Propietario",
 	"modal": {
