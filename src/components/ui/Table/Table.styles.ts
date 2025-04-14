@@ -155,6 +155,7 @@ export const Cell = styled.td`
   font-size: 0.93rem;
   padding: 1.2rem 0;
   text-align: center;
+  word-break: break-word;
 
   &:first-of-type {
     padding-left: 0.75rem;

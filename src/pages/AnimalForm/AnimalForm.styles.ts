@@ -9,6 +9,7 @@ export const Container = styled.div`
     width: 100%;
     height: 100%;
     min-height: calc(100dvh - 76px);
+    overflow: auto;
 `
 
 export const Form = styled.form`
@@ -18,6 +19,7 @@ export const Form = styled.form`
     gap: 1rem;
     margin-top: 2rem;
     padding: 0 20rem;
+    padding-bottom: 2rem;
     width: 100%;
 
     & > button {
