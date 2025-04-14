@@ -78,7 +78,6 @@ export const MyAccount: FC = () => {
 		e.preventDefault()
 		try {
 			await UserService.updateUser(user)
-			i18n.changeLanguage(user.language)
 			updateUser(user)
 			setEdit((prev) => ({ ...prev, user: false }))
 			setModalData({

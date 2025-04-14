@@ -46,6 +46,7 @@ export const App: FC = () => {
 	const navigate = useNavigate()
 	const location = useLocation()
 	const match = useMatch(AppRoutes.ANIMAL)
+	const browserLanguage = navigator.language === 'en' ? 'eng' : 'spa'
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
@@ -62,7 +63,6 @@ export const App: FC = () => {
 			}
 			const user = await UserService.getUser(authUser!.uid)
 			const farm = await FarmsService.getFarm(user!.farmUuid)
-			i18n.changeLanguage(user?.language || 'spa')
 			setUser(user)
 			setFarm(farm)
 			setLoading(false)
@@ -71,8 +71,8 @@ export const App: FC = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		if (!user?.language) i18n.changeLanguage(navigator.language === 'en' ? 'eng' : 'spa')
-	}, [navigator])
+		i18n.changeLanguage(user?.language || browserLanguage)
+	}, [user])
 
 	return (
 		<AppContainer className="app">
