@@ -34,7 +34,7 @@ import { UserService } from './services/user'
 import { AppContainer, AppContent } from './styles/root'
 
 export const App: FC = () => {
-	const { setUser } = useUserStore()
+	const { user, setUser } = useUserStore()
 	const { setFarm } = useFarmStore()
 	const {
 		loading: appLoading,
@@ -49,7 +49,6 @@ export const App: FC = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		i18n.changeLanguage(navigator.language === 'en' ? 'eng' : 'spa')
 		onAuthStateChanged(auth, async (authUser) => {
 			setLoading(true)
 			if (!authUser) {
@@ -69,6 +68,12 @@ export const App: FC = () => {
 			setLoading(false)
 		})
 	}, [setUser])
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
+	useEffect(() => {
+		if (!user?.language) i18n.changeLanguage(navigator.language === 'en' ? 'eng' : 'spa')
+	}, [navigator])
+
 	return (
 		<AppContainer className="app">
 			{location.pathname !== AppRoutes.LOGIN && <PageHeader />}
