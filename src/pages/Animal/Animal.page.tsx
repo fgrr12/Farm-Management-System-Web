@@ -237,7 +237,10 @@ export const Animal: FC = () => {
 				</S.InfoContainer>
 
 				<S.ImageContainer>
-					<S.Image src={animal.picture} alt={animal.species.name} />
+					<S.Image
+						src={animal.picture || '/assets/default-imgs/cow.svg'}
+						alt={animal.species.name}
+					/>
 				</S.ImageContainer>
 			</S.AnimalContainer>
 

@@ -15,7 +15,7 @@ export const RelatedAnimalCard: FC<CardProps> = ({
 	return (
 		<S.Card {...props}>
 			<S.ImageContainer>
-				<img src={picture} alt="Animal" />
+				<img src={picture || '/assets/default-imgs/cow.svg'} alt="Animal" />
 			</S.ImageContainer>
 			<S.MiddleInfoContainer>
 				<p>
