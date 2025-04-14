@@ -16,7 +16,7 @@ export const Dropzone: FC<DropzoneProps> = ({ cleanFile, pictureUrl, onFile, ...
 	const { t } = useTranslation(['dropzone'])
 
 	const inputRef = useRef<HTMLInputElement>(null)
-	const [labelText, setLabelText] = useState<string>(t('nonDrag'))
+	const [labelText, setLabelText] = useState<string>()
 	const [url, setUrl] = useState<string>('')
 	const [hasImg, setHasImg] = useState<boolean>(false)
 
@@ -73,6 +73,10 @@ export const Dropzone: FC<DropzoneProps> = ({ cleanFile, pictureUrl, onFile, ...
 			setUrl(pictureUrl)
 		}
 	}, [pictureUrl])
+
+	useEffect(() => {
+		setLabelText(t('nonDrag'))
+	}, [t])
 
 	return (
 		<S.DropzoneContainer>
