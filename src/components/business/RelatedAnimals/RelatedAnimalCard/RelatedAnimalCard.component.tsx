@@ -22,11 +22,13 @@ export const RelatedAnimalCard: FC<CardProps> = ({
 					{t('animalId')}: {animalId}
 				</p>
 				<p>
-					{t('breed')}: {breed}
-				</p>
-				<p>
-					{t('gender')}: {t(`genderList.${gender.toLowerCase()}`)}
-					<S.GenderIcon className={`i-mdi-gender-${gender.toLowerCase()}`} $gender={gender} />
+					{breed}{' '}
+					<S.GenderIcon
+						className={
+							gender.toLowerCase() === 'male' ? 'i-tdesign-gender-male' : 'i-tdesign-gender-female'
+						}
+						$gender={gender}
+					/>
 				</p>
 			</S.MiddleInfoContainer>
 		</S.Card>
