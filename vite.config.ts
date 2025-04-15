@@ -1,5 +1,5 @@
 import tailwindcss from '@tailwindcss/vite'
-import react from '@vitejs/plugin-react'
+import react from '@vitejs/plugin-react-swc'
 import * as path from 'node:path'
 import unocss from 'unocss/vite'
 import { defineConfig } from 'vite'
