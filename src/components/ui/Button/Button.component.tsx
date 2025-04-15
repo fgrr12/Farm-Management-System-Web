@@ -1,18 +1,17 @@
-// Types
 import type { ButtonProps } from './Button.types'
 
-// Styles
-import * as S from './Button.styles'
-
 export const Button: FC<ButtonProps> = ({ children, ...props }) => {
-	return <S.Button {...props}>{children}</S.Button>
+	return (
+		<button className="btn dark:btn-primary" {...props}>
+			{children}
+		</button>
+	)
 }
 
 export const BackButton: FC<ButtonProps> = (props) => {
 	return (
-		<S.BackButton {...props}>
-			<S.Icon className="i-material-symbols-arrow-left-alt-rounded" />
-			{props.children}
-		</S.BackButton>
+		<button className="btn bg-transparent border-none shadow-none" {...props}>
+			<i className="i-material-symbols-arrow-left-alt-rounded w-14! h-8! bg-black!" />
+		</button>
 	)
 }
