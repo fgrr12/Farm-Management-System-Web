@@ -3,7 +3,7 @@ import type { CardProps } from './AnimalCard.types'
 export const AnimalCard: FC<CardProps> = ({ animalId, breed, gender, ...props }) => {
 	return (
 		<div
-			className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6! cursor-pointer"
+			className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6! cursor-pointer hover:bg-gray-200 hover:animate-pulse"
 			{...props}
 		>
 			<div className="flex justify-center items-center mb-4">
