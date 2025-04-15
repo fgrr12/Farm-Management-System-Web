@@ -1,15 +1,16 @@
-// Types
 import type { SearchProps } from './Search.types'
 
-// Styles
-import * as S from './Search.styles'
-
-export const Search: FC<SearchProps> = ({ className, ...rest }) => {
+export const Search: FC<SearchProps> = ({ placeholder, ...rest }) => {
 	return (
-		<S.TextFieldContainer className={className}>
-			<S.TextField id="search-input" type="text" autoComplete="off" {...rest} />
-			<S.Label htmlFor="search-input">{rest.placeholder}</S.Label>
-			<S.Icon className="i-ph-magnifying-glass-duotone" />
-		</S.TextFieldContainer>
+		<label className="input p-2! w-full rounded-md border-none focus:outline-none">
+			<i className="i-ph-magnifying-glass-duotone h-6! w-6! opacity-50" />
+			<input
+				type="search"
+				className="grow"
+				placeholder={placeholder}
+				autoComplete="off"
+				{...rest}
+			/>
+		</label>
 	)
 }
