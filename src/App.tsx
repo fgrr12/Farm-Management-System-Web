@@ -4,9 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { Navigate, Route, Routes, useLocation, useMatch, useNavigate } from 'react-router-dom'
 import { AppRoutes } from './config/constants/routes'
 import { auth } from './config/environment'
-import { useAppStore } from './store/useAppStore'
-import { useFarmStore } from './store/useFarmStore'
-import { useUserStore } from './store/useUserStore'
 
 import { Animal } from './pages/Animal'
 import { AnimalForm } from './pages/AnimalForm'
@@ -30,6 +27,9 @@ import { Sidebar } from './components/ui/Sidebar'
 
 import { FarmsService } from './services/farms'
 import { UserService } from './services/user'
+import { useAppStore } from './store/useAppStore'
+import { useFarmStore } from './store/useFarmStore'
+import { useUserStore } from './store/useUserStore'
 
 import { AppContainer, AppContent } from './styles/root'
 

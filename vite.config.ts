@@ -1,3 +1,4 @@
+import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import * as path from 'node:path'
 import unocss from 'unocss/vite'
@@ -11,5 +12,5 @@ export default defineConfig({
 			'@': path.resolve(__dirname, './src'),
 		},
 	},
-	plugins: [unocss(), react()],
+	plugins: [unocss(), tailwindcss(), react()],
 })
