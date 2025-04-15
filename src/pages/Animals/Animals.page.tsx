@@ -99,11 +99,8 @@ export const Animals = () => {
 					<AnimalCard
 						key={crypto.randomUUID()}
 						animalId={animal.animalId}
-						species={animal.species}
 						breed={animal.breed}
-						birthDate={animal.birthDate}
 						gender={animal.gender}
-						color={animal.color}
 						onClick={() => navigateToAnimal(animal.uuid)}
 					/>
 				))}

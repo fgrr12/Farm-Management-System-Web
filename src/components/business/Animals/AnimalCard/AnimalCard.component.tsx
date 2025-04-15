@@ -1,41 +1,22 @@
-import dayjs from 'dayjs'
-import { useTranslation } from 'react-i18next'
-
-import { Button } from '../../../ui/Button'
-
 import type { CardProps } from './AnimalCard.types'
 
-import * as S from './AnimalCard.styles'
-
-export const AnimalCard: FC<CardProps> = ({
-	animalId,
-	species,
-	breed,
-	birthDate,
-	gender,
-	color,
-	...props
-}) => {
-	const { t } = useTranslation(['animalCard'])
+export const AnimalCard: FC<CardProps> = ({ animalId, breed, gender, ...props }) => {
 	return (
-		<S.Card {...props}>
-			<S.TopInfoContainer>
-				<h2>{animalId}</h2>
-				<h5>{breed.name}</h5>
-			</S.TopInfoContainer>
-			<S.MiddleInfoContainer>
-				<p>
-					{t('birthDate')}: {dayjs(birthDate).format('DD/MM/YYYY')}
-				</p>
-				<p>
-					{t('gender')}: {t(`genderList.${gender.toLowerCase()}`)}
-					<S.GenderIcon className={`i-mdi-gender-${gender.toLowerCase()}`} $gender={gender} />
-				</p>
-				<p>
-					{t('color')}: {color}
-				</p>
-			</S.MiddleInfoContainer>
-			<Button>{t('view')}</Button>
-		</S.Card>
+		<div
+			className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6! cursor-pointer"
+			{...props}
+		>
+			<div className="flex justify-center items-center mb-4">
+				<span className="text-xl font-bold text-black">#{animalId}</span>
+			</div>
+			<div className="flex items-center justify-center">
+				<span className="font-medium text-gray-600 text-lg pr-1!">{breed.name}</span>
+				{gender.toLowerCase() === 'male' ? (
+					<i className="i-tdesign-gender-male bg-blue-500! w-5! h-5!" />
+				) : (
+					<i className="i-tdesign-gender-female bg-pink-500! w-5! h-5!" />
+				)}
+			</div>
+		</div>
 	)
 }

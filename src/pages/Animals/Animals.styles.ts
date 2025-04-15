@@ -33,7 +33,7 @@ export const ButtonContainer = styled.div`
 
 export const AnimalsContainer = styled.div`
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(calc(25% - 1rem), 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(calc(12.5% - 1rem), 1fr));
     gap: 1rem;
     width: 100%;
     padding: 1rem;
