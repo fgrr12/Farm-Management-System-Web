@@ -22,9 +22,9 @@ export const Select: FC<SelectProps> = ({
 	}
 
 	return (
-		<div className="relative w-full mx-auto h-14">
+		<div className="relative w-full mx-auto">
 			<select
-				className="appearance-none w-full h-full bg-white border border-gray-400 rounded-lg py-2! px-4! pr-8! leading-tight focus:outline-none focus:border-blue-500 text-black"
+				className="appearance-none w-full h-12 bg-white border border-gray-400 rounded-lg py-2! px-4! pr-8! leading-tight focus:outline-none focus:border-blue-500 text-black"
 				value={value}
 				ref={ref}
 				{...rest}

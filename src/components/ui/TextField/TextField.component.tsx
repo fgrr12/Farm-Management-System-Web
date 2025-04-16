@@ -2,14 +2,12 @@ import { useState } from 'react'
 
 import type { TextFieldProps } from './TextField.types'
 
-import * as S from './TextField.styles'
-
-export const TextField: FC<TextFieldProps> = ({ className, type, label, ...rest }) => {
+export const TextField: FC<TextFieldProps> = ({ type, label, ...rest }) => {
 	return (
-		<S.TextFieldContainer className={className}>
-			<S.TextField id="textfield-input" type={type} {...rest} />
-			{label && <S.Label htmlFor="textfield-input">{label}</S.Label>}
-		</S.TextFieldContainer>
+		<fieldset className="fieldset">
+			<legend className="fieldset-legend text-black pb-1! dark:text-white">{label}</legend>
+			<input type={type} className="input w-full h-12 pl-2! pr-2!" {...rest} />
+		</fieldset>
 	)
 }
 
@@ -21,15 +19,28 @@ export const PasswordField: FC<TextFieldProps> = ({ className, label, ...rest })
 	}
 
 	return (
-		<S.TextFieldContainer className={className}>
-			<S.PasswordIcon
-				className={
-					showPassword ? 'i-material-symbols-visibility' : 'i-material-symbols-visibility-lock'
-				}
-				onClick={handleClick}
-			/>
-			<S.TextField id="passwordField-input" type={showPassword ? 'text' : 'password'} {...rest} />
-			{label && <S.Label htmlFor="passwordField-input">{label}</S.Label>}
-		</S.TextFieldContainer>
+		<fieldset className="fieldset">
+			<legend className="fieldset-legend text-black pb-1! dark:text-white">{label}</legend>
+			<label className="input w-full h-12 pl-2!">
+				<i className="i-material-symbols-light-key w-6! h-6!" />
+				<input
+					type={showPassword ? 'text' : 'password'}
+					placeholder="Password"
+					required
+					{...rest}
+				/>
+				<button
+					type="button"
+					className="btn btn-square btn-ghost btn-sm bg-transparent border-none shadow-none"
+					onClick={handleClick}
+				>
+					<i
+						className={`
+					${showPassword ? 'i-material-symbols-visibility-lock' : 'i-material-symbols-visibility'} w-6! h-6!
+				`}
+					/>
+				</button>
+			</label>
+		</fieldset>
 	)
 }

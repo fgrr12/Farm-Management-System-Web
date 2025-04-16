@@ -2,7 +2,7 @@ import type { ButtonProps } from './Button.types'
 
 export const Button: FC<ButtonProps> = ({ children, ...props }) => {
 	return (
-		<button className="btn dark:btn-primary h-14 w-full" {...props}>
+		<button className="btn dark:btn-primary h-12 w-full text-lg" {...props}>
 			{children}
 		</button>
 	)
