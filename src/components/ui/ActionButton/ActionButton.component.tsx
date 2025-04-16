@@ -1,4 +1,3 @@
-import * as S from './ActionButton.styles'
 import type { ActionButtonProps } from './ActionButton.types'
 
 /**
@@ -8,8 +7,16 @@ import type { ActionButtonProps } from './ActionButton.types'
  **/
 export const ActionButton: FC<ActionButtonProps> = ({ icon, ...rest }) => {
 	return (
-		<S.ActionButton {...rest}>
-			<S.Icon className={icon} $icon={icon} />
-		</S.ActionButton>
+		<button
+			type="button"
+			className="btn btn-circle bg-transparent border-none shadow-none"
+			{...rest}
+		>
+			{icon !== 'i-material-symbols-delete-outline' ? (
+				<i className={`${icon} h-6! w-6! bg-white!`} />
+			) : (
+				<i className={`${icon} h-6! w-6! bg-red-500!`} />
+			)}
+		</button>
 	)
 }
