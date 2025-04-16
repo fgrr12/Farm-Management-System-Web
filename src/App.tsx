@@ -1,7 +1,7 @@
 import { onAuthStateChanged } from 'firebase/auth'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Navigate, Route, Routes, useLocation, useMatch, useNavigate } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { AppRoutes } from './config/constants/routes'
 import { auth } from './config/environment'
 
@@ -30,6 +30,7 @@ import { UserService } from './services/user'
 import { useAppStore } from './store/useAppStore'
 import { useFarmStore } from './store/useFarmStore'
 import { useUserStore } from './store/useUserStore'
+import { PrivateRoute } from './utils/PrivateRoute'
 
 import { AppContainer, AppContent } from './styles/root'
 
@@ -43,9 +44,7 @@ export const App: FC = () => {
 		setLoading,
 	} = useAppStore()
 	const { i18n } = useTranslation()
-	const navigate = useNavigate()
 	const location = useLocation()
-	const match = useMatch(AppRoutes.ANIMAL)
 	const browserLanguage = navigator.language === 'en' ? 'eng' : 'spa'
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
@@ -56,9 +55,6 @@ export const App: FC = () => {
 				setUser(null)
 				setFarm(null)
 				setLoading(false)
-				if (match?.pattern.path !== AppRoutes.ANIMAL) {
-					navigate(AppRoutes.LOGIN)
-				}
 				return
 			}
 			const user = await UserService.getUser(authUser!.uid)
@@ -80,32 +76,151 @@ export const App: FC = () => {
 			<AppContent $topHeaderHeight={topHeaderHeight}>
 				{location.pathname !== AppRoutes.LOGIN && <Sidebar />}
 				<Routes>
-					<Route path="/" element={<Navigate to={AppRoutes.ANIMALS} />} />
+					<Route path="/" element={<Navigate to={AppRoutes.ANIMALS} />} key="home" />
 
 					<Route path={AppRoutes.LOGIN} element={<LoginForm />} />
-					<Route path={AppRoutes.CHANGE_PASSWORD} element={<Animals />} />
+					<Route
+						path={AppRoutes.CHANGE_PASSWORD}
+						element={
+							<PrivateRoute>
+								<Animals />
+							</PrivateRoute>
+						}
+					/>
 
-					<Route path={AppRoutes.ANIMALS} element={<Animals />} />
+					<Route
+						path={AppRoutes.ANIMALS}
+						element={
+							<PrivateRoute>
+								<Animals />
+							</PrivateRoute>
+						}
+					/>
 					<Route path={AppRoutes.ANIMAL} element={<Animal />} />
-					<Route path={AppRoutes.ADD_ANIMAL} element={<AnimalForm />} />
-					<Route path={AppRoutes.EDIT_ANIMAL} element={<AnimalForm />} />
-					<Route path={AppRoutes.ADD_HEALTH_RECORD} element={<HealthRecordForm />} />
-					<Route path={AppRoutes.EDIT_HEALTH_RECORD} element={<HealthRecordForm />} />
-					<Route path={AppRoutes.ADD_PRODUCTION_RECORD} element={<ProductionRecordForm />} />
-					<Route path={AppRoutes.EDIT_PRODUCTION_RECORD} element={<ProductionRecordForm />} />
-					<Route path={AppRoutes.RELATED_ANIMALS} element={<RelatedAnimalsForm />} />
+					<Route
+						path={AppRoutes.ADD_ANIMAL}
+						element={
+							<PrivateRoute>
+								<AnimalForm />
+							</PrivateRoute>
+						}
+					/>
+					<Route
+						path={AppRoutes.EDIT_ANIMAL}
+						element={
+							<PrivateRoute>
+								<AnimalForm />
+							</PrivateRoute>
+						}
+					/>
+					<Route
+						path={AppRoutes.ADD_HEALTH_RECORD}
+						element={
+							<PrivateRoute>
+								<HealthRecordForm />
+							</PrivateRoute>
+						}
+					/>
+					<Route
+						path={AppRoutes.EDIT_HEALTH_RECORD}
+						element={
+							<PrivateRoute>
+								<HealthRecordForm />
+							</PrivateRoute>
+						}
+					/>
+					<Route
+						path={AppRoutes.ADD_PRODUCTION_RECORD}
+						element={
+							<PrivateRoute>
+								<ProductionRecordForm />
+							</PrivateRoute>
+						}
+					/>
+					<Route
+						path={AppRoutes.EDIT_PRODUCTION_RECORD}
+						element={
+							<PrivateRoute>
+								<ProductionRecordForm />
+							</PrivateRoute>
+						}
+					/>
+					<Route
+						path={AppRoutes.RELATED_ANIMALS}
+						element={
+							<PrivateRoute>
+								<RelatedAnimalsForm />
+							</PrivateRoute>
+						}
+					/>
 
-					<Route path={AppRoutes.EMPLOYEES} element={<Employees />} />
-					<Route path={AppRoutes.ADD_EMPLOYEE} element={<EmployeeForm />} />
-					<Route path={AppRoutes.EDIT_EMPLOYEE} element={<EmployeeForm />} />
+					<Route
+						path={AppRoutes.EMPLOYEES}
+						element={
+							<PrivateRoute>
+								<Employees />
+							</PrivateRoute>
+						}
+					/>
+					<Route
+						path={AppRoutes.ADD_EMPLOYEE}
+						element={
+							<PrivateRoute>
+								<EmployeeForm />
+							</PrivateRoute>
+						}
+					/>
+					<Route
+						path={AppRoutes.EDIT_EMPLOYEE}
+						element={
+							<PrivateRoute>
+								<EmployeeForm />
+							</PrivateRoute>
+						}
+					/>
 
-					<Route path={AppRoutes.MY_ACCOUNT} element={<MyAccount />} />
-					<Route path={AppRoutes.MY_SPECIES} element={<MySpecies />} />
+					<Route
+						path={AppRoutes.MY_ACCOUNT}
+						element={
+							<PrivateRoute>
+								<MyAccount />
+							</PrivateRoute>
+						}
+					/>
+					<Route
+						path={AppRoutes.MY_SPECIES}
+						element={
+							<PrivateRoute>
+								<MySpecies />
+							</PrivateRoute>
+						}
+					/>
 
-					<Route path={AppRoutes.TASKS} element={<Tasks />} />
-					<Route path={AppRoutes.ADD_TASK} element={<TaskForm />} />
+					<Route
+						path={AppRoutes.TASKS}
+						element={
+							<PrivateRoute>
+								<Tasks />
+							</PrivateRoute>
+						}
+					/>
+					<Route
+						path={AppRoutes.ADD_TASK}
+						element={
+							<PrivateRoute>
+								<TaskForm />
+							</PrivateRoute>
+						}
+					/>
 
-					<Route path={AppRoutes.BILLING_CARD} element={<BillingCard />} />
+					<Route
+						path={AppRoutes.BILLING_CARD}
+						element={
+							<PrivateRoute>
+								<BillingCard />
+							</PrivateRoute>
+						}
+					/>
 				</Routes>
 
 				<Modal
