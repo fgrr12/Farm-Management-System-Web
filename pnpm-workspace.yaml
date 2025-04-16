@@ -1,0 +1,6 @@
+onlyBuiltDependencies:
+  - '@biomejs/biome'
+  - '@firebase/util'
+  - '@swc/core'
+  - esbuild
+  - protobufjs

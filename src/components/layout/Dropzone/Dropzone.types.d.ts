@@ -5,5 +5,5 @@ export type DropEvent<T = HTMLInputElement | HTMLDivElement> = DragEvent<T> | Ch
 export interface DropzoneProps extends InputHTMLAttributes<HTMLInputElement> {
 	cleanFile: boolean
 	pictureUrl?: string
-	onFile: (file: File, event: DropEvent) => void
+	onFile: (file: File, event: any) => void
 }

@@ -4,9 +4,9 @@ import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
+import { Dropzone } from '@/components/layout/Dropzone'
 import { Button } from '@/components/ui/Button'
 import { DatePicker } from '@/components/ui/DatePicker'
-import { Dropzone } from '@/components/ui/Dropzone'
 import { Select } from '@/components/ui/Select'
 import { TextField } from '@/components/ui/TextField'
 
