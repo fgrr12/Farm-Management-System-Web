@@ -1,12 +1,12 @@
 import type { FC, ReactElement } from 'react'
+
 import type { TextareaProps } from './Textarea.types'
-import * as S from './Textarea.styles'
 
 export const Textarea: FC<TextareaProps> = ({ label, ...rest }): ReactElement => {
 	return (
-		<S.TextareaContainer>
-			<S.Textarea {...rest} />
-			<S.Label>{label}</S.Label>
-		</S.TextareaContainer>
+		<fieldset className="fieldset">
+			<legend className="fieldset-legend">{label}</legend>
+			<textarea className="textarea h-24 w-full p-2!" placeholder="Bio" {...rest} />
+		</fieldset>
 	)
 }
