@@ -8,7 +8,7 @@ import { useUserStore } from '@/store/useUserStore'
 import dayjs from 'dayjs'
 import 'react-day-picker/style.css'
 
-export function CustomSelectDropdown(props: DropdownProps) {
+function CustomSelectDropdown(props: DropdownProps) {
 	const { options, value, onChange } = props
 
 	const handleValueChange = (event: ChangeEvent<HTMLSelectElement>) => {
