@@ -8,6 +8,7 @@
 		"email": "Email",
 		"phone": "Phone",
 		"language": "Language",
+		"selectLanguage": "Select your language",
 		"languageList": {
 			"spa": "Spanish",
 			"eng": "English"
@@ -31,16 +32,19 @@
 		"address": "Address",
 		"species": "Species",
 		"liquidUnit": "Measure Liquid",
+		"selectLiquidUnit": "Select the liquid measure",
 		"liquidUnitList": {
 			"L": "Liters",
 			"Gal": "Gallons"
 		},
 		"weightUnit": "Measure Solid",
+		"selectWeightUnit": "Select the solid measure",
 		"weightUnitList": {
 			"Kg": "Kilograms",
 			"Lb": "Pounds"
 		},
 		"temperatureUnit": "Measure Temperature",
+		"selectTemperatureUnit": "Select the temperature measure",
 		"temperatureUnitList": {
 			"°C": "Celsius",
 			"°F": "Fahrenheit"

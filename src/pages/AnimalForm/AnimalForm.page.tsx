@@ -183,7 +183,6 @@ export const AnimalForm = () => {
 				</S.DropzoneContainer>
 				<Select
 					name="species"
-					label={t('species')}
 					defaultLabel={t('selectSpecies')}
 					optionValue="uuid"
 					optionLabel="name"
@@ -194,7 +193,6 @@ export const AnimalForm = () => {
 				/>
 				<Select
 					name="breed"
-					label={t('breed')}
 					defaultLabel={t('selectBreed')}
 					optionValue="uuid"
 					optionLabel="name"
@@ -206,7 +204,6 @@ export const AnimalForm = () => {
 				/>
 				<Select
 					name="gender"
-					label={t('gender')}
 					defaultLabel={t('selectGender')}
 					optionValue="value"
 					optionLabel="name"

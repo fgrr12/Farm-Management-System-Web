@@ -86,8 +86,7 @@ export const Animals = () => {
 				<Search placeholder={t('search')} onKeyDown={handleSearchKeyPress} />
 				<Select
 					name="selectedSpecies"
-					label={t('species')}
-					defaultLabel={t('all')}
+					defaultLabel={t('filterBySpecies')}
 					value={filters.speciesUuid}
 					items={[...species.map((specie) => ({ value: specie.uuid, name: specie.name }))]}
 					onChange={handleSelectChange}

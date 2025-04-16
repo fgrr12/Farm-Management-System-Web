@@ -1,12 +1,9 @@
-import { useRef, type FC, type MouseEvent, type ReactElement } from 'react'
+import { useRef, type MouseEvent, type ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { SelectProps } from './Select.types'
 
-import * as S from './Select.styles'
-
 export const Select: FC<SelectProps> = ({
-	label,
 	items,
 	optionValue = 'value',
 	optionLabel = 'name',
@@ -25,10 +22,14 @@ export const Select: FC<SelectProps> = ({
 	}
 
 	return (
-		<S.DropdownContainer>
-			<S.Label>{label}</S.Label>
-			<S.Dropdown ref={ref} value={value} {...rest}>
-				<option value="" hidden disabled>
+		<div className="relative w-full mx-auto h-14">
+			<select
+				className="appearance-none w-full h-full bg-white border border-gray-400 rounded-lg py-2! px-4! pr-8! leading-tight focus:outline-none focus:border-blue-500 text-black"
+				value={value}
+				ref={ref}
+				{...rest}
+			>
+				<option value="" disabled>
 					{defaultLabel ?? t('select.default')}
 				</option>
 				{items.map((item) => (
@@ -36,14 +37,22 @@ export const Select: FC<SelectProps> = ({
 						{item[optionLabel]}
 					</option>
 				))}
-			</S.Dropdown>
-			{value ? (
-				<S.ClearButton type="button" onClick={handleClear} disabled={rest.disabled}>
-					<S.CircleX className="i-lucide-circle-x" />
-				</S.ClearButton>
+			</select>
+
+			{!value ? (
+				<div className="absolute inset-y-0 right-0 flex items-center px-1! pointer-events-none text-gray-500 hover:text-gray-700">
+					<i className="i-ic-outline-arrow-drop-down w-8! h-8!" />
+				</div>
 			) : (
-				<S.Arrow className="i-ic-outline-arrow-drop-down" />
+				<button
+					className="absolute inset-y-0 right-0 flex items-center px-2! text-red-400 hover:text-red-600"
+					type="button"
+					onClick={handleClear}
+					disabled={rest.disabled}
+				>
+					<i className="i-lucide-circle-x w-6! h-6!" />
+				</button>
 			)}
-		</S.DropdownContainer>
+		</div>
 	)
 }

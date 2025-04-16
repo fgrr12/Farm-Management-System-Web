@@ -149,7 +149,6 @@ export const HealthRecordForm = () => {
 				/>
 				<Select
 					name="type"
-					label={t('type')}
 					defaultLabel={t('selectType')}
 					value={healthRecordForm.type}
 					items={healthRecordTypes}

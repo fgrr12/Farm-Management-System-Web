@@ -85,7 +85,6 @@ export const TaskForm = () => {
 				/>
 				<Select
 					name="priority"
-					label={t('priority')}
 					defaultLabel={t('selectPriority')}
 					value={task.priority}
 					items={[
@@ -98,7 +97,6 @@ export const TaskForm = () => {
 				/>
 				<Select
 					name="species"
-					label={t('species')}
 					defaultLabel={t('selectSpecies')}
 					optionValue="uuid"
 					optionLabel="name"

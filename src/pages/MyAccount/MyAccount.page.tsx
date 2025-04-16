@@ -31,11 +31,6 @@ export const MyAccount: FC = () => {
 		{ value: 'eng', name: t('myProfile.languageList.eng') },
 	]
 
-	// const species = [
-	// 	{ value: 'Cow', name: 'Cow' },
-	// 	{ value: 'Sheep', name: 'Sheep' },
-	// ]
-
 	const liquidUnit = [
 		{ value: 'L', name: t('myFarm.liquidUnitList.L') },
 		{ value: 'Gal', name: t('myFarm.liquidUnitList.Gal') },
@@ -197,7 +192,7 @@ export const MyAccount: FC = () => {
 							/>
 							<Select
 								name="language"
-								label={t('myProfile.language')}
+								defaultLabel={t('myProfile.selectLanguage')}
 								value={user!.language}
 								items={languages}
 								onChange={handleSelectChange(true)}
@@ -247,7 +242,7 @@ export const MyAccount: FC = () => {
 							<S.ContainerOf3>
 								<Select
 									name="liquidUnit"
-									label={t('myFarm.liquidUnit')}
+									defaultLabel={t('myFarm.liquidUnit')}
 									value={farm!.liquidUnit}
 									items={liquidUnit}
 									onChange={handleSelectChange()}
@@ -256,7 +251,7 @@ export const MyAccount: FC = () => {
 								/>
 								<Select
 									name="weightUnit"
-									label={t('myFarm.weightUnit')}
+									defaultLabel={t('myFarm.weightUnit')}
 									value={farm!.weightUnit}
 									items={weightUnit}
 									onChange={handleSelectChange()}
@@ -265,7 +260,7 @@ export const MyAccount: FC = () => {
 								/>
 								<Select
 									name="temperatureUnit"
-									label={t('myFarm.temperatureUnit')}
+									defaultLabel={t('myFarm.temperatureUnit')}
 									value={farm!.temperatureUnit}
 									items={temperatureUnit}
 									onChange={handleSelectChange()}

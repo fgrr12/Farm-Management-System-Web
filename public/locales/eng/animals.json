@@ -2,7 +2,7 @@
 	"title": "Animals",
 	"search": "Search",
 	"species": "Species",
-	"all": "All",
+	"filterBySpecies": "Filter by species",
 	"addAnimal": "Add Animal",
 	"noAnimals": "No animals",
 	"noAnimalsSubtitle": "Add an animal to your farm to get started",

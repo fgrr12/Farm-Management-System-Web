@@ -8,6 +8,7 @@
 		"email": "Email",
 		"phone": "Teléfono",
 		"language": "Idioma",
+		"selectLanguage": "Selecciona tu idioma",
 		"languageList": {
 			"spa": "Español",
 			"eng": "Inglés"
@@ -31,16 +32,19 @@
 		"address": "Dirección",
 		"species": "Especies",
 		"liquidUnit": "Medida de Líquido",
+		"selectLiquidUnit": "Selecciona la medida de líquido",
 		"liquidUnitList": {
 			"L": "Litros",
 			"Gal": "Galones"
 		},
 		"weightUnit": "Medida de Peso",
+		"selectWeightUnit": "Selecciona la medida de peso",
 		"weightUnitList": {
 			"Kg": "Kilogramos",
 			"Lb": "Libras"
 		},
 		"temperatureUnit": "Medida de Temperatura",
+		"selectTemperatureUnit": "Selecciona la medida de temperatura",
 		"temperatureUnitList": {
 			"°C": "Celsius",
 			"°F": "Fahrenheit"

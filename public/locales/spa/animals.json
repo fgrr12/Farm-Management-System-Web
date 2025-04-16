@@ -2,7 +2,7 @@
 	"title": "Animales",
 	"search": "Buscar",
 	"species": "Especies",
-	"all": "Todos",
+	"filterBySpecies": "Filtra por especie",
 	"addAnimal": "Añadir animal",
 	"noAnimals": "No hay animales",
 	"noAnimalsSubtitle": "Agrega un animal a tu granja para comenzar",

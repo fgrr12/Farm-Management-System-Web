@@ -87,8 +87,7 @@ export const Tasks = () => {
 				<Search placeholder={t('search')} onChange={handleDebounceSearch} />
 				<Select
 					name="status"
-					label={t('status')}
-					defaultLabel={t('all')}
+					defaultLabel={t('filterByStatus')}
 					value={filters.status}
 					items={[
 						{ value: 'COMPLETED', name: t('completed') },
@@ -98,8 +97,7 @@ export const Tasks = () => {
 				/>
 				<Select
 					name="priority"
-					label={t('priority')}
-					defaultLabel={t('all')}
+					defaultLabel={t('filterByPriority')}
 					value={filters.priority}
 					items={[
 						{ value: 'high', name: t('high') },
@@ -110,8 +108,7 @@ export const Tasks = () => {
 				/>
 				<Select
 					name="species"
-					label={t('species')}
-					defaultLabel={t('all')}
+					defaultLabel={t('filterBySpecies')}
 					optionValue="uuid"
 					optionLabel="name"
 					value={filters.species}
