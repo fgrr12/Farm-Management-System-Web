@@ -64,7 +64,7 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 				)}
 			</div>
 			<div className="overflow-x-auto w-full">
-				<table className="table! table-zebra! bg-black">
+				<table className="table table-zebra bg-black">
 					<thead>
 						<tr>
 							<th>{t('date')}</th>

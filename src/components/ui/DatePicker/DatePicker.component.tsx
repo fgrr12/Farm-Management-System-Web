@@ -18,7 +18,7 @@ function CustomSelectDropdown(props: DropdownProps) {
 
 	return (
 		<select
-			className="select select-bordered w-25 h-12 pl-2!"
+			className="select select-bordered w-25 h-12 pl-2"
 			value={value}
 			onChange={handleValueChange}
 		>
@@ -44,7 +44,7 @@ export const DatePicker: FC<DatePickerProps> = ({ date, label, onDateChange }) =
 			<button
 				type="button"
 				popoverTarget={id}
-				className="input input-border w-full h-12 pl-2! pr-2! flex items-center justify-between"
+				className="input input-border w-full h-12 pl-2 pr-2 flex items-center justify-between"
 				style={{ anchorName: '--rdp' } as React.CSSProperties}
 			>
 				{date?.isValid() ? dayjs(date).format('DD/MM/YYYY') : label}
@@ -57,7 +57,7 @@ export const DatePicker: FC<DatePickerProps> = ({ date, label, onDateChange }) =
 				style={{ positionAnchor: '--rdp' } as React.CSSProperties}
 			>
 				<DayPicker
-					className="react-day-picker p-2!"
+					className="react-day-picker p-2"
 					captionLayout="dropdown"
 					locale={user?.language === 'spa' ? es : enUS}
 					components={{ Dropdown: CustomSelectDropdown }}

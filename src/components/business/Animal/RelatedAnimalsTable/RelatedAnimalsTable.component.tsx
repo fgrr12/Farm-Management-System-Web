@@ -62,7 +62,7 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 				)}
 			</div>
 			<div className="overflow-x-auto w-full">
-				<table className="table! table-zebra! bg-black">
+				<table className="table table-zebra bg-black">
 					<thead>
 						<tr>
 							<th>{t('animalId')}</th>

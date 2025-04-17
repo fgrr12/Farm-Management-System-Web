@@ -36,7 +36,7 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 	}
 	return (
 		<div className="overflow-x-auto w-full">
-			<table className="table! table-zebra! bg-black">
+			<table className="table table-zebra bg-black">
 				<thead>
 					<tr>
 						<th>{t('name')}</th>

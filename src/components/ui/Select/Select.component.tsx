@@ -24,7 +24,7 @@ export const Select: FC<SelectProps> = ({
 	return (
 		<div className="relative w-full mx-auto">
 			<select
-				className="appearance-none w-full h-12 bg-white border border-gray-400 rounded-lg py-2! px-4! pr-8! leading-tight focus:outline-none focus:border-blue-500 text-black"
+				className="appearance-none w-full h-12 bg-white border border-gray-400 rounded-lg py-2 px-3 pr-8 leading-tight focus:outline-none focus:border-blue-500 text-black"
 				value={value}
 				ref={ref}
 				{...rest}
@@ -40,12 +40,12 @@ export const Select: FC<SelectProps> = ({
 			</select>
 
 			{!value ? (
-				<div className="absolute inset-y-0 right-0 flex items-center px-1! pointer-events-none text-gray-500 hover:text-gray-700">
+				<div className="absolute inset-y-0 right-0 flex items-center px-1 pointer-events-none text-gray-500 hover:text-gray-700">
 					<i className="i-ic-outline-arrow-drop-down w-8! h-8!" />
 				</div>
 			) : (
 				<button
-					className="absolute inset-y-0 right-0 flex items-center px-2! text-red-400 hover:text-red-600"
+					className="absolute inset-y-0 right-0 flex items-center px-2 text-red-400 hover:text-red-600"
 					type="button"
 					onClick={handleClear}
 					disabled={rest.disabled}
