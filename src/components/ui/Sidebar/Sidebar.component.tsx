@@ -1,4 +1,5 @@
 import { AppRoutes } from '@/config/constants/routes'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { UserService } from '@/services/user'
@@ -11,7 +12,7 @@ export const Sidebar: FC = () => {
 	const navigate = useNavigate()
 	const location = useLocation()
 
-	console.log(location.pathname)
+	const [theme, setTheme] = useState<string>(localStorage.getItem('theme') || 'light')
 
 	const handleLogout = async () => {
 		if (!user) return
@@ -21,6 +22,10 @@ export const Sidebar: FC = () => {
 		navigate(AppRoutes.LOGIN)
 	}
 
+	useEffect(() => {
+		localStorage.setItem('theme', theme)
+		document.querySelector('html')!.setAttribute('data-theme', theme)
+	}, [theme])
 	return (
 		<ul className="menu bg-base-100 h-full hidden lg:flex">
 			<li className={location.pathname.includes(AppRoutes.ANIMALS) ? 'bg-info rounded-sm' : ''}>
@@ -77,6 +82,17 @@ export const Sidebar: FC = () => {
 					<i className="i-material-symbols-logout w-8! h-8!" />
 				</button>
 			</li>
+			<div className="divider" />
+			<label className="swap swap-rotate">
+				<input
+					type="checkbox"
+					className="theme-controller"
+					value="synthwave"
+					onChange={() => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'))}
+				/>
+				<i className="i-line-md-moon-alt-to-sunny-outline-loop-transition swap-off h-8! w-8! fill-current" />
+				<i className="i-line-md-sunny-outline-to-moon-alt-loop-transition swap-on h-8! w-8! fill-current" />
+			</label>
 		</ul>
 	)
 }

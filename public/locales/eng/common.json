@@ -8,7 +8,8 @@
 		"employees": "Employees",
 		"myAccount": "My Account",
 		"mySpecies": "My Species",
-		"logout": "Logout"
+		"logout": "Logout",
+		"theme": "Theme"
 	},
 	"loading": "Loading",
 	"select": {

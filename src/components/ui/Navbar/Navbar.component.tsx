@@ -1,4 +1,5 @@
 import { AppRoutes } from '@/config/constants/routes'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -16,6 +17,8 @@ export const Navbar: FC = () => {
 	const navigate = useNavigate()
 	const location = useLocation()
 	const { headerTitle } = useAppStore()
+
+	const [theme, setTheme] = useState<string>(localStorage.getItem('theme') || 'light')
 
 	const backButtonHidden =
 		location.pathname === AppRoutes.ANIMALS ||
@@ -35,6 +38,11 @@ export const Navbar: FC = () => {
 		setFarm(null)
 		navigate(AppRoutes.LOGIN)
 	}
+
+	useEffect(() => {
+		localStorage.setItem('theme', theme)
+		document.querySelector('html')!.setAttribute('data-theme', theme)
+	}, [theme])
 	return (
 		<div className="drawer">
 			<input id="my-drawer" type="checkbox" className="drawer-toggle" />
@@ -132,6 +140,20 @@ export const Navbar: FC = () => {
 							<i className="i-material-symbols-logout w-8! h-8!" />
 							<span className="text-sm">{t('sidebar.logout')}</span>
 						</button>
+					</li>
+					<div className="divider" />
+					<li className="flex items-center content-start flex-row">
+						<label className="swap swap-rotate">
+							<input
+								type="checkbox"
+								className="theme-controller"
+								value="synthwave"
+								onChange={() => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'))}
+							/>
+							<i className="i-line-md-moon-alt-to-sunny-outline-loop-transition swap-off h-8! w-8! fill-current" />
+							<i className="i-line-md-sunny-outline-to-moon-alt-loop-transition swap-on h-8! w-8! fill-current" />
+						</label>
+						<span className="text-sm p-0">{t('sidebar.theme')}</span>
 					</li>
 				</ul>
 			</div>
