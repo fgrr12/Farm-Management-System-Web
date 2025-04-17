@@ -41,7 +41,7 @@ export const DatePicker: FC<DatePickerProps> = ({ legend, label, date, onDateCha
 
 	return (
 		<fieldset className="fieldset">
-			<legend className="fieldset-legend text-black dark:text-white">{legend}</legend>
+			<legend className="fieldset-legend">{legend}</legend>
 			<button
 				type="button"
 				popoverTarget={id}

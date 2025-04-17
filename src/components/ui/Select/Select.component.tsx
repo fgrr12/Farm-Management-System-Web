@@ -24,7 +24,7 @@ export const Select: FC<SelectProps> = ({
 
 	return (
 		<fieldset className="fieldset w-full">
-			<legend className="fieldset-legend text-black dark:text-white">{legend}</legend>
+			<legend className="fieldset-legend">{legend}</legend>
 			<div className="relative w-full mx-auto">
 				<select className="input w-full h-12" value={value} ref={ref} {...rest}>
 					<option value="" hidden disabled>

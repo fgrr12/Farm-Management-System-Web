@@ -5,7 +5,7 @@ import type { TextFieldProps } from './TextField.types'
 export const TextField: FC<TextFieldProps> = ({ type, label, ...rest }) => {
 	return (
 		<fieldset className="fieldset">
-			<legend className="fieldset-legend text-black dark:text-white">{label}</legend>
+			<legend className="fieldset-legend">{label}</legend>
 			<input type={type} className="input w-full h-12" {...rest} />
 		</fieldset>
 	)
@@ -20,7 +20,7 @@ export const PasswordField: FC<TextFieldProps> = ({ className, label, ...rest })
 
 	return (
 		<fieldset className="fieldset">
-			<legend className="fieldset-legend text-black dark:text-white">{label}</legend>
+			<legend className="fieldset-legend">{label}</legend>
 			<label className="input w-full h-12">
 				<i className="i-material-symbols-light-key w-6! h-6!" />
 				<input

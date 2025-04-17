@@ -13,7 +13,7 @@ export const ActionButton: FC<ActionButtonProps> = ({ icon, ...rest }) => {
 			{...rest}
 		>
 			{icon !== 'i-material-symbols-delete-outline' ? (
-				<i className={`${icon} h-6! w-6! ${rest.disabled ? 'bg-gray-400!' : 'bg-white!'}`} />
+				<i className={`${icon} h-6! w-6! ${rest.disabled ? 'bg-gray-400!' : ''}`} />
 			) : (
 				<i className={`${icon} h-6! w-6! ${rest.disabled ? 'bg-gray-400!' : 'bg-red-500!'}`} />
 			)}

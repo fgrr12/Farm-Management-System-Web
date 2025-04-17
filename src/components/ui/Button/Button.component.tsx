@@ -11,7 +11,7 @@ export const Button: FC<ButtonProps> = ({ children, ...props }) => {
 export const BackButton: FC<ButtonProps> = (props) => {
 	return (
 		<button className="btn bg-transparent border-none shadow-none" {...props}>
-			<i className="i-material-symbols-arrow-left-alt-rounded w-14! h-8! bg-black! dark:bg-white!" />
+			<i className="i-material-symbols-arrow-left-alt-rounded w-14! h-8!" />
 		</button>
 	)
 }

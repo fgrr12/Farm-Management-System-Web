@@ -53,7 +53,7 @@ export const Navbar: FC = () => {
 					<div className="navbar-start">
 						<div className="dropdown">
 							<label htmlFor="my-drawer" className="btn btn-ghost btn-circle">
-								<i className="i-flowbite-bars-from-left-outline bg-white! w-8! h-8!" />
+								<i className="i-flowbite-bars-from-left-outline w-8! h-8!" />
 							</label>
 							{!backButtonHidden && (
 								<BackButton disabled={!user} onClick={handleBack}>
@@ -68,7 +68,7 @@ export const Navbar: FC = () => {
 					<div className="navbar-end">
 						<button type="button" className="btn btn-ghost btn-circle">
 							<div className="indicator">
-								<i className="i-material-symbols-notifications-outline-sharp bg-white! w-6! h-6!" />
+								<i className="i-material-symbols-notifications-outline-sharp w-6! h-6!" />
 								<span className="badge badge-xs badge-primary indicator-item" />
 							</div>
 						</button>
