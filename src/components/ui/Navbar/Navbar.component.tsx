@@ -144,7 +144,7 @@ export const Navbar: FC = () => {
 						</button>
 					</li>
 					<div className="divider" />
-					<li className="flex items-center content-start flex-row">
+					<li>
 						<label className="swap swap-rotate">
 							<input
 								type="checkbox"
@@ -155,7 +155,6 @@ export const Navbar: FC = () => {
 							<i className="i-line-md-moon-alt-to-sunny-outline-loop-transition swap-off h-8! w-8! fill-current" />
 							<i className="i-line-md-sunny-outline-to-moon-alt-loop-transition swap-on h-8! w-8! fill-current" />
 						</label>
-						<span className="text-sm p-0">{t('sidebar.theme')}</span>
 					</li>
 				</ul>
 			</div>
