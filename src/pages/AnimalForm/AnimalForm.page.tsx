@@ -48,10 +48,7 @@ export const AnimalForm = () => {
 			setBreeds(species!.breeds)
 		} else if (name === 'breed') {
 			if (value === '') {
-				setAnimalForm((prev) => ({
-					...prev,
-					breed: { uuid: '', name: '', gestationPeriod: breed!.gestationPeriod },
-				}))
+				setAnimalForm((prev) => ({ ...prev, breed: { uuid: '', name: '', gestationPeriod: 0 } }))
 				return
 			}
 			const breed = breeds.find((breed) => breed.uuid === value)

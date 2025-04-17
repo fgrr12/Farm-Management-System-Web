@@ -47,6 +47,7 @@ export const Animal: FC = () => {
 				await AnimalsService.deleteAnimal(animal.uuid, false)
 				setModalData(defaultModalData)
 				setLoading(false)
+				navigate(AppRoutes.ANIMALS)
 			},
 			onCancel: () => setModalData(defaultModalData),
 		})
