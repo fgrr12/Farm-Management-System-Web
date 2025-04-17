@@ -9,7 +9,7 @@ import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
-export const PageHeader: FC = () => {
+export const Navbar: FC = () => {
 	const { user, setUser } = useUserStore()
 	const { farm, setFarm } = useFarmStore()
 	const { t } = useTranslation('common')

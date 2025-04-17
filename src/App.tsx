@@ -22,7 +22,7 @@ import { Tasks } from './pages/Tasks'
 
 import { Loading } from './components/layout/Loading'
 import { Modal } from './components/layout/Modal'
-import { PageHeader } from './components/ui/PageHeader'
+import { Navbar } from './components/ui/Navbar'
 import { Sidebar } from './components/ui/Sidebar'
 
 import { FarmsService } from './services/farms'
@@ -37,12 +37,7 @@ import { AppContainer, AppContent } from './styles/root'
 export const App: FC = () => {
 	const { user, setUser } = useUserStore()
 	const { setFarm } = useFarmStore()
-	const {
-		loading: appLoading,
-		defaultModalData: modalData,
-		topHeaderHeight,
-		setLoading,
-	} = useAppStore()
+	const { loading: appLoading, defaultModalData: modalData, setLoading } = useAppStore()
 	const { i18n } = useTranslation()
 	const location = useLocation()
 	const browserLanguage = navigator.language === 'en' ? 'eng' : 'spa'
@@ -72,8 +67,8 @@ export const App: FC = () => {
 
 	return (
 		<AppContainer className="app">
-			{location.pathname !== AppRoutes.LOGIN && <PageHeader />}
-			<AppContent $topHeaderHeight={topHeaderHeight}>
+			{location.pathname !== AppRoutes.LOGIN && <Navbar />}
+			<AppContent>
 				{location.pathname !== AppRoutes.LOGIN && <Sidebar />}
 				<Routes>
 					<Route path="/" element={<Navigate to={AppRoutes.ANIMALS} />} key="home" />
