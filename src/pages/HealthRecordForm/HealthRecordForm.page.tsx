@@ -167,6 +167,7 @@ export const HealthRecordForm = () => {
 					required
 				/>
 				<DatePicker
+					legend={t('date')}
 					label={t('date')}
 					date={dayjs(healthRecordForm.date)}
 					onDateChange={handleDateChange()}

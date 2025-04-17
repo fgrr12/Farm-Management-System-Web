@@ -1,7 +1,8 @@
 import type dayjs from 'dayjs'
 
 export interface DatePickerProps {
-	date: dayjs.Dayjs | null
+	legend: string
 	label: string
+	date: dayjs.Dayjs | null
 	onDateChange: (date: dayjs.Dayjs) => void
 }

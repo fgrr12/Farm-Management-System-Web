@@ -132,6 +132,7 @@ export const ProductionRecordForm = () => {
 					required
 				/>
 				<DatePicker
+					legend={t('date')}
 					label={t('date')}
 					date={dayjs(productionRecordForm.date)}
 					onDateChange={handleDateChange()}

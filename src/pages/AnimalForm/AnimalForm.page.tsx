@@ -238,17 +238,20 @@ export const AnimalForm = () => {
 					required
 				/>
 				<DatePicker
+					legend={t('birthDate')}
 					label={t('birthDate')}
 					date={dayjs(animalForm.birthDate)}
 					onDateChange={handleDateChange('birthDate')}
 				/>
 				<DatePicker
+					legend={t('purchaseDate')}
 					label={t('purchaseDate')}
 					date={dayjs(animalForm.purchaseDate)}
 					onDateChange={handleDateChange('purchaseDate')}
 				/>
 				{params.animalUuid && (
 					<DatePicker
+						legend={t('soldDate')}
 						label={t('soldDate')}
 						date={animalForm.soldDate ? dayjs(animalForm.soldDate) : null}
 						onDateChange={handleDateChange('soldDate')}
@@ -256,6 +259,7 @@ export const AnimalForm = () => {
 				)}
 				{params.animalUuid && (
 					<DatePicker
+						legend={t('deathDate')}
 						label={t('deathDate')}
 						date={animalForm.deathDate ? dayjs(animalForm.deathDate) : null}
 						onDateChange={handleDateChange('deathDate')}

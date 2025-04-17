@@ -31,7 +31,7 @@ function CustomSelectDropdown(props: DropdownProps) {
 	)
 }
 
-export const DatePicker: FC<DatePickerProps> = ({ date, label, onDateChange }) => {
+export const DatePicker: FC<DatePickerProps> = ({ legend, label, date, onDateChange }) => {
 	const { user } = useUserStore()
 	const id = useId()
 
@@ -41,6 +41,7 @@ export const DatePicker: FC<DatePickerProps> = ({ date, label, onDateChange }) =
 
 	return (
 		<fieldset className="fieldset">
+			<legend className="fieldset-legend text-black dark:text-white">{legend}</legend>
 			<button
 				type="button"
 				popoverTarget={id}
