@@ -7,7 +7,6 @@ export const Container = styled.div`
     gap: 2rem;
     width: 100%;
     height: 100%;
-    min-height: calc(100dvh - 76px);
     padding: 1rem 2rem;
     overflow: auto;
     /* background-color: ${colors.primary[50]}; */
