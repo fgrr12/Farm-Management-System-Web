@@ -52,7 +52,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 		})
 	}
 	return (
-		<div className="w-auto">
+		<div className="w-full xl:w-auto">
 			<div className="flex justify-center items-center">
 				<div className="font-bold">{t('title')}</div>
 				{haveUser && (

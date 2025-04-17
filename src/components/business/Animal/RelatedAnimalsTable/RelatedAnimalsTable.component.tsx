@@ -50,7 +50,7 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 	}
 
 	return (
-		<div className="w-auto">
+		<div className="w-full xl:w-auto">
 			<div className="flex justify-center items-center">
 				<div className="font-bold">{title}</div>
 				{haveUser && (
