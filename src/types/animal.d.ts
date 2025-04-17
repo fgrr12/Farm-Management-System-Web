@@ -49,7 +49,7 @@ interface AnimalHealthRecord {
 	animalUuid: string
 	reason: string
 	notes: string
-	type: string
+	type: HealthRecordType
 	reviewedBy: string
 	date: string
 	status: boolean

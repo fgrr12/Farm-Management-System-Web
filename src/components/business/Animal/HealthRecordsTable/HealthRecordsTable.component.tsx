@@ -51,6 +51,28 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 			onCancel: () => setModalData(defaultModalData),
 		})
 	}
+
+	const trBgColor = (reason: HealthRecordType) => {
+		switch (reason) {
+			case 'Checkup':
+				return 'bg-amber-300'
+			case 'Vaccination':
+				return 'bg-red-300'
+			case 'Medication':
+				return 'bg-green-300'
+			case 'Surgery':
+				return 'bg-cyan-300'
+			case 'Pregnancy':
+				return 'bg-pink-300'
+			case 'Deworming':
+				return 'bg-fuchsia-300'
+			case 'Birth':
+				return 'bg-purple-300'
+			case 'Drying':
+				return 'bg-yellow-300'
+		}
+	}
+
 	return (
 		<div className="w-full xl:w-auto">
 			<div className="flex justify-center items-center">
@@ -64,7 +86,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 				)}
 			</div>
 			<div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
-				<table className="table table-zebra">
+				<table className="table">
 					<thead>
 						<tr>
 							<th>{t('reason')}</th>
@@ -83,7 +105,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 					</thead>
 					<tbody>
 						{healthRecords.map((healthRecord) => (
-							<tr key={self.crypto.randomUUID()}>
+							<tr key={self.crypto.randomUUID()} className={trBgColor(healthRecord.type)}>
 								<td>{healthRecord.reason}</td>
 								<td>{healthRecord.notes}</td>
 								<td>{t(`healthRecordType.${healthRecord.type.toLowerCase()}`)}</td>
