@@ -50,7 +50,7 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 	}
 
 	return (
-		<div className="w-full">
+		<div className="w-auto">
 			<div className="flex justify-center items-center">
 				<div className="font-bold">{title}</div>
 				{haveUser && (
@@ -61,8 +61,8 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 					/>
 				)}
 			</div>
-			<div className="overflow-x-auto w-full">
-				<table className="table table-zebra bg-black">
+			<div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+				<table className="table table-zebra">
 					<thead>
 						<tr>
 							<th>{t('animalId')}</th>
