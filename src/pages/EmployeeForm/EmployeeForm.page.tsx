@@ -148,6 +148,7 @@ export const EmployeeForm: FC = () => {
 				/>
 				<Select
 					name="role"
+					legend={t('selectRole')}
 					defaultLabel={t('selectRole')}
 					value={employee.role}
 					items={[

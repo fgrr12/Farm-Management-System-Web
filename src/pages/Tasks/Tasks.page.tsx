@@ -87,6 +87,7 @@ export const Tasks = () => {
 				<Search placeholder={t('search')} onChange={handleDebounceSearch} />
 				<Select
 					name="status"
+					legend={t('filterByStatus')}
 					defaultLabel={t('filterByStatus')}
 					value={filters.status}
 					items={[
@@ -97,6 +98,7 @@ export const Tasks = () => {
 				/>
 				<Select
 					name="priority"
+					legend={t('filterByPriority')}
 					defaultLabel={t('filterByPriority')}
 					value={filters.priority}
 					items={[
@@ -108,6 +110,7 @@ export const Tasks = () => {
 				/>
 				<Select
 					name="species"
+					legend={t('filterBySpecies')}
 					defaultLabel={t('filterBySpecies')}
 					optionValue="uuid"
 					optionLabel="name"

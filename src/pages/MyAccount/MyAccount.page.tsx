@@ -192,6 +192,7 @@ export const MyAccount: FC = () => {
 							/>
 							<Select
 								name="language"
+								legend={t('myProfile.selectLanguage')}
 								defaultLabel={t('myProfile.selectLanguage')}
 								value={user!.language}
 								items={languages}
@@ -242,6 +243,7 @@ export const MyAccount: FC = () => {
 							<S.ContainerOf3>
 								<Select
 									name="liquidUnit"
+									legend={t('myFarm.liquidUnit')}
 									defaultLabel={t('myFarm.liquidUnit')}
 									value={farm!.liquidUnit}
 									items={liquidUnit}
@@ -251,6 +253,7 @@ export const MyAccount: FC = () => {
 								/>
 								<Select
 									name="weightUnit"
+									legend={t('myFarm.weightUnit')}
 									defaultLabel={t('myFarm.weightUnit')}
 									value={farm!.weightUnit}
 									items={weightUnit}
@@ -260,6 +263,7 @@ export const MyAccount: FC = () => {
 								/>
 								<Select
 									name="temperatureUnit"
+									legend={t('myFarm.temperatureUnit')}
 									defaultLabel={t('myFarm.temperatureUnit')}
 									value={farm!.temperatureUnit}
 									items={temperatureUnit}
