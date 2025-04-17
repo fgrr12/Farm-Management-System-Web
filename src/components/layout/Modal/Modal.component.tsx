@@ -1,26 +1,32 @@
 import { useEffect, useRef } from 'react'
-import { Button } from '@/components/ui/Button'
+
 import type { ModalProps } from './Modal.types'
-import * as S from './Modal.styles'
 
 export const Modal: FC<ModalProps> = ({ title, message, open, onAccept, onCancel, ...rest }) => {
 	const { modalRef } = useModal(open)
 
 	return (
-		<S.ModalDialog ref={modalRef} {...rest}>
-			<S.Modal>
-				<S.ModalHeader>
-					<h2>{title}</h2>
-				</S.ModalHeader>
-				<S.ModalSection>
-					<p>{message}</p>
-				</S.ModalSection>
-				<S.ButtonsSection>
-					<Button onClick={onAccept}>Aceptar</Button>
-					{onCancel && <Button onClick={onCancel}>Cancelar</Button>}
-				</S.ButtonsSection>
-			</S.Modal>
-		</S.ModalDialog>
+		<dialog className="modal" ref={modalRef} {...rest}>
+			<div className="modal-box">
+				<h3 className="font-bold text-lg">{title}</h3>
+				<p className="py-4">{message}</p>
+				<div className="modal-action">
+					<form method="dialog">
+						<button type="button" className="btn btn-primary mr-4" onClick={onAccept}>
+							Aceptar
+						</button>
+						{onCancel && (
+							<button type="button" className="btn btn-error" onClick={onCancel}>
+								Cancelar
+							</button>
+						)}
+					</form>
+				</div>
+			</div>
+			<form method="dialog" className="modal-backdrop">
+				<button type="button" onClick={onCancel ? onCancel : onAccept} />
+			</form>
+		</dialog>
 	)
 }
 
