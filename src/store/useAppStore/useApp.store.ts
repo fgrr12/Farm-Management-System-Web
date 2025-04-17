@@ -11,13 +11,9 @@ export const useAppStore = create<AppStore & AppStoreActions>((set) => ({
 	loading: false,
 	defaultModalData: DEFAULT_MODAL_DATA,
 	headerTitle: '',
-	collapseSidebar: true,
-	topHeaderHeight: 0,
 	setLoading: (loading) => set({ loading }),
 	setModalData: (modalData) => set({ defaultModalData: modalData }),
 	setHeaderTitle: (title) => set({ headerTitle: title }),
-	setCollapseSidebar: (collapse) => set({ collapseSidebar: collapse }),
-	setTopHeaderHeight: (height) => set({ topHeaderHeight: height }),
 }))
 
 export const GENERIC_MODAL_DATA: AppModalData = {

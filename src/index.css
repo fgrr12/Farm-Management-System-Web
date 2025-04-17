@@ -1,13 +1,6 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-	outline: none;
-}
-
 @keyframes spin {
 	from {
 		transform: rotate(0deg);
