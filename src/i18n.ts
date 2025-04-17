@@ -9,7 +9,7 @@ i18n
 	.use(LanguageDetector)
 	.use(initReactI18next)
 	.init({
-		lng: 'esp',
+		lng: 'spa',
 		// debug: true,
 		react: {
 			useSuspense: false,
