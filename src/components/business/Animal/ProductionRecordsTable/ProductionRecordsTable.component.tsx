@@ -4,14 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { ActionButton } from '@/components/ui/ActionButton'
-import { Table } from '@/components/ui/Table'
 
 import { ProductionRecordsService } from '@/services/productionRecords'
 import { useAppStore } from '@/store/useAppStore'
 
 import type { ProductionRecordsTableProps } from './ProductionRecordsTable.types'
-
-import * as S from './ProductionRecordsTable.styles'
 
 export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 	productionRecords,
@@ -55,9 +52,9 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 		})
 	}
 	return (
-		<S.TableContainer>
-			<S.CenterTitle>
-				<S.Label>{t('title')}</S.Label>
+		<div className="w-full">
+			<div className="flex justify-center items-center">
+				<div className="font-bold">{t('title')}</div>
 				{haveUser && (
 					<ActionButton
 						title="Add Production Record"
@@ -65,48 +62,50 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 						onClick={handleAddHealthRecord}
 					/>
 				)}
-			</S.CenterTitle>
-			<Table>
-				<Table.Head>
-					<Table.Row>
-						<Table.HeadCell>{t('date')}</Table.HeadCell>
-						<Table.HeadCell>{t('quantity')}</Table.HeadCell>
-						<Table.HeadCell>{t('notes')}</Table.HeadCell>
-						{haveUser && <Table.HeadCell>{t('actions')}</Table.HeadCell>}
-					</Table.Row>
-				</Table.Head>
-				<Table.Body>
-					{productionRecords.map((productionRecord) => (
-						<Table.Row key={crypto.randomUUID()}>
-							<Table.Cell>{dayjs(productionRecord.date).format('DD/MM/YYYY')}</Table.Cell>
-							<Table.Cell>
-								{productionRecord.quantity}
-								{farm!.liquidUnit}
-							</Table.Cell>
-							<Table.Cell>{productionRecord.notes}</Table.Cell>
-							{haveUser && (
-								<Table.Cell>
-									<ActionButton
-										title="Edit"
-										icon="i-material-symbols-edit-square-outline"
-										onClick={handleEditHealthRecord(productionRecord.uuid)}
-									/>
-									<ActionButton
-										title="Delete"
-										icon="i-material-symbols-delete-outline"
-										onClick={handleDeleteHealthRecord(productionRecord.uuid)}
-									/>
-								</Table.Cell>
-							)}
-						</Table.Row>
-					))}
-					{productionRecords.length === 0 && (
-						<Table.Row>
-							<Table.Cell colSpan={haveUser ? 12 : 11}>{t('noProductionRecords')}</Table.Cell>
-						</Table.Row>
-					)}
-				</Table.Body>
-			</Table>
-		</S.TableContainer>
+			</div>
+			<div className="overflow-x-auto w-full">
+				<table className="table! table-zebra! bg-black">
+					<thead>
+						<tr>
+							<th>{t('date')}</th>
+							<th>{t('quantity')}</th>
+							<th>{t('notes')}</th>
+							{haveUser && <th>{t('actions')}</th>}
+						</tr>
+					</thead>
+					<tbody>
+						{productionRecords.map((productionRecord) => (
+							<tr key={self.crypto.randomUUID()}>
+								<td>{dayjs(productionRecord.date).format('DD/MM/YYYY')}</td>
+								<td>
+									{productionRecord.quantity}
+									{farm!.liquidUnit}
+								</td>
+								<td>{productionRecord.notes}</td>
+								{haveUser && (
+									<td>
+										<ActionButton
+											title="Edit"
+											icon="i-material-symbols-edit-square-outline"
+											onClick={handleEditHealthRecord(productionRecord.uuid)}
+										/>
+										<ActionButton
+											title="Delete"
+											icon="i-material-symbols-delete-outline"
+											onClick={handleDeleteHealthRecord(productionRecord.uuid)}
+										/>
+									</td>
+								)}
+							</tr>
+						))}
+						{productionRecords.length === 0 && (
+							<tr>
+								<td colSpan={haveUser ? 12 : 11}>{t('noProductionRecords')}</td>
+							</tr>
+						)}
+					</tbody>
+				</table>
+			</div>
+		</div>
 	)
 }

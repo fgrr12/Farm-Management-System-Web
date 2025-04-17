@@ -3,14 +3,11 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { ActionButton } from '@/components/ui/ActionButton'
-import { Table } from '@/components/ui/Table'
 
 import { RelatedAnimalsService } from '@/services/relatedAnimals'
 import { useAppStore } from '@/store/useAppStore'
 
 import type { RelatedAnimalsTableProps } from './RelatedAnimalsTable.types'
-
-import * as S from './RelatedAnimalsTable.styles'
 
 export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 	title,
@@ -53,9 +50,9 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 	}
 
 	return (
-		<S.TableContainer>
-			<S.CenterTitle>
-				<S.Label>{title}</S.Label>
+		<div className="w-full">
+			<div className="flex justify-center items-center">
+				<div className="font-bold">{title}</div>
 				{haveUser && (
 					<ActionButton
 						title={title.startsWith('Parents') ? t('addParent') : t('addChild')}
@@ -63,45 +60,47 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 						onClick={handleAddRelatedAnimals}
 					/>
 				)}
-			</S.CenterTitle>
-			<Table>
-				<Table.Head>
-					<Table.Row>
-						<Table.HeadCell>{t('animalId')}</Table.HeadCell>
-						<Table.HeadCell>{t('breed')}</Table.HeadCell>
-						<Table.HeadCell>{t('relation')}</Table.HeadCell>
-						{haveUser && <Table.HeadCell>{t('actions')}</Table.HeadCell>}
-					</Table.Row>
-				</Table.Head>
-				<Table.Body>
-					{animals?.map((animal) => (
-						<Table.Row key={crypto.randomUUID()}>
-							<Table.Cell>{animal[type].animalId}</Table.Cell>
-							<Table.Cell>{animal[type].breed.name}</Table.Cell>
-							<Table.Cell>{t(animal[type].relation.toLowerCase())}</Table.Cell>
-							{haveUser && (
-								<Table.Cell>
-									<ActionButton
-										title="View"
-										icon="i-material-symbols-visibility-outline"
-										onClick={handleViewRelatedAnimal(animal[type].animalUuid)}
-									/>
-									<ActionButton
-										title="Delete"
-										icon="i-material-symbols-delete-outline"
-										onClick={handleDeleteRelatedAnimal(animal.uuid)}
-									/>
-								</Table.Cell>
-							)}
-						</Table.Row>
-					))}
-					{animals.length === 0 && (
-						<Table.Row>
-							<Table.Cell colSpan={haveUser ? 12 : 11}>{t('noRelatedAnimals')}</Table.Cell>
-						</Table.Row>
-					)}
-				</Table.Body>
-			</Table>
-		</S.TableContainer>
+			</div>
+			<div className="overflow-x-auto w-full">
+				<table className="table! table-zebra! bg-black">
+					<thead>
+						<tr>
+							<th>{t('animalId')}</th>
+							<th>{t('breed')}</th>
+							<th>{t('relation')}</th>
+							{haveUser && <th>{t('actions')}</th>}
+						</tr>
+					</thead>
+					<tbody>
+						{animals?.map((animal) => (
+							<tr key={self.crypto.randomUUID()}>
+								<td>{animal[type].animalId}</td>
+								<td>{animal[type].breed.name}</td>
+								<td>{t(animal[type].relation.toLowerCase())}</td>
+								{haveUser && (
+									<td>
+										<ActionButton
+											title="View"
+											icon="i-material-symbols-visibility-outline"
+											onClick={handleViewRelatedAnimal(animal[type].animalUuid)}
+										/>
+										<ActionButton
+											title="Delete"
+											icon="i-material-symbols-delete-outline"
+											onClick={handleDeleteRelatedAnimal(animal.uuid)}
+										/>
+									</td>
+								)}
+							</tr>
+						))}
+						{animals.length === 0 && (
+							<tr>
+								<td colSpan={haveUser ? 12 : 11}>{t('noRelatedAnimals')}</td>
+							</tr>
+						)}
+					</tbody>
+				</table>
+			</div>
+		</div>
 	)
 }

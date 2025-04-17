@@ -3,11 +3,8 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import { HealthRecordsCards } from '@/components/business/Animal/HealthRecordsCards'
 import { HealthRecordsTable } from '@/components/business/Animal/HealthRecordsTable'
-import { ProductionRecordsCards } from '@/components/business/Animal/ProductionRecordsCards'
 import { ProductionRecordsTable } from '@/components/business/Animal/ProductionRecordsTable'
-import { RelatedAnimalsCards } from '@/components/business/Animal/RelatedAnimalsCards'
 import { RelatedAnimalsTable } from '@/components/business/Animal/RelatedAnimalsTable'
 import { ActionButton } from '@/components/ui/ActionButton'
 
@@ -32,7 +29,6 @@ export const Animal: FC = () => {
 
 	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
 	const [animal, setAnimal] = useState(ANIMAL_INITIAL_STATE)
-	const [mobile, setMobile] = useState(false)
 	const [activeTab, setActiveTab] = useState<
 		'healthRecords' | 'productionRecords' | 'relatedAnimals'
 	>('healthRecords')
@@ -150,7 +146,6 @@ export const Animal: FC = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		setMobile(window.innerWidth <= 768)
 		setHeaderTitle('Animal')
 		farm && setActiveTab('healthRecords')
 		farm && getInitialData()
@@ -256,74 +251,40 @@ export const Animal: FC = () => {
 						{t('relatedAnimals')}
 					</S.Tab>
 				</S.Tabs>
-				{activeTab === 'healthRecords' &&
-					(mobile ? (
-						<HealthRecordsCards
-							healthRecords={animal?.healthRecords || []}
+				{activeTab === 'healthRecords' && (
+					<HealthRecordsTable
+						healthRecords={animal?.healthRecords || []}
+						haveUser={user !== null}
+						farm={farm}
+						removeHealthRecord={handleRemoveHealthRecord}
+					/>
+				)}
+				{activeTab === 'productionRecords' && (
+					<ProductionRecordsTable
+						productionRecords={animal?.productionRecords || []}
+						haveUser={user !== null}
+						farm={farm}
+						removeProductionRecord={handleRemoveProductionRecord}
+					/>
+				)}
+				{activeTab === 'relatedAnimals' && (
+					<>
+						<RelatedAnimalsTable
+							title={t('parentsTitle')}
+							animals={animal?.relatedAnimals?.parents || []}
 							haveUser={user !== null}
-							farm={farm}
-							removeHealthRecord={handleRemoveHealthRecord}
+							type="parent"
+							removeRelation={handleRemoveRelation}
 						/>
-					) : (
-						<HealthRecordsTable
-							healthRecords={animal?.healthRecords || []}
+						<RelatedAnimalsTable
+							title={t('childrenTitle')}
+							animals={animal?.relatedAnimals?.children || []}
 							haveUser={user !== null}
-							farm={farm}
-							removeHealthRecord={handleRemoveHealthRecord}
+							type="child"
+							removeRelation={handleRemoveRelation}
 						/>
-					))}
-				{activeTab === 'productionRecords' &&
-					(mobile ? (
-						<ProductionRecordsCards
-							productionRecords={animal?.productionRecords || []}
-							haveUser={user !== null}
-							farm={farm}
-							removeProductionRecord={handleRemoveProductionRecord}
-						/>
-					) : (
-						<ProductionRecordsTable
-							productionRecords={animal?.productionRecords || []}
-							haveUser={user !== null}
-							farm={farm}
-							removeProductionRecord={handleRemoveProductionRecord}
-						/>
-					))}
-				{activeTab === 'relatedAnimals' &&
-					(mobile ? (
-						<>
-							<RelatedAnimalsCards
-								title={t('parentsTitle')}
-								animals={animal?.relatedAnimals?.parents || []}
-								haveUser={user !== null}
-								type="parent"
-								removeRelation={handleRemoveRelation}
-							/>
-							<RelatedAnimalsCards
-								title={t('childrenTitle')}
-								animals={animal?.relatedAnimals?.children || []}
-								haveUser={user !== null}
-								type="child"
-								removeRelation={handleRemoveRelation}
-							/>
-						</>
-					) : (
-						<>
-							<RelatedAnimalsTable
-								title={t('parentsTitle')}
-								animals={animal?.relatedAnimals?.parents || []}
-								haveUser={user !== null}
-								type="parent"
-								removeRelation={handleRemoveRelation}
-							/>
-							<RelatedAnimalsTable
-								title={t('childrenTitle')}
-								animals={animal?.relatedAnimals?.children || []}
-								haveUser={user !== null}
-								type="child"
-								removeRelation={handleRemoveRelation}
-							/>
-						</>
-					))}
+					</>
+				)}
 			</S.TabsContainer>
 		</S.Container>
 	)

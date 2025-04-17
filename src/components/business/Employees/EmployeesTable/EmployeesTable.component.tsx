@@ -3,14 +3,11 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { ActionButton } from '@/components/ui/ActionButton'
-import { Table } from '@/components/ui/Table'
 
 import { EmployeesService } from '@/services/employees'
 import { useAppStore } from '@/store/useAppStore'
 
 import type { EmployeesTableProps } from './EmployeesTable.types'
-
-import * as S from './EmployeesTable.styles'
 
 export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmployee }) => {
 	const { defaultModalData, setModalData, setLoading } = useAppStore()
@@ -38,27 +35,27 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 		})
 	}
 	return (
-		<S.TableContainer>
-			<Table>
-				<Table.Head>
-					<Table.Row>
-						<Table.HeadCell>{t('name')}</Table.HeadCell>
-						<Table.HeadCell>{t('lastName')}</Table.HeadCell>
-						<Table.HeadCell>{t('email')}</Table.HeadCell>
-						<Table.HeadCell>{t('phone')}</Table.HeadCell>
-						<Table.HeadCell>{t('role')}</Table.HeadCell>
-						<Table.HeadCell>{t('actions')}</Table.HeadCell>
-					</Table.Row>
-				</Table.Head>
-				<Table.Body>
+		<div className="overflow-x-auto w-full">
+			<table className="table! table-zebra! bg-black">
+				<thead>
+					<tr>
+						<th>{t('name')}</th>
+						<th>{t('lastName')}</th>
+						<th>{t('email')}</th>
+						<th>{t('phone')}</th>
+						<th>{t('role')}</th>
+						<th>{t('actions')}</th>
+					</tr>
+				</thead>
+				<tbody>
 					{employees.map((employee) => (
-						<Table.Row key={employee.uuid}>
-							<Table.Cell>{employee.name}</Table.Cell>
-							<Table.Cell>{employee.lastName}</Table.Cell>
-							<Table.Cell>{employee.email}</Table.Cell>
-							<Table.Cell>{employee.phone}</Table.Cell>
-							<Table.Cell>{t(`roleList.${employee.role.toLowerCase()}`)}</Table.Cell>
-							<Table.Cell>
+						<tr key={employee.uuid}>
+							<td>{employee.name}</td>
+							<td>{employee.lastName}</td>
+							<td>{employee.email}</td>
+							<td>{employee.phone}</td>
+							<td>{t(`roleList.${employee.role.toLowerCase()}`)}</td>
+							<td>
 								<ActionButton
 									title="Edit"
 									icon="i-material-symbols-edit-square-outline"
@@ -69,16 +66,16 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 									icon="i-material-symbols-delete-outline"
 									onClick={handleDeleteEmployee(employee)}
 								/>
-							</Table.Cell>
-						</Table.Row>
+							</td>
+						</tr>
 					))}
 					{employees.length === 0 && (
-						<Table.Row>
-							<Table.Cell colSpan={12}>{t('noEmployees')}</Table.Cell>
-						</Table.Row>
+						<tr>
+							<td colSpan={12}>{t('noEmployees')}</td>
+						</tr>
 					)}
-				</Table.Body>
-			</Table>
-		</S.TableContainer>
+				</tbody>
+			</table>
+		</div>
 	)
 }

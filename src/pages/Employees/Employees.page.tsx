@@ -2,7 +2,6 @@ import { type ChangeEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { EmployeesCards } from '@/components/business/Employees/EmployeesCards'
 import { EmployeesTable } from '@/components/business/Employees/EmployeesTable'
 import { Button } from '@/components/ui/Button'
 import { Search } from '@/components/ui/Search'
@@ -22,7 +21,6 @@ export const Employees: FC = () => {
 
 	const [employees, setEmployees] = useState<User[]>([])
 	const [search, setSearch] = useState('')
-	const [mobile, setMobile] = useState(false)
 
 	const handleAddEmployee = () => {
 		navigate(AppRoutes.ADD_EMPLOYEE)
@@ -60,7 +58,6 @@ export const Employees: FC = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
-		setMobile(window.innerWidth <= 768)
 		if (!user) return
 		if (user && user.role === 'employee') {
 			navigate(AppRoutes.LOGIN)
@@ -87,11 +84,7 @@ export const Employees: FC = () => {
 				<Search placeholder={t('search')} value={search} onChange={handleDebounceSearch} />
 				<Button onClick={handleAddEmployee}>{t('addEmployee')}</Button>
 			</S.HeaderContainer>
-			{!mobile ? (
-				<EmployeesTable employees={employees} removeEmployee={handleRemoveEmployee} />
-			) : (
-				<EmployeesCards employees={employees} removeEmployee={handleRemoveEmployee} />
-			)}
+			<EmployeesTable employees={employees} removeEmployee={handleRemoveEmployee} />
 		</S.Container>
 	)
 }

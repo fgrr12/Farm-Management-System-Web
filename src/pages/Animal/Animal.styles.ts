@@ -10,7 +10,7 @@ export const Container = styled.div`
     min-height: calc(100dvh - 76px);
     padding: 1rem 2rem;
     overflow: auto;
-    background-color: ${colors.primary[50]};
+    /* background-color: ${colors.primary[50]}; */
 
     &::-webkit-scrollbar {
         display: none;
