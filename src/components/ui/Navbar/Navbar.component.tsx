@@ -79,7 +79,7 @@ export const Navbar: FC = () => {
 				<label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay" />
 				<ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
 					{farm && <h2 className="text-xl font-bold mb-2 text-center">{farm!.name}</h2>}
-					<li>
+					<li className={location.pathname.includes(AppRoutes.ANIMALS) ? 'bg-info rounded-sm' : ''}>
 						<button
 							type="button"
 							className="flex items-center gap-2 px-4 py-2 selection:bg-red"
@@ -89,7 +89,7 @@ export const Navbar: FC = () => {
 							<span className="text-sm">{t('sidebar.animals')}</span>
 						</button>
 					</li>
-					<li>
+					<li className={location.pathname.includes(AppRoutes.TASKS) ? 'bg-info rounded-sm' : ''}>
 						<button
 							type="button"
 							className="flex items-center gap-2 px-4 py-2 selection:bg-red"
@@ -99,7 +99,9 @@ export const Navbar: FC = () => {
 							<span className="text-sm">{t('sidebar.tasks')}</span>
 						</button>
 					</li>
-					<li>
+					<li
+						className={location.pathname.includes(AppRoutes.MY_SPECIES) ? 'bg-info rounded-sm' : ''}
+					>
 						<button
 							type="button"
 							className="flex items-center gap-2 px-4 py-2 selection:bg-red"
@@ -110,7 +112,9 @@ export const Navbar: FC = () => {
 						</button>
 					</li>
 					<div className="divider" />
-					<li>
+					<li
+						className={location.pathname.includes(AppRoutes.MY_ACCOUNT) ? 'bg-info rounded-sm' : ''}
+					>
 						<button
 							type="button"
 							className="flex items-center gap-2 px-4 py-2 selection:bg-red"
@@ -121,7 +125,11 @@ export const Navbar: FC = () => {
 						</button>
 					</li>
 					{(user?.role === 'admin' || user?.role === 'owner') && (
-						<li>
+						<li
+							className={
+								location.pathname.includes(AppRoutes.EMPLOYEES) ? 'bg-info rounded-sm' : ''
+							}
+						>
 							<button
 								type="button"
 								className="flex items-center gap-2 px-4 py-2 selection:bg-red"
