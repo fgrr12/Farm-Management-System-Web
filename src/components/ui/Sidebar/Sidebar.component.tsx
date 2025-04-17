@@ -19,7 +19,7 @@ export const Sidebar: FC = () => {
 	}
 
 	return (
-		<ul className="menu bg-base-100 h-full">
+		<ul className="menu bg-base-100 h-full hidden lg:flex">
 			<li>
 				<button
 					type="button"
