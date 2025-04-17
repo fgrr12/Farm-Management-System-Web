@@ -28,7 +28,9 @@ export const Navbar: FC = () => {
 		location.pathname === AppRoutes.MY_SPECIES
 
 	const handleBack = () => {
-		navigate(-1)
+		const path = location.pathname.split('/')
+		path.pop()
+		navigate(path.join('/'))
 	}
 
 	const handleLogout = async () => {
