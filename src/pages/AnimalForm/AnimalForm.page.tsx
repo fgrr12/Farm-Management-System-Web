@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { Dropzone } from '@/components/layout/Dropzone'
-import { Button } from '@/components/ui/Button'
 import { DatePicker } from '@/components/ui/DatePicker'
 import { Select } from '@/components/ui/Select'
 import { TextField } from '@/components/ui/TextField'
@@ -15,8 +14,6 @@ import { AnimalsService } from '@/services/animals'
 import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
-
-import * as S from './AnimalForm.styles'
 
 export const AnimalForm = () => {
 	const { user } = useUserStore()
@@ -162,8 +159,12 @@ export const AnimalForm = () => {
 	}, [setHeaderTitle, t, params.animalUuid])
 
 	return (
-		<S.Container>
-			<S.Form onSubmit={handleSubmit} autoComplete="off">
+		<div className="flex flex-col items-center w-full h-full overflow-auto">
+			<form
+				className="grid grid-cols-2 items-center gap-4 mt-8 px-20 md:px-40 xl:px-100 pb-8 w-full max-md:px-4 max-md:grid-cols-1 max-md:w-4/5"
+				onSubmit={handleSubmit}
+				autoComplete="off"
+			>
 				<TextField
 					name="animalId"
 					type="text"
@@ -173,14 +174,14 @@ export const AnimalForm = () => {
 					onChange={handleTextChange}
 					required
 				/>
-				<S.DropzoneContainer>
+				<div className="row-span-4 col-start-2 h-full max-md:col-start-1 max-md:row-start-1">
 					<Dropzone
 						className="dropzone"
 						cleanFile={false}
 						pictureUrl={animalForm.picture}
 						onFile={handleFile}
 					/>
-				</S.DropzoneContainer>
+				</div>
 				<Select
 					name="species"
 					legend={t('selectSpecies')}
@@ -265,9 +266,11 @@ export const AnimalForm = () => {
 						onDateChange={handleDateChange('deathDate')}
 					/>
 				)}
-				<Button type="submit">{params.animalUuid ? t('editButton') : t('addButton')}</Button>
-			</S.Form>
-		</S.Container>
+				<button type="submit" className="btn btn-primary col-span-2">
+					{params.animalUuid ? t('editButton') : t('addButton')}
+				</button>
+			</form>
+		</div>
 	)
 }
 
