@@ -1,7 +1,11 @@
-export interface UserStore {
-	user: User | null
-}
+import type { PersistOptions } from 'zustand/middleware'
 
-export interface UserStoreActions {
+type UserStore = {
+	user: User | null
 	setUser: (user: User | null) => void
 }
+
+type MyPersist = (
+	config: (set: any) => UserStore,
+	options: PersistOptions<UserStore>
+) => (set: any) => UserStore

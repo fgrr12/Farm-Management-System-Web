@@ -44,20 +44,19 @@ export const App: FC = () => {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
+		setLoading(true)
 		onAuthStateChanged(auth, async (authUser) => {
-			setLoading(true)
 			if (!authUser) {
 				setUser(null)
 				setFarm(null)
-				setLoading(false)
 				return
 			}
 			const user = await UserService.getUser(authUser!.uid)
 			const farm = await FarmsService.getFarm(user!.farmUuid)
 			setUser(user)
 			setFarm(farm)
-			setLoading(false)
 		})
+		setLoading(false)
 	}, [setUser])
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once

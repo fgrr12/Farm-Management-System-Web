@@ -18,5 +18,9 @@
 	"editor.codeActionsOnSave": {
 		"source.organizeImports.biome": "never"
 	},
-	"cSpell.words": ["firebasestorage", "languagedetector"]
+	"cSpell.words": [
+		"firebasestorage",
+		"languagedetector",
+		"partialize"
+	]
 }

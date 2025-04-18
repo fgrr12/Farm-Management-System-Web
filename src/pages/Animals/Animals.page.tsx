@@ -67,8 +67,8 @@ export const Animals = () => {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		setLoading(true)
-		if (user) {
-			setSpecies(farm!.species!)
+		if (user && farm) {
+			setSpecies(farm.species!)
 			getAnimals()
 		}
 	}, [filters, user])

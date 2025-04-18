@@ -1,7 +1,17 @@
 import { create } from 'zustand'
-import type { UserStore, UserStoreActions } from './useUser.types'
+import { createJSONStorage, persist } from 'zustand/middleware'
 
-export const useUserStore = create<UserStore & UserStoreActions>((set) => ({
-	user: null,
-	setUser: (user) => set({ user }),
-}))
+import type { UserStore } from './useUser.types'
+
+export const useUserStore = create<UserStore>()(
+	persist<UserStore>(
+		(set) => ({
+			user: null,
+			setUser: (user) => set({ user }),
+		}),
+		{
+			name: 'user-storage',
+			storage: createJSONStorage(() => sessionStorage),
+		}
+	)
+)
