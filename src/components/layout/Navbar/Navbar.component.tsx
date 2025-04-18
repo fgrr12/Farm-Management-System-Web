@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { BackButton } from '../Button'
+import { BackButton } from '../../ui/Button'
 
 import { UserService } from '@/services/user'
 import { useAppStore } from '@/store/useAppStore'
@@ -56,7 +56,7 @@ export const Navbar: FC = () => {
 								<i className="i-flowbite-bars-from-left-outline w-8! h-8!" />
 							</label>
 							{!backButtonHidden && (
-								<BackButton disabled={!user} onClick={handleBack}>
+								<BackButton className="hidden md:inline" disabled={!user} onClick={handleBack}>
 									{t('header.return')}
 								</BackButton>
 							)}

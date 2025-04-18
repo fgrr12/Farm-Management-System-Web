@@ -22,7 +22,7 @@ import { Tasks } from './pages/Tasks'
 
 import { Loading } from './components/layout/Loading'
 import { Modal } from './components/layout/Modal'
-import { Navbar } from './components/ui/Navbar'
+import { Navbar } from './components/layout/Navbar'
 import { Sidebar } from './components/ui/Sidebar'
 
 import { FarmsService } from './services/farms'
