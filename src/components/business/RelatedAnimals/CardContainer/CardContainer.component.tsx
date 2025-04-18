@@ -28,7 +28,7 @@ export const CardContainer: FC<ContainerProps> = ({ title, location, children, .
 			{...props}
 		>
 			<div className="flex items-center justify-between mb-4">
-				<span className="text-md font-semibold text-gray-300">{title}</span>
+				<span className="text-md font-semibold text-xl">{title}</span>
 			</div>
 			<div className="flex flex-col items-center justify-between gap-2 overflow-auto pb-2">
 				{children}
