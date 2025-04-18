@@ -216,7 +216,14 @@ export const Animal: FC = () => {
 								}
 							/>
 							<DetailItem label={t('color')} value={animal.color} />
-							<DetailItem label={t('weight')} value={animal.weight} />
+							<DetailItem
+								label={t('weight')}
+								value={
+									<>
+										{animal.weight} {farm?.weightUnit}
+									</>
+								}
+							/>
 							{animal.purchaseDate && (
 								<DetailItem
 									label={t('purchaseDate')}
