@@ -1,11 +1,9 @@
 import { draggable } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
 import { useEffect, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import type { CardProps } from './RelatedAnimalCard.types'
 
 export const RelatedAnimalCard: FC<CardProps> = ({ animal, ...props }) => {
-	const { t } = useTranslation(['relatedAnimalCard'])
 	const ref: any = useRef(null)
 	const [dragging, setDragging] = useState<boolean>(false)
 
@@ -32,7 +30,7 @@ export const RelatedAnimalCard: FC<CardProps> = ({ animal, ...props }) => {
 				<div className="flex justify-between">
 					<div className="flex items-center">
 						<div className="avatar">
-							<div className="w-12 rounded-full bg-primary-100 shadow-lg">
+							<div className="w-14 h-14 rounded-full bg-primary-100 shadow-lg">
 								<img
 									className="pointer-events-none"
 									src={animal.picture || '/assets/default-imgs/cow.svg'}
@@ -40,14 +38,17 @@ export const RelatedAnimalCard: FC<CardProps> = ({ animal, ...props }) => {
 								/>
 							</div>
 						</div>
-						<div className="ml-4">
+						<div className="ml-4 user-select-none">
 							<h2 className="card-title">
-								<span className="text-gray-700">
-									{t('animalId')}: {animal.animalId}
-								</span>
+								<span className="text-gray-700 text-2xl">{animal.animalId}</span>
 							</h2>
-							<p className="card-subtitle text-gray-600">
-								{t('breed')}: {animal.breed.name}
+							<p className="card-subtitle text-gray-600 text-lg user-select-none">
+								{animal.breed.name}
+								{animal.gender.toLowerCase() === 'male' ? (
+									<i className="i-tdesign-gender-male bg-blue-500! w-5! h-5!" />
+								) : (
+									<i className="i-tdesign-gender-female bg-pink-500! w-5! h-5!" />
+								)}
 							</p>
 						</div>
 					</div>
