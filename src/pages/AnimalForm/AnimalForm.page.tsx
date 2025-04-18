@@ -266,7 +266,7 @@ export const AnimalForm = () => {
 						onDateChange={handleDateChange('deathDate')}
 					/>
 				)}
-				<button type="submit" className="btn btn-primary col-span-2">
+				<button type="submit" className="btn btn-primary h-12 w-full text-lg col-span-2">
 					{params.animalUuid ? t('editButton') : t('addButton')}
 				</button>
 			</form>

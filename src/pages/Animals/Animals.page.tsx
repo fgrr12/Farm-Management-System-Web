@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { AnimalCard } from '@/components/business/Animals/AnimalCard'
-import { Button } from '@/components/ui/Button'
 import { Search } from '@/components/ui/Search'
 import { Select } from '@/components/ui/Select'
 
@@ -14,8 +13,6 @@ import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
 import type { AnimalsFilters } from './Animals.types'
-
-import * as S from './Animals.styles'
 
 export const Animals = () => {
 	const { user } = useUserStore()
@@ -81,8 +78,8 @@ export const Animals = () => {
 	}, [setHeaderTitle, t])
 
 	return (
-		<S.Container>
-			<S.ButtonContainer>
+		<div className="flex flex-col gap-5 p-4 w-full h-full overflow-auto">
+			<div className="grid grid-cols-4 items-center justify-center gap-4 w-full">
 				<Search placeholder={t('search')} onKeyDown={handleSearchKeyPress} />
 				<Select
 					name="selectedSpecies"
@@ -92,9 +89,15 @@ export const Animals = () => {
 					items={[...species.map((specie) => ({ value: specie.uuid, name: specie.name }))]}
 					onChange={handleSelectChange}
 				/>
-				<Button onClick={() => navigation(AppRoutes.ADD_ANIMAL)}>{t('addAnimal')}</Button>
-			</S.ButtonContainer>
-			<S.AnimalsContainer>
+				<button
+					type="button"
+					className="btn btn-primary h-12 w-full text-lg col-start-4"
+					onClick={() => navigation(AppRoutes.ADD_ANIMAL)}
+				>
+					{t('addAnimal')}
+				</button>
+			</div>
+			<div className="grid grid-cols-6 items-center justify-center gap-4 w-full">
 				{animals.map((animal) => (
 					<AnimalCard
 						key={crypto.randomUUID()}
@@ -104,14 +107,14 @@ export const Animals = () => {
 						onClick={() => navigateToAnimal(animal.uuid)}
 					/>
 				))}
-			</S.AnimalsContainer>
+			</div>
 			{animals.length === 0 && (
-				<S.NoAnimals>
-					<S.NoAnimalsTitle>{t('noAnimals')}</S.NoAnimalsTitle>
-					<S.NoAnimalsSubtitle>{t('noAnimalsSubtitle')}</S.NoAnimalsSubtitle>
-				</S.NoAnimals>
+				<div className="flex flex-col items-center justify-center gap-2 w-full">
+					<div className="text-center text-2xl font-bold">{t('noAnimals')}</div>
+					<div className="text-center text-sm font-semibold">{t('noAnimalsSubtitle')}</div>
+				</div>
 			)}
-		</S.Container>
+		</div>
 	)
 }
 
