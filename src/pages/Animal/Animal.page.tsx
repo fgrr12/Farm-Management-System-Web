@@ -1,4 +1,4 @@
-import dayjs from 'dayjs'
+import { AppRoutes } from '@/config/constants/routes'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -8,7 +8,6 @@ import { ProductionRecordsTable } from '@/components/business/Animal/ProductionR
 import { RelatedAnimalsTable } from '@/components/business/Animal/RelatedAnimalsTable'
 import { ActionButton } from '@/components/ui/ActionButton'
 
-import { AppRoutes } from '@/config/constants/routes'
 import { AnimalsService } from '@/services/animals'
 import { FarmsService } from '@/services/farms'
 import { HealthRecordsService } from '@/services/healthRecords'
@@ -17,8 +16,21 @@ import { RelatedAnimalsService } from '@/services/relatedAnimals'
 import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
+import dayjs from 'dayjs'
 
-import * as S from './Animal.styles'
+const DetailItem = ({ label, value }: { label: string; value: React.ReactNode }) => (
+	<div className="flex flex-col gap-1 w-full justify-center items-center">
+		<span className="font-bold text-xl text-center">{label}</span>
+		<span className="text-xl text-center">{value}</span>
+	</div>
+)
+
+const GenderIcon = ({ gender }: { gender: string }) =>
+	gender.toLowerCase() === 'male' ? (
+		<i className="i-tdesign-gender-male bg-blue-500! w-5! h-5!" />
+	) : (
+		<i className="i-tdesign-gender-female bg-pink-500! w-5! h-5!" />
+	)
 
 export const Animal: FC = () => {
 	const { user } = useUserStore()
@@ -80,7 +92,9 @@ export const Animal: FC = () => {
 		if (activeTab === 'healthRecords') return
 		setActiveTab('healthRecords')
 		const dbHealthRecords = await HealthRecordsService.getHealthRecords(animal.uuid)
-		animal.weight = dbHealthRecords[0]?.weight ?? animal.weight
+		if (dbHealthRecords[0]?.weight! > 0) {
+			animal.weight = dbHealthRecords[0]?.weight ?? animal.weight
+		}
 		setAnimal((prev) => ({ ...prev, healthRecords: dbHealthRecords, weight: animal.weight }))
 	}
 
@@ -153,11 +167,11 @@ export const Animal: FC = () => {
 	}, [params.animalUuid, farm])
 
 	return (
-		<S.Container>
-			<S.AnimalContainer>
-				<S.InfoContainer>
-					<S.CenterTitle>
-						<S.Label>{t('animalId')}</S.Label>
+		<div className="flex flex-col gap-4 lg:gap-10 p-4 w-full h-full overflow-auto">
+			<div className="flex flex-col-reverse lg:flex-row gap-4 w-full">
+				<div className="flex flex-col gap-4 w-full">
+					<div className="flex flex-row justify-center items-center gap-4 w-full">
+						<span className="text-md font-bold text-xl">{t('animalId')}</span>
 						{user && (
 							<ActionButton
 								title="Edit"
@@ -172,90 +186,86 @@ export const Animal: FC = () => {
 								onClick={handleRemoveAnimal}
 							/>
 						)}
-					</S.CenterTitle>
-					<S.AnimalInfo>
-						<div>
-							<S.Label>ID</S.Label>
-							<S.Value>{animal.animalId}</S.Value>
-						</div>
-						<div>
-							<S.Label>{t('species')}</S.Label>
-							<S.Value>{animal.species.name}</S.Value>
-						</div>
-						<div>
-							<S.Label>{t('breed')}</S.Label>
-							<S.Value>{animal.breed.name}</S.Value>
-						</div>
-						<div>
-							<S.Label>{t('gender')}</S.Label>
-							<S.Value>
-								{t(`genderList.${animal.gender.toLowerCase()}`)}
-								<S.GenderIcon
-									className={`i-mdi-gender-${animal.gender.toLowerCase()}`}
-									$gender={animal.gender}
+					</div>
+					<div className="flex flex-row gap-2 w-full">
+						<div className="flex flex-col gap-2 w-full">
+							<DetailItem label={t('animalId')} value={animal.animalId} />
+							<DetailItem label={t('species')} value={animal.species.name} />
+							<DetailItem label={t('breed')} value={animal.breed.name} />
+							{animal.birthDate && (
+								<DetailItem
+									label={t('birthDate')}
+									value={dayjs(animal.birthDate).format('DD/MM/YYYY')}
 								/>
-							</S.Value>
+							)}
+							{animal.deathDate && (
+								<DetailItem
+									label={t('deathDate')}
+									value={dayjs(animal.deathDate).format('DD/MM/YYYY')}
+								/>
+							)}
 						</div>
-						<div>
-							<S.Label>{t('color')}</S.Label>
-							<S.Value>{animal.color}</S.Value>
+						<div className="flex flex-col gap-2 w-full">
+							<DetailItem
+								label={t('gender')}
+								value={
+									<>
+										{t(`genderList.${animal.gender.toLowerCase()}`)}
+										<GenderIcon gender={animal.gender} />
+									</>
+								}
+							/>
+							<DetailItem label={t('color')} value={animal.color} />
+							<DetailItem label={t('weight')} value={animal.weight} />
+							{animal.purchaseDate && (
+								<DetailItem
+									label={t('purchaseDate')}
+									value={dayjs(animal.purchaseDate).format('DD/MM/YYYY')}
+								/>
+							)}
+							{animal.soldDate && (
+								<DetailItem
+									label={t('soldDate')}
+									value={dayjs(animal.soldDate).format('DD/MM/YYYY')}
+								/>
+							)}
 						</div>
-						<div>
-							<S.Label>{t('weight')}</S.Label>
-							<S.Value>
-								{animal.weight}
-								{farm?.weightUnit}
-							</S.Value>
-						</div>
-						<div>
-							<S.Label>{t('birthDate')}</S.Label>
-							<S.Value>{dayjs(animal.birthDate).format('DD/MM/YYYY')}</S.Value>
-						</div>
-						{animal.purchaseDate && (
-							<div>
-								<S.Label>{t('purchaseDate')}</S.Label>
-								<S.Value>{dayjs(animal.purchaseDate).format('DD/MM/YYYY')}</S.Value>
-							</div>
-						)}
-						{animal.soldDate && (
-							<div>
-								<S.Label>{t('soldDate')}</S.Label>
-								<S.Value>{dayjs(animal.soldDate).format('DD/MM/YYYY')}</S.Value>
-							</div>
-						)}
-						{animal.deathDate && (
-							<div>
-								<S.Label>{t('deathDate')}</S.Label>
-								<S.Value>{dayjs(animal.deathDate).format('DD/MM/YYYY')}</S.Value>
-							</div>
-						)}
-					</S.AnimalInfo>
-				</S.InfoContainer>
-
-				<S.ImageContainer>
-					<S.Image
+					</div>
+				</div>
+				<div className="flex justify-center items-center w-full">
+					<img
+						className="w-64 h-64 rounded-full object-cover"
 						src={animal.picture || '/assets/default-imgs/cow.svg'}
 						alt={animal.species.name}
 					/>
-				</S.ImageContainer>
-			</S.AnimalContainer>
-
-			<S.TabsContainer>
-				<S.Tabs>
-					<S.Tab $active={activeTab === 'healthRecords'} onClick={getHealthRecords}>
-						{t('healthRecords')}
-					</S.Tab>
-					<S.Tab $active={activeTab === 'productionRecords'} onClick={getProductionRecords}>
-						{t('productionRecords')}
-					</S.Tab>
-					<S.Tab $active={activeTab === 'relatedAnimals'} onClick={getRelatedAnimals}>
-						{t('relatedAnimals')}
-					</S.Tab>
-				</S.Tabs>
+				</div>
+			</div>
+			<div className="flex flex-col gap-4 justify-center items-center">
+				<div role="tablist" className="tabs tabs-box flex flex-col md:flex-row w-auto">
+					{[
+						{ key: 'healthRecords', label: t('healthRecords'), onClick: getHealthRecords },
+						{
+							key: 'productionRecords',
+							label: t('productionRecords'),
+							onClick: getProductionRecords,
+						},
+						{ key: 'relatedAnimals', label: t('relatedAnimals'), onClick: getRelatedAnimals },
+					].map((tab) => (
+						<button
+							key={tab.key}
+							type="button"
+							role="tab"
+							className={`tab ${activeTab === tab.key && 'tab-active'}`}
+							onClick={tab.onClick}
+						>
+							{tab.label}
+						</button>
+					))}
+				</div>
 				{activeTab === 'healthRecords' && (
 					<HealthRecordsTable
 						healthRecords={animal?.healthRecords || []}
-						haveUser={user !== null}
+						haveUser={!!user}
 						farm={farm}
 						removeHealthRecord={handleRemoveHealthRecord}
 					/>
@@ -263,7 +273,7 @@ export const Animal: FC = () => {
 				{activeTab === 'productionRecords' && (
 					<ProductionRecordsTable
 						productionRecords={animal?.productionRecords || []}
-						haveUser={user !== null}
+						haveUser={!!user}
 						farm={farm}
 						removeProductionRecord={handleRemoveProductionRecord}
 					/>
@@ -273,21 +283,21 @@ export const Animal: FC = () => {
 						<RelatedAnimalsTable
 							title={t('parentsTitle')}
 							animals={animal?.relatedAnimals?.parents || []}
-							haveUser={user !== null}
+							haveUser={!!user}
 							type="parent"
 							removeRelation={handleRemoveRelation}
 						/>
 						<RelatedAnimalsTable
 							title={t('childrenTitle')}
 							animals={animal?.relatedAnimals?.children || []}
-							haveUser={user !== null}
+							haveUser={!!user}
 							type="child"
 							removeRelation={handleRemoveRelation}
 						/>
 					</>
 				)}
-			</S.TabsContainer>
-		</S.Container>
+			</div>
+		</div>
 	)
 }
 
