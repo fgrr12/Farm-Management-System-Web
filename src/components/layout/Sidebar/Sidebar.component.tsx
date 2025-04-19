@@ -27,7 +27,7 @@ export const Sidebar: FC = () => {
 		document.querySelector('html')!.setAttribute('data-theme', theme)
 	}, [theme])
 	return (
-		<ul className="menu bg-base-100 h-full hidden lg:flex">
+		<ul className="menu bg-base-100 h-full hidden lg:flex shadow-sm">
 			<li className={location.pathname.includes(AppRoutes.ANIMALS) ? 'bg-info rounded-sm' : ''}>
 				<button
 					type="button"
