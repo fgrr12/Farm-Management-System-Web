@@ -4,7 +4,7 @@ import type { TextFieldProps } from './TextField.types'
 
 export const TextField: FC<TextFieldProps> = ({ type, label, ...rest }) => {
 	return (
-		<fieldset className="fieldset">
+		<fieldset className="fieldset w-full">
 			<legend className="fieldset-legend">{label}</legend>
 			<input type={type} className="input w-full h-12" {...rest} />
 		</fieldset>

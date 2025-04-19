@@ -13,8 +13,6 @@ import { useUserStore } from '@/store/useUserStore'
 
 import type { RegisterEmployeeForm } from './EmployeeForm.types'
 
-import * as S from './EmployeeForm.styles'
-
 export const EmployeeForm: FC = () => {
 	const { user } = useUserStore()
 	const { defaultModalData, setHeaderTitle, setModalData, setLoading } = useAppStore()
@@ -108,8 +106,12 @@ export const EmployeeForm: FC = () => {
 	}, [setHeaderTitle, t, params.employeeUuid])
 
 	return (
-		<S.Container>
-			<S.Form onSubmit={handleSubmit} autoComplete="off">
+		<div className="flex flex-col items-center w-full h-full overflow-auto p-4">
+			<form
+				className="flex flex-col items-center justify-center gap-4 max-w-90 w-full h-full"
+				onSubmit={handleSubmit}
+				autoComplete="off"
+			>
 				<TextField
 					name="name"
 					type="text"
@@ -159,8 +161,8 @@ export const EmployeeForm: FC = () => {
 					required
 				/>
 				<Button type="submit">{params.employeeUuid ? t('editButton') : t('addButton')}</Button>
-			</S.Form>
-		</S.Container>
+			</form>
+		</div>
 	)
 }
 
