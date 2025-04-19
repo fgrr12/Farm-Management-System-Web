@@ -40,7 +40,7 @@ export const DatePicker: FC<DatePickerProps> = ({ legend, label, date, onDateCha
 	}
 
 	return (
-		<fieldset className="fieldset">
+		<fieldset className="fieldset w-full">
 			<legend className="fieldset-legend">{legend}</legend>
 			<button
 				type="button"

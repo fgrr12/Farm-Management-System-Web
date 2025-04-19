@@ -4,7 +4,6 @@ import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import { Button } from '@/components/ui/Button'
 import { DatePicker } from '@/components/ui/DatePicker'
 import { Select } from '@/components/ui/Select'
 import { TextField } from '@/components/ui/TextField'
@@ -16,8 +15,6 @@ import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
 import type { HealthRecordFormType } from './HealthRecordForm.types'
-
-import * as S from './HealthRecordForm.styles'
 
 export const HealthRecordForm = () => {
 	const { user } = useUserStore()
@@ -136,8 +133,12 @@ export const HealthRecordForm = () => {
 	}, [setHeaderTitle, t, params.healthRecordUuid])
 
 	return (
-		<S.Container>
-			<S.Form onSubmit={handleSubmit} autoComplete="off">
+		<div className="flex flex-col justify-center items-center w-full h-full overflow-auto p-5">
+			<form
+				className="flex flex-col sm:grid sm:grid-cols-2 items-center gap-4 max-w-[800px] w-full"
+				onSubmit={handleSubmit}
+				autoComplete="off"
+			>
 				<TextField
 					name="reason"
 					type="text"
@@ -222,7 +223,7 @@ export const HealthRecordForm = () => {
 					value={healthRecordForm.duration}
 					onChange={handleTextChange}
 				/>
-				<S.TextareaContainer>
+				<div className="col-span-2 w-full">
 					<Textarea
 						name="notes"
 						placeholder={t('notes')}
@@ -231,10 +232,13 @@ export const HealthRecordForm = () => {
 						onChange={handleTextareaChange}
 						required
 					/>
-				</S.TextareaContainer>
-				<Button type="submit">{params.healthRecordUuid ? t('editButton') : t('addButton')}</Button>
-			</S.Form>
-		</S.Container>
+				</div>
+
+				<button type="submit" className="btn btn-primary h-12 w-full text-lg col-span-2">
+					{params.healthRecordUuid ? t('editButton') : t('addButton')}
+				</button>
+			</form>
+		</div>
 	)
 }
 

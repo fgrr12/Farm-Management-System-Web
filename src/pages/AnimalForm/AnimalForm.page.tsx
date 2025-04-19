@@ -159,12 +159,20 @@ export const AnimalForm = () => {
 	}, [setHeaderTitle, t, params.animalUuid])
 
 	return (
-		<div className="flex flex-col items-center w-full h-full overflow-auto">
+		<div className="flex flex-col justify-center items-center w-full h-full overflow-auto p-5">
 			<form
-				className="grid grid-cols-2 items-center gap-4 mt-8 px-20 md:px-40 xl:px-100 pb-8 w-full max-md:px-4 max-md:grid-cols-1 max-md:w-4/5"
+				className="flex flex-col sm:grid sm:grid-cols-2 items-center gap-4 max-w-[800px] w-full"
 				onSubmit={handleSubmit}
 				autoComplete="off"
 			>
+				<div className="row-span-5 col-start-2 h-full">
+					<Dropzone
+						className="dropzone"
+						cleanFile={false}
+						pictureUrl={animalForm.picture}
+						onFile={handleFile}
+					/>
+				</div>
 				<TextField
 					name="animalId"
 					type="text"
@@ -174,14 +182,7 @@ export const AnimalForm = () => {
 					onChange={handleTextChange}
 					required
 				/>
-				<div className="row-span-4 col-start-2 h-full max-md:col-start-1 max-md:row-start-1">
-					<Dropzone
-						className="dropzone"
-						cleanFile={false}
-						pictureUrl={animalForm.picture}
-						onFile={handleFile}
-					/>
-				</div>
+
 				<Select
 					name="species"
 					legend={t('selectSpecies')}
