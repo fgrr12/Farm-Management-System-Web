@@ -26,7 +26,7 @@ export const Select: FC<SelectProps> = ({
 		<fieldset className="fieldset w-full">
 			<legend className="fieldset-legend">{legend}</legend>
 			<div className="relative w-full mx-auto">
-				<select className="input w-full h-12" value={value} ref={ref} {...rest}>
+				<select className="input w-full h-12 validator" value={value} ref={ref} {...rest}>
 					<option value="" hidden disabled>
 						{defaultLabel ?? t('select.default')}
 					</option>
@@ -43,7 +43,7 @@ export const Select: FC<SelectProps> = ({
 					</div>
 				) : (
 					<button
-						className="absolute inset-y-0 right-0 flex items-center px-2 text-red-400 hover:text-red-600"
+						className="absolute inset-y-0 right-0 flex items-center px-2 text-red-400 hover:text-red-600 z-10"
 						type="button"
 						onClick={handleClear}
 						disabled={rest.disabled}

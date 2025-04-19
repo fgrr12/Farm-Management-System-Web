@@ -58,7 +58,7 @@ export const DatePicker: FC<DatePickerProps> = ({ legend, label, date, onDateCha
 				style={{ positionAnchor: '--rdp' } as React.CSSProperties}
 			>
 				<DayPicker
-					className="react-day-picker p-2"
+					className="react-day-picker p-2 validator"
 					captionLayout="dropdown"
 					locale={user?.language === 'spa' ? es : enUS}
 					components={{ Dropdown: CustomSelectDropdown }}

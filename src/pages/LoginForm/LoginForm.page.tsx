@@ -1,6 +1,6 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { Button } from '@/components/ui/Button'
 import { PasswordField, TextField } from '@/components/ui/TextField'
@@ -11,8 +11,6 @@ import { useAppStore } from '@/store/useAppStore'
 import { useUserStore } from '@/store/useUserStore'
 
 import type { LoginCredentials } from './LoginForm.types'
-
-import * as S from './LoginForm.styles'
 
 export const LoginForm: FC = () => {
 	const { user } = useUserStore()
@@ -71,10 +69,13 @@ export const LoginForm: FC = () => {
 	}, [user, navigate])
 
 	return (
-		<S.Container>
-			<S.Card onSubmit={handleSubmit}>
-				<S.Title>{t('title')}</S.Title>
-				<S.Form onSubmit={handleSubmit}>
+		<div className="flex flex-col justify-center items-center w-full h-full overflow-auto p-5">
+			<div className="flex flex-col items-center gap-4 max-w-[400px] w-full p-4 sm:border-2 rounded-2xl">
+				<h2 className="text-center text-2xl font-bold">{t('title')}</h2>
+				<form
+					className="flex flex-col items-center gap-4 max-w-[400px] w-full"
+					onSubmit={handleSubmit}
+				>
 					<TextField
 						name="email"
 						type="email"
@@ -90,16 +91,20 @@ export const LoginForm: FC = () => {
 						onChange={handleTextChange}
 						required
 					/>
-					<S.ForgotPassword to={AppRoutes.LOGIN}>{t('forgotPassword')}</S.ForgotPassword>
+					<Link to={AppRoutes.LOGIN}>{t('forgotPassword')}</Link>
 					<Button type="submit">{t('login')}</Button>
-				</S.Form>
-				<S.Or>{t('or')}</S.Or>
-				<S.GoogleButton onClick={handleGoogleLogin}>
+				</form>
+				<div className="divider" />
+				<button
+					type="button"
+					className="btn bg-white text-black border-[#e5e5e5] w-full"
+					onClick={handleGoogleLogin}
+				>
 					<i className="i-logos-google-icon" />
 					{t('google')}
-				</S.GoogleButton>
-			</S.Card>
-		</S.Container>
+				</button>
+			</div>
+		</div>
 	)
 }
 
