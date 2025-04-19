@@ -63,7 +63,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 			case 'Surgery':
 				return 'bg-indigo-100'
 			case 'Pregnancy':
-				return 'bg-rose-100'
+				return 'bg-rose-200'
 			case 'Deworming':
 				return 'bg-pink-100'
 			case 'Birth':
