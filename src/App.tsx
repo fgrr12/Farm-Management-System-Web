@@ -63,166 +63,168 @@ export const App: FC = () => {
 	}, [user])
 
 	return (
-		<div className="app flex flex-col w-full h-[100dvh]">
+		<div className="flex flex-col w-full h-[100dvh]">
 			{location.pathname !== AppRoutes.LOGIN && <Navbar />}
 			<div className="flex flex-row w-full h-full overflow-hidden">
 				{location.pathname !== AppRoutes.LOGIN && <Sidebar />}
-				<Routes>
-					<Route path="/" element={<Navigate to={AppRoutes.ANIMALS} />} key="home" />
+				<main className="w-full h-full overflow-auto">
+					<Routes>
+						<Route path="/" element={<Navigate to={AppRoutes.ANIMALS} />} key="home" />
 
-					<Route path={AppRoutes.LOGIN} element={<LoginForm />} />
-					<Route
-						path={AppRoutes.CHANGE_PASSWORD}
-						element={
-							<PrivateRoute>
-								<Animals />
-							</PrivateRoute>
-						}
-					/>
+						<Route path={AppRoutes.LOGIN} element={<LoginForm />} />
+						<Route
+							path={AppRoutes.CHANGE_PASSWORD}
+							element={
+								<PrivateRoute>
+									<Animals />
+								</PrivateRoute>
+							}
+						/>
 
-					<Route
-						path={AppRoutes.ANIMALS}
-						element={
-							<PrivateRoute>
-								<Animals />
-							</PrivateRoute>
-						}
-					/>
-					<Route path={AppRoutes.ANIMAL} element={<Animal />} />
-					<Route
-						path={AppRoutes.ADD_ANIMAL}
-						element={
-							<PrivateRoute>
-								<AnimalForm />
-							</PrivateRoute>
-						}
-					/>
-					<Route
-						path={AppRoutes.EDIT_ANIMAL}
-						element={
-							<PrivateRoute>
-								<AnimalForm />
-							</PrivateRoute>
-						}
-					/>
-					<Route
-						path={AppRoutes.ADD_HEALTH_RECORD}
-						element={
-							<PrivateRoute>
-								<HealthRecordForm />
-							</PrivateRoute>
-						}
-					/>
-					<Route
-						path={AppRoutes.EDIT_HEALTH_RECORD}
-						element={
-							<PrivateRoute>
-								<HealthRecordForm />
-							</PrivateRoute>
-						}
-					/>
-					<Route
-						path={AppRoutes.ADD_PRODUCTION_RECORD}
-						element={
-							<PrivateRoute>
-								<ProductionRecordForm />
-							</PrivateRoute>
-						}
-					/>
-					<Route
-						path={AppRoutes.EDIT_PRODUCTION_RECORD}
-						element={
-							<PrivateRoute>
-								<ProductionRecordForm />
-							</PrivateRoute>
-						}
-					/>
-					<Route
-						path={AppRoutes.RELATED_ANIMALS}
-						element={
-							<PrivateRoute>
-								<RelatedAnimalsForm />
-							</PrivateRoute>
-						}
-					/>
+						<Route
+							path={AppRoutes.ANIMALS}
+							element={
+								<PrivateRoute>
+									<Animals />
+								</PrivateRoute>
+							}
+						/>
+						<Route path={AppRoutes.ANIMAL} element={<Animal />} />
+						<Route
+							path={AppRoutes.ADD_ANIMAL}
+							element={
+								<PrivateRoute>
+									<AnimalForm />
+								</PrivateRoute>
+							}
+						/>
+						<Route
+							path={AppRoutes.EDIT_ANIMAL}
+							element={
+								<PrivateRoute>
+									<AnimalForm />
+								</PrivateRoute>
+							}
+						/>
+						<Route
+							path={AppRoutes.ADD_HEALTH_RECORD}
+							element={
+								<PrivateRoute>
+									<HealthRecordForm />
+								</PrivateRoute>
+							}
+						/>
+						<Route
+							path={AppRoutes.EDIT_HEALTH_RECORD}
+							element={
+								<PrivateRoute>
+									<HealthRecordForm />
+								</PrivateRoute>
+							}
+						/>
+						<Route
+							path={AppRoutes.ADD_PRODUCTION_RECORD}
+							element={
+								<PrivateRoute>
+									<ProductionRecordForm />
+								</PrivateRoute>
+							}
+						/>
+						<Route
+							path={AppRoutes.EDIT_PRODUCTION_RECORD}
+							element={
+								<PrivateRoute>
+									<ProductionRecordForm />
+								</PrivateRoute>
+							}
+						/>
+						<Route
+							path={AppRoutes.RELATED_ANIMALS}
+							element={
+								<PrivateRoute>
+									<RelatedAnimalsForm />
+								</PrivateRoute>
+							}
+						/>
 
-					<Route
-						path={AppRoutes.EMPLOYEES}
-						element={
-							<PrivateRoute>
-								<Employees />
-							</PrivateRoute>
-						}
-					/>
-					<Route
-						path={AppRoutes.ADD_EMPLOYEE}
-						element={
-							<PrivateRoute>
-								<EmployeeForm />
-							</PrivateRoute>
-						}
-					/>
-					<Route
-						path={AppRoutes.EDIT_EMPLOYEE}
-						element={
-							<PrivateRoute>
-								<EmployeeForm />
-							</PrivateRoute>
-						}
-					/>
+						<Route
+							path={AppRoutes.EMPLOYEES}
+							element={
+								<PrivateRoute>
+									<Employees />
+								</PrivateRoute>
+							}
+						/>
+						<Route
+							path={AppRoutes.ADD_EMPLOYEE}
+							element={
+								<PrivateRoute>
+									<EmployeeForm />
+								</PrivateRoute>
+							}
+						/>
+						<Route
+							path={AppRoutes.EDIT_EMPLOYEE}
+							element={
+								<PrivateRoute>
+									<EmployeeForm />
+								</PrivateRoute>
+							}
+						/>
 
-					<Route
-						path={AppRoutes.MY_ACCOUNT}
-						element={
-							<PrivateRoute>
-								<MyAccount />
-							</PrivateRoute>
-						}
-					/>
-					<Route
-						path={AppRoutes.MY_SPECIES}
-						element={
-							<PrivateRoute>
-								<MySpecies />
-							</PrivateRoute>
-						}
-					/>
+						<Route
+							path={AppRoutes.MY_ACCOUNT}
+							element={
+								<PrivateRoute>
+									<MyAccount />
+								</PrivateRoute>
+							}
+						/>
+						<Route
+							path={AppRoutes.MY_SPECIES}
+							element={
+								<PrivateRoute>
+									<MySpecies />
+								</PrivateRoute>
+							}
+						/>
 
-					<Route
-						path={AppRoutes.TASKS}
-						element={
-							<PrivateRoute>
-								<Tasks />
-							</PrivateRoute>
-						}
-					/>
-					<Route
-						path={AppRoutes.ADD_TASK}
-						element={
-							<PrivateRoute>
-								<TaskForm />
-							</PrivateRoute>
-						}
-					/>
+						<Route
+							path={AppRoutes.TASKS}
+							element={
+								<PrivateRoute>
+									<Tasks />
+								</PrivateRoute>
+							}
+						/>
+						<Route
+							path={AppRoutes.ADD_TASK}
+							element={
+								<PrivateRoute>
+									<TaskForm />
+								</PrivateRoute>
+							}
+						/>
 
-					<Route
-						path={AppRoutes.BUSINESS_CARD}
-						element={
-							<PrivateRoute>
-								<BusinessCard />
-							</PrivateRoute>
-						}
-					/>
-				</Routes>
+						<Route
+							path={AppRoutes.BUSINESS_CARD}
+							element={
+								<PrivateRoute>
+									<BusinessCard />
+								</PrivateRoute>
+							}
+						/>
+					</Routes>
 
-				<Modal
-					title={modalData.title}
-					message={modalData.message}
-					open={modalData.open}
-					onAccept={modalData.onAccept}
-					onCancel={modalData.onCancel}
-				/>
-				<Loading open={appLoading} />
+					<Modal
+						title={modalData.title}
+						message={modalData.message}
+						open={modalData.open}
+						onAccept={modalData.onAccept}
+						onCancel={modalData.onCancel}
+					/>
+					<Loading open={appLoading} />
+				</main>
 			</div>
 		</div>
 	)

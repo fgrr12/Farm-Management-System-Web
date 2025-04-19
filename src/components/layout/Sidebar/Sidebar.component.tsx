@@ -55,8 +55,6 @@ export const Sidebar: FC = () => {
 					<i className="i-solar-dna-bold-duotone w-8! h-8!" />
 				</button>
 			</li>
-
-			{(user?.role === 'admin' || user?.role === 'owner') && <div className="divider" />}
 			{(user?.role === 'admin' || user?.role === 'owner') && (
 				<li className={location.pathname.includes(AppRoutes.EMPLOYEES) ? 'bg-info rounded-sm' : ''}>
 					<button
@@ -68,6 +66,15 @@ export const Sidebar: FC = () => {
 					</button>
 				</li>
 			)}
+			<li className={location.pathname.includes(AppRoutes.MY_ACCOUNT) ? 'bg-info rounded-sm' : ''}>
+				<button
+					type="button"
+					className="flex items-center gap-2 px-4 py-2"
+					onClick={() => navigate(AppRoutes.MY_ACCOUNT)}
+				>
+					<i className="i-material-symbols-account-circle w-8! h-8!" />
+				</button>
+			</li>
 			{(user?.role === 'admin' || user?.role === 'owner') && (
 				<li
 					className={
@@ -83,16 +90,6 @@ export const Sidebar: FC = () => {
 					</button>
 				</li>
 			)}
-			<div className="divider" />
-			<li className={location.pathname.includes(AppRoutes.MY_ACCOUNT) ? 'bg-info rounded-sm' : ''}>
-				<button
-					type="button"
-					className="flex items-center gap-2 px-4 py-2"
-					onClick={() => navigate(AppRoutes.MY_ACCOUNT)}
-				>
-					<i className="i-material-symbols-account-circle w-8! h-8!" />
-				</button>
-			</li>
 			<li>
 				<button type="button" className="flex items-center gap-2 px-4 py-2" onClick={handleLogout}>
 					<i className="i-material-symbols-logout w-8! h-8!" />

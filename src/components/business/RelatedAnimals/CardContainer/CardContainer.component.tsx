@@ -23,16 +23,14 @@ export const CardContainer: FC<ContainerProps> = ({ title, location, children, .
 	}, [location])
 	return (
 		<div
-			className={`w-auto sm:w-60 lg:w-70 p-4 space-y-2 overflow-y-auto rounded-lg shadow-lg ${isDraggedOver && 'bg-info'}`}
+			className={`w-auto sm:w-60 lg:w-70 p-4 space-y-2 rounded-lg shadow-lg ${isDraggedOver && 'bg-info'}`}
 			ref={ref}
 			{...props}
 		>
 			<div className="flex items-center justify-between mb-4">
 				<span className="text-md font-semibold text-xl">{title}</span>
 			</div>
-			<div className="flex flex-col items-center justify-between gap-2 overflow-auto pb-2">
-				{children}
-			</div>
+			<div className="flex flex-col items-center gap-2 overflow-auto pb-2 h-[95%]">{children}</div>
 		</div>
 	)
 }

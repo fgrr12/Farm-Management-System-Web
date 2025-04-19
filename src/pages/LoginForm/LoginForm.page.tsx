@@ -69,7 +69,7 @@ export const LoginForm: FC = () => {
 	}, [user, navigate])
 
 	return (
-		<div className="flex flex-col justify-center items-center w-full h-full overflow-auto p-5">
+		<div className="flex flex-col justify-center items-center w-full h-[100dvh] overflow-auto p-5">
 			<div className="flex flex-col items-center gap-4 max-w-[400px] w-full p-4 sm:border-2 rounded-2xl">
 				<h2 className="text-center text-2xl font-bold">{t('title')}</h2>
 				<form

@@ -241,7 +241,7 @@ export const RelatedAnimalsForm: FC = () => {
 		setHeaderTitle(t('title'))
 	}, [setHeaderTitle, t])
 	return (
-		<div className="flex justify-center align-center flex-col gap-4 sm:flex-row p-4 w-full">
+		<div className="flex justify-center align-center flex-col gap-4 sm:flex-row p-4 w-full h-full">
 			<CardContainer title="Animals" location={0}>
 				{animalsLists.animals.map((animal) => (
 					<RelatedAnimalCard key={animal.animalId} animal={animal} draggable />
