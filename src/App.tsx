@@ -63,9 +63,9 @@ export const App: FC = () => {
 	}, [user])
 
 	return (
-		<div className="app w-full h-full">
+		<div className="app flex flex-col w-full h-full">
 			{location.pathname !== AppRoutes.LOGIN && <Navbar />}
-			<div className="flex w-full h-full">
+			<div className="flex flex-row w-full h-full">
 				{location.pathname !== AppRoutes.LOGIN && <Sidebar />}
 				<Routes>
 					<Route path="/" element={<Navigate to={AppRoutes.ANIMALS} />} key="home" />
