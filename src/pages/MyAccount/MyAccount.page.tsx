@@ -14,8 +14,6 @@ import { useUserStore } from '@/store/useUserStore'
 
 import type { FarmData } from './MyAccount.types'
 
-import * as S from './MyAccount.styles'
-
 export const MyAccount: FC = () => {
 	const { user: currentUser, setUser: updateUser } = useUserStore()
 	const { farm: currentFarm, setFarm: updateFarm } = useFarmStore()
@@ -138,20 +136,24 @@ export const MyAccount: FC = () => {
 		setHeaderTitle(t('title'))
 	}, [setHeaderTitle, t])
 	return (
-		<S.MyAccount>
-			<S.MyAccountBody>
-				<S.MyAccountBodyContent>
-					<S.MyAccountBodyTitle>
+		<div className="flex flex-col w-full h-full">
+			<div className="flex flex-col p-4">
+				<div className="flex flex-col p-4 gap-4 border-2 rounded-xl border-gray-200">
+					<h2 className="flex items-center gap-4 text-xl font-bold">
 						{t('myProfile.title')}
 						<ActionButton
 							title="Edit"
 							icon="i-material-symbols-edit-square-outline"
 							onClick={handleEdit('user')}
 						/>
-					</S.MyAccountBodyTitle>
-					<S.MyAccountBodySubtitle>{t('myProfile.subtitle')}</S.MyAccountBodySubtitle>
-					<S.Form onSubmit={handleSubmitUser} autoComplete="off">
-						<S.ContainerOf3>
+					</h2>
+					<p className="text-lg">{t('myProfile.subtitle')}</p>
+					<form
+						className="flex flex-col gap-4 w-full"
+						onSubmit={handleSubmitUser}
+						autoComplete="off"
+					>
+						<div className="grid grid-cols-3 items-center gap-4 w-full">
 							<TextField
 								name="name"
 								label={t('myProfile.name')}
@@ -179,8 +181,8 @@ export const MyAccount: FC = () => {
 								disabled={!edit.user}
 								required
 							/>
-						</S.ContainerOf3>
-						<S.ContainerOf3>
+						</div>
+						<div className="grid grid-cols-3 items-center gap-4 w-full">
 							<TextField
 								name="phone"
 								label={t('myProfile.phone')}
@@ -200,27 +202,31 @@ export const MyAccount: FC = () => {
 								disabled={!edit.user}
 								required
 							/>
-						</S.ContainerOf3>
+						</div>
 						<Button type="submit" disabled={!edit.user}>
 							{t('myProfile.edit')}
 						</Button>
-					</S.Form>
-				</S.MyAccountBodyContent>
-			</S.MyAccountBody>
+					</form>
+				</div>
+			</div>
 			{(user.role === 'admin' || user.role === 'owner') && (
-				<S.MyAccountBody>
-					<S.MyAccountBodyContent>
-						<S.MyAccountBodyTitle>
+				<div className="flex flex-col p-4">
+					<div className="flex flex-col p-4 gap-4 border-2 rounded-xl border-gray-200">
+						<h2 className="flex items-center gap-4 text-xl font-bold">
 							{t('myFarm.title')}
 							<ActionButton
 								title="Edit"
 								icon="i-material-symbols-edit-square-outline"
 								onClick={handleEdit('farm')}
 							/>
-						</S.MyAccountBodyTitle>
-						<S.MyAccountBodySubtitle>{t('myFarm.subtitle')}</S.MyAccountBodySubtitle>
-						<S.Form onSubmit={handleSubmitFarm} autoComplete="off">
-							<S.ContainerOf3>
+						</h2>
+						<p className="text-lg">{t('myFarm.subtitle')}</p>
+						<form
+							className="flex flex-col gap-4 w-full"
+							onSubmit={handleSubmitFarm}
+							autoComplete="off"
+						>
+							<div className="grid grid-cols-3 items-center gap-4 w-full">
 								<TextField
 									name="name"
 									label={t('myFarm.name')}
@@ -239,8 +245,8 @@ export const MyAccount: FC = () => {
 									disabled={!edit.farm}
 									required
 								/>
-							</S.ContainerOf3>
-							<S.ContainerOf3>
+							</div>
+							<div className="grid grid-cols-3 items-center gap-4 w-full">
 								<Select
 									name="liquidUnit"
 									legend={t('myFarm.liquidUnit')}
@@ -271,15 +277,15 @@ export const MyAccount: FC = () => {
 									disabled={!edit.farm}
 									required
 								/>
-							</S.ContainerOf3>
+							</div>
 							<Button type="submit" disabled={!edit.farm}>
 								{t('myFarm.edit')}
 							</Button>
-						</S.Form>
-					</S.MyAccountBodyContent>
-				</S.MyAccountBody>
+						</form>
+					</div>
+				</div>
 			)}
-		</S.MyAccount>
+		</div>
 	)
 }
 
