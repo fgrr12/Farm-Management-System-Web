@@ -79,7 +79,7 @@ export const Animals = () => {
 
 	return (
 		<div className="flex flex-col gap-5 p-4 w-full h-full overflow-auto">
-			<div className="grid grid-cols-4 items-center justify-center gap-4 w-full">
+			<div className="flex flex-col md:grid md:grid-cols-4 items-center justify-center gap-4 w-full">
 				<Search placeholder={t('search')} onKeyDown={handleSearchKeyPress} />
 				<Select
 					name="selectedSpecies"
@@ -97,7 +97,7 @@ export const Animals = () => {
 					{t('addAnimal')}
 				</button>
 			</div>
-			<div className="grid grid-cols-6 items-center justify-center gap-4 w-full">
+			<div className="flex flex-col md:grid md:grid-cols-6 items-center justify-center gap-4 w-full">
 				{animals.map((animal) => (
 					<AnimalCard
 						key={crypto.randomUUID()}
