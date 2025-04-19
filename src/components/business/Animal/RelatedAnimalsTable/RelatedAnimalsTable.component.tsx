@@ -95,7 +95,9 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 						))}
 						{animals.length === 0 && (
 							<tr>
-								<td colSpan={haveUser ? 12 : 11}>{t('noRelatedAnimals')}</td>
+								<td className="text-center font-bold" colSpan={haveUser ? 12 : 11}>
+									{t('noRelatedAnimals')}
+								</td>
 							</tr>
 						)}
 					</tbody>

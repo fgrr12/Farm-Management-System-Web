@@ -141,7 +141,9 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 						))}
 						{healthRecords.length === 0 && (
 							<tr>
-								<td colSpan={haveUser ? 12 : 11}>{t('noHealthRecords')}</td>
+								<td className="text-center font-bold" colSpan={haveUser ? 12 : 11}>
+									{t('noHealthRecords')}
+								</td>
 							</tr>
 						)}
 					</tbody>

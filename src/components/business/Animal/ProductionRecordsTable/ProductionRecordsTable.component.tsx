@@ -100,7 +100,9 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 						))}
 						{productionRecords.length === 0 && (
 							<tr>
-								<td colSpan={haveUser ? 12 : 11}>{t('noProductionRecords')}</td>
+								<td className="text-center font-bold" colSpan={haveUser ? 12 : 11}>
+									{t('noProductionRecords')}
+								</td>
 							</tr>
 						)}
 					</tbody>
