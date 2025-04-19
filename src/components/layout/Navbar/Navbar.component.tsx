@@ -111,19 +111,7 @@ export const Navbar: FC = () => {
 							<span className="text-sm">{t('sidebar.mySpecies')}</span>
 						</button>
 					</li>
-					<div className="divider" />
-					<li
-						className={location.pathname.includes(AppRoutes.MY_ACCOUNT) ? 'bg-info rounded-sm' : ''}
-					>
-						<button
-							type="button"
-							className="flex items-center gap-2 px-4 py-2 selection:bg-red"
-							onClick={() => navigate(AppRoutes.MY_ACCOUNT)}
-						>
-							<i className="i-material-symbols-account-circle w-8! h-8!" />
-							<span className="text-sm">{t('sidebar.myAccount')}</span>
-						</button>
-					</li>
+					{(user?.role === 'admin' || user?.role === 'owner') && <div className="divider" />}
 					{(user?.role === 'admin' || user?.role === 'owner') && (
 						<li
 							className={
@@ -140,7 +128,35 @@ export const Navbar: FC = () => {
 							</button>
 						</li>
 					)}
+					{(user?.role === 'admin' || user?.role === 'owner') && (
+						<li
+							className={
+								location.pathname.includes(AppRoutes.BUSINESS_CARD) ? 'bg-info rounded-sm' : ''
+							}
+						>
+							<button
+								type="button"
+								className="flex items-center gap-2 px-4 py-2"
+								onClick={() => navigate(AppRoutes.BUSINESS_CARD)}
+							>
+								<i className="i-typcn-business-card w-8! h-8!" />
+								<span className="text-sm">{t('sidebar.businessCard')}</span>
+							</button>
+						</li>
+					)}
 					<div className="divider" />
+					<li
+						className={location.pathname.includes(AppRoutes.MY_ACCOUNT) ? 'bg-info rounded-sm' : ''}
+					>
+						<button
+							type="button"
+							className="flex items-center gap-2 px-4 py-2 selection:bg-red"
+							onClick={() => navigate(AppRoutes.MY_ACCOUNT)}
+						>
+							<i className="i-material-symbols-account-circle w-8! h-8!" />
+							<span className="text-sm">{t('sidebar.myAccount')}</span>
+						</button>
+					</li>
 					<li>
 						<button
 							type="button"
