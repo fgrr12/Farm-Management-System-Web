@@ -1,7 +1,10 @@
 {
 	"title": "Crear relaciones",
+	"animals": "Animales",
 	"parentsTitle": "Padres",
 	"childrenTitle": "Hijos",
+	"currentAnimal": "Animal actual",
+	"addExternalRelation": "Agregar relación externa",
 	"modal": {
 		"errorGettingAnimals": {
 			"title": "Error",

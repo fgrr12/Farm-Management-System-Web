@@ -11,6 +11,7 @@ import { RelatedAnimalsService } from '@/services/relatedAnimals'
 import { useAppStore } from '@/store/useAppStore'
 import { useUserStore } from '@/store/useUserStore'
 
+import { Button } from '@/components/ui/Button'
 import type {
 	DragSingularRelation,
 	RelatedAnimalInformation,
@@ -144,6 +145,8 @@ export const RelatedAnimalsForm: FC = () => {
 					animalId: selectedAnimal.animalId,
 					breed: selectedAnimal.breed,
 					gender: selectedAnimal.gender,
+					picture: selectedAnimal.picture,
+					location: -1,
 				})
 				unsubscribe = RelatedAnimalsService.getRealTimeRelatedAnimals(
 					animalUuid,
@@ -241,8 +244,15 @@ export const RelatedAnimalsForm: FC = () => {
 		setHeaderTitle(t('title'))
 	}, [setHeaderTitle, t])
 	return (
-		<div className="flex justify-center align-center flex-col gap-4 sm:flex-row p-4 w-full h-full">
-			<CardContainer title="Animals" location={0}>
+		<div className="flex flex-col sm:grid sm:grid-cols-4 p-4 gap-4 sm:gap-6 w-full h-full">
+			{currentAnimal && (
+				<div className="flex flex-col gap-4 w-full h-full p-4">
+					<div className="text-center text-2xl font-semibold">{t('currentAnimal')}</div>
+					<RelatedAnimalCard animal={currentAnimal} />
+					<Button onClick={() => {}}>{t('addExternalRelation')}</Button>
+				</div>
+			)}
+			<CardContainer title={t('animals')} location={0}>
 				{animalsLists.animals.map((animal) => (
 					<RelatedAnimalCard key={animal.animalId} animal={animal} draggable />
 				))}

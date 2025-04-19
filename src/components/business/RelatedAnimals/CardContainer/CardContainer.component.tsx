@@ -23,7 +23,7 @@ export const CardContainer: FC<ContainerProps> = ({ title, location, children, .
 	}, [location])
 	return (
 		<div
-			className={`w-auto sm:w-60 lg:w-70 p-4 space-y-2 rounded-lg shadow-lg ${isDraggedOver && 'bg-info'}`}
+			className={`w-auto p-4 space-y-2 rounded-lg shadow-lg ${isDraggedOver && 'bg-info'}`}
 			ref={ref}
 			{...props}
 		>

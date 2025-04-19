@@ -19,7 +19,7 @@ export const RelatedAnimalCard: FC<CardProps> = ({ animal, ...props }) => {
 			onDragStart: () => setDragging(true),
 			onDrop: () => setDragging(false),
 		})
-	}, [dragging, animal.location, animal.uuid])
+	}, [dragging, animal])
 	return (
 		<div
 			className={`card bg-base-100 w-full h-auto shadow-sm ${dragging && 'bg-warning'}`}
