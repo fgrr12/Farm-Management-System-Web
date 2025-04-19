@@ -69,7 +69,7 @@ export const Navbar: FC = () => {
 						<button type="button" className="btn btn-ghost btn-circle">
 							<div className="indicator">
 								<i className="i-material-symbols-notifications-outline-sharp w-6! h-6!" />
-								<span className="badge badge-xs badge-primary indicator-item" />
+								<span className="badge badge-xs badge-primary indicator-item animate-pulse" />
 							</div>
 						</button>
 					</div>
