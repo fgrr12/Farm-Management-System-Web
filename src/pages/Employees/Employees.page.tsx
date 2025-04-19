@@ -3,15 +3,12 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { EmployeesTable } from '@/components/business/Employees/EmployeesTable'
-import { Button } from '@/components/ui/Button'
 import { Search } from '@/components/ui/Search'
 
 import { AppRoutes } from '@/config/constants/routes'
 import { EmployeesService } from '@/services/employees'
 import { useAppStore } from '@/store/useAppStore'
 import { useUserStore } from '@/store/useUserStore'
-
-import * as S from './Employees.styles'
 
 export const Employees: FC = () => {
 	const { user } = useUserStore()
@@ -79,12 +76,18 @@ export const Employees: FC = () => {
 		setHeaderTitle(t('title'))
 	}, [setHeaderTitle, t])
 	return (
-		<S.Container>
-			<S.HeaderContainer>
+		<div className="flex flex-col gap-5 p-4 w-full h-full overflow-auto">
+			<div className="flex flex-col md:grid md:grid-cols-3 items-center justify-center gap-4 w-full">
 				<Search placeholder={t('search')} value={search} onChange={handleDebounceSearch} />
-				<Button onClick={handleAddEmployee}>{t('addEmployee')}</Button>
-			</S.HeaderContainer>
+				<button
+					type="button"
+					className="btn btn-primary h-12 w-full text-lg col-start-3"
+					onClick={handleAddEmployee}
+				>
+					{t('addEmployee')}
+				</button>
+			</div>
 			<EmployeesTable employees={employees} removeEmployee={handleRemoveEmployee} />
-		</S.Container>
+		</div>
 	)
 }
