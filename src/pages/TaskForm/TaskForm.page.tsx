@@ -13,8 +13,6 @@ import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
-import * as S from './TaskForm.styles'
-
 export const TaskForm = () => {
 	const { user } = useUserStore()
 	const { farm } = useFarmStore()
@@ -64,8 +62,12 @@ export const TaskForm = () => {
 	}, [farm])
 
 	return (
-		<S.Container>
-			<S.Form onSubmit={handleSubmit} autoComplete="off">
+		<div className="flex flex-col justify-center items-center w-full h-full overflow-auto p-5">
+			<form
+				className="flex flex-col items-center gap-4 max-w-[400px] w-full"
+				onSubmit={handleSubmit}
+				autoComplete="off"
+			>
 				<TextField
 					name="title"
 					type="text"
@@ -108,8 +110,8 @@ export const TaskForm = () => {
 					required
 				/>
 				<Button type="submit">{t('addTask')}</Button>
-			</S.Form>
-		</S.Container>
+			</form>
+		</div>
 	)
 }
 
