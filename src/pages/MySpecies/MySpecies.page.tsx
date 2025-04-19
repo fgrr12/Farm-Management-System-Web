@@ -14,8 +14,6 @@ import { TextField } from '@/components/ui/TextField'
 
 import type { MySpeciesI } from './MySpecies.types'
 
-import * as S from './MySpecies.styles'
-
 export const MySpecies: FC = () => {
 	const { t } = useTranslation(['mySpecies'])
 	const { user } = useUserStore()
@@ -176,97 +174,101 @@ export const MySpecies: FC = () => {
 		setHeaderTitle(t('title'))
 	}, [setHeaderTitle, t])
 	return (
-		<S.MySpecies>
-			<S.Body>
-				<S.Title>{t('title')}</S.Title>
-				<S.Subtitle>{t('subtitle')}</S.Subtitle>
-				<S.SearchContainer>
-					<Search placeholder={t('search')} />
-					<ActionButton
-						type="button"
-						title={t('addButton')}
-						icon="i-material-symbols-add-circle-outline"
-						onClick={handleAddSpecie}
-					/>
-				</S.SearchContainer>
-				<S.Form onSubmit={handleSubmit} autoComplete="off">
-					{species.map((specie) => (
-						<S.Box key={specie.uuid}>
-							<S.BoxHeader>
-								<S.Title>
+		<div className="flex flex-col w-full h-full p-4 gap-4 overflow-auto">
+			<div className="flex flex-col sm:grid sm:grid-cols-3 items-center justify-center gap-4 w-full">
+				<Search placeholder={t('search')} />
+				<div className="col-start-3 w-full">
+					<Button title={t('addMoreSpecies')} onClick={handleAddSpecie}>
+						{t('addMoreSpecies')}
+					</Button>
+				</div>
+			</div>
+			<form
+				className="flex flex-row flex-wrap gap-8 sm:justify-start justify-center align-center w-full"
+				autoComplete="off"
+				onSubmit={handleSubmit}
+			>
+				{species.map((specie) => (
+					<div
+						key={specie.uuid}
+						className="flex flex-col w-90 gap-4 p-4 border-2 rounded-xl border-gray-300"
+					>
+						<header className="flex flex-row justify-between items-center">
+							<div className="text-xl font-bold">
+								<TextField
+									name="name"
+									type="text"
+									value={specie.name}
+									onChange={handleSpecieChange(specie.uuid)}
+									required={specie.editable}
+									disabled={!specie.editable}
+								/>
+							</div>
+							<div className="flex flex-row justify-end items-center mt-4">
+								<ActionButton
+									type="button"
+									title={t('editButton')}
+									icon="i-material-symbols-edit-square-outline"
+									onClick={handleEdit(specie)}
+								/>
+								<ActionButton
+									type="button"
+									title={t('deleteButton')}
+									icon="i-material-symbols-delete-outline"
+									onClick={handleRemoveSpecie(specie.uuid)}
+								/>
+							</div>
+						</header>
+						<div className="grid grid-cols-5 items-center gap-4 w-full">
+							<h3 className="font-semibold text-center col-span-2">{t('breed')}</h3>
+							<h3 className="font-semibold text-center col-span-2">{t('gestationPeriod')}</h3>
+							<ActionButton
+								type="button"
+								title={t('addButton')}
+								icon="i-material-symbols-add-circle-outline"
+								onClick={handleAddBreed(specie)}
+								disabled={!specie.editable}
+							/>
+						</div>
+						{specie.breeds.map((breed) => (
+							<div className="grid grid-cols-5 items-center gap-4 w-full" key={breed.uuid}>
+								<div className="col-span-2">
 									<TextField
 										name="name"
 										type="text"
-										value={specie.name}
-										onChange={handleSpecieChange(specie.uuid)}
+										value={breed.name}
+										onChange={handleBreedChange(specie, breed.uuid)}
 										required={specie.editable}
 										disabled={!specie.editable}
 									/>
-								</S.Title>
-								<S.BoxActions>
-									<ActionButton
-										type="button"
-										title={t('editButton')}
-										icon="i-material-symbols-edit-square-outline"
-										onClick={handleEdit(specie)}
+								</div>
+								<div className="col-span-2">
+									<TextField
+										name="gestationPeriod"
+										type="number"
+										value={breed.gestationPeriod}
+										onChange={handleBreedChange(specie, breed.uuid)}
+										onWheel={(e) => e.currentTarget.blur()}
+										required={specie.editable}
+										disabled={!specie.editable}
 									/>
-									<ActionButton
-										type="button"
-										title={t('deleteButton')}
-										icon="i-material-symbols-delete-outline"
-										onClick={handleRemoveSpecie(specie.uuid)}
-									/>
-								</S.BoxActions>
-							</S.BoxHeader>
-							<S.DataContainer>
-								<S.DataHeader>{t('breed')}</S.DataHeader>
-								<S.DataHeader>{t('gestationPeriod')}</S.DataHeader>
+								</div>
 								<ActionButton
 									type="button"
-									title={t('addButton')}
-									icon="i-material-symbols-add-circle-outline"
-									onClick={handleAddBreed(specie)}
+									title={t('removeButton')}
+									icon="i-material-symbols-delete-outline"
+									onClick={handleRemoveBreed(specie, breed.uuid)}
 									disabled={!specie.editable}
 								/>
-							</S.DataContainer>
-							<S.DataBody>
-								{specie.breeds.map((breed) => (
-									<S.DataContainer key={breed.uuid}>
-										<TextField
-											name="name"
-											type="text"
-											value={breed.name}
-											onChange={handleBreedChange(specie, breed.uuid)}
-											required={specie.editable}
-											disabled={!specie.editable}
-										/>
-										<TextField
-											name="gestationPeriod"
-											type="number"
-											value={breed.gestationPeriod}
-											onChange={handleBreedChange(specie, breed.uuid)}
-											onWheel={(e) => e.currentTarget.blur()}
-											required={specie.editable}
-											disabled={!specie.editable}
-										/>
-										<ActionButton
-											type="button"
-											title={t('removeButton')}
-											icon="i-material-symbols-delete-outline"
-											onClick={handleRemoveBreed(specie, breed.uuid)}
-											disabled={!specie.editable}
-										/>
-									</S.DataContainer>
-								))}
-							</S.DataBody>
-							<Button type="submit" disabled={!specie.editable}>
-								{t('saveButton')}
-							</Button>
-						</S.Box>
-					))}
-				</S.Form>
-			</S.Body>
-		</S.MySpecies>
+							</div>
+						))}
+						<Button type="submit" disabled={!specie.editable}>
+							{t('saveButton')}
+						</Button>
+					</div>
+				))}
+			</form>
+		</div>
 	)
 }
 
