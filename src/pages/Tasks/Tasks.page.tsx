@@ -15,8 +15,6 @@ import { TasksService } from '@/services/tasks'
 
 import type { DividedTasks, TaskFilters } from './Tasks.types'
 
-import * as S from './Tasks.styles'
-
 export const Tasks = () => {
 	const { user } = useUserStore()
 	const { farm } = useFarmStore()
@@ -62,6 +60,20 @@ export const Tasks = () => {
 			setLoading(false)
 		}
 	}
+
+	const handlePriorityColor = (priority: string) => {
+		switch (priority) {
+			case 'low':
+				return 'bg-green-500'
+			case 'medium':
+				return 'bg-yellow-500'
+			case 'high':
+				return 'bg-red-500'
+			default:
+				return 'bg-gray-500'
+		}
+	}
+
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect used to update tasks list
 	useEffect(() => {
 		if (!user) return
@@ -82,8 +94,8 @@ export const Tasks = () => {
 	}, [setHeaderTitle, t])
 
 	return (
-		<S.Container>
-			<S.Filters>
+		<div className="flex flex-col gap-4 p-4 w-full h-full">
+			<div className="flex flex-col md:grid md:grid-cols-6 items-center justify-center gap-4 w-full">
 				<Search placeholder={t('search')} onChange={handleDebounceSearch} />
 				<Select
 					name="status"
@@ -118,47 +130,72 @@ export const Tasks = () => {
 					items={species}
 					onChange={handleSelectChange}
 				/>
-				<Button onClick={handleAddTask}>{t('addTask')}</Button>
-			</S.Filters>
+				<div className="col-start-6 w-full">
+					<Button onClick={handleAddTask}>{t('addTask')}</Button>
+				</div>
+			</div>
 
 			{filters.status !== 'COMPLETED' && (
 				<>
-					<S.StatusTitle>{t('pending')}</S.StatusTitle>
-					<S.TasksList>
+					<h2 className="text-2xl font-semibold">{t('pending')}</h2>
+					<div className="flex flex-col gap-4 p-4 w-full border-2 rounded-xl border-gray-300">
 						{tasks.pending.map((task) => (
-							<S.TaskCard key={task.uuid}>
-								<S.Checkbox onChange={handleUpdateTask(task)} />
-								<S.Task>
-									<S.TaskTitle>{task.title}</S.TaskTitle>
-									<S.TaskDescription>{task.description}</S.TaskDescription>
-								</S.Task>
-								<S.PriorityColor $priority={task.priority} />
-							</S.TaskCard>
+							<div
+								key={task.uuid}
+								className="flex flex-row gap-4 items-center p-4 w-full border-2 rounded-xl border-gray-300 relative"
+							>
+								<input
+									type="checkbox"
+									className="checkbox checkbox-success"
+									onChange={handleUpdateTask(task)}
+								/>
+								<div className="flex flex-col w-[85%] sm:w-[90%]">
+									<h2 className="text-xl font-semibold">{task.title}</h2>
+									<p>{task.description}</p>
+								</div>
+								<div
+									className={`${handlePriorityColor(task.priority)} absolute right-0 top-0 bottom-0 w-10 rounded-r-lg`}
+								/>
+							</div>
 						))}
-						{tasks && tasks.pending.length === 0 && <S.NoTasks>{t('noTasks')}</S.NoTasks>}
-					</S.TasksList>
+						{tasks && tasks.pending.length === 0 && (
+							<div className="text-center text-2xl font-semibold">{t('noTasks')}</div>
+						)}
+					</div>
 				</>
 			)}
 
 			{filters.status !== 'PENDING' && (
 				<>
-					<S.StatusTitle>{t('completed')}</S.StatusTitle>
-					<S.TasksList>
+					<h2 className="text-2xl font-semibold">{t('completed')}</h2>
+					<div className="flex flex-col gap-4 p-4 w-full border-2 rounded-xl border-gray-300">
 						{tasks.completed.map((task) => (
-							<S.TaskCard key={task.uuid}>
-								<S.Checkbox onChange={handleUpdateTask(task)} checked />
-								<S.Task>
-									<S.TaskTitle>{task.title}</S.TaskTitle>
-									<S.TaskDescription>{task.description}</S.TaskDescription>
-								</S.Task>
-								<S.PriorityColor $priority={task.priority} />
-							</S.TaskCard>
+							<div
+								key={task.uuid}
+								className="flex flex-row gap-4 items-center p-4 w-full border-2 rounded-xl border-gray-300 relative"
+							>
+								<input
+									type="checkbox"
+									className="checkbox checkbox-success"
+									onChange={handleUpdateTask(task)}
+									checked
+								/>
+								<div className="flex flex-col w-[85%] sm:w-[90%]">
+									<h2 className="text-xl font-semibold">{task.title}</h2>
+									<p>{task.description}</p>
+								</div>
+								<div
+									className={`${handlePriorityColor(task.priority)} absolute right-0 top-0 bottom-0 w-10 rounded-r-lg`}
+								/>
+							</div>
 						))}
-						{tasks && tasks.completed.length === 0 && <S.NoTasks>{t('noTasks')}</S.NoTasks>}
-					</S.TasksList>
+						{tasks && tasks.completed.length === 0 && (
+							<div className="text-center text-2xl font-semibold">{t('noTasks')}</div>
+						)}
+					</div>
 				</>
 			)}
-		</S.Container>
+		</div>
 	)
 }
 
