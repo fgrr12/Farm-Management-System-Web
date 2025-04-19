@@ -28,5 +28,5 @@ export enum AppRoutes {
 	ADD_TASK = '/tasks/add-task',
 
 	// Billing Card
-	BILLING_CARD = '/billing-card',
+	BUSINESS_CARD = '/business-card',
 }

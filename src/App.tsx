@@ -8,7 +8,7 @@ import { auth } from './config/environment'
 import { Animal } from './pages/Animal'
 import { AnimalForm } from './pages/AnimalForm'
 import { Animals } from './pages/Animals'
-import { BillingCard } from './pages/BillingCard'
+import { BusinessCard } from './pages/BusinessCard'
 import { EmployeeForm } from './pages/EmployeeForm'
 import { Employees } from './pages/Employees'
 import { HealthRecordForm } from './pages/HealthRecordForm'
@@ -208,10 +208,10 @@ export const App: FC = () => {
 					/>
 
 					<Route
-						path={AppRoutes.BILLING_CARD}
+						path={AppRoutes.BUSINESS_CARD}
 						element={
 							<PrivateRoute>
-								<BillingCard />
+								<BusinessCard />
 							</PrivateRoute>
 						}
 					/>
