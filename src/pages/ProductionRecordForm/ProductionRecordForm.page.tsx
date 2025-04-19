@@ -14,8 +14,6 @@ import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
-import * as S from './ProductionRecordForm.styles'
-
 export const ProductionRecordForm = () => {
 	const { user } = useUserStore()
 	const { farm } = useFarmStore()
@@ -119,8 +117,12 @@ export const ProductionRecordForm = () => {
 	}, [setHeaderTitle, t, params.productionRecordUuid])
 
 	return (
-		<S.Container>
-			<S.Form onSubmit={handleSubmit} autoComplete="off">
+		<div className="flex flex-col justify-center items-center w-full h-full overflow-auto p-5">
+			<form
+				className="flex flex-col sm:grid sm:grid-cols-2 items-center gap-4 max-w-[400px] w-full"
+				onSubmit={handleSubmit}
+				autoComplete="off"
+			>
 				<TextField
 					name="quantity"
 					type="number"
@@ -137,7 +139,7 @@ export const ProductionRecordForm = () => {
 					date={dayjs(productionRecordForm.date)}
 					onDateChange={handleDateChange()}
 				/>
-				<S.TextareaContainer>
+				<div className="col-span-2 w-full">
 					<Textarea
 						name="notes"
 						placeholder={t('notes')}
@@ -146,12 +148,14 @@ export const ProductionRecordForm = () => {
 						onChange={handleTextareaChange}
 						required
 					/>
-				</S.TextareaContainer>
-				<Button type="submit">
-					{params.productionRecordUuid ? t('editButton') : t('addButton')}
-				</Button>
-			</S.Form>
-		</S.Container>
+				</div>
+				<div className="col-span-2 w-full">
+					<Button type="submit">
+						{params.productionRecordUuid ? t('editButton') : t('addButton')}
+					</Button>
+				</div>
+			</form>
+		</div>
 	)
 }
 
