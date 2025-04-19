@@ -6,17 +6,23 @@ import type { ActionButtonProps } from './ActionButton.types'
  * @param {string} icon - Name of unoCSS icon
  **/
 export const ActionButton: FC<ActionButtonProps> = ({ icon, ...rest }) => {
+	const iconColor = () => {
+		switch (icon) {
+			case 'i-material-symbols-add-circle-outline':
+				return 'bg-blue-500!'
+			case 'i-material-symbols-delete-outline':
+				return 'bg-red-500!'
+			default:
+				return ''
+		}
+	}
 	return (
 		<button
 			type="button"
 			className="btn btn-circle bg-transparent border-none shadow-none"
 			{...rest}
 		>
-			{icon !== 'i-material-symbols-delete-outline' ? (
-				<i className={`${icon} h-7! w-7! ${rest.disabled ? 'bg-gray-400!' : ''}`} />
-			) : (
-				<i className={`${icon} h-7! w-7! ${rest.disabled ? 'bg-gray-400!' : 'bg-red-500!'}`} />
-			)}
+			<i className={`${icon} h-7! w-7! ${rest.disabled ? 'bg-gray-400!' : iconColor()}`} />
 		</button>
 	)
 }
