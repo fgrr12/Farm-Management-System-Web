@@ -106,7 +106,7 @@ export const EmployeeForm: FC = () => {
 	}, [setHeaderTitle, t, params.employeeUuid])
 
 	return (
-		<div className="flex flex-col justify-center items-center w-full h-full overflow-auto p-5">
+		<div className="flex flex-col justify-center items-center w-full overflow-auto p-5">
 			<form
 				className="flex flex-col items-center gap-4 max-w-[400px] w-full"
 				onSubmit={handleSubmit}

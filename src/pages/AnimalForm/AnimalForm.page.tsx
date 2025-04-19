@@ -159,7 +159,7 @@ export const AnimalForm = () => {
 	}, [setHeaderTitle, t, params.animalUuid])
 
 	return (
-		<div className="flex flex-col justify-center items-center w-full h-full overflow-auto p-5">
+		<div className="flex flex-col justify-center items-center w-fulloverflow-auto p-5">
 			<form
 				className="flex flex-col sm:grid sm:grid-cols-2 items-center gap-4 max-w-[800px] w-full"
 				onSubmit={handleSubmit}
