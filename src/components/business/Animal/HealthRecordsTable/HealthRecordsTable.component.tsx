@@ -55,26 +55,26 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 	const trBgColor = (reason: HealthRecordType) => {
 		switch (reason) {
 			case 'Checkup':
-				return 'bg-amber-300'
+				return 'bg-sky-100'
 			case 'Vaccination':
-				return 'bg-red-300'
+				return 'bg-emerald-100'
 			case 'Medication':
-				return 'bg-green-300'
+				return 'bg-teal-100'
 			case 'Surgery':
-				return 'bg-cyan-300'
+				return 'bg-indigo-100'
 			case 'Pregnancy':
-				return 'bg-pink-300'
+				return 'bg-rose-100'
 			case 'Deworming':
-				return 'bg-fuchsia-300'
+				return 'bg-pink-100'
 			case 'Birth':
-				return 'bg-purple-300'
+				return 'bg-yellow-100'
 			case 'Drying':
-				return 'bg-yellow-300'
+				return 'bg-orange-100'
 		}
 	}
 
 	return (
-		<div className="w-full xl:w-auto">
+		<div className="w-full xl:w-auto bg">
 			<div className="flex justify-center items-center">
 				<div className="font-bold">{t('title')}</div>
 				{haveUser && (
