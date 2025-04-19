@@ -32,8 +32,6 @@ import { useFarmStore } from './store/useFarmStore'
 import { useUserStore } from './store/useUserStore'
 import { PrivateRoute } from './utils/PrivateRoute'
 
-import { AppContainer, AppContent } from './styles/root'
-
 export const App: FC = () => {
 	const { user, setUser } = useUserStore()
 	const { setFarm } = useFarmStore()
@@ -65,9 +63,9 @@ export const App: FC = () => {
 	}, [user])
 
 	return (
-		<AppContainer className="app">
+		<div className="app w-full h-full">
 			{location.pathname !== AppRoutes.LOGIN && <Navbar />}
-			<AppContent>
+			<div className="flex w-full h-full">
 				{location.pathname !== AppRoutes.LOGIN && <Sidebar />}
 				<Routes>
 					<Route path="/" element={<Navigate to={AppRoutes.ANIMALS} />} key="home" />
@@ -225,7 +223,7 @@ export const App: FC = () => {
 					onCancel={modalData.onCancel}
 				/>
 				<Loading open={appLoading} />
-			</AppContent>
-		</AppContainer>
+			</div>
+		</div>
 	)
 }
