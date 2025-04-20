@@ -4,14 +4,15 @@ import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
 import { CardContainer } from '@/components/business/RelatedAnimals/CardContainer'
+import { ExternalRelationForm } from '@/components/business/RelatedAnimals/ExternalRelationForm'
 import { RelatedAnimalCard } from '@/components/business/RelatedAnimals/RelatedAnimalCard'
+import { Button } from '@/components/ui/Button'
 
 import { AnimalsService } from '@/services/animals'
 import { RelatedAnimalsService } from '@/services/relatedAnimals'
 import { useAppStore } from '@/store/useAppStore'
 import { useUserStore } from '@/store/useUserStore'
 
-import { Button } from '@/components/ui/Button'
 import type {
 	DragSingularRelation,
 	RelatedAnimalInformation,
@@ -249,7 +250,9 @@ export const RelatedAnimalsForm: FC = () => {
 				<div className="flex flex-col gap-4 w-full h-full p-4">
 					<div className="text-center text-2xl font-semibold">{t('currentAnimal')}</div>
 					<RelatedAnimalCard animal={currentAnimal} />
-					<Button onClick={() => {}}>{t('addExternalRelation')}</Button>
+					<Button onClick={() => document?.querySelector('dialog')?.showModal()}>
+						{t('addExternalRelation')}
+					</Button>
 				</div>
 			)}
 			<CardContainer title={t('animals')} location={0}>
@@ -267,6 +270,7 @@ export const RelatedAnimalsForm: FC = () => {
 					<RelatedAnimalCard key={animal.animalId} animal={animal} draggable />
 				))}
 			</CardContainer>
+			{currentAnimal && <ExternalRelationForm currentAnimal={currentAnimal} />}
 		</div>
 	)
 }

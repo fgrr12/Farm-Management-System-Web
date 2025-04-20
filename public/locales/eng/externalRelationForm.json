@@ -1,0 +1,15 @@
+{
+	"title": "Add External Relation",
+	"animalId": "Animal ID",
+	"breed": "Breed",
+	"gender": "Gender",
+	"male": "Male",
+	"female": "Female",
+	"save": "Save",
+	"cancel": "Cancel",
+	"relation": {
+		"parent": "Parent",
+		"child": "Son/Daughter"
+	},
+	"newRelationPhrase": "The animal {{animalId}} will be {{relation}} of {{currentAnimal}}"
+}
