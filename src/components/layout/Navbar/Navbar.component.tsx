@@ -1,5 +1,5 @@
 import { AppRoutes } from '@/config/constants/routes'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -11,6 +11,7 @@ import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
 export const Navbar: FC = () => {
+	const drawerRef = useRef<HTMLInputElement>(null)
 	const { user, setUser } = useUserStore()
 	const { farm, setFarm } = useFarmStore()
 	const { t } = useTranslation('common')
@@ -33,6 +34,15 @@ export const Navbar: FC = () => {
 		navigate(path.join('/'))
 	}
 
+	const closeDrawer = () => {
+		if (drawerRef.current) drawerRef.current.checked = false
+	}
+
+	const goTo = (path: string) => () => {
+		navigate(path)
+		closeDrawer()
+	}
+
 	const handleLogout = async () => {
 		if (!user) return
 		await UserService.logout()
@@ -47,7 +57,7 @@ export const Navbar: FC = () => {
 	}, [theme])
 	return (
 		<div className="drawer">
-			<input id="my-drawer" type="checkbox" className="drawer-toggle" />
+			<input id="my-drawer" type="checkbox" className="drawer-toggle" ref={drawerRef} />
 			<div className="drawer-content">
 				<div className="navbar bg-base-100 shadow-sm">
 					<div className="navbar-start">
@@ -83,7 +93,7 @@ export const Navbar: FC = () => {
 						<button
 							type="button"
 							className="flex items-center gap-2 px-4 py-2 selection:bg-red"
-							onClick={() => navigate(AppRoutes.ANIMALS)}
+							onClick={goTo(AppRoutes.ANIMALS)}
 						>
 							<i className="i-healthicons-animal-cow w-8! h-8!" />
 							<span className="text-sm">{t('sidebar.animals')}</span>
@@ -93,7 +103,7 @@ export const Navbar: FC = () => {
 						<button
 							type="button"
 							className="flex items-center gap-2 px-4 py-2 selection:bg-red"
-							onClick={() => navigate(AppRoutes.TASKS)}
+							onClick={goTo(AppRoutes.TASKS)}
 						>
 							<i className="i-fluent-tasks-app-24-filled w-8! h-8!" />
 							<span className="text-sm">{t('sidebar.tasks')}</span>
@@ -105,7 +115,7 @@ export const Navbar: FC = () => {
 						<button
 							type="button"
 							className="flex items-center gap-2 px-4 py-2 selection:bg-red"
-							onClick={() => navigate(AppRoutes.MY_SPECIES)}
+							onClick={goTo(AppRoutes.MY_SPECIES)}
 						>
 							<i className="i-solar-dna-bold-duotone w-8! h-8!" />
 							<span className="text-sm">{t('sidebar.mySpecies')}</span>
@@ -121,7 +131,7 @@ export const Navbar: FC = () => {
 							<button
 								type="button"
 								className="flex items-center gap-2 px-4 py-2 selection:bg-red"
-								onClick={() => navigate(AppRoutes.EMPLOYEES)}
+								onClick={goTo(AppRoutes.EMPLOYEES)}
 							>
 								<i className="i-clarity-employee-group-solid w-8! h-8!" />
 								<span className="text-sm">{t('sidebar.employees')}</span>
@@ -137,7 +147,7 @@ export const Navbar: FC = () => {
 							<button
 								type="button"
 								className="flex items-center gap-2 px-4 py-2"
-								onClick={() => navigate(AppRoutes.BUSINESS_CARD)}
+								onClick={goTo(AppRoutes.BUSINESS_CARD)}
 							>
 								<i className="i-typcn-business-card w-8! h-8!" />
 								<span className="text-sm">{t('sidebar.businessCard')}</span>
@@ -151,7 +161,7 @@ export const Navbar: FC = () => {
 						<button
 							type="button"
 							className="flex items-center gap-2 px-4 py-2 selection:bg-red"
-							onClick={() => navigate(AppRoutes.MY_ACCOUNT)}
+							onClick={goTo(AppRoutes.MY_ACCOUNT)}
 						>
 							<i className="i-material-symbols-account-circle w-8! h-8!" />
 							<span className="text-sm">{t('sidebar.myAccount')}</span>
