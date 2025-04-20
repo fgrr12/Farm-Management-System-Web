@@ -184,14 +184,14 @@ export const MySpecies: FC = () => {
 				</div>
 			</div>
 			<form
-				className="flex flex-row flex-wrap gap-8 sm:justify-start justify-center align-center w-full"
+				className="grid grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-4 w-full"
 				autoComplete="off"
 				onSubmit={handleSubmit}
 			>
 				{species.map((specie) => (
 					<div
 						key={specie.uuid}
-						className="flex flex-col w-90 gap-4 p-4 border-2 rounded-xl border-gray-300"
+						className="flex flex-col w-full gap-4 p-4 border-2 rounded-xl border-gray-300"
 					>
 						<header className="flex flex-row justify-between items-center">
 							<div className="text-xl font-bold">
