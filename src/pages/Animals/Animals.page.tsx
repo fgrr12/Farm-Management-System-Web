@@ -97,7 +97,7 @@ export const Animals = () => {
 					{t('addAnimal')}
 				</button>
 			</div>
-			<div className="flex flex-col md:grid md:grid-cols-6 items-center justify-center gap-4 w-full">
+			<div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 w-full">
 				{animals.map((animal) => (
 					<AnimalCard
 						key={crypto.randomUUID()}
