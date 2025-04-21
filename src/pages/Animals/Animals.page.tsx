@@ -64,18 +64,23 @@ export const Animals = () => {
 		}
 	}
 
+	useEffect(() => {
+		setHeaderTitle(t('title'))
+	}, [setHeaderTitle, t])
+
+	useEffect(() => {
+		if (user && farm) {
+			setSpecies(farm.species!)
+		}
+	}, [farm, user])
+
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		setLoading(true)
 		if (user && farm) {
-			setSpecies(farm.species!)
 			getAnimals()
 		}
-	}, [filters, user])
-
-	useEffect(() => {
-		setHeaderTitle(t('title'))
-	}, [setHeaderTitle, t])
+	}, [filters, user, farm])
 
 	return (
 		<div className="flex flex-col gap-5 p-4 w-full h-full overflow-auto">
@@ -100,7 +105,7 @@ export const Animals = () => {
 			<div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 w-full">
 				{animals.map((animal) => (
 					<AnimalCard
-						key={crypto.randomUUID()}
+						key={animal.uuid}
 						animalId={animal.animalId}
 						breed={animal.breed}
 						gender={animal.gender}
