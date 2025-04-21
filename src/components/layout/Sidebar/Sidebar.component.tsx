@@ -70,14 +70,12 @@ export const Sidebar: FC = () => {
 			)}
 			{(user?.role === 'admin' || user?.role === 'owner') && (
 				<li
-					className={
-						location.pathname.includes(AppRoutes.BUSINESS_CARD) ? 'bg-info rounded-sm' : ''
-					}
+					className={location.pathname.includes(AppRoutes.BILLING_CARD) ? 'bg-info rounded-sm' : ''}
 				>
 					<button
 						type="button"
 						className="flex items-center gap-2 px-4 py-2"
-						onClick={() => navigate(AppRoutes.BUSINESS_CARD)}
+						onClick={() => navigate(AppRoutes.BILLING_CARD)}
 					>
 						<i className="i-typcn-business-card w-8! h-8!" />
 					</button>

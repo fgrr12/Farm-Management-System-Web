@@ -12,8 +12,6 @@ import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
-import type { FarmData } from './MyAccount.types'
-
 export const MyAccount: FC = () => {
 	const { user: currentUser, setUser: updateUser } = useUserStore()
 	const { farm: currentFarm, setFarm: updateFarm } = useFarmStore()
@@ -21,7 +19,8 @@ export const MyAccount: FC = () => {
 	const { t } = useTranslation(['myAccount'])
 
 	const [user, setUser] = useState<User>(INITIAL_USER_DATA)
-	const [farm, setFarm] = useState<FarmData>(INITIAL_FARM_DATA)
+	const [farm, setFarm] = useState<Farm>(INITIAL_FARM_DATA)
+	const [billingCard, setBillingCard] = useState<BillingCard>(INITIAL_BILLING_CARD)
 	const [edit, setEdit] = useState(INITIAL_EDIT)
 
 	const languages = [
@@ -44,28 +43,23 @@ export const MyAccount: FC = () => {
 		{ value: '°F', name: t('myFarm.temperatureUnitList.°F') },
 	]
 
-	const handleEdit = (key: 'farm' | 'user') => () => {
+	const handleEdit = (key: 'farm' | 'user' | 'billingCard') => () => {
 		setEdit((prev) => ({ ...prev, [key]: !prev[key] }))
 	}
 
-	const handleTextChange = (isUser?: boolean) => (event: ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = event.target
+	const handleChange =
+		(key: 'farm' | 'user' | 'billingCard') =>
+		(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+			const { name, value } = event.target
 
-		if (isUser) {
-			setUser((prev) => ({ ...prev, [name]: value }))
-		} else {
-			setFarm((prev) => ({ ...prev, [name]: value }))
+			if (key === 'user') {
+				setUser((prev) => ({ ...prev, [name]: value }))
+			} else if (key === 'farm') {
+				setFarm((prev) => ({ ...prev, [name]: value }))
+			} else {
+				setBillingCard((prev) => ({ ...prev, [name]: value }))
+			}
 		}
-	}
-
-	const handleSelectChange = (isUser?: boolean) => (event: ChangeEvent<HTMLSelectElement>) => {
-		const { name, value } = event.target
-		if (isUser) {
-			setUser((prev) => ({ ...prev, [name]: value }))
-		} else {
-			setFarm((prev) => ({ ...prev, [name]: value }))
-		}
-	}
 
 	const handleSubmitUser = async (e: FormEvent) => {
 		e.preventDefault()
@@ -99,6 +93,7 @@ export const MyAccount: FC = () => {
 		e.preventDefault()
 		try {
 			setLoading(true)
+			farm.billingCard = billingCard
 			await FarmsService.updateFarm({ ...farm })
 			updateFarm({ ...farm })
 			setEdit((prev) => ({ ...prev, farm: false }))
@@ -124,12 +119,43 @@ export const MyAccount: FC = () => {
 		}
 	}
 
+	const handleSubmitBillingCard = async (e: FormEvent) => {
+		e.preventDefault()
+		try {
+			setLoading(true)
+			farm.billingCard = billingCard
+			await FarmsService.updateFarm({ ...farm })
+			updateFarm({ ...farm })
+			setEdit((prev) => ({ ...prev, billingCard: false }))
+			setModalData({
+				open: true,
+				title: t('myBillingCard.modal.editBillingCard.title'),
+				message: t('myBillingCard.modal.editBillingCard.message'),
+				onAccept: () => {
+					setModalData(defaultModalData)
+				},
+			})
+		} catch (error) {
+			setModalData({
+				open: true,
+				title: t('myBillingCard.modal.errorBillingCard.title'),
+				message: t('myBillingCard.modal.errorBillingCard.message'),
+				onAccept: () => {
+					setModalData(defaultModalData)
+				},
+			})
+		} finally {
+			setLoading(false)
+		}
+	}
+
 	// biome-ignore lint/correctness/useExhaustiveDependencies: useEffect is only called once
 	useEffect(() => {
 		if (!user || !currentFarm) return
 
 		setUser(currentUser!)
 		setFarm({ ...currentFarm! })
+		setBillingCard({ ...currentFarm!.billingCard! })
 	}, [currentUser, currentFarm])
 
 	useEffect(() => {
@@ -158,8 +184,8 @@ export const MyAccount: FC = () => {
 								name="name"
 								label={t('myProfile.name')}
 								placeholder={t('myProfile.name')}
-								value={user!.name}
-								onChange={handleTextChange(true)}
+								value={user.name}
+								onChange={handleChange('user')}
 								disabled={!edit.user}
 								required
 							/>
@@ -167,8 +193,8 @@ export const MyAccount: FC = () => {
 								name="lastName"
 								label={t('myProfile.lastName')}
 								placeholder={t('myProfile.lastName')}
-								value={user!.lastName}
-								onChange={handleTextChange(true)}
+								value={user.lastName}
+								onChange={handleChange('user')}
 								disabled={!edit.user}
 								required
 							/>
@@ -176,8 +202,8 @@ export const MyAccount: FC = () => {
 								name="email"
 								label={t('myProfile.email')}
 								placeholder={t('myProfile.email')}
-								value={user!.email}
-								onChange={handleTextChange(true)}
+								value={user.email}
+								onChange={handleChange('user')}
 								disabled={!edit.user}
 								required
 							/>
@@ -187,8 +213,8 @@ export const MyAccount: FC = () => {
 								name="phone"
 								label={t('myProfile.phone')}
 								placeholder={t('myProfile.phone')}
-								value={user!.phone}
-								onChange={handleTextChange(true)}
+								value={user.phone}
+								onChange={handleChange('user')}
 								disabled={!edit.user}
 								required
 							/>
@@ -196,9 +222,9 @@ export const MyAccount: FC = () => {
 								name="language"
 								legend={t('myProfile.selectLanguage')}
 								defaultLabel={t('myProfile.selectLanguage')}
-								value={user!.language}
+								value={user.language}
 								items={languages}
-								onChange={handleSelectChange(true)}
+								onChange={handleChange('user')}
 								disabled={!edit.user}
 								required
 							/>
@@ -231,8 +257,8 @@ export const MyAccount: FC = () => {
 									name="name"
 									label={t('myFarm.name')}
 									placeholder={t('myFarm.name')}
-									value={farm!.name}
-									onChange={handleTextChange()}
+									value={farm.name}
+									onChange={handleChange('farm')}
 									disabled={!edit.farm}
 									required
 								/>
@@ -240,8 +266,8 @@ export const MyAccount: FC = () => {
 									name="address"
 									label={t('myFarm.address')}
 									placeholder={t('myFarm.address')}
-									value={farm!.address}
-									onChange={handleTextChange()}
+									value={farm.address}
+									onChange={handleChange('farm')}
 									disabled={!edit.farm}
 									required
 								/>
@@ -251,9 +277,9 @@ export const MyAccount: FC = () => {
 									name="liquidUnit"
 									legend={t('myFarm.liquidUnit')}
 									defaultLabel={t('myFarm.liquidUnit')}
-									value={farm!.liquidUnit}
+									value={farm.liquidUnit}
 									items={liquidUnit}
-									onChange={handleSelectChange()}
+									onChange={handleChange('farm')}
 									disabled={!edit.farm}
 									required
 								/>
@@ -261,9 +287,9 @@ export const MyAccount: FC = () => {
 									name="weightUnit"
 									legend={t('myFarm.weightUnit')}
 									defaultLabel={t('myFarm.weightUnit')}
-									value={farm!.weightUnit}
+									value={farm.weightUnit}
 									items={weightUnit}
-									onChange={handleSelectChange()}
+									onChange={handleChange('farm')}
 									disabled={!edit.farm}
 									required
 								/>
@@ -271,15 +297,88 @@ export const MyAccount: FC = () => {
 									name="temperatureUnit"
 									legend={t('myFarm.temperatureUnit')}
 									defaultLabel={t('myFarm.temperatureUnit')}
-									value={farm!.temperatureUnit}
+									value={farm.temperatureUnit}
 									items={temperatureUnit}
-									onChange={handleSelectChange()}
+									onChange={handleChange('farm')}
 									disabled={!edit.farm}
 									required
 								/>
 							</div>
 							<Button type="submit" disabled={!edit.farm}>
 								{t('myFarm.edit')}
+							</Button>
+						</form>
+					</div>
+				</div>
+			)}
+			{(user.role === 'admin' || user.role === 'owner') && (
+				<div className="flex flex-col p-4">
+					<div className="flex flex-col p-4 gap-4 border-2 rounded-xl border-gray-200">
+						<h2 className="flex items-center gap-4 text-xl font-bold">
+							{t('myBillingCard.title')}
+							<ActionButton
+								title="Edit"
+								icon="i-material-symbols-edit-square-outline"
+								onClick={handleEdit('billingCard')}
+							/>
+						</h2>
+						<p className="text-lg">{t('myBillingCard.subtitle')}</p>
+						<form
+							className="flex flex-col gap-4 w-full"
+							onSubmit={handleSubmitBillingCard}
+							autoComplete="off"
+						>
+							<div className="grid grid-cols-3 items-center gap-4 w-full">
+								<TextField
+									name="id"
+									label={t('myBillingCard.id')}
+									placeholder={t('myBillingCard.id')}
+									value={billingCard.id}
+									onChange={handleChange('billingCard')}
+									disabled={!edit.billingCard}
+									required
+								/>
+								<TextField
+									name="name"
+									label={t('myBillingCard.name')}
+									placeholder={t('myBillingCard.name')}
+									value={billingCard.name}
+									onChange={handleChange('billingCard')}
+									disabled={!edit.billingCard}
+									required
+								/>
+								<TextField
+									name="email"
+									label={t('myBillingCard.email')}
+									placeholder={t('myBillingCard.email')}
+									value={billingCard.email}
+									onChange={handleChange('billingCard')}
+									disabled={!edit.billingCard}
+									required
+								/>
+							</div>
+							<div className="grid grid-cols-3 items-center gap-4 w-full">
+								<TextField
+									name="phone"
+									label={t('myBillingCard.phone')}
+									placeholder={t('myBillingCard.phone')}
+									value={billingCard.phone}
+									onChange={handleChange('billingCard')}
+									disabled={!edit.billingCard}
+									required
+								/>
+								<TextField
+									name="address"
+									label={t('myBillingCard.address')}
+									placeholder={t('myBillingCard.address')}
+									value={billingCard.address}
+									onChange={handleChange('billingCard')}
+									disabled={!edit.billingCard}
+									required
+								/>
+							</div>
+							<Button type="submit" disabled={!edit.billingCard}>
+								{t('myBillingCard.edit')}
 							</Button>
 						</form>
 					</div>
@@ -302,17 +401,27 @@ const INITIAL_USER_DATA: User = {
 	farmUuid: '',
 }
 
-const INITIAL_FARM_DATA: FarmData = {
+const INITIAL_BILLING_CARD: BillingCard = {
+	name: '',
+	phone: '',
+	id: '',
+	email: '',
+	address: '',
+}
+
+const INITIAL_FARM_DATA: Farm = {
 	uuid: '',
 	name: '',
 	address: '',
 	liquidUnit: 'L',
 	weightUnit: 'Kg',
 	temperatureUnit: '°C',
+	billingCard: INITIAL_BILLING_CARD,
 	status: true,
 }
 
 const INITIAL_EDIT = {
 	user: false,
 	farm: false,
+	billingCard: false,
 }

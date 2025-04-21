@@ -60,5 +60,25 @@
 				"message": "There was an error updating your farm"
 			}
 		}
+	},
+	"myBillingCard": {
+		"title": "My Billing Card",
+		"subtitle": "Manage your billing card",
+		"id": "ID",
+		"name": "Name",
+		"email": "Email",
+		"phone": "Phone",
+		"address": "Address",
+		"edit": "Update My Billing Card",
+		"modal": {
+			"editBillingCard": {
+				"title": "Billing Card Updated",
+				"message": "Your billing card has been updated successfully"
+			},
+			"errorBillingCard": {
+				"title": "Error",
+				"message": "There was an error updating your billing card"
+			}
+		}
 	}
 }

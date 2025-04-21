@@ -60,5 +60,25 @@
 				"message": "Ocurrió un error al actualizar tu granja"
 			}
 		}
+	},
+	"myBillingCard": {
+		"title": "Mi Tarjeta de Facturación",
+		"subtitle": "Gestiona tu tarjeta de facturación",
+		"id": "ID",
+		"name": "Nombre",
+		"email": "Email",
+		"phone": "Teléfono",
+		"address": "Dirección",
+		"edit": "Actualizar Mi Tarjeta de Facturación",
+		"modal": {
+			"editBillingCard": {
+				"title": "Tarjeta de Facturación Actualizada",
+				"message": "Tu tarjeta de facturación ha sido actualizada exitosamente"
+			},
+			"errorBillingCard": {
+				"title": "Error",
+				"message": "Ocurrió un error al actualizar tu tarjeta de facturación"
+			}
+		}
 	}
 }

@@ -8,7 +8,7 @@ import { auth } from './config/environment'
 import { Animal } from './pages/Animal'
 import { AnimalForm } from './pages/AnimalForm'
 import { Animals } from './pages/Animals'
-import { BusinessCard } from './pages/BusinessCard'
+import { BillingCard } from './pages/BillingCard'
 import { EmployeeForm } from './pages/EmployeeForm'
 import { Employees } from './pages/Employees'
 import { HealthRecordForm } from './pages/HealthRecordForm'
@@ -51,6 +51,11 @@ export const App: FC = () => {
 			}
 			const user = await UserService.getUser(authUser!.uid)
 			const farm = await FarmsService.getFarm(user!.farmUuid)
+
+			if (user?.role !== 'admin' && user?.role !== 'owner') {
+				farm.billingCard = null
+			}
+
 			setUser(user)
 			setFarm(farm)
 		})
@@ -207,10 +212,10 @@ export const App: FC = () => {
 						/>
 
 						<Route
-							path={AppRoutes.BUSINESS_CARD}
+							path={AppRoutes.BILLING_CARD}
 							element={
 								<PrivateRoute>
-									<BusinessCard />
+									<BillingCard />
 								</PrivateRoute>
 							}
 						/>
