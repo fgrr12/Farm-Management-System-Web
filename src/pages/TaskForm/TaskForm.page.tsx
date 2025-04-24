@@ -1,4 +1,5 @@
 import { AppRoutes } from '@/config/constants/routes'
+import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -25,7 +26,7 @@ export const TaskForm = () => {
 
 	const handleTextChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		const { name, value } = event.target
-		setTask((prev) => ({ ...prev, [name]: value }))
+		setTask((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
 	}
 
 	const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {

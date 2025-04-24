@@ -9,6 +9,7 @@
 	"purchaseDate": "Purchase Date",
 	"soldDate": "Sold Date",
 	"deathDate": "Death Date",
+	"origin": "Origin",
 	"parentsTitle": "Parents",
 	"childrenTitle": "Children",
 	"healthRecords": "Health Records",

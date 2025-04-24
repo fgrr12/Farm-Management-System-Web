@@ -1,10 +1,11 @@
 import { AppRoutes } from '@/config/constants/routes'
+import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 import dayjs from 'dayjs'
 import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import { DatePicker } from '@/components/ui/DatePicker'
+import { DatePicker } from '@/components/layout/DatePicker'
 import { Select } from '@/components/ui/Select'
 import { TextField } from '@/components/ui/TextField'
 import { Textarea } from '@/components/ui/Textarea'
@@ -37,14 +38,9 @@ export const HealthRecordForm = () => {
 		{ value: 'Drying', name: t('healthRecordType.drying') },
 	]
 
-	const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
+	const handleTextChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		const { name, value } = event.target
-		setHealthRecordForm((prev) => ({ ...prev, [name]: value }))
-	}
-
-	const handleTextareaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-		const { name, value } = event.target
-		setHealthRecordForm((prev) => ({ ...prev, [name]: value }))
+		setHealthRecordForm((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
 	}
 
 	const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -229,7 +225,7 @@ export const HealthRecordForm = () => {
 						placeholder={t('notes')}
 						label={t('notes')}
 						value={healthRecordForm.notes}
-						onChange={handleTextareaChange}
+						onChange={handleTextChange}
 						required
 					/>
 				</div>

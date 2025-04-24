@@ -77,3 +77,17 @@ dialog::backdrop {
 		opacity: 0.9;
 	}
 }
+
+span::first-letter,
+label::first-letter,
+ p::first-letter,
+ h1::first-letter,
+ h2::first-letter,
+ h3::first-letter,
+ h4::first-letter,
+ h5::first-letter,
+ h6::first-letter,
+ th::first-letter,
+ td::first-letter {
+	text-transform: uppercase;
+}

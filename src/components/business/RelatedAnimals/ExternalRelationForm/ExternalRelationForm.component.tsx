@@ -1,4 +1,5 @@
 import { useUserStore } from '@/store/useUserStore'
+import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 import { type ChangeEvent, type FormEventHandler, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -33,7 +34,7 @@ export const ExternalRelationForm: FC<ExternalRelationFormProps> = ({ currentAni
 				},
 			})
 		} else {
-			setRelation({ ...relation, [name]: value })
+			setRelation({ ...relation, [name]: capitalizeFirstLetter(value) })
 		}
 	}
 

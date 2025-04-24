@@ -9,6 +9,7 @@
 	"purchaseDate": "Fecha de compra",
 	"soldDate": "Fecha de venta",
 	"deathDate": "Fecha de fallecimiento",
+	"origin": "Procedencia",
 	"parentsTitle": "Padres",
 	"childrenTitle": "Hijos",
 	"healthRecords": "Registros de salud",

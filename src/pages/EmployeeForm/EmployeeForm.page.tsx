@@ -1,3 +1,4 @@
+import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -24,7 +25,7 @@ export const EmployeeForm: FC = () => {
 
 	const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target
-		setEmployee((prev) => ({ ...prev, [name]: value }))
+		setEmployee((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
 	}
 
 	const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {

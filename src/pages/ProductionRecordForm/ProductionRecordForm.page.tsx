@@ -1,11 +1,12 @@
 import { AppRoutes } from '@/config/constants/routes'
+import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 import dayjs from 'dayjs'
 import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
+import { DatePicker } from '@/components/layout/DatePicker'
 import { Button } from '@/components/ui/Button'
-import { DatePicker } from '@/components/ui/DatePicker'
 import { TextField } from '@/components/ui/TextField'
 import { Textarea } from '@/components/ui/Textarea'
 
@@ -25,14 +26,9 @@ export const ProductionRecordForm = () => {
 		INITIAL_PRODUCTION_RECORD_FORM
 	)
 
-	const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
+	const handleTextChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		const { name, value } = event.target
-		setProductionRecordForm((prev) => ({ ...prev, [name]: value }))
-	}
-
-	const handleTextareaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-		const { name, value } = event.target
-		setProductionRecordForm((prev) => ({ ...prev, [name]: value }))
+		setProductionRecordForm((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
 	}
 
 	const handleDateChange = () => (newDate: dayjs.Dayjs) => {
@@ -145,7 +141,7 @@ export const ProductionRecordForm = () => {
 						placeholder={t('notes')}
 						label={t('notes')}
 						value={productionRecordForm.notes}
-						onChange={handleTextareaChange}
+						onChange={handleTextChange}
 						required
 					/>
 				</div>

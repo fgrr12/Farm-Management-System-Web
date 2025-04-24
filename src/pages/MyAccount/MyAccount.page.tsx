@@ -1,3 +1,4 @@
+import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -48,8 +49,20 @@ export const MyAccount: FC = () => {
 	}
 
 	const handleChange =
-		(key: 'farm' | 'user' | 'billingCard') =>
-		(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+		(key: 'farm' | 'user' | 'billingCard') => (event: ChangeEvent<HTMLInputElement>) => {
+			const { name, value } = event.target
+
+			if (key === 'user') {
+				setUser((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
+			} else if (key === 'farm') {
+				setFarm((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
+			} else {
+				setBillingCard((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
+			}
+		}
+
+	const handleSelectChange =
+		(key: 'farm' | 'user' | 'billingCard') => (event: ChangeEvent<HTMLSelectElement>) => {
 			const { name, value } = event.target
 
 			if (key === 'user') {
@@ -224,7 +237,7 @@ export const MyAccount: FC = () => {
 								defaultLabel={t('myProfile.selectLanguage')}
 								value={user.language}
 								items={languages}
-								onChange={handleChange('user')}
+								onChange={handleSelectChange('user')}
 								disabled={!edit.user}
 								required
 							/>
@@ -279,7 +292,7 @@ export const MyAccount: FC = () => {
 									defaultLabel={t('myFarm.liquidUnit')}
 									value={farm.liquidUnit}
 									items={liquidUnit}
-									onChange={handleChange('farm')}
+									onChange={handleSelectChange('farm')}
 									disabled={!edit.farm}
 									required
 								/>
@@ -289,7 +302,7 @@ export const MyAccount: FC = () => {
 									defaultLabel={t('myFarm.weightUnit')}
 									value={farm.weightUnit}
 									items={weightUnit}
-									onChange={handleChange('farm')}
+									onChange={handleSelectChange('farm')}
 									disabled={!edit.farm}
 									required
 								/>
@@ -299,7 +312,7 @@ export const MyAccount: FC = () => {
 									defaultLabel={t('myFarm.temperatureUnit')}
 									value={farm.temperatureUnit}
 									items={temperatureUnit}
-									onChange={handleChange('farm')}
+									onChange={handleSelectChange('farm')}
 									disabled={!edit.farm}
 									required
 								/>

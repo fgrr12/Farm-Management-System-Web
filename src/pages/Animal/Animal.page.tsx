@@ -187,7 +187,7 @@ export const Animal: FC = () => {
 							/>
 						)}
 					</div>
-					<div className="flex flex-row gap-2 w-full">
+					<div className="grid grid-cols-2 gap-2 w-full justify-center items-center">
 						<div className="flex flex-col gap-2 w-full">
 							<DetailItem label={t('animalId')} value={animal.animalId} />
 							<DetailItem label={t('species')} value={animal.species.name} />
@@ -236,6 +236,9 @@ export const Animal: FC = () => {
 									value={dayjs(animal.soldDate).format('DD/MM/YYYY')}
 								/>
 							)}
+						</div>
+						<div className="col-span-2 w-full">
+							<DetailItem label={t('origin')} value={animal.origin} />
 						</div>
 					</div>
 				</div>

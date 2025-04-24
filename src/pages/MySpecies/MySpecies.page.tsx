@@ -1,3 +1,4 @@
+import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -24,7 +25,9 @@ export const MySpecies: FC = () => {
 
 	const handleSpecieChange = (specieUuid: string) => (event: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target
-		const sps = species.map((sp) => (sp.uuid === specieUuid ? { ...sp, [name]: value } : sp))
+		const sps = species.map((sp) =>
+			sp.uuid === specieUuid ? { ...sp, [name]: capitalizeFirstLetter(value) } : sp
+		)
 		setSpecies(sps)
 	}
 
@@ -32,7 +35,7 @@ export const MySpecies: FC = () => {
 		(specie: MySpeciesI, breedUuid: string) => (event: ChangeEvent<HTMLInputElement>) => {
 			const { name, value } = event.target
 			const breeds = specie.breeds.map((breed) =>
-				breed.uuid === breedUuid ? { ...breed, [name]: value } : breed
+				breed.uuid === breedUuid ? { ...breed, [name]: capitalizeFirstLetter(value) } : breed
 			)
 			specie.breeds = breeds
 			const sps = species.map((sp) => (sp.uuid === specie.uuid ? specie : sp))
