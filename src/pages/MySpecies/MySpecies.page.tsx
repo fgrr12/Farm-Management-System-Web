@@ -116,33 +116,14 @@ export const MySpecies: FC = () => {
 				breeds: specie.breeds,
 				status: specie.status,
 			}))
-			await FarmsService.updateFarm({ ...farm!, species: data })
-			setFarm({ ...farm!, species: data })
-			species
-				.filter((specie) => specie.editable)
-				.forEach(async (specie) => {
-					const animals = await AnimalsService.getAnimals({
-						speciesUuid: specie.uuid,
-						search: '',
-						farmUuid: farm!.uuid,
-					})
-					animals.forEach(async (animal) => {
-						const species = {
-							uuid: specie.uuid,
-							name: specie.name,
-						}
-						const breed = specie!.breeds.find((breed) => breed.uuid === animal.breed.uuid)
-						animal.breed = breed!
-						animal.species = species!
-
-						await AnimalsService.updateAnimal(animal, user!.uuid)
-					})
-				})
 			const sps = farm!.species!.map((specie) => ({
 				...specie,
 				editable: false,
 			}))
+			await FarmsService.updateFarm({ ...farm!, species: data })
+			setFarm({ ...farm!, species: data })
 			setSpecies(sps)
+			await AnimalsService.updateAnimalsBySpecie({ farm: farm!, species })
 			setModalData({
 				open: true,
 				title: t('modal.saveSpecies.title'),

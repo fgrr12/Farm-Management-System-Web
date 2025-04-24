@@ -1,17 +1,24 @@
 import { firestore } from '@/config/environment'
 import storageHandler from '@/config/persistence/storageHandler'
 import dayjs from 'dayjs'
-import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore'
-import type { GetAnimalResponse, GetAnimalsProps, SetAnimalProps } from './types'
+import {
+	collection,
+	doc,
+	getDoc,
+	getDocs,
+	query,
+	setDoc,
+	where,
+	writeBatch,
+} from 'firebase/firestore'
+import type { GetAnimalsProps, UpdateAnimalsBySpecieProps } from './types'
 
 const collectionName = 'animals'
 
 export module AnimalsService {
 	// Gets
 
-	export const getAnimals = async (
-		getAnimalsProps: GetAnimalsProps
-	): Promise<GetAnimalResponse[]> => {
+	export const getAnimals = async (getAnimalsProps: GetAnimalsProps): Promise<Animal[]> => {
 		const { speciesUuid, search, farmUuid } = getAnimalsProps
 		let response = []
 		let queryBase = query(
@@ -25,7 +32,7 @@ export module AnimalsService {
 		const animalsDocs = await getDocs(queryBase)
 		response = animalsDocs.docs
 			.map((doc) => doc.data())
-			.sort((a, b) => a.animalId - b.animalId) as GetAnimalResponse[]
+			.sort((a, b) => a.animalId - b.animalId) as Animal[]
 
 		if (search) {
 			response = response.filter((animal) =>
@@ -33,21 +40,21 @@ export module AnimalsService {
 			)
 		}
 
-		return response as GetAnimalResponse[]
+		return response as Animal[]
 	}
 
-	export const getAnimal = async (animalUuid: string): Promise<GetAnimalResponse> => {
+	export const getAnimal = async (animalUuid: string): Promise<Animal> => {
 		const docRef = doc(firestore, collectionName, animalUuid)
 		const animalDoc = await getDoc(docRef)
 		const animalData = animalDoc.data()
 
-		return animalData as GetAnimalResponse
+		return animalData as Animal
 	}
 
 	// Sets
 
 	export const setAnimal = async (
-		animalData: SetAnimalProps,
+		animalData: Animal,
 		createdBy: string | null,
 		farmUuid: string | null
 	) => {
@@ -63,7 +70,7 @@ export module AnimalsService {
 
 	// Update
 
-	export const updateAnimal = async (animalData: SetAnimalProps, editedBy: string | null) => {
+	export const updateAnimal = async (animalData: Animal, editedBy: string | null) => {
 		if (animalData.picture && !animalData.picture.includes('firebasestorage')) {
 			animalData.picture = await savePicture(animalData.uuid, animalData.picture)
 		}
@@ -72,6 +79,36 @@ export module AnimalsService {
 
 		const document = doc(firestore, collectionName, animalData.uuid)
 		await setDoc(document, { ...animalData, updateAt, editedBy }, { merge: true })
+	}
+
+	export const updateAnimalsBySpecie = async (
+		updateAnimalsBySpecieProps: UpdateAnimalsBySpecieProps
+	) => {
+		const { farm, species } = updateAnimalsBySpecieProps
+		const batch = writeBatch(firestore)
+
+		for (const specie of species) {
+			if (specie.editable) {
+				const animals = await AnimalsService.getAnimals({
+					speciesUuid: specie.uuid,
+					search: '',
+					farmUuid: farm!.uuid,
+				})
+				for (const animal of animals) {
+					const updatedAnimal = {
+						...animal,
+						species: {
+							uuid: specie.uuid,
+							name: specie.name,
+						},
+						breed: specie.breeds.find((breed) => breed.uuid === animal.breed.uuid)!,
+					}
+					const document = doc(firestore, collectionName, animal.uuid)
+					batch.update(document, updatedAnimal)
+				}
+			}
+		}
+		await batch.commit()
 	}
 
 	// Delete

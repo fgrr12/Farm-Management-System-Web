@@ -2,15 +2,11 @@ import { firestore, signUpAuth } from '@/config/environment'
 import dayjs from 'dayjs'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore'
-import type { GetEmployeesResponse, SetEmployeeProps } from './types'
 
 const collectionName = 'users'
 
 export module EmployeesService {
-	export const getEmployees = async (
-		search: string | null,
-		farmUuid: string
-	): Promise<GetEmployeesResponse[]> => {
+	export const getEmployees = async (search: string | null, farmUuid: string): Promise<User[]> => {
 		let response = []
 
 		const employeesDocs = await getDocs(
@@ -21,7 +17,7 @@ export module EmployeesService {
 				where('status', '==', true)
 			)
 		)
-		response = employeesDocs.docs.map((doc) => doc.data()) as GetEmployeesResponse[]
+		response = employeesDocs.docs.map((doc) => doc.data()) as User[]
 
 		if (search) {
 			response = response.filter(
@@ -29,20 +25,20 @@ export module EmployeesService {
 					employee.name.toLowerCase().includes(search.toLowerCase()) ||
 					employee.lastName.toLowerCase().includes(search.toLowerCase()) ||
 					employee.email.toLowerCase().includes(search.toLowerCase())
-			) as GetEmployeesResponse[]
+			) as User[]
 		}
 		return response
 	}
 
-	export const getEmployee = async (uuid: string): Promise<GetEmployeesResponse> => {
+	export const getEmployee = async (uuid: string): Promise<User> => {
 		const document = doc(firestore, collectionName, uuid)
 		const employee = await getDoc(document)
-		return employee.data() as GetEmployeesResponse
+		return employee.data() as User
 	}
 
-	export const setEmployee = async (data: SetEmployeeProps): Promise<void> => {
-		const psw = 'Pass123!'
-		const response = await createUserWithEmailAndPassword(signUpAuth, data.email, psw)
+	export const setEmployee = async (data: User): Promise<void> => {
+		const temporal_psw = 'Pass123!'
+		const response = await createUserWithEmailAndPassword(signUpAuth, data.email, temporal_psw)
 		const { user } = response
 
 		const createdAt = dayjs().toISOString()
@@ -50,7 +46,7 @@ export module EmployeesService {
 		await setDoc(document, { ...data, createdAt, uuid: user.uid })
 	}
 
-	export const updateEmployee = async (data: SetEmployeeProps): Promise<void> => {
+	export const updateEmployee = async (data: User): Promise<void> => {
 		const document = doc(firestore, collectionName, data.uuid)
 		await setDoc(document, data, { merge: true })
 	}

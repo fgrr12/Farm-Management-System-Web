@@ -6,7 +6,6 @@ import {
 	signInWithPopup,
 } from 'firebase/auth'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
-import type { GetUserResponse } from './types'
 
 const collectionName = 'users'
 
@@ -28,13 +27,13 @@ export module UserService {
 		}
 	}
 
-	export const getUser = async (uuid: string): Promise<GetUserResponse> => {
+	export const getUser = async (uuid: string): Promise<User> => {
 		const userDocument = doc(firestore, collectionName, uuid)
 		const userDoc = await getDoc(userDocument)
-		return userDoc.data() as GetUserResponse
+		return userDoc.data() as User
 	}
 
-	export const updateUser = async (user: GetUserResponse) => {
+	export const updateUser = async (user: User) => {
 		const userDocument = doc(firestore, collectionName, user.uuid)
 		await setDoc(userDocument, user, { merge: true })
 	}

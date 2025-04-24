@@ -2,16 +2,16 @@ import { useState } from 'react'
 
 import type { TextFieldProps } from './TextField.types'
 
-export const TextField: FC<TextFieldProps> = ({ type, label, ...rest }) => {
+export const TextField: FC<TextFieldProps> = ({ label, ...rest }) => {
 	return (
 		<fieldset className="fieldset w-full">
 			<legend className="fieldset-legend">{label}</legend>
-			<input type={type} className="input w-full h-12 validator" {...rest} />
+			<input className="input w-full h-12 validator" {...rest} />
 		</fieldset>
 	)
 }
 
-export const PasswordField: FC<TextFieldProps> = ({ className, label, ...rest }) => {
+export const PasswordField: FC<TextFieldProps> = ({ label, ...rest }) => {
 	const [showPassword, setShowPassword] = useState<boolean>(false)
 
 	const handleClick = () => {

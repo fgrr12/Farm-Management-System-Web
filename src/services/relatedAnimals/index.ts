@@ -11,16 +11,12 @@ import {
 	where,
 } from 'firebase/firestore'
 
-import type { GetRelatedAnimalsResponse, SetRelatedAnimalProps } from './types'
-
 const collectionName = 'relatedAnimals'
 
 export module RelatedAnimalsService {
 	// Gets
 
-	export const getRelatedAnimals = async (
-		animalUuid: string
-	): Promise<GetRelatedAnimalsResponse[]> => {
+	export const getRelatedAnimals = async (animalUuid: string): Promise<Relation[]> => {
 		const parentsDocs = await getDocs(
 			query(collection(firestore, collectionName), where('child.animalUuid', '==', animalUuid))
 		)
@@ -30,16 +26,16 @@ export module RelatedAnimalsService {
 		const parentsResponse = parentsDocs.docs.map((doc) => ({ ...doc.data(), uuid: doc.id }))
 		const childrenResponse = childrenDocs.docs.map((doc) => ({ ...doc.data(), uuid: doc.id }))
 
-		return [...parentsResponse, ...childrenResponse] as GetRelatedAnimalsResponse[]
+		return [...parentsResponse, ...childrenResponse] as Relation[]
 	}
 
 	export const getRealTimeRelatedAnimals = (
 		animalUuid: string,
-		onUpdate: (data: GetRelatedAnimalsResponse[]) => void,
+		onUpdate: (data: Relation[]) => void,
 		onError: (error: any) => void
 	) => {
-		let parents: GetRelatedAnimalsResponse[] = []
-		let children: GetRelatedAnimalsResponse[] = []
+		let parents: Relation[] = []
+		let children: Relation[] = []
 
 		const parentsQuery = query(
 			collection(firestore, collectionName),
@@ -53,7 +49,7 @@ export module RelatedAnimalsService {
 		const parentsUnsubscribe = onSnapshot(
 			parentsQuery,
 			(snapshot) => {
-				parents = snapshot.docs.map((doc) => ({ ...doc.data() })) as GetRelatedAnimalsResponse[]
+				parents = snapshot.docs.map((doc) => ({ ...doc.data() })) as Relation[]
 				onUpdate([...parents, ...children])
 			},
 			(error) => onError(error)
@@ -62,7 +58,7 @@ export module RelatedAnimalsService {
 		const childrenUnsubscribe = onSnapshot(
 			childrenQuery,
 			(snapshot) => {
-				children = snapshot.docs.map((doc) => ({ ...doc.data() })) as GetRelatedAnimalsResponse[]
+				children = snapshot.docs.map((doc) => ({ ...doc.data() })) as Relation[]
 				onUpdate([...parents, ...children])
 			},
 			(error) => onError(error)
@@ -76,10 +72,7 @@ export module RelatedAnimalsService {
 
 	// Sets
 
-	export const setRelatedAnimal = async (
-		relatedAnimalData: SetRelatedAnimalProps,
-		createdBy: string | null
-	) => {
+	export const setRelatedAnimal = async (relatedAnimalData: Relation, createdBy: string | null) => {
 		const { uuid, parent, child } = relatedAnimalData
 		const createdAt = dayjs().format()
 
