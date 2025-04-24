@@ -26,7 +26,7 @@ jobs:
           node-version: '22'
 
       - name: Instalar dependencias
-        run: pnpm install
+        run: npm install
 
       - name: Crear archivo .env
         run: |
@@ -49,9 +49,9 @@ jobs:
       - name: Build del proyecto
         run: |
           if [ "${{ env.IS_PROD }}" = "true" ]; then
-            pnpm run build:production
+            npm run build:production
           else
-            pnpm run build:develop
+            npm run build:develop
           fi
 
       - name: Deploy a Firebase Hosting
