@@ -1,5 +1,6 @@
 {
 	"projects": {
+		"develop": "cattle-ea97b",
 		"default": "my-farm-8161d"
 	}
 }
