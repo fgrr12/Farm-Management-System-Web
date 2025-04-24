@@ -10,6 +10,12 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
+    env:
+      IS_PROD: ${{ github.ref == 'refs/heads/main' }}
+      FIREBASE_SERVICE_ACCOUNT: ${{ github.ref == 'refs/heads/main' && secrets.FIREBASE_SERVICE_ACCOUNT_PROD || secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}
+      FIREBASE_PROJECT_ID: ${{ github.ref == 'refs/heads/main' && 'my-farm-8161d' || 'cattle-ea97b' }}
+      FIREBASE_TARGET: ${{ github.ref == 'refs/heads/main' && 'production' || 'develop' }}
+
     steps:
       - name: Checkout código
         uses: actions/checkout@v3
@@ -24,7 +30,7 @@ jobs:
 
       - name: Crear archivo .env
         run: |
-          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+          if [ "${{ env.IS_PROD }}" = "true" ]; then
             echo "VITE_API_KEY=${{ secrets.VITE_API_KEY_PROD }}" >> .env
             echo "VITE_AUTH_DOMAIN=${{ secrets.VITE_AUTH_DOMAIN_PROD }}" >> .env
             echo "VITE_PROJECT_ID=${{ secrets.VITE_PROJECT_ID_PROD }}" >> .env
@@ -42,7 +48,7 @@ jobs:
 
       - name: Build del proyecto
         run: |
-          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+          if [ "${{ env.IS_PROD }}" = "true" ]; then
             npm run build:production
           else
             npm run build:develop
@@ -52,6 +58,7 @@ jobs:
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: ${{ github.ref == 'refs/heads/main' && secrets.FIREBASE_SERVICE_ACCOUNT_PROD || secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}
-          projectId: ${{ github.ref == 'refs/heads/main' && secrets.FIREBASE_PROJECT_ID_PROD || secrets.FIREBASE_PROJECT_ID_DEV }}
+          firebaseServiceAccount: ${{ env.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: ${{ env.FIREBASE_PROJECT_ID }}
+          target: ${{ env.FIREBASE_TARGET }}
           channelId: 'live'

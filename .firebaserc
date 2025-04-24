@@ -1,6 +1,19 @@
 {
 	"projects": {
 		"develop": "cattle-ea97b",
-		"default": "my-farm-8161d"
-	}
+		"production": "my-farm-8161d"
+	},
+	"targets": {
+		"my-farm-8161d": {
+			"hosting": {
+				"production": ["my-farm-8161d"]
+			}
+		},
+		"cattle-ea97b": {
+			"hosting": {
+				"develop": ["cattle-ea97b"]
+			}
+		}
+	},
+	"etags": {}
 }
