@@ -17,8 +17,8 @@ jobs:
       - name: Setup Node.js y pnpm
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
-          cache: 'pnpm'
+          node-version: '22'
+          cache: 'npm'
 
       - name: Instalar pnpm
         run: npm install -g pnpm
