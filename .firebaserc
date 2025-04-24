@@ -1,3 +1,6 @@
 {
-	"projects": {}
+	"projects": {
+		"develop": "cattle-ea97b",
+		"production": "my-farm-8161d"
+	}
 }
