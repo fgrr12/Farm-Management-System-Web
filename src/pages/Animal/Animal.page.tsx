@@ -326,6 +326,7 @@ const ANIMAL_INITIAL_STATE: Animal = {
 	picture: '',
 	status: true,
 	farmUuid: '',
+	origin: '',
 	relatedAnimals: {
 		parents: [],
 		children: [],

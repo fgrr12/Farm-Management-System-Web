@@ -9,6 +9,7 @@ import { DatePicker } from '@/components/ui/DatePicker'
 import { Select } from '@/components/ui/Select'
 import { TextField } from '@/components/ui/TextField'
 
+import { Textarea } from '@/components/ui/Textarea'
 import { AppRoutes } from '@/config/constants/routes'
 import { AnimalsService } from '@/services/animals'
 import { useAppStore } from '@/store/useAppStore'
@@ -27,7 +28,7 @@ export const AnimalForm = () => {
 	const [species, setSpecies] = useState(INITIAL_SPECIES)
 	const [breeds, setBreeds] = useState<Breed[]>([])
 
-	const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
+	const handleTextChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		const { name, value } = event.target
 		setAnimalForm((prev) => ({ ...prev, [name]: value }))
 	}
@@ -267,6 +268,15 @@ export const AnimalForm = () => {
 						onDateChange={handleDateChange('deathDate')}
 					/>
 				)}
+				<div className="col-span-2">
+					<Textarea
+						name="origin"
+						placeholder={t('origin')}
+						label={t('origin')}
+						value={animalForm.origin}
+						onChange={handleTextChange}
+					/>
+				</div>
 				<button type="submit" className="btn btn-primary h-12 w-full text-lg col-span-2">
 					{params.animalUuid ? t('editButton') : t('addButton')}
 				</button>
@@ -293,6 +303,7 @@ const INITIAL_ANIMAL_FORM: Animal = {
 	picture: '',
 	status: true,
 	farmUuid: '',
+	origin: '',
 	birthDate: dayjs().toISOString(),
 	purchaseDate: null,
 	soldDate: null,

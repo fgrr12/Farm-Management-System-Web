@@ -11,6 +11,7 @@ interface Animal {
 	weight: number
 	status: boolean
 	farmUuid: string
+	origin: string
 	picture?: string
 	birthDate?: string
 	purchaseDate?: string | null
