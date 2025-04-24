@@ -268,7 +268,7 @@ export const AnimalForm = () => {
 						onDateChange={handleDateChange('deathDate')}
 					/>
 				)}
-				<div className="col-span-2">
+				<div className="col-span-2 w-full">
 					<Textarea
 						name="origin"
 						placeholder={t('origin')}
