@@ -96,6 +96,7 @@ export const DatePicker: FC<DatePickerProps> = ({ legend, label, date, onDateCha
 						<DayPicker
 							className="react-day-picker p-2"
 							mode="single"
+							captionLayout="dropdown"
 							locale={user?.language === 'spa' ? es : enUS}
 							components={{ Dropdown: CustomSelectDropdown }}
 							selected={date?.toDate()}
