@@ -74,7 +74,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 	}
 
 	return (
-		<div className="w-full xl:w-auto bg">
+		<div className="w-full xl:w-auto">
 			<div className="flex justify-center items-center">
 				<div className="font-bold">{t('title')}</div>
 				{haveUser && (
@@ -106,23 +106,25 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 					<tbody>
 						{healthRecords.map((healthRecord) => (
 							<tr key={self.crypto.randomUUID()} className={trBgColor(healthRecord.type)}>
-								<td>{healthRecord.reason}</td>
-								<td>{healthRecord.notes}</td>
-								<td>{t(`healthRecordType.${healthRecord.type.toLowerCase()}`)}</td>
-								<td>{healthRecord.reviewedBy}</td>
-								<td>{dayjs(healthRecord.date).format('DD/MM/YYYY')}</td>
-								<td>
+								<td className="text-black">{healthRecord.reason}</td>
+								<td className="text-black">{healthRecord.notes}</td>
+								<td className="text-black">
+									{t(`healthRecordType.${healthRecord.type.toLowerCase()}`)}
+								</td>
+								<td className="text-black">{healthRecord.reviewedBy}</td>
+								<td className="text-black">{dayjs(healthRecord.date).format('DD/MM/YYYY')}</td>
+								<td className="text-black">
 									{healthRecord.weight}
 									{farm!.weightUnit}
 								</td>
-								<td>
+								<td className="text-black">
 									{healthRecord.temperature}
 									{farm!.temperatureUnit}
 								</td>
-								<td>{healthRecord.medication}</td>
-								<td>{healthRecord.dosage}</td>
-								<td>{healthRecord.frequency}</td>
-								<td>{healthRecord.duration}</td>
+								<td className="text-black">{healthRecord.medication}</td>
+								<td className="text-black">{healthRecord.dosage}</td>
+								<td className="text-black">{healthRecord.frequency}</td>
+								<td className="text-black">{healthRecord.duration}</td>
 								{haveUser && (
 									<td>
 										<ActionButton

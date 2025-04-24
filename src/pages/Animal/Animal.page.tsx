@@ -237,9 +237,11 @@ export const Animal: FC = () => {
 								/>
 							)}
 						</div>
-						<div className="col-span-2 w-full">
-							<DetailItem label={t('origin')} value={animal.origin} />
-						</div>
+						{animal.origin && (
+							<div className="col-span-2 w-full">
+								<DetailItem label={t('origin')} value={animal.origin} />
+							</div>
+						)}
 					</div>
 				</div>
 				<div className="flex justify-center items-center w-full">
