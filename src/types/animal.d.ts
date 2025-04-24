@@ -23,8 +23,8 @@ interface Animal {
 }
 
 interface RelatedAnimalList {
-	parents: RelatedAnimal[]
-	children: RelatedAnimal[]
+	parents: Relation[]
+	children: Relation[]
 }
 
 interface AnimalHealthRecord {

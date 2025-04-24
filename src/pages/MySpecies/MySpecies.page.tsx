@@ -6,7 +6,6 @@ import { AnimalsService } from '@/services/animals'
 import { FarmsService } from '@/services/farms'
 import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
-import { useUserStore } from '@/store/useUserStore'
 
 import { ActionButton } from '@/components/ui/ActionButton'
 import { Button } from '@/components/ui/Button'
@@ -17,7 +16,6 @@ import type { MySpeciesI } from './MySpecies.types'
 
 export const MySpecies: FC = () => {
 	const { t } = useTranslation(['mySpecies'])
-	const { user } = useUserStore()
 	const { setFarm, farm } = useFarmStore()
 	const { defaultModalData, setModalData, setLoading, setHeaderTitle } = useAppStore()
 
