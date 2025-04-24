@@ -54,4 +54,4 @@ jobs:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: ${{ github.ref == 'refs/heads/main' && secrets.FIREBASE_SERVICE_ACCOUNT_PROD || secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}
           projectId: ${{ github.ref == 'refs/heads/main' && secrets.FIREBASE_PROJECT_ID_PROD || secrets.FIREBASE_PROJECT_ID_DEV }}
-          channelId: 'live'
+          channelId: 'dev'
