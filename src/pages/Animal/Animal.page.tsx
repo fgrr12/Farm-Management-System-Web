@@ -246,7 +246,7 @@ export const Animal: FC = () => {
 				</div>
 				<div className="flex justify-center items-center w-full">
 					<img
-						className="w-64 h-64 rounded-full object-cover"
+						className="w-full h-full sm:w-75 sm:h-75 rounded-3xl object-cover"
 						src={animal.picture || '/assets/default-imgs/cow.svg'}
 						alt={animal.species.name}
 					/>
