@@ -14,17 +14,13 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v3
 
-      - name: Setup Node.js y pnpm
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '22'
-          cache: 'npm'
-
-      - name: Instalar pnpm
-        run: npm install -g pnpm
 
       - name: Instalar dependencias
-        run: pnpm install
+        run: npm install
 
       - name: Crear archivo .env
         run: |
@@ -47,9 +43,9 @@ jobs:
       - name: Build del proyecto
         run: |
           if [ "${{ github.ref }}" == "refs/heads/main" ]; then
-            pnpm build:production
+            npm run build:production
           else
-            pnpm build:develop
+            npm run build:develop
           fi
 
       - name: Deploy a Firebase Hosting
