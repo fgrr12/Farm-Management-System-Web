@@ -27,7 +27,7 @@ export const Sidebar: FC = () => {
 		document.querySelector('html')!.setAttribute('data-theme', theme)
 	}, [theme])
 	return (
-		<ul className="menu bg-base-100 h-full hidden lg:flex shadow-sm">
+		<ul className="menu bg-base-100 h-full hidden lg:grid auto-rows-[50px] items-center shadow-sm overflow-auto scrollbar-hidden">
 			<li className={location.pathname.includes(AppRoutes.ANIMALS) ? 'bg-info rounded-sm' : ''}>
 				<button
 					type="button"
@@ -97,16 +97,18 @@ export const Sidebar: FC = () => {
 				</button>
 			</li>
 			<div className="divider" />
-			<label className="swap swap-rotate">
-				<input
-					type="checkbox"
-					className="theme-controller"
-					value="synthwave"
-					onChange={() => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'))}
-				/>
-				<i className="i-line-md-moon-alt-to-sunny-outline-loop-transition swap-off h-8! w-8! fill-current" />
-				<i className="i-line-md-sunny-outline-to-moon-alt-loop-transition swap-on h-8! w-8! fill-current" />
-			</label>
+			<li>
+				<label className="swap swap-rotate">
+					<input
+						type="checkbox"
+						className="theme-controller"
+						value="synthwave"
+						onChange={() => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'))}
+					/>
+					<i className="i-line-md-moon-alt-to-sunny-outline-loop-transition swap-off h-8! w-8! fill-current" />
+					<i className="i-line-md-sunny-outline-to-moon-alt-loop-transition swap-on h-8! w-8! fill-current" />
+				</label>
+			</li>
 		</ul>
 	)
 }

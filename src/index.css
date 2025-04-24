@@ -63,6 +63,14 @@
 	.delay-300 {
 		animation-delay: 0.3s;
 	}
+
+	.scrollbar-hidden::-webkit-scrollbar {
+		display: none;
+	  }
+	  .scrollbar-hidden {
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+	  }
 }
 
 dialog::backdrop {
