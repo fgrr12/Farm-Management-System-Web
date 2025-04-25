@@ -46,7 +46,7 @@ export module HealthRecordsService {
 
 		if (healthRecordData.type === 'Pregnancy') {
 			const dbAnimal = await AnimalsService.getAnimal(healthRecordData.animalUuid)
-			let date = dayjs().add(dbAnimal.breed.gestationPeriod, 'days')
+			let date = dayjs(healthRecordData.date).add(dbAnimal.breed.gestationPeriod, 'days')
 			setHealthRecordGiveBirth(healthRecordData.animalUuid, createdBy, date.toString())
 			setHealthRecordDrying(healthRecordData.animalUuid, createdBy, date.add(7, 'month').toString())
 		}
