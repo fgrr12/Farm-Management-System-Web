@@ -66,11 +66,11 @@
 
 	.scrollbar-hidden::-webkit-scrollbar {
 		display: none;
-	  }
-	  .scrollbar-hidden {
+	}
+	.scrollbar-hidden {
 		-ms-overflow-style: none;
 		scrollbar-width: none;
-	  }
+	}
 }
 
 dialog::backdrop {
@@ -88,14 +88,14 @@ dialog::backdrop {
 
 span::first-letter,
 label::first-letter,
- p::first-letter,
- h1::first-letter,
- h2::first-letter,
- h3::first-letter,
- h4::first-letter,
- h5::first-letter,
- h6::first-letter,
- th::first-letter,
- td::first-letter {
+p::first-letter,
+h1::first-letter,
+h2::first-letter,
+h3::first-letter,
+h4::first-letter,
+h5::first-letter,
+h6::first-letter,
+th::first-letter,
+td::first-letter {
 	text-transform: uppercase;
 }

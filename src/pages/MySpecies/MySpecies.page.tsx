@@ -6,7 +6,6 @@ import { AnimalsService } from '@/services/animals'
 import { FarmsService } from '@/services/farms'
 import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
-import { useUserStore } from '@/store/useUserStore'
 
 import { ActionButton } from '@/components/ui/ActionButton'
 import { Button } from '@/components/ui/Button'
@@ -17,7 +16,6 @@ import type { MySpeciesI } from './MySpecies.types'
 
 export const MySpecies: FC = () => {
 	const { t } = useTranslation(['mySpecies'])
-	const { user } = useUserStore()
 	const { setFarm, farm } = useFarmStore()
 	const { defaultModalData, setModalData, setLoading, setHeaderTitle } = useAppStore()
 
@@ -116,33 +114,14 @@ export const MySpecies: FC = () => {
 				breeds: specie.breeds,
 				status: specie.status,
 			}))
-			await FarmsService.updateFarm({ ...farm!, species: data })
-			setFarm({ ...farm!, species: data })
-			species
-				.filter((specie) => specie.editable)
-				.forEach(async (specie) => {
-					const animals = await AnimalsService.getAnimals({
-						speciesUuid: specie.uuid,
-						search: '',
-						farmUuid: farm!.uuid,
-					})
-					animals.forEach(async (animal) => {
-						const species = {
-							uuid: specie.uuid,
-							name: specie.name,
-						}
-						const breed = specie!.breeds.find((breed) => breed.uuid === animal.breed.uuid)
-						animal.breed = breed!
-						animal.species = species!
-
-						await AnimalsService.updateAnimal(animal, user!.uuid)
-					})
-				})
 			const sps = farm!.species!.map((specie) => ({
 				...specie,
 				editable: false,
 			}))
+			await FarmsService.updateFarm({ ...farm!, species: data })
+			setFarm({ ...farm!, species: data })
 			setSpecies(sps)
+			await AnimalsService.updateAnimalsBySpecie({ farm: farm!, species })
 			setModalData({
 				open: true,
 				title: t('modal.saveSpecies.title'),

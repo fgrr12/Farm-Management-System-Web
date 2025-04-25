@@ -3,7 +3,7 @@ import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firesto
 
 import { firestore } from '@/config/environment'
 
-import type { GetTasksParams, GetTasksResponse } from './types'
+import type { GetTasksParams } from './types'
 
 const collectionName = 'tasks'
 
@@ -14,7 +14,7 @@ export module TasksService {
 		status,
 		priority,
 		species,
-	}: GetTasksParams): Promise<GetTasksResponse[]> => {
+	}: GetTasksParams): Promise<Task[]> => {
 		let response = []
 		let queryBase = query(collection(firestore, collectionName), where('farmUuid', '==', farmUuid))
 
@@ -23,7 +23,7 @@ export module TasksService {
 		if (species !== '') queryBase = query(queryBase, where('species', '==', species))
 
 		const tasksDocs = await getDocs(queryBase)
-		response = tasksDocs.docs.map((doc) => doc.data()) as GetTasksResponse[]
+		response = tasksDocs.docs.map((doc) => doc.data()) as Task[]
 
 		if (search) {
 			response = response.filter((task) => task.title.toLowerCase().includes(search.toLowerCase()))
@@ -39,11 +39,7 @@ export module TasksService {
 		return response
 	}
 
-	export const setTask = async (
-		task: GetTasksResponse,
-		createdBy: string,
-		farmUuid: string
-	): Promise<void> => {
+	export const setTask = async (task: Task, createdBy: string, farmUuid: string): Promise<void> => {
 		const document = doc(firestore, collectionName, task.uuid)
 		const createdAt = dayjs().toISOString()
 		await setDoc(document, { ...task, createdAt, createdBy, farmUuid }, { merge: true })

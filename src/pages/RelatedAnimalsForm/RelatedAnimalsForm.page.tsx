@@ -16,7 +16,6 @@ import { useUserStore } from '@/store/useUserStore'
 import type {
 	DragSingularRelation,
 	RelatedAnimalInformation,
-	RelatedAnimalsList,
 	RelatedAnimalsLists,
 } from './RelatedAnimalsForm.types'
 
@@ -27,7 +26,7 @@ export const RelatedAnimalsForm: FC = () => {
 
 	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
 	const [animalsLists, setAnimalsLists] = useState<RelatedAnimalsLists>(INITIAL_ANIMALS_LISTS)
-	const [relatedAnimals, setRelatedAnimals] = useState<RelatedAnimalsList[]>([])
+	const [relatedAnimals, setRelatedAnimals] = useState<Relation[]>([])
 	const [currentAnimal, setCurrentAnimal] = useState<RelatedAnimalInformation | null>(null)
 
 	const removeRelationIfExists = async (
@@ -47,18 +46,18 @@ export const RelatedAnimalsForm: FC = () => {
 		}
 	}
 
-	const buildRelation = (info: RelatedAnimalInformation, isChild: boolean) => ({
+	const buildRelation = (info: RelatedAnimalInformation, isChild: boolean): RelatedAnimal => ({
 		animalUuid: info.uuid,
 		animalId: info.animalId,
 		breed: info.breed,
 		relation:
 			info.gender.toLowerCase() === Gender.FEMALE
 				? isChild
-					? Relation.DAUGHTER
-					: Relation.MOTHER
+					? Relationship.DAUGHTER
+					: Relationship.MOTHER
 				: isChild
-					? Relation.SON
-					: Relation.FATHER,
+					? Relationship.SON
+					: Relationship.FATHER,
 	})
 
 	const handleAddRelatedAnimal = async (
@@ -286,7 +285,7 @@ enum Gender {
 	MALE = 'male',
 }
 
-enum Relation {
+enum Relationship {
 	MOTHER = 'Mother',
 	FATHER = 'Father',
 	SON = 'Son',

@@ -1,16 +1,13 @@
 import { firestore } from '@/config/environment'
 import dayjs from 'dayjs'
 import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore'
-import type { GetProductionRecordResponse, SetProductionRecordProps } from './types'
 
 const collectionName = 'productionRecords'
 
 export module ProductionRecordsService {
 	// Gets
 
-	export const getProductionRecords = async (
-		animalUuid: string
-	): Promise<GetProductionRecordResponse[]> => {
+	export const getProductionRecords = async (animalUuid: string): Promise<ProductionRecord[]> => {
 		const productionRecords = await getDocs(
 			query(
 				collection(firestore, collectionName),
@@ -20,20 +17,20 @@ export module ProductionRecordsService {
 		)
 		const response = productionRecords.docs.map((doc) => ({ ...doc.data(), uuid: doc.id }))
 
-		return response as GetProductionRecordResponse[]
+		return response as ProductionRecord[]
 	}
 
-	export const getProductionRecord = async (uuid: string): Promise<GetProductionRecordResponse> => {
+	export const getProductionRecord = async (uuid: string): Promise<ProductionRecord> => {
 		const document = doc(firestore, collectionName, uuid)
 		const productionRecord = await getDoc(document)
 
-		return productionRecord.data() as GetProductionRecordResponse
+		return productionRecord.data() as ProductionRecord
 	}
 
 	// Sets
 
 	export const setProductionRecord = async (
-		productionRecordData: SetProductionRecordProps,
+		productionRecordData: ProductionRecord,
 		createdBy: string | null
 	) => {
 		productionRecordData.date = formatDate(productionRecordData.date)
@@ -46,7 +43,7 @@ export module ProductionRecordsService {
 	// Update
 
 	export const updateProductionRecord = async (
-		productionRecordData: SetProductionRecordProps,
+		productionRecordData: ProductionRecord,
 		updatedBy: string | null
 	) => {
 		productionRecordData.date = formatDate(productionRecordData.date)

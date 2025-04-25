@@ -66,7 +66,7 @@ export const Navbar: FC = () => {
 								<i className="i-flowbite-bars-from-left-outline w-8! h-8!" />
 							</label>
 							{!backButtonHidden && (
-								<BackButton className="hidden md:inline" disabled={!user} onClick={handleBack}>
+								<BackButton disabled={!user} onClick={handleBack}>
 									{t('header.return')}
 								</BackButton>
 							)}

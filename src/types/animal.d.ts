@@ -23,26 +23,8 @@ interface Animal {
 }
 
 interface RelatedAnimalList {
-	parents: RelatedAnimal[]
-	children: RelatedAnimal[]
-}
-
-interface RelatedAnimal {
-	uuid: string
-	parent: {
-		animalUuid: string
-		animalId: string
-		breed: Breed
-		relation: string
-	}
-	child: {
-		animalUuid: string
-		animalId: string
-		breed: Breed
-		relation: string
-	}
-	createdAt?: string
-	updatedAt?: string
+	parents: Relation[]
+	children: Relation[]
 }
 
 interface AnimalHealthRecord {

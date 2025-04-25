@@ -1,4 +1,4 @@
-type Relation = 'Father' | 'Mother' | 'Daughter' | 'Son'
+type Relationship = 'Father' | 'Mother' | 'Daughter' | 'Son'
 
 type Gender = 'Male' | 'Female' | ''
 
