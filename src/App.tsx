@@ -68,7 +68,7 @@ export const App: FC = () => {
 	}, [user])
 
 	return (
-		<div className="flex flex-col w-full h-[100dvh]">
+		<div className="flex flex-col w-full h-screen">
 			{location.pathname !== AppRoutes.LOGIN && <Navbar />}
 			<div className="flex flex-row w-full h-full overflow-hidden">
 				{location.pathname !== AppRoutes.LOGIN && <Sidebar />}
