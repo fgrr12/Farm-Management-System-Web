@@ -51,7 +51,7 @@ export const RelatedAnimalsForm: FC = () => {
 		animalId: info.animalId,
 		breed: info.breed,
 		relation:
-			info.gender.toLowerCase() === Gender.FEMALE
+			info.gender.toLowerCase() === GenderEnum.FEMALE
 				? isChild
 					? Relationship.DAUGHTER
 					: Relationship.MOTHER
@@ -175,37 +175,31 @@ export const RelatedAnimalsForm: FC = () => {
 								location: 0,
 							}))
 
-						const parents = animals
-							.filter((animal) =>
-								data.some(
-									(related) =>
-										related.parent.animalUuid === animal.uuid &&
-										related.child.animalUuid === animalUuid
-								)
-							)
-							.map((animal) => ({
-								uuid: animal.uuid,
-								animalId: animal.animalId,
-								breed: animal.breed,
-								gender: animal.gender,
-								picture: animal.picture,
+						const parents = data
+							.filter((related) => animalUuid === related.child.animalUuid)
+							.map((related) => ({
+								uuid: related.parent.animalUuid,
+								animalId: related.parent.animalId,
+								breed: related.parent.breed,
+								gender:
+									related.parent.relation === Relationship.MOTHER
+										? (GenderEnum.FEMALE as unknown as Gender)
+										: (GenderEnum.MALE as unknown as Gender),
+								picture: '',
 								location: 1,
 							}))
 
-						const children = animals
-							.filter((animal) =>
-								data.some(
-									(related) =>
-										related.child.animalUuid === animal.uuid &&
-										related.parent.animalUuid === animalUuid
-								)
-							)
-							.map((animal) => ({
-								uuid: animal.uuid,
-								animalId: animal.animalId,
-								breed: animal.breed,
-								gender: animal.gender,
-								picture: animal.picture,
+						const children = data
+							.filter((related) => animalUuid === related.parent.animalUuid)
+							.map((related) => ({
+								uuid: related.child.animalUuid,
+								animalId: related.child.animalId,
+								breed: related.child.breed,
+								gender:
+									related.child.relation === Relationship.DAUGHTER
+										? (GenderEnum.FEMALE as unknown as Gender)
+										: (GenderEnum.MALE as unknown as Gender),
+								picture: '',
 								location: 2,
 							}))
 
@@ -247,28 +241,22 @@ export const RelatedAnimalsForm: FC = () => {
 		<div className="flex flex-col sm:grid sm:grid-cols-4 p-4 gap-4 sm:gap-6 w-full h-full">
 			{currentAnimal && (
 				<div className="flex flex-col gap-4 w-full h-full p-4">
-					<div className="text-center text-2xl font-semibold">{t('currentAnimal')}</div>
+					<div className="text-center text-2xl font-semibold">{t('selectedAnimal')}</div>
 					<RelatedAnimalCard animal={currentAnimal} />
 					<Button onClick={() => document?.querySelector('dialog')?.showModal()}>
 						{t('addExternalRelation')}
 					</Button>
 				</div>
 			)}
-			<CardContainer title={t('animals')} location={0}>
-				{animalsLists.animals.map((animal) => (
-					<RelatedAnimalCard key={animal.animalId} animal={animal} draggable />
-				))}
-			</CardContainer>
-			<CardContainer title={t('parentsTitle')} location={1}>
-				{animalsLists.parents.map((animal) => (
-					<RelatedAnimalCard key={animal.animalId} animal={animal} draggable />
-				))}
-			</CardContainer>
-			<CardContainer title={t('childrenTitle')} location={2}>
-				{animalsLists.children.map((animal) => (
-					<RelatedAnimalCard key={animal.animalId} animal={animal} draggable />
-				))}
-			</CardContainer>
+			<div className="h-[calc(100vh-100px)]">
+				<CardContainer title={t('animals')} animals={animalsLists.animals} location={0} />
+			</div>
+			<div className="h-[calc(100vh-100px)]">
+				<CardContainer title={t('parentsTitle')} animals={animalsLists.parents} location={1} />
+			</div>
+			<div className="h-[calc(100vh-100px)]">
+				<CardContainer title={t('childrenTitle')} animals={animalsLists.children} location={2} />
+			</div>
 			{currentAnimal && <ExternalRelationForm currentAnimal={currentAnimal} />}
 		</div>
 	)
@@ -280,7 +268,7 @@ const INITIAL_ANIMALS_LISTS: RelatedAnimalsLists = {
 	children: [],
 }
 
-enum Gender {
+enum GenderEnum {
 	FEMALE = 'female',
 	MALE = 'male',
 }

@@ -1,7 +1,8 @@
-import type { HTMLAttributes, ReactNode } from 'react'
+import type { RelatedAnimalInformation } from '@/pages/RelatedAnimalsForm/RelatedAnimalsForm.types'
+import type { HTMLAttributes } from 'react'
 
 export type ContainerProps = HTMLAttributes<HTMLDivElement> & {
 	title: string
 	location: number
-	children: ReactNode
+	animals: RelatedAnimalInformation[]
 }

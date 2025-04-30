@@ -3,8 +3,9 @@
 	"animals": "Animals",
 	"parentsTitle": "Parents",
 	"childrenTitle": "Children",
-	"currentAnimal": "Current Animal",
+	"selectedAnimal": "Selected animal",
 	"addExternalRelation": "Add External Relation",
+	"filterByID": "Filter by ID",
 	"modal": {
 		"errorGettingAnimals": {
 			"title": "Error",
