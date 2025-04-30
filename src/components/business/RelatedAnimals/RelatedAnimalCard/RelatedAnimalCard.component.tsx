@@ -22,7 +22,7 @@ export const RelatedAnimalCard: FC<CardProps> = ({ animal, ...props }) => {
 	}, [dragging, animal])
 	return (
 		<div
-			className={`card bg-base-100 w-full h-auto shadow-sm ${dragging && 'bg-warning'}`}
+			className={`card bg-base-100 w-full h-auto shadow-sm cursor-grab ${dragging && 'bg-warning'}`}
 			ref={ref}
 			{...props}
 		>
