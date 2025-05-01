@@ -1,5 +1,5 @@
 import { AppRoutes } from '@/config/constants/routes'
-import { useEffect, useState, type ChangeEvent, type KeyboardEvent } from 'react'
+import { useEffect, useMemo, useState, type ChangeEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -25,16 +25,29 @@ export const Animals = () => {
 	const [species, setSpecies] = useState<Species[]>([])
 	const [filters, setFilters] = useState<AnimalsFilters>(INITIAL_FILTERS)
 
+	const filteredAnimals = useMemo(() => {
+		if (!animals.length) return []
+
+		const { speciesUuid, search } = filters
+		const normalizedSearch = search?.toLowerCase()
+
+		return animals.filter((animal) => {
+			const matchesSpecies = speciesUuid ? animal.species.uuid === speciesUuid : true
+			const matchesSearch = normalizedSearch
+				? animal.animalId.toLowerCase().includes(normalizedSearch)
+				: true
+			return matchesSpecies && matchesSearch
+		})
+	}, [animals, filters])
+
 	const navigateToAnimal = (uuid: string) => {
 		const path = AppRoutes.ANIMAL.replace(':animalUuid', uuid)
 		navigation(path)
 	}
 
-	const handleSearchKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
+	const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const { value } = event.target as HTMLInputElement
-		if (event.key === 'Enter') {
-			setFilters((prev) => ({ ...prev, search: value }))
-		}
+		setFilters((prev) => ({ ...prev, search: value }))
 	}
 
 	const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -45,12 +58,7 @@ export const Animals = () => {
 	const getAnimals = async () => {
 		try {
 			setLoading(true)
-			const { speciesUuid, search } = filters
-			const dbAnimals = await AnimalsService.getAnimals({
-				speciesUuid,
-				search,
-				farmUuid: farm!.uuid,
-			})
+			const dbAnimals = await AnimalsService.getAnimals(farm!.uuid)
 			setAnimals(dbAnimals)
 		} catch (error) {
 			setModalData({
@@ -68,26 +76,21 @@ export const Animals = () => {
 		setHeaderTitle(t('title'))
 	}, [setHeaderTitle, t])
 
-	useEffect(() => {
-		if (user && farm) {
-			setSpecies(farm.species!)
-		}
-	}, [farm, user])
-
 	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
 	useEffect(() => {
 		setLoading(true)
 		if (user && farm) {
 			getAnimals()
+			setSpecies(farm.species!)
 		}
-	}, [filters, user, farm])
+	}, [user, farm])
 
 	return (
 		<div className="flex flex-col gap-5 p-4 w-full h-full overflow-auto">
 			<div className="flex flex-col md:grid md:grid-cols-4 items-center justify-center gap-4 w-full">
-				<Search placeholder={t('search')} onKeyDown={handleSearchKeyPress} />
+				<Search placeholder={t('search')} value={filters.search} onChange={handleSearchChange} />
 				<Select
-					name="selectedSpecies"
+					name="speciesUuid"
 					legend={t('filterBySpecies')}
 					defaultLabel={t('filterBySpecies')}
 					value={filters.speciesUuid}
@@ -103,7 +106,7 @@ export const Animals = () => {
 				</button>
 			</div>
 			<div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 w-full">
-				{animals.map((animal) => (
+				{filteredAnimals.map((animal) => (
 					<AnimalCard
 						key={animal.uuid}
 						animalId={animal.animalId}
