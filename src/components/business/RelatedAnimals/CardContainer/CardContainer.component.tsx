@@ -13,6 +13,7 @@ export const CardContainer: FC<ContainerProps> = ({ title, location, animals, ..
 	const [search, setSearch] = useState('')
 
 	const { filteredAnimals } = useMemo(() => {
+		if (!animals.length) return { filteredAnimals: [] }
 		return {
 			filteredAnimals: search
 				? animals.filter((animal) => animal.animalId.toLowerCase().includes(search.toLowerCase()))
