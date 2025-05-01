@@ -11,15 +11,15 @@ import {
 	where,
 	writeBatch,
 } from 'firebase/firestore'
-import type { GetAnimalsProps, UpdateAnimalsBySpecieProps } from './types'
+
+import type { UpdateAnimalsBySpecieProps } from './types'
 
 const collectionName = 'animals'
 
 export module AnimalsService {
 	// Gets
 
-	export const getAnimals = async (getAnimalsProps: GetAnimalsProps): Promise<Animal[]> => {
-		const { speciesUuid, search, farmUuid } = getAnimalsProps
+	export const getAnimals = async (farmUuid: string | null) => {
 		let response = []
 		let queryBase = query(
 			collection(firestore, collectionName),
@@ -27,18 +27,10 @@ export module AnimalsService {
 			where('farmUuid', '==', farmUuid)
 		)
 
-		if (speciesUuid) queryBase = query(queryBase, where('species.uuid', '==', speciesUuid))
-
 		const animalsDocs = await getDocs(queryBase)
 		response = animalsDocs.docs
 			.map((doc) => doc.data())
 			.sort((a, b) => a.animalId - b.animalId) as Animal[]
-
-		if (search) {
-			response = response.filter((animal) =>
-				animal.animalId.toString().includes(search.toLowerCase())
-			)
-		}
 
 		return response as Animal[]
 	}
@@ -49,6 +41,18 @@ export module AnimalsService {
 		const animalData = animalDoc.data()
 
 		return animalData as Animal
+	}
+
+	export const getAnimalsBySpecies = async (speciesUuid: string, farmUuid: string | null) => {
+		const queryBase = query(
+			collection(firestore, collectionName),
+			where('status', '==', true),
+			where('species.uuid', '==', speciesUuid),
+			where('farmUuid', '==', farmUuid)
+		)
+
+		const animalsDocs = await getDocs(queryBase)
+		return animalsDocs.docs.map((doc) => doc.data()) as Animal[]
 	}
 
 	// Sets
@@ -89,11 +93,7 @@ export module AnimalsService {
 
 		for (const specie of species) {
 			if (specie.editable) {
-				const animals = await AnimalsService.getAnimals({
-					speciesUuid: specie.uuid,
-					search: '',
-					farmUuid: farm!.uuid,
-				})
+				const animals = await AnimalsService.getAnimalsBySpecies(specie.uuid, farm!.uuid)
 				for (const animal of animals) {
 					const updatedAnimal = {
 						...animal,

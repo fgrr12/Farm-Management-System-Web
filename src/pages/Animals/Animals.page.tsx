@@ -58,12 +58,7 @@ export const Animals = () => {
 	const getAnimals = async () => {
 		try {
 			setLoading(true)
-			const { speciesUuid, search } = filters
-			const dbAnimals = await AnimalsService.getAnimals({
-				speciesUuid,
-				search,
-				farmUuid: farm!.uuid,
-			})
+			const dbAnimals = await AnimalsService.getAnimals(farm!.uuid)
 			setAnimals(dbAnimals)
 		} catch (error) {
 			setModalData({
