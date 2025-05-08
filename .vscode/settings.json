@@ -18,5 +18,10 @@
 	"editor.codeActionsOnSave": {
 		"source.organizeImports.biome": "never"
 	},
-	"cSpell.words": ["firebasestorage", "languagedetector", "partialize"]
+	"cSpell.words": [
+		"atlaskit",
+		"firebasestorage",
+		"languagedetector",
+		"partialize"
+	]
 }
