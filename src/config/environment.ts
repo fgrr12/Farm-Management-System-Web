@@ -20,7 +20,6 @@ const signUpAuth = getAuth(signUpApp)
 const firestore = getFirestore(app)
 const storage = getStorage(app)
 
-auth.useDeviceLanguage()
 auth.settings.appVerificationDisabledForTesting = true
 
 export { auth, firestore, signUpAuth, storage }

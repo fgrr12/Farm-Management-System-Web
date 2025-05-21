@@ -1,4 +1,4 @@
-import { useRef, type MouseEvent, type ReactElement } from 'react'
+import { type MouseEvent, type ReactElement, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { SelectProps } from './Select.types'

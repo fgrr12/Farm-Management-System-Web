@@ -1,13 +1,12 @@
-import { AppRoutes } from '@/config/constants/routes'
+import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
-
 import { HealthRecordsTable } from '@/components/business/Animal/HealthRecordsTable'
 import { ProductionRecordsTable } from '@/components/business/Animal/ProductionRecordsTable'
 import { RelatedAnimalsTable } from '@/components/business/Animal/RelatedAnimalsTable'
 import { ActionButton } from '@/components/ui/ActionButton'
-
+import { AppRoutes } from '@/config/constants/routes'
 import { AnimalsService } from '@/services/animals'
 import { FarmsService } from '@/services/farms'
 import { HealthRecordsService } from '@/services/healthRecords'
@@ -16,7 +15,6 @@ import { RelatedAnimalsService } from '@/services/relatedAnimals'
 import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
-import dayjs from 'dayjs'
 
 const DetailItem = ({ label, value }: { label: string; value: React.ReactNode }) => (
 	<div className="flex flex-col gap-1 w-full justify-center items-center">

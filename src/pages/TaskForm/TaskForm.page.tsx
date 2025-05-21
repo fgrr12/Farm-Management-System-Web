@@ -1,18 +1,16 @@
-import { AppRoutes } from '@/config/constants/routes'
-import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-
 import { Button } from '@/components/ui/Button'
 import { Select } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
-
+import { AppRoutes } from '@/config/constants/routes'
 import { TasksService } from '@/services/tasks'
 import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
+import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 
 export const TaskForm = () => {
 	const { user } = useUserStore()

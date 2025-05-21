@@ -1,21 +1,19 @@
-import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
-import { fileToBase64 } from '@/utils/fileToBase64'
 import dayjs from 'dayjs'
-import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
+import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
-
 import { DatePicker } from '@/components/layout/DatePicker'
 import { Dropzone } from '@/components/layout/Dropzone'
 import { Select } from '@/components/ui/Select'
-import { TextField } from '@/components/ui/TextField'
-
 import { Textarea } from '@/components/ui/Textarea'
+import { TextField } from '@/components/ui/TextField'
 import { AppRoutes } from '@/config/constants/routes'
 import { AnimalsService } from '@/services/animals'
 import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
+import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
+import { fileToBase64 } from '@/utils/fileToBase64'
 
 export const AnimalForm = () => {
 	const { user } = useUserStore()

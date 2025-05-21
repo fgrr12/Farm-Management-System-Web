@@ -1,19 +1,17 @@
-import { AppRoutes } from '@/config/constants/routes'
-import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 import dayjs from 'dayjs'
-import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
+import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
-
 import { DatePicker } from '@/components/layout/DatePicker'
 import { Select } from '@/components/ui/Select'
-import { TextField } from '@/components/ui/TextField'
 import { Textarea } from '@/components/ui/Textarea'
-
+import { TextField } from '@/components/ui/TextField'
+import { AppRoutes } from '@/config/constants/routes'
 import { HealthRecordsService } from '@/services/healthRecords'
 import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
+import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 
 import type { HealthRecordFormType } from './HealthRecordForm.types'
 

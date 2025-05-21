@@ -1,8 +1,7 @@
-import { AppRoutes } from '@/config/constants/routes'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
-
 import { ActionButton } from '@/components/ui/ActionButton'
+import { AppRoutes } from '@/config/constants/routes'
 
 import { RelatedAnimalsService } from '@/services/relatedAnimals'
 import { useAppStore } from '@/store/useAppStore'

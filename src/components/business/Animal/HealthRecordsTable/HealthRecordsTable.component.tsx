@@ -1,13 +1,10 @@
-import { AppRoutes } from '@/config/constants/routes'
 import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
-
 import { ActionButton } from '@/components/ui/ActionButton'
-
+import { AppRoutes } from '@/config/constants/routes'
 import { HealthRecordsService } from '@/services/healthRecords'
 import { useAppStore } from '@/store/useAppStore'
-
 import type { HealthRecordsTableProps } from './HealthRecordsTable.types'
 
 export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({

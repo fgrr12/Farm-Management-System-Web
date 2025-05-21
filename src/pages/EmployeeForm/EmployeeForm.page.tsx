@@ -1,17 +1,14 @@
-import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
-import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
+import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
-
 import { Button } from '@/components/ui/Button'
 import { Select } from '@/components/ui/Select'
 import { TextField } from '@/components/ui/TextField'
-
 import { AppRoutes } from '@/config/constants/routes'
 import { EmployeesService } from '@/services/employees'
 import { useAppStore } from '@/store/useAppStore'
 import { useUserStore } from '@/store/useUserStore'
-
+import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 import type { RegisterEmployeeForm } from './EmployeeForm.types'
 
 export const EmployeeForm: FC = () => {

@@ -15,13 +15,15 @@
 		"editor.defaultFormatter": "biomejs.biome",
 		"editor.formatOnSave": true
 	},
-	"editor.codeActionsOnSave": {
-		"source.organizeImports.biome": "never"
-	},
 	"cSpell.words": [
 		"atlaskit",
+		"daisyui",
 		"firebasestorage",
+		"firestore",
+		"Firestore",
 		"languagedetector",
-		"partialize"
+		"partialize",
+		"tailwindcss",
+		"unocss"
 	]
 }

@@ -7,11 +7,10 @@ import { Search } from '@/components/ui/Search'
 import { Select } from '@/components/ui/Select'
 
 import { AppRoutes } from '@/config/constants/routes'
+import { TasksService } from '@/services/tasks'
 import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
-
-import { TasksService } from '@/services/tasks'
 
 import type { DividedTasks, TaskFilters } from './Tasks.types'
 

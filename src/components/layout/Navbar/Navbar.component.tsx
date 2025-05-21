@@ -1,10 +1,8 @@
-import { AppRoutes } from '@/config/constants/routes'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
-
-import { BackButton } from '../../ui/Button'
-
+import { BackButton } from '@/components/ui/Button'
+import { AppRoutes } from '@/config/constants/routes'
 import { UserService } from '@/services/user'
 import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'

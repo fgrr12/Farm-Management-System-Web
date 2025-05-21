@@ -1,11 +1,10 @@
-import { AppRoutes } from '@/config/constants/routes'
-import { useEffect, useMemo, useState, type ChangeEvent } from 'react'
+import { type ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-
 import { AnimalCard } from '@/components/business/Animals/AnimalCard'
 import { Search } from '@/components/ui/Search'
 import { Select } from '@/components/ui/Select'
+import { AppRoutes } from '@/config/constants/routes'
 
 import { AnimalsService } from '@/services/animals'
 import { useAppStore } from '@/store/useAppStore'

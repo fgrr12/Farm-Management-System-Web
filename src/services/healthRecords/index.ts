@@ -1,6 +1,6 @@
-import { firestore } from '@/config/environment'
 import dayjs from 'dayjs'
 import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore'
+import { firestore } from '@/config/environment'
 import { AnimalsService } from '../animals'
 
 const collectionName = 'healthRecords'
