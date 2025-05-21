@@ -2,13 +2,15 @@ import { type ChangeEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { EmployeesTable } from '@/components/business/Employees/EmployeesTable'
-import { Search } from '@/components/ui/Search'
-
 import { AppRoutes } from '@/config/constants/routes'
-import { EmployeesService } from '@/services/employees'
+
 import { useAppStore } from '@/store/useAppStore'
 import { useUserStore } from '@/store/useUserStore'
+
+import { EmployeesService } from '@/services/employees'
+
+import { EmployeesTable } from '@/components/business/Employees/EmployeesTable'
+import { Search } from '@/components/ui/Search'
 
 export const Employees: FC = () => {
 	const { user } = useUserStore()
@@ -36,7 +38,7 @@ export const Employees: FC = () => {
 			setLoading(true)
 			const data = await EmployeesService.getEmployees(null, user!.farmUuid!)
 			setEmployees(data.filter((employee) => employee.uuid !== user!.uuid))
-		} catch (error) {
+		} catch (_error) {
 			setModalData({
 				open: true,
 				title: t('modal.errorGettingEmployees.title'),
@@ -53,7 +55,7 @@ export const Employees: FC = () => {
 		setEmployees(data.filter((employee) => employee.uuid !== user!.uuid))
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
+	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
 		if (!user) return
 		if (user && user.role === 'employee') {
@@ -63,7 +65,7 @@ export const Employees: FC = () => {
 		initialData()
 	}, [user])
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
+	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
 		const debounceId = setTimeout(() => {
 			if (!user) return

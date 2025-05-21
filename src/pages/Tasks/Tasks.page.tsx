@@ -2,15 +2,17 @@ import { type ChangeEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { Button } from '@/components/ui/Button'
-import { Search } from '@/components/ui/Search'
-import { Select } from '@/components/ui/Select'
-
 import { AppRoutes } from '@/config/constants/routes'
-import { TasksService } from '@/services/tasks'
+
 import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
+
+import { TasksService } from '@/services/tasks'
+
+import { Button } from '@/components/ui/Button'
+import { Search } from '@/components/ui/Search'
+import { Select } from '@/components/ui/Select'
 
 import type { DividedTasks, TaskFilters } from './Tasks.types'
 
@@ -73,14 +75,14 @@ export const Tasks = () => {
 		}
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect used to update tasks list
+	// biome-ignore lint:: UseEffect used to update tasks list
 	useEffect(() => {
 		if (!user) return
 		getTasks()
 		setSpecies(farm!.species!)
 	}, [user, filters.priority, filters.species, filters.status])
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only watching for search changes
+	// biome-ignore lint:: UseEffect is only watching for search changes
 	useEffect(() => {
 		const debounceId = setTimeout(() => {
 			if (filters.search !== '') getTasks()

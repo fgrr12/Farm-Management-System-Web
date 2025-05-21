@@ -9,6 +9,7 @@ import {
 	setDoc,
 	where,
 } from 'firebase/firestore'
+
 import { firestore } from '@/config/environment'
 
 const collectionName = 'relatedAnimals'

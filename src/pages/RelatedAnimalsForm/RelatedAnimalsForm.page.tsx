@@ -3,15 +3,16 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
+import { useAppStore } from '@/store/useAppStore'
+import { useUserStore } from '@/store/useUserStore'
+
+import { AnimalsService } from '@/services/animals'
+import { RelatedAnimalsService } from '@/services/relatedAnimals'
+
 import { CardContainer } from '@/components/business/RelatedAnimals/CardContainer'
 import { ExternalRelationForm } from '@/components/business/RelatedAnimals/ExternalRelationForm'
 import { RelatedAnimalCard } from '@/components/business/RelatedAnimals/RelatedAnimalCard'
 import { Button } from '@/components/ui/Button'
-
-import { AnimalsService } from '@/services/animals'
-import { RelatedAnimalsService } from '@/services/relatedAnimals'
-import { useAppStore } from '@/store/useAppStore'
-import { useUserStore } from '@/store/useUserStore'
 
 import type {
 	DragSingularRelation,
@@ -79,7 +80,7 @@ export const RelatedAnimalsForm: FC = () => {
 		animalsLists.parents.find((a) => a.uuid === uuid) ||
 		animalsLists.children.find((a) => a.uuid === uuid)
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
+	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
 		return monitorForElements({
 			async onDrop({ source, location }) {
@@ -129,7 +130,7 @@ export const RelatedAnimalsForm: FC = () => {
 		})
 	}, [animalsLists])
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
+	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
 		if (!user) return
 		let unsubscribe: (() => void) | undefined
@@ -211,7 +212,7 @@ export const RelatedAnimalsForm: FC = () => {
 					},
 					(error) => console.error('Error fetching related animals: ', error)
 				)
-			} catch (error) {
+			} catch (_error) {
 				setModalData({
 					...defaultModalData,
 					open: true,

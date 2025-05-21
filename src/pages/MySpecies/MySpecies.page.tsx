@@ -1,14 +1,18 @@
 import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { useAppStore } from '@/store/useAppStore'
+import { useFarmStore } from '@/store/useFarmStore'
+
+import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
+
+import { AnimalsService } from '@/services/animals'
+import { FarmsService } from '@/services/farms'
+
 import { ActionButton } from '@/components/ui/ActionButton'
 import { Button } from '@/components/ui/Button'
 import { Search } from '@/components/ui/Search'
 import { TextField } from '@/components/ui/TextField'
-import { AnimalsService } from '@/services/animals'
-import { FarmsService } from '@/services/farms'
-import { useAppStore } from '@/store/useAppStore'
-import { useFarmStore } from '@/store/useFarmStore'
-import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 
 import type { MySpeciesI } from './MySpecies.types'
 
@@ -128,7 +132,7 @@ export const MySpecies: FC = () => {
 					setModalData(defaultModalData)
 				},
 			})
-		} catch (error) {
+		} catch (_error) {
 			setModalData({
 				open: true,
 				title: t('modal.errorEditingSpecies.title'),

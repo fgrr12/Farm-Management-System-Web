@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore'
+
 import { firestore, signUpAuth } from '@/config/environment'
 
 const collectionName = 'users'

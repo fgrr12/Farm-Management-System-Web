@@ -1,12 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { BackButton } from '@/components/ui/Button'
+
 import { AppRoutes } from '@/config/constants/routes'
-import { UserService } from '@/services/user'
+
 import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
+
+import { UserService } from '@/services/user'
+
+import { BackButton } from '@/components/ui/Button'
 
 export const Navbar: FC = () => {
 	const drawerRef = useRef<HTMLInputElement>(null)

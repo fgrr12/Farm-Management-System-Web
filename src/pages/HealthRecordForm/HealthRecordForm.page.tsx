@@ -2,16 +2,21 @@ import dayjs from 'dayjs'
 import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
+
+import { AppRoutes } from '@/config/constants/routes'
+
+import { useAppStore } from '@/store/useAppStore'
+import { useFarmStore } from '@/store/useFarmStore'
+import { useUserStore } from '@/store/useUserStore'
+
+import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
+
+import { HealthRecordsService } from '@/services/healthRecords'
+
 import { DatePicker } from '@/components/layout/DatePicker'
 import { Select } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
-import { AppRoutes } from '@/config/constants/routes'
-import { HealthRecordsService } from '@/services/healthRecords'
-import { useAppStore } from '@/store/useAppStore'
-import { useFarmStore } from '@/store/useFarmStore'
-import { useUserStore } from '@/store/useUserStore'
-import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 
 import type { HealthRecordFormType } from './HealthRecordForm.types'
 
@@ -56,7 +61,7 @@ export const HealthRecordForm = () => {
 			const healthRecordUuid = params.healthRecordUuid as string
 			const dbHealthRecord = await HealthRecordsService.getHealthRecord(healthRecordUuid)
 			setHealthRecordForm(dbHealthRecord)
-		} catch (error) {
+		} catch (_error) {
 			setModalData({
 				open: true,
 				title: t('modal.errorGettingHealthRecord.title'),
@@ -98,7 +103,7 @@ export const HealthRecordForm = () => {
 					},
 				})
 			}
-		} catch (error) {
+		} catch (_error) {
 			setModalData({
 				open: true,
 				title: t('modal.errorAddingHealthRecord.title'),
@@ -110,7 +115,7 @@ export const HealthRecordForm = () => {
 		}
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
+	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
 		if (user) {
 			const animalUuid = params.animalUuid ?? ''

@@ -5,6 +5,7 @@ import {
 	signInWithPopup,
 } from 'firebase/auth'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
+
 import { auth, firestore } from '@/config/environment'
 
 const collectionName = 'users'

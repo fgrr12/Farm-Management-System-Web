@@ -1,4 +1,5 @@
 import { doc, getDoc, setDoc } from 'firebase/firestore'
+
 import { firestore } from '@/config/environment'
 
 const collectionName = 'farms'

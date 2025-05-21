@@ -1,15 +1,19 @@
 import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { useAppStore } from '@/store/useAppStore'
+import { useFarmStore } from '@/store/useFarmStore'
+import { useUserStore } from '@/store/useUserStore'
+
+import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
+
+import { FarmsService } from '@/services/farms'
+import { UserService } from '@/services/user'
+
 import { ActionButton } from '@/components/ui/ActionButton'
 import { Button } from '@/components/ui/Button'
 import { Select } from '@/components/ui/Select'
 import { TextField } from '@/components/ui/TextField'
-import { FarmsService } from '@/services/farms'
-import { UserService } from '@/services/user'
-import { useAppStore } from '@/store/useAppStore'
-import { useFarmStore } from '@/store/useFarmStore'
-import { useUserStore } from '@/store/useUserStore'
-import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 
 export const MyAccount: FC = () => {
 	const { user: currentUser, setUser: updateUser } = useUserStore()
@@ -86,7 +90,7 @@ export const MyAccount: FC = () => {
 					setModalData(defaultModalData)
 				},
 			})
-		} catch (error) {
+		} catch (_error) {
 			setModalData({
 				open: true,
 				title: t('myProfile.modal.errorEditingMyAccount.title'),
@@ -116,7 +120,7 @@ export const MyAccount: FC = () => {
 					setModalData(defaultModalData)
 				},
 			})
-		} catch (error) {
+		} catch (_error) {
 			setModalData({
 				open: true,
 				title: t('myFarm.modal.errorMyFarm.title'),
@@ -146,7 +150,7 @@ export const MyAccount: FC = () => {
 					setModalData(defaultModalData)
 				},
 			})
-		} catch (error) {
+		} catch (_error) {
 			setModalData({
 				open: true,
 				title: t('myBillingCard.modal.errorBillingCard.title'),
@@ -160,7 +164,7 @@ export const MyAccount: FC = () => {
 		}
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: useEffect is only called once
+	// biome-ignore lint:: useEffect is only called once
 	useEffect(() => {
 		if (!user || !currentFarm) return
 

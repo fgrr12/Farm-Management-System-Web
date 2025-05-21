@@ -11,7 +11,31 @@
 	"assist": {
 		"actions": {
 			"source": {
-				"organizeImports": "on"
+				"organizeImports": {
+					"level": "on",
+					"options": {
+						"groups": [
+							[":PACKAGE:", ":NODE:", ":PACKAGE_WITH_PROTOCOL:"],
+							":BLANK_LINE:",
+							"@/config/**",
+							":BLANK_LINE:",
+							"@/store/**",
+							":BLANK_LINE:",
+							"@/utils/**",
+							":BLANK_LINE:",
+							"@/services/**",
+							":BLANK_LINE:",
+							"@/pages/**",
+							":BLANK_LINE:",
+							"@/components/**",
+							":BLANK_LINE:",
+							"@/hooks/**",
+							":BLANK_LINE:",
+							["@/**/*.types*", "@/types/**"],
+							":BLANK_LINE:"
+						]
+					}
+				}
 			}
 		}
 	},

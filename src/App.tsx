@@ -2,6 +2,7 @@ import { onAuthStateChanged } from 'firebase/auth'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+
 import { Loading } from './components/layout/Loading'
 import { Modal } from './components/layout/Modal'
 import { Navbar } from './components/layout/Navbar'
@@ -37,7 +38,7 @@ export const App: FC = () => {
 	const location = useLocation()
 	const browserLanguage = navigator.language === 'en' ? 'eng' : 'spa'
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
+	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
 		setLoading(true)
 		onAuthStateChanged(auth, async (authUser) => {
@@ -59,7 +60,7 @@ export const App: FC = () => {
 		setLoading(false)
 	}, [setUser])
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
+	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
 		i18n.changeLanguage(user?.language || browserLanguage)
 	}, [user])

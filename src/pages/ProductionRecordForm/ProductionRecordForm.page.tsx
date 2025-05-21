@@ -2,16 +2,21 @@ import dayjs from 'dayjs'
 import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
+
+import { AppRoutes } from '@/config/constants/routes'
+
+import { useAppStore } from '@/store/useAppStore'
+import { useFarmStore } from '@/store/useFarmStore'
+import { useUserStore } from '@/store/useUserStore'
+
+import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
+
+import { ProductionRecordsService } from '@/services/productionRecords'
+
 import { DatePicker } from '@/components/layout/DatePicker'
 import { Button } from '@/components/ui/Button'
 import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
-import { AppRoutes } from '@/config/constants/routes'
-import { ProductionRecordsService } from '@/services/productionRecords'
-import { useAppStore } from '@/store/useAppStore'
-import { useFarmStore } from '@/store/useFarmStore'
-import { useUserStore } from '@/store/useUserStore'
-import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 
 export const ProductionRecordForm = () => {
 	const { user } = useUserStore()
@@ -63,7 +68,7 @@ export const ProductionRecordForm = () => {
 					},
 				})
 			}
-		} catch (error) {
+		} catch (_error) {
 			setModalData({
 				open: true,
 				title: t('modal.errorAddingProductionRecord.title'),
@@ -82,7 +87,7 @@ export const ProductionRecordForm = () => {
 			const dbProductionRecord =
 				await ProductionRecordsService.getProductionRecord(productionRecordUuid)
 			setProductionRecordForm(dbProductionRecord)
-		} catch (error) {
+		} catch (_error) {
 			setModalData({
 				open: true,
 				title: t('modal.errorGettingProductionRecord.title'),
@@ -94,7 +99,7 @@ export const ProductionRecordForm = () => {
 		}
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
+	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
 		if (user) {
 			const animalUuid = params.animalUuid as string

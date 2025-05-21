@@ -9,6 +9,7 @@ import {
 	where,
 	writeBatch,
 } from 'firebase/firestore'
+
 import { firestore } from '@/config/environment'
 import storageHandler from '@/config/persistence/storageHandler'
 

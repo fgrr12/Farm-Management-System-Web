@@ -69,7 +69,7 @@ export const Dropzone: FC<DropzoneProps> = ({ cleanFile, pictureUrl, onFile, ...
 		setUrl('')
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
+	// biome-ignore lint: UseEffect is only called once
 	useEffect(() => {
 		if (cleanFile) removeImage()
 	}, [cleanFile])

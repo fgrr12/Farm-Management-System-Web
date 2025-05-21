@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+
 import type { AppModalData, AppStore, AppStoreActions } from './useApp.types'
 
 const DEFAULT_MODAL_DATA: AppModalData = {

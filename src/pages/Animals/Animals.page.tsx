@@ -1,15 +1,18 @@
 import { type ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { AnimalCard } from '@/components/business/Animals/AnimalCard'
-import { Search } from '@/components/ui/Search'
-import { Select } from '@/components/ui/Select'
+
 import { AppRoutes } from '@/config/constants/routes'
 
-import { AnimalsService } from '@/services/animals'
 import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
+
+import { AnimalsService } from '@/services/animals'
+
+import { AnimalCard } from '@/components/business/Animals/AnimalCard'
+import { Search } from '@/components/ui/Search'
+import { Select } from '@/components/ui/Select'
 
 import type { AnimalsFilters } from './Animals.types'
 
@@ -59,7 +62,7 @@ export const Animals = () => {
 			setLoading(true)
 			const dbAnimals = await AnimalsService.getAnimals(farm!.uuid)
 			setAnimals(dbAnimals)
-		} catch (error) {
+		} catch (_error) {
 			setModalData({
 				open: true,
 				title: t('modal.errorGettingAnimals.title'),
@@ -75,7 +78,7 @@ export const Animals = () => {
 		setHeaderTitle(t('title'))
 	}, [setHeaderTitle, t])
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
+	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
 		setLoading(true)
 		if (user && farm) {

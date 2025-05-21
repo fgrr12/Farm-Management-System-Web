@@ -1,4 +1,4 @@
-import { useState, type MouseEvent } from 'react'
+import { type MouseEvent, useState } from 'react'
 
 export interface UseModal<T> {
 	isOpen: boolean

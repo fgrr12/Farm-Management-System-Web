@@ -2,19 +2,23 @@ import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
-import { HealthRecordsTable } from '@/components/business/Animal/HealthRecordsTable'
-import { ProductionRecordsTable } from '@/components/business/Animal/ProductionRecordsTable'
-import { RelatedAnimalsTable } from '@/components/business/Animal/RelatedAnimalsTable'
-import { ActionButton } from '@/components/ui/ActionButton'
+
 import { AppRoutes } from '@/config/constants/routes'
+
+import { useAppStore } from '@/store/useAppStore'
+import { useFarmStore } from '@/store/useFarmStore'
+import { useUserStore } from '@/store/useUserStore'
+
 import { AnimalsService } from '@/services/animals'
 import { FarmsService } from '@/services/farms'
 import { HealthRecordsService } from '@/services/healthRecords'
 import { ProductionRecordsService } from '@/services/productionRecords'
 import { RelatedAnimalsService } from '@/services/relatedAnimals'
-import { useAppStore } from '@/store/useAppStore'
-import { useFarmStore } from '@/store/useFarmStore'
-import { useUserStore } from '@/store/useUserStore'
+
+import { HealthRecordsTable } from '@/components/business/Animal/HealthRecordsTable'
+import { ProductionRecordsTable } from '@/components/business/Animal/ProductionRecordsTable'
+import { RelatedAnimalsTable } from '@/components/business/Animal/RelatedAnimalsTable'
+import { ActionButton } from '@/components/ui/ActionButton'
 
 const DetailItem = ({ label, value }: { label: string; value: React.ReactNode }) => (
 	<div className="flex flex-col gap-1 w-full justify-center items-center">
@@ -145,7 +149,7 @@ export const Animal: FC = () => {
 					: dbAnimal.weight
 			dbAnimal.healthRecords = dbHealthRecords
 			setAnimal({ ...dbAnimal, weight: weight! })
-		} catch (error) {
+		} catch (_error) {
 			setModalData({
 				open: true,
 				title: t('modal.errorGettingAnimal.title'),
@@ -157,7 +161,7 @@ export const Animal: FC = () => {
 		}
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
+	// biome-ignore lint: UseEffect is only called by farm and params.animalUuid
 	useEffect(() => {
 		setHeaderTitle('Animal')
 		farm && setActiveTab('healthRecords')

@@ -13,8 +13,10 @@ import dayjs from 'dayjs'
 import { type ChangeEvent, type FC, useState } from 'react'
 import { DayPicker, type DropdownProps } from 'react-day-picker'
 import { enUS, es } from 'react-day-picker/locale'
+
 import { useUserStore } from '@/store/useUserStore'
 import 'react-day-picker/style.css'
+
 import type { DatePickerProps } from './DatePicker.types'
 
 function CustomSelectDropdown(props: DropdownProps) {
