@@ -1,10 +1,12 @@
-import { AppRoutes } from '@/config/constants/routes'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { UserService } from '@/services/user'
+import { AppRoutes } from '@/config/constants/routes'
+
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
+
+import { UserService } from '@/services/user'
 
 export const Sidebar: FC = () => {
 	const { user, setUser } = useUserStore()

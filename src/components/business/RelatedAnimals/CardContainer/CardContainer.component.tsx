@@ -3,7 +3,6 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { RelatedAnimalCard } from '../RelatedAnimalCard'
-
 import type { ContainerProps } from './CardContainer.types'
 
 export const CardContainer: FC<ContainerProps> = ({ title, location, animals, ...props }) => {

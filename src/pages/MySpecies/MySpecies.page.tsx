@@ -1,11 +1,13 @@
-import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { AnimalsService } from '@/services/animals'
-import { FarmsService } from '@/services/farms'
 import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
+
+import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
+
+import { AnimalsService } from '@/services/animals'
+import { FarmsService } from '@/services/farms'
 
 import { ActionButton } from '@/components/ui/ActionButton'
 import { Button } from '@/components/ui/Button'
@@ -130,7 +132,7 @@ export const MySpecies: FC = () => {
 					setModalData(defaultModalData)
 				},
 			})
-		} catch (error) {
+		} catch (_error) {
 			setModalData({
 				open: true,
 				title: t('modal.errorEditingSpecies.title'),

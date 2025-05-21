@@ -1,15 +1,18 @@
-import { useUserStore } from '@/store/useUserStore'
-import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 import { type ChangeEvent, type FormEventHandler, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useUserStore } from '@/store/useUserStore'
+
+import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
+
 import { RelatedAnimalsService } from '@/services/relatedAnimals'
+
+import type { RelatedAnimalInformation } from '@/pages/RelatedAnimalsForm/RelatedAnimalsForm.types'
 
 import { Button } from '@/components/ui/Button'
 import { Select } from '@/components/ui/Select'
 import { TextField } from '@/components/ui/TextField'
 
-import type { RelatedAnimalInformation } from '@/pages/RelatedAnimalsForm/RelatedAnimalsForm.types'
 import type { ExternalRelation, ExternalRelationFormProps } from './ExternalRelationForm.types'
 
 export const ExternalRelationForm: FC<ExternalRelationFormProps> = ({ currentAnimal }) => {

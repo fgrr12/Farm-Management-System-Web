@@ -12,16 +12,19 @@
 		"editor.formatOnSave": true
 	},
 	"[typescriptreact]": {
-		"editor.defaultFormatter": "biomejs.biome",
+		"editor.defaultFormatter": "vscode.typescript-language-features",
 		"editor.formatOnSave": true
-	},
-	"editor.codeActionsOnSave": {
-		"source.organizeImports.biome": "never"
 	},
 	"cSpell.words": [
 		"atlaskit",
+		"daisyui",
 		"firebasestorage",
+		"firestore",
+		"Firestore",
 		"languagedetector",
-		"partialize"
+		"partialize",
+		"Shouty",
+		"tailwindcss",
+		"unocss"
 	]
 }

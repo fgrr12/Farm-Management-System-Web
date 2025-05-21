@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+
 import type { LoadingProps, LoadingRef } from './Loading.types'
 
 export const Loading: FC<LoadingProps> = ({ open, ...rest }) => {

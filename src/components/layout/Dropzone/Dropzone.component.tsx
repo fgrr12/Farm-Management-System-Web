@@ -1,5 +1,5 @@
 import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
-import { useEffect, useRef, useState, type ChangeEvent, type FC } from 'react'
+import { type ChangeEvent, type FC, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { DropzoneProps } from './Dropzone.types'
@@ -69,7 +69,7 @@ export const Dropzone: FC<DropzoneProps> = ({ cleanFile, pictureUrl, onFile, ...
 		setUrl('')
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
+	// biome-ignore lint: UseEffect is only called once
 	useEffect(() => {
 		if (cleanFile) removeImage()
 	}, [cleanFile])

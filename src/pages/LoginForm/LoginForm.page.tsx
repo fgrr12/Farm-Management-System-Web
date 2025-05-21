@@ -1,14 +1,16 @@
-import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
+import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { Button } from '@/components/ui/Button'
-import { PasswordField, TextField } from '@/components/ui/TextField'
-
 import { AppRoutes } from '@/config/constants/routes'
-import { UserService } from '@/services/user'
+
 import { useAppStore } from '@/store/useAppStore'
 import { useUserStore } from '@/store/useUserStore'
+
+import { UserService } from '@/services/user'
+
+import { Button } from '@/components/ui/Button'
+import { PasswordField, TextField } from '@/components/ui/TextField'
 
 import type { LoginCredentials } from './LoginForm.types'
 
@@ -31,7 +33,7 @@ export const LoginForm: FC = () => {
 			const { email, password } = credentials
 			await UserService.loginWithEmailAndPassword(email, password)
 			navigate(AppRoutes.ANIMALS)
-		} catch (error) {
+		} catch (_error) {
 			setModalData({
 				open: true,
 				title: t('modal.errorLoggingIn.title'),
@@ -48,7 +50,7 @@ export const LoginForm: FC = () => {
 			setLoading(true)
 			await UserService.loginWithGoogle()
 			navigate(AppRoutes.ANIMALS)
-		} catch (error) {
+		} catch (_error) {
 			setModalData({
 				open: true,
 				title: t('modal.errorLoggingIn.title'),
@@ -60,7 +62,7 @@ export const LoginForm: FC = () => {
 		}
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
+	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
 		setLoading(false)
 		if (user) {

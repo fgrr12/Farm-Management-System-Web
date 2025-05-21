@@ -2,9 +2,13 @@ import { onAuthStateChanged } from 'firebase/auth'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+
+import { Loading } from './components/layout/Loading'
+import { Modal } from './components/layout/Modal'
+import { Navbar } from './components/layout/Navbar'
+import { Sidebar } from './components/layout/Sidebar'
 import { AppRoutes } from './config/constants/routes'
 import { auth } from './config/environment'
-
 import { Animal } from './pages/Animal'
 import { AnimalForm } from './pages/AnimalForm'
 import { Animals } from './pages/Animals'
@@ -19,12 +23,6 @@ import { ProductionRecordForm } from './pages/ProductionRecordForm'
 import { RelatedAnimalsForm } from './pages/RelatedAnimalsForm'
 import { TaskForm } from './pages/TaskForm'
 import { Tasks } from './pages/Tasks'
-
-import { Loading } from './components/layout/Loading'
-import { Modal } from './components/layout/Modal'
-import { Navbar } from './components/layout/Navbar'
-import { Sidebar } from './components/layout/Sidebar'
-
 import { FarmsService } from './services/farms'
 import { UserService } from './services/user'
 import { useAppStore } from './store/useAppStore'
@@ -40,7 +38,7 @@ export const App: FC = () => {
 	const location = useLocation()
 	const browserLanguage = navigator.language === 'en' ? 'eng' : 'spa'
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
+	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
 		setLoading(true)
 		onAuthStateChanged(auth, async (authUser) => {
@@ -62,7 +60,7 @@ export const App: FC = () => {
 		setLoading(false)
 	}, [setUser])
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
+	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
 		i18n.changeLanguage(user?.language || browserLanguage)
 	}, [user])

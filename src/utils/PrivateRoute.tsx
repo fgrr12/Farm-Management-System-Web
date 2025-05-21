@@ -1,13 +1,11 @@
-import { AppRoutes } from '@/config/constants/routes'
-import { useUserStore } from '@/store/useUserStore'
 import type { ReactNode } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 
-export const PrivateRoute = ({
-	children,
-}: {
-	children: ReactNode
-}) => {
+import { AppRoutes } from '@/config/constants/routes'
+
+import { useUserStore } from '@/store/useUserStore'
+
+export const PrivateRoute = ({ children }: { children: ReactNode }) => {
 	const location = useLocation()
 	const { user } = useUserStore()
 

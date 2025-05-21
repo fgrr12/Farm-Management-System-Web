@@ -1,11 +1,13 @@
-import { AppRoutes } from '@/config/constants/routes'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { ActionButton } from '@/components/ui/ActionButton'
+import { AppRoutes } from '@/config/constants/routes'
+
+import { useAppStore } from '@/store/useAppStore'
 
 import { EmployeesService } from '@/services/employees'
-import { useAppStore } from '@/store/useAppStore'
+
+import { ActionButton } from '@/components/ui/ActionButton'
 
 import type { EmployeesTableProps } from './EmployeesTable.types'
 

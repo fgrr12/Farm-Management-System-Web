@@ -1,21 +1,24 @@
-import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
-import { fileToBase64 } from '@/utils/fileToBase64'
 import dayjs from 'dayjs'
-import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
+import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
+
+import { AppRoutes } from '@/config/constants/routes'
+
+import { useAppStore } from '@/store/useAppStore'
+import { useFarmStore } from '@/store/useFarmStore'
+import { useUserStore } from '@/store/useUserStore'
+
+import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
+import { fileToBase64 } from '@/utils/fileToBase64'
+
+import { AnimalsService } from '@/services/animals'
 
 import { DatePicker } from '@/components/layout/DatePicker'
 import { Dropzone } from '@/components/layout/Dropzone'
 import { Select } from '@/components/ui/Select'
-import { TextField } from '@/components/ui/TextField'
-
 import { Textarea } from '@/components/ui/Textarea'
-import { AppRoutes } from '@/config/constants/routes'
-import { AnimalsService } from '@/services/animals'
-import { useAppStore } from '@/store/useAppStore'
-import { useFarmStore } from '@/store/useFarmStore'
-import { useUserStore } from '@/store/useUserStore'
+import { TextField } from '@/components/ui/TextField'
 
 export const AnimalForm = () => {
 	const { user } = useUserStore()
@@ -78,7 +81,7 @@ export const AnimalForm = () => {
 			const species = farm!.species!.find((sp) => sp.uuid === dbAnimal.species.uuid)
 			setAnimalForm(dbAnimal)
 			setBreeds(species!.breeds)
-		} catch (error) {
+		} catch (_error) {
 			setModalData({
 				open: true,
 				title: t('modal.errorGettingAnimal.title'),
@@ -136,7 +139,7 @@ export const AnimalForm = () => {
 					},
 				})
 			}
-		} catch (error) {
+		} catch (_error) {
 			setModalData({
 				open: true,
 				title: t('modal.errorAddingAnimal.title'),
@@ -148,7 +151,7 @@ export const AnimalForm = () => {
 		}
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: UseEffect is only called once
+	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
 		if (!user) return
 		setSpecies(farm!.species!)

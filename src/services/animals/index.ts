@@ -1,5 +1,3 @@
-import { firestore } from '@/config/environment'
-import storageHandler from '@/config/persistence/storageHandler'
 import dayjs from 'dayjs'
 import {
 	collection,
@@ -11,6 +9,9 @@ import {
 	where,
 	writeBatch,
 } from 'firebase/firestore'
+
+import { firestore } from '@/config/environment'
+import storageHandler from '@/config/persistence/storageHandler'
 
 import type { UpdateAnimalsBySpecieProps } from './types'
 
