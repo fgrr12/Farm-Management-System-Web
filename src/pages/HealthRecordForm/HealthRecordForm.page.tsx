@@ -20,7 +20,7 @@ import { TextField } from '@/components/ui/TextField'
 
 import type { HealthRecordFormType } from './HealthRecordForm.types'
 
-export const HealthRecordForm = () => {
+const HealthRecordForm = () => {
 	const { user } = useUserStore()
 	const { farm } = useFarmStore()
 	const navigate = useNavigate()
@@ -257,3 +257,5 @@ const INITIAL_HEALTH_RECORD_FORM: AnimalHealthRecord = {
 	duration: '',
 	status: true,
 }
+
+export default HealthRecordForm

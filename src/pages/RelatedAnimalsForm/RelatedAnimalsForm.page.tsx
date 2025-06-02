@@ -20,7 +20,7 @@ import type {
 	RelatedAnimalsLists,
 } from './RelatedAnimalsForm.types'
 
-export const RelatedAnimalsForm: FC = () => {
+const RelatedAnimalsForm = () => {
 	const { user } = useUserStore()
 	const params = useParams()
 	const { t } = useTranslation(['relatedAnimals'])
@@ -279,3 +279,5 @@ enum Relationship {
 	SON = 'Son',
 	DAUGHTER = 'Daughter',
 }
+
+export default RelatedAnimalsForm

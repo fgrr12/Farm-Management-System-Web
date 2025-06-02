@@ -18,7 +18,7 @@ import { Button } from '@/components/ui/Button'
 import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
-export const ProductionRecordForm = () => {
+const ProductionRecordForm = () => {
 	const { user } = useUserStore()
 	const { farm } = useFarmStore()
 	const navigate = useNavigate()
@@ -166,3 +166,5 @@ const INITIAL_PRODUCTION_RECORD_FORM: ProductionRecord = {
 	notes: '',
 	status: true,
 }
+
+export default ProductionRecordForm

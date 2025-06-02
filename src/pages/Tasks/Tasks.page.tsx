@@ -16,7 +16,7 @@ import { Select } from '@/components/ui/Select'
 
 import type { DividedTasks, TaskFilters } from './Tasks.types'
 
-export const Tasks = () => {
+const Tasks = () => {
 	const { user } = useUserStore()
 	const { farm } = useFarmStore()
 	const { setHeaderTitle, setLoading } = useAppStore()
@@ -223,3 +223,5 @@ const INITIAL_SPECIES: Species[] = [
 		status: true,
 	},
 ]
+
+export default Tasks

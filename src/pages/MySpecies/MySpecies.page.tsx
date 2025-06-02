@@ -16,7 +16,7 @@ import { TextField } from '@/components/ui/TextField'
 
 import type { MySpeciesI } from './MySpecies.types'
 
-export const MySpecies: FC = () => {
+const MySpecies = () => {
 	const { t } = useTranslation(['mySpecies'])
 	const { setFarm, farm } = useFarmStore()
 	const { defaultModalData, setModalData, setLoading, setHeaderTitle } = useAppStore()
@@ -271,3 +271,5 @@ const INITIAL_SPECIES: MySpeciesI[] = [
 		editable: false,
 	},
 ]
+
+export default MySpecies

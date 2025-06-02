@@ -34,7 +34,7 @@ const GenderIcon = ({ gender }: { gender: string }) =>
 		<i className="i-tdesign-gender-female bg-pink-500! w-5! h-5!" />
 	)
 
-export const Animal: FC = () => {
+const Animal = () => {
 	const { user } = useUserStore()
 	const { farm, setFarm } = useFarmStore()
 	const navigate = useNavigate()
@@ -164,8 +164,8 @@ export const Animal: FC = () => {
 	// biome-ignore lint: UseEffect is only called by farm and params.animalUuid
 	useEffect(() => {
 		setHeaderTitle('Animal')
-		farm && setActiveTab('healthRecords')
-		farm && getInitialData()
+		setActiveTab('healthRecords')
+		getInitialData()
 	}, [params.animalUuid, farm])
 
 	return (
@@ -345,3 +345,5 @@ const ANIMAL_INITIAL_STATE: Animal = {
 	soldDate: undefined,
 	deathDate: undefined,
 }
+
+export default Animal
