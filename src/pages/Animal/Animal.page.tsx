@@ -164,8 +164,8 @@ const Animal = () => {
 	// biome-ignore lint: UseEffect is only called by farm and params.animalUuid
 	useEffect(() => {
 		setHeaderTitle('Animal')
-		farm && setActiveTab('healthRecords')
-		farm && getInitialData()
+		setActiveTab('healthRecords')
+		getInitialData()
 	}, [params.animalUuid, farm])
 
 	return (
