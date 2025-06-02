@@ -18,4 +18,7 @@ export default defineConfig({
 		include: ['src/**/*.{test,spec}.{ts,tsx}'],
 	},
 	plugins: [unocss(), tailwindcss(), react()],
+	build: {
+		chunkSizeWarningLimit: 2000,
+	},
 })
