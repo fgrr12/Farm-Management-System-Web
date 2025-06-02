@@ -12,7 +12,7 @@ import { EmployeesService } from '@/services/employees'
 import { EmployeesTable } from '@/components/business/Employees/EmployeesTable'
 import { Search } from '@/components/ui/Search'
 
-export const Employees: FC = () => {
+const Employees = () => {
 	const { user } = useUserStore()
 	const { defaultModalData, setHeaderTitle, setModalData, setLoading } = useAppStore()
 	const navigate = useNavigate()
@@ -93,3 +93,5 @@ export const Employees: FC = () => {
 		</div>
 	)
 }
+
+export default Employees

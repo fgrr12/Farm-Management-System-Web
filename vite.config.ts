@@ -19,6 +19,14 @@ export default defineConfig({
 	},
 	plugins: [unocss(), tailwindcss(), react()],
 	build: {
-		chunkSizeWarningLimit: 2000,
+		rollupOptions: {
+			output: {
+				manualChunks: {
+					react: ['react', 'react-dom'],
+					firebase: ['firebase/app', 'firebase/firestore'],
+					i18n: ['i18next', 'react-i18next'],
+				},
+			},
+		},
 	},
 })

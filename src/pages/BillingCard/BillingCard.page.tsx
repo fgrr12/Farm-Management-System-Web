@@ -1,6 +1,6 @@
 import { useFarmStore } from '@/store/useFarmStore'
 
-export const BillingCard: FC = () => {
+const BillingCard: FC = () => {
 	const { farm } = useFarmStore()
 	const { billingCard } = farm!
 	return (
@@ -36,3 +36,5 @@ export const BillingCard: FC = () => {
 		</div>
 	)
 }
+
+export default BillingCard

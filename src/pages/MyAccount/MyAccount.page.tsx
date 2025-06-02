@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/Button'
 import { Select } from '@/components/ui/Select'
 import { TextField } from '@/components/ui/TextField'
 
-export const MyAccount: FC = () => {
+const MyAccount = () => {
 	const { user: currentUser, setUser: updateUser } = useUserStore()
 	const { farm: currentFarm, setFarm: updateFarm } = useFarmStore()
 	const { defaultModalData, setHeaderTitle, setModalData, setLoading } = useAppStore()
@@ -440,3 +440,5 @@ const INITIAL_EDIT = {
 	farm: false,
 	billingCard: false,
 }
+
+export default MyAccount

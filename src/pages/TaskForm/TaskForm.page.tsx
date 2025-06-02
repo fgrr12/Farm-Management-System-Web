@@ -17,7 +17,7 @@ import { Select } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
-export const TaskForm = () => {
+const TaskForm = () => {
 	const { user } = useUserStore()
 	const { farm } = useFarmStore()
 	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
@@ -143,3 +143,5 @@ const INITIAL_SPECIES: Species[] = [
 		status: true,
 	},
 ]
+
+export default TaskForm

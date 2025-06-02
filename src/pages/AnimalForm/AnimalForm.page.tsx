@@ -20,7 +20,7 @@ import { Select } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
-export const AnimalForm = () => {
+const AnimalForm = () => {
 	const { user } = useUserStore()
 	const { farm } = useFarmStore()
 	const navigate = useNavigate()
@@ -332,3 +332,5 @@ const INITIAL_SPECIES: Species[] = [
 const formatDate = (date: dayjs.Dayjs | string) => {
 	return dayjs(date).toISOString()
 }
+
+export default AnimalForm

@@ -17,7 +17,7 @@ import { TextField } from '@/components/ui/TextField'
 
 import type { RegisterEmployeeForm } from './EmployeeForm.types'
 
-export const EmployeeForm: FC = () => {
+const EmployeeForm = () => {
 	const { user } = useUserStore()
 	const { defaultModalData, setHeaderTitle, setModalData, setLoading } = useAppStore()
 	const navigate = useNavigate()
@@ -183,3 +183,5 @@ const INITIAL_EMPLOYEE_DATA: RegisterEmployeeForm = {
 	photoUrl: '',
 	language: 'spa',
 }
+
+export default EmployeeForm

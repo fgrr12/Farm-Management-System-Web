@@ -16,7 +16,7 @@ import { Select } from '@/components/ui/Select'
 
 import type { AnimalsFilters } from './Animals.types'
 
-export const Animals = () => {
+const Animals = () => {
 	const { user } = useUserStore()
 	const { farm } = useFarmStore()
 	const navigation = useNavigate()
@@ -80,7 +80,6 @@ export const Animals = () => {
 
 	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
-		setLoading(true)
 		if (user && farm) {
 			getAnimals()
 			setSpecies(farm.species!)
@@ -132,3 +131,5 @@ const INITIAL_FILTERS: AnimalsFilters = {
 	speciesUuid: '',
 	search: '',
 }
+
+export default Animals

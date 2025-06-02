@@ -14,7 +14,7 @@ import { PasswordField, TextField } from '@/components/ui/TextField'
 
 import type { LoginCredentials } from './LoginForm.types'
 
-export const LoginForm: FC = () => {
+const LoginForm = () => {
 	const { user } = useUserStore()
 	const { defaultModalData, setModalData, setLoading } = useAppStore()
 	const navigate = useNavigate()
@@ -114,3 +114,5 @@ const INITIAL_CREDENTIALS: LoginCredentials = {
 	email: '',
 	password: '',
 }
+
+export default LoginForm
