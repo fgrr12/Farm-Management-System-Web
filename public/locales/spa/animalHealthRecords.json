@@ -2,6 +2,7 @@
 	"title": "Registros de salud",
 	"reason": "Razón",
 	"notes": "Notas",
+	"additionalInfo": "Información adicional",
 	"type": "Tipo",
 	"reviewedBy": "Revisado por",
 	"date": "Fecha",

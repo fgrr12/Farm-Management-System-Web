@@ -7,7 +7,7 @@ export interface HealthRecordsTableProps {
 	removeHealthRecord: (uuid: string) => void
 }
 
-declare interface HealthRecord {
+export interface HealthRecord {
 	uuid: string
 	animalUuid: string
 	reason: string
