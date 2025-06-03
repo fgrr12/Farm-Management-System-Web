@@ -73,7 +73,7 @@ export module RelatedAnimalsService {
 
 	// Sets
 
-	export const setRelatedAnimal = async (relatedAnimalData: Relation, createdBy: string | null) => {
+	export const setRelatedAnimal = async (relatedAnimalData: Relation, createdBy: string) => {
 		const { uuid, parent, child } = relatedAnimalData
 		const createdAt = dayjs().format()
 

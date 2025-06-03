@@ -32,7 +32,7 @@ export module ProductionRecordsService {
 
 	export const setProductionRecord = async (
 		productionRecordData: ProductionRecord,
-		createdBy: string | null
+		createdBy: string
 	) => {
 		productionRecordData.date = formatDate(productionRecordData.date)
 		const createdAt = dayjs().toISOString()

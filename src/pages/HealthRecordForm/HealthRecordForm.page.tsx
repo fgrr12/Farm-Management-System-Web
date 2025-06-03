@@ -248,6 +248,7 @@ const INITIAL_HEALTH_RECORD_FORM: AnimalHealthRecord = {
 	notes: '',
 	type: '',
 	reviewedBy: '',
+	createdBy: '',
 	date: dayjs().toISOString(),
 	weight: 0,
 	temperature: 0,

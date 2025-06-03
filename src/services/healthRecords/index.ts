@@ -38,7 +38,7 @@ export module HealthRecordsService {
 
 	export const setHealthRecord = async (
 		healthRecordData: AnimalHealthRecord,
-		createdBy: string | null
+		createdBy: string
 	) => {
 		healthRecordData.date = formatDate(healthRecordData.date)
 		const createdAt = dayjs().toISOString()
@@ -61,7 +61,7 @@ export module HealthRecordsService {
 
 	const setHealthRecordGiveBirth = async (
 		animalUuid: string,
-		createdBy: string | null,
+		createdBy: string,
 		date: string
 	) => {
 		const healthRecordData: AnimalHealthRecord = {
@@ -69,6 +69,7 @@ export module HealthRecordsService {
 			type: 'Birth',
 			date,
 			reviewedBy: '',
+			createdBy,
 			weight: 0,
 			temperature: 0,
 			medication: '',
@@ -83,12 +84,12 @@ export module HealthRecordsService {
 		const createdAt = dayjs().toISOString()
 
 		const document = doc(firestore, collectionName, healthRecordData.uuid)
-		await setDoc(document, { ...healthRecordData, createdAt, createdBy }, { merge: true })
+		await setDoc(document, { ...healthRecordData, createdAt }, { merge: true })
 	}
 
 	const setHealthRecordDrying = async (
 		animalUuid: string,
-		createdBy: string | null,
+		createdBy: string,
 		date: string
 	) => {
 		const healthRecordData: AnimalHealthRecord = {
@@ -96,6 +97,7 @@ export module HealthRecordsService {
 			type: 'Drying',
 			date,
 			reviewedBy: '',
+			createdBy,
 			weight: 0,
 			temperature: 0,
 			medication: '',
@@ -110,7 +112,7 @@ export module HealthRecordsService {
 		const createdAt = dayjs().toISOString()
 
 		const document = doc(firestore, collectionName, healthRecordData.uuid)
-		await setDoc(document, { ...healthRecordData, createdAt, createdBy }, { merge: true })
+		await setDoc(document, { ...healthRecordData, createdAt }, { merge: true })
 	}
 
 	// Update
