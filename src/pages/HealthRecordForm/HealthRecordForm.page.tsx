@@ -19,7 +19,6 @@ import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
 import type { HealthRecordFormType } from './HealthRecordForm.types'
-import { da } from 'react-day-picker/locale'
 
 const HealthRecordForm = () => {
 	const { user } = useUserStore()
