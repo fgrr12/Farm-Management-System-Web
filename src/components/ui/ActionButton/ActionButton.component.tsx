@@ -13,6 +13,8 @@ export const ActionButton: FC<ActionButtonProps> = ({ icon, ...rest }) => {
 				return 'bg-gray-500!'
 			case 'i-tabler-circles-relation':
 				return 'bg-yellow-500!'
+			case 'i-material-symbols-cancel-outline':
+				return 'bg-red-500!'
 			default:
 				return ''
 		}

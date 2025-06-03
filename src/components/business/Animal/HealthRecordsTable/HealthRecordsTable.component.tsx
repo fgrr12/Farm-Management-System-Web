@@ -56,9 +56,10 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 		return {
 			healthRecordsFiltered: healthRecords.filter((healthRecord) => {
 				const matchesDate =
-					filters.fromDate === '' ||
+					filters.fromDate === null ||
+					filters.toDate === null ||
 					(dayjs(healthRecord.date).isAfter(dayjs(filters.fromDate)) &&
-						(filters.toDate === '' || dayjs(healthRecord.date).isBefore(dayjs(filters.toDate))))
+						dayjs(healthRecord.date).isBefore(dayjs(filters.toDate)))
 				const matchesType = filters.type === '' || healthRecord.type === filters.type
 				const matchesReviewedBy =
 					filters.createdBy === '' ||
@@ -85,7 +86,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 		setFilters((prev) => ({ ...prev, [name]: value }))
 	}
 
-	const handleDateChange = (name: string) => (date: dayjs.Dayjs | string) => {
+	const handleDateChange = (name: string) => (date: dayjs.Dayjs | null) => {
 		setFilters((prev) => ({ ...prev, [name]: date }))
 	}
 
@@ -274,8 +275,8 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 }
 
 const INITIAL_FILTERS: HealthRecordsFilters = {
-	fromDate: '',
-	toDate: '',
+	fromDate: null,
+	toDate: null,
 	type: '',
 	createdBy: '',
 }

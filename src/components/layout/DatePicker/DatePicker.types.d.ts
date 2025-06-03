@@ -4,5 +4,5 @@ export interface DatePickerProps {
 	legend: string
 	label: string
 	date: dayjs.Dayjs | null
-	onDateChange: (date: dayjs.Dayjs) => void
+	onDateChange: (date: dayjs.Dayjs | null) => void
 }

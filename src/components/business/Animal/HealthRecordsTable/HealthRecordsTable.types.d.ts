@@ -9,8 +9,8 @@ export interface HealthRecordsTableProps {
 }
 
 export interface HealthRecordsFilters {
-	fromDate: dayjs.Dayjs | string
-	toDate: string
+	fromDate: dayjs.Dayjs | null
+	toDate: dayjs.Dayjs | null
 	type: HealthRecordType
 	createdBy: string
 }
