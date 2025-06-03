@@ -10,7 +10,7 @@ import { HealthRecordsService } from '@/services/healthRecords'
 
 import { ActionButton } from '@/components/ui/ActionButton'
 
-import type { HealthRecordsTableProps } from './HealthRecordsTable.types'
+import type { HealthRecord, HealthRecordsTableProps } from './HealthRecordsTable.types'
 
 export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 	healthRecords,
@@ -22,6 +22,17 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation(['animalHealthRecords'])
+
+	const additionalInfoExists = (healthRecord: HealthRecord) => {
+		return (
+			healthRecord.weight! > 0 ||
+			healthRecord.temperature! > 0 ||
+			healthRecord.medication ||
+			healthRecord.dosage ||
+			healthRecord.frequency ||
+			healthRecord.duration
+		)
+	}
 
 	const handleAddHealthRecord = () => {
 		const animalUuid = params.animalUuid as string
@@ -96,12 +107,6 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 							<th>{t('type')}</th>
 							<th>{t('reviewedBy')}</th>
 							<th>{t('date')}</th>
-							<th>{t('weight')}</th>
-							<th>{t('temperature')}</th>
-							<th>{t('medication')}</th>
-							<th>{t('dosage')}</th>
-							<th>{t('frequency')}</th>
-							<th>{t('duration')}</th>
 							{haveUser && <th>{t('actions')}</th>}
 						</tr>
 					</thead>
@@ -109,24 +114,47 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 						{healthRecords.map((healthRecord) => (
 							<tr key={self.crypto.randomUUID()} className={trBgColor(healthRecord.type)}>
 								<td className="text-black">{healthRecord.reason}</td>
-								<td className="text-black">{healthRecord.notes}</td>
+								<td className="text-black flex flex-col gap-1">
+									<span>{healthRecord.notes}</span>
+									{additionalInfoExists(healthRecord) && (
+										<span className="text-sm text-gray-600 mt-4">{t('additionalInfo')}</span>
+									)}
+									{healthRecord.weight! > 0 && (
+										<span>
+											{t('weight')}: {healthRecord.weight} {farm!.weightUnit}
+										</span>
+									)}
+									{healthRecord.temperature! > 0 && (
+										<span>
+											{t('temperature')}: {healthRecord.temperature} {farm!.temperatureUnit}
+										</span>
+									)}
+									{healthRecord.medication && (
+										<span>
+											{t('medication')}: {healthRecord.medication}
+										</span>
+									)}
+									{healthRecord.dosage && (
+										<span>
+											{t('dosage')}: {healthRecord.dosage}
+										</span>
+									)}
+									{healthRecord.frequency && (
+										<span>
+											{t('frequency')}: {healthRecord.frequency}
+										</span>
+									)}
+									{healthRecord.duration && (
+										<span>
+											{t('duration')}: {healthRecord.duration}
+										</span>
+									)}
+								</td>
 								<td className="text-black">
 									{t(`healthRecordType.${healthRecord.type.toLowerCase()}`)}
 								</td>
 								<td className="text-black">{healthRecord.reviewedBy}</td>
 								<td className="text-black">{dayjs(healthRecord.date).format('DD/MM/YYYY')}</td>
-								<td className="text-black">
-									{healthRecord.weight}
-									{farm!.weightUnit}
-								</td>
-								<td className="text-black">
-									{healthRecord.temperature}
-									{farm!.temperatureUnit}
-								</td>
-								<td className="text-black">{healthRecord.medication}</td>
-								<td className="text-black">{healthRecord.dosage}</td>
-								<td className="text-black">{healthRecord.frequency}</td>
-								<td className="text-black">{healthRecord.duration}</td>
 								{haveUser && (
 									<td>
 										<ActionButton

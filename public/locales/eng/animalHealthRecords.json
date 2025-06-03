@@ -2,6 +2,7 @@
 	"title": "Health Records",
 	"reason": "Reason",
 	"notes": "Notes",
+	"additionalInfo": "Additional Info",
 	"type": "Type",
 	"reviewedBy": "Reviewed By",
 	"date": "Date",
