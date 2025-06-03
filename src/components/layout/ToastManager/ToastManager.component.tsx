@@ -1,7 +1,10 @@
-import { Toast } from '@/components/ui/Toast'
 import { useCallback, useEffect, useState } from 'react'
-import { ToastItem } from './ToastManager.types'
+
 import { useAppStore } from '@/store/useAppStore'
+
+import { Toast } from '@/components/ui/Toast'
+
+import type { ToastItem } from './ToastManager.types'
 
 export const ToastManager = () => {
 	const { toastData } = useAppStore()

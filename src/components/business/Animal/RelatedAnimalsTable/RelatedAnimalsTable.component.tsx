@@ -51,7 +51,7 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 						message: t('toast.deleted'),
 						type: 'success',
 					})
-				} catch (error) {
+				} catch (_error) {
 					setToastData({
 						message: t('toast.deleteError'),
 						type: 'error',

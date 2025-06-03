@@ -54,7 +54,7 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 						message: t('toast.deleted'),
 						type: 'success',
 					})
-				} catch (error) {
+				} catch (_error) {
 					setToastData({
 						message: t('toast.deleteError'),
 						type: 'error',

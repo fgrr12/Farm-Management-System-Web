@@ -37,7 +37,7 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 						message: t('toast.deleted'),
 						type: 'success',
 					})
-				} catch (error) {
+				} catch (_error) {
 					setToastData({
 						message: t('toast.deleteError'),
 						type: 'error',

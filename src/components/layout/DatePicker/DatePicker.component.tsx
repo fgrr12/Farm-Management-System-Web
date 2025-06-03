@@ -17,8 +17,9 @@ import { enUS, es } from 'react-day-picker/locale'
 import { useUserStore } from '@/store/useUserStore'
 import 'react-day-picker/style.css'
 
-import type { DatePickerProps } from './DatePicker.types'
 import { ActionButton } from '@/components/ui/ActionButton'
+
+import type { DatePickerProps } from './DatePicker.types'
 
 function CustomSelectDropdown(props: DropdownProps) {
 	const { options, value, onChange } = props

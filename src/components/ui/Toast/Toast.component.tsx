@@ -1,6 +1,7 @@
-import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
-import { ToastProps } from './Toast.types'
+import { useLayoutEffect, useRef } from 'react'
+
+import type { ToastProps } from './Toast.types'
 
 export const Toast = ({ id, message, type = 'info', duration = 5000, onClose }: ToastProps) => {
 	const toastRef = useRef<HTMLDivElement>(null)
@@ -36,7 +37,7 @@ export const Toast = ({ id, message, type = 'info', duration = 5000, onClose }: 
 		return () => {
 			if (timeoutRef.current) clearTimeout(timeoutRef.current)
 		}
-	}, [])
+	}, [duration, id, onClose])
 
 	return (
 		<div

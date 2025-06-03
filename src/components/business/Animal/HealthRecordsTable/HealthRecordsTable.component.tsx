@@ -1,20 +1,20 @@
 import dayjs from 'dayjs'
+import { type ChangeEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
 
 import { useAppStore } from '@/store/useAppStore'
+import { useUserStore } from '@/store/useUserStore'
 
 import { HealthRecordsService } from '@/services/healthRecords'
 
+import { DatePicker } from '@/components/layout/DatePicker'
 import { ActionButton } from '@/components/ui/ActionButton'
+import { Select } from '@/components/ui/Select'
 
 import type { HealthRecordsFilters, HealthRecordsTableProps } from './HealthRecordsTable.types'
-import { ChangeEvent, useMemo, useState } from 'react'
-import { Select } from '@/components/ui/Select'
-import { useUserStore } from '@/store/useUserStore'
-import { DatePicker } from '@/components/layout/DatePicker'
 
 const trBgColor = (reason: HealthRecordType) => {
 	switch (reason) {
@@ -121,7 +121,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 						message: t('toast.deleted'),
 						type: 'success',
 					})
-				} catch (error) {
+				} catch (_error) {
 					setToastData({
 						message: t('toast.deleteError'),
 						type: 'error',
