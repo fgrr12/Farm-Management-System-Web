@@ -60,7 +60,7 @@ export module AnimalsService {
 
 	export const setAnimal = async (
 		animalData: Animal,
-		createdBy: string | null,
+		createdBy: string,
 		farmUuid: string | null
 	) => {
 		if (animalData.picture && !animalData.picture.includes('firebasestorage')) {
