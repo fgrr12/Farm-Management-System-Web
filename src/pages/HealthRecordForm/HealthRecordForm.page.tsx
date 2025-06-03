@@ -19,6 +19,7 @@ import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
 import type { HealthRecordFormType } from './HealthRecordForm.types'
+import { da } from 'react-day-picker/locale'
 
 const HealthRecordForm = () => {
 	const { user } = useUserStore()
@@ -54,7 +55,7 @@ const HealthRecordForm = () => {
 	const handleDateChange = () => (newDate: dayjs.Dayjs | null) => {
 		setHealthRecordForm((prev) => ({
 			...prev,
-			newDate: newDate ? dayjs(newDate).toISOString() : null,
+			date: newDate ? dayjs(newDate).toISOString() : dayjs().toISOString(),
 		}))
 	}
 
