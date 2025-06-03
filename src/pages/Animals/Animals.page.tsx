@@ -42,9 +42,8 @@ const Animals = () => {
 		})
 	}, [animals, filters])
 
-	const navigateToAnimal = (uuid: string) => {
-		const path = AppRoutes.ANIMAL.replace(':animalUuid', uuid)
-		navigation(path)
+	const navigateToAddAnimal = () => {
+		navigation(AppRoutes.ADD_ANIMAL)
 	}
 
 	const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -101,7 +100,7 @@ const Animals = () => {
 				<button
 					type="button"
 					className="btn btn-primary h-12 w-full text-lg col-start-4"
-					onClick={() => navigation(AppRoutes.ADD_ANIMAL)}
+					onClick={navigateToAddAnimal}
 				>
 					{t('addAnimal')}
 				</button>
@@ -110,10 +109,10 @@ const Animals = () => {
 				{filteredAnimals.map((animal) => (
 					<AnimalCard
 						key={animal.uuid}
+						uuid={animal.uuid}
 						animalId={animal.animalId}
 						breed={animal.breed}
 						gender={animal.gender}
-						onClick={() => navigateToAnimal(animal.uuid)}
 					/>
 				))}
 			</div>

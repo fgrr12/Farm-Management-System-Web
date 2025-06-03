@@ -1,10 +1,5 @@
 import type { ActionButtonProps } from './ActionButton.types'
 
-/**
- * @name ActionButton
- * @description Inserts an icon as a button on the webpage
- * @param {string} icon - Name of unoCSS icon
- **/
 export const ActionButton: FC<ActionButtonProps> = ({ icon, ...rest }) => {
 	const iconColor = () => {
 		switch (icon) {
@@ -12,10 +7,17 @@ export const ActionButton: FC<ActionButtonProps> = ({ icon, ...rest }) => {
 				return 'bg-blue-500!'
 			case 'i-material-symbols-delete-outline':
 				return 'bg-red-500!'
+			case 'i-material-symbols-light-health-metrics-rounded':
+				return 'bg-emerald-500!'
+			case 'i-icon-park-outline-milk':
+				return 'bg-gray-500!'
+			case 'i-tabler-circles-relation':
+				return 'bg-yellow-500!'
 			default:
 				return ''
 		}
 	}
+
 	return (
 		<button
 			type="button"
