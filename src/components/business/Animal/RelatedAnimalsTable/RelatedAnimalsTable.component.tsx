@@ -18,7 +18,7 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 	type,
 	removeRelation,
 }) => {
-	const { defaultModalData, setModalData, setLoading } = useAppStore()
+	const { defaultModalData, setModalData, setLoading, setToastData } = useAppStore()
 	const params = useParams()
 	const navigate = useNavigate()
 	const { t } = useTranslation(['animalRelations'])
@@ -40,14 +40,31 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 			title: t('modal.deleteRelatedAnimal.title'),
 			message: t('modal.deleteRelatedAnimal.message'),
 			onAccept: async () => {
-				setLoading(true)
-				await RelatedAnimalsService.deleteRelatedAnimal(animalUuid)
-				animals = animals.filter((animal) => animal.uuid !== animalUuid)
-				removeRelation(animalUuid)
-				setModalData(defaultModalData)
-				setLoading(false)
+				try {
+					setLoading(true)
+					await RelatedAnimalsService.deleteRelatedAnimal(animalUuid)
+					animals = animals.filter((animal) => animal.uuid !== animalUuid)
+					removeRelation(animalUuid)
+					setModalData(defaultModalData)
+					setLoading(false)
+					setToastData({
+						message: t('toast.deleted'),
+						type: 'success',
+					})
+				} catch (_error) {
+					setToastData({
+						message: t('toast.deleteError'),
+						type: 'error',
+					})
+				}
 			},
-			onCancel: () => setModalData(defaultModalData),
+			onCancel: () => {
+				setModalData(defaultModalData)
+				setToastData({
+					message: t('toast.notDeleted'),
+					type: 'info',
+				})
+			},
 		})
 	}
 

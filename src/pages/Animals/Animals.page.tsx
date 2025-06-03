@@ -21,7 +21,7 @@ const Animals = () => {
 	const { farm } = useFarmStore()
 	const navigation = useNavigate()
 	const { t } = useTranslation(['animals'])
-	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
+	const { setLoading, setHeaderTitle, setToastData } = useAppStore()
 
 	const [animals, setAnimals] = useState<Animal[]>([])
 	const [species, setSpecies] = useState<Species[]>([])
@@ -62,11 +62,9 @@ const Animals = () => {
 			const dbAnimals = await AnimalsService.getAnimals(farm!.uuid)
 			setAnimals(dbAnimals)
 		} catch (_error) {
-			setModalData({
-				open: true,
-				title: t('modal.errorGettingAnimals.title'),
-				message: t('modal.errorGettingAnimals.message'),
-				onAccept: () => setModalData(defaultModalData),
+			setToastData({
+				message: t('toast.errorGettingAnimals'),
+				type: 'error',
 			})
 		} finally {
 			setLoading(false)

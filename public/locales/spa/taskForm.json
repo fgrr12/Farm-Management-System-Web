@@ -13,10 +13,7 @@
 	"species": "Especie",
 	"selectSpecies": "Selecciona una especie",
 	"addTask": "Añadir",
-	"modal": {
-		"errorAddingTask": {
-			"title": "Error",
-			"message": "Ocurrió un error al añadir la tarea"
-		}
+	"toast": {
+		"errorAddingTask": "Se ha producido un error al añadir la tarea."
 	}
 }

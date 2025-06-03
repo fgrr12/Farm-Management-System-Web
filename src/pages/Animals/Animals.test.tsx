@@ -2,6 +2,7 @@
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, expect, it, vi } from 'vitest'
+
 import Animals from './Animals.page'
 
 // Mocks centralizados

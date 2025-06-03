@@ -12,7 +12,7 @@ import { ActionButton } from '@/components/ui/ActionButton'
 import type { EmployeesTableProps } from './EmployeesTable.types'
 
 export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmployee }) => {
-	const { defaultModalData, setModalData, setLoading } = useAppStore()
+	const { defaultModalData, setModalData, setLoading, setToastData } = useAppStore()
 	const navigate = useNavigate()
 	const { t } = useTranslation(['employeesData'])
 
@@ -27,13 +27,30 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 			title: t('modal.deleteEmployee.title'),
 			message: t('modal.deleteEmployee.message'),
 			onAccept: async () => {
-				setLoading(true)
-				await EmployeesService.deleteEmployee(user.uuid)
-				removeEmployee(user.uuid)
-				setModalData(defaultModalData)
-				setLoading(false)
+				try {
+					setLoading(true)
+					await EmployeesService.deleteEmployee(user.uuid)
+					removeEmployee(user.uuid)
+					setModalData(defaultModalData)
+					setLoading(false)
+					setToastData({
+						message: t('toast.deleted'),
+						type: 'success',
+					})
+				} catch (_error) {
+					setToastData({
+						message: t('toast.deleteError'),
+						type: 'error',
+					})
+				}
 			},
-			onCancel: () => setModalData(defaultModalData),
+			onCancel: () => {
+				setModalData(defaultModalData)
+				setToastData({
+					message: t('toast.notDeleted'),
+					type: 'info',
+				})
+			},
 		})
 	}
 	return (

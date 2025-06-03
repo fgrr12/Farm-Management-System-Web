@@ -14,15 +14,9 @@
 			"eng": "English"
 		},
 		"edit": "Update My Profile",
-		"modal": {
-			"editMyAccount": {
-				"title": "Profile Updated",
-				"message": "Your profile has been updated successfully"
-			},
-			"errorEditingMyAccount": {
-				"title": "Error",
-				"message": "There was an error updating your profile"
-			}
+		"toast": {
+			"edited": "Profile updated successfully",
+			"errorEditing": "There was an error updating your profile"
 		}
 	},
 	"myFarm": {
@@ -50,15 +44,9 @@
 			"°F": "Fahrenheit"
 		},
 		"edit": "Update My Farm",
-		"modal": {
-			"editMyFarm": {
-				"title": "Farm Updated",
-				"message": "Your farm has been updated successfully"
-			},
-			"errorMyFarm": {
-				"title": "Error",
-				"message": "There was an error updating your farm"
-			}
+		"toast": {
+			"edited": "Farm updated successfully",
+			"errorEditing": "There was an error updating your farm"
 		}
 	},
 	"myBillingCard": {
@@ -70,15 +58,9 @@
 		"phone": "Phone",
 		"address": "Address",
 		"edit": "Update My Billing Card",
-		"modal": {
-			"editBillingCard": {
-				"title": "Billing Card Updated",
-				"message": "Your billing card has been updated successfully"
-			},
-			"errorBillingCard": {
-				"title": "Error",
-				"message": "There was an error updating your billing card"
-			}
+		"toast": {
+			"edited": "Billing card updated successfully",
+			"errorEditing": "There was an error updating your billing card"
 		}
 	}
 }

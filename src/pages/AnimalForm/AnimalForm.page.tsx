@@ -27,7 +27,7 @@ const AnimalForm = () => {
 	const params = useParams()
 	const { t } = useTranslation(['animalForm'])
 
-	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
+	const { setLoading, setHeaderTitle, setToastData } = useAppStore()
 	const [animalForm, setAnimalForm] = useState<Animal>(INITIAL_ANIMAL_FORM)
 	const [species, setSpecies] = useState(INITIAL_SPECIES)
 	const [breeds, setBreeds] = useState<Breed[]>([])
@@ -83,11 +83,9 @@ const AnimalForm = () => {
 			setAnimalForm(dbAnimal)
 			setBreeds(species!.breeds)
 		} catch (_error) {
-			setModalData({
-				open: true,
-				title: t('modal.errorGettingAnimal.title'),
-				message: t('modal.errorGettingAnimal.message'),
-				onAccept: () => setModalData(defaultModalData),
+			setToastData({
+				message: t('toast.errorGettingAnimal'),
+				type: 'error',
 			})
 		} finally {
 			setLoading(false)
@@ -119,33 +117,22 @@ const AnimalForm = () => {
 
 			if (animalUuid) {
 				await AnimalsService.updateAnimal(animalForm, user!.uuid)
-				setModalData({
-					open: true,
-					title: t('modal.editAnimal.title'),
-					message: t('modal.editAnimal.message'),
-					onAccept: () => {
-						setModalData(defaultModalData)
-						navigate(AppRoutes.ANIMAL.replace(':animalUuid', animalUuid))
-					},
+				setToastData({
+					message: t('toast.edited'),
+					type: 'success',
 				})
+				navigate(AppRoutes.ANIMAL.replace(':animalUuid', animalUuid))
 			} else {
 				await AnimalsService.setAnimal(animalForm, user!.uuid, user!.farmUuid)
-				setModalData({
-					open: true,
-					title: t('modal.addAnimal.title'),
-					message: t('modal.addAnimal.message'),
-					onAccept: () => {
-						setModalData(defaultModalData)
-						setAnimalForm(INITIAL_ANIMAL_FORM)
-					},
+				setToastData({
+					message: t('toast.added'),
+					type: 'success',
 				})
 			}
 		} catch (_error) {
-			setModalData({
-				open: true,
-				title: t('modal.errorAddingAnimal.title'),
-				message: t('modal.errorAddingAnimal.message'),
-				onAccept: () => setModalData(defaultModalData),
+			setToastData({
+				message: t('toast.errorAddingAnimal'),
+				type: 'error',
 			})
 		} finally {
 			setLoading(false)

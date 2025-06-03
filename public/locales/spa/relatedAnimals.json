@@ -6,10 +6,7 @@
 	"selectedAnimal": "Animal seleccionado",
 	"addExternalRelation": "Agregar relación externa",
 	"filterByID": "Filtra por ID",
-	"modal": {
-		"errorGettingAnimals": {
-			"title": "Error",
-			"message": "Ocurrió un error al obtener los animales"
-		}
+	"toast": {
+		"errorGettingAnimals": "Se ha producido un error al obtener los animales."
 	}
 }

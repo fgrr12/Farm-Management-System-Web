@@ -19,6 +19,7 @@ import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
 import type { HealthRecordFormType } from './HealthRecordForm.types'
+import { da } from 'react-day-picker/locale'
 
 const HealthRecordForm = () => {
 	const { user } = useUserStore()
@@ -26,7 +27,7 @@ const HealthRecordForm = () => {
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation(['healthRecordForm'])
-	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
+	const { setLoading, setToastData, setHeaderTitle } = useAppStore()
 
 	const [healthRecordForm, setHealthRecordForm] = useState(INITIAL_HEALTH_RECORD_FORM)
 
@@ -54,7 +55,7 @@ const HealthRecordForm = () => {
 	const handleDateChange = () => (newDate: dayjs.Dayjs | null) => {
 		setHealthRecordForm((prev) => ({
 			...prev,
-			newDate: newDate ? dayjs(newDate).toISOString() : null,
+			date: newDate ? dayjs(newDate).toISOString() : dayjs().toISOString(),
 		}))
 	}
 
@@ -65,11 +66,9 @@ const HealthRecordForm = () => {
 			const dbHealthRecord = await HealthRecordsService.getHealthRecord(healthRecordUuid)
 			setHealthRecordForm(dbHealthRecord)
 		} catch (_error) {
-			setModalData({
-				open: true,
-				title: t('modal.errorGettingHealthRecord.title'),
-				message: t('modal.errorGettingHealthRecord.message'),
-				onAccept: () => setModalData(defaultModalData),
+			setToastData({
+				message: t('toast.errorGettingHealthRecord'),
+				type: 'error',
 			})
 		} finally {
 			setLoading(false)
@@ -85,33 +84,23 @@ const HealthRecordForm = () => {
 
 			if (healthRecordUuid) {
 				await HealthRecordsService.updateHealthRecord(healthRecordForm, user!.uuid)
-				setModalData({
-					open: true,
-					title: t('modal.editHealthRecord.title'),
-					message: t('modal.editHealthRecord.message'),
-					onAccept: () => {
-						setModalData(defaultModalData)
-						navigate(AppRoutes.ANIMAL.replace(':animalUuid', healthRecordForm.animalUuid))
-					},
+				setToastData({
+					message: t('toast.editHealthRecord'),
+					type: 'success',
 				})
+				navigate(AppRoutes.ANIMAL.replace(':animalUuid', healthRecordForm.animalUuid))
 			} else {
 				await HealthRecordsService.setHealthRecord(healthRecordForm, user!.uuid)
-				setModalData({
-					open: true,
-					title: t('modal.addHealthRecord.title'),
-					message: t('modal.addHealthRecord.message'),
-					onAccept: () => {
-						setModalData(defaultModalData)
-						navigate(AppRoutes.ANIMAL.replace(':animalUuid', healthRecordForm.animalUuid))
-					},
+				setToastData({
+					message: t('toast.addHealthRecord'),
+					type: 'success',
 				})
+				navigate(AppRoutes.ANIMAL.replace(':animalUuid', healthRecordForm.animalUuid))
 			}
 		} catch (_error) {
-			setModalData({
-				open: true,
-				title: t('modal.errorAddingHealthRecord.title'),
-				message: t('modal.errorAddingHealthRecord.message'),
-				onAccept: () => setModalData(defaultModalData),
+			setToastData({
+				message: t('toast.errorAddingHealthRecord'),
+				type: 'error',
 			})
 		} finally {
 			setLoading(false)

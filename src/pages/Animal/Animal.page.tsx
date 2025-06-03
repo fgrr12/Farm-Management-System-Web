@@ -10,6 +10,7 @@ import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
 import { AnimalsService } from '@/services/animals'
+import { EmployeesService } from '@/services/employees'
 import { FarmsService } from '@/services/farms'
 import { HealthRecordsService } from '@/services/healthRecords'
 import { ProductionRecordsService } from '@/services/productionRecords'
@@ -19,7 +20,6 @@ import { HealthRecordsTable } from '@/components/business/Animal/HealthRecordsTa
 import { ProductionRecordsTable } from '@/components/business/Animal/ProductionRecordsTable'
 import { RelatedAnimalsTable } from '@/components/business/Animal/RelatedAnimalsTable'
 import { ActionButton } from '@/components/ui/ActionButton'
-import { EmployeesService } from '@/services/employees'
 
 const DetailItem = ({ label, value }: { label: string; value: React.ReactNode }) => (
 	<div className="flex flex-col gap-1 w-full justify-center items-center">
@@ -42,7 +42,7 @@ const Animal = () => {
 	const params = useParams()
 	const { t } = useTranslation(['animal'])
 
-	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
+	const { defaultModalData, setLoading, setModalData, setHeaderTitle, setToastData } = useAppStore()
 	const [animal, setAnimal] = useState(ANIMAL_INITIAL_STATE)
 	const [employees, setEmployees] = useState<User[]>([])
 	const [activeTab, setActiveTab] = useState<
@@ -72,13 +72,30 @@ const Animal = () => {
 			title: t('modal.removeAnimal.title'),
 			message: t('modal.removeAnimal.message'),
 			onAccept: async () => {
-				setLoading(true)
-				await AnimalsService.deleteAnimal(animal.uuid, false)
-				setModalData(defaultModalData)
-				setLoading(false)
-				navigate(AppRoutes.ANIMALS)
+				try {
+					setLoading(true)
+					await AnimalsService.deleteAnimal(animal.uuid, false)
+					setModalData(defaultModalData)
+					setLoading(false)
+					setToastData({
+						message: t('toast.deleted'),
+						type: 'success',
+					})
+					navigate(AppRoutes.ANIMALS)
+				} catch (_error) {
+					setToastData({
+						message: t('toast.deleteError'),
+						type: 'error',
+					})
+				}
 			},
-			onCancel: () => setModalData(defaultModalData),
+			onCancel: () => {
+				setModalData(defaultModalData)
+				setToastData({
+					message: t('toast.notDeleted'),
+					type: 'info',
+				})
+			},
 		})
 	}
 
@@ -169,11 +186,9 @@ const Animal = () => {
 			dbAnimal.healthRecords = dbHealthRecords
 			setAnimal({ ...dbAnimal, weight: weight! })
 		} catch (_error) {
-			setModalData({
-				open: true,
-				title: t('modal.errorGettingAnimal.title'),
-				message: t('modal.errorGettingAnimal.message'),
-				onAccept: () => setModalData(defaultModalData),
+			setToastData({
+				message: t('toast.errorGettingAnimal'),
+				type: 'error',
 			})
 		} finally {
 			setLoading(false)

@@ -7,6 +7,7 @@ import { Loading } from './components/layout/Loading'
 import { Modal } from './components/layout/Modal'
 import { Navbar } from './components/layout/Navbar'
 import { Sidebar } from './components/layout/Sidebar'
+import { ToastManager } from './components/layout/ToastManager'
 import { AppRoutes } from './config/constants/routes'
 import { auth } from './config/environment'
 import { FarmsService } from './services/farms'
@@ -236,6 +237,7 @@ export const App = () => {
 						onCancel={modalData.onCancel}
 					/>
 					<Loading open={appLoading || authLoading} />
+					<ToastManager />
 				</main>
 			</div>
 		</div>

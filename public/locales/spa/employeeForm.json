@@ -11,18 +11,9 @@
 	"editButton": "Guardar",
 	"employee": "Empleado",
 	"owner": "Propietario",
-	"modal": {
-		"addEmployee": {
-			"title": "Empleado añadido",
-			"message": "El empleado ha sido añadido exitosamente"
-		},
-		"editEmployee": {
-			"title": "Empleado editado",
-			"message": "El empleado ha sido editado exitosamente"
-		},
-		"errorAddingEmployee": {
-			"title": "Error",
-			"message": "Ocurrió un error al añadir el empleado"
-		}
+	"toast": {
+		"added": "Empleado añadido exitosamente.",
+		"edited": "Empleado editado exitosamente.",
+		"errorAddingEmployee": "Se ha producido un error al añadir el empleado."
 	}
 }

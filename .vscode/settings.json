@@ -23,6 +23,7 @@
 		"firebasestorage",
 		"firestore",
 		"Firestore",
+		"gsap",
 		"languagedetector",
 		"partialize",
 		"Shouty",

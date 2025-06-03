@@ -20,7 +20,7 @@ import { TextField } from '@/components/ui/TextField'
 const TaskForm = () => {
 	const { user } = useUserStore()
 	const { farm } = useFarmStore()
-	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
+	const { setLoading, setHeaderTitle, setToastData } = useAppStore()
 	const navigate = useNavigate()
 	const { t } = useTranslation(['taskForm'])
 
@@ -45,11 +45,9 @@ const TaskForm = () => {
 			await TasksService.setTask(task, user!.uuid, farm!.uuid)
 			navigate(AppRoutes.TASKS)
 		} catch (_error) {
-			setModalData({
-				open: true,
-				title: t('modal.errorAddingTask.title'),
-				message: t('modal.errorAddingTask.message'),
-				onAccept: () => setModalData(defaultModalData),
+			setToastData({
+				message: t('toast.errorAddingTask'),
+				type: 'error',
 			})
 		} finally {
 			setLoading(false)

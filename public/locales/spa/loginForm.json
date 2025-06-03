@@ -6,10 +6,7 @@
 	"forgotPassword": "¿Olvidaste tu contraseña?",
 	"or": "O",
 	"google": "Iniciar sesión con Google",
-	"modal": {
-		"errorLoggingIn": {
-			"title": "Error",
-			"message": "Ocurrió un error al iniciar sesión"
-		}
+	"toast": {
+		"errorLoggingIn": "Se ha producido un error al iniciar sesión"
 	}
 }

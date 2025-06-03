@@ -23,10 +23,12 @@
 		"removeAnimal": {
 			"title": "Quieres eliminar este animal?",
 			"message": "Esta acción no se puede deshacer."
-		},
-		"errorGettingAnimal": {
-			"title": "Error",
-			"message": "Ocurrió un error al obtener el animal"
 		}
+	},
+	"toast": {
+		"deleted": "Animal eliminado con éxito.",
+		"notDeleted": "El animal no se ha eliminado.",
+		"deleteError": "Se ha producido un error al eliminar el animal.",
+		"errorGettingAnimal": "Se ha producido un error al obtener el animal."
 	}
 }

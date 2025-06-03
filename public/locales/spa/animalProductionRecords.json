@@ -10,5 +10,10 @@
 			"title": "¿Quieres eliminar este registro de producción?",
 			"message": "Esta acción no se puede deshacer."
 		}
+	},
+	"toast": {
+		"deleted": "Registro de producción eliminado con éxito.",
+		"notDeleted": "El registro de producción no se ha eliminado.",
+		"deleteError": "Se ha producido un error al eliminar el registro de producción."
 	}
 }

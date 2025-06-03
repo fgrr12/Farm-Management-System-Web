@@ -15,5 +15,10 @@
 			"title": "¿Quieres eliminar este empleado?",
 			"message": "Esta acción no se puede deshacer."
 		}
+	},
+	"toast": {
+		"deleted": "Empleado eliminado con éxito.",
+		"notDeleted": "El empleado no se ha eliminado.",
+		"deleteError": "Se ha producido un error al eliminar el empleado."
 	}
 }

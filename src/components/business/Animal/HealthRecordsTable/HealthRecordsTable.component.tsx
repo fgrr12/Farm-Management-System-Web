@@ -1,20 +1,20 @@
 import dayjs from 'dayjs'
+import { type ChangeEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
 
 import { useAppStore } from '@/store/useAppStore'
+import { useUserStore } from '@/store/useUserStore'
 
 import { HealthRecordsService } from '@/services/healthRecords'
 
+import { DatePicker } from '@/components/layout/DatePicker'
 import { ActionButton } from '@/components/ui/ActionButton'
+import { Select } from '@/components/ui/Select'
 
 import type { HealthRecordsFilters, HealthRecordsTableProps } from './HealthRecordsTable.types'
-import { ChangeEvent, useMemo, useState } from 'react'
-import { Select } from '@/components/ui/Select'
-import { useUserStore } from '@/store/useUserStore'
-import { DatePicker } from '@/components/layout/DatePicker'
 
 const trBgColor = (reason: HealthRecordType) => {
 	switch (reason) {
@@ -44,7 +44,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 	employees,
 	removeHealthRecord,
 }) => {
-	const { defaultModalData, setModalData, setLoading } = useAppStore()
+	const { defaultModalData, setToastData, setModalData, setLoading } = useAppStore()
 	const { user } = useUserStore()
 	const navigate = useNavigate()
 	const params = useParams()
@@ -111,13 +111,30 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 			title: t('modal.deleteHealthRecord.title'),
 			message: t('modal.deleteHealthRecord.message'),
 			onAccept: async () => {
-				setLoading(true)
-				await HealthRecordsService.updateHealthRecordsStatus(uuid, false)
-				removeHealthRecord(uuid)
-				setModalData(defaultModalData)
-				setLoading(false)
+				try {
+					setLoading(true)
+					await HealthRecordsService.updateHealthRecordsStatus(uuid, false)
+					removeHealthRecord(uuid)
+					setModalData(defaultModalData)
+					setLoading(false)
+					setToastData({
+						message: t('toast.deleted'),
+						type: 'success',
+					})
+				} catch (_error) {
+					setToastData({
+						message: t('toast.deleteError'),
+						type: 'error',
+					})
+				}
 			},
-			onCancel: () => setModalData(defaultModalData),
+			onCancel: () => {
+				setModalData(defaultModalData)
+				setToastData({
+					message: t('toast.notDeleted'),
+					type: 'info',
+				})
+			},
 		})
 	}
 

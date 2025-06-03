@@ -2,10 +2,7 @@
 	"title": "Empleados",
 	"search": "Buscar",
 	"addEmployee": "Añadir empleado",
-	"modal": {
-		"errorGettingEmployees": {
-			"title": "Error",
-			"message": "Ocurrió un error al obtener los empleados"
-		}
+	"toast": {
+		"errorGettingEmployees": "Se ha producido un error al obtener los empleados."
 	}
 }

@@ -1,8 +1,11 @@
-import { ActionButton } from '@/components/ui/ActionButton'
-import type { CardProps } from './AnimalCard.types'
+import type { MouseEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
+
 import { AppRoutes } from '@/config/constants/routes'
-import { MouseEvent } from 'react'
+
+import { ActionButton } from '@/components/ui/ActionButton'
+
+import type { CardProps } from './AnimalCard.types'
 
 export const AnimalCard: FC<CardProps> = ({ uuid, animalId, breed, gender, ...props }) => {
 	const navigate = useNavigate()
