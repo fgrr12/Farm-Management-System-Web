@@ -18,6 +18,7 @@ import { useUserStore } from '@/store/useUserStore'
 import 'react-day-picker/style.css'
 
 import type { DatePickerProps } from './DatePicker.types'
+import { ActionButton } from '@/components/ui/ActionButton'
 
 function CustomSelectDropdown(props: DropdownProps) {
 	const { options, value, onChange } = props
@@ -76,16 +77,26 @@ export const DatePicker: FC<DatePickerProps> = ({ legend, label, date, onDateCha
 		<fieldset className="fieldset w-full relative">
 			<legend className="fieldset-legend">{legend}</legend>
 
-			<button
-				type="button"
-				className="input input-border w-full h-12 pl-2 pr-2 flex items-center justify-between"
-				ref={refs.setReference}
-				onClick={() => setOpen((prev) => !prev)}
-				{...getReferenceProps()}
-			>
-				{date?.isValid() ? dayjs(date).format('DD/MM/YYYY') : label}
-				<i className="i-material-symbols-calendar-month w-6! h-6!" />
-			</button>
+			<div className="flex items-center gap-2">
+				<button
+					type="button"
+					className="input input-border w-full h-12 pl-2 pr-2 flex items-center justify-between"
+					ref={refs.setReference}
+					onClick={() => setOpen((prev) => !prev)}
+					{...getReferenceProps()}
+				>
+					{date?.isValid() ? dayjs(date).format('DD/MM/YYYY') : label}
+					<i className="i-material-symbols-calendar-month w-6! h-6!" />
+				</button>
+
+				{date?.isValid() && (
+					<ActionButton
+						title="Clear"
+						icon="i-material-symbols-cancel-outline"
+						onClick={() => onDateChange(null)}
+					/>
+				)}
+			</div>
 
 			{open && (
 				<FloatingFocusManager context={context} modal={false}>

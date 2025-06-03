@@ -64,8 +64,9 @@ const AnimalForm = () => {
 	}
 
 	const handleDateChange =
-		(key: 'birthDate' | 'purchaseDate' | 'soldDate' | 'deathDate') => (newDate: dayjs.Dayjs) => {
-			setAnimalForm((prev) => ({ ...prev, [key]: newDate.format('YYYY-MM-DD') }))
+		(key: 'birthDate' | 'purchaseDate' | 'soldDate' | 'deathDate') =>
+		(newDate: dayjs.Dayjs | null) => {
+			setAnimalForm((prev) => ({ ...prev, [key]: newDate ? newDate.format('YYYY-MM-DD') : null }))
 		}
 
 	const handleFile = async (file: File) => {

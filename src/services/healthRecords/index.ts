@@ -59,11 +59,7 @@ export module HealthRecordsService {
 		}
 	}
 
-	const setHealthRecordGiveBirth = async (
-		animalUuid: string,
-		createdBy: string,
-		date: string
-	) => {
+	const setHealthRecordGiveBirth = async (animalUuid: string, createdBy: string, date: string) => {
 		const healthRecordData: AnimalHealthRecord = {
 			reason: 'Posible fecha de nacimiento',
 			type: 'Birth',
@@ -87,11 +83,7 @@ export module HealthRecordsService {
 		await setDoc(document, { ...healthRecordData, createdAt }, { merge: true })
 	}
 
-	const setHealthRecordDrying = async (
-		animalUuid: string,
-		createdBy: string,
-		date: string
-	) => {
+	const setHealthRecordDrying = async (animalUuid: string, createdBy: string, date: string) => {
 		const healthRecordData: AnimalHealthRecord = {
 			reason: 'Posible fecha de secado',
 			type: 'Drying',

@@ -34,7 +34,7 @@ const ProductionRecordForm = () => {
 		setProductionRecordForm((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
 	}
 
-	const handleDateChange = () => (newDate: dayjs.Dayjs) => {
+	const handleDateChange = () => (newDate: dayjs.Dayjs | null) => {
 		setProductionRecordForm((prev) => ({ ...prev, date: dayjs(newDate).format('YYYY-MM-DD') }))
 	}
 

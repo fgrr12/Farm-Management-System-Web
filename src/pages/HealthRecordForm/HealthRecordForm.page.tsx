@@ -51,8 +51,11 @@ const HealthRecordForm = () => {
 		setHealthRecordForm((prev) => ({ ...prev, [name]: value }))
 	}
 
-	const handleDateChange = () => (newDate: dayjs.Dayjs) => {
-		setHealthRecordForm((prev) => ({ ...prev, date: dayjs(newDate).toISOString() }))
+	const handleDateChange = () => (newDate: dayjs.Dayjs | null) => {
+		setHealthRecordForm((prev) => ({
+			...prev,
+			newDate: newDate ? dayjs(newDate).toISOString() : null,
+		}))
 	}
 
 	const getHealthRecord = async () => {
