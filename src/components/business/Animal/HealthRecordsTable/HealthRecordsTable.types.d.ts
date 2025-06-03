@@ -1,24 +1,16 @@
-import type dayjs from 'dayjs'
+import dayjs from 'dayjs'
 
 export interface HealthRecordsTableProps {
-	healthRecords: HealthRecord[]
+	healthRecords: AnimalHealthRecord[]
+	employees: User[]
 	haveUser: boolean
 	farm: Farm | null
 	removeHealthRecord: (uuid: string) => void
 }
 
-export interface HealthRecord {
-	uuid: string
-	animalUuid: string
-	reason: string
-	notes: string
+export interface HealthRecordsFilters {
+	fromDate: dayjs.Dayjs | string
+	toDate: string
 	type: HealthRecordType
-	reviewedBy: string
-	date: dayjs.Dayjs | string
-	weight?: number
-	temperature?: number
-	medication?: string
-	dosage?: string
-	frequency?: string
-	duration?: string
+	createdBy: string
 }

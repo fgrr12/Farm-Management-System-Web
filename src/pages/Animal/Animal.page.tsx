@@ -19,6 +19,7 @@ import { HealthRecordsTable } from '@/components/business/Animal/HealthRecordsTa
 import { ProductionRecordsTable } from '@/components/business/Animal/ProductionRecordsTable'
 import { RelatedAnimalsTable } from '@/components/business/Animal/RelatedAnimalsTable'
 import { ActionButton } from '@/components/ui/ActionButton'
+import { EmployeesService } from '@/services/employees'
 
 const DetailItem = ({ label, value }: { label: string; value: React.ReactNode }) => (
 	<div className="flex flex-col gap-1 w-full justify-center items-center">
@@ -43,6 +44,7 @@ const Animal = () => {
 
 	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
 	const [animal, setAnimal] = useState(ANIMAL_INITIAL_STATE)
+	const [employees, setEmployees] = useState<User[]>([])
 	const [activeTab, setActiveTab] = useState<
 		'healthRecords' | 'productionRecords' | 'relatedAnimals'
 	>('healthRecords')
@@ -153,6 +155,10 @@ const Animal = () => {
 			if (!farm) {
 				const farmData = await FarmsService.getFarm(dbAnimal!.farmUuid)
 				setFarm(farmData)
+			}
+
+			if (user && farm) {
+				setEmployees(await EmployeesService.getEmployees('', farm.uuid))
 			}
 
 			setHeaderTitle(`Animal ${dbAnimal.animalId}`)
@@ -292,9 +298,10 @@ const Animal = () => {
 				</div>
 				{activeTab === 'healthRecords' && (
 					<HealthRecordsTable
-						healthRecords={animal?.healthRecords || []}
 						haveUser={!!user}
 						farm={farm}
+						healthRecords={animal?.healthRecords || []}
+						employees={employees}
 						removeHealthRecord={handleRemoveHealthRecord}
 					/>
 				)}
