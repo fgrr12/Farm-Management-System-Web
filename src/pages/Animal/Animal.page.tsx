@@ -51,6 +51,19 @@ const Animal = () => {
 		navigate(AppRoutes.EDIT_ANIMAL.replace(':animalUuid', animal.uuid))
 	}
 
+	const buttonIcon = (key: string) => {
+		switch (key) {
+			case 'healthRecords':
+				return 'i-material-symbols-light-health-metrics-rounded bg-emerald-500! w-7! h-7!'
+			case 'productionRecords':
+				return 'i-icon-park-outline-milk bg-gray-500! w-7! h-7!'
+			case 'relatedAnimals':
+				return 'i-tabler-circles-relation bg-yellow-500! w-7! h-7!'
+			default:
+				return ''
+		}
+	}
+
 	const handleRemoveAnimal = async () => {
 		setModalData({
 			open: true,
@@ -269,10 +282,11 @@ const Animal = () => {
 							key={tab.key}
 							type="button"
 							role="tab"
-							className={`tab ${activeTab === tab.key && 'tab-active'}`}
+							className={`tab ${activeTab === tab.key && 'tab-active'} flex items-center justify-center gap-2`}
 							onClick={tab.onClick}
 						>
-							{tab.label}
+							<i className={buttonIcon(tab.key)} />
+							<span>{tab.label}</span>
 						</button>
 					))}
 				</div>

@@ -21,7 +21,6 @@ export const Loading: FC<LoadingProps> = ({ open, ...rest }) => {
 				bg-transparent
 				outline-none
 				overflow-hidden
-				backdrop-blur-xl
 				backdrop:bg-neutral-500
 				"
 		>
