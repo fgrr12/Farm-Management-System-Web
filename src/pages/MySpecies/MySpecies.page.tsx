@@ -19,7 +19,7 @@ import type { MySpeciesI } from './MySpecies.types'
 const MySpecies = () => {
 	const { t } = useTranslation(['mySpecies'])
 	const { setFarm, farm } = useFarmStore()
-	const { defaultModalData, setModalData, setLoading, setHeaderTitle } = useAppStore()
+	const { defaultModalData, setModalData, setLoading, setHeaderTitle, setToastData } = useAppStore()
 
 	const [species, setSpecies] = useState<MySpeciesI[]>(INITIAL_SPECIES)
 
@@ -76,33 +76,55 @@ const MySpecies = () => {
 		setSpecies(sps)
 	}
 
+	//! Incomplete
 	const handleRemoveSpecie = (specieUuid: string) => () => {
 		setModalData({
 			open: true,
 			title: t('modal.deleteSpecies.title'),
 			message: t('modal.deleteSpecies.message'),
-			onAccept: async () => {
+			onAccept: () => {
 				const sps = species.filter((specie) => specie.uuid !== specieUuid)
 				setSpecies(sps)
 				setModalData(defaultModalData)
+				setToastData({
+					message: t('toast.deletedSpecies'),
+					type: 'success',
+				})
 			},
-			onCancel: () => setModalData(defaultModalData),
+			onCancel: () => {
+				setModalData(defaultModalData)
+				setToastData({
+					message: t('toast.notDeletedSpecies'),
+					type: 'info',
+				})
+			},
 		})
 	}
 
+	//! Incomplete
 	const handleRemoveBreed = (specie: MySpeciesI, breedUuid: string) => () => {
 		setModalData({
 			open: true,
 			title: t('modal.deleteBreed.title'),
 			message: t('modal.deleteBreed.message'),
-			onAccept: async () => {
+			onAccept: () => {
 				const breeds = specie.breeds.filter((breed) => breed.uuid !== breedUuid)
 				specie.breeds = breeds
 				const sps = species.map((sp) => (sp.uuid === specie.uuid ? specie : sp))
 				setSpecies(sps)
 				setModalData(defaultModalData)
+				setToastData({
+					message: t('toast.deletedBreed'),
+					type: 'success',
+				})
 			},
-			onCancel: () => setModalData(defaultModalData),
+			onCancel: () => {
+				setModalData(defaultModalData)
+				setToastData({
+					message: t('toast.notDeletedBreed'),
+					type: 'info',
+				})
+			},
 		})
 	}
 
@@ -124,21 +146,14 @@ const MySpecies = () => {
 			setFarm({ ...farm!, species: data })
 			setSpecies(sps)
 			await AnimalsService.updateAnimalsBySpecie({ farm: farm!, species })
-			setModalData({
-				open: true,
-				title: t('modal.saveSpecies.title'),
-				message: t('modal.saveSpecies.message'),
-				onAccept: () => {
-					setModalData(defaultModalData)
-				},
+			setToastData({
+				message: t('toast.edited'),
+				type: 'success',
 			})
 		} catch (_error) {
-			setModalData({
-				open: true,
-				title: t('modal.errorEditingSpecies.title'),
-				message: t('modal.errorEditingSpecies.message'),
-				onAccept: () => setModalData(defaultModalData),
-				onCancel: () => setModalData(defaultModalData),
+			setToastData({
+				message: t('toast.errorEditing'),
+				type: 'error',
 			})
 		} finally {
 			setLoading(false)

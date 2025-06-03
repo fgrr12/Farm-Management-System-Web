@@ -25,18 +25,9 @@
 		"birth": "Birth",
 		"drying": "Drying"
 	},
-	"modal": {
-		"addHealthRecord": {
-			"title": "Health Record Added",
-			"message": "The health record has been added successfully"
-		},
-		"editHealthRecord": {
-			"title": "Health Record Edited",
-			"message": "The health record has been edited successfully"
-		},
-		"errorAddingHealthRecord": {
-			"title": "Error",
-			"message": "There was an error adding the health record"
-		}
+	"toast": {
+		"addHealthRecord": "Health record added successfully.",
+		"editHealthRecord": "Health record edited successfully.",
+		"errorAddingHealthRecord": "There was an error adding the health record."
 	}
 }

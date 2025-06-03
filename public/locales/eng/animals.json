@@ -6,10 +6,7 @@
 	"addAnimal": "Add Animal",
 	"noAnimals": "No animals",
 	"noAnimalsSubtitle": "Add an animal to your farm to get started",
-	"modal": {
-		"errorGettingAnimals": {
-			"title": "Error",
-			"message": "There was an error getting the animals"
-		}
+	"toast": {
+		"errorGettingAnimals": "There was an error getting the animals."
 	}
 }

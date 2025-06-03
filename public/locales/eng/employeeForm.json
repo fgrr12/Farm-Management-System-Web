@@ -11,18 +11,9 @@
 	"editButton": "Save",
 	"employee": "Employee",
 	"owner": "Owner",
-	"modal": {
-		"addEmployee": {
-			"title": "Employee Added",
-			"message": "The employee has been added successfully"
-		},
-		"editEmployee": {
-			"title": "Employee Edited",
-			"message": "The employee has been edited successfully"
-		},
-		"errorAddingEmployee": {
-			"title": "Error",
-			"message": "There was an error adding the employee"
-		}
+	"toast": {
+		"added": "Employee added successfully.",
+		"edited": "Employee edited successfully.",
+		"errorAddingEmployee": "There was an error adding the employee."
 	}
 }

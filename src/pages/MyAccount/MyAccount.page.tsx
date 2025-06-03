@@ -18,7 +18,7 @@ import { TextField } from '@/components/ui/TextField'
 const MyAccount = () => {
 	const { user: currentUser, setUser: updateUser } = useUserStore()
 	const { farm: currentFarm, setFarm: updateFarm } = useFarmStore()
-	const { defaultModalData, setHeaderTitle, setModalData, setLoading } = useAppStore()
+	const { setHeaderTitle, setLoading, setToastData } = useAppStore()
 	const { t } = useTranslation(['myAccount'])
 
 	const [user, setUser] = useState<User>(INITIAL_USER_DATA)
@@ -82,22 +82,14 @@ const MyAccount = () => {
 			await UserService.updateUser(user)
 			updateUser(user)
 			setEdit((prev) => ({ ...prev, user: false }))
-			setModalData({
-				open: true,
-				title: t('myProfile.modal.editMyAccount.title'),
-				message: t('myProfile.modal.editMyAccount.message'),
-				onAccept: () => {
-					setModalData(defaultModalData)
-				},
+			setToastData({
+				message: t('myProfile.toast.edited'),
+				type: 'success',
 			})
 		} catch (_error) {
-			setModalData({
-				open: true,
-				title: t('myProfile.modal.errorEditingMyAccount.title'),
-				message: t('myProfile.modal.errorEditingMyAccount.message'),
-				onAccept: () => {
-					setModalData(defaultModalData)
-				},
+			setToastData({
+				message: t('myProfile.toast.errorEditing'),
+				type: 'error',
 			})
 		} finally {
 			setLoading(false)
@@ -112,22 +104,14 @@ const MyAccount = () => {
 			await FarmsService.updateFarm({ ...farm })
 			updateFarm({ ...farm })
 			setEdit((prev) => ({ ...prev, farm: false }))
-			setModalData({
-				open: true,
-				title: t('myFarm.modal.editMyFarm.title'),
-				message: t('myFarm.modal.editMyFarm.message'),
-				onAccept: () => {
-					setModalData(defaultModalData)
-				},
+			setToastData({
+				message: t('myFarm.toast.edited'),
+				type: 'success',
 			})
 		} catch (_error) {
-			setModalData({
-				open: true,
-				title: t('myFarm.modal.errorMyFarm.title'),
-				message: t('myFarm.modal.errorMyFarm.message'),
-				onAccept: () => {
-					setModalData(defaultModalData)
-				},
+			setToastData({
+				message: t('myFarm.toast.errorEditing'),
+				type: 'error',
 			})
 		} finally {
 			setLoading(false)
@@ -142,22 +126,14 @@ const MyAccount = () => {
 			await FarmsService.updateFarm({ ...farm })
 			updateFarm({ ...farm })
 			setEdit((prev) => ({ ...prev, billingCard: false }))
-			setModalData({
-				open: true,
-				title: t('myBillingCard.modal.editBillingCard.title'),
-				message: t('myBillingCard.modal.editBillingCard.message'),
-				onAccept: () => {
-					setModalData(defaultModalData)
-				},
+			setToastData({
+				message: t('myBillingCard.toast.edited'),
+				type: 'success',
 			})
 		} catch (_error) {
-			setModalData({
-				open: true,
-				title: t('myBillingCard.modal.errorBillingCard.title'),
-				message: t('myBillingCard.modal.errorBillingCard.message'),
-				onAccept: () => {
-					setModalData(defaultModalData)
-				},
+			setToastData({
+				message: t('myBillingCard.toast.errorEditing'),
+				type: 'error',
 			})
 		} finally {
 			setLoading(false)

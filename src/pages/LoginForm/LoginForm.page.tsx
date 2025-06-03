@@ -16,7 +16,7 @@ import type { LoginCredentials } from './LoginForm.types'
 
 const LoginForm = () => {
 	const { user } = useUserStore()
-	const { defaultModalData, setModalData, setLoading } = useAppStore()
+	const { setLoading, setToastData } = useAppStore()
 	const navigate = useNavigate()
 	const [credentials, setCredentials] = useState(INITIAL_CREDENTIALS)
 	const { t } = useTranslation(['loginForm'])
@@ -34,11 +34,9 @@ const LoginForm = () => {
 			await UserService.loginWithEmailAndPassword(email, password)
 			navigate(AppRoutes.ANIMALS)
 		} catch (_error) {
-			setModalData({
-				open: true,
-				title: t('modal.errorLoggingIn.title'),
-				message: t('modal.errorLoggingIn.message'),
-				onAccept: () => setModalData(defaultModalData),
+			setToastData({
+				message: t('toast.errorLoggingIn'),
+				type: 'error',
 			})
 		} finally {
 			setLoading(false)
@@ -51,11 +49,9 @@ const LoginForm = () => {
 			await UserService.loginWithGoogle()
 			navigate(AppRoutes.ANIMALS)
 		} catch (_error) {
-			setModalData({
-				open: true,
-				title: t('modal.errorLoggingIn.title'),
-				message: t('modal.errorLoggingIn.message'),
-				onAccept: () => setModalData(defaultModalData),
+			setToastData({
+				message: t('toast.errorLoggingIn'),
+				type: 'error',
 			})
 		} finally {
 			setLoading(false)

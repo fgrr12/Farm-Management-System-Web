@@ -14,7 +14,7 @@ import { Search } from '@/components/ui/Search'
 
 const Employees = () => {
 	const { user } = useUserStore()
-	const { defaultModalData, setHeaderTitle, setModalData, setLoading } = useAppStore()
+	const { setHeaderTitle, setLoading, setToastData } = useAppStore()
 	const navigate = useNavigate()
 	const { t } = useTranslation(['employees'])
 
@@ -39,11 +39,9 @@ const Employees = () => {
 			const data = await EmployeesService.getEmployees(null, user!.farmUuid!)
 			setEmployees(data.filter((employee) => employee.uuid !== user!.uuid))
 		} catch (_error) {
-			setModalData({
-				open: true,
-				title: t('modal.errorGettingEmployees.title'),
-				message: t('modal.errorGettingEmployees.message'),
-				onAccept: () => setModalData(defaultModalData),
+			setToastData({
+				message: t('toast.errorGettingEmployees'),
+				type: 'error',
 			})
 		} finally {
 			setLoading(false)

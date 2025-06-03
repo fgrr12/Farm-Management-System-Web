@@ -44,7 +44,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 	employees,
 	removeHealthRecord,
 }) => {
-	const { defaultModalData, setModalData, setLoading } = useAppStore()
+	const { defaultModalData, setToastData, setModalData, setLoading } = useAppStore()
 	const { user } = useUserStore()
 	const navigate = useNavigate()
 	const params = useParams()
@@ -111,13 +111,30 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 			title: t('modal.deleteHealthRecord.title'),
 			message: t('modal.deleteHealthRecord.message'),
 			onAccept: async () => {
-				setLoading(true)
-				await HealthRecordsService.updateHealthRecordsStatus(uuid, false)
-				removeHealthRecord(uuid)
-				setModalData(defaultModalData)
-				setLoading(false)
+				try {
+					setLoading(true)
+					await HealthRecordsService.updateHealthRecordsStatus(uuid, false)
+					removeHealthRecord(uuid)
+					setModalData(defaultModalData)
+					setLoading(false)
+					setToastData({
+						message: t('toast.deleted'),
+						type: 'success',
+					})
+				} catch (error) {
+					setToastData({
+						message: t('toast.deleteError'),
+						type: 'error',
+					})
+				}
 			},
-			onCancel: () => setModalData(defaultModalData),
+			onCancel: () => {
+				setModalData(defaultModalData)
+				setToastData({
+					message: t('toast.notDeleted'),
+					type: 'info',
+				})
+			},
 		})
 	}
 

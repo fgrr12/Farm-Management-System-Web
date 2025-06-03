@@ -25,18 +25,9 @@
 		"birth": "Nacimiento/Parto",
 		"drying": "Secado"
 	},
-	"modal": {
-		"addHealthRecord": {
-			"title": "Registro de salud añadido",
-			"message": "El registro de salud ha sido añadido exitosamente"
-		},
-		"editHealthRecord": {
-			"title": "Registro de salud editado",
-			"message": "El registro de salud ha sido editado exitosamente"
-		},
-		"errorAddingHealthRecord": {
-			"title": "Error",
-			"message": "Ocurrió un error al añadir el registro de salud"
-		}
+	"toast": {
+		"addHealthRecord": "Registro de salud añadido exitosamente.",
+		"editHealthRecord": "Registro de salud editado exitosamente.",
+		"errorAddingHealthRecord": "Se ha producido un error al añadir el registro de salud."
 	}
 }

@@ -16,5 +16,10 @@
 			"title": "¿Quieres eliminar este animal?",
 			"message": "Esta acción no se puede deshacer."
 		}
+	},
+	"toast": {
+		"deleted": "Animal eliminado con éxito.",
+		"notDeleted": "El animal no se ha eliminado.",
+		"deleteError": "Se ha producido un error al eliminar el animal."
 	}
 }

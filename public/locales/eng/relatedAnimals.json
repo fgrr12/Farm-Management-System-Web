@@ -6,10 +6,7 @@
 	"selectedAnimal": "Selected animal",
 	"addExternalRelation": "Add External Relation",
 	"filterByID": "Filter by ID",
-	"modal": {
-		"errorGettingAnimals": {
-			"title": "Error",
-			"message": "There was an error getting the animals"
-		}
+	"toast": {
+		"errorGettingAnimals": "There was an error getting the animals."
 	}
 }

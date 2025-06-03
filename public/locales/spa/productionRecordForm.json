@@ -6,22 +6,10 @@
 	"notes": "Notas",
 	"addButton": "Añadir",
 	"editButton": "Guardar",
-	"modal": {
-		"addProductionRecord": {
-			"title": "Registro de producción añadido",
-			"message": "El registro de producción ha sido añadido exitosamente"
-		},
-		"editProductionRecord": {
-			"title": "Registro de producción editado",
-			"message": "El registro de producción ha sido editado exitosamente"
-		},
-		"errorGettingProductionRecord": {
-			"title": "Error",
-			"message": "Ocurrió un error al obtener el registro de producción"
-		},
-		"errorAddingProductionRecord": {
-			"title": "Error",
-			"message": "Ocurrió un error al añadir el registro de producción"
-		}
+	"toast": {
+		"added": "Registro de producción añadido exitosamente.",
+		"edited": "Registro de producción editado exitosamente.",
+		"errorAddingProductionRecord": "Se ha producido un error al añadir el registro de producción.",
+		"errorGettingProductionRecord": "Se ha producido un error al obtener el registro de producción."
 	}
 }

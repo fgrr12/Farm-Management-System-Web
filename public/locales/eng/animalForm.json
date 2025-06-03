@@ -21,22 +21,10 @@
 		"male": "Male",
 		"female": "Female"
 	},
-	"modal": {
-		"addAnimal": {
-			"title": "Animal Added",
-			"message": "The animal was added successfully"
-		},
-		"editAnimal": {
-			"title": "Edit Animal",
-			"message": "The animal was edited successfully"
-		},
-		"errorAddingAnimal": {
-			"title": "Error",
-			"message": "There was an error adding the animal"
-		},
-		"errorGettingAnimal": {
-			"title": "Error",
-			"message": "There was an error getting the animal"
-		}
+	"toast": {
+		"added": "Animal added successfully.",
+		"edited": "Animal edited successfully.",
+		"errorAddingAnimal": "There was an error adding the animal.",
+		"errorGettingAnimal": "There was an error getting the animal."
 	}
 }

@@ -13,10 +13,7 @@
 	"species": "Species",
 	"selectSpecies": "Select a species",
 	"addTask": "Add",
-	"modal": {
-		"errorAddingTask": {
-			"title": "Error",
-			"message": "There was an error adding the task"
-		}
+	"toast": {
+		"errorAddingTask": "There was an error adding the task."
 	}
 }

@@ -18,7 +18,7 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 	farm,
 	removeProductionRecord,
 }) => {
-	const { defaultModalData, setModalData, setLoading } = useAppStore()
+	const { defaultModalData, setModalData, setLoading, setToastData } = useAppStore()
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation(['animalProductionRecords'])
@@ -44,13 +44,30 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 			title: t('modal.deleteProductionRecord.title'),
 			message: t('modal.deleteProductionRecord.message'),
 			onAccept: async () => {
-				setLoading(true)
-				await ProductionRecordsService.updateProductionRecordsStatus(uuid, false)
-				removeProductionRecord(uuid)
-				setModalData(defaultModalData)
-				setLoading(false)
+				try {
+					setLoading(true)
+					await ProductionRecordsService.updateProductionRecordsStatus(uuid, false)
+					removeProductionRecord(uuid)
+					setModalData(defaultModalData)
+					setLoading(false)
+					setToastData({
+						message: t('toast.deleted'),
+						type: 'success',
+					})
+				} catch (error) {
+					setToastData({
+						message: t('toast.deleteError'),
+						type: 'error',
+					})
+				}
 			},
-			onCancel: () => setModalData(defaultModalData),
+			onCancel: () => {
+				setModalData(defaultModalData)
+				setToastData({
+					message: t('toast.notDeleted'),
+					type: 'info',
+				})
+			},
 		})
 	}
 	return (

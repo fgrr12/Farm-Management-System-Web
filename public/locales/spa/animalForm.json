@@ -21,22 +21,10 @@
 		"male": "Macho",
 		"female": "Hembra"
 	},
-	"modal": {
-		"addAnimal": {
-			"title": "Animal añadido",
-			"message": "El animal ha sido añadido con éxito"
-		},
-		"editAnimal": {
-			"title": "Editar animal",
-			"message": "El animal ha sido editado con éxito"
-		},
-		"errorAddingAnimal": {
-			"title": "Error",
-			"message": "Ocurrió un error al añadir el animal"
-		},
-		"errorGettingAnimal": {
-			"title": "Error",
-			"message": "Ocurrió un error al obtener el animal"
-		}
+	"toast": {
+		"added": "Animal añadido con éxito.",
+		"edited": "Animal editado con éxito.",
+		"errorAddingAnimal": "Se ha producido un error al añadir el animal.",
+		"errorGettingAnimal": "Se ha producido un error al obtener el animal."
 	}
 }

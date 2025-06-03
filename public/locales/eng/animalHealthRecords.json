@@ -38,5 +38,10 @@
 			"title": "Do you want to delete this health record?",
 			"message": "This action cannot be undone."
 		}
+	},
+	"toast": {
+		"deleted": "Health record deleted successfully.",
+		"notDeleted": "The health record was not deleted.",
+		"deleteError": "An error occurred while deleting the health record."
 	}
 }

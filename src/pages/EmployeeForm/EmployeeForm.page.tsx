@@ -19,7 +19,7 @@ import type { RegisterEmployeeForm } from './EmployeeForm.types'
 
 const EmployeeForm = () => {
 	const { user } = useUserStore()
-	const { defaultModalData, setHeaderTitle, setModalData, setLoading } = useAppStore()
+	const { setHeaderTitle, setLoading, setToastData } = useAppStore()
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation(['employeeForm'])
@@ -55,37 +55,25 @@ const EmployeeForm = () => {
 
 			if (params.employeeUuid) {
 				await EmployeesService.updateEmployee(employee)
-
-				setModalData({
-					open: true,
-					title: t('modal.editEmployee.title'),
-					message: t('modal.editEmployee.message'),
-					onAccept: () => {
-						setModalData(defaultModalData)
-						navigate(AppRoutes.EMPLOYEES)
-					},
+				setToastData({
+					message: t('toast.edited'),
+					type: 'success',
 				})
-
+				navigate(AppRoutes.EMPLOYEES)
 				return
 			}
 
 			employee.createdBy = user!.uuid
 			await EmployeesService.setEmployee(employee)
-			setModalData({
-				open: true,
-				title: t('modal.addEmployee.title'),
-				message: t('modal.addEmployee.message'),
-				onAccept: () => {
-					setModalData(defaultModalData)
-					navigate(AppRoutes.EMPLOYEES)
-				},
+			setToastData({
+				message: t('toast.added'),
+				type: 'success',
 			})
+			navigate(AppRoutes.EMPLOYEES)
 		} catch (_error) {
-			setModalData({
-				open: true,
-				title: t('modal.errorAddingEmployee.title'),
-				message: t('modal.errorAddingEmployee.message'),
-				onAccept: () => setModalData(defaultModalData),
+			setToastData({
+				message: t('toast.errorAddingEmployee'),
+				type: 'error',
 			})
 		} finally {
 			setLoading(false)

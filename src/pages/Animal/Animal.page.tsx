@@ -42,7 +42,7 @@ const Animal = () => {
 	const params = useParams()
 	const { t } = useTranslation(['animal'])
 
-	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
+	const { defaultModalData, setLoading, setModalData, setHeaderTitle, setToastData } = useAppStore()
 	const [animal, setAnimal] = useState(ANIMAL_INITIAL_STATE)
 	const [employees, setEmployees] = useState<User[]>([])
 	const [activeTab, setActiveTab] = useState<
@@ -72,13 +72,30 @@ const Animal = () => {
 			title: t('modal.removeAnimal.title'),
 			message: t('modal.removeAnimal.message'),
 			onAccept: async () => {
-				setLoading(true)
-				await AnimalsService.deleteAnimal(animal.uuid, false)
-				setModalData(defaultModalData)
-				setLoading(false)
-				navigate(AppRoutes.ANIMALS)
+				try {
+					setLoading(true)
+					await AnimalsService.deleteAnimal(animal.uuid, false)
+					setModalData(defaultModalData)
+					setLoading(false)
+					setToastData({
+						message: t('toast.deleted'),
+						type: 'success',
+					})
+					navigate(AppRoutes.ANIMALS)
+				} catch (error) {
+					setToastData({
+						message: t('toast.deleteError'),
+						type: 'error',
+					})
+				}
 			},
-			onCancel: () => setModalData(defaultModalData),
+			onCancel: () => {
+				setModalData(defaultModalData)
+				setToastData({
+					message: t('toast.notDeleted'),
+					type: 'info',
+				})
+			},
 		})
 	}
 
@@ -169,11 +186,9 @@ const Animal = () => {
 			dbAnimal.healthRecords = dbHealthRecords
 			setAnimal({ ...dbAnimal, weight: weight! })
 		} catch (_error) {
-			setModalData({
-				open: true,
-				title: t('modal.errorGettingAnimal.title'),
-				message: t('modal.errorGettingAnimal.message'),
-				onAccept: () => setModalData(defaultModalData),
+			setToastData({
+				message: t('toast.errorGettingAnimal'),
+				type: 'error',
 			})
 		} finally {
 			setLoading(false)

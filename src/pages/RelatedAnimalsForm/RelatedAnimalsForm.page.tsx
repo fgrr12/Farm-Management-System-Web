@@ -25,7 +25,7 @@ const RelatedAnimalsForm = () => {
 	const params = useParams()
 	const { t } = useTranslation(['relatedAnimals'])
 
-	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
+	const { setLoading, setHeaderTitle, setToastData } = useAppStore()
 	const [animalsLists, setAnimalsLists] = useState<RelatedAnimalsLists>(INITIAL_ANIMALS_LISTS)
 	const [relatedAnimals, setRelatedAnimals] = useState<Relation[]>([])
 	const [currentAnimal, setCurrentAnimal] = useState<RelatedAnimalInformation | null>(null)
@@ -213,12 +213,9 @@ const RelatedAnimalsForm = () => {
 					(error) => console.error('Error fetching related animals: ', error)
 				)
 			} catch (_error) {
-				setModalData({
-					...defaultModalData,
-					open: true,
-					title: t('modal.errorGettingAnimals.title'),
-					message: t('modal.errorGettingAnimals.message'),
-					onAccept: () => setModalData({ ...defaultModalData }),
+				setToastData({
+					message: t('toast.errorGettingAnimals'),
+					type: 'error',
 				})
 			} finally {
 				setLoading(false)

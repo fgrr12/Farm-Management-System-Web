@@ -24,7 +24,7 @@ const ProductionRecordForm = () => {
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation(['productionRecordForm'])
-	const { defaultModalData, setLoading, setModalData, setHeaderTitle } = useAppStore()
+	const { setLoading, setHeaderTitle, setToastData } = useAppStore()
 	const [productionRecordForm, setProductionRecordForm] = useState<ProductionRecord>(
 		INITIAL_PRODUCTION_RECORD_FORM
 	)
@@ -47,33 +47,23 @@ const ProductionRecordForm = () => {
 
 			if (productionRecordUuid) {
 				await ProductionRecordsService.updateProductionRecord(productionRecordForm, user!.uuid)
-				setModalData({
-					open: true,
-					title: t('modal.editProductionRecord.title'),
-					message: t('modal.editProductionRecord.message'),
-					onAccept: () => {
-						setModalData(defaultModalData)
-						navigate(AppRoutes.ANIMAL.replace(':animalUuid', productionRecordForm.animalUuid))
-					},
+				setToastData({
+					message: t('toast.edited'),
+					type: 'success',
 				})
+				navigate(AppRoutes.ANIMAL.replace(':animalUuid', productionRecordForm.animalUuid))
 			} else {
 				ProductionRecordsService.setProductionRecord(productionRecordForm, user!.uuid)
-				setModalData({
-					open: true,
-					title: t('modal.addProductionRecord.title'),
-					message: t('modal.addProductionRecord.message'),
-					onAccept: () => {
-						setModalData(defaultModalData)
-						navigate(AppRoutes.ANIMAL.replace(':animalUuid', productionRecordForm.animalUuid))
-					},
+				setToastData({
+					message: t('toast.added'),
+					type: 'success',
 				})
+				navigate(AppRoutes.ANIMAL.replace(':animalUuid', productionRecordForm.animalUuid))
 			}
 		} catch (_error) {
-			setModalData({
-				open: true,
-				title: t('modal.errorAddingProductionRecord.title'),
-				message: t('modal.errorAddingProductionRecord.message'),
-				onAccept: () => setModalData(defaultModalData),
+			setToastData({
+				message: t('toast.errorAddingProductionRecord'),
+				type: 'error',
 			})
 		} finally {
 			setLoading(false)
@@ -88,11 +78,9 @@ const ProductionRecordForm = () => {
 				await ProductionRecordsService.getProductionRecord(productionRecordUuid)
 			setProductionRecordForm(dbProductionRecord)
 		} catch (_error) {
-			setModalData({
-				open: true,
-				title: t('modal.errorGettingProductionRecord.title'),
-				message: t('modal.errorGettingProductionRecord.message'),
-				onAccept: () => setModalData(defaultModalData),
+			setToastData({
+				message: t('toast.errorGettingProductionRecord'),
+				type: 'error',
 			})
 		} finally {
 			setLoading(false)
