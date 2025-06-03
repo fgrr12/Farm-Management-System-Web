@@ -34,6 +34,7 @@ interface AnimalHealthRecord {
 	notes: string
 	type: HealthRecordType
 	reviewedBy: string
+	createdBy: string
 	date: string
 	status: boolean
 	weight?: number

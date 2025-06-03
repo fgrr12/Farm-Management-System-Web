@@ -24,6 +24,15 @@
 		"birth": "Nacimiento/Parto",
 		"drying": "Secado"
 	},
+	"filter": {
+		"fromDate": "Filtrar por fecha desde",
+		"toDate": "Filtrar por fecha hasta",
+		"type": "Filtrar por tipo",
+		"createdBy": "Filtrar por colaborador"
+	},
+	"createdBy": {
+		"me": "Yo"
+	},
 	"modal": {
 		"deleteHealthRecord": {
 			"title": "¿Quieres eliminar este registro de salud?",

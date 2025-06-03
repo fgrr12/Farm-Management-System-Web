@@ -24,6 +24,15 @@
 		"birth": "Birth",
 		"drying": "Drying"
 	},
+	"filter": {
+		"fromDate": "Filter by date from",
+		"toDate": "Filter by date to",
+		"type": "Filter by type",
+		"createdBy": "Filter by created by"
+	},
+	"createdBy": {
+		"me": "Me"
+	},
 	"modal": {
 		"deleteHealthRecord": {
 			"title": "Do you want to delete this health record?",
