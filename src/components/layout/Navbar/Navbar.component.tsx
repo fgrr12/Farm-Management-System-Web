@@ -12,7 +12,26 @@ import { UserService } from '@/services/user'
 
 import { BackButton } from '@/components/ui/Button'
 
-export const Navbar: FC = () => {
+const handleBackNavigation = (location: string): string | number => {
+	switch (location) {
+		case AppRoutes.ANIMAL:
+		case AppRoutes.ADD_ANIMAL:
+			return AppRoutes.ANIMALS
+		case AppRoutes.EDIT_ANIMAL:
+		case AppRoutes.EDIT_HEALTH_RECORD:
+		case AppRoutes.EDIT_PRODUCTION_RECORD:
+			return AppRoutes.ANIMAL
+		case AppRoutes.ADD_EMPLOYEE:
+		case AppRoutes.EDIT_EMPLOYEE:
+			return AppRoutes.EMPLOYEES
+		case AppRoutes.ADD_TASK:
+			return AppRoutes.TASKS
+		default:
+			return -1
+	}
+}
+
+export const Navbar = () => {
 	const drawerRef = useRef<HTMLInputElement>(null)
 	const { user, setUser } = useUserStore()
 	const { farm, setFarm } = useFarmStore()
@@ -28,12 +47,16 @@ export const Navbar: FC = () => {
 		location.pathname === AppRoutes.EMPLOYEES ||
 		location.pathname === AppRoutes.TASKS ||
 		location.pathname === AppRoutes.MY_ACCOUNT ||
-		location.pathname === AppRoutes.MY_SPECIES
+		location.pathname === AppRoutes.MY_SPECIES ||
+		location.pathname === AppRoutes.BILLING_CARD
 
 	const handleBack = () => {
-		const path = location.pathname.split('/')
-		path.pop()
-		navigate(path.join('/'))
+		const path = handleBackNavigation(location.pathname)
+		if (typeof path === 'number') {
+			navigate(path)
+		} else {
+			navigate(path)
+		}
 	}
 
 	const closeDrawer = () => {
