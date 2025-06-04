@@ -85,7 +85,7 @@ export const Navbar = () => {
 		}
 	}, [headerTitle, loading])
 
-	useEffect(() => {
+	useGSAP(() => {
 		const drawer = drawerRef.current
 		if (!drawer || !drawerTitleRef.current || !farm) return
 

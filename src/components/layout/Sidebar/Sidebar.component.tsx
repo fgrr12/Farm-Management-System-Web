@@ -1,6 +1,6 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
@@ -17,7 +17,6 @@ export const Sidebar: FC = () => {
 	const { loading } = useAppStore()
 	const navigate = useNavigate()
 	const location = useLocation()
-	const sidebarRef = useRef<HTMLUListElement | null>(null)
 
 	const [theme, setTheme] = useState<string>(localStorage.getItem('theme') || 'light')
 
@@ -35,7 +34,7 @@ export const Sidebar: FC = () => {
 	}, [theme])
 
 	useGSAP(() => {
-		if (!sidebarRef.current || loading) return
+		if (loading) return
 		gsap.fromTo(
 			'.menu li',
 			{ opacity: 0, y: 20 },
@@ -44,15 +43,12 @@ export const Sidebar: FC = () => {
 				y: 0,
 				stagger: 0.05,
 				duration: 0.4,
-				ease: 'power2.out',
+				ease: 'power1.out',
 			}
 		)
 	}, [loading])
 	return (
-		<ul
-			ref={sidebarRef}
-			className="menu bg-base-100 h-full hidden lg:grid auto-rows-[50px] items-center shadow-sm overflow-auto scrollbar-hidden"
-		>
+		<ul className="menu bg-base-100 h-full hidden lg:grid auto-rows-[50px] items-center shadow-sm overflow-auto scrollbar-hidden">
 			<li className={location.pathname.includes(AppRoutes.ANIMALS) ? 'bg-info rounded-sm' : ''}>
 				<button
 					type="button"
