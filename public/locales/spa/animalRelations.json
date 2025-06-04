@@ -13,13 +13,13 @@
 	"noRelatedAnimals": "No hay animales relacionados",
 	"modal": {
 		"deleteRelatedAnimal": {
-			"title": "¿Quieres eliminar este animal?",
+			"title": "¿Quieres eliminar esta relación?",
 			"message": "Esta acción no se puede deshacer."
 		}
 	},
 	"toast": {
-		"deleted": "Animal eliminado con éxito.",
-		"notDeleted": "El animal no se ha eliminado.",
-		"deleteError": "Se ha producido un error al eliminar el animal."
+		"deleted": "La relación se ha eliminado correctamente.",
+		"notDeleted": "La relación no se ha eliminado.",
+		"deleteError": "Se ha producido un error al eliminar la relación."
 	}
 }
