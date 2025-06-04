@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useGSAP } from '@gsap/react'
+import gsap from 'gsap'
+import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
 
+import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
@@ -11,8 +14,10 @@ import { UserService } from '@/services/user'
 export const Sidebar: FC = () => {
 	const { user, setUser } = useUserStore()
 	const { setFarm } = useFarmStore()
+	const { loading } = useAppStore()
 	const navigate = useNavigate()
 	const location = useLocation()
+	const sidebarRef = useRef<HTMLUListElement | null>(null)
 
 	const [theme, setTheme] = useState<string>(localStorage.getItem('theme') || 'light')
 
@@ -28,8 +33,26 @@ export const Sidebar: FC = () => {
 		localStorage.setItem('theme', theme)
 		document.querySelector('html')!.setAttribute('data-theme', theme)
 	}, [theme])
+
+	useGSAP(() => {
+		if (!sidebarRef.current || !loading) return
+		gsap.fromTo(
+			'.menu li',
+			{ opacity: 0, y: 20 },
+			{
+				opacity: 1,
+				y: 0,
+				stagger: 0.05,
+				duration: 0.4,
+				ease: 'power2.out',
+			}
+		)
+	}, [loading])
 	return (
-		<ul className="menu bg-base-100 h-full hidden lg:grid auto-rows-[50px] items-center shadow-sm overflow-auto scrollbar-hidden">
+		<ul
+			ref={sidebarRef}
+			className="menu bg-base-100 h-full hidden lg:grid auto-rows-[50px] items-center shadow-sm overflow-auto scrollbar-hidden"
+		>
 			<li className={location.pathname.includes(AppRoutes.ANIMALS) ? 'bg-info rounded-sm' : ''}>
 				<button
 					type="button"

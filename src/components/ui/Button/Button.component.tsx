@@ -49,18 +49,15 @@ export const BackButton: FC<ButtonProps> = (props) => {
 	const btnRef = useRef<HTMLButtonElement>(null)
 	const { loading } = useAppStore()
 
-	useGSAP(
-		() => {
-			if (!loading && btnRef.current) {
-				gsap.fromTo(
-					btnRef.current,
-					{ x: -30, opacity: 0 },
-					{ x: 0, opacity: 1, duration: 0.5, ease: 'power2.out', delay: 0.2 }
-				)
-			}
-		},
-		{ dependencies: [loading], scope: btnRef }
-	)
+	useGSAP(() => {
+		if (!loading && btnRef.current) {
+			gsap.fromTo(
+				btnRef.current,
+				{ x: -30, opacity: 0 },
+				{ x: 0, opacity: 1, duration: 0.5, ease: 'power2.out', delay: 0.2 }
+			)
+		}
+	}, [loading])
 
 	const handleMouseEnter = () => {
 		if (btnRef.current) {
