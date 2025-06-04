@@ -66,7 +66,7 @@ export const Navbar = () => {
 	}, [theme])
 
 	useGSAP(() => {
-		if (!titleRef.current) return
+		if (!titleRef.current || loading) return
 
 		titleRef.current.innerText = headerTitle
 

@@ -76,7 +76,7 @@ export const BackButton: FC<ButtonProps> = (props) => {
 			ref={btnRef}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
-			className="btn bg-transparent border-none shadow-none hidden md:inline"
+			className="btn bg-transparent border-none shadow-none hidden md:inline pl-0 ml-4"
 			{...props}
 		>
 			<i className="i-material-symbols-arrow-left-alt-rounded w-14! h-8!" />

@@ -35,7 +35,7 @@ export const Sidebar: FC = () => {
 	}, [theme])
 
 	useGSAP(() => {
-		if (!sidebarRef.current || !loading) return
+		if (!sidebarRef.current || loading) return
 		gsap.fromTo(
 			'.menu li',
 			{ opacity: 0, y: 20 },
