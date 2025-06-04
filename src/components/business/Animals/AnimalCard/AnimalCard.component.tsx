@@ -1,4 +1,4 @@
-import type { MouseEvent } from 'react'
+import { useRef, type MouseEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
@@ -9,6 +9,7 @@ import type { CardProps } from './AnimalCard.types'
 
 export const AnimalCard: FC<CardProps> = ({ uuid, animalId, breed, gender, ...props }) => {
 	const navigate = useNavigate()
+	const divRef = useRef<HTMLDivElement>(null)
 
 	const navigateToAnimal = (e: MouseEvent<HTMLDivElement>) => {
 		e.stopPropagation()
@@ -31,10 +32,21 @@ export const AnimalCard: FC<CardProps> = ({ uuid, animalId, breed, gender, ...pr
 		const route = AppRoutes.RELATED_ANIMALS.replace(':animalUuid', uuid)
 		navigate(route)
 	}
+
+	const handleMouseEnter = () => {
+		gsap.to(divRef.current, { scale: 1.1, duration: 0.2, ease: 'power1.out' })
+	}
+
+	const handleMouseLeave = () => {
+		gsap.to(divRef.current, { scale: 1, duration: 0.2, ease: 'power1.out' })
+	}
+
 	return (
 		<div
 			className="rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 cursor-pointer hover:bg-gray-200 hover:animate-pulse w-full"
 			onClick={navigateToAnimal}
+			onMouseEnter={handleMouseEnter}
+			onMouseLeave={handleMouseLeave}
 			{...props}
 		>
 			<div className="flex justify-center items-center">
