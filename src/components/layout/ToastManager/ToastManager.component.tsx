@@ -20,7 +20,7 @@ export const ToastManager = () => {
 	}, [toastData])
 
 	return (
-		<div className="fixed top-18 right-4 space-y-2 z-50 w-full max-w-sm">
+		<div className="fixed top-18 right-0 sm:right-4 space-y-2 z-50 w-full max-w-sm flex flex-col justify-end items-center">
 			{toasts.map((toast) => (
 				<Toast key={toast.id} {...toast} onClose={removeToast} />
 			))}
