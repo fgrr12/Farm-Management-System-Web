@@ -91,11 +91,7 @@ export const DatePicker: FC<DatePickerProps> = ({ legend, label, date, onDateCha
 				</button>
 
 				{date?.isValid() && (
-					<ActionButton
-						title="Clear"
-						icon="i-material-symbols-cancel-outline"
-						onClick={() => onDateChange(null)}
-					/>
+					<ActionButton title="Clear" icon="i-lucide-circle-x" onClick={() => onDateChange(null)} />
 				)}
 			</div>
 
