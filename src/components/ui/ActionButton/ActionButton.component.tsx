@@ -19,6 +19,7 @@ const iconColor = (icon: string | undefined) => {
 		case 'i-tabler-circles-relation':
 			return 'bg-yellow-500!'
 		case 'i-lucide-circle-x':
+		case 'i-material-symbols-event-busy-rounded':
 			return 'bg-red-500!'
 		default:
 			return ''
