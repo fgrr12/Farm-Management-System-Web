@@ -12,24 +12,7 @@ import { UserService } from '@/services/user'
 
 import { BackButton } from '@/components/ui/Button'
 
-const handleBackNavigation = (location: string): string | number => {
-	switch (location) {
-		case AppRoutes.ANIMAL:
-		case AppRoutes.ADD_ANIMAL:
-			return AppRoutes.ANIMALS
-		case AppRoutes.EDIT_ANIMAL:
-		case AppRoutes.EDIT_HEALTH_RECORD:
-		case AppRoutes.EDIT_PRODUCTION_RECORD:
-			return AppRoutes.ANIMAL
-		case AppRoutes.ADD_EMPLOYEE:
-		case AppRoutes.EDIT_EMPLOYEE:
-			return AppRoutes.EMPLOYEES
-		case AppRoutes.ADD_TASK:
-			return AppRoutes.TASKS
-		default:
-			return -1
-	}
-}
+import { useBackRoute } from '@/hooks/useBackRoute'
 
 export const Navbar = () => {
 	const drawerRef = useRef<HTMLInputElement>(null)
@@ -39,6 +22,7 @@ export const Navbar = () => {
 	const navigate = useNavigate()
 	const location = useLocation()
 	const { headerTitle } = useAppStore()
+	const backRoute = useBackRoute()
 
 	const [theme, setTheme] = useState<string>(localStorage.getItem('theme') || 'light')
 
@@ -51,12 +35,7 @@ export const Navbar = () => {
 		location.pathname === AppRoutes.BILLING_CARD
 
 	const handleBack = () => {
-		const path = handleBackNavigation(location.pathname)
-		if (typeof path === 'number') {
-			navigate(path)
-		} else {
-			navigate(path)
-		}
+		navigate(backRoute as string)
 	}
 
 	const closeDrawer = () => {
