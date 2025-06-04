@@ -1,8 +1,8 @@
 import { type MouseEvent, type ReactElement, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import type { SelectProps } from './Select.types'
 import { ActionButton } from '../ActionButton'
+import type { SelectProps } from './Select.types'
 
 export const Select: FC<SelectProps> = ({
 	items,

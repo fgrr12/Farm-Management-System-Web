@@ -1,6 +1,7 @@
+import gsap from 'gsap'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import gsap from 'gsap'
+
 import type { LoadingProps, LoadingRef } from './Loading.types'
 
 export const Loading: FC<LoadingProps> = ({ open, ...rest }) => {
@@ -9,6 +10,11 @@ export const Loading: FC<LoadingProps> = ({ open, ...rest }) => {
 
 	const dotsRef = useRef<HTMLSpanElement[]>([])
 	const iconsRef = useRef<HTMLSpanElement[]>([])
+
+	//biome-ignore lint:: ignore it
+	const setDotsRef = (i: number) => (el: HTMLElement | null) => (dotsRef.current[i] = el!)
+	//biome-ignore lint:: ignore it
+	const setIconsRef = (i: number) => (el: HTMLElement | null) => (iconsRef.current[i] = el!)
 
 	useEffect(() => {
 		if (dotsRef.current.length) {
@@ -60,11 +66,7 @@ export const Loading: FC<LoadingProps> = ({ open, ...rest }) => {
 				<div className="flex justify-center items-center h-10 mb-8!">
 					<span className="text-white text-4xl mx-1">{t('loading')}</span>
 					{['.', '.', '.'].map((dot, i) => (
-						<span
-							key={i}
-							ref={(el) => (dotsRef.current[i] = el!) as any}
-							className="text-white text-5xl mx-1"
-						>
+						<span key={i} ref={setDotsRef(i) as any} className="text-white text-5xl mx-1">
 							{dot}
 						</span>
 					))}
@@ -77,11 +79,7 @@ export const Loading: FC<LoadingProps> = ({ open, ...rest }) => {
 						'i-fxemoji-sheep',
 						'i-emojione-goat',
 					].map((icon, i) => (
-						<i
-							key={i}
-							ref={(el) => (iconsRef.current[i] = el!) as any}
-							className={`${icon} w-12! h-12! mx-2`}
-						/>
+						<i key={i} ref={setIconsRef(i) as any} className={`${icon} w-12! h-12! mx-2`} />
 					))}
 				</div>
 			</dialog>

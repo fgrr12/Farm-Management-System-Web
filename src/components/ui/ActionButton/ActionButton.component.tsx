@@ -1,7 +1,9 @@
-import { useEffect, useRef } from 'react'
-import type { ActionButtonProps } from './ActionButton.types'
 import gsap from 'gsap'
+import { useEffect, useRef } from 'react'
+
 import { useAppStore } from '@/store/useAppStore'
+
+import type { ActionButtonProps } from './ActionButton.types'
 
 const iconColor = (icon: string | undefined) => {
 	switch (icon) {
@@ -26,7 +28,6 @@ export const ActionButton: FC<ActionButtonProps> = ({ icon, ...rest }) => {
 	const btnRef = useRef<HTMLButtonElement>(null)
 	const { loading } = useAppStore()
 
-	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
 		if (btnRef.current && !loading) {
 			gsap.fromTo(

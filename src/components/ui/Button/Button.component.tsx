@@ -1,7 +1,9 @@
-import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
-import type { ButtonProps } from './Button.types'
+import { useEffect, useRef } from 'react'
+
 import { useAppStore } from '@/store/useAppStore'
+
+import type { ButtonProps } from './Button.types'
 
 export const Button: FC<ButtonProps> = ({ children, ...props }) => {
 	const btnRef = useRef<HTMLButtonElement>(null)

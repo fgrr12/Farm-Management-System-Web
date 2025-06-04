@@ -15,11 +15,9 @@ import { DayPicker, type DropdownProps } from 'react-day-picker'
 import { enUS, es } from 'react-day-picker/locale'
 
 import { useUserStore } from '@/store/useUserStore'
-import 'react-day-picker/style.css'
-
-import { ActionButton } from '@/components/ui/ActionButton'
 
 import type { DatePickerProps } from './DatePicker.types'
+import 'react-day-picker/style.css'
 
 function CustomSelectDropdown(props: DropdownProps) {
 	const { options, value, onChange } = props
@@ -87,12 +85,16 @@ export const DatePicker: FC<DatePickerProps> = ({ legend, label, date, onDateCha
 					{...getReferenceProps()}
 				>
 					{date?.isValid() ? dayjs(date).format('DD/MM/YYYY') : label}
-					<i className="i-material-symbols-calendar-month w-6! h-6!" />
+					{!date?.isValid() ? (
+						<i className="i-material-symbols-calendar-month w-6! h-6!" />
+					) : (
+						<button
+							type="button"
+							className="i-material-symbols-event-busy-rounded w-6! h-6! bg-red-500! cursor-pointer"
+							onClick={() => onDateChange(null)}
+						/>
+					)}
 				</button>
-
-				{date?.isValid() && (
-					<ActionButton title="Clear" icon="i-lucide-circle-x" onClick={() => onDateChange(null)} />
-				)}
 			</div>
 
 			{open && (
