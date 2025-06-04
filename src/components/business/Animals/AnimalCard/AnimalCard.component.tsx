@@ -35,7 +35,7 @@ export const AnimalCard: FC<CardProps> = ({ uuid, animalId, breed, gender }) => 
 	}
 
 	const handleMouseEnter = () => {
-		gsap.to(divRef.current, { scale: 1.1, duration: 0.2, ease: 'power1.out' })
+		gsap.to(divRef.current, { scale: 1.05, duration: 0.2, ease: 'power1.out' })
 	}
 
 	const handleMouseLeave = () => {
@@ -44,6 +44,7 @@ export const AnimalCard: FC<CardProps> = ({ uuid, animalId, breed, gender }) => 
 
 	return (
 		<div
+			ref={divRef}
 			role="button"
 			tabIndex={0}
 			className="rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 cursor-pointer hover:bg-gray-200 hover:animate-pulse w-full"
