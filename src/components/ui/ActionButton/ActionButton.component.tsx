@@ -1,5 +1,6 @@
+import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 
 import { useAppStore } from '@/store/useAppStore'
 
@@ -28,27 +29,26 @@ export const ActionButton: FC<ActionButtonProps> = ({ icon, ...rest }) => {
 	const btnRef = useRef<HTMLButtonElement>(null)
 	const { loading } = useAppStore()
 
-	useEffect(() => {
-		if (btnRef.current && !loading) {
+	useGSAP(() => {
+		if (!loading && btnRef.current) {
 			gsap.fromTo(
 				btnRef.current,
 				{ scale: 0.6, opacity: 0 },
-				{
-					scale: 1,
-					opacity: 1,
-					duration: 0.5,
-					ease: 'back.out(1.7)',
-				}
+				{ scale: 1, opacity: 1, duration: 0.5, ease: 'back.out(1.7)' }
 			)
 		}
 	}, [loading])
 
 	const handleMouseEnter = () => {
-		gsap.to(btnRef.current, { scale: 1.1, duration: 0.2, ease: 'power1.out' })
+		if (btnRef.current) {
+			gsap.to(btnRef.current, { scale: 1.1, duration: 0.2, ease: 'power1.out' })
+		}
 	}
 
 	const handleMouseLeave = () => {
-		gsap.to(btnRef.current, { scale: 1, duration: 0.2, ease: 'power1.out' })
+		if (btnRef.current) {
+			gsap.to(btnRef.current, { scale: 1, duration: 0.2, ease: 'power1.out' })
+		}
 	}
 
 	return (

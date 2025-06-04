@@ -101,6 +101,10 @@
 				"noExplicitAny": "off",
 				"noPrototypeBuiltins": "off",
 				"useNamespaceKeyword": "off"
+			},
+			"a11y": {
+				"useKeyWithClickEvents": "off",
+				"useSemanticElements": "off"
 			}
 		},
 		"includes": [

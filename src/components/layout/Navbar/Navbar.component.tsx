@@ -1,3 +1,6 @@
+import { useGSAP } from '@gsap/react'
+import gsap from 'gsap'
+import { SplitText } from 'gsap/SplitText'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -16,12 +19,13 @@ import { useBackRoute } from '@/hooks/useBackRoute'
 
 export const Navbar = () => {
 	const drawerRef = useRef<HTMLInputElement>(null)
+	const titleRef = useRef<HTMLHeadingElement>(null)
 	const { user, setUser } = useUserStore()
 	const { farm, setFarm } = useFarmStore()
 	const { t } = useTranslation('common')
 	const navigate = useNavigate()
 	const location = useLocation()
-	const { headerTitle } = useAppStore()
+	const { headerTitle, loading } = useAppStore()
 	const backRoute = useBackRoute()
 
 	const [theme, setTheme] = useState<string>(localStorage.getItem('theme') || 'light')
@@ -59,6 +63,26 @@ export const Navbar = () => {
 		localStorage.setItem('theme', theme)
 		document.querySelector('html')!.setAttribute('data-theme', theme)
 	}, [theme])
+
+	useGSAP(() => {
+		if (!titleRef.current) return
+
+		titleRef.current.innerText = headerTitle
+
+		const split = new SplitText(titleRef.current, { type: 'chars' })
+
+		gsap.from(split.chars, {
+			autoAlpha: 0,
+			x: 10,
+			duration: 1,
+			stagger: 0.05,
+			ease: 'power1.out',
+		})
+
+		return () => {
+			split.revert()
+		}
+	}, [headerTitle, loading])
 	return (
 		<div className="drawer">
 			<input id="my-drawer" type="checkbox" className="drawer-toggle" ref={drawerRef} />
@@ -77,7 +101,9 @@ export const Navbar = () => {
 						</div>
 					</div>
 					<div className="navbar-center">
-						<h2 className="text-2xl font-bold">{headerTitle}</h2>
+						<h2 ref={titleRef} className="text-2xl font-bold">
+							{headerTitle}
+						</h2>
 					</div>
 					<div className="navbar-end">
 						<button type="button" className="btn btn-ghost btn-circle">

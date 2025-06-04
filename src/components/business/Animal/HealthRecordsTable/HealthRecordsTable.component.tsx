@@ -216,7 +216,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 					</thead>
 					<tbody>
 						{healthRecordsFiltered.map((healthRecord) => (
-							<tr key={self.crypto.randomUUID()} className={trBgColor(healthRecord.type)}>
+							<tr key={healthRecord.uuid} className={trBgColor(healthRecord.type)}>
 								<td className="text-black">{healthRecord.reason}</td>
 								<td className="text-black">
 									<div className="flex flex-col gap-1">

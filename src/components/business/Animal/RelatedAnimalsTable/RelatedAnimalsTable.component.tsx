@@ -92,7 +92,7 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 					</thead>
 					<tbody>
 						{animals?.map((animal) => (
-							<tr key={self.crypto.randomUUID()}>
+							<tr key={animal.uuid}>
 								<td>{animal[type].animalId}</td>
 								<td>{animal[type].breed.name}</td>
 								<td>{t(animal[type].relation.toLowerCase())}</td>
