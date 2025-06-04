@@ -13,10 +13,10 @@
 	"filterBySpecies": "Filter by species",
 	"addTask": "Add Task",
 	"noTasks": "No tasks found",
-	"modal": {
-		"errorGettingTasks": {
-			"title": "Error",
-			"message": "There was an error getting the tasks"
-		}
+	"toast": {
+		"taskPending": "Task {{taskUuid}} is pending",
+		"taskCompleted": "Task {{taskUuid}} is completed",
+		"errorUpdatingTaskStatus": "Error updating task status",
+		"errorGettingTasks": "Error getting tasks"
 	}
 }

@@ -13,10 +13,10 @@
 	"filterBySpecies": "Filtra por especie",
 	"addTask": "Añadir tarea",
 	"noTasks": "No se encontraron tareas",
-	"modal": {
-		"errorGettingTasks": {
-			"title": "Error",
-			"message": "Ocurrió un error al obtener las tareas"
-		}
+	"toast": {
+		"taskPending": "La tarea {{taskUuid}} está pendiente",
+		"taskCompleted": "La tarea {{taskUuid}} está completada",
+		"errorUpdatingTaskStatus": "Error al actualizar el estado de la tarea",
+		"errorGettingTasks": "Error al obtener las tareas"
 	}
 }
