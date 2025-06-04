@@ -19,7 +19,7 @@ import type { DividedTasks, TaskFilters } from './Tasks.types'
 const Tasks = () => {
 	const { user } = useUserStore()
 	const { farm } = useFarmStore()
-	const { setHeaderTitle, setLoading } = useAppStore()
+	const { setHeaderTitle, setLoading, setToastData } = useAppStore()
 	const navigate = useNavigate()
 	const { t } = useTranslation(['tasks'])
 
@@ -41,9 +41,23 @@ const Tasks = () => {
 	}
 
 	const handleUpdateTask = (task: Task) => async () => {
-		const status = task.status === 'COMPLETED' ? 'PENDING' : 'COMPLETED'
-		await TasksService.updateTaskStatus(task.uuid, status)
-		await getTasks()
+		try {
+			const status = task.status === 'COMPLETED' ? 'PENDING' : 'COMPLETED'
+			await TasksService.updateTaskStatus(task.uuid, status)
+			await getTasks()
+			if (status === 'COMPLETED')
+				setToastData({
+					message: t('toast.taskCompleted', { taskUuid: task.title }),
+					type: 'success',
+				})
+			else
+				setToastData({ message: t('toast.taskPending', { taskUuid: task.title }), type: 'warning' })
+		} catch (_error) {
+			setToastData({
+				message: t('toast.errorUpdatingTaskStatus'),
+				type: 'error',
+			})
+		}
 	}
 
 	const getTasks = async () => {
@@ -55,8 +69,11 @@ const Tasks = () => {
 			const pendingTasks = tasks.filter((task) => task.status === 'PENDING')
 			const completedTasks = tasks.filter((task) => task.status === 'COMPLETED')
 			setTasks({ pending: pendingTasks, completed: completedTasks })
-		} catch (error) {
-			console.error(error)
+		} catch (_error) {
+			setToastData({
+				message: t('toast.errorGettingTasks'),
+				type: 'error',
+			})
 		} finally {
 			setLoading(false)
 		}
