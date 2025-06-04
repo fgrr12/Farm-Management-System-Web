@@ -94,7 +94,7 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 					</thead>
 					<tbody>
 						{productionRecords.map((productionRecord) => (
-							<tr key={self.crypto.randomUUID()}>
+							<tr key={productionRecord.uuid}>
 								<td>{dayjs(productionRecord.date).format('DD/MM/YYYY')}</td>
 								<td>
 									{productionRecord.quantity}

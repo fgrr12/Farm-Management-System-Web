@@ -10,7 +10,7 @@ import {
 	useInteractions,
 } from '@floating-ui/react'
 import dayjs from 'dayjs'
-import { type ChangeEvent, type FC, useState } from 'react'
+import { type ChangeEvent, type FC, type MouseEvent, useState } from 'react'
 import { DayPicker, type DropdownProps } from 'react-day-picker'
 import { enUS, es } from 'react-day-picker/locale'
 
@@ -18,6 +18,8 @@ import { useUserStore } from '@/store/useUserStore'
 
 import type { DatePickerProps } from './DatePicker.types'
 import 'react-day-picker/style.css'
+
+import { ActionButton } from '@/components/ui/ActionButton'
 
 function CustomSelectDropdown(props: DropdownProps) {
 	const { options, value, onChange } = props
@@ -51,6 +53,11 @@ export const DatePicker: FC<DatePickerProps> = ({ legend, label, date, onDateCha
 		setOpen(false)
 	}
 
+	const handleClear = (e: MouseEvent<HTMLButtonElement>) => {
+		e.stopPropagation()
+		onDateChange(null)
+	}
+
 	const { refs, floatingStyles, context } = useFloating({
 		open,
 		onOpenChange: setOpen,
@@ -77,8 +84,9 @@ export const DatePicker: FC<DatePickerProps> = ({ legend, label, date, onDateCha
 			<legend className="fieldset-legend">{legend}</legend>
 
 			<div className="flex items-center gap-2">
-				<button
-					type="button"
+				<div
+					role="button"
+					tabIndex={0}
 					className="input input-border w-full h-12 pl-2 pr-2 flex items-center justify-between"
 					ref={refs.setReference}
 					onClick={() => setOpen((prev) => !prev)}
@@ -86,15 +94,19 @@ export const DatePicker: FC<DatePickerProps> = ({ legend, label, date, onDateCha
 				>
 					{date?.isValid() ? dayjs(date).format('DD/MM/YYYY') : label}
 					{!date?.isValid() ? (
-						<i className="i-material-symbols-calendar-month w-6! h-6!" />
+						<ActionButton
+							title="Select"
+							icon="i-material-symbols-calendar-month"
+							onClick={() => setOpen((prev) => !prev)}
+						/>
 					) : (
-						<button
-							type="button"
-							className="i-material-symbols-event-busy-rounded w-6! h-6! bg-red-500! cursor-pointer"
-							onClick={() => onDateChange(null)}
+						<ActionButton
+							title="Clear"
+							icon="i-material-symbols-event-busy-rounded"
+							onClick={handleClear}
 						/>
 					)}
-				</button>
+				</div>
 			</div>
 
 			{open && (

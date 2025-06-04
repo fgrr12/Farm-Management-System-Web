@@ -11,6 +11,7 @@ import { useUserStore } from '@/store/useUserStore'
 import { AnimalsService } from '@/services/animals'
 
 import { AnimalCard } from '@/components/business/Animals/AnimalCard'
+import { Button } from '@/components/ui/Button'
 import { Search } from '@/components/ui/Search'
 import { Select } from '@/components/ui/Select'
 
@@ -95,13 +96,13 @@ const Animals = () => {
 					items={[...species.map((specie) => ({ value: specie.uuid, name: specie.name }))]}
 					onChange={handleSelectChange}
 				/>
-				<button
+				<Button
 					type="button"
 					className="btn btn-primary h-12 w-full text-lg col-start-4"
 					onClick={navigateToAddAnimal}
 				>
 					{t('addAnimal')}
-				</button>
+				</Button>
 			</div>
 			<div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 w-full">
 				{filteredAnimals.map((animal) => (

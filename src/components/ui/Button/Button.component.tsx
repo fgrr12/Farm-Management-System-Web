@@ -1,5 +1,6 @@
+import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 
 import { useAppStore } from '@/store/useAppStore'
 
@@ -9,8 +10,8 @@ export const Button: FC<ButtonProps> = ({ children, ...props }) => {
 	const btnRef = useRef<HTMLButtonElement>(null)
 	const { loading } = useAppStore()
 
-	useEffect(() => {
-		if (btnRef.current && !loading) {
+	useGSAP(() => {
+		if (!loading && btnRef.current) {
 			gsap.fromTo(
 				btnRef.current,
 				{ y: 20, opacity: 0 },
@@ -20,11 +21,15 @@ export const Button: FC<ButtonProps> = ({ children, ...props }) => {
 	}, [loading])
 
 	const handleMouseEnter = () => {
-		gsap.to(btnRef.current, { scale: 1.05, duration: 0.2, ease: 'power1.out' })
+		if (btnRef.current) {
+			gsap.to(btnRef.current, { scale: 1.02, duration: 0.2, ease: 'power1.out' })
+		}
 	}
 
 	const handleMouseLeave = () => {
-		gsap.to(btnRef.current, { scale: 1, duration: 0.2, ease: 'power1.out' })
+		if (btnRef.current) {
+			gsap.to(btnRef.current, { scale: 1, duration: 0.2, ease: 'power1.out' })
+		}
 	}
 
 	return (
@@ -44,8 +49,8 @@ export const BackButton: FC<ButtonProps> = (props) => {
 	const btnRef = useRef<HTMLButtonElement>(null)
 	const { loading } = useAppStore()
 
-	useEffect(() => {
-		if (btnRef.current && !loading) {
+	useGSAP(() => {
+		if (!loading && btnRef.current) {
 			gsap.fromTo(
 				btnRef.current,
 				{ x: -30, opacity: 0 },
@@ -55,11 +60,15 @@ export const BackButton: FC<ButtonProps> = (props) => {
 	}, [loading])
 
 	const handleMouseEnter = () => {
-		gsap.to(btnRef.current, { scale: 1.1, duration: 0.2, ease: 'power1.out' })
+		if (btnRef.current) {
+			gsap.to(btnRef.current, { scale: 1.1, duration: 0.2, ease: 'power1.out' })
+		}
 	}
 
 	const handleMouseLeave = () => {
-		gsap.to(btnRef.current, { scale: 1, duration: 0.2, ease: 'power1.out' })
+		if (btnRef.current) {
+			gsap.to(btnRef.current, { scale: 1, duration: 0.2, ease: 'power1.out' })
+		}
 	}
 
 	return (
@@ -67,7 +76,7 @@ export const BackButton: FC<ButtonProps> = (props) => {
 			ref={btnRef}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
-			className="btn bg-transparent border-none shadow-none hidden md:inline"
+			className="btn bg-transparent border-none shadow-none hidden md:inline pl-0 ml-4"
 			{...props}
 		>
 			<i className="i-material-symbols-arrow-left-alt-rounded w-14! h-8!" />

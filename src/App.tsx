@@ -1,4 +1,7 @@
+import { useGSAP } from '@gsap/react'
 import { onAuthStateChanged } from 'firebase/auth'
+import { gsap } from 'gsap'
+import { SplitText } from 'gsap/all'
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
@@ -16,6 +19,8 @@ import { useAppStore } from './store/useAppStore'
 import { useFarmStore } from './store/useFarmStore'
 import { useUserStore } from './store/useUserStore'
 import { PrivateRoute } from './utils/PrivateRoute'
+
+gsap.registerPlugin(SplitText, useGSAP)
 
 const Animal = lazy(() => import('@/pages/Animal/Animal.page'))
 const AnimalForm = lazy(() => import('@/pages/AnimalForm/AnimalForm.page'))

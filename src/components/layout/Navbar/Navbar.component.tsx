@@ -1,3 +1,6 @@
+import { useGSAP } from '@gsap/react'
+import gsap from 'gsap'
+import { SplitText } from 'gsap/SplitText'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -16,12 +19,14 @@ import { useBackRoute } from '@/hooks/useBackRoute'
 
 export const Navbar = () => {
 	const drawerRef = useRef<HTMLInputElement>(null)
+	const titleRef = useRef<HTMLHeadingElement>(null)
+	const drawerTitleRef = useRef<HTMLHeadingElement>(null)
 	const { user, setUser } = useUserStore()
 	const { farm, setFarm } = useFarmStore()
 	const { t } = useTranslation('common')
 	const navigate = useNavigate()
 	const location = useLocation()
-	const { headerTitle } = useAppStore()
+	const { headerTitle, loading } = useAppStore()
 	const backRoute = useBackRoute()
 
 	const [theme, setTheme] = useState<string>(localStorage.getItem('theme') || 'light')
@@ -59,6 +64,52 @@ export const Navbar = () => {
 		localStorage.setItem('theme', theme)
 		document.querySelector('html')!.setAttribute('data-theme', theme)
 	}, [theme])
+
+	useGSAP(() => {
+		if (!titleRef.current || loading) return
+
+		titleRef.current.innerText = headerTitle
+
+		const split = new SplitText(titleRef.current, { type: 'chars' })
+
+		gsap.from(split.chars, {
+			autoAlpha: 0,
+			x: 10,
+			duration: 1,
+			stagger: 0.05,
+			ease: 'power1.out',
+		})
+
+		return () => {
+			split.revert()
+		}
+	}, [headerTitle, loading])
+
+	useGSAP(() => {
+		const drawer = drawerRef.current
+		if (!drawer || !drawerTitleRef.current || !farm) return
+
+		const handleChange = () => {
+			if (drawer.checked && drawerTitleRef.current) {
+				drawerTitleRef.current.innerText = farm.name
+				const split = new SplitText(drawerTitleRef.current, { type: 'chars' })
+				gsap.from(split.chars, {
+					autoAlpha: 0,
+					x: 10,
+					duration: 1,
+					stagger: 0.05,
+					ease: 'power1.out',
+				})
+				setTimeout(() => split.revert(), 2000)
+			}
+		}
+
+		drawer.addEventListener('change', handleChange)
+
+		return () => {
+			drawer.removeEventListener('change', handleChange)
+		}
+	}, [farm])
 	return (
 		<div className="drawer">
 			<input id="my-drawer" type="checkbox" className="drawer-toggle" ref={drawerRef} />
@@ -77,7 +128,9 @@ export const Navbar = () => {
 						</div>
 					</div>
 					<div className="navbar-center">
-						<h2 className="text-2xl font-bold">{headerTitle}</h2>
+						<h2 ref={titleRef} className="text-2xl font-bold">
+							{headerTitle}
+						</h2>
 					</div>
 					<div className="navbar-end">
 						<button type="button" className="btn btn-ghost btn-circle">
@@ -92,7 +145,11 @@ export const Navbar = () => {
 			<div className="drawer-side z-10">
 				<label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay" />
 				<ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
-					{farm && <h2 className="text-xl font-bold mb-2 text-center">{farm!.name}</h2>}
+					{farm && (
+						<h2 ref={drawerTitleRef} className="text-xl font-bold mb-2 text-center">
+							{farm!.name}
+						</h2>
+					)}
 					<li className={location.pathname.includes(AppRoutes.ANIMALS) ? 'bg-info rounded-sm' : ''}>
 						<button
 							type="button"
