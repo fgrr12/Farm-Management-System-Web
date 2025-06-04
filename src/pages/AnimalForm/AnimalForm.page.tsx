@@ -121,6 +121,7 @@ const AnimalForm = () => {
 					message: t('toast.edited'),
 					type: 'success',
 				})
+				setAnimalForm(INITIAL_ANIMAL_FORM)
 				navigate(AppRoutes.ANIMAL.replace(':animalUuid', animalUuid))
 			} else {
 				await AnimalsService.setAnimal(animalForm, user!.uuid, user!.farmUuid)
@@ -128,6 +129,7 @@ const AnimalForm = () => {
 					message: t('toast.added'),
 					type: 'success',
 				})
+				setAnimalForm(INITIAL_ANIMAL_FORM)
 			}
 		} catch (_error) {
 			setToastData({
