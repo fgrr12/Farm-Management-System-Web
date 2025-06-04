@@ -76,15 +76,26 @@ const MySpecies = () => {
 		setSpecies(sps)
 	}
 
-	//! Incomplete
+	const handleUpdateFarm = async (sps: MySpeciesI[]) => {
+		const data: Species[] = sps!.map((specie) => ({
+			uuid: specie.uuid,
+			name: specie.name,
+			breeds: specie.breeds,
+			status: specie.status,
+		}))
+		await FarmsService.updateFarm({ ...farm!, species: data })
+		setSpecies(sps)
+		setFarm({ ...farm!, species: data })
+	}
+
 	const handleRemoveSpecie = (specieUuid: string) => () => {
 		setModalData({
 			open: true,
 			title: t('modal.deleteSpecies.title'),
 			message: t('modal.deleteSpecies.message'),
-			onAccept: () => {
+			onAccept: async () => {
 				const sps = species.filter((specie) => specie.uuid !== specieUuid)
-				setSpecies(sps)
+				await handleUpdateFarm(sps)
 				setModalData(defaultModalData)
 				setToastData({
 					message: t('toast.deletedSpecies'),
@@ -101,17 +112,16 @@ const MySpecies = () => {
 		})
 	}
 
-	//! Incomplete
 	const handleRemoveBreed = (specie: MySpeciesI, breedUuid: string) => () => {
 		setModalData({
 			open: true,
 			title: t('modal.deleteBreed.title'),
 			message: t('modal.deleteBreed.message'),
-			onAccept: () => {
+			onAccept: async () => {
 				const breeds = specie.breeds.filter((breed) => breed.uuid !== breedUuid)
 				specie.breeds = breeds
 				const sps = species.map((sp) => (sp.uuid === specie.uuid ? specie : sp))
-				setSpecies(sps)
+				await handleUpdateFarm(sps)
 				setModalData(defaultModalData)
 				setToastData({
 					message: t('toast.deletedBreed'),
