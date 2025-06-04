@@ -37,16 +37,16 @@ export const Sidebar: FC = () => {
 		if (loading) return
 		gsap.fromTo(
 			'.menu li',
-			{ opacity: 0, y: 20 },
+			{ opacity: 0, y: 20, duration: 0, ease: 'power1.out' },
 			{
 				opacity: 1,
 				y: 0,
 				stagger: 0.05,
-				duration: 0.4,
+				duration: 0.2,
 				ease: 'power1.out',
 			}
 		)
-	}, [loading])
+	}, [location])
 	return (
 		<ul className="menu bg-base-100 h-full hidden lg:grid auto-rows-[50px] items-center shadow-sm overflow-auto scrollbar-hidden">
 			<li className={location.pathname.includes(AppRoutes.ANIMALS) ? 'bg-info rounded-sm' : ''}>
