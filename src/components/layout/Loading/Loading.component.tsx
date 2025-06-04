@@ -1,3 +1,4 @@
+import gsap from 'gsap'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -7,37 +8,82 @@ export const Loading: FC<LoadingProps> = ({ open, ...rest }) => {
 	const { t } = useTranslation(['common'])
 	const { loadingRef } = useLoading(open)
 
-	return (
-		<dialog
-			ref={loadingRef}
-			{...rest}
-			className="
-				fixed
-				top-1/2
-				left-1/2
-				-translate-x-1/2
-				-translate-y-1/2
-				border-none
-				bg-transparent
-				outline-none
-				overflow-hidden
-				backdrop:bg-neutral-500
-				"
-		>
-			<div className="flex justify-center items-center h-10 mb-8!">
-				<span className="text-white text-4xl mx-1">{t('loading')}</span>
-				<span className="text-white text-5xl mx-1 animate-dot-pulse delay-0">.</span>
-				<span className="text-white text-5xl mx-1 animate-dot-pulse delay-100">.</span>
-				<span className="text-white text-5xl mx-1 animate-dot-pulse delay-200">.</span>
-			</div>
+	const dotsRef = useRef<HTMLSpanElement[]>([])
+	const iconsRef = useRef<HTMLSpanElement[]>([])
 
-			<div className="flex justify-center items-center w-screen">
-				<i className="i-fluent-emoji-flat-cow w-12! h-12! mx-2 animate-slide-left delay-0" />
-				<i className="i-emojione-chicken w-12! h-12! mx-2 animate-slide-left delay-100" />
-				<i className="i-fxemoji-sheep w-12! h-12! mx-2 animate-slide-left delay-200" />
-				<i className="i-emojione-goat w-12! h-12! mx-2 animate-slide-left delay-300" />
-			</div>
-		</dialog>
+	//biome-ignore lint:: ignore it
+	const setDotsRef = (i: number) => (el: HTMLElement | null) => (dotsRef.current[i] = el!)
+	//biome-ignore lint:: ignore it
+	const setIconsRef = (i: number) => (el: HTMLElement | null) => (iconsRef.current[i] = el!)
+
+	useEffect(() => {
+		if (dotsRef.current.length) {
+			gsap.to(dotsRef.current, {
+				scale: 1.2,
+				repeat: -1,
+				yoyo: true,
+				ease: 'power1.inOut',
+				stagger: 0.1,
+				duration: 0.6,
+			})
+		}
+
+		if (iconsRef.current.length) {
+			gsap.to(iconsRef.current, {
+				x: -64,
+				repeat: -1,
+				yoyo: true,
+				ease: 'power1.inOut',
+				stagger: 0.1,
+				duration: 1.2,
+			})
+		}
+	}, [])
+
+	return (
+		<>
+			{open && (
+				<div className="fixed inset-0 z-40 backdrop-blur-md bg-black/30" aria-hidden="true" />
+			)}
+
+			<dialog
+				ref={loadingRef}
+				{...rest}
+				className="
+					fixed
+					top-1/2
+					left-1/2
+					-translate-x-1/2
+					-translate-y-1/2
+					border-none
+					bg-transparent
+					outline-none
+					overflow-hidden
+					backdrop:bg-neutral-500
+					z-50
+				"
+			>
+				<div className="flex justify-center items-center h-10 mb-8!">
+					<span className="text-white text-4xl mx-1">{t('loading')}</span>
+					{['.', '.', '.'].map((dot, i) => (
+						<span key={i} ref={setDotsRef(i) as any} className="text-white text-5xl mx-1">
+							{dot}
+						</span>
+					))}
+				</div>
+
+				<div className="flex justify-center items-center w-screen">
+					{[
+						'i-fluent-emoji-flat-cow',
+						'i-emojione-chicken',
+						'i-fxemoji-sheep',
+						'i-emojione-goat',
+					].map((icon, i) => (
+						<i key={i} ref={setIconsRef(i) as any} className={`${icon} w-12! h-12! mx-2`} />
+					))}
+				</div>
+			</dialog>
+		</>
 	)
 }
 

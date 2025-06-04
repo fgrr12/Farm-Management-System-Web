@@ -114,7 +114,7 @@ const Animals = () => {
 					/>
 				))}
 			</div>
-			{animals.length === 0 && (
+			{filteredAnimals.length === 0 && (
 				<div className="flex flex-col items-center justify-center gap-2 w-full">
 					<div className="text-center text-2xl font-bold">{t('noAnimals')}</div>
 					<div className="text-center text-sm font-semibold">{t('noAnimalsSubtitle')}</div>

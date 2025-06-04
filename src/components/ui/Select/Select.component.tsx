@@ -1,6 +1,7 @@
 import { type MouseEvent, type ReactElement, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { ActionButton } from '../ActionButton'
 import type { SelectProps } from './Select.types'
 
 export const Select: FC<SelectProps> = ({
@@ -42,14 +43,14 @@ export const Select: FC<SelectProps> = ({
 						<i className="i-ic-outline-arrow-drop-down w-8! h-8!" />
 					</div>
 				) : (
-					<button
-						className="absolute inset-y-0 right-0 flex items-center px-2 text-red-400 hover:text-red-600 z-10"
-						type="button"
-						onClick={handleClear}
-						disabled={rest.disabled}
-					>
-						<i className="i-lucide-circle-x w-6! h-6!" />
-					</button>
+					<div className="absolute inset-y-0 right-0 flex items-center px-2 z-10">
+						<ActionButton
+							title="Clear"
+							icon="i-lucide-circle-x"
+							onClick={handleClear}
+							disabled={rest.disabled}
+						/>
+					</div>
 				)}
 			</div>
 		</fieldset>
