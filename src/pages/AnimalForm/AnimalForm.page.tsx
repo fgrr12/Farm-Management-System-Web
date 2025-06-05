@@ -31,6 +31,7 @@ const AnimalForm = () => {
 	const [animalForm, setAnimalForm] = useState<Animal>(INITIAL_ANIMAL_FORM)
 	const [species, setSpecies] = useState(INITIAL_SPECIES)
 	const [breeds, setBreeds] = useState<Breed[]>([])
+	const [pictureUrl, setPictureUrl] = useState<string>('')
 
 	const handleTextChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		const { name, value } = event.target
@@ -71,6 +72,8 @@ const AnimalForm = () => {
 
 	const handleFile = async (file: File) => {
 		const picture = await fileToBase64(file)
+		const fullDataUrl = `data:${picture.contentType};base64,${picture.data}`
+		setPictureUrl(fullDataUrl)
 		setAnimalForm((prev) => ({ ...prev, picture: picture.data }))
 	}
 
@@ -164,7 +167,7 @@ const AnimalForm = () => {
 					<Dropzone
 						className="dropzone"
 						cleanFile={false}
-						pictureUrl={animalForm.picture}
+						pictureUrl={pictureUrl || animalForm.picture}
 						onFile={handleFile}
 					/>
 				</div>
