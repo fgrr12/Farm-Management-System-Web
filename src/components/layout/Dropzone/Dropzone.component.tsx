@@ -111,7 +111,7 @@ export const Dropzone: FC<DropzoneProps> = ({ cleanFile, pictureUrl, onFile, ...
 							{labelText}
 						</span>
 						<div className="w-16 h-16 bg-primary-600 pointer-events-none">
-							<i className="i-mdi-file-upload" />
+							<i className="i-mdi-file-upload w-10! h-10!" />
 						</div>
 					</>
 				)}
@@ -120,7 +120,7 @@ export const Dropzone: FC<DropzoneProps> = ({ cleanFile, pictureUrl, onFile, ...
 					<img
 						src={url}
 						alt="Imagen seleccionada"
-						className="w-full h-full max-w-full max-h-full object-fill rounded-lg"
+						className="w-full h-full max-w-full max-h-full object-cover rounded-lg"
 					/>
 				)}
 
