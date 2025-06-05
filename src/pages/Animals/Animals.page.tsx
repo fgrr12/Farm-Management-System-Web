@@ -1,4 +1,6 @@
-import { type ChangeEvent, useEffect, useMemo, useState } from 'react'
+import { useGSAP } from '@gsap/react'
+import gsap from 'gsap'
+import { type ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -23,6 +25,7 @@ const Animals = () => {
 	const navigation = useNavigate()
 	const { t } = useTranslation(['animals'])
 	const { setLoading, setHeaderTitle, setToastData } = useAppStore()
+	const containerRef = useRef<HTMLDivElement>(null)
 
 	const [animals, setAnimals] = useState<Animal[]>([])
 	const [species, setSpecies] = useState<Species[]>([])
@@ -84,6 +87,22 @@ const Animals = () => {
 		}
 	}, [user, farm])
 
+	useGSAP(() => {
+		if (!filteredAnimals.length) return
+
+		const cards = containerRef.current?.querySelectorAll('.animal-card')
+
+		if (cards && cards.length > 0) {
+			gsap.from(cards, {
+				opacity: 0,
+				x: 30,
+				stagger: 0.1,
+				duration: 0.5,
+				ease: 'power2.out',
+				clearProps: 'opacity,transform',
+			})
+		}
+	}, [filteredAnimals])
 	return (
 		<div className="flex flex-col gap-5 p-4 w-full h-full overflow-auto">
 			<div className="flex flex-col md:grid md:grid-cols-4 items-center justify-center gap-4 w-full">
@@ -104,7 +123,10 @@ const Animals = () => {
 					{t('addAnimal')}
 				</Button>
 			</div>
-			<div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 w-full">
+			<div
+				ref={containerRef}
+				className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 w-full"
+			>
 				{filteredAnimals.map((animal) => (
 					<AnimalCard
 						key={animal.uuid}
