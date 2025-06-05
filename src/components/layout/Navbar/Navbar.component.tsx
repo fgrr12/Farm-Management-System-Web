@@ -66,11 +66,10 @@ export const Navbar = () => {
 	}, [theme])
 
 	useGSAP(() => {
-		if (!titleRef.current || loading) return
+		const el = titleRef.current
+		if (!el || loading || !headerTitle.trim()) return
 
-		titleRef.current.innerText = headerTitle
-
-		const split = new SplitText(titleRef.current, { type: 'chars' })
+		const split = new SplitText(el, { type: 'chars' })
 
 		gsap.from(split.chars, {
 			autoAlpha: 0,
@@ -91,7 +90,6 @@ export const Navbar = () => {
 
 		const handleChange = () => {
 			if (drawer.checked && drawerTitleRef.current) {
-				drawerTitleRef.current.innerText = farm.name
 				const split = new SplitText(drawerTitleRef.current, { type: 'chars' })
 				gsap.from(split.chars, {
 					autoAlpha: 0,
