@@ -47,7 +47,7 @@ export const AnimalCard: FC<CardProps> = ({ uuid, animalId, breed, gender }) => 
 			ref={divRef}
 			role="button"
 			tabIndex={0}
-			className="rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 cursor-pointer hover:bg-gray-200 hover:animate-pulse w-full"
+			className="animal-card rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 cursor-pointer hover:bg-gray-200 hover:animate-pulse w-full"
 			onClick={navigateToAnimal}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
