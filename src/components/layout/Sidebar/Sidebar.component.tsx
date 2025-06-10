@@ -11,7 +11,7 @@ import { useUserStore } from '@/store/useUserStore'
 
 import { UserService } from '@/services/user'
 
-export const Sidebar: FC = () => {
+export const Sidebar = () => {
 	const { user, setUser } = useUserStore()
 	const { setFarm } = useFarmStore()
 	const { loading } = useAppStore()
@@ -28,6 +28,16 @@ export const Sidebar: FC = () => {
 		navigate(AppRoutes.LOGIN)
 	}
 
+	const handleGoTo = (path: string) => () => {
+		if (location.pathname === path) return
+		navigate(path)
+	}
+
+	const handleCheckActive = (path: string) => {
+		if (location.pathname === path) return 'bg-info rounded-sm'
+		return ''
+	}
+
 	useEffect(() => {
 		localStorage.setItem('theme', theme)
 		document.querySelector('html')!.setAttribute('data-theme', theme)
@@ -36,7 +46,7 @@ export const Sidebar: FC = () => {
 	useGSAP(() => {
 		if (loading) return
 		gsap.fromTo(
-			'.menu li',
+			'.menu li, .divider',
 			{ opacity: 0, y: 20, duration: 0, ease: 'power1.out' },
 			{
 				opacity: 1,
@@ -49,65 +59,63 @@ export const Sidebar: FC = () => {
 	}, [location])
 	return (
 		<ul className="menu bg-base-100 h-full hidden lg:grid auto-rows-[50px] items-center shadow-sm overflow-auto scrollbar-hidden">
-			<li className={location.pathname.includes(AppRoutes.ANIMALS) ? 'bg-info rounded-sm' : ''}>
+			<li className={handleCheckActive(AppRoutes.ANIMALS)}>
 				<button
 					type="button"
 					className="flex items-center gap-2 px-4 py-2"
-					onClick={() => navigate(AppRoutes.ANIMALS)}
+					onClick={handleGoTo(AppRoutes.ANIMALS)}
 				>
 					<i className="i-healthicons-animal-cow w-8! h-8!" />
 				</button>
 			</li>
-			<li className={location.pathname.includes(AppRoutes.TASKS) ? 'bg-info rounded-sm' : ''}>
+			<li className={handleCheckActive(AppRoutes.TASKS)}>
 				<button
 					type="button"
 					className="flex items-center gap-2 px-4 py-2"
-					onClick={() => navigate(AppRoutes.TASKS)}
+					onClick={handleGoTo(AppRoutes.TASKS)}
 				>
 					<i className="i-fluent-tasks-app-24-filled w-8! h-8!" />
 				</button>
 			</li>
-			<li className={location.pathname.includes(AppRoutes.MY_SPECIES) ? 'bg-info rounded-sm' : ''}>
+			<li className={handleCheckActive(AppRoutes.MY_SPECIES)}>
 				<button
 					type="button"
 					className="flex items-center gap-2 px-4 py-2"
-					onClick={() => navigate(AppRoutes.MY_SPECIES)}
+					onClick={handleGoTo(AppRoutes.MY_SPECIES)}
 				>
 					<i className="i-solar-dna-bold-duotone w-8! h-8!" />
 				</button>
 			</li>
 
-			{/* {(user?.role === 'admin' || user?.role === 'owner') && <div className="divider" />} */}
+			{(user?.role === 'admin' || user?.role === 'owner') && <div className="divider" />}
 			{(user?.role === 'admin' || user?.role === 'owner') && (
-				<li className={location.pathname.includes(AppRoutes.EMPLOYEES) ? 'bg-info rounded-sm' : ''}>
+				<li className={handleCheckActive(AppRoutes.EMPLOYEES)}>
 					<button
 						type="button"
 						className="flex items-center gap-2 px-4 py-2"
-						onClick={() => navigate(AppRoutes.EMPLOYEES)}
+						onClick={handleGoTo(AppRoutes.EMPLOYEES)}
 					>
 						<i className="i-clarity-employee-group-solid w-8! h-8!" />
 					</button>
 				</li>
 			)}
 			{(user?.role === 'admin' || user?.role === 'owner') && (
-				<li
-					className={location.pathname.includes(AppRoutes.BILLING_CARD) ? 'bg-info rounded-sm' : ''}
-				>
+				<li className={handleCheckActive(AppRoutes.BILLING_CARD)}>
 					<button
 						type="button"
 						className="flex items-center gap-2 px-4 py-2"
-						onClick={() => navigate(AppRoutes.BILLING_CARD)}
+						onClick={handleGoTo(AppRoutes.BILLING_CARD)}
 					>
 						<i className="i-typcn-business-card w-8! h-8!" />
 					</button>
 				</li>
 			)}
 			<div className="divider" />
-			<li className={location.pathname.includes(AppRoutes.MY_ACCOUNT) ? 'bg-info rounded-sm' : ''}>
+			<li className={handleCheckActive(AppRoutes.MY_ACCOUNT)}>
 				<button
 					type="button"
 					className="flex items-center gap-2 px-4 py-2"
-					onClick={() => navigate(AppRoutes.MY_ACCOUNT)}
+					onClick={handleGoTo(AppRoutes.MY_ACCOUNT)}
 				>
 					<i className="i-material-symbols-account-circle w-8! h-8!" />
 				</button>
