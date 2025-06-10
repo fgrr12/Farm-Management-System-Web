@@ -1,6 +1,6 @@
 import { doc, getDoc, setDoc } from 'firebase/firestore'
 
-import { firestore } from '@/config/environment'
+import { firestore } from '@/config/firebaseConfig'
 
 const collectionName = 'farms'
 export module FarmsService {

@@ -10,7 +10,7 @@ import {
 	where,
 } from 'firebase/firestore'
 
-import { firestore } from '@/config/environment'
+import { firestore } from '@/config/firebaseConfig'
 
 const collectionName = 'relatedAnimals'
 
