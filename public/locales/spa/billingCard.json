@@ -1,0 +1,9 @@
+{
+	"title": "Tarjeta de facturación",
+	"subtitle": "DATOS PARA FACTURA ELECTRÓNICA",
+	"name": "Nombre:",
+	"phone": "Teléfono:",
+	"id": "Cédula:",
+	"email": "Correo:",
+	"address": "Dirección:"
+}
