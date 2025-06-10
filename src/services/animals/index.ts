@@ -124,6 +124,7 @@ const savePicture = async (uuid: string, picture: string) => {
 export const AnimalsService = {
 	getAnimals,
 	getAnimal,
+	getAnimalsBySpecies,
 	setAnimal,
 	updateAnimal,
 	updateAnimalsBySpecie,
