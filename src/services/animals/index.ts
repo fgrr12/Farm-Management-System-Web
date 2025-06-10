@@ -31,7 +31,7 @@ export module AnimalsService {
 		const animalsDocs = await getDocs(queryBase)
 		response = animalsDocs.docs
 			.map((doc) => doc.data())
-			.sort((a, b) => a.animalId - b.animalId) as Animal[]
+			.sort((a, b) => b.animalId - a.animalId) as Animal[]
 
 		return response as Animal[]
 	}
