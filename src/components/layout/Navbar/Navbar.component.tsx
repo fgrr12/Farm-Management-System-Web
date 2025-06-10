@@ -98,7 +98,9 @@ export const Navbar = () => {
 					stagger: 0.05,
 					ease: 'power1.out',
 				})
-				setTimeout(() => split.revert(), 2000)
+				return () => {
+					setTimeout(() => split.revert(), 2000)
+				}
 			}
 		}
 

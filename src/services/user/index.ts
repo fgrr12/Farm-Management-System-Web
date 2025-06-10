@@ -6,7 +6,7 @@ import {
 } from 'firebase/auth'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
 
-import { auth, firestore } from '@/config/environment'
+import { auth, firestore } from '@/config/firebaseConfig'
 
 const collectionName = 'users'
 

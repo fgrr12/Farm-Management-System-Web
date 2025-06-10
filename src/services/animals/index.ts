@@ -10,7 +10,7 @@ import {
 	writeBatch,
 } from 'firebase/firestore'
 
-import { firestore } from '@/config/environment'
+import { firestore } from '@/config/firebaseConfig'
 import storageHandler from '@/config/persistence/storageHandler'
 
 import type { UpdateAnimalsBySpecieProps } from './types'

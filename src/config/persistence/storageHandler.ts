@@ -1,6 +1,6 @@
 import { getDownloadURL, ref, uploadString } from 'firebase/storage'
 
-import { storage } from '../environment'
+import { storage } from '../firebaseConfig'
 
 // Gets
 const getPicture = async (path: string) => {

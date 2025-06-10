@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore'
 
-import { firestore } from '@/config/environment'
+import { firestore } from '@/config/firebaseConfig'
 
 import type { GetTasksParams } from './types'
 
