@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -37,7 +37,7 @@ const GenderIcon = ({ gender }: { gender: string }) =>
 
 const Animal = () => {
 	const { user } = useUserStore()
-	const { farm, setFarm } = useFarmStore()
+	const { farm, species, breeds, setFarm } = useFarmStore()
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation(['animal'])
@@ -48,6 +48,13 @@ const Animal = () => {
 	const [activeTab, setActiveTab] = useState<
 		'healthRecords' | 'productionRecords' | 'relatedAnimals'
 	>('healthRecords')
+
+	const { specie, breed } = useMemo(() => {
+		return {
+			specie: species.find((sp) => sp.uuid === animal.speciesUuid),
+			breed: breeds.find((br) => br.uuid === animal.breedUuid),
+		}
+	}, [breeds, animal.breedUuid, animal.speciesUuid, species])
 
 	const handleEditAnimal = () => {
 		navigate(AppRoutes.EDIT_ANIMAL.replace(':animalUuid', animal.uuid))
@@ -226,8 +233,8 @@ const Animal = () => {
 					<div className="grid grid-cols-2 gap-2 w-full justify-center items-center">
 						<div className="flex flex-col gap-2 w-full">
 							<DetailItem label={t('animalId')} value={animal.animalId} />
-							<DetailItem label={t('species')} value={animal.species.name} />
-							<DetailItem label={t('breed')} value={animal.breed.name} />
+							<DetailItem label={t('species')} value={specie?.name} />
+							<DetailItem label={t('breed')} value={breed?.name} />
 							{animal.birthDate && (
 								<DetailItem
 									label={t('birthDate')}
@@ -284,7 +291,7 @@ const Animal = () => {
 					<img
 						className="w-full h-full sm:w-75 sm:h-75 rounded-3xl object-cover"
 						src={animal.picture || '/assets/default-imgs/cow.svg'}
-						alt={animal.species.name}
+						alt={specie?.name}
 					/>
 				</div>
 			</div>
@@ -353,22 +360,15 @@ const Animal = () => {
 
 const ANIMAL_INITIAL_STATE: Animal = {
 	uuid: '',
+	speciesUuid: '',
+	breedUuid: '',
+	farmUuid: '',
 	animalId: '0',
-	species: {
-		uuid: '',
-		name: '',
-	},
-	breed: {
-		uuid: '',
-		name: '',
-		gestationPeriod: 0,
-	},
 	gender: 'Male',
 	color: '',
 	weight: 0,
 	picture: '',
 	status: true,
-	farmUuid: '',
 	origin: '',
 	relatedAnimals: {
 		parents: [],
