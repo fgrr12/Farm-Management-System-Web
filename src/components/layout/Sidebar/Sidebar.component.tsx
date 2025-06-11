@@ -13,7 +13,7 @@ import { UserService } from '@/services/user'
 
 export const Sidebar = () => {
 	const { user, setUser } = useUserStore()
-	const { setFarm } = useFarmStore()
+	const { billingCard, setFarm } = useFarmStore()
 	const { loading } = useAppStore()
 	const navigate = useNavigate()
 	const location = useLocation()
@@ -99,17 +99,19 @@ export const Sidebar = () => {
 					</button>
 				</li>
 			)}
-			{(user?.role === 'admin' || user?.role === 'owner') && (
-				<li className={handleCheckActive(AppRoutes.BILLING_CARD)}>
-					<button
-						type="button"
-						className="flex items-center gap-2 px-4 py-2"
-						onClick={handleGoTo(AppRoutes.BILLING_CARD)}
-					>
-						<i className="i-typcn-business-card w-8! h-8!" />
-					</button>
-				</li>
-			)}
+			{(user?.role === 'admin' || user?.role === 'owner') &&
+				billingCard !== null &&
+				!billingCard.status && (
+					<li className={handleCheckActive(AppRoutes.BILLING_CARD)}>
+						<button
+							type="button"
+							className="flex items-center gap-2 px-4 py-2"
+							onClick={handleGoTo(AppRoutes.BILLING_CARD)}
+						>
+							<i className="i-typcn-business-card w-8! h-8!" />
+						</button>
+					</li>
+				)}
 			<div className="divider" />
 			<li className={handleCheckActive(AppRoutes.MY_ACCOUNT)}>
 				<button

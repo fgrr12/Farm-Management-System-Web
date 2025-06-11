@@ -58,6 +58,8 @@
 		"phone": "Phone",
 		"address": "Address",
 		"edit": "Update My Billing Card",
+		"active": "Your billing card is active",
+		"inactive": "Your billing card is inactive",
 		"toast": {
 			"edited": "Billing card updated successfully",
 			"errorEditing": "There was an error updating your billing card"
