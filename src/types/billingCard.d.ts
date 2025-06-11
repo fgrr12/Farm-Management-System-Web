@@ -1,7 +1,10 @@
 interface BillingCard {
+	uuid: string
+	farmUuid: string
+	id: string
 	name: string
 	phone: string
-	id: string
 	email: string
 	address: string
+	status: boolean
 }

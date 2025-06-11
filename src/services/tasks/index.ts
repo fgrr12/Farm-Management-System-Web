@@ -7,7 +7,7 @@ import type { GetTasksParams } from './types'
 
 const collectionName = 'tasks'
 
-export const getTasks = async ({
+const getTasks = async ({
 	farmUuid,
 	search,
 	status,
@@ -37,13 +37,13 @@ export const getTasks = async ({
 	return response
 }
 
-export const setTask = async (task: Task, createdBy: string, farmUuid: string): Promise<void> => {
+const setTask = async (task: Task, createdBy: string, farmUuid: string): Promise<void> => {
 	const document = doc(firestore, collectionName, task.uuid)
 	const createdAt = dayjs().toISOString()
 	await setDoc(document, { ...task, createdAt, createdBy, farmUuid }, { merge: true })
 }
 
-export const updateTaskStatus = async (taskUuid: string, status: string): Promise<void> => {
+const updateTaskStatus = async (taskUuid: string, status: string): Promise<void> => {
 	const document = doc(firestore, collectionName, taskUuid)
 	const updatedAt = dayjs().toISOString()
 	await setDoc(document, { status, updatedAt }, { merge: true })

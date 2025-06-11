@@ -16,7 +16,7 @@ const collectionName = 'relatedAnimals'
 
 // Gets
 
-export const getRelatedAnimals = async (animalUuid: string): Promise<Relation[]> => {
+const getRelatedAnimals = async (animalUuid: string): Promise<Relation[]> => {
 	const parentsDocs = await getDocs(
 		query(collection(firestore, collectionName), where('child.animalUuid', '==', animalUuid))
 	)
@@ -29,7 +29,7 @@ export const getRelatedAnimals = async (animalUuid: string): Promise<Relation[]>
 	return [...parentsResponse, ...childrenResponse] as Relation[]
 }
 
-export const getRealTimeRelatedAnimals = (
+const getRealTimeRelatedAnimals = (
 	animalUuid: string,
 	onUpdate: (data: Relation[]) => void,
 	onError: (error: any) => void
@@ -72,7 +72,7 @@ export const getRealTimeRelatedAnimals = (
 
 // Sets
 
-export const setRelatedAnimal = async (relatedAnimalData: Relation, createdBy: string) => {
+const setRelatedAnimal = async (relatedAnimalData: Relation, createdBy: string) => {
 	const { uuid, parent, child } = relatedAnimalData
 	const createdAt = dayjs().format()
 
@@ -82,7 +82,7 @@ export const setRelatedAnimal = async (relatedAnimalData: Relation, createdBy: s
 
 // Delete
 
-export const deleteRelatedAnimal = async (uuid: string) => {
+const deleteRelatedAnimal = async (uuid: string) => {
 	const relatedAnimalDocument = doc(firestore, collectionName, uuid)
 	await deleteDoc(relatedAnimalDocument)
 }

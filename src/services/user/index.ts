@@ -10,11 +10,11 @@ import { auth, firestore } from '@/config/firebaseConfig'
 
 const collectionName = 'users'
 
-export const loginWithEmailAndPassword = async (email: string, password: string) => {
+const loginWithEmailAndPassword = async (email: string, password: string) => {
 	await signInWithEmailAndPassword(auth, email, password)
 }
 
-export const loginWithGoogle = async () => {
+const loginWithGoogle = async () => {
 	const provider = new GoogleAuthProvider()
 	provider.addScope('profile')
 	provider.addScope('email')
@@ -27,18 +27,18 @@ export const loginWithGoogle = async () => {
 	}
 }
 
-export const getUser = async (uuid: string): Promise<User> => {
+const getUser = async (uuid: string): Promise<User> => {
 	const userDocument = doc(firestore, collectionName, uuid)
 	const userDoc = await getDoc(userDocument)
 	return userDoc.data() as User
 }
 
-export const updateUser = async (user: User) => {
+const updateUser = async (user: User) => {
 	const userDocument = doc(firestore, collectionName, user.uuid)
 	await setDoc(userDocument, user, { merge: true })
 }
 
-export const logout = async () => {
+const logout = async () => {
 	await auth.signOut()
 }
 

@@ -7,7 +7,7 @@ const collectionName = 'productionRecords'
 
 // Gets
 
-export const getProductionRecords = async (animalUuid: string): Promise<ProductionRecord[]> => {
+const getProductionRecords = async (animalUuid: string): Promise<ProductionRecord[]> => {
 	const productionRecords = await getDocs(
 		query(
 			collection(firestore, collectionName),
@@ -20,7 +20,7 @@ export const getProductionRecords = async (animalUuid: string): Promise<Producti
 	return response as ProductionRecord[]
 }
 
-export const getProductionRecord = async (uuid: string): Promise<ProductionRecord> => {
+const getProductionRecord = async (uuid: string): Promise<ProductionRecord> => {
 	const document = doc(firestore, collectionName, uuid)
 	const productionRecord = await getDoc(document)
 
@@ -29,10 +29,7 @@ export const getProductionRecord = async (uuid: string): Promise<ProductionRecor
 
 // Sets
 
-export const setProductionRecord = async (
-	productionRecordData: ProductionRecord,
-	createdBy: string
-) => {
+const setProductionRecord = async (productionRecordData: ProductionRecord, createdBy: string) => {
 	productionRecordData.date = formatDate(productionRecordData.date)
 	const createdAt = dayjs().toISOString()
 
@@ -42,7 +39,7 @@ export const setProductionRecord = async (
 
 // Update
 
-export const updateProductionRecord = async (
+const updateProductionRecord = async (
 	productionRecordData: ProductionRecord,
 	updatedBy: string | null
 ) => {
@@ -55,7 +52,7 @@ export const updateProductionRecord = async (
 
 // Delete
 
-export const updateProductionRecordsStatus = async (uuid: string, status: boolean) => {
+const updateProductionRecordsStatus = async (uuid: string, status: boolean) => {
 	const document = doc(firestore, collectionName, uuid)
 	const updateAt = dayjs().toISOString()
 
