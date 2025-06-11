@@ -4,9 +4,3 @@ interface Species {
 	breeds: Breed[]
 	status: boolean
 }
-
-interface Breed {
-	uuid: string
-	name: string
-	gestationPeriod: number
-}

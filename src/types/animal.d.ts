@@ -18,42 +18,6 @@ interface Animal {
 	soldDate?: string | null
 	deathDate?: string | null
 	relatedAnimals?: RelatedAnimalList
-	healthRecords?: AnimalHealthRecord[]
+	healthRecords?: HealthRecord[]
 	productionRecords?: ProductionRecord[]
-}
-
-interface RelatedAnimalList {
-	parents: Relation[]
-	children: Relation[]
-}
-
-interface AnimalHealthRecord {
-	uuid: string
-	animalUuid: string
-	reason: string
-	notes: string
-	type: HealthRecordType
-	reviewedBy: string
-	createdBy: string
-	date: string
-	status: boolean
-	weight?: number
-	temperature?: number
-	medication?: string
-	dosage?: string
-	frequency?: string
-	duration?: string
-	createdAt?: string
-	updatedAt?: string
-}
-
-interface ProductionRecord {
-	uuid: string
-	animalUuid: string
-	date: string
-	quantity: number
-	notes: string
-	status: boolean
-	createdAt?: string
-	updatedAt?: string
 }

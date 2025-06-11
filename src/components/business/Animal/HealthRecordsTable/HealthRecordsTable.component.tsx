@@ -70,7 +70,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 		}
 	}, [healthRecords, filters, user])
 
-	const additionalInfoExists = (healthRecord: AnimalHealthRecord) => {
+	const additionalInfoExists = (healthRecord: HealthRecord) => {
 		return (
 			healthRecord.weight! > 0 ||
 			healthRecord.temperature! > 0 ||

@@ -12,3 +12,8 @@ interface RelatedAnimal {
 	breed: Breed
 	relation: Relationship
 }
+
+interface RelatedAnimalList {
+	parents: Relation[]
+	children: Relation[]
+}

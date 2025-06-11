@@ -232,7 +232,7 @@ const HealthRecordForm = () => {
 	)
 }
 
-const INITIAL_HEALTH_RECORD_FORM: AnimalHealthRecord = {
+const INITIAL_HEALTH_RECORD_FORM: HealthRecord = {
 	uuid: crypto.randomUUID(),
 	animalUuid: '',
 	reason: '',

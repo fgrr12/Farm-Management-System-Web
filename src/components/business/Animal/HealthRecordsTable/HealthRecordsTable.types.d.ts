@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 
 export interface HealthRecordsTableProps {
-	healthRecords: AnimalHealthRecord[]
+	healthRecords: HealthRecord[]
 	employees: User[]
 	haveUser: boolean
 	farm: Farm | null
