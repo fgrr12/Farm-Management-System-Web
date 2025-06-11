@@ -36,7 +36,7 @@ const getAnimalsBySpecies = async (speciesUuid: string, farmUuid: string | null)
 	const queryBase = query(
 		collection(firestore, collectionName),
 		where('status', '==', true),
-		where('species.uuid', '==', speciesUuid),
+		where('speciesUuid', '==', speciesUuid),
 		where('farmUuid', '==', farmUuid)
 	)
 
