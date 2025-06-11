@@ -18,13 +18,12 @@ import type { DividedTasks, TaskFilters } from './Tasks.types'
 
 const Tasks = () => {
 	const { user } = useUserStore()
-	const { farm } = useFarmStore()
+	const { farm, species } = useFarmStore()
 	const { setHeaderTitle, setLoading, setToastData } = useAppStore()
 	const navigate = useNavigate()
 	const { t } = useTranslation(['tasks'])
 
 	const [tasks, setTasks] = useState(INITIAL_TASKS)
-	const [species, setSpecies] = useState(INITIAL_SPECIES)
 	const [filters, setFilters] = useState(INITIAL_FILTERS)
 
 	const handleAddTask = () => {
@@ -96,7 +95,6 @@ const Tasks = () => {
 	useEffect(() => {
 		if (!user) return
 		getTasks()
-		setSpecies(farm!.species!)
 	}, [user, filters.priority, filters.species, filters.status])
 
 	// biome-ignore lint:: UseEffect is only watching for search changes
@@ -225,20 +223,5 @@ const INITIAL_FILTERS: TaskFilters = {
 	priority: '',
 	species: '',
 }
-
-const INITIAL_SPECIES: Species[] = [
-	{
-		uuid: crypto.randomUUID(),
-		name: '',
-		breeds: [
-			{
-				uuid: crypto.randomUUID(),
-				name: '',
-				gestationPeriod: 0,
-			},
-		],
-		status: true,
-	},
-]
 
 export default Tasks

@@ -43,7 +43,7 @@ export const RelatedAnimalCard: FC<CardProps> = ({ animal, ...props }) => {
 								<span className="text-2xl">{animal.animalId}</span>
 							</h2>
 							<p className="card-subtitle text-lg user-select-none">
-								{animal.breed.name}
+								{animal.breed}
 								{animal.gender.toLowerCase() === 'male' ? (
 									<i className="i-tdesign-gender-male bg-blue-500! w-5! h-5!" />
 								) : (

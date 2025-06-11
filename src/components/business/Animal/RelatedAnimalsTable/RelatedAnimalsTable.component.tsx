@@ -94,7 +94,7 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 						{animals?.map((animal) => (
 							<tr key={animal.uuid}>
 								<td>{animal[type].animalId}</td>
-								<td>{animal[type].breed.name}</td>
+								<td>{animal[type].breed}</td>
 								<td>{t(animal[type].relation.toLowerCase())}</td>
 								{haveUser && (
 									<td>

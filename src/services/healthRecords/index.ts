@@ -4,6 +4,7 @@ import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase
 import { firestore } from '@/config/firebaseConfig'
 
 import { AnimalsService } from '../animals'
+import { BreedsService } from '../breeds'
 
 const collectionName = 'healthRecords'
 
@@ -44,7 +45,9 @@ const setHealthRecord = async (healthRecordData: HealthRecord, createdBy: string
 
 	if (healthRecordData.type === 'Pregnancy') {
 		const dbAnimal = await AnimalsService.getAnimal(healthRecordData.animalUuid)
-		let date = dayjs(healthRecordData.date).add(dbAnimal.breed.gestationPeriod, 'days')
+		const dbBreed = await BreedsService.getBreed(dbAnimal.breedUuid)
+
+		let date = dayjs(healthRecordData.date).add(dbBreed.gestationPeriod, 'days')
 		setHealthRecordGiveBirth(healthRecordData.animalUuid, createdBy, date.toString())
 		setHealthRecordDrying(healthRecordData.animalUuid, createdBy, date.add(7, 'month').toString())
 	}
