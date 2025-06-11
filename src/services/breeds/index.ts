@@ -10,12 +10,7 @@ const getAllBreeds = async (farmUuid: string) => {
 	return breedsDocs.docs.map((doc) => doc.data()) as Breed[]
 }
 
-const setBreed = async (breedData: Breed) => {
-	const document = doc(firestore, collectionName, breedData.uuid)
-	await setDoc(document, { ...breedData }, { merge: true })
-}
-
-const updateBreed = async (breedData: Breed) => {
+const upsertBreed = async (breedData: Breed) => {
 	const document = doc(firestore, collectionName, breedData.uuid)
 	await setDoc(document, { ...breedData }, { merge: true })
 }
@@ -25,9 +20,20 @@ const deleteBreed = async (uuid: string) => {
 	await deleteDoc(document)
 }
 
+const deleteBreedsBySpecie = async (specieUuid: string) => {
+	const queryBase = query(
+		collection(firestore, collectionName),
+		where('speciesUuid', '==', specieUuid)
+	)
+	const breedsDocs = await getDocs(queryBase)
+	for (const breed of breedsDocs.docs) {
+		await deleteDoc(breed.ref)
+	}
+}
+
 export const BreedsService = {
 	getAllBreeds,
-	setBreed,
-	updateBreed,
+	upsertBreed,
 	deleteBreed,
+	deleteBreedsBySpecie,
 }

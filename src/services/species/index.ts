@@ -10,12 +10,7 @@ const getAllSpecies = async (farmUuid: string) => {
 	return speciesDocs.docs.map((doc) => doc.data()) as Species[]
 }
 
-const setSpecies = async (speciesData: Species) => {
-	const document = doc(firestore, collectionName, speciesData.uuid)
-	await setDoc(document, { ...speciesData }, { merge: true })
-}
-
-const updateSpecies = async (speciesData: Species) => {
+const upsertSpecies = async (speciesData: Species) => {
 	const document = doc(firestore, collectionName, speciesData.uuid)
 	await setDoc(document, { ...speciesData }, { merge: true })
 }
@@ -27,7 +22,6 @@ const deleteSpecies = async (uuid: string) => {
 
 export const SpeciesService = {
 	getAllSpecies,
-	setSpecies,
-	updateSpecies,
+	upsertSpecies,
 	deleteSpecies,
 }
