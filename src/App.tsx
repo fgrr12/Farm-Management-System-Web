@@ -6,19 +6,23 @@ import { lazy, Suspense, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 
-import { Loading } from './components/layout/Loading'
-import { Modal } from './components/layout/Modal'
-import { Navbar } from './components/layout/Navbar'
-import { Sidebar } from './components/layout/Sidebar'
-import { ToastManager } from './components/layout/ToastManager'
-import { AppRoutes } from './config/constants/routes'
-import { auth } from './config/firebaseConfig'
-import { FarmsService } from './services/farms'
-import { UserService } from './services/user'
-import { useAppStore } from './store/useAppStore'
-import { useFarmStore } from './store/useFarmStore'
-import { useUserStore } from './store/useUserStore'
-import { PrivateRoute } from './utils/PrivateRoute'
+import { AppRoutes } from '@/config/constants/routes'
+import { auth } from '@/config/firebaseConfig'
+
+import { useAppStore } from '@/store/useAppStore'
+import { useFarmStore } from '@/store/useFarmStore'
+import { useUserStore } from '@/store/useUserStore'
+
+import { PrivateRoute } from '@/utils/PrivateRoute'
+
+import { FarmsService } from '@/services/farms'
+import { UserService } from '@/services/user'
+
+import { Loading } from '@/components/layout/Loading'
+import { Modal } from '@/components/layout/Modal'
+import { Navbar } from '@/components/layout/Navbar'
+import { Sidebar } from '@/components/layout/Sidebar'
+import { ToastManager } from '@/components/layout/ToastManager'
 
 gsap.registerPlugin(SplitText, useGSAP)
 
