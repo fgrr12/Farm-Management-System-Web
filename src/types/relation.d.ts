@@ -9,7 +9,7 @@ interface Relation {
 interface RelatedAnimal {
 	animalUuid: string
 	animalId: string
-	breed: Breed
+	breed: string
 	relation: Relationship
 }
 

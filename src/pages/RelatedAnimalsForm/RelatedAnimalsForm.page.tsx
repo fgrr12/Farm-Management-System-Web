@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
 import { useAppStore } from '@/store/useAppStore'
+import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
 import { AnimalsService } from '@/services/animals'
@@ -22,6 +23,7 @@ import type {
 
 const RelatedAnimalsForm = () => {
 	const { user } = useUserStore()
+	const { breeds } = useFarmStore()
 	const params = useParams()
 	const { t } = useTranslation(['relatedAnimals'])
 
@@ -144,7 +146,7 @@ const RelatedAnimalsForm = () => {
 				setCurrentAnimal({
 					uuid: selectedAnimal.uuid,
 					animalId: selectedAnimal.animalId,
-					breed: selectedAnimal.breed,
+					breed: breeds.find((breed) => breed.uuid === selectedAnimal.breedUuid)!.name,
 					gender: selectedAnimal.gender,
 					picture: selectedAnimal.picture,
 					location: -1,
@@ -153,7 +155,7 @@ const RelatedAnimalsForm = () => {
 					animalUuid,
 					async (data) => {
 						const animals = await AnimalsService.getAnimalsBySpecies(
-							selectedAnimal.species.uuid,
+							selectedAnimal.speciesUuid,
 							user!.farmUuid
 						)
 						const animalsData = animals
@@ -169,7 +171,7 @@ const RelatedAnimalsForm = () => {
 							.map((animal) => ({
 								uuid: animal.uuid,
 								animalId: animal.animalId,
-								breed: animal.breed,
+								breed: breeds.find((breed) => breed.uuid === animal.breedUuid)!.name,
 								gender: animal.gender,
 								picture: animal.picture,
 								location: 0,
@@ -180,7 +182,9 @@ const RelatedAnimalsForm = () => {
 							.map((related) => ({
 								uuid: related.parent.animalUuid,
 								animalId: related.parent.animalId,
-								breed: related.parent.breed,
+								breed:
+									breeds.find((breed) => breed.uuid === related.parent.breed)!.name ??
+									related.parent.breed,
 								gender:
 									related.parent.relation === Relationship.MOTHER
 										? (GenderEnum.FEMALE as unknown as Gender)
@@ -194,7 +198,9 @@ const RelatedAnimalsForm = () => {
 							.map((related) => ({
 								uuid: related.child.animalUuid,
 								animalId: related.child.animalId,
-								breed: related.child.breed,
+								breed:
+									breeds.find((breed) => breed.uuid === related.child.breed)!.name ??
+									related.child.breed,
 								gender:
 									related.child.relation === Relationship.DAUGHTER
 										? (GenderEnum.FEMALE as unknown as Gender)

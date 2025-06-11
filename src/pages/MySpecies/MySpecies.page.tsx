@@ -6,7 +6,6 @@ import { useFarmStore } from '@/store/useFarmStore'
 
 import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 
-import { AnimalsService } from '@/services/animals'
 import { BreedsService } from '@/services/breeds'
 import { SpeciesService } from '@/services/species'
 
@@ -185,11 +184,6 @@ const MySpecies = () => {
 			}))
 
 			await handleUpdateSpeciesAndBreeds(updatedSpecies)
-
-			await AnimalsService.updateAnimalsBySpecie({
-				farm: farm!,
-				species: updatedSpecies,
-			})
 
 			setToastData({
 				message: t('toast.edited'),
