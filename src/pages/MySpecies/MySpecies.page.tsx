@@ -79,8 +79,6 @@ const MySpecies = () => {
 	const handleUpdateSpeciesAndBreeds = async (sps: MySpeciesI[]) => {
 		try {
 			for (const specie of sps) {
-				if (!specie.editable) return
-
 				await SpeciesService.upsertSpecies({
 					uuid: specie.uuid,
 					farmUuid: farm!.uuid,
@@ -114,6 +112,7 @@ const MySpecies = () => {
 			title: t('modal.deleteSpecies.title'),
 			message: t('modal.deleteSpecies.message'),
 			onAccept: async () => {
+				setLoading(true)
 				try {
 					await BreedsService.deleteBreedsBySpecie(specieUuid)
 					await SpeciesService.deleteSpecies(specieUuid)
@@ -131,6 +130,8 @@ const MySpecies = () => {
 						message: t('toast.errorDeletingSpecies'),
 						type: 'error',
 					})
+				} finally {
+					setLoading(false)
 				}
 			},
 			onCancel: () => {
@@ -149,6 +150,7 @@ const MySpecies = () => {
 			title: t('modal.deleteBreed.title'),
 			message: t('modal.deleteBreed.message'),
 			onAccept: async () => {
+				setLoading(true)
 				try {
 					await BreedsService.deleteBreed(breedUuid)
 					setModalData(defaultModalData)
@@ -161,6 +163,8 @@ const MySpecies = () => {
 						message: t('toast.errorDeletingBreed'),
 						type: 'error',
 					})
+				} finally {
+					setLoading(false)
 				}
 			},
 			onCancel: () => {
