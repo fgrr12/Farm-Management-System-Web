@@ -1,19 +1,8 @@
 import dayjs from 'dayjs'
-import {
-	collection,
-	doc,
-	getDoc,
-	getDocs,
-	query,
-	setDoc,
-	where,
-	writeBatch,
-} from 'firebase/firestore'
+import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore'
 
 import { firestore } from '@/config/firebaseConfig'
 import storageHandler from '@/config/persistence/storageHandler'
-
-import type { UpdateAnimalsBySpecieProps } from './types'
 
 const collectionName = 'animals'
 
@@ -47,7 +36,7 @@ const getAnimalsBySpecies = async (speciesUuid: string, farmUuid: string | null)
 	const queryBase = query(
 		collection(firestore, collectionName),
 		where('status', '==', true),
-		where('species.uuid', '==', speciesUuid),
+		where('speciesUuid', '==', speciesUuid),
 		where('farmUuid', '==', farmUuid)
 	)
 
@@ -81,30 +70,6 @@ const updateAnimal = async (animalData: Animal, editedBy: string | null) => {
 	await setDoc(document, { ...animalData, updateAt, editedBy }, { merge: true })
 }
 
-const updateAnimalsBySpecie = async (updateAnimalsBySpecieProps: UpdateAnimalsBySpecieProps) => {
-	const { farm, species } = updateAnimalsBySpecieProps
-	const batch = writeBatch(firestore)
-
-	for (const specie of species) {
-		if (specie.editable) {
-			const animals = await getAnimalsBySpecies(specie.uuid, farm!.uuid)
-			for (const animal of animals) {
-				const updatedAnimal = {
-					...animal,
-					species: {
-						uuid: specie.uuid,
-						name: specie.name,
-					},
-					breed: specie.breeds.find((breed) => breed.uuid === animal.breed.uuid)!,
-				}
-				const document = doc(firestore, collectionName, animal.uuid)
-				batch.update(document, updatedAnimal)
-			}
-		}
-	}
-	await batch.commit()
-}
-
 // Delete
 
 const deleteAnimal = async (uuid: string, status: boolean) => {
@@ -127,6 +92,5 @@ export const AnimalsService = {
 	getAnimalsBySpecies,
 	setAnimal,
 	updateAnimal,
-	updateAnimalsBySpecie,
 	deleteAnimal,
 }

@@ -18,13 +18,12 @@ import type { DividedTasks, TaskFilters } from './Tasks.types'
 
 const Tasks = () => {
 	const { user } = useUserStore()
-	const { farm } = useFarmStore()
+	const { farm, species } = useFarmStore()
 	const { setHeaderTitle, setLoading, setToastData } = useAppStore()
 	const navigate = useNavigate()
 	const { t } = useTranslation(['tasks'])
 
 	const [tasks, setTasks] = useState(INITIAL_TASKS)
-	const [species, setSpecies] = useState(INITIAL_SPECIES)
 	const [filters, setFilters] = useState(INITIAL_FILTERS)
 
 	const handleAddTask = () => {
@@ -63,9 +62,9 @@ const Tasks = () => {
 	const getTasks = async () => {
 		try {
 			setLoading(true)
-			const { search, status, priority, species } = filters
+			const { search, status, priority, speciesUuid } = filters
 			const farmUuid = farm!.uuid
-			const tasks = await TasksService.getTasks({ search, status, priority, species, farmUuid })
+			const tasks = await TasksService.getTasks({ search, status, priority, speciesUuid, farmUuid })
 			const pendingTasks = tasks.filter((task) => task.status === 'PENDING')
 			const completedTasks = tasks.filter((task) => task.status === 'COMPLETED')
 			setTasks({ pending: pendingTasks, completed: completedTasks })
@@ -96,8 +95,7 @@ const Tasks = () => {
 	useEffect(() => {
 		if (!user) return
 		getTasks()
-		setSpecies(farm!.species!)
-	}, [user, filters.priority, filters.species, filters.status])
+	}, [user, filters.priority, filters.speciesUuid, filters.status])
 
 	// biome-ignore lint:: UseEffect is only watching for search changes
 	useEffect(() => {
@@ -139,12 +137,12 @@ const Tasks = () => {
 					onChange={handleSelectChange}
 				/>
 				<Select
-					name="species"
+					name="speciesUuid"
 					legend={t('filterBySpecies')}
 					defaultLabel={t('filterBySpecies')}
 					optionValue="uuid"
 					optionLabel="name"
-					value={filters.species}
+					value={filters.speciesUuid}
 					items={species}
 					onChange={handleSelectChange}
 				/>
@@ -223,22 +221,7 @@ const INITIAL_FILTERS: TaskFilters = {
 	search: '',
 	status: '',
 	priority: '',
-	species: '',
+	speciesUuid: '',
 }
-
-const INITIAL_SPECIES: Species[] = [
-	{
-		uuid: crypto.randomUUID(),
-		name: '',
-		breeds: [
-			{
-				uuid: crypto.randomUUID(),
-				name: '',
-				gestationPeriod: 0,
-			},
-		],
-		status: true,
-	},
-]
 
 export default Tasks

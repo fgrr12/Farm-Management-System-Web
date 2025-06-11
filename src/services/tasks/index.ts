@@ -7,19 +7,19 @@ import type { GetTasksParams } from './types'
 
 const collectionName = 'tasks'
 
-export const getTasks = async ({
+const getTasks = async ({
 	farmUuid,
 	search,
 	status,
 	priority,
-	species,
+	speciesUuid,
 }: GetTasksParams): Promise<Task[]> => {
 	let response = []
 	let queryBase = query(collection(firestore, collectionName), where('farmUuid', '==', farmUuid))
 
 	if (status !== '') queryBase = query(queryBase, where('status', '==', status))
 	if (priority !== '') queryBase = query(queryBase, where('priority', '==', priority))
-	if (species !== '') queryBase = query(queryBase, where('species', '==', species))
+	if (speciesUuid !== '') queryBase = query(queryBase, where('speciesUuid', '==', speciesUuid))
 
 	const tasksDocs = await getDocs(queryBase)
 	response = tasksDocs.docs.map((doc) => doc.data()) as Task[]
@@ -37,13 +37,13 @@ export const getTasks = async ({
 	return response
 }
 
-export const setTask = async (task: Task, createdBy: string, farmUuid: string): Promise<void> => {
+const setTask = async (task: Task, createdBy: string, farmUuid: string): Promise<void> => {
 	const document = doc(firestore, collectionName, task.uuid)
 	const createdAt = dayjs().toISOString()
 	await setDoc(document, { ...task, createdAt, createdBy, farmUuid }, { merge: true })
 }
 
-export const updateTaskStatus = async (taskUuid: string, status: string): Promise<void> => {
+const updateTaskStatus = async (taskUuid: string, status: string): Promise<void> => {
 	const document = doc(firestore, collectionName, taskUuid)
 	const updatedAt = dayjs().toISOString()
 	await setDoc(document, { status, updatedAt }, { merge: true })

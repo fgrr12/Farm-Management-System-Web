@@ -22,7 +22,7 @@ export const Navbar = () => {
 	const titleRef = useRef<HTMLHeadingElement>(null)
 	const drawerTitleRef = useRef<HTMLHeadingElement>(null)
 	const { user, setUser } = useUserStore()
-	const { farm, setFarm } = useFarmStore()
+	const { farm, billingCard, setFarm } = useFarmStore()
 	const { t } = useTranslation('common')
 	const navigate = useNavigate()
 	const location = useLocation()
@@ -199,22 +199,24 @@ export const Navbar = () => {
 							</button>
 						</li>
 					)}
-					{(user?.role === 'admin' || user?.role === 'owner') && (
-						<li
-							className={
-								location.pathname.includes(AppRoutes.BILLING_CARD) ? 'bg-info rounded-sm' : ''
-							}
-						>
-							<button
-								type="button"
-								className="flex items-center gap-2 px-4 py-2"
-								onClick={goTo(AppRoutes.BILLING_CARD)}
+					{(user?.role === 'admin' || user?.role === 'owner') &&
+						billingCard !== null &&
+						billingCard.status && (
+							<li
+								className={
+									location.pathname.includes(AppRoutes.BILLING_CARD) ? 'bg-info rounded-sm' : ''
+								}
 							>
-								<i className="i-typcn-business-card w-8! h-8!" />
-								<span className="text-sm">{t('sidebar.businessCard')}</span>
-							</button>
-						</li>
-					)}
+								<button
+									type="button"
+									className="flex items-center gap-2 px-4 py-2"
+									onClick={goTo(AppRoutes.BILLING_CARD)}
+								>
+									<i className="i-typcn-business-card w-8! h-8!" />
+									<span className="text-sm">{t('sidebar.businessCard')}</span>
+								</button>
+							</li>
+						)}
 					<div className="divider" />
 					<li
 						className={location.pathname.includes(AppRoutes.MY_ACCOUNT) ? 'bg-info rounded-sm' : ''}

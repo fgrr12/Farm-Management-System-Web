@@ -6,9 +6,8 @@ import { useFarmStore } from '@/store/useFarmStore'
 
 const BillingCard: FC = () => {
 	const { setHeaderTitle } = useAppStore()
-	const { farm } = useFarmStore()
+	const { billingCard } = useFarmStore()
 	const { t } = useTranslation('billingCard')
-	const { billingCard } = farm!
 
 	useEffect(() => {
 		setHeaderTitle(t('title'))

@@ -4,12 +4,13 @@ import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase
 import { firestore } from '@/config/firebaseConfig'
 
 import { AnimalsService } from '../animals'
+import { BreedsService } from '../breeds'
 
 const collectionName = 'healthRecords'
 
 // Gets
 
-const getHealthRecords = async (animalUuid: string): Promise<AnimalHealthRecord[]> => {
+const getHealthRecords = async (animalUuid: string): Promise<HealthRecord[]> => {
 	const healthRecords = await getDocs(
 		query(
 			collection(firestore, collectionName),
@@ -23,19 +24,19 @@ const getHealthRecords = async (animalUuid: string): Promise<AnimalHealthRecord[
 			return dayjs(b.date).diff(dayjs(a.date))
 		})
 
-	return response as AnimalHealthRecord[]
+	return response as HealthRecord[]
 }
 
-const getHealthRecord = async (uuid: string): Promise<AnimalHealthRecord> => {
+const getHealthRecord = async (uuid: string): Promise<HealthRecord> => {
 	const document = doc(firestore, collectionName, uuid)
 	const healthRecord = await getDoc(document)
 
-	return healthRecord.data() as AnimalHealthRecord
+	return healthRecord.data() as HealthRecord
 }
 
 // Sets
 
-const setHealthRecord = async (healthRecordData: AnimalHealthRecord, createdBy: string) => {
+const setHealthRecord = async (healthRecordData: HealthRecord, createdBy: string) => {
 	healthRecordData.date = formatDate(healthRecordData.date)
 	const createdAt = dayjs().toISOString()
 
@@ -44,7 +45,9 @@ const setHealthRecord = async (healthRecordData: AnimalHealthRecord, createdBy: 
 
 	if (healthRecordData.type === 'Pregnancy') {
 		const dbAnimal = await AnimalsService.getAnimal(healthRecordData.animalUuid)
-		let date = dayjs(healthRecordData.date).add(dbAnimal.breed.gestationPeriod, 'days')
+		const dbBreed = await BreedsService.getBreed(dbAnimal.breedUuid)
+
+		let date = dayjs(healthRecordData.date).add(dbBreed.gestationPeriod, 'days')
 		setHealthRecordGiveBirth(healthRecordData.animalUuid, createdBy, date.toString())
 		setHealthRecordDrying(healthRecordData.animalUuid, createdBy, date.add(7, 'month').toString())
 	}
@@ -56,7 +59,7 @@ const setHealthRecord = async (healthRecordData: AnimalHealthRecord, createdBy: 
 }
 
 const setHealthRecordGiveBirth = async (animalUuid: string, createdBy: string, date: string) => {
-	const healthRecordData: AnimalHealthRecord = {
+	const healthRecordData: HealthRecord = {
 		reason: 'Posible fecha de nacimiento',
 		type: 'Birth',
 		date,
@@ -80,7 +83,7 @@ const setHealthRecordGiveBirth = async (animalUuid: string, createdBy: string, d
 }
 
 const setHealthRecordDrying = async (animalUuid: string, createdBy: string, date: string) => {
-	const healthRecordData: AnimalHealthRecord = {
+	const healthRecordData: HealthRecord = {
 		reason: 'Posible fecha de secado',
 		type: 'Drying',
 		date,
@@ -105,10 +108,7 @@ const setHealthRecordDrying = async (animalUuid: string, createdBy: string, date
 
 // Update
 
-const updateHealthRecord = async (
-	healthRecordData: AnimalHealthRecord,
-	editedBy: string | null
-) => {
+const updateHealthRecord = async (healthRecordData: HealthRecord, editedBy: string | null) => {
 	healthRecordData.date = formatDate(healthRecordData.date)
 	const updateAt = dayjs().toISOString()
 

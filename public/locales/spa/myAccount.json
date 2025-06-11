@@ -58,6 +58,8 @@
 		"phone": "Teléfono",
 		"address": "Dirección",
 		"edit": "Actualizar Mi Tarjeta de Facturación",
+		"active": "Tu tarjeta de facturación está activa",
+		"inactive": "Tu tarjeta de facturación está inactiva",
 		"toast": {
 			"edited": "Tarjeta de facturación actualizada exitosamente",
 			"errorEditing": "Ocurrió un error al actualizar tu tarjeta de facturación"

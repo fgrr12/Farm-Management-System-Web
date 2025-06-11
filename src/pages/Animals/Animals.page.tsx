@@ -17,18 +17,17 @@ import { Button } from '@/components/ui/Button'
 import { Search } from '@/components/ui/Search'
 import { Select } from '@/components/ui/Select'
 
-import type { AnimalsFilters } from './Animals.types'
+import type { AnimalCardProps, AnimalsFilters } from './Animals.types'
 
 const Animals = () => {
 	const { user } = useUserStore()
-	const { farm } = useFarmStore()
+	const { farm, species, breeds } = useFarmStore()
 	const navigation = useNavigate()
 	const { t } = useTranslation(['animals'])
 	const { setLoading, setHeaderTitle, setToastData } = useAppStore()
 	const containerRef = useRef<HTMLDivElement>(null)
 
-	const [animals, setAnimals] = useState<Animal[]>([])
-	const [species, setSpecies] = useState<Species[]>([])
+	const [animals, setAnimals] = useState<AnimalCardProps[]>([])
 	const [filters, setFilters] = useState<AnimalsFilters>(INITIAL_FILTERS)
 
 	const filteredAnimals = useMemo(() => {
@@ -38,7 +37,7 @@ const Animals = () => {
 		const normalizedSearch = search?.toLowerCase()
 
 		return animals.filter((animal) => {
-			const matchesSpecies = speciesUuid ? animal.species.uuid === speciesUuid : true
+			const matchesSpecies = speciesUuid ? animal.speciesUuid === speciesUuid : true
 			const matchesSearch = normalizedSearch
 				? animal.animalId.toLowerCase().includes(normalizedSearch)
 				: true
@@ -61,11 +60,26 @@ const Animals = () => {
 	}
 
 	const getAnimals = async () => {
+		setLoading(true)
+
 		try {
-			setLoading(true)
 			const dbAnimals = await AnimalsService.getAnimals(farm!.uuid)
-			setAnimals(dbAnimals)
-		} catch (_error) {
+
+			const enrichedAnimals: AnimalCardProps[] = dbAnimals.map((animal) => {
+				const speciesName = species.find((sp) => sp.uuid === animal.speciesUuid)!.name
+				const breedName = breeds.find((br) => br.uuid === animal.breedUuid)!.name
+
+				return {
+					...animal,
+					speciesName,
+					breedName,
+				}
+			})
+
+			setAnimals(enrichedAnimals)
+		} catch (error) {
+			console.error('Error loading animals:', error)
+
 			setToastData({
 				message: t('toast.errorGettingAnimals'),
 				type: 'error',
@@ -83,7 +97,6 @@ const Animals = () => {
 	useEffect(() => {
 		if (user && farm) {
 			getAnimals()
-			setSpecies(farm.species!)
 		}
 	}, [user, farm])
 
@@ -132,7 +145,7 @@ const Animals = () => {
 						key={animal.uuid}
 						uuid={animal.uuid}
 						animalId={animal.animalId}
-						breed={animal.breed}
+						breedName={animal.breedName}
 						gender={animal.gender}
 					/>
 				))}
