@@ -4,7 +4,7 @@ import { firestore } from '@/config/firebaseConfig'
 
 const collectionName = 'species'
 
-const getSpecies = async (farmUuid: string) => {
+const getAllSpecies = async (farmUuid: string) => {
 	const queryBase = query(collection(firestore, collectionName), where('farmUuid', '==', farmUuid))
 	const speciesDocs = await getDocs(queryBase)
 	return speciesDocs.docs.map((doc) => doc.data()) as Species[]
@@ -26,7 +26,7 @@ const deleteSpecies = async (uuid: string) => {
 }
 
 export const SpeciesService = {
-	getSpecies,
+	getAllSpecies,
 	setSpecies,
 	updateSpecies,
 	deleteSpecies,

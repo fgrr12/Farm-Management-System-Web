@@ -15,7 +15,6 @@ import { useUserStore } from '@/store/useUserStore'
 
 import { PrivateRoute } from '@/utils/PrivateRoute'
 
-import { FarmsService } from '@/services/farms'
 import { UserService } from '@/services/user'
 
 import { Loading } from '@/components/layout/Loading'
@@ -62,15 +61,12 @@ export const App = () => {
 				setAuthLoading(false)
 				return
 			}
-			const user = await UserService.getUser(authUser!.uid)
-			const farm = await FarmsService.getFarm(user!.farmUuid)
 
-			if (user?.role !== 'admin' && user?.role !== 'owner') {
-				farm.billingCard = null
-			}
-
+			const user = await UserService.getUser(authUser.uid)
 			setUser(user)
-			setFarm(farm)
+
+			await useFarmStore.getState().loadFarmData(user.farmUuid, user.role)
+
 			setAuthLoading(false)
 		})
 

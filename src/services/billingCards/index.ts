@@ -4,7 +4,7 @@ import { firestore } from '@/config/firebaseConfig'
 
 const collectionName = 'billingCards'
 
-const getBillingCard = async (uuid: string) => {
+const getBillingCardByUuid = async (uuid: string) => {
 	const document = doc(firestore, collectionName, uuid)
 	const billingCard = await getDoc(document)
 	return billingCard.data() as BillingCard
@@ -21,7 +21,7 @@ const updateBillingCard = async (billingCardData: BillingCard) => {
 }
 
 export const BillingCardsService = {
-	getBillingCard,
+	getBillingCardByUuid,
 	setBillingCard,
 	updateBillingCard,
 }

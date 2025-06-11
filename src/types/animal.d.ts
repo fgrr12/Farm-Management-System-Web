@@ -1,16 +1,13 @@
 interface Animal {
 	uuid: string
+	farmUuid: string
+	speciesUuid: string
+	breedUuid: string
 	animalId: string
-	species: {
-		uuid: string
-		name: string
-	}
-	breed: Breed
 	gender: Gender
 	color: string
 	weight: number
 	status: boolean
-	farmUuid: string
 	origin: string
 	picture?: string
 	birthDate?: string
