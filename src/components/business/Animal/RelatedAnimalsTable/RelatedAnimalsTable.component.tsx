@@ -25,7 +25,7 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 	const navigate = useNavigate()
 	const { t } = useTranslation(['animalRelations'])
 
-	const breed = (breedUuid: string) => breeds.find((breed) => breed.uuid === breedUuid)
+	const breed = (breedUuid: string) => breeds.find((breed) => breed.uuid === breedUuid)?.name
 
 	const handleAddRelatedAnimals = () => {
 		const animalUuid = params.animalUuid as string
@@ -98,7 +98,9 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 						{animals?.map((animal) => (
 							<tr key={animal.uuid}>
 								<td>{animal[type].animalId}</td>
-								<td>{breed(animal[type].breed)?.name ? breed(animal[type].breed)?.name : animal[type].breed}</td>
+								<td>
+									{breed(animal[type].breed) ? breed(animal[type].breed) : animal[type].breed}
+								</td>
 								<td>{t(animal[type].relation.toLowerCase())}</td>
 								{haveUser && (
 									<td>
