@@ -99,12 +99,12 @@ const TaskForm = () => {
 					required
 				/>
 				<Select
-					name="species"
+					name="speciesUuid"
 					legend={t('selectSpecies')}
 					defaultLabel={t('selectSpecies')}
 					optionValue="uuid"
 					optionLabel="name"
-					value={task.species}
+					value={task.speciesUuid}
 					items={species}
 					onChange={handleSelectChange}
 					required
@@ -121,7 +121,7 @@ const INITIAL_TASK: Task = {
 	description: '',
 	priority: '',
 	status: 'PENDING',
-	species: '',
+	speciesUuid: '',
 	farmUuid: '',
 }
 

@@ -2,6 +2,6 @@ export interface GetTasksParams {
 	search: string
 	status: string
 	priority: string
-	species: string
+	speciesUuid: string
 	farmUuid: string
 }

@@ -12,14 +12,14 @@ const getTasks = async ({
 	search,
 	status,
 	priority,
-	species,
+	speciesUuid,
 }: GetTasksParams): Promise<Task[]> => {
 	let response = []
 	let queryBase = query(collection(firestore, collectionName), where('farmUuid', '==', farmUuid))
 
 	if (status !== '') queryBase = query(queryBase, where('status', '==', status))
 	if (priority !== '') queryBase = query(queryBase, where('priority', '==', priority))
-	if (species !== '') queryBase = query(queryBase, where('species', '==', species))
+	if (speciesUuid !== '') queryBase = query(queryBase, where('speciesUuid', '==', speciesUuid))
 
 	const tasksDocs = await getDocs(queryBase)
 	response = tasksDocs.docs.map((doc) => doc.data()) as Task[]
