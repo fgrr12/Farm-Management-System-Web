@@ -52,7 +52,7 @@ const RelatedAnimalsForm = () => {
 	const buildRelation = (info: RelatedAnimalInformation, isChild: boolean): RelatedAnimal => ({
 		animalUuid: info.uuid,
 		animalId: info.animalId,
-		breed: info.breed,
+		breed: breeds.find((breed) => breed.name === info.breed)?.uuid!,
 		relation:
 			info.gender.toLowerCase() === GenderEnum.FEMALE
 				? isChild
@@ -179,35 +179,37 @@ const RelatedAnimalsForm = () => {
 
 						const parents = data
 							.filter((related) => animalUuid === related.child.animalUuid)
-							.map((related) => ({
-								uuid: related.parent.animalUuid,
-								animalId: related.parent.animalId,
-								breed:
-									breeds.find((breed) => breed.uuid === related.parent.breed)!.name ??
-									related.parent.breed,
-								gender:
-									related.parent.relation === Relationship.MOTHER
-										? (GenderEnum.FEMALE as unknown as Gender)
-										: (GenderEnum.MALE as unknown as Gender),
-								picture: '',
-								location: 1,
-							}))
+							.map((related) => {
+								const breed = breeds.find((breed) => breed.uuid === related.parent.breed)
+								return {
+									uuid: related.parent.animalUuid,
+									animalId: related.parent.animalId,
+									breed: breed?.name ?? related.parent.breed,
+									gender:
+										related.parent.relation === Relationship.MOTHER
+											? (GenderEnum.FEMALE as unknown as Gender)
+											: (GenderEnum.MALE as unknown as Gender),
+									picture: '',
+									location: 1,
+								}
+							})
 
 						const children = data
 							.filter((related) => animalUuid === related.parent.animalUuid)
-							.map((related) => ({
-								uuid: related.child.animalUuid,
-								animalId: related.child.animalId,
-								breed:
-									breeds.find((breed) => breed.uuid === related.child.breed)!.name ??
-									related.child.breed,
-								gender:
-									related.child.relation === Relationship.DAUGHTER
-										? (GenderEnum.FEMALE as unknown as Gender)
-										: (GenderEnum.MALE as unknown as Gender),
-								picture: '',
-								location: 2,
-							}))
+							.map((related) => {
+								const breed = breeds.find((breed) => breed.uuid === related.child.breed)
+								return {
+									uuid: related.child.animalUuid,
+									animalId: related.child.animalId,
+									breed: breed?.name ?? related.child.breed,
+									gender:
+										related.child.relation === Relationship.DAUGHTER
+											? (GenderEnum.FEMALE as unknown as Gender)
+											: (GenderEnum.MALE as unknown as Gender),
+									picture: '',
+									location: 2,
+								}
+							})
 
 						setRelatedAnimals(data)
 						setAnimalsLists({

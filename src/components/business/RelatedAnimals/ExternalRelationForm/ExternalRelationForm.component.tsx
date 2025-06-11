@@ -27,11 +27,7 @@ export const ExternalRelationForm: FC<ExternalRelationFormProps> = ({ currentAni
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
 		const { name, value } = e.target
-		if (name === 'breed') {
-			setRelation(relation)
-		} else {
-			setRelation({ ...relation, [name]: capitalizeFirstLetter(value) })
-		}
+		setRelation({ ...relation, [name]: capitalizeFirstLetter(value) })
 	}
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {

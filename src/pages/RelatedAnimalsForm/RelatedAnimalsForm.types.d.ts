@@ -28,6 +28,6 @@ export interface RelatedAnimalsList {
 interface SelectedAnimal {
 	animalUuid: string
 	animalId: string
-	breed: Breed
+	breed: string
 	relation: string
 }
