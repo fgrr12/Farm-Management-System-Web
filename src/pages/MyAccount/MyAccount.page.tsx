@@ -19,6 +19,7 @@ import { TextField } from '@/components/ui/TextField'
 const MyAccount = () => {
 	const { user: currentUser, setUser: updateUser } = useUserStore()
 	const {
+		billingCard: currentBillingCard,
 		farm: currentFarm,
 		setFarm: updateFarm,
 		setBillingCard: updateBillingCard,
@@ -175,7 +176,7 @@ const MyAccount = () => {
 
 		setUser(currentUser!)
 		setFarm({ ...currentFarm! })
-		setBillingCard({ ...billingCard! })
+		setBillingCard({ ...currentBillingCard! })
 	}, [currentUser, currentFarm])
 
 	useEffect(() => {
@@ -355,7 +356,7 @@ const MyAccount = () => {
 										name="status"
 										type="checkbox"
 										className="checkbox border-error bg-error checked:border-info checked:bg-info"
-										checked={billingCard.status}
+										defaultChecked={billingCard.status}
 										onChange={handleCheckboxChange('billingCard')}
 										disabled={!edit.billingCard}
 									/>

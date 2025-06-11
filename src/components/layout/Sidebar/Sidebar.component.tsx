@@ -101,7 +101,7 @@ export const Sidebar = () => {
 			)}
 			{(user?.role === 'admin' || user?.role === 'owner') &&
 				billingCard !== null &&
-				!billingCard.status && (
+				billingCard.status && (
 					<li className={handleCheckActive(AppRoutes.BILLING_CARD)}>
 						<button
 							type="button"

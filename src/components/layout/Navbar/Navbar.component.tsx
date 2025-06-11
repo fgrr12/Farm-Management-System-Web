@@ -201,7 +201,7 @@ export const Navbar = () => {
 					)}
 					{(user?.role === 'admin' || user?.role === 'owner') &&
 						billingCard !== null &&
-						!billingCard.status && (
+						billingCard.status && (
 							<li
 								className={
 									location.pathname.includes(AppRoutes.BILLING_CARD) ? 'bg-info rounded-sm' : ''
