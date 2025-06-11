@@ -19,13 +19,12 @@ import { TextField } from '@/components/ui/TextField'
 
 const TaskForm = () => {
 	const { user } = useUserStore()
-	const { farm } = useFarmStore()
+	const { farm, species } = useFarmStore()
 	const { setLoading, setHeaderTitle, setToastData } = useAppStore()
 	const navigate = useNavigate()
 	const { t } = useTranslation(['taskForm'])
 
 	const [task, setTask] = useState(INITIAL_TASK)
-	const [species, setSpecies] = useState(INITIAL_SPECIES)
 
 	const handleTextChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		const { name, value } = event.target
@@ -60,7 +59,6 @@ const TaskForm = () => {
 
 	useEffect(() => {
 		if (!farm) return
-		setSpecies(farm!.species!)
 	}, [farm])
 
 	return (
@@ -126,20 +124,5 @@ const INITIAL_TASK: Task = {
 	species: '',
 	farmUuid: '',
 }
-
-const INITIAL_SPECIES: Species[] = [
-	{
-		uuid: crypto.randomUUID(),
-		name: '',
-		breeds: [
-			{
-				uuid: crypto.randomUUID(),
-				name: '',
-				gestationPeriod: 0,
-			},
-		],
-		status: true,
-	},
-]
 
 export default TaskForm
