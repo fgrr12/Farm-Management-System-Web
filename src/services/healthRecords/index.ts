@@ -3,6 +3,8 @@ import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase
 
 import { firestore } from '@/config/firebaseConfig'
 
+import { formatDate } from '@/utils/formatDate'
+
 import { AnimalsService } from '../animals'
 import { BreedsService } from '../breeds'
 
@@ -123,12 +125,6 @@ const updateHealthRecordsStatus = async (uuid: string, status: boolean) => {
 	const updateAt = dayjs().toISOString()
 
 	await setDoc(document, { status, updateAt }, { merge: true })
-}
-
-// Constants
-
-const formatDate = (date: dayjs.Dayjs | string) => {
-	return dayjs(date).toISOString()
 }
 
 export const HealthRecordsService = {
