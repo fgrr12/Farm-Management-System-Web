@@ -44,13 +44,13 @@ const Tasks = () => {
 			const status = task.status === 'COMPLETED' ? 'PENDING' : 'COMPLETED'
 			await TasksService.updateTaskStatus(task.uuid, status)
 			await getTasks()
-			if (status === 'COMPLETED')
-				setToastData({
-					message: t('toast.taskCompleted', { taskUuid: task.title }),
-					type: 'success',
-				})
-			else
-				setToastData({ message: t('toast.taskPending', { taskUuid: task.title }), type: 'warning' })
+			setToastData({
+				message:
+					status === 'COMPLETED'
+						? t('toast.taskCompleted', { taskUuid: task.title })
+						: t('toast.taskPending', { taskUuid: task.title }),
+				type: status === 'COMPLETED' ? 'success' : 'warning',
+			})
 		} catch (_error) {
 			setToastData({
 				message: t('toast.errorUpdatingTaskStatus'),

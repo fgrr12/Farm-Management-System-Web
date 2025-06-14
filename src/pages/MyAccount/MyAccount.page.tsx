@@ -57,46 +57,32 @@ const MyAccount = () => {
 	}
 
 	const handleChange =
-		(key: 'farm' | 'user' | 'billingCard') => (event: ChangeEvent<HTMLInputElement>) => {
-			const { name, value } = event.target
+		<T extends 'farm' | 'user' | 'billingCard'>(key: T) =>
+			(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+				const { name, value, type } = event.target
+				const newValue = type === 'checkbox' ? (event.target as HTMLInputElement).checked : value
 
-			if (key === 'user') {
-				setUser((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
-			} else if (key === 'farm') {
-				setFarm((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
-			} else {
-				setBillingCard((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
+				if (key === 'user') {
+					setUser((prev) => ({
+						...prev,
+						[name]: type === 'text' ? capitalizeFirstLetter(newValue as string) : newValue,
+					}))
+				} else if (key === 'farm') {
+					setFarm((prev) => ({
+						...prev,
+						[name]: type === 'text' ? capitalizeFirstLetter(newValue as string) : newValue,
+					}))
+				} else {
+					setBillingCard((prev) => ({
+						...prev,
+						[name]: type === 'text' ? capitalizeFirstLetter(newValue as string) : newValue,
+					}))
+				}
 			}
-		}
-
-	const handleSelectChange =
-		(key: 'farm' | 'user' | 'billingCard') => (event: ChangeEvent<HTMLSelectElement>) => {
-			const { name, value } = event.target
-
-			if (key === 'user') {
-				setUser((prev) => ({ ...prev, [name]: value }))
-			} else if (key === 'farm') {
-				setFarm((prev) => ({ ...prev, [name]: value }))
-			} else {
-				setBillingCard((prev) => ({ ...prev, [name]: value }))
-			}
-		}
-
-	const handleCheckboxChange =
-		(key: 'farm' | 'user' | 'billingCard') => (event: ChangeEvent<HTMLInputElement>) => {
-			const { name, checked } = event.target
-
-			if (key === 'user') {
-				setUser((prev) => ({ ...prev, [name]: checked }))
-			} else if (key === 'farm') {
-				setFarm((prev) => ({ ...prev, [name]: checked }))
-			} else {
-				setBillingCard((prev) => ({ ...prev, [name]: checked }))
-			}
-		}
 
 	const handleSubmitUser = async (e: FormEvent) => {
 		e.preventDefault()
+		setLoading(true)
 		try {
 			await UserService.updateUser(user)
 			updateUser(user)
@@ -245,7 +231,7 @@ const MyAccount = () => {
 								defaultLabel={t('myProfile.selectLanguage')}
 								value={user.language}
 								items={languages}
-								onChange={handleSelectChange('user')}
+								onChange={handleChange('user')}
 								disabled={!edit.user}
 								required
 							/>
@@ -300,7 +286,7 @@ const MyAccount = () => {
 									defaultLabel={t('myFarm.liquidUnit')}
 									value={farm.liquidUnit}
 									items={liquidUnit}
-									onChange={handleSelectChange('farm')}
+									onChange={handleChange('farm')}
 									disabled={!edit.farm}
 									required
 								/>
@@ -310,7 +296,7 @@ const MyAccount = () => {
 									defaultLabel={t('myFarm.weightUnit')}
 									value={farm.weightUnit}
 									items={weightUnit}
-									onChange={handleSelectChange('farm')}
+									onChange={handleChange('farm')}
 									disabled={!edit.farm}
 									required
 								/>
@@ -320,7 +306,7 @@ const MyAccount = () => {
 									defaultLabel={t('myFarm.temperatureUnit')}
 									value={farm.temperatureUnit}
 									items={temperatureUnit}
-									onChange={handleSelectChange('farm')}
+									onChange={handleChange('farm')}
 									disabled={!edit.farm}
 									required
 								/>
@@ -357,7 +343,7 @@ const MyAccount = () => {
 										type="checkbox"
 										className="checkbox border-error bg-error checked:border-info checked:bg-info"
 										defaultChecked={billingCard.status}
-										onChange={handleCheckboxChange('billingCard')}
+										onChange={handleChange('billingCard')}
 										disabled={!edit.billingCard}
 									/>
 									{t(billingCard.status ? 'myBillingCard.active' : 'myBillingCard.inactive')}

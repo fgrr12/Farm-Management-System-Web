@@ -153,6 +153,8 @@ const MySpecies = () => {
 				setLoading(true)
 				try {
 					await BreedsService.deleteBreed(breedUuid)
+					setBreeds((prev) => prev.filter((breed) => breed.uuid !== breedUuid))
+					setDbBreeds(breeds)
 					setModalData(defaultModalData)
 					setToastData({
 						message: t('toast.deletedBreed'),

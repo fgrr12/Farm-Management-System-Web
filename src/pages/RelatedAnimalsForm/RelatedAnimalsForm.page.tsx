@@ -82,6 +82,18 @@ const RelatedAnimalsForm = () => {
 		animalsLists.parents.find((a) => a.uuid === uuid) ||
 		animalsLists.children.find((a) => a.uuid === uuid)
 
+	const setCurrentAnimalFromSelected = (selectedAnimal: any) => {
+		const breedObj = breeds.find((breed) => breed.uuid === selectedAnimal.breedUuid)
+		setCurrentAnimal({
+			uuid: selectedAnimal.uuid,
+			animalId: selectedAnimal.animalId,
+			breed: breedObj ? breedObj.name : '',
+			gender: selectedAnimal.gender,
+			picture: selectedAnimal.picture,
+			location: -1,
+		})
+	}
+
 	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
 		return monitorForElements({
@@ -142,15 +154,7 @@ const RelatedAnimalsForm = () => {
 				setLoading(true)
 				const animalUuid = params.animalUuid as string
 				const selectedAnimal = await AnimalsService.getAnimal(animalUuid)
-
-				setCurrentAnimal({
-					uuid: selectedAnimal.uuid,
-					animalId: selectedAnimal.animalId,
-					breed: breeds.find((breed) => breed.uuid === selectedAnimal.breedUuid)!.name,
-					gender: selectedAnimal.gender,
-					picture: selectedAnimal.picture,
-					location: -1,
-				})
+				setCurrentAnimalFromSelected(selectedAnimal)
 				unsubscribe = RelatedAnimalsService.getRealTimeRelatedAnimals(
 					animalUuid,
 					async (data) => {
