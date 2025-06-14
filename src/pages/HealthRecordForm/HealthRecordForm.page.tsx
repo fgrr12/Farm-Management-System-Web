@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
+import { type ChangeEvent, type FormEvent, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -20,81 +20,56 @@ import { TextField } from '@/components/ui/TextField'
 
 import type { HealthRecordFormType } from './HealthRecordForm.types'
 
-const HealthRecordForm = () => {
-	const { user } = useUserStore()
-	const { farm } = useFarmStore()
-	const navigate = useNavigate()
-	const params = useParams()
-	const { t } = useTranslation(['healthRecordForm'])
-	const { setLoading, setToastData, setHeaderTitle } = useAppStore()
-
-	const [healthRecordForm, setHealthRecordForm] = useState(INITIAL_HEALTH_RECORD_FORM)
-
-	const healthRecordTypes: HealthRecordFormType[] = [
-		{ value: 'Checkup', name: t('healthRecordType.checkup') },
-		{ value: 'Vaccination', name: t('healthRecordType.vaccination') },
-		{ value: 'Medication', name: t('healthRecordType.medication') },
-		{ value: 'Surgery', name: t('healthRecordType.surgery') },
-		{ value: 'Pregnancy', name: t('healthRecordType.pregnancy') },
-		{ value: 'Deworming', name: t('healthRecordType.deworming') },
-		{ value: 'Birth', name: t('healthRecordType.birth') },
-		{ value: 'Drying', name: t('healthRecordType.drying') },
-	]
+// Custom hook for form state management
+const useHealthRecordForm = (initialForm: HealthRecord) => {
+	const [form, setForm] = useState(initialForm)
 
 	const handleTextChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		const { name, value } = event.target
-		setHealthRecordForm((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
+		setForm((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
 	}
 
 	const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
 		const { name, value } = event.target
-		setHealthRecordForm((prev) => ({ ...prev, [name]: value }))
+		setForm((prev) => ({ ...prev, [name]: value }))
 	}
 
 	const handleDateChange = () => (newDate: dayjs.Dayjs | null) => {
-		setHealthRecordForm((prev) => ({
+		setForm((prev) => ({
 			...prev,
 			date: newDate ? dayjs(newDate).toISOString() : dayjs().toISOString(),
 		}))
 	}
 
-	const getHealthRecord = async () => {
-		try {
-			setLoading(true)
-			const healthRecordUuid = params.healthRecordUuid as string
-			const dbHealthRecord = await HealthRecordsService.getHealthRecord(healthRecordUuid)
-			setHealthRecordForm(dbHealthRecord)
-		} catch (_error) {
-			setToastData({
-				message: t('toast.errorGettingHealthRecord'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
+	return { form, setForm, handleTextChange, handleSelectChange, handleDateChange }
+}
+
+// Custom hook for form submission
+const useHealthRecordSubmit = (form: HealthRecord, userUuid: string, navigate: any, t: any) => {
+	const { setLoading, setToastData } = useAppStore()
+	const params = useParams()
 
 	const handleSubmit = async (event: FormEvent) => {
 		try {
 			setLoading(true)
 			event.preventDefault()
 			const healthRecordUuid = params.healthRecordUuid as string
-			healthRecordForm.uuid = healthRecordUuid ?? crypto.randomUUID()
+			form.uuid = healthRecordUuid ?? crypto.randomUUID()
 
 			if (healthRecordUuid) {
-				await HealthRecordsService.updateHealthRecord(healthRecordForm, user!.uuid)
+				await HealthRecordsService.updateHealthRecord(form, userUuid)
 				setToastData({
 					message: t('toast.editHealthRecord'),
 					type: 'success',
 				})
-				navigate(AppRoutes.ANIMAL.replace(':animalUuid', healthRecordForm.animalUuid))
+				navigate(AppRoutes.ANIMAL.replace(':animalUuid', form.animalUuid))
 			} else {
-				await HealthRecordsService.setHealthRecord(healthRecordForm, user!.uuid)
+				await HealthRecordsService.setHealthRecord(form, userUuid)
 				setToastData({
 					message: t('toast.addHealthRecord'),
 					type: 'success',
 				})
-				navigate(AppRoutes.ANIMAL.replace(':animalUuid', healthRecordForm.animalUuid))
+				navigate(AppRoutes.ANIMAL.replace(':animalUuid', form.animalUuid))
 			}
 		} catch (_error) {
 			setToastData({
@@ -106,11 +81,57 @@ const HealthRecordForm = () => {
 		}
 	}
 
+	return handleSubmit
+}
+
+const HealthRecordForm = () => {
+	const { user } = useUserStore()
+	const { farm } = useFarmStore()
+	const navigate = useNavigate()
+	const params = useParams()
+	const { t } = useTranslation(['healthRecordForm'])
+	const { setLoading, setToastData, setHeaderTitle } = useAppStore()
+
+	const { form, setForm, handleTextChange, handleSelectChange, handleDateChange } =
+		useHealthRecordForm(INITIAL_HEALTH_RECORD_FORM)
+
+	const healthRecordTypes: HealthRecordFormType[] = useMemo(
+		() => [
+			{ value: 'Checkup', name: t('healthRecordType.checkup') },
+			{ value: 'Vaccination', name: t('healthRecordType.vaccination') },
+			{ value: 'Medication', name: t('healthRecordType.medication') },
+			{ value: 'Surgery', name: t('healthRecordType.surgery') },
+			{ value: 'Pregnancy', name: t('healthRecordType.pregnancy') },
+			{ value: 'Deworming', name: t('healthRecordType.deworming') },
+			{ value: 'Birth', name: t('healthRecordType.birth') },
+			{ value: 'Drying', name: t('healthRecordType.drying') },
+		],
+		[t]
+	)
+
+	const handleSubmit = useHealthRecordSubmit(form, user!.uuid, navigate, t)
+
+	const getHealthRecord = async () => {
+		try {
+			setLoading(true)
+			const healthRecordUuid = params.healthRecordUuid as string
+			const dbHealthRecord = await HealthRecordsService.getHealthRecord(healthRecordUuid)
+			setForm(dbHealthRecord)
+		} catch (_error) {
+			setToastData({
+				message: t('toast.errorGettingHealthRecord'),
+				type: 'error',
+			})
+		} finally {
+			setLoading(false)
+		}
+	}
+
 	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
 		if (user) {
 			const animalUuid = params.animalUuid ?? ''
-			setHealthRecordForm((prev) => ({ ...prev, animalUuid }))
+			setForm((prev) => ({ ...prev, animalUuid }))
 			if (params.healthRecordUuid) {
 				getHealthRecord()
 			}
@@ -134,7 +155,7 @@ const HealthRecordForm = () => {
 					type="text"
 					placeholder={t('reason')}
 					label={t('reason')}
-					value={healthRecordForm.reason}
+					value={form.reason}
 					onChange={handleTextChange}
 					required
 				/>
@@ -142,7 +163,7 @@ const HealthRecordForm = () => {
 					name="type"
 					legend={t('selectType')}
 					defaultLabel={t('selectType')}
-					value={healthRecordForm.type}
+					value={form.type}
 					items={healthRecordTypes}
 					onChange={handleSelectChange}
 					required
@@ -153,14 +174,14 @@ const HealthRecordForm = () => {
 					type="text"
 					placeholder={t('reviewedBy')}
 					label={t('reviewedBy')}
-					value={healthRecordForm.reviewedBy}
+					value={form.reviewedBy}
 					onChange={handleTextChange}
 					required
 				/>
 				<DatePicker
 					legend={t('date')}
 					label={t('date')}
-					date={dayjs(healthRecordForm.date)}
+					date={dayjs(form.date)}
 					onDateChange={handleDateChange()}
 				/>
 				<TextField
@@ -168,7 +189,7 @@ const HealthRecordForm = () => {
 					type="number"
 					placeholder={`${t('weight')} (${farm?.weightUnit})`}
 					label={`${t('weight')} (${farm?.weightUnit})`}
-					value={healthRecordForm.weight}
+					value={form.weight}
 					onChange={handleTextChange}
 					onWheel={(e) => e.currentTarget.blur()}
 				/>
@@ -177,7 +198,7 @@ const HealthRecordForm = () => {
 					type="number"
 					placeholder={`${t('temperature')} (${farm?.temperatureUnit})`}
 					label={`${t('temperature')} (${farm?.temperatureUnit})`}
-					value={healthRecordForm.temperature}
+					value={form.temperature}
 					onChange={handleTextChange}
 					onWheel={(e) => e.currentTarget.blur()}
 				/>
@@ -186,7 +207,7 @@ const HealthRecordForm = () => {
 					type="text"
 					placeholder="-"
 					label={t('medication')}
-					value={healthRecordForm.medication}
+					value={form.medication}
 					onChange={handleTextChange}
 				/>
 				<TextField
@@ -194,7 +215,7 @@ const HealthRecordForm = () => {
 					type="text"
 					placeholder="-"
 					label={t('dosage')}
-					value={healthRecordForm.dosage}
+					value={form.dosage}
 					onChange={handleTextChange}
 				/>
 				<TextField
@@ -202,7 +223,7 @@ const HealthRecordForm = () => {
 					type="text"
 					placeholder="-"
 					label={t('frequency')}
-					value={healthRecordForm.frequency}
+					value={form.frequency}
 					onChange={handleTextChange}
 				/>
 				<TextField
@@ -210,7 +231,7 @@ const HealthRecordForm = () => {
 					type="text"
 					placeholder="-"
 					label={t('duration')}
-					value={healthRecordForm.duration}
+					value={form.duration}
 					onChange={handleTextChange}
 				/>
 				<div className="col-span-2 w-full">
@@ -218,7 +239,7 @@ const HealthRecordForm = () => {
 						name="notes"
 						placeholder={t('notes')}
 						label={t('notes')}
-						value={healthRecordForm.notes}
+						value={form.notes}
 						onChange={handleTextChange}
 						required
 					/>
