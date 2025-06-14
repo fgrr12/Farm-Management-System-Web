@@ -22,11 +22,12 @@ const Employees = () => {
 	const [search, setSearch] = useState('')
 
 	const filteredEmployees = useMemo(() => {
-		return employees.filter((employee) =>
-			employee.name.toLowerCase().includes(search.toLowerCase()) ||
-			employee.lastName.toLowerCase().includes(search.toLowerCase()) ||
-			employee.email.toLowerCase().includes(search.toLowerCase()) ||
-			employee.phone.toLowerCase().includes(search.toLowerCase())
+		return employees.filter(
+			(employee) =>
+				employee.name.toLowerCase().includes(search.toLowerCase()) ||
+				employee.lastName.toLowerCase().includes(search.toLowerCase()) ||
+				employee.email.toLowerCase().includes(search.toLowerCase()) ||
+				employee.phone.toLowerCase().includes(search.toLowerCase())
 		)
 	}, [employees, search])
 
@@ -38,9 +39,12 @@ const Employees = () => {
 		setSearch(event.target.value)
 	}
 
-	const handleRemoveEmployee = useCallback((employeeUuid: string) => async () => {
-		setEmployees(employees.filter((employee) => employee.uuid !== employeeUuid))
-	}, [employees])
+	const handleRemoveEmployee = useCallback(
+		(employeeUuid: string) => async () => {
+			setEmployees(employees.filter((employee) => employee.uuid !== employeeUuid))
+		},
+		[employees]
+	)
 
 	const initialData = async () => {
 		try {
