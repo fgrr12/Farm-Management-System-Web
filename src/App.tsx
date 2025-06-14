@@ -163,31 +163,35 @@ export const App = () => {
 									</PrivateRoute>
 								}
 							/>
-
-							<Route
-								path={AppRoutes.EMPLOYEES}
-								element={
-									<PrivateRoute>
-										<Employees />
-									</PrivateRoute>
-								}
-							/>
-							<Route
-								path={AppRoutes.ADD_EMPLOYEE}
-								element={
-									<PrivateRoute>
-										<EmployeeForm />
-									</PrivateRoute>
-								}
-							/>
-							<Route
-								path={AppRoutes.EDIT_EMPLOYEE}
-								element={
-									<PrivateRoute>
-										<EmployeeForm />
-									</PrivateRoute>
-								}
-							/>
+							{user?.role === 'owner' || user?.role === 'admin' && (
+								<Route
+									path={AppRoutes.EMPLOYEES}
+									element={
+										<PrivateRoute>
+											<Employees />
+										</PrivateRoute>
+									}
+								/>)}
+							{user?.role === 'owner' || user?.role === 'admin' && (
+								<Route
+									path={AppRoutes.ADD_EMPLOYEE}
+									element={
+										<PrivateRoute>
+											<EmployeeForm />
+										</PrivateRoute>
+									}
+								/>
+							)}
+							{user?.role === 'owner' || user?.role === 'admin' && (
+								<Route
+									path={AppRoutes.EDIT_EMPLOYEE}
+									element={
+										<PrivateRoute>
+											<EmployeeForm />
+										</PrivateRoute>
+									}
+								/>
+							)}
 
 							<Route
 								path={AppRoutes.MY_ACCOUNT}
@@ -222,15 +226,16 @@ export const App = () => {
 									</PrivateRoute>
 								}
 							/>
-
-							<Route
-								path={AppRoutes.BILLING_CARD}
-								element={
-									<PrivateRoute>
-										<BillingCard />
-									</PrivateRoute>
-								}
-							/>
+							{user?.role === 'owner' || user?.role === 'admin' && (
+								<Route
+									path={AppRoutes.BILLING_CARD}
+									element={
+										<PrivateRoute>
+											<BillingCard />
+										</PrivateRoute>
+									}
+								/>
+							)}
 						</Routes>
 					</Suspense>
 

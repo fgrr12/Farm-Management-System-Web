@@ -6,7 +6,7 @@ import { firestore, signUpAuth } from '@/config/firebaseConfig'
 
 const collectionName = 'users'
 
-const getEmployees = async (search: string | null, farmUuid: string): Promise<User[]> => {
+const getEmployees = async (farmUuid: string): Promise<User[]> => {
 	let response = []
 
 	const employeesDocs = await getDocs(
@@ -18,15 +18,6 @@ const getEmployees = async (search: string | null, farmUuid: string): Promise<Us
 		)
 	)
 	response = employeesDocs.docs.map((doc) => doc.data()) as User[]
-
-	if (search) {
-		response = response.filter(
-			(employee) =>
-				employee.name.toLowerCase().includes(search.toLowerCase()) ||
-				employee.lastName.toLowerCase().includes(search.toLowerCase()) ||
-				employee.email.toLowerCase().includes(search.toLowerCase())
-		) as User[]
-	}
 	return response
 }
 

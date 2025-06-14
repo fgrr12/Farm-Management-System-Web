@@ -11,6 +11,7 @@ import { useUserStore } from '@/store/useUserStore'
 
 import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 import { fileToBase64 } from '@/utils/fileToBase64'
+import { formatDate } from '@/utils/formatDate'
 
 import { AnimalsService } from '@/services/animals'
 
@@ -20,22 +21,10 @@ import { Select } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
-const AnimalForm = () => {
-	const { user } = useUserStore()
-	const { farm, species, breeds } = useFarmStore()
-	const navigate = useNavigate()
-	const params = useParams()
-	const { t } = useTranslation(['animalForm'])
-
-	const { setLoading, setHeaderTitle, setToastData } = useAppStore()
-	const [animalForm, setAnimalForm] = useState<Animal>(INITIAL_ANIMAL_FORM)
+// Custom hook for form state management
+const useAnimalForm = (initialForm: Animal) => {
+	const [animalForm, setAnimalForm] = useState<Animal>(initialForm)
 	const [pictureUrl, setPictureUrl] = useState<string>('')
-
-	const { filteredBreeds } = useMemo(() => {
-		return {
-			filteredBreeds: breeds.filter((breed) => breed.speciesUuid === animalForm.speciesUuid),
-		}
-	}, [breeds, animalForm.speciesUuid])
 
 	const handleTextChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		const { name, value } = event.target
@@ -49,9 +38,9 @@ const AnimalForm = () => {
 
 	const handleDateChange =
 		(key: 'birthDate' | 'purchaseDate' | 'soldDate' | 'deathDate') =>
-		(newDate: dayjs.Dayjs | null) => {
-			setAnimalForm((prev) => ({ ...prev, [key]: newDate ? newDate.format('YYYY-MM-DD') : null }))
-		}
+			(newDate: dayjs.Dayjs | null) => {
+				setAnimalForm((prev) => ({ ...prev, [key]: newDate ? newDate.format('YYYY-MM-DD') : null }))
+			}
 
 	const handleFile = async (file: File) => {
 		const picture = await fileToBase64(file)
@@ -59,6 +48,39 @@ const AnimalForm = () => {
 		setPictureUrl(fullDataUrl)
 		setAnimalForm((prev) => ({ ...prev, picture: picture.data }))
 	}
+
+	return {
+		animalForm,
+		pictureUrl,
+		setAnimalForm,
+		handleTextChange,
+		handleSelectChange,
+		handleDateChange,
+		handleFile,
+	}
+}
+
+const AnimalForm = () => {
+	const { user } = useUserStore()
+	const { farm, species, breeds } = useFarmStore()
+	const navigate = useNavigate()
+	const params = useParams()
+	const { t } = useTranslation(['animalForm'])
+
+	const { setLoading, setHeaderTitle, setToastData } = useAppStore()
+	const {
+		animalForm,
+		pictureUrl,
+		setAnimalForm,
+		handleTextChange,
+		handleSelectChange,
+		handleDateChange,
+		handleFile,
+	} = useAnimalForm(INITIAL_ANIMAL_FORM)
+
+	const filteredBreeds = useMemo(() => {
+		return breeds.filter((breed) => breed.speciesUuid === animalForm.speciesUuid)
+	}, [breeds, animalForm.speciesUuid])
 
 	const getAnimal = async () => {
 		try {
@@ -278,9 +300,6 @@ const INITIAL_ANIMAL_FORM: Animal = {
 	purchaseDate: null,
 	soldDate: null,
 	deathDate: null,
-}
-const formatDate = (date: dayjs.Dayjs | string) => {
-	return dayjs(date).toISOString()
 }
 
 export default AnimalForm

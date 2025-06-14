@@ -182,7 +182,7 @@ const Animal = () => {
 			}
 
 			if (user && farm) {
-				setEmployees(await EmployeesService.getEmployees('', farm.uuid))
+				setEmployees(await EmployeesService.getEmployees(farm.uuid))
 			}
 
 			setHeaderTitle(`Animal ${dbAnimal.animalId}`)

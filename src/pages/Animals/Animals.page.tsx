@@ -1,6 +1,6 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import { type ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
+import { type ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -30,12 +30,25 @@ const Animals = () => {
 	const [animals, setAnimals] = useState<AnimalCardProps[]>([])
 	const [filters, setFilters] = useState<AnimalsFilters>(INITIAL_FILTERS)
 
+	const speciesOptions = useMemo(
+		() => species.map((specie) => ({ value: specie.uuid, name: specie.name })),
+		[species]
+	)
+
+	const handleSearchChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+		const { value } = event.target as HTMLInputElement
+		setFilters((prev) => ({ ...prev, search: value }))
+	}, [])
+
+	const handleSelectChange = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
+		const { name, value } = event.target
+		setFilters((prev) => ({ ...prev, [name]: value }))
+	}, [])
+
 	const filteredAnimals = useMemo(() => {
 		if (!animals.length) return []
-
 		const { speciesUuid, search } = filters
 		const normalizedSearch = search?.toLowerCase()
-
 		return animals.filter((animal) => {
 			const matchesSpecies = speciesUuid ? animal.speciesUuid === speciesUuid : true
 			const matchesSearch = normalizedSearch
@@ -47,16 +60,6 @@ const Animals = () => {
 
 	const navigateToAddAnimal = () => {
 		navigation(AppRoutes.ADD_ANIMAL)
-	}
-
-	const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
-		const { value } = event.target as HTMLInputElement
-		setFilters((prev) => ({ ...prev, search: value }))
-	}
-
-	const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
-		const { name, value } = event.target
-		setFilters((prev) => ({ ...prev, [name]: value }))
 	}
 
 	const getAnimals = async () => {
@@ -95,9 +98,8 @@ const Animals = () => {
 
 	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
-		if (user && farm) {
-			getAnimals()
-		}
+		if (!user || !farm) return
+		getAnimals()
 	}, [user, farm])
 
 	useGSAP(() => {
@@ -125,7 +127,7 @@ const Animals = () => {
 					legend={t('filterBySpecies')}
 					defaultLabel={t('filterBySpecies')}
 					value={filters.speciesUuid}
-					items={[...species.map((specie) => ({ value: specie.uuid, name: specie.name }))]}
+					items={speciesOptions}
 					onChange={handleSelectChange}
 				/>
 				<Button

@@ -3,6 +3,8 @@ import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase
 
 import { firestore } from '@/config/firebaseConfig'
 
+import { formatDate } from '@/utils/formatDate'
+
 const collectionName = 'productionRecords'
 
 // Gets
@@ -57,12 +59,6 @@ const updateProductionRecordsStatus = async (uuid: string, status: boolean) => {
 	const updateAt = dayjs().toISOString()
 
 	await setDoc(document, { status, updateAt }, { merge: true })
-}
-
-// Constants
-
-const formatDate = (date: dayjs.Dayjs | string) => {
-	return dayjs(date).toISOString()
 }
 
 export const ProductionRecordsService = {
