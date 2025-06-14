@@ -82,10 +82,6 @@ const EmployeeForm = () => {
 
 	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
-		if (user && user.role === 'employee') {
-			navigate(AppRoutes.LOGIN)
-			return
-		}
 		if (user && params.employeeUuid) {
 			setHeaderTitle('Edit Employee')
 			initialData()

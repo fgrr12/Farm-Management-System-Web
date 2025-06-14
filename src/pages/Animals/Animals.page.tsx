@@ -98,9 +98,8 @@ const Animals = () => {
 
 	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
-		if (user && farm) {
-			getAnimals()
-		}
+		if (!user || !farm) return
+		getAnimals()
 	}, [user, farm])
 
 	useGSAP(() => {

@@ -60,10 +60,6 @@ const Employees = () => {
 	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
 		if (!user) return
-		if (user && user.role === 'employee') {
-			navigate(AppRoutes.LOGIN)
-			return
-		}
 		initialData()
 	}, [user])
 
