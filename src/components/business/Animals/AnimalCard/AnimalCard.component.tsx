@@ -8,7 +8,7 @@ import { ActionButton } from '@/components/ui/ActionButton'
 
 import type { CardProps } from './AnimalCard.types'
 
-export const AnimalCard: FC<CardProps> = ({ uuid, animalId, breed, gender }) => {
+export const AnimalCard: FC<CardProps> = ({ uuid, animalId, breedName, gender }) => {
 	const navigate = useNavigate()
 	const divRef = useRef<HTMLDivElement>(null)
 
@@ -56,7 +56,7 @@ export const AnimalCard: FC<CardProps> = ({ uuid, animalId, breed, gender }) => 
 				<span className="text-xl font-bold">#{animalId}</span>
 			</div>
 			<div className="flex items-center justify-center">
-				<span className="font-medium text-gray-500 text-lg pr-1">{breed.name}</span>
+				<span className="font-medium text-gray-500 text-lg pr-1">{breedName}</span>
 				{gender.toLowerCase() === 'male' ? (
 					<i className="i-tdesign-gender-male bg-blue-500! w-5! h-5!" />
 				) : (

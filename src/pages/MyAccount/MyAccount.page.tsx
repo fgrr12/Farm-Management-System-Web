@@ -7,6 +7,7 @@ import { useUserStore } from '@/store/useUserStore'
 
 import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 
+import { BillingCardsService } from '@/services/billingCards'
 import { FarmsService } from '@/services/farms'
 import { UserService } from '@/services/user'
 
@@ -17,7 +18,12 @@ import { TextField } from '@/components/ui/TextField'
 
 const MyAccount = () => {
 	const { user: currentUser, setUser: updateUser } = useUserStore()
-	const { farm: currentFarm, setFarm: updateFarm } = useFarmStore()
+	const {
+		billingCard: currentBillingCard,
+		farm: currentFarm,
+		setFarm: updateFarm,
+		setBillingCard: updateBillingCard,
+	} = useFarmStore()
 	const { setHeaderTitle, setLoading, setToastData } = useAppStore()
 	const { t } = useTranslation(['myAccount'])
 
@@ -51,33 +57,32 @@ const MyAccount = () => {
 	}
 
 	const handleChange =
-		(key: 'farm' | 'user' | 'billingCard') => (event: ChangeEvent<HTMLInputElement>) => {
-			const { name, value } = event.target
+		<T extends 'farm' | 'user' | 'billingCard'>(key: T) =>
+		(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+			const { name, value, type } = event.target
+			const newValue = type === 'checkbox' ? (event.target as HTMLInputElement).checked : value
 
 			if (key === 'user') {
-				setUser((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
+				setUser((prev) => ({
+					...prev,
+					[name]: type === 'text' ? capitalizeFirstLetter(newValue as string) : newValue,
+				}))
 			} else if (key === 'farm') {
-				setFarm((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
+				setFarm((prev) => ({
+					...prev,
+					[name]: type === 'text' ? capitalizeFirstLetter(newValue as string) : newValue,
+				}))
 			} else {
-				setBillingCard((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
-			}
-		}
-
-	const handleSelectChange =
-		(key: 'farm' | 'user' | 'billingCard') => (event: ChangeEvent<HTMLSelectElement>) => {
-			const { name, value } = event.target
-
-			if (key === 'user') {
-				setUser((prev) => ({ ...prev, [name]: value }))
-			} else if (key === 'farm') {
-				setFarm((prev) => ({ ...prev, [name]: value }))
-			} else {
-				setBillingCard((prev) => ({ ...prev, [name]: value }))
+				setBillingCard((prev) => ({
+					...prev,
+					[name]: type === 'text' ? capitalizeFirstLetter(newValue as string) : newValue,
+				}))
 			}
 		}
 
 	const handleSubmitUser = async (e: FormEvent) => {
 		e.preventDefault()
+		setLoading(true)
 		try {
 			await UserService.updateUser(user)
 			updateUser(user)
@@ -100,7 +105,6 @@ const MyAccount = () => {
 		e.preventDefault()
 		try {
 			setLoading(true)
-			farm.billingCard = billingCard
 			await FarmsService.updateFarm({ ...farm })
 			updateFarm({ ...farm })
 			setEdit((prev) => ({ ...prev, farm: false }))
@@ -122,14 +126,26 @@ const MyAccount = () => {
 		e.preventDefault()
 		try {
 			setLoading(true)
-			farm.billingCard = billingCard
-			await FarmsService.updateFarm({ ...farm })
-			updateFarm({ ...farm })
+			const uuid = billingCard.uuid ?? crypto.randomUUID()
+			if (billingCard.uuid) {
+				await BillingCardsService.updateBillingCard(billingCard)
+				updateFarm({ ...farm })
+				setToastData({
+					message: t('myBillingCard.toast.edited'),
+					type: 'success',
+				})
+			} else {
+				farm.billingCardUuid = uuid
+				billingCard.uuid = uuid
+				await BillingCardsService.setBillingCard(billingCard)
+				await FarmsService.updateFarm({ ...farm })
+				setToastData({
+					message: t('myBillingCard.toast.added'),
+					type: 'success',
+				})
+			}
+			updateBillingCard(billingCard)
 			setEdit((prev) => ({ ...prev, billingCard: false }))
-			setToastData({
-				message: t('myBillingCard.toast.edited'),
-				type: 'success',
-			})
 		} catch (_error) {
 			setToastData({
 				message: t('myBillingCard.toast.errorEditing'),
@@ -146,7 +162,7 @@ const MyAccount = () => {
 
 		setUser(currentUser!)
 		setFarm({ ...currentFarm! })
-		setBillingCard({ ...currentFarm!.billingCard! })
+		setBillingCard({ ...currentBillingCard! })
 	}, [currentUser, currentFarm])
 
 	useEffect(() => {
@@ -215,7 +231,7 @@ const MyAccount = () => {
 								defaultLabel={t('myProfile.selectLanguage')}
 								value={user.language}
 								items={languages}
-								onChange={handleSelectChange('user')}
+								onChange={handleChange('user')}
 								disabled={!edit.user}
 								required
 							/>
@@ -270,7 +286,7 @@ const MyAccount = () => {
 									defaultLabel={t('myFarm.liquidUnit')}
 									value={farm.liquidUnit}
 									items={liquidUnit}
-									onChange={handleSelectChange('farm')}
+									onChange={handleChange('farm')}
 									disabled={!edit.farm}
 									required
 								/>
@@ -280,7 +296,7 @@ const MyAccount = () => {
 									defaultLabel={t('myFarm.weightUnit')}
 									value={farm.weightUnit}
 									items={weightUnit}
-									onChange={handleSelectChange('farm')}
+									onChange={handleChange('farm')}
 									disabled={!edit.farm}
 									required
 								/>
@@ -290,7 +306,7 @@ const MyAccount = () => {
 									defaultLabel={t('myFarm.temperatureUnit')}
 									value={farm.temperatureUnit}
 									items={temperatureUnit}
-									onChange={handleSelectChange('farm')}
+									onChange={handleChange('farm')}
 									disabled={!edit.farm}
 									required
 								/>
@@ -313,12 +329,27 @@ const MyAccount = () => {
 								onClick={handleEdit('billingCard')}
 							/>
 						</h2>
-						<p className="text-lg">{t('myBillingCard.subtitle')}</p>
+
 						<form
 							className="flex flex-col gap-4 w-full"
 							onSubmit={handleSubmitBillingCard}
 							autoComplete="off"
 						>
+							<div className="flex flex-row gap-4 w-full">
+								<p className="text-lg">{t('myBillingCard.subtitle')}</p>
+								<label className="label">
+									<input
+										name="status"
+										type="checkbox"
+										className="checkbox border-error bg-error checked:border-info checked:bg-info"
+										defaultChecked={billingCard.status}
+										onChange={handleChange('billingCard')}
+										disabled={!edit.billingCard}
+									/>
+									{t(billingCard.status ? 'myBillingCard.active' : 'myBillingCard.inactive')}
+								</label>
+							</div>
+
 							<div className="grid grid-cols-3 items-center gap-4 w-full">
 								<TextField
 									name="id"
@@ -393,21 +424,23 @@ const INITIAL_USER_DATA: User = {
 }
 
 const INITIAL_BILLING_CARD: BillingCard = {
+	uuid: '',
+	id: '',
 	name: '',
 	phone: '',
-	id: '',
 	email: '',
 	address: '',
+	status: false,
 }
 
 const INITIAL_FARM_DATA: Farm = {
 	uuid: '',
+	billingCardUuid: '',
 	name: '',
 	address: '',
 	liquidUnit: 'L',
 	weightUnit: 'Kg',
 	temperatureUnit: '°C',
-	billingCard: INITIAL_BILLING_CARD,
 	status: true,
 }
 

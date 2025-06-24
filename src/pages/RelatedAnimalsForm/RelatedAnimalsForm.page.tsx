@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
 import { useAppStore } from '@/store/useAppStore'
+import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
 import { AnimalsService } from '@/services/animals'
@@ -22,6 +23,7 @@ import type {
 
 const RelatedAnimalsForm = () => {
 	const { user } = useUserStore()
+	const { breeds } = useFarmStore()
 	const params = useParams()
 	const { t } = useTranslation(['relatedAnimals'])
 
@@ -50,7 +52,7 @@ const RelatedAnimalsForm = () => {
 	const buildRelation = (info: RelatedAnimalInformation, isChild: boolean): RelatedAnimal => ({
 		animalUuid: info.uuid,
 		animalId: info.animalId,
-		breed: info.breed,
+		breed: breeds.find((breed) => breed.name === info.breed)?.uuid!,
 		relation:
 			info.gender.toLowerCase() === GenderEnum.FEMALE
 				? isChild
@@ -79,6 +81,18 @@ const RelatedAnimalsForm = () => {
 		animalsLists.animals.find((a) => a.uuid === uuid) ||
 		animalsLists.parents.find((a) => a.uuid === uuid) ||
 		animalsLists.children.find((a) => a.uuid === uuid)
+
+	const setCurrentAnimalFromSelected = (selectedAnimal: any) => {
+		const breedObj = breeds.find((breed) => breed.uuid === selectedAnimal.breedUuid)
+		setCurrentAnimal({
+			uuid: selectedAnimal.uuid,
+			animalId: selectedAnimal.animalId,
+			breed: breedObj ? breedObj.name : '',
+			gender: selectedAnimal.gender,
+			picture: selectedAnimal.picture,
+			location: -1,
+		})
+	}
 
 	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
@@ -140,20 +154,12 @@ const RelatedAnimalsForm = () => {
 				setLoading(true)
 				const animalUuid = params.animalUuid as string
 				const selectedAnimal = await AnimalsService.getAnimal(animalUuid)
-
-				setCurrentAnimal({
-					uuid: selectedAnimal.uuid,
-					animalId: selectedAnimal.animalId,
-					breed: selectedAnimal.breed,
-					gender: selectedAnimal.gender,
-					picture: selectedAnimal.picture,
-					location: -1,
-				})
+				setCurrentAnimalFromSelected(selectedAnimal)
 				unsubscribe = RelatedAnimalsService.getRealTimeRelatedAnimals(
 					animalUuid,
 					async (data) => {
 						const animals = await AnimalsService.getAnimalsBySpecies(
-							selectedAnimal.species.uuid,
+							selectedAnimal.speciesUuid,
 							user!.farmUuid
 						)
 						const animalsData = animals
@@ -169,7 +175,7 @@ const RelatedAnimalsForm = () => {
 							.map((animal) => ({
 								uuid: animal.uuid,
 								animalId: animal.animalId,
-								breed: animal.breed,
+								breed: breeds.find((breed) => breed.uuid === animal.breedUuid)!.name,
 								gender: animal.gender,
 								picture: animal.picture,
 								location: 0,
@@ -177,31 +183,37 @@ const RelatedAnimalsForm = () => {
 
 						const parents = data
 							.filter((related) => animalUuid === related.child.animalUuid)
-							.map((related) => ({
-								uuid: related.parent.animalUuid,
-								animalId: related.parent.animalId,
-								breed: related.parent.breed,
-								gender:
-									related.parent.relation === Relationship.MOTHER
-										? (GenderEnum.FEMALE as unknown as Gender)
-										: (GenderEnum.MALE as unknown as Gender),
-								picture: '',
-								location: 1,
-							}))
+							.map((related) => {
+								const breed = breeds.find((breed) => breed.uuid === related.parent.breed)
+								return {
+									uuid: related.parent.animalUuid,
+									animalId: related.parent.animalId,
+									breed: breed?.name ?? related.parent.breed,
+									gender:
+										related.parent.relation === Relationship.MOTHER
+											? (GenderEnum.FEMALE as unknown as Gender)
+											: (GenderEnum.MALE as unknown as Gender),
+									picture: '',
+									location: 1,
+								}
+							})
 
 						const children = data
 							.filter((related) => animalUuid === related.parent.animalUuid)
-							.map((related) => ({
-								uuid: related.child.animalUuid,
-								animalId: related.child.animalId,
-								breed: related.child.breed,
-								gender:
-									related.child.relation === Relationship.DAUGHTER
-										? (GenderEnum.FEMALE as unknown as Gender)
-										: (GenderEnum.MALE as unknown as Gender),
-								picture: '',
-								location: 2,
-							}))
+							.map((related) => {
+								const breed = breeds.find((breed) => breed.uuid === related.child.breed)
+								return {
+									uuid: related.child.animalUuid,
+									animalId: related.child.animalId,
+									breed: breed?.name ?? related.child.breed,
+									gender:
+										related.child.relation === Relationship.DAUGHTER
+											? (GenderEnum.FEMALE as unknown as Gender)
+											: (GenderEnum.MALE as unknown as Gender),
+									picture: '',
+									location: 2,
+								}
+							})
 
 						setRelatedAnimals(data)
 						setAnimalsLists({

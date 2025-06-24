@@ -1,0 +1,9 @@
+{
+	"title": "Billing Card",
+	"subtitle": "DATA FOR ELECTRONIC INVOICE",
+	"name": "Name:",
+	"phone": "Phone:",
+	"id": "ID:",
+	"email": "Email:",
+	"address": "Address:"
+}

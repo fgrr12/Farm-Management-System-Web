@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
+import { type ChangeEvent, type FormEvent, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -11,6 +11,7 @@ import { useUserStore } from '@/store/useUserStore'
 
 import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 import { fileToBase64 } from '@/utils/fileToBase64'
+import { formatDate } from '@/utils/formatDate'
 
 import { AnimalsService } from '@/services/animals'
 
@@ -20,17 +21,9 @@ import { Select } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
-const AnimalForm = () => {
-	const { user } = useUserStore()
-	const { farm } = useFarmStore()
-	const navigate = useNavigate()
-	const params = useParams()
-	const { t } = useTranslation(['animalForm'])
-
-	const { setLoading, setHeaderTitle, setToastData } = useAppStore()
-	const [animalForm, setAnimalForm] = useState<Animal>(INITIAL_ANIMAL_FORM)
-	const [species, setSpecies] = useState(INITIAL_SPECIES)
-	const [breeds, setBreeds] = useState<Breed[]>([])
+// Custom hook for form state management
+const useAnimalForm = (initialForm: Animal) => {
+	const [animalForm, setAnimalForm] = useState<Animal>(initialForm)
 	const [pictureUrl, setPictureUrl] = useState<string>('')
 
 	const handleTextChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -40,28 +33,7 @@ const AnimalForm = () => {
 
 	const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
 		const { name, value } = event.target
-		if (name === 'species') {
-			if (value === '') {
-				setAnimalForm((prev) => ({ ...prev, species: { uuid: '', name: '' } }))
-				setBreeds([])
-				return
-			}
-			const species = farm!.species!.find((sp) => sp.uuid === value)
-			setAnimalForm((prev) => ({ ...prev, species: { uuid: value, name: species!.name! } }))
-			setBreeds(species!.breeds)
-		} else if (name === 'breed') {
-			if (value === '') {
-				setAnimalForm((prev) => ({ ...prev, breed: { uuid: '', name: '', gestationPeriod: 0 } }))
-				return
-			}
-			const breed = breeds.find((breed) => breed.uuid === value)
-			setAnimalForm((prev) => ({
-				...prev,
-				breed: { uuid: value, name: breed!.name!, gestationPeriod: breed!.gestationPeriod },
-			}))
-		} else if (name === 'gender') {
-			setAnimalForm((prev) => ({ ...prev, gender: value as Gender }))
-		}
+		setAnimalForm((prev) => ({ ...prev, [name]: value }))
 	}
 
 	const handleDateChange =
@@ -77,14 +49,45 @@ const AnimalForm = () => {
 		setAnimalForm((prev) => ({ ...prev, picture: picture.data }))
 	}
 
+	return {
+		animalForm,
+		pictureUrl,
+		setAnimalForm,
+		handleTextChange,
+		handleSelectChange,
+		handleDateChange,
+		handleFile,
+	}
+}
+
+const AnimalForm = () => {
+	const { user } = useUserStore()
+	const { farm, species, breeds } = useFarmStore()
+	const navigate = useNavigate()
+	const params = useParams()
+	const { t } = useTranslation(['animalForm'])
+
+	const { setLoading, setHeaderTitle, setToastData } = useAppStore()
+	const {
+		animalForm,
+		pictureUrl,
+		setAnimalForm,
+		handleTextChange,
+		handleSelectChange,
+		handleDateChange,
+		handleFile,
+	} = useAnimalForm(INITIAL_ANIMAL_FORM)
+
+	const filteredBreeds = useMemo(() => {
+		return breeds.filter((breed) => breed.speciesUuid === animalForm.speciesUuid)
+	}, [breeds, animalForm.speciesUuid])
+
 	const getAnimal = async () => {
 		try {
 			setLoading(true)
 			const animalUuid = params.animalUuid as string
 			const dbAnimal = await AnimalsService.getAnimal(animalUuid)
-			const species = farm!.species!.find((sp) => sp.uuid === dbAnimal.species.uuid)
 			setAnimalForm(dbAnimal)
-			setBreeds(species!.breeds)
 		} catch (_error) {
 			setToastData({
 				message: t('toast.errorGettingAnimal'),
@@ -147,7 +150,6 @@ const AnimalForm = () => {
 	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
 		if (!user) return
-		setSpecies(farm!.species!)
 		if (params.animalUuid) getAnimal()
 	}, [user])
 
@@ -182,26 +184,26 @@ const AnimalForm = () => {
 				/>
 
 				<Select
-					name="species"
+					name="speciesUuid"
 					legend={t('selectSpecies')}
 					defaultLabel={t('selectSpecies')}
 					optionValue="uuid"
 					optionLabel="name"
-					value={animalForm.species.uuid}
+					value={animalForm.speciesUuid}
 					items={species}
 					onChange={handleSelectChange}
 					required
 				/>
 				<Select
-					name="breed"
+					name="breedUuid"
 					legend={t('selectBreed')}
 					defaultLabel={t('selectBreed')}
 					optionValue="uuid"
 					optionLabel="name"
-					value={animalForm.breed.uuid}
-					items={breeds}
+					value={animalForm.breedUuid}
+					items={filteredBreeds}
 					onChange={handleSelectChange}
-					disabled={!breeds.length}
+					disabled={!filteredBreeds.length}
 					required
 				/>
 				<Select
@@ -284,46 +286,20 @@ const AnimalForm = () => {
 
 const INITIAL_ANIMAL_FORM: Animal = {
 	uuid: '',
+	speciesUuid: '',
+	breedUuid: '',
+	farmUuid: '',
 	animalId: '',
-	species: {
-		uuid: '',
-		name: '',
-	},
-	breed: {
-		uuid: '',
-		name: '',
-		gestationPeriod: 0,
-	},
 	gender: '',
 	color: '',
 	weight: 0,
 	picture: '',
 	status: true,
-	farmUuid: '',
 	origin: '',
 	birthDate: dayjs().toISOString(),
 	purchaseDate: null,
 	soldDate: null,
 	deathDate: null,
-}
-
-const INITIAL_SPECIES: Species[] = [
-	{
-		uuid: crypto.randomUUID(),
-		name: '',
-		breeds: [
-			{
-				uuid: crypto.randomUUID(),
-				name: '',
-				gestationPeriod: 0,
-			},
-		],
-		status: true,
-	},
-]
-
-const formatDate = (date: dayjs.Dayjs | string) => {
-	return dayjs(date).toISOString()
 }
 
 export default AnimalForm

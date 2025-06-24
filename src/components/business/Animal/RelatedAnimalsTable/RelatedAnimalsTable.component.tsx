@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { AppRoutes } from '@/config/constants/routes'
 
 import { useAppStore } from '@/store/useAppStore'
+import { useFarmStore } from '@/store/useFarmStore'
 
 import { RelatedAnimalsService } from '@/services/relatedAnimals'
 
@@ -19,9 +20,12 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 	removeRelation,
 }) => {
 	const { defaultModalData, setModalData, setLoading, setToastData } = useAppStore()
+	const { breeds } = useFarmStore()
 	const params = useParams()
 	const navigate = useNavigate()
 	const { t } = useTranslation(['animalRelations'])
+
+	const breed = (breedUuid: string) => breeds.find((breed) => breed.uuid === breedUuid)?.name
 
 	const handleAddRelatedAnimals = () => {
 		const animalUuid = params.animalUuid as string
@@ -94,7 +98,9 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 						{animals?.map((animal) => (
 							<tr key={animal.uuid}>
 								<td>{animal[type].animalId}</td>
-								<td>{animal[type].breed.name}</td>
+								<td>
+									{breed(animal[type].breed) ? breed(animal[type].breed) : animal[type].breed}
+								</td>
 								<td>{t(animal[type].relation.toLowerCase())}</td>
 								{haveUser && (
 									<td>

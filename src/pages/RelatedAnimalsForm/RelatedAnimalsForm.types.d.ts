@@ -5,7 +5,7 @@ export type DragSingularRelation = 'parent' | 'child'
 export interface RelatedAnimalInformation {
 	uuid: string
 	animalId: string
-	breed: Breed
+	breed: string
 	gender: Gender
 	location?: number
 	picture?: string
@@ -28,6 +28,6 @@ export interface RelatedAnimalsList {
 interface SelectedAnimal {
 	animalUuid: string
 	animalId: string
-	breed: Breed
+	breed: string
 	relation: string
 }

@@ -1,6 +1,6 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import { type ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
+import { type ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -17,28 +17,40 @@ import { Button } from '@/components/ui/Button'
 import { Search } from '@/components/ui/Search'
 import { Select } from '@/components/ui/Select'
 
-import type { AnimalsFilters } from './Animals.types'
+import type { AnimalCardProps, AnimalsFilters } from './Animals.types'
 
 const Animals = () => {
 	const { user } = useUserStore()
-	const { farm } = useFarmStore()
+	const { farm, species, breeds } = useFarmStore()
 	const navigation = useNavigate()
 	const { t } = useTranslation(['animals'])
 	const { setLoading, setHeaderTitle, setToastData } = useAppStore()
 	const containerRef = useRef<HTMLDivElement>(null)
 
-	const [animals, setAnimals] = useState<Animal[]>([])
-	const [species, setSpecies] = useState<Species[]>([])
+	const [animals, setAnimals] = useState<AnimalCardProps[]>([])
 	const [filters, setFilters] = useState<AnimalsFilters>(INITIAL_FILTERS)
+
+	const speciesOptions = useMemo(
+		() => species.map((specie) => ({ value: specie.uuid, name: specie.name })),
+		[species]
+	)
+
+	const handleSearchChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+		const { value } = event.target as HTMLInputElement
+		setFilters((prev) => ({ ...prev, search: value }))
+	}, [])
+
+	const handleSelectChange = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
+		const { name, value } = event.target
+		setFilters((prev) => ({ ...prev, [name]: value }))
+	}, [])
 
 	const filteredAnimals = useMemo(() => {
 		if (!animals.length) return []
-
 		const { speciesUuid, search } = filters
 		const normalizedSearch = search?.toLowerCase()
-
 		return animals.filter((animal) => {
-			const matchesSpecies = speciesUuid ? animal.species.uuid === speciesUuid : true
+			const matchesSpecies = speciesUuid ? animal.speciesUuid === speciesUuid : true
 			const matchesSearch = normalizedSearch
 				? animal.animalId.toLowerCase().includes(normalizedSearch)
 				: true
@@ -50,22 +62,27 @@ const Animals = () => {
 		navigation(AppRoutes.ADD_ANIMAL)
 	}
 
-	const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
-		const { value } = event.target as HTMLInputElement
-		setFilters((prev) => ({ ...prev, search: value }))
-	}
-
-	const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
-		const { name, value } = event.target
-		setFilters((prev) => ({ ...prev, [name]: value }))
-	}
-
 	const getAnimals = async () => {
+		setLoading(true)
+
 		try {
-			setLoading(true)
 			const dbAnimals = await AnimalsService.getAnimals(farm!.uuid)
-			setAnimals(dbAnimals)
-		} catch (_error) {
+
+			const enrichedAnimals: AnimalCardProps[] = dbAnimals.map((animal) => {
+				const speciesName = species.find((sp) => sp.uuid === animal.speciesUuid)!.name
+				const breedName = breeds.find((br) => br.uuid === animal.breedUuid)!.name
+
+				return {
+					...animal,
+					speciesName,
+					breedName,
+				}
+			})
+
+			setAnimals(enrichedAnimals)
+		} catch (error) {
+			console.error('Error loading animals:', error)
+
 			setToastData({
 				message: t('toast.errorGettingAnimals'),
 				type: 'error',
@@ -81,10 +98,8 @@ const Animals = () => {
 
 	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
-		if (user && farm) {
-			getAnimals()
-			setSpecies(farm.species!)
-		}
+		if (!user || !farm) return
+		getAnimals()
 	}, [user, farm])
 
 	useGSAP(() => {
@@ -112,7 +127,7 @@ const Animals = () => {
 					legend={t('filterBySpecies')}
 					defaultLabel={t('filterBySpecies')}
 					value={filters.speciesUuid}
-					items={[...species.map((specie) => ({ value: specie.uuid, name: specie.name }))]}
+					items={speciesOptions}
 					onChange={handleSelectChange}
 				/>
 				<Button
@@ -132,7 +147,7 @@ const Animals = () => {
 						key={animal.uuid}
 						uuid={animal.uuid}
 						animalId={animal.animalId}
-						breed={animal.breed}
+						breedName={animal.breedName}
 						gender={animal.gender}
 					/>
 				))}

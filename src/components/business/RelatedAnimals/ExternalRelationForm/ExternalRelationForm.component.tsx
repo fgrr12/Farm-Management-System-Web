@@ -27,18 +27,7 @@ export const ExternalRelationForm: FC<ExternalRelationFormProps> = ({ currentAni
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
 		const { name, value } = e.target
-		if (name === 'breed') {
-			setRelation({
-				...relation,
-				breed: {
-					name: value,
-					uuid: '-1',
-					gestationPeriod: 0,
-				},
-			})
-		} else {
-			setRelation({ ...relation, [name]: capitalizeFirstLetter(value) })
-		}
+		setRelation({ ...relation, [name]: capitalizeFirstLetter(value) })
 	}
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
@@ -128,7 +117,7 @@ export const ExternalRelationForm: FC<ExternalRelationFormProps> = ({ currentAni
 					<TextField
 						label={t('breed')}
 						name="breed"
-						value={relation.breed.name}
+						value={relation.breed}
 						onChange={handleChange}
 						required
 					/>
@@ -161,11 +150,7 @@ export const ExternalRelationForm: FC<ExternalRelationFormProps> = ({ currentAni
 
 const INITIAL_RELATION: ExternalRelation = {
 	animalId: '',
-	breed: {
-		name: '',
-		uuid: '-1',
-		gestationPeriod: 0,
-	},
+	breed: '',
 	gender: '',
 	relation: 'Child',
 }

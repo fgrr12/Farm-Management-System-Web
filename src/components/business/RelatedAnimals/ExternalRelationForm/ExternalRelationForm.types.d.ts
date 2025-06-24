@@ -6,7 +6,7 @@ export interface ExternalRelationFormProps {
 
 export interface ExternalRelation {
 	animalId: string
-	breed: Breed
+	breed: string
 	gender: Gender
 	relation: 'Parent' | 'Child'
 }

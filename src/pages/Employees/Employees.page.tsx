@@ -1,4 +1,4 @@
-import { type ChangeEvent, useEffect, useState } from 'react'
+import { type ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -21,6 +21,16 @@ const Employees = () => {
 	const [employees, setEmployees] = useState<User[]>([])
 	const [search, setSearch] = useState('')
 
+	const filteredEmployees = useMemo(() => {
+		return employees.filter(
+			(employee) =>
+				employee.name.toLowerCase().includes(search.toLowerCase()) ||
+				employee.lastName.toLowerCase().includes(search.toLowerCase()) ||
+				employee.email.toLowerCase().includes(search.toLowerCase()) ||
+				employee.phone.toLowerCase().includes(search.toLowerCase())
+		)
+	}, [employees, search])
+
 	const handleAddEmployee = () => {
 		navigate(AppRoutes.ADD_EMPLOYEE)
 	}
@@ -29,15 +39,18 @@ const Employees = () => {
 		setSearch(event.target.value)
 	}
 
-	const handleRemoveEmployee = (employeeUuid: string) => async () => {
-		setEmployees(employees.filter((employee) => employee.uuid !== employeeUuid))
-	}
+	const handleRemoveEmployee = useCallback(
+		(employeeUuid: string) => async () => {
+			setEmployees(employees.filter((employee) => employee.uuid !== employeeUuid))
+		},
+		[employees]
+	)
 
 	const initialData = async () => {
 		try {
 			setLoading(true)
-			const data = await EmployeesService.getEmployees(null, user!.farmUuid!)
-			setEmployees(data.filter((employee) => employee.uuid !== user!.uuid))
+			const data = await EmployeesService.getEmployees(user!.farmUuid)
+			setEmployees(data)
 		} catch (_error) {
 			setToastData({
 				message: t('toast.errorGettingEmployees'),
@@ -48,29 +61,11 @@ const Employees = () => {
 		}
 	}
 
-	const getEmployees = async () => {
-		const data = await EmployeesService.getEmployees(search, user!.farmUuid!)
-		setEmployees(data.filter((employee) => employee.uuid !== user!.uuid))
-	}
-
 	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
 		if (!user) return
-		if (user && user.role === 'employee') {
-			navigate(AppRoutes.LOGIN)
-			return
-		}
 		initialData()
 	}, [user])
-
-	// biome-ignore lint:: UseEffect is only called once
-	useEffect(() => {
-		const debounceId = setTimeout(() => {
-			if (!user) return
-			getEmployees()
-		}, 500)
-		return () => clearTimeout(debounceId)
-	}, [search])
 
 	useEffect(() => {
 		setHeaderTitle(t('title'))
@@ -87,7 +82,7 @@ const Employees = () => {
 					{t('addEmployee')}
 				</button>
 			</div>
-			<EmployeesTable employees={employees} removeEmployee={handleRemoveEmployee} />
+			<EmployeesTable employees={filteredEmployees} removeEmployee={handleRemoveEmployee} />
 		</div>
 	)
 }
