@@ -11,6 +11,7 @@
     "subtitle": "Manage your billing card",
     "title": "My Billing Card",
     "toast": {
+      "added": "Billing card added successfully",
       "edited": "Billing card updated successfully",
       "errorEditing": "There was an error updating your billing card"
     }

@@ -26,7 +26,8 @@
   "toast": {
     "addHealthRecord": "Registro de salud añadido exitosamente.",
     "editHealthRecord": "Registro de salud editado exitosamente.",
-    "errorAddingHealthRecord": "Se ha producido un error al añadir el registro de salud."
+    "errorAddingHealthRecord": "Se ha producido un error al añadir el registro de salud.",
+    "errorGettingHealthRecord": "Se ha producido un error al obtener el registro de salud."
   },
   "type": "Tipo",
   "weight": "Peso"

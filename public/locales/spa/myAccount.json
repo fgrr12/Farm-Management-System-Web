@@ -11,6 +11,7 @@
     "subtitle": "Gestiona tu tarjeta de facturación",
     "title": "Mi Tarjeta de Facturación",
     "toast": {
+      "added": "Tarjeta de facturación añadida exitosamente",
       "edited": "Tarjeta de facturación actualizada exitosamente",
       "errorEditing": "Ocurrió un error al actualizar tu tarjeta de facturación"
     }

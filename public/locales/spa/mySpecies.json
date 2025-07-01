@@ -15,6 +15,7 @@
       "title": "¿Quieres eliminar esta especie?"
     }
   },
+  "removeButton": "Eliminar",
   "saveButton": "Guardar",
   "search": "Buscar",
   "title": "Mis especies",
@@ -22,7 +23,10 @@
     "deletedBreed": "Raza eliminada exitosamente",
     "deletedSpecies": "Especie eliminada exitosamente",
     "edited": "Especie editada exitosamente",
+    "errorDeletingBreed": "Se ha producido un error al eliminar la raza",
+    "errorDeletingSpecies": "Se ha producido un error al eliminar la especie",
     "errorEditing": "Se ha producido un error al editar la especie",
+    "errorUpdatingSpecies": "Se ha producido un error al actualizar las especies",
     "notDeletedBreed": "La raza no se ha eliminado",
     "notDeletedSpecies": "La especie no se ha eliminado"
   }

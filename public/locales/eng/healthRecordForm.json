@@ -26,7 +26,8 @@
   "toast": {
     "addHealthRecord": "Health record added successfully.",
     "editHealthRecord": "Health record edited successfully.",
-    "errorAddingHealthRecord": "There was an error adding the health record."
+    "errorAddingHealthRecord": "There was an error adding the health record.",
+    "errorGettingHealthRecord": "There was an error getting the health record."
   },
   "type": "Type",
   "weight": "Weight"
