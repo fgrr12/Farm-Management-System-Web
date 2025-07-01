@@ -1,68 +1,68 @@
 {
-	"title": "Mi Cuenta",
-	"myProfile": {
-		"title": "Mi Perfil",
-		"subtitle": "Gestiona tu cuenta de usuario",
-		"name": "Nombre",
-		"lastName": "Apellido",
-		"email": "Email",
-		"phone": "Teléfono",
-		"language": "Idioma",
-		"selectLanguage": "Selecciona tu idioma",
-		"languageList": {
-			"spa": "Español",
-			"eng": "Inglés"
-		},
-		"edit": "Actualizar Mi Perfil",
-		"toast": {
-			"edited": "Perfil actualizado exitosamente",
-			"errorEditing": "Ocurrió un error al actualizar tu perfil"
-		}
-	},
-	"myFarm": {
-		"title": "Mi Granja",
-		"subtitle": "Gestiona tu granja",
-		"name": "Nombre",
-		"address": "Dirección",
-		"species": "Especies",
-		"liquidUnit": "Medida de Líquido",
-		"selectLiquidUnit": "Selecciona la medida de líquido",
-		"liquidUnitList": {
-			"L": "Litros",
-			"Gal": "Galones"
-		},
-		"weightUnit": "Medida de Peso",
-		"selectWeightUnit": "Selecciona la medida de peso",
-		"weightUnitList": {
-			"Kg": "Kilogramos",
-			"Lb": "Libras"
-		},
-		"temperatureUnit": "Medida de Temperatura",
-		"selectTemperatureUnit": "Selecciona la medida de temperatura",
-		"temperatureUnitList": {
-			"°C": "Celsius",
-			"°F": "Fahrenheit"
-		},
-		"edit": "Actualizar Mi Granja",
-		"toast": {
-			"edited": "Granja actualizada exitosamente",
-			"errorEditing": "Ocurrió un error al actualizar tu granja"
-		}
-	},
-	"myBillingCard": {
-		"title": "Mi Tarjeta de Facturación",
-		"subtitle": "Gestiona tu tarjeta de facturación",
-		"id": "ID",
-		"name": "Nombre",
-		"email": "Email",
-		"phone": "Teléfono",
-		"address": "Dirección",
-		"edit": "Actualizar Mi Tarjeta de Facturación",
-		"active": "Tu tarjeta de facturación está activa",
-		"inactive": "Tu tarjeta de facturación está inactiva",
-		"toast": {
-			"edited": "Tarjeta de facturación actualizada exitosamente",
-			"errorEditing": "Ocurrió un error al actualizar tu tarjeta de facturación"
-		}
-	}
+  "myBillingCard": {
+    "active": "Tu tarjeta de facturación está activa",
+    "address": "Dirección",
+    "edit": "Actualizar Mi Tarjeta de Facturación",
+    "email": "Email",
+    "id": "ID",
+    "inactive": "Tu tarjeta de facturación está inactiva",
+    "name": "Nombre",
+    "phone": "Teléfono",
+    "subtitle": "Gestiona tu tarjeta de facturación",
+    "title": "Mi Tarjeta de Facturación",
+    "toast": {
+      "edited": "Tarjeta de facturación actualizada exitosamente",
+      "errorEditing": "Ocurrió un error al actualizar tu tarjeta de facturación"
+    }
+  },
+  "myFarm": {
+    "address": "Dirección",
+    "edit": "Actualizar Mi Granja",
+    "liquidUnit": "Medida de Líquido",
+    "liquidUnitList": {
+      "Gal": "Galones",
+      "L": "Litros"
+    },
+    "name": "Nombre",
+    "selectLiquidUnit": "Selecciona la medida de líquido",
+    "selectTemperatureUnit": "Selecciona la medida de temperatura",
+    "selectWeightUnit": "Selecciona la medida de peso",
+    "species": "Especies",
+    "subtitle": "Gestiona tu granja",
+    "temperatureUnit": "Medida de Temperatura",
+    "temperatureUnitList": {
+      "°C": "Celsius",
+      "°F": "Fahrenheit"
+    },
+    "title": "Mi Granja",
+    "toast": {
+      "edited": "Granja actualizada exitosamente",
+      "errorEditing": "Ocurrió un error al actualizar tu granja"
+    },
+    "weightUnit": "Medida de Peso",
+    "weightUnitList": {
+      "Kg": "Kilogramos",
+      "Lb": "Libras"
+    }
+  },
+  "myProfile": {
+    "edit": "Actualizar Mi Perfil",
+    "email": "Email",
+    "language": "Idioma",
+    "languageList": {
+      "eng": "Inglés",
+      "spa": "Español"
+    },
+    "lastName": "Apellido",
+    "name": "Nombre",
+    "phone": "Teléfono",
+    "selectLanguage": "Selecciona tu idioma",
+    "subtitle": "Gestiona tu cuenta de usuario",
+    "title": "Mi Perfil",
+    "toast": {
+      "edited": "Perfil actualizado exitosamente",
+      "errorEditing": "Ocurrió un error al actualizar tu perfil"
+    }
+  },
+  "title": "Mi Cuenta"
 }

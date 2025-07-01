@@ -1,47 +1,47 @@
 {
-	"title": "Registros de salud",
-	"reason": "Razón",
-	"notes": "Notas",
-	"additionalInfo": "Información adicional",
-	"type": "Tipo",
-	"reviewedBy": "Revisado por",
-	"date": "Fecha",
-	"weight": "Peso",
-	"temperature": "Temperatura",
-	"medication": "Medicación",
-	"dosage": "Dosis",
-	"frequency": "Frecuencia",
-	"duration": "Duración",
-	"actions": "Acciones",
-	"noHealthRecords": "No hay registros de salud",
-	"healthRecordType": {
-		"checkup": "Revision",
-		"vaccination": "Vacunación",
-		"medication": "Medicación",
-		"surgery": "Cirugía",
-		"pregnancy": "Embarazo/Preñes",
-		"deworming": "Desparasitación",
-		"birth": "Nacimiento/Parto",
-		"drying": "Secado"
-	},
-	"filter": {
-		"fromDate": "Filtrar por fecha desde",
-		"toDate": "Filtrar por fecha hasta",
-		"type": "Filtrar por tipo",
-		"createdBy": "Filtrar por colaborador"
-	},
-	"createdBy": {
-		"me": "Yo"
-	},
-	"modal": {
-		"deleteHealthRecord": {
-			"title": "¿Quieres eliminar este registro de salud?",
-			"message": "Esta acción no se puede deshacer."
-		}
-	},
-	"toast": {
-		"deleted": "Registro de salud eliminado con éxito.",
-		"notDeleted": "El registro de salud no se ha eliminado.",
-		"deleteError": "Se ha producido un error al eliminar el registro de salud."
-	}
+  "actions": "Acciones",
+  "additionalInfo": "Información adicional",
+  "createdBy": {
+    "me": "Yo"
+  },
+  "date": "Fecha",
+  "dosage": "Dosis",
+  "duration": "Duración",
+  "filter": {
+    "createdBy": "Filtrar por colaborador",
+    "fromDate": "Filtrar por fecha desde",
+    "toDate": "Filtrar por fecha hasta",
+    "type": "Filtrar por tipo"
+  },
+  "frequency": "Frecuencia",
+  "healthRecordType": {
+    "birth": "Nacimiento/Parto",
+    "checkup": "Revision",
+    "deworming": "Desparasitación",
+    "drying": "Secado",
+    "medication": "Medicación",
+    "pregnancy": "Embarazo/Preñes",
+    "surgery": "Cirugía",
+    "vaccination": "Vacunación"
+  },
+  "medication": "Medicación",
+  "modal": {
+    "deleteHealthRecord": {
+      "message": "Esta acción no se puede deshacer.",
+      "title": "¿Quieres eliminar este registro de salud?"
+    }
+  },
+  "noHealthRecords": "No hay registros de salud",
+  "notes": "Notas",
+  "reason": "Razón",
+  "reviewedBy": "Revisado por",
+  "temperature": "Temperatura",
+  "title": "Registros de salud",
+  "toast": {
+    "deleteError": "Se ha producido un error al eliminar el registro de salud.",
+    "deleted": "Registro de salud eliminado con éxito.",
+    "notDeleted": "El registro de salud no se ha eliminado."
+  },
+  "type": "Tipo",
+  "weight": "Peso"
 }

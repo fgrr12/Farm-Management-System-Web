@@ -1,15 +1,15 @@
 {
-	"addProductionRecord": "Añadir registro de producción",
-	"editProductionRecord": "Editar registro de producción",
-	"quantity": "Cantidad",
-	"date": "Fecha",
-	"notes": "Notas",
-	"addButton": "Añadir",
-	"editButton": "Guardar",
-	"toast": {
-		"added": "Registro de producción añadido exitosamente.",
-		"edited": "Registro de producción editado exitosamente.",
-		"errorAddingProductionRecord": "Se ha producido un error al añadir el registro de producción.",
-		"errorGettingProductionRecord": "Se ha producido un error al obtener el registro de producción."
-	}
+  "addButton": "Añadir",
+  "addProductionRecord": "Añadir registro de producción",
+  "date": "Fecha",
+  "editButton": "Guardar",
+  "editProductionRecord": "Editar registro de producción",
+  "notes": "Notas",
+  "quantity": "Cantidad",
+  "toast": {
+    "added": "Registro de producción añadido exitosamente.",
+    "edited": "Registro de producción editado exitosamente.",
+    "errorAddingProductionRecord": "Se ha producido un error al añadir el registro de producción.",
+    "errorGettingProductionRecord": "Se ha producido un error al obtener el registro de producción."
+  }
 }

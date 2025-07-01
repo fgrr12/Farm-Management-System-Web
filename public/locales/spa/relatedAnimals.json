@@ -1,12 +1,12 @@
 {
-	"title": "Crear relaciones",
-	"animals": "Animales",
-	"parentsTitle": "Padres",
-	"childrenTitle": "Hijos",
-	"selectedAnimal": "Animal seleccionado",
-	"addExternalRelation": "Agregar relación externa",
-	"filterByID": "Filtra por ID",
-	"toast": {
-		"errorGettingAnimals": "Se ha producido un error al obtener los animales."
-	}
+  "addExternalRelation": "Agregar relación externa",
+  "animals": "Animales",
+  "childrenTitle": "Hijos",
+  "filterByID": "Filtra por ID",
+  "parentsTitle": "Padres",
+  "selectedAnimal": "Animal seleccionado",
+  "title": "Crear relaciones",
+  "toast": {
+    "errorGettingAnimals": "Se ha producido un error al obtener los animales."
+  }
 }

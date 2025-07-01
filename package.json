@@ -6,6 +6,7 @@
 	"scripts": {
 		"dev": "vite --mode local-develop",
 		"prod": "vite --mode production",
+		"i18n:extract": "i18next-scanner --config i18next-scanner.config.cjs",
 		"build:production": "tsc && vite build --mode production",
 		"build:develop": "tsc && vite build --mode develop",
 		"preview": "vite preview",
@@ -42,6 +43,7 @@
 		"@types/react-dom": "^19.1.6",
 		"@vitejs/plugin-react-swc": "^3.10.2",
 		"daisyui": "^5.0.43",
+		"i18next-scanner": "^4.6.0",
 		"jsdom": "^26.1.0",
 		"tailwindcss": "^4.1.11",
 		"typescript": "^5.8.3",

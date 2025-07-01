@@ -1,19 +1,19 @@
 {
-	"title": "Add Task",
-	"name": "Name",
-	"description": "Description",
-	"priority": "Priority",
-	"selectPriority": "Select a priority",
-	"priorities": {
-		"default": "Select a priority",
-		"low": "Low",
-		"medium": "Medium",
-		"high": "High"
-	},
-	"species": "Species",
-	"selectSpecies": "Select a species",
-	"addTask": "Add",
-	"toast": {
-		"errorAddingTask": "There was an error adding the task."
-	}
+  "addTask": "Add",
+  "description": "Description",
+  "name": "Name",
+  "priorities": {
+    "default": "Select a priority",
+    "high": "High",
+    "low": "Low",
+    "medium": "Medium"
+  },
+  "priority": "Priority",
+  "selectPriority": "Select a priority",
+  "selectSpecies": "Select a species",
+  "species": "Species",
+  "title": "Add Task",
+  "toast": {
+    "errorAddingTask": "There was an error adding the task."
+  }
 }

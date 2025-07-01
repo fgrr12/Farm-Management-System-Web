@@ -1,24 +1,24 @@
 {
-	"name": "Nombre",
-	"lastName": "Apellido",
-	"email": "Email",
-	"phone": "Teléfono",
-	"role": "Rol",
-	"actions": "Acciones",
-	"noEmployees": "No hay empleados",
-	"roleList": {
-		"employee": "Empleado",
-		"owner": "Propietario"
-	},
-	"modal": {
-		"deleteEmployee": {
-			"title": "¿Quieres eliminar este empleado?",
-			"message": "Esta acción no se puede deshacer."
-		}
-	},
-	"toast": {
-		"deleted": "Empleado eliminado con éxito.",
-		"notDeleted": "El empleado no se ha eliminado.",
-		"deleteError": "Se ha producido un error al eliminar el empleado."
-	}
+  "actions": "Acciones",
+  "email": "Email",
+  "lastName": "Apellido",
+  "modal": {
+    "deleteEmployee": {
+      "message": "Esta acción no se puede deshacer.",
+      "title": "¿Quieres eliminar este empleado?"
+    }
+  },
+  "name": "Nombre",
+  "noEmployees": "No hay empleados",
+  "phone": "Teléfono",
+  "role": "Rol",
+  "roleList": {
+    "employee": "Empleado",
+    "owner": "Propietario"
+  },
+  "toast": {
+    "deleteError": "Se ha producido un error al eliminar el empleado.",
+    "deleted": "Empleado eliminado con éxito.",
+    "notDeleted": "El empleado no se ha eliminado."
+  }
 }
