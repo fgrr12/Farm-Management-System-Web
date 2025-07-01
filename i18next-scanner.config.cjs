@@ -6,11 +6,11 @@ module.exports = {
 		sort: true,
 		lngs: ['eng', 'spa'],
 		ns: [
+			'animal',
 			'animalForm',
 			'animalHealthRecords',
 			'animalProductionRecords',
 			'animalRelations',
-			'animal',
 			'animals',
 			'billingCard',
 			'common',
