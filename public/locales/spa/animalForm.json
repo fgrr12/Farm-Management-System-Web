@@ -1,30 +1,30 @@
 {
-	"addAnimal": "Añadir animal",
-	"editAnimal": "Editar animal",
-	"animalId": "ID del animal",
-	"species": "Especie",
-	"selectSpecies": "Selecciona una especie",
-	"breed": "Raza",
-	"selectBreed": "Selecciona una raza",
-	"gender": "Género",
-	"selectGender": "Selecciona un género",
-	"color": "Color",
-	"weight": "Peso",
-	"birthDate": "Fecha de nacimiento",
-	"purchaseDate": "Fecha de compra",
-	"soldDate": "Fecha de venta",
-	"deathDate": "Fecha de fallecimiento",
-	"origin": "Origen",
-	"addButton": "Añadir",
-	"editButton": "Guardar",
-	"genderList": {
-		"male": "Macho",
-		"female": "Hembra"
-	},
-	"toast": {
-		"added": "Animal añadido con éxito.",
-		"edited": "Animal editado con éxito.",
-		"errorAddingAnimal": "Se ha producido un error al añadir el animal.",
-		"errorGettingAnimal": "Se ha producido un error al obtener el animal."
-	}
+  "addAnimal": "Añadir animal",
+  "addButton": "Añadir",
+  "animalId": "ID del animal",
+  "birthDate": "Fecha de nacimiento",
+  "breed": "Raza",
+  "color": "Color",
+  "deathDate": "Fecha de fallecimiento",
+  "editAnimal": "Editar animal",
+  "editButton": "Guardar",
+  "gender": "Género",
+  "genderList": {
+    "female": "Hembra",
+    "male": "Macho"
+  },
+  "origin": "Origen",
+  "purchaseDate": "Fecha de compra",
+  "selectBreed": "Selecciona una raza",
+  "selectGender": "Selecciona un género",
+  "selectSpecies": "Selecciona una especie",
+  "soldDate": "Fecha de venta",
+  "species": "Especie",
+  "toast": {
+    "added": "Animal añadido con éxito.",
+    "edited": "Animal editado con éxito.",
+    "errorAddingAnimal": "Se ha producido un error al añadir el animal.",
+    "errorGettingAnimal": "Se ha producido un error al obtener el animal."
+  },
+  "weight": "Peso"
 }

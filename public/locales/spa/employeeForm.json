@@ -1,19 +1,19 @@
 {
-	"addEmployee": "Añadir empleado",
-	"editEmployee": "Editar empleado",
-	"name": "Nombre",
-	"lastName": "Apellido",
-	"email": "Email",
-	"phone": "Teléfono",
-	"role": "Rol",
-	"selectRole": "Selecciona un rol",
-	"addButton": "Añadir",
-	"editButton": "Guardar",
-	"employee": "Empleado",
-	"owner": "Propietario",
-	"toast": {
-		"added": "Empleado añadido exitosamente.",
-		"edited": "Empleado editado exitosamente.",
-		"errorAddingEmployee": "Se ha producido un error al añadir el empleado."
-	}
+  "addButton": "Añadir",
+  "addEmployee": "Añadir empleado",
+  "editButton": "Guardar",
+  "editEmployee": "Editar empleado",
+  "email": "Email",
+  "employee": "Empleado",
+  "lastName": "Apellido",
+  "name": "Nombre",
+  "owner": "Propietario",
+  "phone": "Teléfono",
+  "role": "Rol",
+  "selectRole": "Selecciona un rol",
+  "toast": {
+    "added": "Empleado añadido exitosamente.",
+    "edited": "Empleado editado exitosamente.",
+    "errorAddingEmployee": "Se ha producido un error al añadir el empleado."
+  }
 }

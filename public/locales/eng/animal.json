@@ -1,34 +1,34 @@
 {
-	"animalId": "Animal ID",
-	"species": "Species",
-	"breed": "Breed",
-	"gender": "Gender",
-	"color": "Color",
-	"weight": "Weight",
-	"birthDate": "Birth Date",
-	"purchaseDate": "Purchase Date",
-	"soldDate": "Sold Date",
-	"deathDate": "Death Date",
-	"origin": "Origin",
-	"parentsTitle": "Parents",
-	"childrenTitle": "Children",
-	"healthRecords": "Health Records",
-	"productionRecords": "Production Records",
-	"relatedAnimals": "Related Animals",
-	"genderList": {
-		"male": "Male",
-		"female": "Female"
-	},
-	"modal": {
-		"removeAnimal": {
-			"title": "Do you want to delete this animal?",
-			"message": "This action cannot be undone."
-		}
-	},
-	"toast": {
-		"deleted": "Animal deleted successfully.",
-		"notDeleted": "The animal was not deleted.",
-		"deleteError": "An error occurred while deleting the animal.",
-		"errorGettingAnimal": "There was an error getting the animal."
-	}
+  "animalId": "Animal ID",
+  "birthDate": "Birth Date",
+  "breed": "Breed",
+  "childrenTitle": "Children",
+  "color": "Color",
+  "deathDate": "Death Date",
+  "gender": "Gender",
+  "genderList": {
+    "female": "Female",
+    "male": "Male"
+  },
+  "healthRecords": "Health Records",
+  "modal": {
+    "removeAnimal": {
+      "message": "This action cannot be undone.",
+      "title": "Do you want to delete this animal?"
+    }
+  },
+  "origin": "Origin",
+  "parentsTitle": "Parents",
+  "productionRecords": "Production Records",
+  "purchaseDate": "Purchase Date",
+  "relatedAnimals": "Related Animals",
+  "soldDate": "Sold Date",
+  "species": "Species",
+  "toast": {
+    "deleteError": "An error occurred while deleting the animal.",
+    "deleted": "Animal deleted successfully.",
+    "errorGettingAnimal": "There was an error getting the animal.",
+    "notDeleted": "The animal was not deleted."
+  },
+  "weight": "Weight"
 }

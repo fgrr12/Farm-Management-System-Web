@@ -45,7 +45,8 @@ const useHealthRecordForm = (initialForm: HealthRecord) => {
 }
 
 // Custom hook for form submission
-const useHealthRecordSubmit = (form: HealthRecord, userUuid: string, navigate: any, t: any) => {
+const useHealthRecordSubmit = (form: HealthRecord, userUuid: string, navigate: any) => {
+	const { t } = useTranslation(['healthRecordForm'])
 	const { setLoading, setToastData } = useAppStore()
 	const params = useParams()
 
@@ -109,7 +110,7 @@ const HealthRecordForm = () => {
 		[t]
 	)
 
-	const handleSubmit = useHealthRecordSubmit(form, user!.uuid, navigate, t)
+	const handleSubmit = useHealthRecordSubmit(form, user!.uuid, navigate)
 
 	const getHealthRecord = async () => {
 		try {

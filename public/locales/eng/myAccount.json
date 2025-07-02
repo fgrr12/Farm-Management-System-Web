@@ -1,68 +1,69 @@
 {
-	"title": "My Account",
-	"myProfile": {
-		"title": "My Profile",
-		"subtitle": "Manage your account settings",
-		"name": "Name",
-		"lastName": "Last Name",
-		"email": "Email",
-		"phone": "Phone",
-		"language": "Language",
-		"selectLanguage": "Select your language",
-		"languageList": {
-			"spa": "Spanish",
-			"eng": "English"
-		},
-		"edit": "Update My Profile",
-		"toast": {
-			"edited": "Profile updated successfully",
-			"errorEditing": "There was an error updating your profile"
-		}
-	},
-	"myFarm": {
-		"title": "My Farm",
-		"subtitle": "Manage your farm settings",
-		"name": "Name",
-		"address": "Address",
-		"species": "Species",
-		"liquidUnit": "Measure Liquid",
-		"selectLiquidUnit": "Select the liquid measure",
-		"liquidUnitList": {
-			"L": "Liters",
-			"Gal": "Gallons"
-		},
-		"weightUnit": "Measure Solid",
-		"selectWeightUnit": "Select the solid measure",
-		"weightUnitList": {
-			"Kg": "Kilograms",
-			"Lb": "Pounds"
-		},
-		"temperatureUnit": "Measure Temperature",
-		"selectTemperatureUnit": "Select the temperature measure",
-		"temperatureUnitList": {
-			"°C": "Celsius",
-			"°F": "Fahrenheit"
-		},
-		"edit": "Update My Farm",
-		"toast": {
-			"edited": "Farm updated successfully",
-			"errorEditing": "There was an error updating your farm"
-		}
-	},
-	"myBillingCard": {
-		"title": "My Billing Card",
-		"subtitle": "Manage your billing card",
-		"id": "ID",
-		"name": "Name",
-		"email": "Email",
-		"phone": "Phone",
-		"address": "Address",
-		"edit": "Update My Billing Card",
-		"active": "Your billing card is active",
-		"inactive": "Your billing card is inactive",
-		"toast": {
-			"edited": "Billing card updated successfully",
-			"errorEditing": "There was an error updating your billing card"
-		}
-	}
+  "myBillingCard": {
+    "active": "Your billing card is active",
+    "address": "Address",
+    "edit": "Update My Billing Card",
+    "email": "Email",
+    "id": "ID",
+    "inactive": "Your billing card is inactive",
+    "name": "Name",
+    "phone": "Phone",
+    "subtitle": "Manage your billing card",
+    "title": "My Billing Card",
+    "toast": {
+      "added": "Billing card added successfully",
+      "edited": "Billing card updated successfully",
+      "errorEditing": "There was an error updating your billing card"
+    }
+  },
+  "myFarm": {
+    "address": "Address",
+    "edit": "Update My Farm",
+    "liquidUnit": "Measure Liquid",
+    "liquidUnitList": {
+      "Gal": "Gallons",
+      "L": "Liters"
+    },
+    "name": "Name",
+    "selectLiquidUnit": "Select the liquid measure",
+    "selectTemperatureUnit": "Select the temperature measure",
+    "selectWeightUnit": "Select the solid measure",
+    "species": "Species",
+    "subtitle": "Manage your farm settings",
+    "temperatureUnit": "Measure Temperature",
+    "temperatureUnitList": {
+      "°C": "Celsius",
+      "°F": "Fahrenheit"
+    },
+    "title": "My Farm",
+    "toast": {
+      "edited": "Farm updated successfully",
+      "errorEditing": "There was an error updating your farm"
+    },
+    "weightUnit": "Measure Solid",
+    "weightUnitList": {
+      "Kg": "Kilograms",
+      "Lb": "Pounds"
+    }
+  },
+  "myProfile": {
+    "edit": "Update My Profile",
+    "email": "Email",
+    "language": "Language",
+    "languageList": {
+      "eng": "English",
+      "spa": "Spanish"
+    },
+    "lastName": "Last Name",
+    "name": "Name",
+    "phone": "Phone",
+    "selectLanguage": "Select your language",
+    "subtitle": "Manage your account settings",
+    "title": "My Profile",
+    "toast": {
+      "edited": "Profile updated successfully",
+      "errorEditing": "There was an error updating your profile"
+    }
+  },
+  "title": "My Account"
 }

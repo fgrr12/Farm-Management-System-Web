@@ -1,33 +1,34 @@
 {
-	"addHealthRecord": "Añadir registro de salud",
-	"editHealthRecord": "Editar registro de salud",
-	"reason": "Razón",
-	"type": "Tipo",
-	"selectType": "Selecciona un tipo",
-	"reviewedBy": "Revisado por",
-	"date": "Fecha",
-	"weight": "Peso",
-	"temperature": "Temperatura",
-	"medication": "Medicación",
-	"dosage": "Dosis",
-	"frequency": "Frecuencia",
-	"duration": "Duración",
-	"notes": "Notas",
-	"addButton": "Añadir",
-	"editButton": "Guardar",
-	"healthRecordType": {
-		"checkup": "Revision",
-		"vaccination": "Vacunación",
-		"medication": "Medicación",
-		"surgery": "Cirugía",
-		"pregnancy": "Embarazo/Preñes",
-		"deworming": "Desparasitación",
-		"birth": "Nacimiento/Parto",
-		"drying": "Secado"
-	},
-	"toast": {
-		"addHealthRecord": "Registro de salud añadido exitosamente.",
-		"editHealthRecord": "Registro de salud editado exitosamente.",
-		"errorAddingHealthRecord": "Se ha producido un error al añadir el registro de salud."
-	}
+  "addButton": "Añadir",
+  "addHealthRecord": "Añadir registro de salud",
+  "date": "Fecha",
+  "dosage": "Dosis",
+  "duration": "Duración",
+  "editButton": "Guardar",
+  "editHealthRecord": "Editar registro de salud",
+  "frequency": "Frecuencia",
+  "healthRecordType": {
+    "birth": "Nacimiento/Parto",
+    "checkup": "Revision",
+    "deworming": "Desparasitación",
+    "drying": "Secado",
+    "medication": "Medicación",
+    "pregnancy": "Embarazo/Preñes",
+    "surgery": "Cirugía",
+    "vaccination": "Vacunación"
+  },
+  "medication": "Medicación",
+  "notes": "Notas",
+  "reason": "Razón",
+  "reviewedBy": "Revisado por",
+  "selectType": "Selecciona un tipo",
+  "temperature": "Temperatura",
+  "toast": {
+    "addHealthRecord": "Registro de salud añadido exitosamente.",
+    "editHealthRecord": "Registro de salud editado exitosamente.",
+    "errorAddingHealthRecord": "Se ha producido un error al añadir el registro de salud.",
+    "errorGettingHealthRecord": "Se ha producido un error al obtener el registro de salud."
+  },
+  "type": "Tipo",
+  "weight": "Peso"
 }

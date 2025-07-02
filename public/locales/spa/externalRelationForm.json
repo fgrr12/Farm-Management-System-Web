@@ -1,15 +1,15 @@
 {
-	"title": "Agregar relación externa",
-	"animalId": "ID del animal",
-	"breed": "Raza",
-	"gender": "Género",
-	"male": "Masculino",
-	"female": "Femenino",
-	"save": "Guardar",
-	"cancel": "Cancelar",
-	"relation": {
-		"parent": "Padre\\Madre",
-		"child": "Hijo\\a"
-	},
-	"newRelationPhrase": "El animal {{animalId}} será {{relation}} de {{currentAnimal}}"
+  "animalId": "ID del animal",
+  "breed": "Raza",
+  "cancel": "Cancelar",
+  "female": "Femenino",
+  "gender": "Género",
+  "male": "Masculino",
+  "newRelationPhrase": "El animal {{animalId}} será {{relation}} de {{currentAnimal}}",
+  "relation": {
+    "child": "Hijo\\a",
+    "parent": "Padre\\Madre"
+  },
+  "save": "Guardar",
+  "title": "Agregar relación externa"
 }

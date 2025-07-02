@@ -1,12 +1,12 @@
 {
-	"title": "Iniciar sesión",
-	"email": "Email",
-	"password": "Contraseña",
-	"login": "Iniciar sesión",
-	"forgotPassword": "¿Olvidaste tu contraseña?",
-	"or": "O",
-	"google": "Iniciar sesión con Google",
-	"toast": {
-		"errorLoggingIn": "Se ha producido un error al iniciar sesión"
-	}
+  "email": "Email",
+  "forgotPassword": "¿Olvidaste tu contraseña?",
+  "google": "Iniciar sesión con Google",
+  "login": "Iniciar sesión",
+  "or": "O",
+  "password": "Contraseña",
+  "title": "Iniciar sesión",
+  "toast": {
+    "errorLoggingIn": "Se ha producido un error al iniciar sesión"
+  }
 }

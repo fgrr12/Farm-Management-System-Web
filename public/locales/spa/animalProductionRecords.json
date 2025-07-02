@@ -1,19 +1,19 @@
 {
-	"title": "Registros de producción",
-	"date": "Fecha",
-	"quantity": "Cantidad",
-	"notes": "Notas",
-	"actions": "Acciones",
-	"noProductionRecords": "No hay registros de producción",
-	"modal": {
-		"deleteProductionRecord": {
-			"title": "¿Quieres eliminar este registro de producción?",
-			"message": "Esta acción no se puede deshacer."
-		}
-	},
-	"toast": {
-		"deleted": "Registro de producción eliminado con éxito.",
-		"notDeleted": "El registro de producción no se ha eliminado.",
-		"deleteError": "Se ha producido un error al eliminar el registro de producción."
-	}
+  "actions": "Acciones",
+  "date": "Fecha",
+  "modal": {
+    "deleteProductionRecord": {
+      "message": "Esta acción no se puede deshacer.",
+      "title": "¿Quieres eliminar este registro de producción?"
+    }
+  },
+  "noProductionRecords": "No hay registros de producción",
+  "notes": "Notas",
+  "quantity": "Cantidad",
+  "title": "Registros de producción",
+  "toast": {
+    "deleteError": "Se ha producido un error al eliminar el registro de producción.",
+    "deleted": "Registro de producción eliminado con éxito.",
+    "notDeleted": "El registro de producción no se ha eliminado."
+  }
 }

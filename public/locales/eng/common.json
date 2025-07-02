@@ -1,19 +1,19 @@
 {
-	"header": {
-		"return": "Return"
-	},
-	"sidebar": {
-		"animals": "Animals",
-		"tasks": "Tasks",
-		"employees": "Employees",
-		"myAccount": "My Account",
-		"mySpecies": "My Species",
-		"businessCard": "Business Card",
-		"logout": "Logout",
-		"theme": "Theme"
-	},
-	"loading": "Loading",
-	"select": {
-		"default": "Select an option"
-	}
+  "header": {
+    "return": "Return"
+  },
+  "loading": "Loading",
+  "select": {
+    "default": "Select an option"
+  },
+  "sidebar": {
+    "animals": "Animals",
+    "businessCard": "Business Card",
+    "employees": "Employees",
+    "logout": "Logout",
+    "myAccount": "My Account",
+    "mySpecies": "My Species",
+    "tasks": "Tasks",
+    "theme": "Theme"
+  }
 }

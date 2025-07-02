@@ -1,29 +1,33 @@
 {
-	"title": "Mis especies",
-	"addMoreSpecies": "Añade más especies",
-	"search": "Buscar",
-	"addButton": "Añadir",
-	"editButton": "Guardar",
-	"saveButton": "Guardar",
-	"deleteButton": "Eliminar",
-	"breed": "Raza",
-	"gestationPeriod": "Periodo de gestación",
-	"modal": {
-		"deleteSpecies": {
-			"title": "¿Quieres eliminar esta especie?",
-			"message": "Esta acción se guardara hasta que presiones el botón de guardar."
-		},
-		"deleteBreed": {
-			"title": "¿Quieres eliminar esta raza?",
-			"message": "Esta acción se guardara hasta que presiones el botón de guardar."
-		}
-	},
-	"toast": {
-		"edited": "Especie editada exitosamente",
-		"errorEditing": "Se ha producido un error al editar la especie",
-		"deletedSpecies": "Especie eliminada exitosamente",
-		"notDeletedSpecies": "La especie no se ha eliminado",
-		"deletedBreed": "Raza eliminada exitosamente",
-		"notDeletedBreed": "La raza no se ha eliminado"
-	}
+  "addButton": "Añadir",
+  "addMoreSpecies": "Añade más especies",
+  "breed": "Raza",
+  "deleteButton": "Eliminar",
+  "editButton": "Guardar",
+  "gestationPeriod": "Periodo de gestación",
+  "modal": {
+    "deleteBreed": {
+      "message": "Esta acción se guardara hasta que presiones el botón de guardar.",
+      "title": "¿Quieres eliminar esta raza?"
+    },
+    "deleteSpecies": {
+      "message": "Esta acción se guardara hasta que presiones el botón de guardar.",
+      "title": "¿Quieres eliminar esta especie?"
+    }
+  },
+  "removeButton": "Eliminar",
+  "saveButton": "Guardar",
+  "search": "Buscar",
+  "title": "Mis especies",
+  "toast": {
+    "deletedBreed": "Raza eliminada exitosamente",
+    "deletedSpecies": "Especie eliminada exitosamente",
+    "edited": "Especie editada exitosamente",
+    "errorDeletingBreed": "Se ha producido un error al eliminar la raza",
+    "errorDeletingSpecies": "Se ha producido un error al eliminar la especie",
+    "errorEditing": "Se ha producido un error al editar la especie",
+    "errorUpdatingSpecies": "Se ha producido un error al actualizar las especies",
+    "notDeletedBreed": "La raza no se ha eliminado",
+    "notDeletedSpecies": "La especie no se ha eliminado"
+  }
 }

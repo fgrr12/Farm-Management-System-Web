@@ -1,33 +1,34 @@
 {
-	"addHealthRecord": "Add Health Record",
-	"editHealthRecord": "Edit Health Record",
-	"reason": "Reason",
-	"type": "Type",
-	"selectType": "Select a type",
-	"reviewedBy": "Reviewed By",
-	"date": "Date",
-	"weight": "Weight",
-	"temperature": "Temperature",
-	"medication": "Medication",
-	"dosage": "Dosage",
-	"frequency": "Frequency",
-	"duration": "Duration",
-	"notes": "Notes",
-	"addButton": "Add",
-	"editButton": "Save",
-	"healthRecordType": {
-		"checkup": "Checkup",
-		"vaccination": "Vaccination",
-		"medication": "Medication",
-		"surgery": "Surgery",
-		"pregnancy": "Pregnancy",
-		"deworming": "Deworming",
-		"birth": "Birth",
-		"drying": "Drying"
-	},
-	"toast": {
-		"addHealthRecord": "Health record added successfully.",
-		"editHealthRecord": "Health record edited successfully.",
-		"errorAddingHealthRecord": "There was an error adding the health record."
-	}
+  "addButton": "Add",
+  "addHealthRecord": "Add Health Record",
+  "date": "Date",
+  "dosage": "Dosage",
+  "duration": "Duration",
+  "editButton": "Save",
+  "editHealthRecord": "Edit Health Record",
+  "frequency": "Frequency",
+  "healthRecordType": {
+    "birth": "Birth",
+    "checkup": "Checkup",
+    "deworming": "Deworming",
+    "drying": "Drying",
+    "medication": "Medication",
+    "pregnancy": "Pregnancy",
+    "surgery": "Surgery",
+    "vaccination": "Vaccination"
+  },
+  "medication": "Medication",
+  "notes": "Notes",
+  "reason": "Reason",
+  "reviewedBy": "Reviewed By",
+  "selectType": "Select a type",
+  "temperature": "Temperature",
+  "toast": {
+    "addHealthRecord": "Health record added successfully.",
+    "editHealthRecord": "Health record edited successfully.",
+    "errorAddingHealthRecord": "There was an error adding the health record.",
+    "errorGettingHealthRecord": "There was an error getting the health record."
+  },
+  "type": "Type",
+  "weight": "Weight"
 }

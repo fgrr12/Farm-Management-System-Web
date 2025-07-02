@@ -58,27 +58,27 @@ const MyAccount = () => {
 
 	const handleChange =
 		<T extends 'farm' | 'user' | 'billingCard'>(key: T) =>
-		(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-			const { name, value, type } = event.target
-			const newValue = type === 'checkbox' ? (event.target as HTMLInputElement).checked : value
+			(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+				const { name, value, type } = event.target
+				const newValue = type === 'checkbox' ? (event.target as HTMLInputElement).checked : value
 
-			if (key === 'user') {
-				setUser((prev) => ({
-					...prev,
-					[name]: type === 'text' ? capitalizeFirstLetter(newValue as string) : newValue,
-				}))
-			} else if (key === 'farm') {
-				setFarm((prev) => ({
-					...prev,
-					[name]: type === 'text' ? capitalizeFirstLetter(newValue as string) : newValue,
-				}))
-			} else {
-				setBillingCard((prev) => ({
-					...prev,
-					[name]: type === 'text' ? capitalizeFirstLetter(newValue as string) : newValue,
-				}))
+				if (key === 'user') {
+					setUser((prev) => ({
+						...prev,
+						[name]: type === 'text' ? capitalizeFirstLetter(newValue as string) : newValue,
+					}))
+				} else if (key === 'farm') {
+					setFarm((prev) => ({
+						...prev,
+						[name]: type === 'text' ? capitalizeFirstLetter(newValue as string) : newValue,
+					}))
+				} else {
+					setBillingCard((prev) => ({
+						...prev,
+						[name]: type === 'text' ? capitalizeFirstLetter(newValue as string) : newValue,
+					}))
+				}
 			}
-		}
 
 	const handleSubmitUser = async (e: FormEvent) => {
 		e.preventDefault()

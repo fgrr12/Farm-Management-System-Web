@@ -1,12 +1,12 @@
 {
-	"title": "Create Relationships",
-	"animals": "Animals",
-	"parentsTitle": "Parents",
-	"childrenTitle": "Children",
-	"selectedAnimal": "Selected animal",
-	"addExternalRelation": "Add External Relation",
-	"filterByID": "Filter by ID",
-	"toast": {
-		"errorGettingAnimals": "There was an error getting the animals."
-	}
+  "addExternalRelation": "Add External Relation",
+  "animals": "Animals",
+  "childrenTitle": "Children",
+  "filterByID": "Filter by ID",
+  "parentsTitle": "Parents",
+  "selectedAnimal": "Selected animal",
+  "title": "Create Relationships",
+  "toast": {
+    "errorGettingAnimals": "There was an error getting the animals."
+  }
 }

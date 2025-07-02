@@ -1,29 +1,33 @@
 {
-	"title": "My Species",
-	"addMoreSpecies": "Add more species",
-	"search": "Search",
-	"addButton": "Add",
-	"editButton": "Save",
-	"saveButton": "Save",
-	"deleteButton": "Delete",
-	"breed": "Breed",
-	"gestationPeriod": "Gestation Period",
-	"modal": {
-		"deleteSpecies": {
-			"title": "Do you want to delete this species?",
-			"message": "This action cannot be undone."
-		},
-		"deleteBreed": {
-			"title": "Do you want to delete this breed?",
-			"message": "This action cannot be undone."
-		}
-	},
-	"toast": {
-		"edited": "Species edited successfully",
-		"errorEditing": "There was an error editing the species",
-		"deletedSpecies": "Species deleted successfully",
-		"notDeletedSpecies": "The species was not deleted",
-		"deletedBreed": "Breed deleted successfully",
-		"notDeletedBreed": "The breed was not deleted"
-	}
+  "addButton": "Add",
+  "addMoreSpecies": "Add more species",
+  "breed": "Breed",
+  "deleteButton": "Delete",
+  "editButton": "Save",
+  "gestationPeriod": "Gestation Period",
+  "modal": {
+    "deleteBreed": {
+      "message": "This action cannot be undone.",
+      "title": "Do you want to delete this breed?"
+    },
+    "deleteSpecies": {
+      "message": "This action cannot be undone.",
+      "title": "Do you want to delete this species?"
+    }
+  },
+  "removeButton": "Remove",
+  "saveButton": "Save",
+  "search": "Search",
+  "title": "My Species",
+  "toast": {
+    "deletedBreed": "Breed deleted successfully",
+    "deletedSpecies": "Species deleted successfully",
+    "edited": "Species edited successfully",
+    "errorDeletingBreed": "There was an error deleting the breed",
+    "errorDeletingSpecies": "There was an error deleting the species",
+    "errorEditing": "There was an error editing the species",
+    "errorUpdatingSpecies": "There was an error updating the species",
+    "notDeletedBreed": "The breed was not deleted",
+    "notDeletedSpecies": "The species was not deleted"
+  }
 }

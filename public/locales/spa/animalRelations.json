@@ -1,25 +1,25 @@
 {
-	"title": "Relaciones con animales",
-	"animalId": "ID del animal",
-	"breed": "Raza",
-	"relation": "Relación",
-	"addParent": "Añadir padre",
-	"addChild": "Añadir hijo",
-	"actions": "Acciones",
-	"mother": "Madre",
-	"father": "Padre",
-	"son": "Hijo",
-	"daughter": "Hija",
-	"noRelatedAnimals": "No hay animales relacionados",
-	"modal": {
-		"deleteRelatedAnimal": {
-			"title": "¿Quieres eliminar esta relación?",
-			"message": "Esta acción no se puede deshacer."
-		}
-	},
-	"toast": {
-		"deleted": "La relación se ha eliminado correctamente.",
-		"notDeleted": "La relación no se ha eliminado.",
-		"deleteError": "Se ha producido un error al eliminar la relación."
-	}
+  "actions": "Acciones",
+  "addChild": "Añadir hijo",
+  "addParent": "Añadir padre",
+  "animalId": "ID del animal",
+  "breed": "Raza",
+  "daughter": "Hija",
+  "father": "Padre",
+  "modal": {
+    "deleteRelatedAnimal": {
+      "message": "Esta acción no se puede deshacer.",
+      "title": "¿Quieres eliminar esta relación?"
+    }
+  },
+  "mother": "Madre",
+  "noRelatedAnimals": "No hay animales relacionados",
+  "relation": "Relación",
+  "son": "Hijo",
+  "title": "Relaciones con animales",
+  "toast": {
+    "deleteError": "Se ha producido un error al eliminar la relación.",
+    "deleted": "La relación se ha eliminado correctamente.",
+    "notDeleted": "La relación no se ha eliminado."
+  }
 }

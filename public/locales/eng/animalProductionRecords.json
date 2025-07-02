@@ -1,19 +1,19 @@
 {
-	"title": "Production Records",
-	"date": "Date",
-	"quantity": "Quantity",
-	"notes": "Notes",
-	"actions": "Actions",
-	"noProductionRecords": "No production records",
-	"modal": {
-		"deleteProductionRecord": {
-			"title": "Do you want to delete this production record?",
-			"message": "This action cannot be undone."
-		}
-	},
-	"toast": {
-		"deleted": "Production record deleted successfully.",
-		"notDeleted": "The production record was not deleted.",
-		"deleteError": "An error occurred while deleting the production record."
-	}
+  "actions": "Actions",
+  "date": "Date",
+  "modal": {
+    "deleteProductionRecord": {
+      "message": "This action cannot be undone.",
+      "title": "Do you want to delete this production record?"
+    }
+  },
+  "noProductionRecords": "No production records",
+  "notes": "Notes",
+  "quantity": "Quantity",
+  "title": "Production Records",
+  "toast": {
+    "deleteError": "An error occurred while deleting the production record.",
+    "deleted": "Production record deleted successfully.",
+    "notDeleted": "The production record was not deleted."
+  }
 }

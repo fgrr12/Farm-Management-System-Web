@@ -1,8 +1,8 @@
 {
-	"title": "Empleados",
-	"search": "Buscar",
-	"addEmployee": "Añadir empleado",
-	"toast": {
-		"errorGettingEmployees": "Se ha producido un error al obtener los empleados."
-	}
+  "addEmployee": "Añadir empleado",
+  "search": "Buscar",
+  "title": "Empleados",
+  "toast": {
+    "errorGettingEmployees": "Se ha producido un error al obtener los empleados."
+  }
 }

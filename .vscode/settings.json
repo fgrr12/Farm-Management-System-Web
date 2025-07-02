@@ -26,6 +26,7 @@
 		"gsap",
 		"healthicons",
 		"languagedetector",
+		"lngs",
 		"partialize",
 		"Shouty",
 		"synthwave",
@@ -45,5 +46,4 @@
 	"i18n-ally.namespace": true,
 	"i18n-ally.annotations": false,
 	"i18n-ally.displayLanguage": "eng"
-}
 }
