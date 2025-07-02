@@ -1,12 +1,12 @@
 {
-  "addAnimal": "Añadir animal",
-  "filterBySpecies": "Filtra por especie",
-  "noAnimals": "No hay animales",
-  "noAnimalsSubtitle": "Agrega un animal a tu granja para comenzar",
-  "search": "Buscar",
-  "species": "Especies",
-  "title": "Animales",
-  "toast": {
-    "errorGettingAnimals": "Se ha producido un error al obtener los animales."
-  }
+	"addAnimal": "Añadir animal",
+	"filterBySpecies": "Filtra por especie",
+	"noAnimals": "No hay animales",
+	"noAnimalsSubtitle": "Agrega un animal a tu granja para comenzar",
+	"search": "Buscar",
+	"species": "Especies",
+	"title": "Animales",
+	"toast": {
+		"errorGettingAnimals": "Se ha producido un error al obtener los animales."
+	}
 }

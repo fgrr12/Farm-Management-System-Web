@@ -1,34 +1,34 @@
 {
-  "animalId": "ID del animal",
-  "birthDate": "Fecha de nacimiento",
-  "breed": "Raza",
-  "childrenTitle": "Hijos",
-  "color": "Color",
-  "deathDate": "Fecha de fallecimiento",
-  "gender": "Género",
-  "genderList": {
-    "female": "Hembra",
-    "male": "Macho"
-  },
-  "healthRecords": "Registros de salud",
-  "modal": {
-    "removeAnimal": {
-      "message": "Esta acción no se puede deshacer.",
-      "title": "Quieres eliminar este animal?"
-    }
-  },
-  "origin": "Procedencia",
-  "parentsTitle": "Padres",
-  "productionRecords": "Registros de producción",
-  "purchaseDate": "Fecha de compra",
-  "relatedAnimals": "Animales relacionados",
-  "soldDate": "Fecha de venta",
-  "species": "Especie",
-  "toast": {
-    "deleteError": "Se ha producido un error al eliminar el animal.",
-    "deleted": "Animal eliminado con éxito.",
-    "errorGettingAnimal": "Se ha producido un error al obtener el animal.",
-    "notDeleted": "El animal no se ha eliminado."
-  },
-  "weight": "Peso"
+	"animalId": "ID del animal",
+	"birthDate": "Fecha de nacimiento",
+	"breed": "Raza",
+	"childrenTitle": "Hijos",
+	"color": "Color",
+	"deathDate": "Fecha de fallecimiento",
+	"gender": "Género",
+	"genderList": {
+		"female": "Hembra",
+		"male": "Macho"
+	},
+	"healthRecords": "Registros de salud",
+	"modal": {
+		"removeAnimal": {
+			"message": "Esta acción no se puede deshacer.",
+			"title": "Quieres eliminar este animal?"
+		}
+	},
+	"origin": "Procedencia",
+	"parentsTitle": "Padres",
+	"productionRecords": "Registros de producción",
+	"purchaseDate": "Fecha de compra",
+	"relatedAnimals": "Animales relacionados",
+	"soldDate": "Fecha de venta",
+	"species": "Especie",
+	"toast": {
+		"deleteError": "Se ha producido un error al eliminar el animal.",
+		"deleted": "Animal eliminado con éxito.",
+		"errorGettingAnimal": "Se ha producido un error al obtener el animal.",
+		"notDeleted": "El animal no se ha eliminado."
+	},
+	"weight": "Peso"
 }

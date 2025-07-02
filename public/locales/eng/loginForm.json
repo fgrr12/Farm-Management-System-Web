@@ -1,12 +1,12 @@
 {
-  "email": "Email",
-  "forgotPassword": "Forgot your password?",
-  "google": "Login with Google",
-  "login": "Login",
-  "or": "Or",
-  "password": "Password",
-  "title": "Login",
-  "toast": {
-    "errorLoggingIn": "There was an error logging in"
-  }
+	"email": "Email",
+	"forgotPassword": "Forgot your password?",
+	"google": "Login with Google",
+	"login": "Login",
+	"or": "Or",
+	"password": "Password",
+	"title": "Login",
+	"toast": {
+		"errorLoggingIn": "There was an error logging in"
+	}
 }

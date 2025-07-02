@@ -1,19 +1,19 @@
 {
-  "header": {
-    "return": "Volver"
-  },
-  "loading": "Cargando",
-  "select": {
-    "default": "Selecciona una opción"
-  },
-  "sidebar": {
-    "animals": "Animales",
-    "businessCard": "Tarjeta de Negocio",
-    "employees": "Empleados",
-    "logout": "Cerrar Sesión",
-    "myAccount": "Mi Cuenta",
-    "mySpecies": "Mis Especies",
-    "tasks": "Tareas",
-    "theme": "Tema"
-  }
+	"header": {
+		"return": "Volver"
+	},
+	"loading": "Cargando",
+	"select": {
+		"default": "Selecciona una opción"
+	},
+	"sidebar": {
+		"animals": "Animales",
+		"businessCard": "Tarjeta de Negocio",
+		"employees": "Empleados",
+		"logout": "Cerrar Sesión",
+		"myAccount": "Mi Cuenta",
+		"mySpecies": "Mis Especies",
+		"tasks": "Tareas",
+		"theme": "Tema"
+	}
 }

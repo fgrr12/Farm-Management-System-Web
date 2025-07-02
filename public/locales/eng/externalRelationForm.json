@@ -1,15 +1,15 @@
 {
-  "animalId": "Animal ID",
-  "breed": "Breed",
-  "cancel": "Cancel",
-  "female": "Female",
-  "gender": "Gender",
-  "male": "Male",
-  "newRelationPhrase": "The animal {{animalId}} will be {{relation}} of {{currentAnimal}}",
-  "relation": {
-    "child": "Son/Daughter",
-    "parent": "Parent"
-  },
-  "save": "Save",
-  "title": "Add External Relation"
+	"animalId": "Animal ID",
+	"breed": "Breed",
+	"cancel": "Cancel",
+	"female": "Female",
+	"gender": "Gender",
+	"male": "Male",
+	"newRelationPhrase": "The animal {{animalId}} will be {{relation}} of {{currentAnimal}}",
+	"relation": {
+		"child": "Son/Daughter",
+		"parent": "Parent"
+	},
+	"save": "Save",
+	"title": "Add External Relation"
 }

@@ -1,8 +1,8 @@
 {
-  "addEmployee": "Add employee",
-  "search": "Search",
-  "title": "Employees",
-  "toast": {
-    "errorGettingEmployees": "There was an error getting the employees."
-  }
+	"addEmployee": "Add employee",
+	"search": "Search",
+	"title": "Employees",
+	"toast": {
+		"errorGettingEmployees": "There was an error getting the employees."
+	}
 }

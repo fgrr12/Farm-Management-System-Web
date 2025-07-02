@@ -6,15 +6,21 @@
 	"scripts": {
 		"dev": "vite --mode local-develop",
 		"prod": "vite --mode production",
-		"i18n:extract": "i18next-scanner --config i18next-scanner.config.cjs",
+
 		"build:production": "tsc && vite build --mode production",
 		"build:develop": "tsc && vite build --mode develop",
 		"preview": "vite preview",
+
 		"test": "vitest",
+
 		"lint": "biome check . --write",
 		"format": "biome format --write .",
 		"lint:check": "biome check .",
-		"format:check": "biome format ."
+		"format:check": "biome format .",
+
+		"i18n:scan": "i18next-scanner --config i18next-scanner.config.cjs",
+		"i18n:format": "biome format public/locales --write",
+		"i18n": "npm run i18n:scan && npm run i18n:format"
 	},
 	"dependencies": {
 		"@atlaskit/pragmatic-drag-and-drop": "^1.7.4",

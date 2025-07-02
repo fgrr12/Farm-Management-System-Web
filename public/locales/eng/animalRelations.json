@@ -1,25 +1,25 @@
 {
-  "actions": "Actions",
-  "addChild": "Add Child",
-  "addParent": "Add Parent",
-  "animalId": "Animal ID",
-  "breed": "Breed",
-  "daughter": "Daughter",
-  "father": "Father",
-  "modal": {
-    "deleteRelatedAnimal": {
-      "message": "This action cannot be undone.",
-      "title": "Do you want to delete this relation?"
-    }
-  },
-  "mother": "Mother",
-  "noRelatedAnimals": "No related animals",
-  "relation": "Relation",
-  "son": "Son",
-  "title": "Animal Relations",
-  "toast": {
-    "deleteError": "An error occurred while deleting the relation.",
-    "deleted": "Relation deleted successfully.",
-    "notDeleted": "The relation was not deleted."
-  }
+	"actions": "Actions",
+	"addChild": "Add Child",
+	"addParent": "Add Parent",
+	"animalId": "Animal ID",
+	"breed": "Breed",
+	"daughter": "Daughter",
+	"father": "Father",
+	"modal": {
+		"deleteRelatedAnimal": {
+			"message": "This action cannot be undone.",
+			"title": "Do you want to delete this relation?"
+		}
+	},
+	"mother": "Mother",
+	"noRelatedAnimals": "No related animals",
+	"relation": "Relation",
+	"son": "Son",
+	"title": "Animal Relations",
+	"toast": {
+		"deleteError": "An error occurred while deleting the relation.",
+		"deleted": "Relation deleted successfully.",
+		"notDeleted": "The relation was not deleted."
+	}
 }

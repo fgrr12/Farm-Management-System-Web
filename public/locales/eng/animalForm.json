@@ -1,30 +1,30 @@
 {
-  "addAnimal": "Add Animal",
-  "addButton": "Add",
-  "animalId": "Animal ID",
-  "birthDate": "Birth Date",
-  "breed": "Breed",
-  "color": "Color",
-  "deathDate": "Death Date",
-  "editAnimal": "Edit Animal",
-  "editButton": "Save",
-  "gender": "Gender",
-  "genderList": {
-    "female": "Female",
-    "male": "Male"
-  },
-  "origin": "Origin",
-  "purchaseDate": "Purchase Date",
-  "selectBreed": "Select a breed",
-  "selectGender": "Select a gender",
-  "selectSpecies": "Select a species",
-  "soldDate": "Sold Date",
-  "species": "Species",
-  "toast": {
-    "added": "Animal added successfully.",
-    "edited": "Animal edited successfully.",
-    "errorAddingAnimal": "There was an error adding the animal.",
-    "errorGettingAnimal": "There was an error getting the animal."
-  },
-  "weight": "Weight"
+	"addAnimal": "Add Animal",
+	"addButton": "Add",
+	"animalId": "Animal ID",
+	"birthDate": "Birth Date",
+	"breed": "Breed",
+	"color": "Color",
+	"deathDate": "Death Date",
+	"editAnimal": "Edit Animal",
+	"editButton": "Save",
+	"gender": "Gender",
+	"genderList": {
+		"female": "Female",
+		"male": "Male"
+	},
+	"origin": "Origin",
+	"purchaseDate": "Purchase Date",
+	"selectBreed": "Select a breed",
+	"selectGender": "Select a gender",
+	"selectSpecies": "Select a species",
+	"soldDate": "Sold Date",
+	"species": "Species",
+	"toast": {
+		"added": "Animal added successfully.",
+		"edited": "Animal edited successfully.",
+		"errorAddingAnimal": "There was an error adding the animal.",
+		"errorGettingAnimal": "There was an error getting the animal."
+	},
+	"weight": "Weight"
 }

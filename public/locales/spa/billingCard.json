@@ -1,9 +1,9 @@
 {
-  "address": "Dirección:",
-  "email": "Correo:",
-  "id": "Cédula:",
-  "name": "Nombre:",
-  "phone": "Teléfono:",
-  "subtitle": "DATOS PARA FACTURA ELECTRÓNICA",
-  "title": "Tarjeta de facturación"
+	"address": "Dirección:",
+	"email": "Correo:",
+	"id": "Cédula:",
+	"name": "Nombre:",
+	"phone": "Teléfono:",
+	"subtitle": "DATOS PARA FACTURA ELECTRÓNICA",
+	"title": "Tarjeta de facturación"
 }
