@@ -23,6 +23,8 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { ToastManager } from '@/components/layout/ToastManager'
 
+import { VoiceRecorder } from './components/layout/VoiceRecorder/VoiceRecorder'
+
 gsap.registerPlugin(SplitText, useGSAP)
 
 const Animal = lazy(() => import('@/pages/Animal/Animal.page'))
@@ -83,7 +85,7 @@ export const App = () => {
 			{location.pathname !== AppRoutes.LOGIN && <Navbar />}
 			<div className="flex flex-row w-full h-full overflow-hidden">
 				{location.pathname !== AppRoutes.LOGIN && <Sidebar />}
-				<main className="w-full h-full overflow-auto">
+				<main className="w-full h-full overflow-auto relative">
 					<Suspense fallback={<Loading open={true} />}>
 						<Routes>
 							<Route path="/" element={<Navigate to={AppRoutes.ANIMALS} />} key="home" />
@@ -252,6 +254,7 @@ export const App = () => {
 						onCancel={modalData.onCancel}
 					/>
 					<Loading open={appLoading || authLoading} />
+					<VoiceRecorder />
 					<ToastManager />
 				</main>
 			</div>

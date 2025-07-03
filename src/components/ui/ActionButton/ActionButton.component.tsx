@@ -21,6 +21,9 @@ const iconColor = (icon: string | undefined) => {
 		case 'i-lucide-circle-x':
 		case 'i-material-symbols-event-busy-rounded':
 			return 'bg-red-500!'
+		case 'i-lineicons-xmark':
+		case 'i-lineicons-microphone-1':
+			return 'bg-white!'
 		default:
 			return ''
 	}
