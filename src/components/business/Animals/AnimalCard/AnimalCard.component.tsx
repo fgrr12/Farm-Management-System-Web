@@ -47,20 +47,20 @@ export const AnimalCard: FC<CardProps> = ({ uuid, animalId, breedName, gender })
 			ref={divRef}
 			role="button"
 			tabIndex={0}
-			className="animal-card rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 cursor-pointer hover:bg-gray-200 hover:animate-pulse w-full"
+			className="animal-card rounded-lg shadow-md hover:shadow-lg transition-shadow p-4 cursor-pointer hover:bg-gray-200 hover:animate-pulse w-full"
 			onClick={navigateToAnimal}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 		>
 			<div className="flex justify-center items-center">
-				<span className="text-xl font-bold">#{animalId}</span>
+				<span className="text-3xl font-bold">#{animalId}</span>
 			</div>
 			<div className="flex items-center justify-center">
-				<span className="font-medium text-gray-500 text-lg pr-1">{breedName}</span>
+				<span className="font-medium text-gray-500 text-xl pr-1">{breedName}</span>
 				{gender.toLowerCase() === 'male' ? (
-					<i className="i-tdesign-gender-male bg-blue-500! w-5! h-5!" />
+					<i className="i-tdesign-gender-male bg-blue-500! w-8! h-8!" />
 				) : (
-					<i className="i-tdesign-gender-female bg-pink-500! w-5! h-5!" />
+					<i className="i-tdesign-gender-female bg-pink-500! w-8! h-8!" />
 				)}
 			</div>
 			<div className="flex justify-center items-center mt-2">

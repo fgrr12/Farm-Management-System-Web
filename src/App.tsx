@@ -254,7 +254,7 @@ export const App = () => {
 						onCancel={modalData.onCancel}
 					/>
 					<Loading open={appLoading || authLoading} />
-					<VoiceRecorder />
+					{/* <VoiceRecorder /> */}
 					<ToastManager />
 				</main>
 			</div>
