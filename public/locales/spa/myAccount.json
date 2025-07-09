@@ -1,69 +1,69 @@
 {
-  "myBillingCard": {
-    "active": "Tu tarjeta de facturación está activa",
-    "address": "Dirección",
-    "edit": "Actualizar Mi Tarjeta de Facturación",
-    "email": "Email",
-    "id": "ID",
-    "inactive": "Tu tarjeta de facturación está inactiva",
-    "name": "Nombre",
-    "phone": "Teléfono",
-    "subtitle": "Gestiona tu tarjeta de facturación",
-    "title": "Mi Tarjeta de Facturación",
-    "toast": {
-      "added": "Tarjeta de facturación añadida exitosamente",
-      "edited": "Tarjeta de facturación actualizada exitosamente",
-      "errorEditing": "Ocurrió un error al actualizar tu tarjeta de facturación"
-    }
-  },
-  "myFarm": {
-    "address": "Dirección",
-    "edit": "Actualizar Mi Granja",
-    "liquidUnit": "Medida de Líquido",
-    "liquidUnitList": {
-      "Gal": "Galones",
-      "L": "Litros"
-    },
-    "name": "Nombre",
-    "selectLiquidUnit": "Selecciona la medida de líquido",
-    "selectTemperatureUnit": "Selecciona la medida de temperatura",
-    "selectWeightUnit": "Selecciona la medida de peso",
-    "species": "Especies",
-    "subtitle": "Gestiona tu granja",
-    "temperatureUnit": "Medida de Temperatura",
-    "temperatureUnitList": {
-      "°C": "Celsius",
-      "°F": "Fahrenheit"
-    },
-    "title": "Mi Granja",
-    "toast": {
-      "edited": "Granja actualizada exitosamente",
-      "errorEditing": "Ocurrió un error al actualizar tu granja"
-    },
-    "weightUnit": "Medida de Peso",
-    "weightUnitList": {
-      "Kg": "Kilogramos",
-      "Lb": "Libras"
-    }
-  },
-  "myProfile": {
-    "edit": "Actualizar Mi Perfil",
-    "email": "Email",
-    "language": "Idioma",
-    "languageList": {
-      "eng": "Inglés",
-      "spa": "Español"
-    },
-    "lastName": "Apellido",
-    "name": "Nombre",
-    "phone": "Teléfono",
-    "selectLanguage": "Selecciona tu idioma",
-    "subtitle": "Gestiona tu cuenta de usuario",
-    "title": "Mi Perfil",
-    "toast": {
-      "edited": "Perfil actualizado exitosamente",
-      "errorEditing": "Ocurrió un error al actualizar tu perfil"
-    }
-  },
-  "title": "Mi Cuenta"
+	"myBillingCard": {
+		"active": "Tu tarjeta de facturación está activa",
+		"address": "Dirección",
+		"edit": "Actualizar Mi Tarjeta de Facturación",
+		"email": "Email",
+		"id": "ID",
+		"inactive": "Tu tarjeta de facturación está inactiva",
+		"name": "Nombre",
+		"phone": "Teléfono",
+		"subtitle": "Gestiona tu tarjeta de facturación",
+		"title": "Mi Tarjeta de Facturación",
+		"toast": {
+			"added": "Tarjeta de facturación añadida exitosamente",
+			"edited": "Tarjeta de facturación actualizada exitosamente",
+			"errorEditing": "Ocurrió un error al actualizar tu tarjeta de facturación"
+		}
+	},
+	"myFarm": {
+		"address": "Dirección",
+		"edit": "Actualizar Mi Granja",
+		"liquidUnit": "Medida de Líquido",
+		"liquidUnitList": {
+			"Gal": "Galones",
+			"L": "Litros"
+		},
+		"name": "Nombre",
+		"selectLiquidUnit": "Selecciona la medida de líquido",
+		"selectTemperatureUnit": "Selecciona la medida de temperatura",
+		"selectWeightUnit": "Selecciona la medida de peso",
+		"species": "Especies",
+		"subtitle": "Gestiona tu granja",
+		"temperatureUnit": "Medida de Temperatura",
+		"temperatureUnitList": {
+			"°C": "Celsius",
+			"°F": "Fahrenheit"
+		},
+		"title": "Mi Granja",
+		"toast": {
+			"edited": "Granja actualizada exitosamente",
+			"errorEditing": "Ocurrió un error al actualizar tu granja"
+		},
+		"weightUnit": "Medida de Peso",
+		"weightUnitList": {
+			"Kg": "Kilogramos",
+			"Lb": "Libras"
+		}
+	},
+	"myProfile": {
+		"edit": "Actualizar Mi Perfil",
+		"email": "Email",
+		"language": "Idioma",
+		"languageList": {
+			"eng": "Inglés",
+			"spa": "Español"
+		},
+		"lastName": "Apellido",
+		"name": "Nombre",
+		"phone": "Teléfono",
+		"selectLanguage": "Selecciona tu idioma",
+		"subtitle": "Gestiona tu cuenta de usuario",
+		"title": "Mi Perfil",
+		"toast": {
+			"edited": "Perfil actualizado exitosamente",
+			"errorEditing": "Ocurrió un error al actualizar tu perfil"
+		}
+	},
+	"title": "Mi Cuenta"
 }

@@ -1,19 +1,19 @@
 {
-  "addButton": "Add",
-  "addEmployee": "Add Employee",
-  "editButton": "Save",
-  "editEmployee": "Edit Employee",
-  "email": "Email",
-  "employee": "Employee",
-  "lastName": "Last Name",
-  "name": "Name",
-  "owner": "Owner",
-  "phone": "Phone",
-  "role": "Role",
-  "selectRole": "Select a role",
-  "toast": {
-    "added": "Employee added successfully.",
-    "edited": "Employee edited successfully.",
-    "errorAddingEmployee": "There was an error adding the employee."
-  }
+	"addButton": "Add",
+	"addEmployee": "Add Employee",
+	"editButton": "Save",
+	"editEmployee": "Edit Employee",
+	"email": "Email",
+	"employee": "Employee",
+	"lastName": "Last Name",
+	"name": "Name",
+	"owner": "Owner",
+	"phone": "Phone",
+	"role": "Role",
+	"selectRole": "Select a role",
+	"toast": {
+		"added": "Employee added successfully.",
+		"edited": "Employee edited successfully.",
+		"errorAddingEmployee": "There was an error adding the employee."
+	}
 }

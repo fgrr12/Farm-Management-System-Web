@@ -1,33 +1,33 @@
 {
-  "addButton": "Add",
-  "addMoreSpecies": "Add more species",
-  "breed": "Breed",
-  "deleteButton": "Delete",
-  "editButton": "Save",
-  "gestationPeriod": "Gestation Period",
-  "modal": {
-    "deleteBreed": {
-      "message": "This action cannot be undone.",
-      "title": "Do you want to delete this breed?"
-    },
-    "deleteSpecies": {
-      "message": "This action cannot be undone.",
-      "title": "Do you want to delete this species?"
-    }
-  },
-  "removeButton": "Remove",
-  "saveButton": "Save",
-  "search": "Search",
-  "title": "My Species",
-  "toast": {
-    "deletedBreed": "Breed deleted successfully",
-    "deletedSpecies": "Species deleted successfully",
-    "edited": "Species edited successfully",
-    "errorDeletingBreed": "There was an error deleting the breed",
-    "errorDeletingSpecies": "There was an error deleting the species",
-    "errorEditing": "There was an error editing the species",
-    "errorUpdatingSpecies": "There was an error updating the species",
-    "notDeletedBreed": "The breed was not deleted",
-    "notDeletedSpecies": "The species was not deleted"
-  }
+	"addButton": "Add",
+	"addMoreSpecies": "Add more species",
+	"breed": "Breed",
+	"deleteButton": "Delete",
+	"editButton": "Save",
+	"gestationPeriod": "Gestation Period",
+	"modal": {
+		"deleteBreed": {
+			"message": "This action cannot be undone.",
+			"title": "Do you want to delete this breed?"
+		},
+		"deleteSpecies": {
+			"message": "This action cannot be undone.",
+			"title": "Do you want to delete this species?"
+		}
+	},
+	"removeButton": "Remove",
+	"saveButton": "Save",
+	"search": "Search",
+	"title": "My Species",
+	"toast": {
+		"deletedBreed": "Breed deleted successfully",
+		"deletedSpecies": "Species deleted successfully",
+		"edited": "Species edited successfully",
+		"errorDeletingBreed": "There was an error deleting the breed",
+		"errorDeletingSpecies": "There was an error deleting the species",
+		"errorEditing": "There was an error editing the species",
+		"errorUpdatingSpecies": "There was an error updating the species",
+		"notDeletedBreed": "The breed was not deleted",
+		"notDeletedSpecies": "The species was not deleted"
+	}
 }

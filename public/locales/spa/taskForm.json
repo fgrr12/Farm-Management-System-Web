@@ -1,19 +1,19 @@
 {
-  "addTask": "Añadir",
-  "description": "Descripción",
-  "name": "Nombre",
-  "priorities": {
-    "default": "Selecciona una prioridad",
-    "high": "Alta",
-    "low": "Baja",
-    "medium": "Media"
-  },
-  "priority": "Prioridad",
-  "selectPriority": "Selecciona una prioridad",
-  "selectSpecies": "Selecciona una especie",
-  "species": "Especie",
-  "title": "Añadir tarea",
-  "toast": {
-    "errorAddingTask": "Se ha producido un error al añadir la tarea."
-  }
+	"addTask": "Añadir",
+	"description": "Descripción",
+	"name": "Nombre",
+	"priorities": {
+		"default": "Selecciona una prioridad",
+		"high": "Alta",
+		"low": "Baja",
+		"medium": "Media"
+	},
+	"priority": "Prioridad",
+	"selectPriority": "Selecciona una prioridad",
+	"selectSpecies": "Selecciona una especie",
+	"species": "Especie",
+	"title": "Añadir tarea",
+	"toast": {
+		"errorAddingTask": "Se ha producido un error al añadir la tarea."
+	}
 }

@@ -1,6 +1,6 @@
 {
-  "drag": "Suelta tu imagen aquí",
-  "invalid": "Solo se permiten imágenes",
-  "nonDrag": "Suelta tu imagen aquí o haz click para seleccionarla",
-  "selected": "Imagen seleccionada:"
+	"drag": "Suelta tu imagen aquí",
+	"invalid": "Solo se permiten imágenes",
+	"nonDrag": "Suelta tu imagen aquí o haz click para seleccionarla",
+	"selected": "Imagen seleccionada:"
 }

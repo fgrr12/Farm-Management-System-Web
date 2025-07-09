@@ -1,22 +1,22 @@
 {
-  "addTask": "Add Task",
-  "completed": "Completed",
-  "filterByPriority": "Filter by priority",
-  "filterBySpecies": "Filter by species",
-  "filterByStatus": "Filter by status",
-  "high": "High",
-  "low": "Low",
-  "medium": "Medium",
-  "noTasks": "No tasks found",
-  "pending": "Pending",
-  "search": "Search",
-  "species": "Species",
-  "status": "Status",
-  "title": "Tasks",
-  "toast": {
-    "errorGettingTasks": "Error getting tasks",
-    "errorUpdatingTaskStatus": "Error updating task status",
-    "taskCompleted": "Task {{taskUuid}} is completed",
-    "taskPending": "Task {{taskUuid}} is pending"
-  }
+	"addTask": "Add Task",
+	"completed": "Completed",
+	"filterByPriority": "Filter by priority",
+	"filterBySpecies": "Filter by species",
+	"filterByStatus": "Filter by status",
+	"high": "High",
+	"low": "Low",
+	"medium": "Medium",
+	"noTasks": "No tasks found",
+	"pending": "Pending",
+	"search": "Search",
+	"species": "Species",
+	"status": "Status",
+	"title": "Tasks",
+	"toast": {
+		"errorGettingTasks": "Error getting tasks",
+		"errorUpdatingTaskStatus": "Error updating task status",
+		"taskCompleted": "Task {{taskUuid}} is completed",
+		"taskPending": "Task {{taskUuid}} is pending"
+	}
 }

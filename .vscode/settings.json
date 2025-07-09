@@ -26,7 +26,9 @@
 		"gsap",
 		"healthicons",
 		"languagedetector",
+		"lineicons",
 		"lngs",
+		"mynaui",
 		"partialize",
 		"Shouty",
 		"synthwave",
@@ -35,6 +37,7 @@
 		"tdesign",
 		"typcn",
 		"unocss",
+		"xmark",
 		"yoyo"
 	],
 	"i18n-ally.localesPaths": "public/locales",

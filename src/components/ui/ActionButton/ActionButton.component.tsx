@@ -21,6 +21,9 @@ const iconColor = (icon: string | undefined) => {
 		case 'i-lucide-circle-x':
 		case 'i-material-symbols-event-busy-rounded':
 			return 'bg-red-500!'
+		case 'i-lineicons-xmark':
+		case 'i-lineicons-microphone-1':
+			return 'bg-white!'
 		default:
 			return ''
 	}
@@ -61,7 +64,7 @@ export const ActionButton: FC<ActionButtonProps> = ({ icon, ...rest }) => {
 			onMouseLeave={handleMouseLeave}
 			{...rest}
 		>
-			<i className={`${icon} h-7! w-7! ${rest.disabled ? 'bg-gray-400!' : iconColor(icon)}`} />
+			<i className={`${icon} h-8! w-8! ${rest.disabled ? 'bg-gray-400!' : iconColor(icon)}`} />
 		</button>
 	)
 }

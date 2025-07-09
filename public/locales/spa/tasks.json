@@ -1,22 +1,22 @@
 {
-  "addTask": "Añadir tarea",
-  "completed": "Completadas",
-  "filterByPriority": "Filtra por prioridad",
-  "filterBySpecies": "Filtra por especie",
-  "filterByStatus": "Filtra por estado",
-  "high": "Alta",
-  "low": "Baja",
-  "medium": "Media",
-  "noTasks": "No se encontraron tareas",
-  "pending": "Pendientes",
-  "search": "Buscar",
-  "species": "Especie",
-  "status": "Estado",
-  "title": "Tareas",
-  "toast": {
-    "errorGettingTasks": "Error al obtener las tareas",
-    "errorUpdatingTaskStatus": "Error al actualizar el estado de la tarea",
-    "taskCompleted": "La tarea {{taskUuid}} está completada",
-    "taskPending": "La tarea {{taskUuid}} está pendiente"
-  }
+	"addTask": "Añadir tarea",
+	"completed": "Completadas",
+	"filterByPriority": "Filtra por prioridad",
+	"filterBySpecies": "Filtra por especie",
+	"filterByStatus": "Filtra por estado",
+	"high": "Alta",
+	"low": "Baja",
+	"medium": "Media",
+	"noTasks": "No se encontraron tareas",
+	"pending": "Pendientes",
+	"search": "Buscar",
+	"species": "Especie",
+	"status": "Estado",
+	"title": "Tareas",
+	"toast": {
+		"errorGettingTasks": "Error al obtener las tareas",
+		"errorUpdatingTaskStatus": "Error al actualizar el estado de la tarea",
+		"taskCompleted": "La tarea {{taskUuid}} está completada",
+		"taskPending": "La tarea {{taskUuid}} está pendiente"
+	}
 }

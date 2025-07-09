@@ -1,34 +1,34 @@
 {
-  "addButton": "Añadir",
-  "addHealthRecord": "Añadir registro de salud",
-  "date": "Fecha",
-  "dosage": "Dosis",
-  "duration": "Duración",
-  "editButton": "Guardar",
-  "editHealthRecord": "Editar registro de salud",
-  "frequency": "Frecuencia",
-  "healthRecordType": {
-    "birth": "Nacimiento/Parto",
-    "checkup": "Revision",
-    "deworming": "Desparasitación",
-    "drying": "Secado",
-    "medication": "Medicación",
-    "pregnancy": "Embarazo/Preñes",
-    "surgery": "Cirugía",
-    "vaccination": "Vacunación"
-  },
-  "medication": "Medicación",
-  "notes": "Notas",
-  "reason": "Razón",
-  "reviewedBy": "Revisado por",
-  "selectType": "Selecciona un tipo",
-  "temperature": "Temperatura",
-  "toast": {
-    "addHealthRecord": "Registro de salud añadido exitosamente.",
-    "editHealthRecord": "Registro de salud editado exitosamente.",
-    "errorAddingHealthRecord": "Se ha producido un error al añadir el registro de salud.",
-    "errorGettingHealthRecord": "Se ha producido un error al obtener el registro de salud."
-  },
-  "type": "Tipo",
-  "weight": "Peso"
+	"addButton": "Añadir",
+	"addHealthRecord": "Añadir registro de salud",
+	"date": "Fecha",
+	"dosage": "Dosis",
+	"duration": "Duración",
+	"editButton": "Guardar",
+	"editHealthRecord": "Editar registro de salud",
+	"frequency": "Frecuencia",
+	"healthRecordType": {
+		"birth": "Nacimiento/Parto",
+		"checkup": "Revision",
+		"deworming": "Desparasitación",
+		"drying": "Secado",
+		"medication": "Medicación",
+		"pregnancy": "Embarazo/Preñes",
+		"surgery": "Cirugía",
+		"vaccination": "Vacunación"
+	},
+	"medication": "Medicación",
+	"notes": "Notas",
+	"reason": "Razón",
+	"reviewedBy": "Revisado por",
+	"selectType": "Selecciona un tipo",
+	"temperature": "Temperatura",
+	"toast": {
+		"addHealthRecord": "Registro de salud añadido exitosamente.",
+		"editHealthRecord": "Registro de salud editado exitosamente.",
+		"errorAddingHealthRecord": "Se ha producido un error al añadir el registro de salud.",
+		"errorGettingHealthRecord": "Se ha producido un error al obtener el registro de salud."
+	},
+	"type": "Tipo",
+	"weight": "Peso"
 }

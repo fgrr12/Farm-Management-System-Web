@@ -1,6 +1,6 @@
 {
-  "drag": "Drag and drop your image here",
-  "invalid": "Invalid file type",
-  "nonDrag": "Drop your image here or click to select it",
-  "selected": "Selected file"
+	"drag": "Drag and drop your image here",
+	"invalid": "Invalid file type",
+	"nonDrag": "Drop your image here or click to select it",
+	"selected": "Selected file"
 }
