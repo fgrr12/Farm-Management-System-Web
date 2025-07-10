@@ -23,7 +23,7 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { ToastManager } from '@/components/layout/ToastManager'
 
-// import { VoiceRecorder } from './components/layout/VoiceRecorder/VoiceRecorder'
+import { VoiceRecorder } from './components/layout/VoiceRecorder/VoiceRecorder'
 
 gsap.registerPlugin(SplitText, useGSAP)
 
@@ -254,7 +254,7 @@ export const App = () => {
 						onCancel={modalData.onCancel}
 					/>
 					<Loading open={appLoading || authLoading} />
-					{/* <VoiceRecorder /> */}
+					<VoiceRecorder />
 					<ToastManager />
 				</main>
 			</div>
