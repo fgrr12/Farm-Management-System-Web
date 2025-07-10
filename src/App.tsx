@@ -23,6 +23,8 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { ToastManager } from '@/components/layout/ToastManager'
 
+// import { VoiceRecorder } from './components/layout/VoiceRecorder/VoiceRecorder'
+
 gsap.registerPlugin(SplitText, useGSAP)
 
 const Animal = lazy(() => import('@/pages/Animal/Animal.page'))

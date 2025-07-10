@@ -30,9 +30,9 @@ const DetailItem = ({ label, value }: { label: string; value: React.ReactNode })
 
 const GenderIcon = ({ gender }: { gender: string }) =>
 	gender.toLowerCase() === 'male' ? (
-		<i className="i-tdesign-gender-male bg-blue-500! w-5! h-5!" />
+		<i className="i-tdesign-gender-male bg-blue-500! w-8! h-8!" />
 	) : (
-		<i className="i-tdesign-gender-female bg-pink-500! w-5! h-5!" />
+		<i className="i-tdesign-gender-female bg-pink-500! w-8! h-8!" />
 	)
 
 const Animal = () => {
