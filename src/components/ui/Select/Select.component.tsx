@@ -27,7 +27,12 @@ export const Select: FC<SelectProps> = ({
 		<fieldset className="fieldset w-full">
 			<legend className="fieldset-legend">{legend}</legend>
 			<div className="relative w-full mx-auto">
-				<select className="input w-full h-12 validator" value={value} ref={ref} {...rest}>
+				<select
+					className="input w-full h-12 validator cursor-pointer"
+					value={value}
+					ref={ref}
+					{...rest}
+				>
 					<option value="" hidden disabled>
 						{defaultLabel ?? t('select.default')}
 					</option>

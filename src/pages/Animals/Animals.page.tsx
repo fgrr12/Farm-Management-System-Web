@@ -1,7 +1,7 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { type ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
@@ -28,12 +28,52 @@ const Animals = () => {
 	const containerRef = useRef<HTMLDivElement>(null)
 
 	const [animals, setAnimals] = useState<AnimalCardProps[]>([])
-	const [filters, setFilters] = useState<AnimalsFilters>(INITIAL_FILTERS)
+	const [filters, setFilters] = useState(INITIAL_FILTERS)
+
+	const genderOptions = [
+		{ value: 'female', name: t('gender.female') },
+		{ value: 'male', name: t('gender.male') },
+	]
+
+	const statusOptions = [
+		{ value: 'inFarm', name: t('status.inFarm') },
+		{ value: 'dead', name: t('status.dead') },
+		{ value: 'sold', name: t('status.sold') },
+	]
 
 	const speciesOptions = useMemo(
 		() => species.map((specie) => ({ value: specie.uuid, name: specie.name })),
 		[species]
 	)
+
+	const filteredAnimals = useMemo(() => {
+		if (!animals.length) return []
+
+		const { speciesUuid, search, gender, status } = filters
+		const normalizedSearch = search?.toLowerCase()
+
+		return animals.filter((animal) => {
+			const matchesSpecies = !speciesUuid || animal.speciesUuid === speciesUuid
+			const matchesGender = !gender || animal.gender.toLowerCase() === gender
+			const matchesSearch =
+				!normalizedSearch || animal.animalId.toLowerCase().includes(normalizedSearch)
+
+			let matchesStatus = true
+			switch (status) {
+				case 'sold':
+					matchesStatus = !!animal.soldDate
+					break
+				case 'dead':
+					matchesStatus = !!animal.deathDate
+					break
+				case 'inFarm':
+					matchesStatus = !animal.soldDate && !animal.deathDate
+					break
+			}
+
+			return matchesSpecies && matchesGender && matchesStatus && matchesSearch
+		})
+	}, [animals, filters])
 
 	const handleSearchChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
 		const { value } = event.target as HTMLInputElement
@@ -44,19 +84,6 @@ const Animals = () => {
 		const { name, value } = event.target
 		setFilters((prev) => ({ ...prev, [name]: value }))
 	}, [])
-
-	const filteredAnimals = useMemo(() => {
-		if (!animals.length) return []
-		const { speciesUuid, search } = filters
-		const normalizedSearch = search?.toLowerCase()
-		return animals.filter((animal) => {
-			const matchesSpecies = speciesUuid ? animal.speciesUuid === speciesUuid : true
-			const matchesSearch = normalizedSearch
-				? animal.animalId.toLowerCase().includes(normalizedSearch)
-				: true
-			return matchesSpecies && matchesSearch
-		})
-	}, [animals, filters])
 
 	const navigateToAddAnimal = () => {
 		navigation(AppRoutes.ADD_ANIMAL)
@@ -119,8 +146,8 @@ const Animals = () => {
 		}
 	}, [filteredAnimals])
 	return (
-		<div className="flex flex-col gap-5 p-4 w-full h-full overflow-auto">
-			<div className="flex flex-col md:grid md:grid-cols-4 items-center justify-center gap-4 w-full">
+		<div className="flex flex-col gap-5 p-4 w-full h-full overflow-auto relative pb-18">
+			<div className="flex flex-col md:grid md:grid-cols-6 items-center justify-center md:gap-4 w-full">
 				<Search placeholder={t('search')} value={filters.search} onChange={handleSearchChange} />
 				<Select
 					name="speciesUuid"
@@ -130,9 +157,25 @@ const Animals = () => {
 					items={speciesOptions}
 					onChange={handleSelectChange}
 				/>
+				<Select
+					name="gender"
+					legend={t('filterByGender')}
+					defaultLabel={t('filterByGender')}
+					value={filters.gender}
+					items={genderOptions}
+					onChange={handleSelectChange}
+				/>
+				<Select
+					name="status"
+					legend={t('filterByStatus')}
+					defaultLabel={t('filterByStatus')}
+					value={filters.status}
+					items={statusOptions}
+					onChange={handleSelectChange}
+				/>
 				<Button
 					type="button"
-					className="btn btn-primary h-12 w-full text-lg col-start-4"
+					className="btn btn-primary h-12 w-full text-lg col-start-6 mt-4 md:mt-0"
 					onClick={navigateToAddAnimal}
 				>
 					{t('addAnimal')}
@@ -158,12 +201,19 @@ const Animals = () => {
 					<div className="text-center text-sm font-semibold">{t('noAnimalsSubtitle')}</div>
 				</div>
 			)}
+			<div className="fixed bottom-4 left-4 lg:left-23 shadow-md rounded-lg p-2 text-center bg-blue-100">
+				<p>
+					<Trans ns="animals" i18nKey="totalFilteredAnimals" count={filteredAnimals.length} />
+				</p>
+			</div>
 		</div>
 	)
 }
 
 const INITIAL_FILTERS: AnimalsFilters = {
 	speciesUuid: '',
+	gender: 'female',
+	status: 'inFarm',
 	search: '',
 }
 

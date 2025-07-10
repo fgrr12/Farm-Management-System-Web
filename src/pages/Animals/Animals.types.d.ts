@@ -1,5 +1,7 @@
 export interface AnimalsFilters {
 	speciesUuid: string
+	gender: string
+	status: string
 	search: string
 }
 

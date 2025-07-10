@@ -1,12 +1,24 @@
 {
 	"addAnimal": "Añadir animal",
+	"filterByGender": "Filtrar por género",
 	"filterBySpecies": "Filtra por especie",
+	"filterByStatus": "Filtrar por estado",
+	"gender": {
+		"female": "Femenino",
+		"male": "Masculino"
+	},
 	"noAnimals": "No hay animales",
 	"noAnimalsSubtitle": "Agrega un animal a tu granja para comenzar",
 	"search": "Buscar",
 	"species": "Especies",
+	"status": {
+		"dead": "Muerto",
+		"inFarm": "En granja",
+		"sold": "Vendido"
+	},
 	"title": "Animales",
 	"toast": {
 		"errorGettingAnimals": "Se ha producido un error al obtener los animales."
-	}
+	},
+	"totalFilteredAnimals": "Animales filtrados: <strong>{{count}}</strong>"
 }
