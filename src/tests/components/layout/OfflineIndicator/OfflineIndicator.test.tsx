@@ -15,8 +15,8 @@ vi.mock('react-i18next', () => ({
 	useTranslation: () => ({
 		t: (key: string, options?: any) => {
 			const translations: Record<string, string> = {
-				'offline.noConnection': 'Sin conexión a internet',
-				'offline.pendingOperations': `${options?.count || 0} operación pendiente`,
+				'offline.noConnection': 'No internet connection',
+				'offline.pendingOperations': `${options?.count || 0} pending operation${options?.count !== 1 ? 's' : ''}`,
 			}
 			return translations[key] || key
 		},
@@ -56,9 +56,9 @@ describe('OfflineIndicator', () => {
 
 		render(<OfflineIndicator />)
 
-		expect(screen.getByText('Sin conexión a internet')).toBeInTheDocument()
+		expect(screen.getByText('No internet connection')).toBeInTheDocument()
 
-		const alertElement = screen.getByText('Sin conexión a internet').closest('.alert')
+		const alertElement = screen.getByText('No internet connection').closest('.alert')
 		expect(alertElement).toHaveClass('alert-warning')
 	})
 
@@ -75,9 +75,9 @@ describe('OfflineIndicator', () => {
 
 		render(<OfflineIndicator />)
 
-		expect(screen.getByText('3 operación pendiente')).toBeInTheDocument()
+		expect(screen.getByText('3 pending operations')).toBeInTheDocument()
 
-		const alertElement = screen.getByText('3 operación pendiente').closest('.alert')
+		const alertElement = screen.getByText('3 pending operations').closest('.alert')
 		expect(alertElement).toHaveClass('alert-info')
 	})
 
@@ -94,8 +94,8 @@ describe('OfflineIndicator', () => {
 
 		render(<OfflineIndicator />)
 
-		expect(screen.getByText('Sin conexión a internet')).toBeInTheDocument()
-		expect(screen.getByText('2 operación pendiente')).toBeInTheDocument()
+		expect(screen.getByText('No internet connection')).toBeInTheDocument()
+		expect(screen.getByText('2 pending operations')).toBeInTheDocument()
 
 		const alerts = document.querySelectorAll('.alert')
 		expect(alerts).toHaveLength(2)
@@ -171,7 +171,7 @@ describe('OfflineIndicator', () => {
 
 			const { unmount } = render(<OfflineIndicator />)
 
-			expect(screen.getByText(`${queueLength} operación pendiente`)).toBeInTheDocument()
+			expect(screen.getByText(`${queueLength} pending operation${queueLength !== 1 ? 's' : ''}`)).toBeInTheDocument()
 
 			unmount()
 		}
@@ -204,7 +204,7 @@ describe('OfflineIndicator', () => {
 		})
 
 		rerender(<OfflineIndicator />)
-		expect(screen.getByText('Sin conexión a internet')).toBeInTheDocument()
+		expect(screen.getByText('No internet connection')).toBeInTheDocument()
 
 		// Add pending operations
 		vi.mocked(useOffline).mockReturnValue({
@@ -217,8 +217,8 @@ describe('OfflineIndicator', () => {
 		})
 
 		rerender(<OfflineIndicator />)
-		expect(screen.getByText('Sin conexión a internet')).toBeInTheDocument()
-		expect(screen.getByText('3 operación pendiente')).toBeInTheDocument()
+		expect(screen.getByText('No internet connection')).toBeInTheDocument()
+		expect(screen.getByText('3 pending operations')).toBeInTheDocument()
 
 		// Go back online but keep queue
 		vi.mocked(useOffline).mockReturnValue({
@@ -231,8 +231,8 @@ describe('OfflineIndicator', () => {
 		})
 
 		rerender(<OfflineIndicator />)
-		expect(screen.queryByText('Sin conexión a internet')).not.toBeInTheDocument()
-		expect(screen.getByText('3 operación pendiente')).toBeInTheDocument()
+		expect(screen.queryByText('No internet connection')).not.toBeInTheDocument()
+		expect(screen.getByText('3 pending operations')).toBeInTheDocument()
 	})
 
 	it('should have accessible alert roles', async () => {

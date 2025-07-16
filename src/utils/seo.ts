@@ -1,35 +1,31 @@
 /**
- * Utilidades SEO para mejorar el rendimiento y la indexación
+ * SEO utilities to improve performance and indexing
  */
 
-// Preload de recursos críticos
-export const preloadCriticalResources = () => {
-	// Preload de fuentes críticas
-	const preloadFont = (href: string, type = 'font/woff2') => {
-		const link = document.createElement('link')
-		link.rel = 'preload'
-		link.as = 'font'
-		link.type = type
-		link.href = href
-		link.crossOrigin = 'anonymous'
-		document.head.appendChild(link)
-	}
+// export const preloadCriticalResources = () => {
+// 	const preloadFont = (href: string, type = 'font/woff2') => {
+// 		const link = document.createElement('link')
+// 		link.rel = 'preload'
+// 		link.as = 'font'
+// 		link.type = type
+// 		link.href = href
+// 		link.crossOrigin = 'anonymous'
+// 		document.head.appendChild(link)
+// 	}
 
-	// Preload de imágenes críticas
-	const preloadImage = (href: string) => {
-		const link = document.createElement('link')
-		link.rel = 'preload'
-		link.as = 'image'
-		link.href = href
-		document.head.appendChild(link)
-	}
+// 	const preloadImage = (href: string) => {
+// 		const link = document.createElement('link')
+// 		link.rel = 'preload'
+// 		link.as = 'image'
+// 		link.href = href
+// 		document.head.appendChild(link)
+// 	}
 
-	// Precargar recursos críticos
-	preloadFont('/fonts/inter-var.woff2')
-	preloadImage('/logo.png')
-}
+// 	// preloadFont('/fonts/inter-var.woff2')
+// 	// preloadImage('/logo.png')
+// }
 
-// Generar breadcrumbs estructurados
+// Generate structured breadcrumbs
 export const generateBreadcrumbs = (pathname: string) => {
 	const pathSegments = pathname.split('/').filter(Boolean)
 	const breadcrumbs = [
@@ -61,7 +57,7 @@ export const generateBreadcrumbs = (pathname: string) => {
 	}
 }
 
-// Generar datos estructurados para la aplicación
+// Generate structured data for the application
 export const generateAppStructuredData = () => {
 	return {
 		'@context': 'https://schema.org',
@@ -110,14 +106,14 @@ export const generateAppStructuredData = () => {
 	}
 }
 
-// Optimizar imágenes para SEO
+// Optimize images for SEO
 export const optimizeImageSEO = (img: HTMLImageElement, alt: string, title?: string) => {
 	img.alt = alt
 	if (title) img.title = title
 	img.loading = 'lazy'
 	img.decoding = 'async'
 
-	// Agregar datos estructurados para imágenes importantes
+	// Add structured data for important images
 	if (img.classList.contains('hero-image') || img.classList.contains('featured-image')) {
 		const imageData = {
 			'@context': 'https://schema.org',
@@ -128,7 +124,7 @@ export const optimizeImageSEO = (img: HTMLImageElement, alt: string, title?: str
 			height: img.naturalHeight || img.height,
 		}
 
-		// Crear script de datos estructurados para la imagen
+		// Create structured data script for the image
 		const script = document.createElement('script')
 		script.type = 'application/ld+json'
 		script.textContent = JSON.stringify(imageData)
@@ -136,9 +132,9 @@ export const optimizeImageSEO = (img: HTMLImageElement, alt: string, title?: str
 	}
 }
 
-// Mejorar la accesibilidad para SEO
+// Improve accessibility for SEO
 export const improveAccessibility = () => {
-	// Agregar skip links si no existen
+	// Add skip links if they don't exist
 	if (!document.querySelector('#skip-to-main')) {
 		const skipLink = document.createElement('a')
 		skipLink.id = 'skip-to-main'
@@ -149,14 +145,14 @@ export const improveAccessibility = () => {
 		document.body.insertBefore(skipLink, document.body.firstChild)
 	}
 
-	// Asegurar que el main content tenga el ID correcto
+	// Ensure main content has the correct ID
 	const main = document.querySelector('main')
 	if (main && !main.id) {
 		main.id = 'main-content'
 	}
 }
 
-// Generar meta tags para redes sociales específicas
+// Generate meta tags for specific social networks
 export const generateSocialMetaTags = (data: {
 	title: string
 	description: string
@@ -199,18 +195,18 @@ export const generateSocialMetaTags = (data: {
 	return metaTags
 }
 
-// Función para lazy load de componentes no críticos
+// Lazy load non-critical components
 export const lazyLoadNonCritical = () => {
-	// Lazy load de analytics y tracking scripts
+	// Lazy load analytics and tracking scripts
 	const loadAnalytics = () => {
-		// Cargar Google Analytics, Hotjar, etc. después del load inicial
+		// Load Google Analytics, Hotjar, etc. after initial load
 		setTimeout(() => {
-			// Aquí se cargarían los scripts de analytics
+			// Analytics scripts would be loaded here
 			console.log('Loading analytics scripts...')
 		}, 2000)
 	}
 
-	// Cargar después de que la página esté completamente cargada
+	// Load after page is completely loaded
 	if (document.readyState === 'complete') {
 		loadAnalytics()
 	} else {
@@ -218,9 +214,9 @@ export const lazyLoadNonCritical = () => {
 	}
 }
 
-// Optimizar Core Web Vitals
+// Optimize Core Web Vitals
 export const optimizeCoreWebVitals = () => {
-	// Preconnect a dominios externos críticos
+	// Preconnect to critical external domains
 	const preconnectDomains = [
 		'https://fonts.googleapis.com',
 		'https://fonts.gstatic.com',
@@ -238,9 +234,9 @@ export const optimizeCoreWebVitals = () => {
 		document.head.appendChild(link)
 	})
 
-	// Optimizar LCP (Largest Contentful Paint)
+	// Optimize LCP (Largest Contentful Paint)
 	const optimizeLCP = () => {
-		// Preload de la imagen hero si existe
+		// Preload hero image if it exists
 		const heroImage = document.querySelector('.hero-image') as HTMLImageElement
 		if (heroImage && heroImage.src) {
 			const link = document.createElement('link')
@@ -251,31 +247,31 @@ export const optimizeCoreWebVitals = () => {
 		}
 	}
 
-	// Optimizar CLS (Cumulative Layout Shift)
+	// Optimize CLS (Cumulative Layout Shift)
 	const optimizeCLS = () => {
-		// Reservar espacio para imágenes
+		// Reserve space for images
 		const images = document.querySelectorAll('img:not([width]):not([height])')
 		images.forEach((img) => {
 			const htmlImg = img as HTMLImageElement
 			if (!htmlImg.style.aspectRatio) {
-				htmlImg.style.aspectRatio = '16/9' // Ratio por defecto
+				htmlImg.style.aspectRatio = '16/9' // Default ratio
 			}
 		})
 	}
 
-	// Ejecutar optimizaciones
+	// Execute optimizations
 	optimizeLCP()
 	optimizeCLS()
 }
 
-// Inicializar todas las optimizaciones SEO
+// Initialize all SEO optimizations
 export const initializeSEO = () => {
-	preloadCriticalResources()
+	// preloadCriticalResources()
 	improveAccessibility()
 	optimizeCoreWebVitals()
 	lazyLoadNonCritical()
 
-	// Agregar datos estructurados de la aplicación
+	// Add application structured data
 	const appData = generateAppStructuredData()
 	const script = document.createElement('script')
 	script.type = 'application/ld+json'

@@ -14,7 +14,7 @@ export const useOffline = () => {
 	const [isOffline, setIsOffline] = useState(!navigator.onLine)
 	const [offlineQueue, setOfflineQueue] = useState<OfflineQueueItem[]>([])
 
-	// Procesar cola offline cuando se recupere la conexión
+	// Process offline queue when connection is restored
 	const processOfflineQueue = useCallback(async () => {
 		if (offlineQueue.length === 0) return
 
@@ -32,20 +32,20 @@ export const useOffline = () => {
 					retries: item.retries,
 				})
 
-				// Reintentar hasta 3 veces
+				// Retry up to 3 times
 				if (item.retries < 3) {
 					failedItems.push({
 						...item,
 						retries: item.retries + 1,
 					})
 				} else {
-					// Después de 3 reintentos, marcar como procesado para eliminarlo
+					// After 3 retries, mark as processed to remove it
 					processedItems.push(item.id)
 				}
 			}
 		}
 
-		// Actualizar cola: remover procesados, mantener fallidos
+		// Update queue: remove processed, keep failed
 		setOfflineQueue((prev) => [
 			...failedItems,
 			...prev.filter(
@@ -55,7 +55,7 @@ export const useOffline = () => {
 		])
 	}, [offlineQueue])
 
-	// Cargar cola desde localStorage al inicializar
+	// Load queue from localStorage on initialization
 	useEffect(() => {
 		const savedQueue = localStorage.getItem('offlineQueue')
 		if (savedQueue) {
@@ -68,7 +68,7 @@ export const useOffline = () => {
 		}
 	}, [])
 
-	// Guardar cola en localStorage cuando cambie
+	// Save queue to localStorage when it changes
 	useEffect(() => {
 		if (offlineQueue.length > 0) {
 			localStorage.setItem('offlineQueue', JSON.stringify(offlineQueue))
@@ -77,7 +77,7 @@ export const useOffline = () => {
 		}
 	}, [offlineQueue])
 
-	// Escuchar cambios de conectividad
+	// Listen for connectivity changes
 	useEffect(() => {
 		const handleOnline = () => {
 			setIsOffline(false)
@@ -97,7 +97,7 @@ export const useOffline = () => {
 		}
 	}, [processOfflineQueue])
 
-	// Agregar operación a la cola offline
+	// Add operation to offline queue
 	const addToOfflineQueue = useCallback((operation: () => Promise<any>, data: any) => {
 		const queueItem: OfflineQueueItem = {
 			id: crypto.randomUUID(),
@@ -110,7 +110,7 @@ export const useOffline = () => {
 		setOfflineQueue((prev) => [...prev, queueItem])
 	}, [])
 
-	// Limpiar cola offline
+	// Clear offline queue
 	const clearOfflineQueue = useCallback(() => {
 		setOfflineQueue([])
 	}, [])
@@ -126,7 +126,7 @@ export const useOffline = () => {
 }
 
 /**
- * Hook para operaciones que deben funcionar offline
+ * Hook for operations that should work offline
  */
 export const useOfflineOperation = () => {
 	const { isOffline, addToOfflineQueue } = useOffline()
@@ -140,13 +140,13 @@ export const useOfflineOperation = () => {
 			try {
 				return await operation()
 			} catch (error) {
-				// Si falla online, agregar a cola offline
+				// If fails online, add to offline queue
 				addToOfflineQueue(operation, data)
 				if (fallback) fallback()
 				throw error
 			}
 		} else {
-			// Si está offline, agregar directamente a la cola
+			// If offline, add directly to queue
 			addToOfflineQueue(operation, data)
 			if (fallback) fallback()
 		}

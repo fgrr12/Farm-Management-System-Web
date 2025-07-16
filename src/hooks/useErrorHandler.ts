@@ -9,25 +9,20 @@ export const useErrorHandler = () => {
 
 	const handleError = useCallback(
 		(error: unknown, context?: Record<string, any>) => {
-			// Log del error
 			logError(error, context)
-
-			// Determinar el tipo de error y mostrar mensaje apropiado
 			if (error instanceof AppError) {
 				setToastData({
 					message: error.message,
 					type: error.statusCode >= 500 ? 'error' : 'warning',
 				})
 			} else if (error instanceof Error) {
-				// Error genérico de JavaScript
 				setToastData({
-					message: error.message || 'Ha ocurrido un error inesperado',
+					message: error.message || 'An unexpected error occurred',
 					type: 'error',
 				})
 			} else {
-				// Error desconocido
 				setToastData({
-					message: 'Ha ocurrido un error inesperado',
+					message: 'An unexpected error occurred',
 					type: 'error',
 				})
 			}
@@ -41,7 +36,7 @@ export const useErrorHandler = () => {
 				return await asyncFn()
 			} catch (error) {
 				handleError(error, context)
-				throw error // Re-throw para que el componente pueda manejar el error si es necesario
+				throw error
 			}
 		},
 		[handleError]

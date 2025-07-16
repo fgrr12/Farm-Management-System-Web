@@ -1,4 +1,4 @@
-// Configuración de analytics
+// Analytics configuration
 interface AnalyticsConfig {
 	enabled: boolean
 	debug: boolean
@@ -26,14 +26,13 @@ class Analytics {
 	private queue: Array<{ type: string; data: any }> = []
 
 	constructor() {
-		// Inicializar analytics en producción
 		if (this.config.enabled) {
 			this.initializeAnalytics()
 		}
 	}
 
 	private initializeAnalytics() {
-		// TODO: Inicializar servicio de analytics (Google Analytics, Mixpanel, etc.)
+		// TODO: Initialize analytics service (Google Analytics, Mixpanel, etc.)
 		if (this.config.debug) {
 			console.log('Analytics initialized')
 		}
@@ -51,7 +50,7 @@ class Analytics {
 		}
 
 		if (this.config.enabled) {
-			// TODO: Enviar a servicio de analytics
+			// TODO: Send to analytics service
 			this.queue.push({ type: 'identify', data })
 		}
 
@@ -75,7 +74,7 @@ class Analytics {
 		}
 
 		if (this.config.enabled) {
-			// TODO: Enviar a servicio de analytics
+			// TODO: Send to analytics service
 			this.queue.push({ type: 'track', data })
 		}
 	}
@@ -97,12 +96,11 @@ class Analytics {
 		}
 
 		if (this.config.enabled) {
-			// TODO: Enviar a servicio de analytics
+			// TODO: Send to analytics service
 			this.queue.push({ type: 'page', data })
 		}
 	}
 
-	// Método para interacciones específicas
 	trackInteraction(element: string, action: string, properties?: EventProperties) {
 		this.track(`${element}_${action}`, {
 			element,
@@ -111,21 +109,17 @@ class Analytics {
 		})
 	}
 
-	// Obtener cola de eventos (útil para debugging)
 	getQueue() {
 		return this.queue
 	}
 
-	// Limpiar cola
 	clearQueue() {
 		this.queue = []
 	}
 }
 
-// Instancia singleton
 const analytics = new Analytics()
 
-// Funciones de conveniencia
 export const trackEvent = (eventName: string, properties?: Record<string, any>) => {
 	analytics.track(eventName, properties)
 }
@@ -146,46 +140,36 @@ export const identifyUser = (userId: string, properties?: Partial<UserProperties
 	analytics.identify(userId, properties)
 }
 
-// Eventos predefinidos para la aplicación
 export const ANALYTICS_EVENTS = {
-	// Autenticación
 	LOGIN_SUCCESS: 'login_success',
 	LOGIN_FAILED: 'login_failed',
 	LOGOUT: 'logout',
 
-	// Navegación
 	PAGE_VIEW: 'page_view',
 	LANGUAGE_CHANGED: 'language_changed',
 
-	// Animales
 	ANIMAL_CREATED: 'animal_created',
 	ANIMAL_UPDATED: 'animal_updated',
 	ANIMAL_DELETED: 'animal_deleted',
 	ANIMAL_VIEWED: 'animal_viewed',
 
-	// Empleados
 	EMPLOYEE_CREATED: 'employee_created',
 	EMPLOYEE_UPDATED: 'employee_updated',
 	EMPLOYEE_DELETED: 'employee_deleted',
 
-	// Tareas
 	TASK_CREATED: 'task_created',
 	TASK_COMPLETED: 'task_completed',
 	TASK_UPDATED: 'task_updated',
 
-	// Registros de salud
 	HEALTH_RECORD_CREATED: 'health_record_created',
 	HEALTH_RECORD_UPDATED: 'health_record_updated',
 
-	// Registros de producción
 	PRODUCTION_RECORD_CREATED: 'production_record_created',
 	PRODUCTION_RECORD_UPDATED: 'production_record_updated',
 
-	// Errores
 	ERROR_OCCURRED: 'error_occurred',
 	NETWORK_ERROR: 'network_error',
 
-	// Funcionalidad offline
 	OFFLINE_MODE_ENABLED: 'offline_mode_enabled',
 	OFFLINE_QUEUE_PROCESSED: 'offline_queue_processed',
 } as const

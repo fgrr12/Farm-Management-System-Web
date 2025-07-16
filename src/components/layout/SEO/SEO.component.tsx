@@ -17,7 +17,7 @@ interface PageSEOConfig {
     keywords: string
 }
 
-// Configuración SEO por página
+// SEO configuration per page
 const PAGE_SEO_CONFIG: Record<string, PageSEOConfig> = {
     '/': {
         title: 'Dashboard - Cattle Farm Management System',
@@ -103,20 +103,15 @@ export const SEO = ({
     const location = useLocation()
 
     useEffect(() => {
-        // Obtener configuración SEO de la página actual
         const pageConfig = PAGE_SEO_CONFIG[location.pathname]
 
-        // Usar props personalizados o configuración de página por defecto
         const finalTitle = title || pageConfig?.title || 'Cattle Farm Management System'
         const finalDescription = description || pageConfig?.description || 'Professional farm management software for livestock operations'
         const finalKeywords = keywords || pageConfig?.keywords || 'farm management, livestock, cattle'
         const finalUrl = url || `${window.location.origin}${location.pathname}`
         const finalImage = image || `${window.location.origin}/og-image.jpg`
 
-        // Actualizar título de la página
         document.title = finalTitle
-
-        // Función para actualizar o crear meta tag
         const updateMetaTag = (selector: string, content: string) => {
             let element = document.querySelector(selector) as HTMLMetaElement
             if (element) {
@@ -133,26 +128,21 @@ export const SEO = ({
             }
         }
 
-        // Actualizar meta tags básicos
         updateMetaTag('meta[name="title"]', finalTitle)
         updateMetaTag('meta[name="description"]', finalDescription)
         updateMetaTag('meta[name="keywords"]', finalKeywords)
         updateMetaTag('meta[name="robots"]', noIndex ? 'noindex, nofollow' : 'index, follow')
 
-        // Actualizar Open Graph tags
         updateMetaTag('meta[property="og:title"]', finalTitle)
         updateMetaTag('meta[property="og:description"]', finalDescription)
         updateMetaTag('meta[property="og:url"]', finalUrl)
         updateMetaTag('meta[property="og:image"]', finalImage)
         updateMetaTag('meta[property="og:type"]', type)
 
-        // Actualizar Twitter tags
         updateMetaTag('meta[property="twitter:title"]', finalTitle)
         updateMetaTag('meta[property="twitter:description"]', finalDescription)
         updateMetaTag('meta[property="twitter:url"]', finalUrl)
         updateMetaTag('meta[property="twitter:image"]', finalImage)
-
-        // Actualizar canonical URL
         let canonicalLink = document.querySelector('link[rel="canonical"]') as HTMLLinkElement
         if (canonicalLink) {
             canonicalLink.href = finalUrl
@@ -163,15 +153,12 @@ export const SEO = ({
             document.head.appendChild(canonicalLink)
         }
 
-        // Actualizar structured data para páginas específicas
         updateStructuredData(location.pathname, finalTitle, finalDescription)
 
     }, [location.pathname, title, description, keywords, image, url, type, noIndex])
 
-    return null // Este componente no renderiza nada visible
+    return null
 }
-
-// Función para actualizar datos estructurados específicos por página
 const updateStructuredData = (pathname: string, title: string, description: string) => {
     let structuredData: any = {
         '@context': 'https://schema.org',
@@ -181,7 +168,7 @@ const updateStructuredData = (pathname: string, title: string, description: stri
         url: `${window.location.origin}${pathname}`,
     }
 
-    // Datos estructurados específicos por tipo de página
+    // Specific structured data by page type
     if (pathname.includes('/animals')) {
         structuredData = {
             ...structuredData,
@@ -205,7 +192,7 @@ const updateStructuredData = (pathname: string, title: string, description: stri
         }
     }
 
-    // Actualizar o crear script de datos estructurados
+
     let structuredDataScript = document.querySelector('script[type="application/ld+json"]#page-structured-data') as HTMLScriptElement
     if (structuredDataScript) {
         structuredDataScript.textContent = JSON.stringify(structuredData)

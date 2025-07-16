@@ -93,7 +93,7 @@ describe('useErrorHandler', () => {
 			const { logError } = await import('@/utils/errorHandler')
 			expect(logError).toHaveBeenCalledWith(errorWithoutMessage, undefined)
 			expect(mockSetToastData).toHaveBeenCalledWith({
-				message: 'Ha ocurrido un error inesperado',
+				message: 'An unexpected error occurred',
 				type: 'error',
 			})
 		})
@@ -109,7 +109,7 @@ describe('useErrorHandler', () => {
 			const { logError } = await import('@/utils/errorHandler')
 			expect(logError).toHaveBeenCalledWith(unknownError, undefined)
 			expect(mockSetToastData).toHaveBeenCalledWith({
-				message: 'Ha ocurrido un error inesperado',
+				message: 'An unexpected error occurred',
 				type: 'error',
 			})
 		})
@@ -170,7 +170,7 @@ describe('useErrorHandler', () => {
 			})
 
 			expect(mockSetToastData).toHaveBeenCalledWith({
-				message: 'Ha ocurrido un error inesperado',
+				message: 'An unexpected error occurred',
 				type: 'error',
 			})
 
@@ -179,7 +179,7 @@ describe('useErrorHandler', () => {
 			})
 
 			expect(mockSetToastData).toHaveBeenCalledWith({
-				message: 'Ha ocurrido un error inesperado',
+				message: 'An unexpected error occurred',
 				type: 'error',
 			})
 		})

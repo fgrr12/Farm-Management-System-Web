@@ -5,7 +5,7 @@ import { useAppStore } from '@/store/useAppStore'
 
 import { ANALYTICS_EVENTS, trackEvent } from '@/utils/analytics'
 
-// Mapeo de rutas a nombres de página
+// Route to page name mapping
 const PAGE_NAMES: Record<string, string> = {
 	'/': 'Home',
 	'/animals': 'Animals',
@@ -24,14 +24,14 @@ const PAGE_NAMES: Record<string, string> = {
 }
 
 /**
- * Hook para tracking automático de páginas
+ * Hook for automatic page tracking
  */
 export const usePageTracking = () => {
 	const location = useLocation()
 	const { headerTitle } = useAppStore()
 
 	useEffect(() => {
-		// Obtener nombre de la página
+		// Get page name
 		const pageName = PAGE_NAMES[location.pathname] || headerTitle || 'Unknown Page'
 
 		// Track page view
@@ -42,7 +42,7 @@ export const usePageTracking = () => {
 			timestamp: new Date().toISOString(),
 		})
 
-		// Actualizar título del documento (solo si no hay un título más específico)
+		// Update document title (only if there's no more specific title)
 		if (!document.title.includes(' - ')) {
 			document.title = pageName
 				? `${pageName} - Cattle Farm Management System`

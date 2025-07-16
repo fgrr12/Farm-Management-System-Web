@@ -25,7 +25,7 @@ export const VoiceRecorder = () => {
 			mediaRecorder.onstop = () => {
 				const blob = new Blob(chunks, { type: 'audio/webm' })
 				setAudioBlob(blob)
-				stream.getTracks().forEach((track) => track.stop()) // Limpia micrófono
+				stream.getTracks().forEach((track) => track.stop()) // Clean up microphone
 				streamRef.current = null
 			}
 
@@ -39,7 +39,7 @@ export const VoiceRecorder = () => {
 				setRecordingTime((prev) => prev + 1)
 			}, 1000)
 		} catch (err) {
-			console.error('Error al iniciar grabación:', err)
+			console.error('Error starting recording:', err)
 		}
 	}
 
@@ -65,8 +65,8 @@ export const VoiceRecorder = () => {
 			const data = await res.json()
 			setTranscript(data.texto || data.error || 'Error al transcribir')
 		} catch (err) {
-			console.error('Error al enviar audio:', err)
-			setTranscript('Error al enviar el audio')
+			console.error('Error sending audio:', err)
+			setTranscript('Error sending audio')
 		}
 	}
 
@@ -105,15 +105,14 @@ export const VoiceRecorder = () => {
 							<div className="flex flex-col gap-2 items-center flex-1 max-w-60">
 								<div className="w-full h-1 bg-gray-400 rounded-full">
 									<div
-										className={`w-full h-1 rounded-full animate-pulse ${
-											recording ? 'bg-blue-500' : 'bg-gray-400'
-										}`}
+										className={`w-full h-1 rounded-full animate-pulse ${recording ? 'bg-blue-500' : 'bg-gray-400'
+											}`}
 									/>
 								</div>
 								<div className="text-xs text-gray-500">
 									{recording
-										? `Grabando... ${recordingTime}s`
-										: `Duración de la grabación: ${recordingTime}s`}
+										? `Recording... ${recordingTime}s`
+										: `Recording duration: ${recordingTime}s`}
 								</div>
 							</div>
 
@@ -123,19 +122,19 @@ export const VoiceRecorder = () => {
 								onClick={sendAudio}
 								disabled={!audioBlob || recording}
 							>
-								Enviar
+								Send
 							</button>
 						</div>
 
 						<p className="mt-4 text-sm text-gray-700">
-							<strong>Transcripción:</strong> {transcript}
+							<strong>Transcription:</strong> {transcript}
 						</p>
 						<div key={audioUrl} className="mt-4 max-w-100">
-							<p className="text-sm text-gray-700 font-semibold mb-1">Reproducir audio grabado:</p>
+							<p className="text-sm text-gray-700 font-semibold mb-1">Play recorded audio:</p>
 							<audio controls className="w-full">
 								<source src={audioUrl} type="audio/webm" />
 								<track kind="captions" />
-								Tu navegador no soporta audio.
+								Your browser does not support audio.
 							</audio>
 						</div>
 					</div>

@@ -10,8 +10,8 @@ interface SEOOptions {
 }
 
 /**
- * Hook para manejar SEO dinámico en componentes específicos
- * Útil para páginas que necesitan SEO personalizado basado en datos
+ * Hook for dynamic SEO in specific components
+ * Useful for pages that need custom SEO based on data
  */
 export const useSEO = ({
 	title,
@@ -22,7 +22,7 @@ export const useSEO = ({
 	canonical,
 }: SEOOptions) => {
 	useEffect(() => {
-		// Función para actualizar o crear meta tag
+		// Function to update or create meta tag
 		const updateMetaTag = (selector: string, content: string) => {
 			let element = document.querySelector(selector) as HTMLMetaElement
 			if (element) {
@@ -39,7 +39,7 @@ export const useSEO = ({
 			}
 		}
 
-		// Actualizar título si se proporciona
+		// Update title if provided
 		if (title) {
 			document.title = title
 			updateMetaTag('meta[name="title"]', title)
@@ -47,30 +47,30 @@ export const useSEO = ({
 			updateMetaTag('meta[property="twitter:title"]', title)
 		}
 
-		// Actualizar descripción si se proporciona
+		// Update description if provided
 		if (description) {
 			updateMetaTag('meta[name="description"]', description)
 			updateMetaTag('meta[property="og:description"]', description)
 			updateMetaTag('meta[property="twitter:description"]', description)
 		}
 
-		// Actualizar keywords si se proporciona
+		// Update keywords if provided
 		if (keywords) {
 			updateMetaTag('meta[name="keywords"]', keywords)
 		}
 
-		// Actualizar imagen si se proporciona
+		// Update image if provided
 		if (image) {
 			updateMetaTag('meta[property="og:image"]', image)
 			updateMetaTag('meta[property="twitter:image"]', image)
 		}
 
-		// Actualizar robots si se especifica noIndex
+		// Update robots if noIndex is specified
 		if (noIndex) {
 			updateMetaTag('meta[name="robots"]', 'noindex, nofollow')
 		}
 
-		// Actualizar canonical URL si se proporciona
+		// Update canonical URL if provided
 		if (canonical) {
 			let canonicalLink = document.querySelector('link[rel="canonical"]') as HTMLLinkElement
 			if (canonicalLink) {
@@ -83,16 +83,15 @@ export const useSEO = ({
 			}
 		}
 
-		// Cleanup function para restaurar valores por defecto si es necesario
+		// Cleanup function to restore default values if needed
 		return () => {
-			// En este caso no necesitamos cleanup ya que el componente SEO principal
-			// se encarga de manejar los valores por defecto
+			// No cleanup needed as the main SEO component handles default values
 		}
 	}, [title, description, keywords, image, noIndex, canonical])
 }
 
 /**
- * Hook específico para páginas de detalles de animales
+ * Specific hook for animal detail pages
  */
 export const useAnimalSEO = (animal?: {
 	animalId: string
@@ -118,12 +117,12 @@ export const useAnimalSEO = (animal?: {
 		title,
 		description,
 		keywords,
-		noIndex: false, // Los detalles de animales pueden ser indexados
+		noIndex: false, // Animal details can be indexed
 	})
 }
 
 /**
- * Hook específico para páginas de empleados
+ * Specific hook for employee pages
  */
 export const useEmployeeSEO = (employee?: { name: string; role: string }) => {
 	const title = employee
@@ -142,12 +141,12 @@ export const useEmployeeSEO = (employee?: { name: string; role: string }) => {
 		title,
 		description,
 		keywords,
-		noIndex: true, // Los detalles de empleados no deben ser indexados por privacidad
+		noIndex: true, // Employee details should not be indexed for privacy
 	})
 }
 
 /**
- * Hook específico para páginas de tareas
+ * Specific hook for task pages
  */
 export const useTaskSEO = (task?: { title: string; description?: string; type?: string }) => {
 	const pageTitle = task
@@ -166,6 +165,6 @@ export const useTaskSEO = (task?: { title: string; description?: string; type?: 
 		title: pageTitle,
 		description: pageDescription,
 		keywords,
-		noIndex: false, // Las tareas pueden ser indexadas
+		noIndex: false, // Tasks can be indexed
 	})
 }

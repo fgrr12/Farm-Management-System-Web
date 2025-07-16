@@ -20,21 +20,21 @@ export class ValidationError extends AppError {
 }
 
 export class NetworkError extends AppError {
-	constructor(message = 'Error de conexión') {
+	constructor(message = 'Connection error') {
 		super(message, 'NETWORK_ERROR', 503)
 		this.name = 'NetworkError'
 	}
 }
 
 export class AuthError extends AppError {
-	constructor(message = 'Error de autenticación') {
+	constructor(message = 'Authentication error') {
 		super(message, 'AUTH_ERROR', 401)
 		this.name = 'AuthError'
 	}
 }
 
 export class PermissionError extends AppError {
-	constructor(message = 'No tienes permisos para realizar esta acción') {
+	constructor(message = 'You do not have permission to perform this action') {
 		super(message, 'PERMISSION_ERROR', 403)
 		this.name = 'PermissionError'
 	}
@@ -52,9 +52,9 @@ export const logError = (error: unknown, context?: Record<string, any>) => {
 
 	console.error('App Error:', errorInfo)
 
-	// En producción, enviar a servicio de logging (Sentry, LogRocket, etc.)
+	// In production, send to logging service (Sentry, LogRocket, etc.)
 	if (import.meta.env.PROD) {
-		// TODO: Integrar con servicio de logging externo
+		// TODO: Integrate with external logging service
 		// Sentry.captureException(error, { extra: errorInfo })
 	}
 }
