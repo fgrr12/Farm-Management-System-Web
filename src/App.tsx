@@ -14,6 +14,7 @@ import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
 import { PrivateRoute } from '@/utils/PrivateRoute'
+import { initializeSEO } from '@/utils/seo'
 
 import { UserService } from '@/services/user'
 
@@ -21,6 +22,7 @@ import { Loading } from '@/components/layout/Loading'
 import { Modal } from '@/components/layout/Modal'
 import { Navbar } from '@/components/layout/Navbar'
 import { OfflineIndicator } from '@/components/layout/OfflineIndicator'
+import { SEO } from '@/components/layout/SEO'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { ToastManager } from '@/components/layout/ToastManager'
 
@@ -81,8 +83,15 @@ export const App = () => {
 		i18n.changeLanguage(user?.language || browserLanguage)
 	}, [user])
 
+	// Inicializar optimizaciones SEO
+	// biome-ignore lint:: UseEffect is only called once
+	useEffect(() => {
+		initializeSEO()
+	}, [])
+
 	return (
 		<div className="flex flex-col w-full h-screen">
+			<SEO />
 			{location.pathname !== AppRoutes.LOGIN && <Navbar />}
 			<div className="flex flex-row w-full h-full overflow-hidden">
 				{location.pathname !== AppRoutes.LOGIN && <Sidebar />}

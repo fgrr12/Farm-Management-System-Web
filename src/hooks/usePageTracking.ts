@@ -42,7 +42,11 @@ export const usePageTracking = () => {
 			timestamp: new Date().toISOString(),
 		})
 
-		// Actualizar título del documento
-		document.title = pageName ? `${pageName} - Cattle Farm` : 'Cattle Farm'
+		// Actualizar título del documento (solo si no hay un título más específico)
+		if (!document.title.includes(' - ')) {
+			document.title = pageName
+				? `${pageName} - Cattle Farm Management System`
+				: 'Cattle Farm Management System'
+		}
 	}, [location.pathname, location.search, headerTitle])
 }

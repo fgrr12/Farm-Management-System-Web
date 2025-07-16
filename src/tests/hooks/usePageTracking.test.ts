@@ -54,7 +54,7 @@ describe('usePageTracking', () => {
 	it('should update document title', () => {
 		renderHook(() => usePageTracking())
 
-		expect(document.title).toBe('Animals - Cattle Farm')
+		expect(document.title).toBe('Animals - Cattle Farm Management System')
 	})
 
 	it('should use header title when page name not found', () => {
@@ -69,7 +69,7 @@ describe('usePageTracking', () => {
 			timestamp: expect.any(String),
 		})
 
-		expect(document.title).toBe(`${mockHeaderTitle} - Cattle Farm`)
+		expect(document.title).toBe(`${mockHeaderTitle} - Cattle Farm Management System`)
 	})
 
 	it('should handle root path correctly', () => {
