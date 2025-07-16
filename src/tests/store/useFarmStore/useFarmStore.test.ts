@@ -83,8 +83,8 @@ describe('useFarmStore', () => {
 	it('should set species correctly', () => {
 		const { result } = renderHook(() => useFarmStore())
 		const mockSpecies = [
-			{ uuid: 'species-1', name: 'Cattle' },
-			{ uuid: 'species-2', name: 'Sheep' },
+			{ uuid: 'species-1', farmUuid: 'test-farm', name: 'Cattle' },
+			{ uuid: 'species-2', farmUuid: 'test-farm', name: 'Sheep' },
 		]
 
 		act(() => {
@@ -97,8 +97,20 @@ describe('useFarmStore', () => {
 	it('should set breeds correctly', () => {
 		const { result } = renderHook(() => useFarmStore())
 		const mockBreeds = [
-			{ uuid: 'breed-1', name: 'Holstein' },
-			{ uuid: 'breed-2', name: 'Jersey' },
+			{
+				uuid: 'breed-1',
+				farmUuid: 'test-farm',
+				speciesUuid: 'species-1',
+				name: 'Holstein',
+				gestationPeriod: 280,
+			},
+			{
+				uuid: 'breed-2',
+				farmUuid: 'test-farm',
+				speciesUuid: 'species-1',
+				name: 'Jersey',
+				gestationPeriod: 280,
+			},
 		]
 
 		act(() => {
@@ -110,7 +122,15 @@ describe('useFarmStore', () => {
 
 	it('should load farm data correctly', async () => {
 		const mockFarm = createMockFarm()
-		const mockBillingCard = { uuid: 'billing-1', name: 'Test Card' }
+		const mockBillingCard = {
+			uuid: 'billing-1',
+			id: 'card-1',
+			name: 'Test Card',
+			phone: '123-456-7890',
+			email: 'test@example.com',
+			address: '123 Test St',
+			status: true,
+		}
 
 		// Mock service responses using dynamic imports
 		const farmsService = await import('@/services/farms')

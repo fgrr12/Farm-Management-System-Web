@@ -94,13 +94,13 @@ describe('Modal', () => {
 		const dialog = document.querySelector('dialog')
 		expect(dialog).toHaveClass('modal')
 
-		const modalBox = dialog.querySelector('.modal-box')
+		const modalBox = dialog?.querySelector('.modal-box')
 		expect(modalBox).toBeInTheDocument()
 
-		const modalAction = dialog.querySelector('.modal-action')
+		const modalAction = dialog?.querySelector('.modal-action')
 		expect(modalAction).toBeInTheDocument()
 
-		const modalBackdrop = dialog.querySelector('.modal-backdrop')
+		const modalBackdrop = dialog?.querySelector('.modal-backdrop')
 		expect(modalBackdrop).toBeInTheDocument()
 	})
 
@@ -142,7 +142,7 @@ describe('Modal', () => {
 		render(<Modal {...defaultProps} onAccept={onAccept} onCancel={onCancel} />)
 
 		const acceptButton = screen.getByText('Aceptar')
-		const _cancelButton = screen.getByText('Cancelar')
+		screen.getByText('Cancelar')
 
 		// Test Enter key on accept button
 		fireEvent.keyDown(acceptButton, { key: 'Enter', code: 'Enter' })

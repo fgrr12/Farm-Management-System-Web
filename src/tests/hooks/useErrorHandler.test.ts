@@ -15,10 +15,12 @@ vi.mock('@/store/useAppStore', () => ({
 vi.mock('@/utils/errorHandler', () => ({
 	logError: vi.fn(),
 	AppError: class AppError extends Error {
+		public code: string
 		public statusCode: number
 
-		constructor(message: string, statusCode: number) {
+		constructor(message: string, code: string, statusCode = 500) {
 			super(message)
+			this.code = code
 			this.statusCode = statusCode
 			this.name = 'AppError'
 		}
@@ -34,7 +36,7 @@ describe('useErrorHandler', () => {
 		it('should handle AppError with status code >= 500 as error', async () => {
 			const { result } = renderHook(() => useErrorHandler())
 			const { AppError } = await import('@/utils/errorHandler')
-			const serverError = new AppError('Server error', 500)
+			const serverError = new AppError('Server error', 'SERVER_ERROR', 500)
 
 			act(() => {
 				result.current.handleError(serverError)
@@ -51,7 +53,7 @@ describe('useErrorHandler', () => {
 		it('should handle AppError with status code < 500 as warning', async () => {
 			const { result } = renderHook(() => useErrorHandler())
 			const { AppError, logError } = await import('@/utils/errorHandler')
-			const clientError = new AppError('Validation error', 400)
+			const clientError = new AppError('Validation error', 'VALIDATION_ERROR', 400)
 
 			act(() => {
 				result.current.handleError(clientError)
@@ -134,7 +136,7 @@ describe('useErrorHandler', () => {
 			const { AppError } = await import('@/utils/errorHandler')
 
 			// Test 404 error (client error)
-			const notFoundError = new AppError('Not found', 404)
+			const notFoundError = new AppError('Not found', 'NOT_FOUND', 404)
 			act(() => {
 				result.current.handleError(notFoundError)
 			})
@@ -145,7 +147,11 @@ describe('useErrorHandler', () => {
 			})
 
 			// Test 503 error (server error)
-			const serviceUnavailableError = new AppError('Service unavailable', 503)
+			const serviceUnavailableError = new AppError(
+				'Service unavailable',
+				'SERVICE_UNAVAILABLE',
+				503
+			)
 			act(() => {
 				result.current.handleError(serviceUnavailableError)
 			})
@@ -292,7 +298,7 @@ describe('useErrorHandler', () => {
 				result.current.handleAsyncError(errorFn).catch(() => 'handled'),
 			]
 
-			let results: any[]
+			let results: any[] = []
 			await act(async () => {
 				results = await Promise.all(promises)
 			})

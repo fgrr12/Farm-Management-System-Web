@@ -139,7 +139,7 @@ describe('capitalizeFirstLetter', () => {
 	describe('performance and edge cases', () => {
 		it('should handle very long strings', () => {
 			const longString = 'a'.repeat(10000)
-			const result = capitalizeFirstLetter(longString)
+			const result = capitalizeFirstLetter(longString) as string
 			expect(result[0]).toBe('A')
 			expect(result.length).toBe(10000)
 			expect(result.slice(1)).toBe('a'.repeat(9999))
