@@ -33,69 +33,81 @@ const RelatedAnimalsForm = () => {
 	const [relatedAnimals, setRelatedAnimals] = useState<Relation[]>([])
 	const [currentAnimal, setCurrentAnimal] = useState<RelatedAnimalInformation | null>(null)
 
-	const removeRelationIfExists = useCallback(async (
-		firstAnimalUuid: string,
-		secondAnimalUuid: string,
-		firstType: DragSingularRelation,
-		secondType: DragSingularRelation
-	) => {
-		const exist = relatedAnimals.find(
-			(related) =>
-				related[firstType].animalUuid === firstAnimalUuid &&
-				related[secondType].animalUuid === secondAnimalUuid
-		)
+	const removeRelationIfExists = useCallback(
+		async (
+			firstAnimalUuid: string,
+			secondAnimalUuid: string,
+			firstType: DragSingularRelation,
+			secondType: DragSingularRelation
+		) => {
+			const exist = relatedAnimals.find(
+				(related) =>
+					related[firstType].animalUuid === firstAnimalUuid &&
+					related[secondType].animalUuid === secondAnimalUuid
+			)
 
-		if (exist) {
-			await RelatedAnimalsService.deleteRelatedAnimal(exist.uuid)
-		}
-	}, [relatedAnimals])
+			if (exist) {
+				await RelatedAnimalsService.deleteRelatedAnimal(exist.uuid)
+			}
+		},
+		[relatedAnimals]
+	)
 
-	const buildRelation = useCallback((info: RelatedAnimalInformation, isChild: boolean): RelatedAnimal => ({
-		animalUuid: info.uuid,
-		animalId: info.animalId,
-		breed: breeds.find((breed) => breed.name === info.breed)?.uuid!,
-		relation:
-			info.gender.toLowerCase() === GenderEnum.FEMALE
-				? isChild
-					? Relationship.DAUGHTER
-					: Relationship.MOTHER
-				: isChild
-					? Relationship.SON
-					: Relationship.FATHER,
-	}), [breeds])
+	const buildRelation = useCallback(
+		(info: RelatedAnimalInformation, isChild: boolean): RelatedAnimal => ({
+			animalUuid: info.uuid,
+			animalId: info.animalId,
+			breed: breeds.find((breed) => breed.name === info.breed)?.uuid!,
+			relation:
+				info.gender.toLowerCase() === GenderEnum.FEMALE
+					? isChild
+						? Relationship.DAUGHTER
+						: Relationship.MOTHER
+					: isChild
+						? Relationship.SON
+						: Relationship.FATHER,
+		}),
+		[breeds]
+	)
 
-	const handleAddRelatedAnimal = useCallback(async (
-		child: RelatedAnimalInformation,
-		parent: RelatedAnimalInformation
-	) => {
-		if (!user) return
+	const handleAddRelatedAnimal = useCallback(
+		async (child: RelatedAnimalInformation, parent: RelatedAnimalInformation) => {
+			if (!user) return
 
-		await RelatedAnimalsService.setRelatedAnimal(
-			{
-				uuid: crypto.randomUUID(),
-				child: buildRelation(child, true),
-				parent: buildRelation(parent, false),
-			},
-			user.uuid
-		)
-	}, [user, buildRelation])
+			await RelatedAnimalsService.setRelatedAnimal(
+				{
+					uuid: crypto.randomUUID(),
+					child: buildRelation(child, true),
+					parent: buildRelation(parent, false),
+				},
+				user.uuid
+			)
+		},
+		[user, buildRelation]
+	)
 
-	const getSourceAnimal = useCallback((uuid: string) =>
-		animalsLists.animals.find((a) => a.uuid === uuid) ||
-		animalsLists.parents.find((a) => a.uuid === uuid) ||
-		animalsLists.children.find((a) => a.uuid === uuid), [animalsLists])
+	const getSourceAnimal = useCallback(
+		(uuid: string) =>
+			animalsLists.animals.find((a) => a.uuid === uuid) ||
+			animalsLists.parents.find((a) => a.uuid === uuid) ||
+			animalsLists.children.find((a) => a.uuid === uuid),
+		[animalsLists]
+	)
 
-	const setCurrentAnimalFromSelected = useCallback((selectedAnimal: any) => {
-		const breedObj = breeds.find((breed) => breed.uuid === selectedAnimal.breedUuid)
-		setCurrentAnimal({
-			uuid: selectedAnimal.uuid,
-			animalId: selectedAnimal.animalId,
-			breed: breedObj ? breedObj.name : '',
-			gender: selectedAnimal.gender,
-			picture: selectedAnimal.picture,
-			location: -1,
-		})
-	}, [breeds])
+	const setCurrentAnimalFromSelected = useCallback(
+		(selectedAnimal: any) => {
+			const breedObj = breeds.find((breed) => breed.uuid === selectedAnimal.breedUuid)
+			setCurrentAnimal({
+				uuid: selectedAnimal.uuid,
+				animalId: selectedAnimal.animalId,
+				breed: breedObj ? breedObj.name : '',
+				gender: selectedAnimal.gender,
+				picture: selectedAnimal.picture,
+				location: -1,
+			})
+		},
+		[breeds]
+	)
 
 	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
@@ -153,83 +165,80 @@ const RelatedAnimalsForm = () => {
 		let unsubscribe: (() => void) | undefined
 
 		const initialData = async () => {
-			await withLoadingAndError(
-				async () => {
-					const animalUuid = params.animalUuid as string
-					const selectedAnimal = await AnimalsService.getAnimal(animalUuid)
-					setCurrentAnimalFromSelected(selectedAnimal)
-					unsubscribe = RelatedAnimalsService.getRealTimeRelatedAnimals(
-						animalUuid,
-						async (data) => {
-							const animals = await AnimalsService.getAnimalsBySpecies(
-								selectedAnimal.speciesUuid,
-								user!.farmUuid
+			await withLoadingAndError(async () => {
+				const animalUuid = params.animalUuid as string
+				const selectedAnimal = await AnimalsService.getAnimal(animalUuid)
+				setCurrentAnimalFromSelected(selectedAnimal)
+				unsubscribe = RelatedAnimalsService.getRealTimeRelatedAnimals(
+					animalUuid,
+					async (data) => {
+						const animals = await AnimalsService.getAnimalsBySpecies(
+							selectedAnimal.speciesUuid,
+							user!.farmUuid
+						)
+						const animalsData = animals
+							.filter(
+								(animal) =>
+									animal.uuid !== animalUuid &&
+									!data.some(
+										(related) =>
+											related.child.animalUuid === animal.uuid ||
+											related.parent.animalUuid === animal.uuid
+									)
 							)
-							const animalsData = animals
-								.filter(
-									(animal) =>
-										animal.uuid !== animalUuid &&
-										!data.some(
-											(related) =>
-												related.child.animalUuid === animal.uuid ||
-												related.parent.animalUuid === animal.uuid
-										)
-								)
-								.map((animal) => ({
-									uuid: animal.uuid,
-									animalId: animal.animalId,
-									breed: breeds.find((breed) => breed.uuid === animal.breedUuid)!.name,
-									gender: animal.gender,
-									picture: animal.picture,
-									location: 0,
-								}))
+							.map((animal) => ({
+								uuid: animal.uuid,
+								animalId: animal.animalId,
+								breed: breeds.find((breed) => breed.uuid === animal.breedUuid)!.name,
+								gender: animal.gender,
+								picture: animal.picture,
+								location: 0,
+							}))
 
-							const parents = data
-								.filter((related) => animalUuid === related.child.animalUuid)
-								.map((related) => {
-									const breed = breeds.find((breed) => breed.uuid === related.parent.breed)
-									return {
-										uuid: related.parent.animalUuid,
-										animalId: related.parent.animalId,
-										breed: breed?.name ?? related.parent.breed,
-										gender:
-											related.parent.relation === Relationship.MOTHER
-												? (GenderEnum.FEMALE as unknown as Gender)
-												: (GenderEnum.MALE as unknown as Gender),
-										picture: '',
-										location: 1,
-									}
-								})
-
-							const children = data
-								.filter((related) => animalUuid === related.parent.animalUuid)
-								.map((related) => {
-									const breed = breeds.find((breed) => breed.uuid === related.child.breed)
-									return {
-										uuid: related.child.animalUuid,
-										animalId: related.child.animalId,
-										breed: breed?.name ?? related.child.breed,
-										gender:
-											related.child.relation === Relationship.DAUGHTER
-												? (GenderEnum.FEMALE as unknown as Gender)
-												: (GenderEnum.MALE as unknown as Gender),
-										picture: '',
-										location: 2,
-									}
-								})
-
-							setRelatedAnimals(data)
-							setAnimalsLists({
-								animals: animalsData,
-								parents,
-								children,
+						const parents = data
+							.filter((related) => animalUuid === related.child.animalUuid)
+							.map((related) => {
+								const breed = breeds.find((breed) => breed.uuid === related.parent.breed)
+								return {
+									uuid: related.parent.animalUuid,
+									animalId: related.parent.animalId,
+									breed: breed?.name ?? related.parent.breed,
+									gender:
+										related.parent.relation === Relationship.MOTHER
+											? (GenderEnum.FEMALE as unknown as Gender)
+											: (GenderEnum.MALE as unknown as Gender),
+									picture: '',
+									location: 1,
+								}
 							})
-						},
-						(error) => console.error('Error fetching related animals: ', error)
-					)
-				},
-				t('toast.errorGettingAnimals')
-			)
+
+						const children = data
+							.filter((related) => animalUuid === related.parent.animalUuid)
+							.map((related) => {
+								const breed = breeds.find((breed) => breed.uuid === related.child.breed)
+								return {
+									uuid: related.child.animalUuid,
+									animalId: related.child.animalId,
+									breed: breed?.name ?? related.child.breed,
+									gender:
+										related.child.relation === Relationship.DAUGHTER
+											? (GenderEnum.FEMALE as unknown as Gender)
+											: (GenderEnum.MALE as unknown as Gender),
+									picture: '',
+									location: 2,
+								}
+							})
+
+						setRelatedAnimals(data)
+						setAnimalsLists({
+							animals: animalsData,
+							parents,
+							children,
+						})
+					},
+					(error) => console.error('Error fetching related animals: ', error)
+				)
+			}, t('toast.errorGettingAnimals'))
 		}
 
 		initialData()
@@ -246,25 +255,82 @@ const RelatedAnimalsForm = () => {
 	}, [setPageTitle, t])
 	return (
 		<div className="flex flex-col sm:grid sm:grid-cols-4 p-4 gap-4 sm:gap-6 w-full h-full">
+			<a
+				href="#main-content"
+				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded"
+			>
+				{t('skipToMainContent', 'Skip to main content')}
+			</a>
+
 			{currentAnimal && (
-				<div className="flex flex-col gap-4 w-full h-full p-4">
-					<div className="text-center text-2xl font-semibold">{t('selectedAnimal')}</div>
-					<RelatedAnimalCard animal={currentAnimal} />
-					<Button onClick={() => document?.querySelector('dialog')?.showModal()}>
+				<section
+					className="flex flex-col gap-4 w-full h-full p-4"
+					aria-labelledby="selected-animal-heading"
+				>
+					<h1 id="selected-animal-heading" className="text-center text-2xl font-semibold">
+						{t('selectedAnimal')}
+					</h1>
+					<div role="img" aria-label={t('selectedAnimalCard', 'Selected animal information')}>
+						<RelatedAnimalCard animal={currentAnimal} />
+					</div>
+					<Button
+						onClick={() => document?.querySelector('dialog')?.showModal()}
+						aria-describedby="external-relation-description"
+					>
 						{t('addExternalRelation')}
 					</Button>
-				</div>
+					<div id="external-relation-description" className="sr-only">
+						{t('addExternalRelationDescription', 'Opens dialog to add external animal relation')}
+					</div>
+				</section>
 			)}
-			<div className="h-[calc(100vh-100px)]">
-				<CardContainer title={t('animals')} animals={animalsLists.animals} location={0} />
-			</div>
-			<div className="h-[calc(100vh-100px)]">
-				<CardContainer title={t('parentsTitle')} animals={animalsLists.parents} location={1} />
-			</div>
-			<div className="h-[calc(100vh-100px)]">
-				<CardContainer title={t('childrenTitle')} animals={animalsLists.children} location={2} />
-			</div>
-			{currentAnimal && <ExternalRelationForm currentAnimal={currentAnimal} />}
+
+			<section
+				className="h-[calc(100vh-100px)]"
+				aria-labelledby="available-animals-heading"
+				id="main-content"
+			>
+				<h2 id="available-animals-heading" className="sr-only">
+					{t('animals')}
+				</h2>
+				<CardContainer
+					title={t('animals')}
+					animals={animalsLists.animals}
+					location={0}
+					aria-label={t('availableAnimalsContainer', 'Available animals for creating relations')}
+				/>
+			</section>
+
+			<section className="h-[calc(100vh-100px)]" aria-labelledby="parents-heading">
+				<h2 id="parents-heading" className="sr-only">
+					{t('parentsTitle')}
+				</h2>
+				<CardContainer
+					title={t('parentsTitle')}
+					animals={animalsLists.parents}
+					location={1}
+					aria-label={t('parentsContainer', 'Parent animals of the selected animal')}
+				/>
+			</section>
+
+			<section className="h-[calc(100vh-100px)]" aria-labelledby="children-heading">
+				<h2 id="children-heading" className="sr-only">
+					{t('childrenTitle')}
+				</h2>
+				<CardContainer
+					title={t('childrenTitle')}
+					animals={animalsLists.children}
+					location={2}
+					aria-label={t('childrenContainer', 'Child animals of the selected animal')}
+				/>
+			</section>
+
+			{currentAnimal && (
+				<ExternalRelationForm
+					currentAnimal={currentAnimal}
+					aria-label={t('externalRelationForm', 'Form to add external animal relations')}
+				/>
+			)}
 		</div>
 	)
 }

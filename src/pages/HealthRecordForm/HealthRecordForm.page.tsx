@@ -118,17 +118,14 @@ const HealthRecordForm = () => {
 	const handleSubmit = useHealthRecordSubmit(form, user!.uuid, navigate)
 
 	const getHealthRecord = useCallback(async () => {
-		await withLoadingAndError(
-			async () => {
-				if (!params.healthRecordUuid) return null
+		await withLoadingAndError(async () => {
+			if (!params.healthRecordUuid) return null
 
-				const healthRecordUuid = params.healthRecordUuid as string
-				const dbHealthRecord = await HealthRecordsService.getHealthRecord(healthRecordUuid)
-				setForm(dbHealthRecord)
-				return dbHealthRecord
-			},
-			t('toast.errorGettingHealthRecord')
-		)
+			const healthRecordUuid = params.healthRecordUuid as string
+			const dbHealthRecord = await HealthRecordsService.getHealthRecord(healthRecordUuid)
+			setForm(dbHealthRecord)
+			return dbHealthRecord
+		}, t('toast.errorGettingHealthRecord'))
 	}, [params.healthRecordUuid, withLoadingAndError, t, setForm])
 
 	// biome-ignore lint:: UseEffect is only called once

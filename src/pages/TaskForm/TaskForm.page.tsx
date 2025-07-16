@@ -27,31 +27,34 @@ const TaskForm = () => {
 
 	const [task, setTask] = useState(INITIAL_TASK)
 
-	const handleTextChange = useCallback((event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-		const { name, value } = event.target
-		setTask((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
-	}, [])
+	const handleTextChange = useCallback(
+		(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+			const { name, value } = event.target
+			setTask((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
+		},
+		[]
+	)
 
 	const handleSelectChange = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
 		const { name, value } = event.target
 		setTask((prev) => ({ ...prev, [name]: value }))
 	}, [])
 
-	const handleSubmit = useCallback(async (event: FormEvent) => {
-		if (!user || !farm) return
+	const handleSubmit = useCallback(
+		async (event: FormEvent) => {
+			if (!user || !farm) return
 
-		event.preventDefault()
+			event.preventDefault()
 
-		await withLoadingAndError(
-			async () => {
+			await withLoadingAndError(async () => {
 				task.uuid = task.uuid || crypto.randomUUID()
 				await TasksService.setTask(task, user.uuid, farm.uuid)
 				showToast(t('toast.taskAdded'), 'success')
 				navigate(AppRoutes.TASKS)
-			},
-			t('toast.errorAddingTask')
-		)
-	}, [user, farm, task, withLoadingAndError, showToast, t, navigate])
+			}, t('toast.errorAddingTask'))
+		},
+		[user, farm, task, withLoadingAndError, showToast, t, navigate]
+	)
 
 	useEffect(() => {
 		setPageTitle(t('title'))
@@ -63,11 +66,25 @@ const TaskForm = () => {
 
 	return (
 		<div className="flex flex-col justify-center items-center w-full overflow-auto p-5">
+			<a
+				href="#task-form"
+				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
+			>
+				{t('skipToForm', 'Skip to task form')}
+			</a>
+
 			<form
+				id="task-form"
 				className="flex flex-col items-center gap-4 max-w-[400px] w-full"
 				onSubmit={handleSubmit}
 				autoComplete="off"
+				aria-labelledby="form-heading"
+				noValidate
 			>
+				<h2 id="form-heading" className="sr-only">
+					{t('addTaskForm', 'Add new task form')}
+				</h2>
+
 				<TextField
 					name="title"
 					type="text"
@@ -76,7 +93,13 @@ const TaskForm = () => {
 					value={task.title}
 					onChange={handleTextChange}
 					required
+					aria-describedby="title-help"
+					autoComplete="off"
 				/>
+				<div id="title-help" className="sr-only">
+					{t('titleHelp', 'Enter a descriptive name for this task')}
+				</div>
+
 				<Textarea
 					name="description"
 					placeholder={t('description')}
@@ -84,7 +107,12 @@ const TaskForm = () => {
 					value={task.description}
 					onChange={handleTextChange}
 					required
+					aria-describedby="description-help"
 				/>
+				<div id="description-help" className="sr-only">
+					{t('descriptionHelp', 'Provide detailed instructions for this task')}
+				</div>
+
 				<Select
 					name="priority"
 					legend={t('selectPriority')}
@@ -97,7 +125,12 @@ const TaskForm = () => {
 					]}
 					onChange={handleSelectChange}
 					required
+					aria-describedby="priority-help"
 				/>
+				<div id="priority-help" className="sr-only">
+					{t('priorityHelp', 'Select the urgency level for this task')}
+				</div>
+
 				<Select
 					name="speciesUuid"
 					legend={t('selectSpecies')}
@@ -108,8 +141,18 @@ const TaskForm = () => {
 					items={species}
 					onChange={handleSelectChange}
 					required
+					aria-describedby="species-help"
 				/>
-				<Button type="submit">{t('addTask')}</Button>
+				<div id="species-help" className="sr-only">
+					{t('speciesHelp', 'Select which animal species this task applies to')}
+				</div>
+
+				<Button type="submit" aria-describedby="submit-help">
+					{t('addTask')}
+				</Button>
+				<div id="submit-help" className="sr-only">
+					{t('submitHelp', 'Create this new task for your farm')}
+				</div>
 			</form>
 		</div>
 	)

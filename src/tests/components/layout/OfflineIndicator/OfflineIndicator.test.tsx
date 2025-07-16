@@ -171,7 +171,9 @@ describe('OfflineIndicator', () => {
 
 			const { unmount } = render(<OfflineIndicator />)
 
-			expect(screen.getByText(`${queueLength} pending operation${queueLength !== 1 ? 's' : ''}`)).toBeInTheDocument()
+			expect(
+				screen.getByText(`${queueLength} pending operation${queueLength !== 1 ? 's' : ''}`)
+			).toBeInTheDocument()
 
 			unmount()
 		}

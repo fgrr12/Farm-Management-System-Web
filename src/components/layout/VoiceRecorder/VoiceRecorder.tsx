@@ -105,8 +105,9 @@ export const VoiceRecorder = () => {
 							<div className="flex flex-col gap-2 items-center flex-1 max-w-60">
 								<div className="w-full h-1 bg-gray-400 rounded-full">
 									<div
-										className={`w-full h-1 rounded-full animate-pulse ${recording ? 'bg-blue-500' : 'bg-gray-400'
-											}`}
+										className={`w-full h-1 rounded-full animate-pulse ${
+											recording ? 'bg-blue-500' : 'bg-gray-400'
+										}`}
 									/>
 								</div>
 								<div className="text-xs text-gray-500">

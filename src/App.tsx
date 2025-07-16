@@ -83,7 +83,6 @@ export const App = () => {
 		i18n.changeLanguage(user?.language || browserLanguage)
 	}, [user])
 
-	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
 		initializeSEO()
 	}, [])

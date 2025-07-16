@@ -97,26 +97,23 @@ const AnimalForm = () => {
 	}, [breeds, animalForm.speciesUuid])
 
 	const getAnimal = useCallback(async () => {
-		await withLoadingAndError(
-			async () => {
-				if (!params.animalUuid) return null
+		await withLoadingAndError(async () => {
+			if (!params.animalUuid) return null
 
-				const animalUuid = params.animalUuid as string
-				const dbAnimal = await AnimalsService.getAnimal(animalUuid)
-				setAnimalForm(dbAnimal)
-				return dbAnimal
-			},
-			t('toast.errorGettingAnimal')
-		)
+			const animalUuid = params.animalUuid as string
+			const dbAnimal = await AnimalsService.getAnimal(animalUuid)
+			setAnimalForm(dbAnimal)
+			return dbAnimal
+		}, t('toast.errorGettingAnimal'))
 	}, [params.animalUuid, withLoadingAndError, t, setAnimalForm])
 
-	const handleSubmit = useCallback(async (event: FormEvent) => {
-		if (!user) return
+	const handleSubmit = useCallback(
+		async (event: FormEvent) => {
+			if (!user) return
 
-		event.preventDefault()
+			event.preventDefault()
 
-		await withLoadingAndError(
-			async () => {
+			await withLoadingAndError(async () => {
 				const animalUuid = params.animalUuid as string
 				animalForm.uuid = animalUuid ?? crypto.randomUUID()
 
@@ -146,10 +143,19 @@ const AnimalForm = () => {
 					showToast(t('toast.added'), 'success')
 					setAnimalForm(INITIAL_ANIMAL_FORM)
 				}
-			},
-			t('toast.errorAddingAnimal')
-		)
-	}, [user, params.animalUuid, animalForm, withLoadingAndError, showToast, t, setAnimalForm, navigate])
+			}, t('toast.errorAddingAnimal'))
+		},
+		[
+			user,
+			params.animalUuid,
+			animalForm,
+			withLoadingAndError,
+			showToast,
+			t,
+			setAnimalForm,
+			navigate,
+		]
+	)
 
 	useEffect(() => {
 		if (!user) return
@@ -165,113 +171,199 @@ const AnimalForm = () => {
 
 	return (
 		<div className="flex flex-col justify-center items-center w-full overflow-auto p-5">
+			<a
+				href="#animal-form"
+				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
+			>
+				{t('skipToForm', 'Skip to animal form')}
+			</a>
+
 			<form
+				id="animal-form"
 				className="flex flex-col sm:grid sm:grid-cols-2 items-center gap-4 max-w-[800px] w-full"
 				onSubmit={handleSubmit}
 				autoComplete="off"
+				aria-labelledby="form-heading"
+				noValidate
 			>
-				<div className="row-span-5 col-start-2 h-full">
+				<h2 id="form-heading" className="sr-only">
+					{params.animalUuid ? t('editAnimalForm') : t('addAnimalForm')}
+				</h2>
+
+				<fieldset className="row-span-5 col-start-2 h-full border-0 p-0 m-0">
+					<legend className="sr-only">{t('animalPhoto', 'Animal photo')}</legend>
 					<Dropzone
 						className="dropzone"
 						cleanFile={false}
 						pictureUrl={pictureUrl || animalForm.picture}
 						onFile={handleFile}
+						aria-label={t('uploadPhoto', 'Upload animal photo')}
+						aria-describedby="photo-help"
 					/>
-				</div>
-				<TextField
-					name="animalId"
-					type="text"
-					placeholder={t('animalId')}
-					label={t('animalId')}
-					value={animalForm.animalId}
-					onChange={handleTextChange}
-					required
-				/>
+					<div id="photo-help" className="sr-only">
+						{t('photoHelp', 'Click or drag to upload an animal photo')}
+					</div>
+				</fieldset>
 
-				<Select
-					name="speciesUuid"
-					legend={t('selectSpecies')}
-					defaultLabel={t('selectSpecies')}
-					optionValue="uuid"
-					optionLabel="name"
-					value={animalForm.speciesUuid}
-					items={species}
-					onChange={handleSelectChange}
-					required
-				/>
-				<Select
-					name="breedUuid"
-					legend={t('selectBreed')}
-					defaultLabel={t('selectBreed')}
-					optionValue="uuid"
-					optionLabel="name"
-					value={animalForm.breedUuid}
-					items={filteredBreeds}
-					onChange={handleSelectChange}
-					disabled={!filteredBreeds.length}
-					required
-				/>
-				<Select
-					name="gender"
-					legend={t('selectGender')}
-					defaultLabel={t('selectGender')}
-					optionValue="value"
-					optionLabel="name"
-					value={animalForm.gender}
-					items={[
-						{ value: 'Male', name: t('genderList.male') },
-						{ value: 'Female', name: t('genderList.female') },
-					]}
-					onChange={handleSelectChange}
-					required
-				/>
-				<TextField
-					name="color"
-					type="text"
-					placeholder={t('color')}
-					label={t('color')}
-					value={animalForm.color}
-					onChange={handleTextChange}
-					required
-				/>
-				<TextField
-					name="weight"
-					type="number"
-					placeholder={`${t('weight')} (${farm?.weightUnit})`}
-					label={`${t('weight')} (${farm?.weightUnit})`}
-					value={animalForm.weight}
-					onChange={handleTextChange}
-					onWheel={(e) => e.currentTarget.blur()}
-					required
-				/>
-				<DatePicker
-					legend={t('birthDate')}
-					label={t('birthDate')}
-					date={dayjs(animalForm.birthDate)}
-					onDateChange={handleDateChange('birthDate')}
-				/>
-				<DatePicker
-					legend={t('purchaseDate')}
-					label={t('purchaseDate')}
-					date={dayjs(animalForm.purchaseDate)}
-					onDateChange={handleDateChange('purchaseDate')}
-				/>
-				{params.animalUuid && (
-					<DatePicker
-						legend={t('soldDate')}
-						label={t('soldDate')}
-						date={animalForm.soldDate ? dayjs(animalForm.soldDate) : null}
-						onDateChange={handleDateChange('soldDate')}
+				<fieldset className="contents">
+					<legend className="sr-only">{t('basicInformation', 'Basic animal information')}</legend>
+
+					<TextField
+						name="animalId"
+						type="text"
+						placeholder={t('animalId')}
+						label={t('animalId')}
+						value={animalForm.animalId}
+						onChange={handleTextChange}
+						required
+						aria-describedby="animal-id-help"
+						autoComplete="off"
 					/>
-				)}
-				{params.animalUuid && (
-					<DatePicker
-						legend={t('deathDate')}
-						label={t('deathDate')}
-						date={animalForm.deathDate ? dayjs(animalForm.deathDate) : null}
-						onDateChange={handleDateChange('deathDate')}
+					<div id="animal-id-help" className="sr-only">
+						{t('animalIdHelp', 'Unique identifier for this animal')}
+					</div>
+
+					<Select
+						name="speciesUuid"
+						legend={t('selectSpecies')}
+						defaultLabel={t('selectSpecies')}
+						optionValue="uuid"
+						optionLabel="name"
+						value={animalForm.speciesUuid}
+						items={species}
+						onChange={handleSelectChange}
+						required
+						aria-describedby="species-help"
 					/>
-				)}
+					<div id="species-help" className="sr-only">
+						{t('speciesHelp', 'Select the species of this animal')}
+					</div>
+
+					<Select
+						name="breedUuid"
+						legend={t('selectBreed')}
+						defaultLabel={t('selectBreed')}
+						optionValue="uuid"
+						optionLabel="name"
+						value={animalForm.breedUuid}
+						items={filteredBreeds}
+						onChange={handleSelectChange}
+						disabled={!filteredBreeds.length}
+						required
+						aria-describedby="breed-help"
+					/>
+					<div id="breed-help" className="sr-only">
+						{t('breedHelp', 'Select the breed of this animal. First select a species.')}
+					</div>
+
+					<Select
+						name="gender"
+						legend={t('selectGender')}
+						defaultLabel={t('selectGender')}
+						optionValue="value"
+						optionLabel="name"
+						value={animalForm.gender}
+						items={[
+							{ value: 'Male', name: t('genderList.male') },
+							{ value: 'Female', name: t('genderList.female') },
+						]}
+						onChange={handleSelectChange}
+						required
+						aria-describedby="gender-help"
+					/>
+					<div id="gender-help" className="sr-only">
+						{t('genderHelp', 'Select the gender of this animal')}
+					</div>
+
+					<TextField
+						name="color"
+						type="text"
+						placeholder={t('color')}
+						label={t('color')}
+						value={animalForm.color}
+						onChange={handleTextChange}
+						required
+						aria-describedby="color-help"
+						autoComplete="off"
+					/>
+					<div id="color-help" className="sr-only">
+						{t('colorHelp', 'Describe the color or markings of this animal')}
+					</div>
+
+					<TextField
+						name="weight"
+						type="number"
+						placeholder={`${t('weight')} (${farm?.weightUnit})`}
+						label={`${t('weight')} (${farm?.weightUnit})`}
+						value={animalForm.weight}
+						onChange={handleTextChange}
+						onWheel={(e) => e.currentTarget.blur()}
+						required
+						aria-describedby="weight-help"
+						min="0"
+						step="0.1"
+					/>
+					<div id="weight-help" className="sr-only">
+						{t('weightHelp', `Enter the weight of this animal in ${farm?.weightUnit}`)}
+					</div>
+				</fieldset>
+
+				<fieldset className="contents">
+					<legend className="sr-only">{t('dateInformation', 'Date information')}</legend>
+
+					<DatePicker
+						legend={t('birthDate')}
+						label={t('birthDate')}
+						date={dayjs(animalForm.birthDate)}
+						onDateChange={handleDateChange('birthDate')}
+						aria-describedby="birth-date-help"
+					/>
+					<div id="birth-date-help" className="sr-only">
+						{t('birthDateHelp', 'Select the birth date of this animal')}
+					</div>
+
+					<DatePicker
+						legend={t('purchaseDate')}
+						label={t('purchaseDate')}
+						date={dayjs(animalForm.purchaseDate)}
+						onDateChange={handleDateChange('purchaseDate')}
+						aria-describedby="purchase-date-help"
+					/>
+					<div id="purchase-date-help" className="sr-only">
+						{t('purchaseDateHelp', 'Select when this animal was purchased (optional)')}
+					</div>
+
+					{params.animalUuid && (
+						<>
+							<DatePicker
+								legend={t('soldDate')}
+								label={t('soldDate')}
+								date={animalForm.soldDate ? dayjs(animalForm.soldDate) : null}
+								onDateChange={handleDateChange('soldDate')}
+								aria-describedby="sold-date-help"
+							/>
+							<div id="sold-date-help" className="sr-only">
+								{t('soldDateHelp', 'Select when this animal was sold (optional)')}
+							</div>
+						</>
+					)}
+
+					{params.animalUuid && (
+						<>
+							<DatePicker
+								legend={t('deathDate')}
+								label={t('deathDate')}
+								date={animalForm.deathDate ? dayjs(animalForm.deathDate) : null}
+								onDateChange={handleDateChange('deathDate')}
+								aria-describedby="death-date-help"
+							/>
+							<div id="death-date-help" className="sr-only">
+								{t('deathDateHelp', 'Select the death date if this animal has died (optional)')}
+							</div>
+						</>
+					)}
+				</fieldset>
+
 				<div className="col-span-2 w-full">
 					<Textarea
 						name="origin"
@@ -279,11 +371,25 @@ const AnimalForm = () => {
 						label={t('origin')}
 						value={animalForm.origin}
 						onChange={handleTextChange}
+						aria-describedby="origin-help"
 					/>
+					<div id="origin-help" className="sr-only">
+						{t('originHelp', 'Describe the origin or source of this animal (optional)')}
+					</div>
 				</div>
-				<button type="submit" className="btn btn-primary h-12 w-full text-lg col-span-2">
+
+				<button
+					type="submit"
+					className="btn btn-primary h-12 w-full text-lg col-span-2"
+					aria-describedby="submit-help"
+				>
 					{params.animalUuid ? t('editButton') : t('addButton')}
 				</button>
+				<div id="submit-help" className="sr-only">
+					{params.animalUuid
+						? t('editSubmitHelp', 'Save changes to this animal')
+						: t('addSubmitHelp', 'Add this new animal to your farm')}
+				</div>
 			</form>
 		</div>
 	)

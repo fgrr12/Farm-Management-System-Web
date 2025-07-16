@@ -45,13 +45,13 @@ const ProductionRecordForm = () => {
 		[]
 	)
 
-	const handleSubmit = useCallback(async (event: FormEvent) => {
-		if (!user) return
+	const handleSubmit = useCallback(
+		async (event: FormEvent) => {
+			if (!user) return
 
-		event.preventDefault()
+			event.preventDefault()
 
-		await withLoadingAndError(
-			async () => {
+			await withLoadingAndError(async () => {
 				const productionRecordUuid = params.productionRecordUuid as string
 				productionRecordForm.uuid = productionRecordUuid ?? crypto.randomUUID()
 
@@ -64,24 +64,29 @@ const ProductionRecordForm = () => {
 					showToast(t('toast.added'), 'success')
 					navigate(AppRoutes.ANIMAL.replace(':animalUuid', productionRecordForm.animalUuid))
 				}
-			},
-			t('toast.errorAddingProductionRecord')
-		)
-	}, [user, params.productionRecordUuid, productionRecordForm, withLoadingAndError, showToast, t, navigate])
+			}, t('toast.errorAddingProductionRecord'))
+		},
+		[
+			user,
+			params.productionRecordUuid,
+			productionRecordForm,
+			withLoadingAndError,
+			showToast,
+			t,
+			navigate,
+		]
+	)
 
 	const getProductionRecord = useCallback(async () => {
-		await withLoadingAndError(
-			async () => {
-				if (!params.productionRecordUuid) return null
+		await withLoadingAndError(async () => {
+			if (!params.productionRecordUuid) return null
 
-				const productionRecordUuid = params.productionRecordUuid as string
-				const dbProductionRecord =
-					await ProductionRecordsService.getProductionRecord(productionRecordUuid)
-				setProductionRecordForm(dbProductionRecord)
-				return dbProductionRecord
-			},
-			t('toast.errorGettingProductionRecord')
-		)
+			const productionRecordUuid = params.productionRecordUuid as string
+			const dbProductionRecord =
+				await ProductionRecordsService.getProductionRecord(productionRecordUuid)
+			setProductionRecordForm(dbProductionRecord)
+			return dbProductionRecord
+		}, t('toast.errorGettingProductionRecord'))
 	}, [params.productionRecordUuid, withLoadingAndError, t])
 
 	useEffect(() => {

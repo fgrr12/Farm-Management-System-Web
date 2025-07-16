@@ -84,39 +84,42 @@ const MySpecies = () => {
 		setSpecies(sps)
 	}
 
-	const handleUpdateSpeciesAndBreeds = useCallback(async (sps: MySpeciesI[]) => {
-		if (!farm?.uuid) return
+	const handleUpdateSpeciesAndBreeds = useCallback(
+		async (sps: MySpeciesI[]) => {
+			if (!farm?.uuid) return
 
-		for (const specie of sps) {
-			await SpeciesService.upsertSpecies({
-				uuid: specie.uuid,
-				farmUuid: farm.uuid,
-				name: specie.name,
-			})
+			for (const specie of sps) {
+				await SpeciesService.upsertSpecies({
+					uuid: specie.uuid,
+					farmUuid: farm.uuid,
+					name: specie.name,
+				})
 
-			for (const breed of breeds) {
-				if (breed.speciesUuid === specie.uuid) {
-					await BreedsService.upsertBreed({
-						...breed,
-						speciesUuid: specie.uuid,
-					})
+				for (const breed of breeds) {
+					if (breed.speciesUuid === specie.uuid) {
+						await BreedsService.upsertBreed({
+							...breed,
+							speciesUuid: specie.uuid,
+						})
+					}
 				}
 			}
-		}
 
-		setDbSpecies(sps)
-		setDbBreeds(breeds)
-		setSpecies(sps)
-	}, [farm?.uuid, breeds, setDbSpecies, setDbBreeds])
+			setDbSpecies(sps)
+			setDbBreeds(breeds)
+			setSpecies(sps)
+		},
+		[farm?.uuid, breeds, setDbSpecies, setDbBreeds]
+	)
 
-	const handleRemoveSpecie = useCallback((specieUuid: string) => () => {
-		setModalData({
-			open: true,
-			title: t('modal.deleteSpecies.title'),
-			message: t('modal.deleteSpecies.message'),
-			onAccept: async () => {
-				await withLoadingAndError(
-					async () => {
+	const handleRemoveSpecie = useCallback(
+		(specieUuid: string) => () => {
+			setModalData({
+				open: true,
+				title: t('modal.deleteSpecies.title'),
+				message: t('modal.deleteSpecies.message'),
+				onAccept: async () => {
+					await withLoadingAndError(async () => {
 						await BreedsService.deleteBreedsBySpecie(specieUuid)
 						await SpeciesService.deleteSpecies(specieUuid)
 						const sps = species.filter((specie) => specie.uuid !== specieUuid)
@@ -125,46 +128,56 @@ const MySpecies = () => {
 						setDbBreeds(breeds)
 						setModalData(defaultModalData)
 						showToast(t('toast.deletedSpecies'), 'success')
-					},
-					t('toast.errorDeletingSpecies')
-				)
-			},
-			onCancel: () => {
-				setModalData(defaultModalData)
-				showToast(t('toast.notDeletedSpecies'), 'info')
-			},
-		})
-	}, [species, breeds, setModalData, defaultModalData, withLoadingAndError, showToast, t, setDbSpecies, setDbBreeds])
+					}, t('toast.errorDeletingSpecies'))
+				},
+				onCancel: () => {
+					setModalData(defaultModalData)
+					showToast(t('toast.notDeletedSpecies'), 'info')
+				},
+			})
+		},
+		[
+			species,
+			breeds,
+			setModalData,
+			defaultModalData,
+			withLoadingAndError,
+			showToast,
+			t,
+			setDbSpecies,
+			setDbBreeds,
+		]
+	)
 
-	const handleRemoveBreed = useCallback((breedUuid: string) => () => {
-		setModalData({
-			open: true,
-			title: t('modal.deleteBreed.title'),
-			message: t('modal.deleteBreed.message'),
-			onAccept: async () => {
-				await withLoadingAndError(
-					async () => {
+	const handleRemoveBreed = useCallback(
+		(breedUuid: string) => () => {
+			setModalData({
+				open: true,
+				title: t('modal.deleteBreed.title'),
+				message: t('modal.deleteBreed.message'),
+				onAccept: async () => {
+					await withLoadingAndError(async () => {
 						await BreedsService.deleteBreed(breedUuid)
 						setBreeds((prev) => prev.filter((breed) => breed.uuid !== breedUuid))
 						setDbBreeds(breeds)
 						setModalData(defaultModalData)
 						showToast(t('toast.deletedBreed'), 'success')
-					},
-					t('toast.errorDeletingBreed')
-				)
-			},
-			onCancel: () => {
-				setModalData(defaultModalData)
-				showToast(t('toast.notDeletedBreed'), 'info')
-			},
-		})
-	}, [breeds, setModalData, defaultModalData, withLoadingAndError, showToast, t, setDbBreeds])
+					}, t('toast.errorDeletingBreed'))
+				},
+				onCancel: () => {
+					setModalData(defaultModalData)
+					showToast(t('toast.notDeletedBreed'), 'info')
+				},
+			})
+		},
+		[breeds, setModalData, defaultModalData, withLoadingAndError, showToast, t, setDbBreeds]
+	)
 
-	const handleSubmit = useCallback(async (e: FormEvent) => {
-		e.preventDefault()
+	const handleSubmit = useCallback(
+		async (e: FormEvent) => {
+			e.preventDefault()
 
-		await withLoadingAndError(
-			async () => {
+			await withLoadingAndError(async () => {
 				const updatedSpecies = species.map((specie) => ({
 					...specie,
 					editable: false,
@@ -172,10 +185,10 @@ const MySpecies = () => {
 
 				await handleUpdateSpeciesAndBreeds(updatedSpecies)
 				showToast(t('toast.edited'), 'success')
-			},
-			t('toast.errorEditing')
-		)
-	}, [species, handleUpdateSpeciesAndBreeds, withLoadingAndError, showToast, t])
+			}, t('toast.errorEditing'))
+		},
+		[species, handleUpdateSpeciesAndBreeds, withLoadingAndError, showToast, t]
+	)
 
 	useEffect(() => {
 		if (!farm) return

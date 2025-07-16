@@ -83,15 +83,12 @@ const Animal = () => {
 			title: t('modal.removeAnimal.title'),
 			message: t('modal.removeAnimal.message'),
 			onAccept: async () => {
-				await withLoadingAndError(
-					async () => {
-						await AnimalsService.deleteAnimal(animal.uuid, false)
-						setModalData(defaultModalData)
-						showToast(t('toast.deleted'), 'success')
-						navigate(AppRoutes.ANIMALS)
-					},
-					t('toast.deleteError')
-				)
+				await withLoadingAndError(async () => {
+					await AnimalsService.deleteAnimal(animal.uuid, false)
+					setModalData(defaultModalData)
+					showToast(t('toast.deleted'), 'success')
+					navigate(AppRoutes.ANIMALS)
+				}, t('toast.deleteError'))
 			},
 			onCancel: () => {
 				setModalData(defaultModalData)
