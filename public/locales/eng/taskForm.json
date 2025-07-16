@@ -1,4 +1,13 @@
 {
+	"accessibility": {
+		"addTaskForm": "Add new task form",
+		"descriptionHelp": "Provide detailed instructions for this task",
+		"priorityHelp": "Select the urgency level for this task",
+		"skipToForm": "Skip to task form",
+		"speciesHelp": "Select which animal species this task applies to",
+		"submitHelp": "Create this new task for your farm",
+		"titleHelp": "Enter a descriptive name for this task"
+	},
 	"addTask": "Add",
 	"description": "Description",
 	"name": "Name",
@@ -14,6 +23,7 @@
 	"species": "Species",
 	"title": "Add Task",
 	"toast": {
-		"errorAddingTask": "There was an error adding the task."
+		"errorAddingTask": "There was an error adding the task.",
+		"taskAdded": "Task added successfully"
 	}
 }

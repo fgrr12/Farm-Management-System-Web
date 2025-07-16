@@ -71,7 +71,7 @@ const Employees = () => {
 				href="#employees-table"
 				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
 			>
-				{t('skipToEmployees', 'Skip to employees list')}
+				{t('accessibility.skipToEmployees')}
 			</a>
 
 			<header>
@@ -80,18 +80,18 @@ const Employees = () => {
 
 			<section aria-labelledby="search-heading" role="search">
 				<h2 id="search-heading" className="sr-only">
-					{t('searchSection', 'Search and manage employees')}
+					{t('accessibility.searchSection')}
 				</h2>
 				<div className="flex flex-col md:grid md:grid-cols-3 items-center justify-center gap-4 w-full">
 					<Search
 						placeholder={t('search')}
 						value={search}
 						onChange={handleDebounceSearch}
-						aria-label={t('searchEmployees', 'Search employees by name, email, or phone')}
+						aria-label={t('accessibility.searchEmployees')}
 						aria-describedby="search-help"
 					/>
 					<div id="search-help" className="sr-only">
-						{t('searchHelp', 'Search by name, last name, email, or phone number')}
+						{t('accessibility.searchHelp')}
 					</div>
 
 					<button
@@ -103,21 +103,21 @@ const Employees = () => {
 						{t('addEmployee')}
 					</button>
 					<div id="add-employee-description" className="sr-only">
-						{t('addEmployeeDescription', 'Navigate to form to add a new employee')}
+						{t('accessibility.addEmployeeDescription')}
 					</div>
 				</div>
 			</section>
 
 			<section aria-labelledby="employees-heading" aria-live="polite">
 				<h2 id="employees-heading" className="sr-only">
-					{t('employeesList', 'Employees list')} ({filteredEmployees.length}{' '}
-					{t('results', 'results')})
+					{t('accessibility.employeesList')} ({filteredEmployees.length}{' '}
+					{t('accessibility.results')})
 				</h2>
 				<div id="employees-table">
 					<EmployeesTable
 						employees={filteredEmployees}
 						removeEmployee={handleRemoveEmployee}
-						aria-label={t('employeesTable', `Table showing ${filteredEmployees.length} employees`)}
+						aria-label={t('accessibility.employeesTable', { count: filteredEmployees.length })}
 					/>
 				</div>
 			</section>

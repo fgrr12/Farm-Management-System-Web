@@ -91,7 +91,7 @@ const EmployeeForm = () => {
 				href="#employee-form"
 				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
 			>
-				{t('skipToForm', 'Skip to employee form')}
+				{t('accessibility.skipToForm')}
 			</a>
 
 			<form
@@ -103,11 +103,13 @@ const EmployeeForm = () => {
 				noValidate
 			>
 				<h2 id="form-heading" className="sr-only">
-					{params.employeeUuid ? t('editEmployeeForm') : t('addEmployeeForm')}
+					{params.employeeUuid
+						? t('accessibility.editEmployeeForm')
+						: t('accessibility.addEmployeeForm')}
 				</h2>
 
 				<fieldset className="contents">
-					<legend className="sr-only">{t('employeeInformation', 'Employee information')}</legend>
+					<legend className="sr-only">{t('accessibility.employeeInformation')}</legend>
 
 					<TextField
 						name="name"
@@ -121,7 +123,7 @@ const EmployeeForm = () => {
 						autoComplete="given-name"
 					/>
 					<div id="name-help" className="sr-only">
-						{t('nameHelp', "Enter the employee's first name")}
+						{t('accessibility.nameHelp')}
 					</div>
 
 					<TextField
@@ -132,11 +134,11 @@ const EmployeeForm = () => {
 						value={employee.lastName}
 						onChange={handleTextChange}
 						required
-						aria-describedby="lastname-help"
+						aria-describedby="lastName-help"
 						autoComplete="family-name"
 					/>
-					<div id="lastname-help" className="sr-only">
-						{t('lastNameHelp', "Enter the employee's last name")}
+					<div id="lastName-help" className="sr-only">
+						{t('accessibility.lastNameHelp')}
 					</div>
 
 					<TextField
@@ -151,7 +153,7 @@ const EmployeeForm = () => {
 						autoComplete="email"
 					/>
 					<div id="email-help" className="sr-only">
-						{t('emailHelp', "Enter the employee's email address")}
+						{t('accessibility.emailHelp')}
 					</div>
 
 					<TextField
@@ -166,7 +168,7 @@ const EmployeeForm = () => {
 						autoComplete="tel"
 					/>
 					<div id="phone-help" className="sr-only">
-						{t('phoneHelp', "Enter the employee's phone number")}
+						{t('accessibility.phoneHelp')}
 					</div>
 
 					<Select
@@ -183,7 +185,7 @@ const EmployeeForm = () => {
 						aria-describedby="role-help"
 					/>
 					<div id="role-help" className="sr-only">
-						{t('roleHelp', "Select the employee's role and permissions level")}
+						{t('accessibility.roleHelp')}
 					</div>
 				</fieldset>
 
@@ -192,8 +194,8 @@ const EmployeeForm = () => {
 				</Button>
 				<div id="submit-help" className="sr-only">
 					{params.employeeUuid
-						? t('editSubmitHelp', 'Save changes to this employee')
-						: t('addSubmitHelp', 'Add this new employee to your farm')}
+						? t('accessibility.editSubmitHelp')
+						: t('accessibility.addSubmitHelp')}
 				</div>
 			</form>
 		</div>

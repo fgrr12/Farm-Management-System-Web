@@ -107,7 +107,7 @@ const Tasks = () => {
 				href="#tasks-content"
 				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
 			>
-				{t('skipToTasks', 'Skip to tasks list')}
+				{t('accessibility.skipToTasks')}
 			</a>
 
 			<header>
@@ -116,13 +116,13 @@ const Tasks = () => {
 
 			<section aria-labelledby="filters-heading" role="search">
 				<h2 id="filters-heading" className="sr-only">
-					{t('filtersSection', 'Filter and search tasks')}
+					{t('accessibility.filtersSection')}
 				</h2>
 				<div className="flex flex-col md:grid md:grid-cols-6 items-center justify-center gap-4 w-full">
 					<Search
 						placeholder={t('search')}
 						onChange={handleDebounceSearch}
-						aria-label={t('searchTasks', 'Search tasks by title or description')}
+						aria-label={t('accessibility.searchTasks')}
 					/>
 					<Select
 						name="status"
@@ -165,7 +165,7 @@ const Tasks = () => {
 							{t('addTask')}
 						</Button>
 						<div id="add-task-description" className="sr-only">
-							{t('addTaskDescription', 'Navigate to form to create a new task')}
+							{t('accessibility.addTaskDescription')}
 						</div>
 					</div>
 				</div>
@@ -180,7 +180,7 @@ const Tasks = () => {
 						<div
 							className="flex flex-col gap-4 p-4 w-full border-2 rounded-xl border-gray-300"
 							role="list"
-							aria-label={t('pendingTasksList', `List of ${tasks.pending.length} pending tasks`)}
+							aria-label={t('accessibility.pendingTasksList', { count: tasks.pending.length })}
 						>
 							{tasks.pending.map((task) => (
 								<div
@@ -194,11 +194,11 @@ const Tasks = () => {
 										type="checkbox"
 										className="checkbox checkbox-success"
 										onChange={handleUpdateTask(task)}
-										aria-label={t('markTaskComplete', `Mark task "${task.title}" as complete`)}
+										aria-label={t('accessibility.markTaskComplete', { title: task.title })}
 										aria-describedby={`task-${task.uuid}-status-help`}
 									/>
 									<div id={`task-${task.uuid}-status-help`} className="sr-only">
-										{t('taskStatusHelp', 'Check this box to mark the task as completed')}
+										{t('accessibility.taskStatusHelp')}
 									</div>
 
 									<div className="flex flex-col w-[85%] sm:w-[90%]">
@@ -211,7 +211,7 @@ const Tasks = () => {
 									<div
 										className={`${handlePriorityColor(task.priority)} absolute right-0 top-0 bottom-0 w-10 rounded-r-lg`}
 										role="img"
-										aria-label={t('priorityIndicator', `Priority: ${task.priority}`)}
+										aria-label={t('accessibility.priorityIndicator', { priority: task.priority })}
 										id={`task-${task.uuid}-priority`}
 									/>
 								</div>
@@ -233,10 +233,7 @@ const Tasks = () => {
 						<div
 							className="flex flex-col gap-4 p-4 w-full border-2 rounded-xl border-gray-300"
 							role="list"
-							aria-label={t(
-								'completedTasksList',
-								`List of ${tasks.completed.length} completed tasks`
-							)}
+							aria-label={t('accessibility.completedTasksList', { count: tasks.completed.length })}
 						>
 							{tasks.completed.map((task) => (
 								<div
@@ -251,11 +248,11 @@ const Tasks = () => {
 										className="checkbox checkbox-success"
 										onChange={handleUpdateTask(task)}
 										checked
-										aria-label={t('markTaskPending', `Mark task "${task.title}" as pending`)}
+										aria-label={t('accessibility.markTaskPending', { title: task.title })}
 										aria-describedby={`task-${task.uuid}-status-help`}
 									/>
 									<div id={`task-${task.uuid}-status-help`} className="sr-only">
-										{t('completedTaskStatusHelp', 'Uncheck this box to mark the task as pending')}
+										{t('accessibility.completedTaskStatusHelp')}
 									</div>
 
 									<div className="flex flex-col w-[85%] sm:w-[90%]">
@@ -268,7 +265,7 @@ const Tasks = () => {
 									<div
 										className={`${handlePriorityColor(task.priority)} absolute right-0 top-0 bottom-0 w-10 rounded-r-lg`}
 										role="img"
-										aria-label={t('priorityIndicator', `Priority: ${task.priority}`)}
+										aria-label={t('accessibility.priorityIndicator', { priority: task.priority })}
 										id={`task-${task.uuid}-priority`}
 									/>
 								</div>

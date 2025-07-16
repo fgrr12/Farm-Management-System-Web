@@ -175,7 +175,7 @@ const AnimalForm = () => {
 				href="#animal-form"
 				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
 			>
-				{t('skipToForm', 'Skip to animal form')}
+				{t('accessibility.skipToForm')}
 			</a>
 
 			<form
@@ -187,26 +187,26 @@ const AnimalForm = () => {
 				noValidate
 			>
 				<h2 id="form-heading" className="sr-only">
-					{params.animalUuid ? t('editAnimalForm') : t('addAnimalForm')}
+					{params.animalUuid ? t('accessibility.editAnimalForm') : t('accessibility.addAnimalForm')}
 				</h2>
 
 				<fieldset className="row-span-5 col-start-2 h-full border-0 p-0 m-0">
-					<legend className="sr-only">{t('animalPhoto', 'Animal photo')}</legend>
+					<legend className="sr-only">{t('accessibility.animalPhoto')}</legend>
 					<Dropzone
 						className="dropzone"
 						cleanFile={false}
 						pictureUrl={pictureUrl || animalForm.picture}
 						onFile={handleFile}
-						aria-label={t('uploadPhoto', 'Upload animal photo')}
+						aria-label={t('accessibility.uploadPhoto')}
 						aria-describedby="photo-help"
 					/>
 					<div id="photo-help" className="sr-only">
-						{t('photoHelp', 'Click or drag to upload an animal photo')}
+						{t('accessibility.photoHelp')}
 					</div>
 				</fieldset>
 
 				<fieldset className="contents">
-					<legend className="sr-only">{t('basicInformation', 'Basic animal information')}</legend>
+					<legend className="sr-only">{t('accessibility.basicInformation')}</legend>
 
 					<TextField
 						name="animalId"
@@ -220,7 +220,7 @@ const AnimalForm = () => {
 						autoComplete="off"
 					/>
 					<div id="animal-id-help" className="sr-only">
-						{t('animalIdHelp', 'Unique identifier for this animal')}
+						{t('accessibility.animalIdHelp')}
 					</div>
 
 					<Select
@@ -236,7 +236,7 @@ const AnimalForm = () => {
 						aria-describedby="species-help"
 					/>
 					<div id="species-help" className="sr-only">
-						{t('speciesHelp', 'Select the species of this animal')}
+						{t('accessibility.speciesHelp')}
 					</div>
 
 					<Select
@@ -253,7 +253,7 @@ const AnimalForm = () => {
 						aria-describedby="breed-help"
 					/>
 					<div id="breed-help" className="sr-only">
-						{t('breedHelp', 'Select the breed of this animal. First select a species.')}
+						{t('accessibility.breedHelp')}
 					</div>
 
 					<Select
@@ -272,7 +272,7 @@ const AnimalForm = () => {
 						aria-describedby="gender-help"
 					/>
 					<div id="gender-help" className="sr-only">
-						{t('genderHelp', 'Select the gender of this animal')}
+						{t('accessibility.genderHelp')}
 					</div>
 
 					<TextField
@@ -287,7 +287,7 @@ const AnimalForm = () => {
 						autoComplete="off"
 					/>
 					<div id="color-help" className="sr-only">
-						{t('colorHelp', 'Describe the color or markings of this animal')}
+						{t('accessibility.colorHelp')}
 					</div>
 
 					<TextField
@@ -304,12 +304,12 @@ const AnimalForm = () => {
 						step="0.1"
 					/>
 					<div id="weight-help" className="sr-only">
-						{t('weightHelp', `Enter the weight of this animal in ${farm?.weightUnit}`)}
+						{t('accessibility.weightHelp', { unit: farm?.weightUnit })}
 					</div>
 				</fieldset>
 
 				<fieldset className="contents">
-					<legend className="sr-only">{t('dateInformation', 'Date information')}</legend>
+					<legend className="sr-only">{t('accessibility.dateInformation')}</legend>
 
 					<DatePicker
 						legend={t('birthDate')}
@@ -319,7 +319,7 @@ const AnimalForm = () => {
 						aria-describedby="birth-date-help"
 					/>
 					<div id="birth-date-help" className="sr-only">
-						{t('birthDateHelp', 'Select the birth date of this animal')}
+						{t('accessibility.birthDateHelp')}
 					</div>
 
 					<DatePicker
@@ -330,7 +330,7 @@ const AnimalForm = () => {
 						aria-describedby="purchase-date-help"
 					/>
 					<div id="purchase-date-help" className="sr-only">
-						{t('purchaseDateHelp', 'Select when this animal was purchased (optional)')}
+						{t('accessibility.purchaseDateHelp')}
 					</div>
 
 					{params.animalUuid && (
@@ -343,7 +343,7 @@ const AnimalForm = () => {
 								aria-describedby="sold-date-help"
 							/>
 							<div id="sold-date-help" className="sr-only">
-								{t('soldDateHelp', 'Select when this animal was sold (optional)')}
+								{t('accessibility.soldDateHelp')}
 							</div>
 						</>
 					)}
@@ -358,7 +358,7 @@ const AnimalForm = () => {
 								aria-describedby="death-date-help"
 							/>
 							<div id="death-date-help" className="sr-only">
-								{t('deathDateHelp', 'Select the death date if this animal has died (optional)')}
+								{t('accessibility.deathDateHelp')}
 							</div>
 						</>
 					)}
@@ -374,7 +374,7 @@ const AnimalForm = () => {
 						aria-describedby="origin-help"
 					/>
 					<div id="origin-help" className="sr-only">
-						{t('originHelp', 'Describe the origin or source of this animal (optional)')}
+						{t('accessibility.originHelp')}
 					</div>
 				</div>
 
@@ -386,9 +386,7 @@ const AnimalForm = () => {
 					{params.animalUuid ? t('editButton') : t('addButton')}
 				</button>
 				<div id="submit-help" className="sr-only">
-					{params.animalUuid
-						? t('editSubmitHelp', 'Save changes to this animal')
-						: t('addSubmitHelp', 'Add this new animal to your farm')}
+					{params.animalUuid ? t('accessibility.editSubmitHelp') : t('accessibility.addSubmitHelp')}
 				</div>
 			</form>
 		</div>

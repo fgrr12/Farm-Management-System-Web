@@ -1,4 +1,13 @@
 {
+	"accessibility": {
+		"emailHelp": "Ingresa tu dirección de email para iniciar sesión",
+		"forgotPasswordLink": "Restablece tu contraseña si la olvidaste",
+		"googleLoginHelp": "Inicia sesión usando tu cuenta de Google",
+		"loginButtonHelp": "Envía el formulario para iniciar sesión con email y contraseña",
+		"orSeparator": "O inicia sesión con",
+		"passwordHelp": "Ingresa tu contraseña para iniciar sesión",
+		"skipToLogin": "Saltar al formulario de inicio de sesión"
+	},
 	"email": "Email",
 	"forgotPassword": "¿Olvidaste tu contraseña?",
 	"google": "Iniciar sesión con Google",

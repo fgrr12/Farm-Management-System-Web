@@ -143,7 +143,7 @@ const Animals = () => {
 				href="#animals-grid"
 				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
 			>
-				{t('skipToAnimals', 'Skip to animals list')}
+				{t('accessibility.skipToAnimals')}
 			</a>
 
 			<header>
@@ -152,14 +152,14 @@ const Animals = () => {
 
 			<section aria-labelledby="filters-heading" role="search">
 				<h2 id="filters-heading" className="sr-only">
-					{t('filtersSection', 'Filter and search animals')}
+					{t('accessibility.filtersSection')}
 				</h2>
 				<div className="flex flex-col md:grid md:grid-cols-6 items-center justify-center md:gap-4 w-full">
 					<Search
 						placeholder={t('search')}
 						value={filters.search}
 						onChange={handleSearchChange}
-						aria-label={t('searchAnimals', 'Search animals by ID')}
+						aria-label={t('accessibility.searchAnimals')}
 					/>
 					<Select
 						name="speciesUuid"
@@ -197,22 +197,22 @@ const Animals = () => {
 						{t('addAnimal')}
 					</Button>
 					<div id="add-animal-description" className="sr-only">
-						{t('addAnimalDescription', 'Navigate to form to add a new animal')}
+						{t('accessibility.addAnimalDescription')}
 					</div>
 				</div>
 			</section>
 
 			<section aria-labelledby="animals-heading" aria-live="polite" aria-atomic="false">
 				<h2 id="animals-heading" className="sr-only">
-					{t('animalsListHeading', 'Animals list')} ({filteredAnimals.length}{' '}
-					{t('results', 'results')})
+					{t('accessibility.animalsListHeading')} ({filteredAnimals.length}{' '}
+					{t('accessibility.results')})
 				</h2>
 				<div
 					ref={containerRef}
 					className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 w-full"
 					id="animals-grid"
 					role="list"
-					aria-label={t('animalsGrid', `List showing ${filteredAnimals.length} animals`)}
+					aria-label={t('accessibility.animalsGrid', { count: filteredAnimals.length })}
 				>
 					{filteredAnimals.map((animal) => (
 						<div key={animal.uuid} role="listitem">
@@ -221,10 +221,11 @@ const Animals = () => {
 								animalId={animal.animalId}
 								breedName={animal.breedName}
 								gender={animal.gender}
-								aria-label={t(
-									'animalCardLabel',
-									`Animal ${animal.animalId}, ${animal.breedName}, ${animal.gender}`
-								)}
+								aria-label={t('accessibility.animalCardLabel', {
+									animalId: animal.animalId,
+									breedName: animal.breedName,
+									gender: animal.gender,
+								})}
 							/>
 						</div>
 					))}
@@ -246,7 +247,7 @@ const Animals = () => {
 				className="fixed bottom-4 left-4 lg:left-23 shadow-md rounded-lg p-2 text-center bg-blue-100"
 				role="status"
 				aria-live="polite"
-				aria-label={t('resultsCounter', 'Results counter')}
+				aria-label={t('accessibility.resultsCounter')}
 			>
 				<p>
 					<Trans ns="animals" i18nKey="totalFilteredAnimals" count={filteredAnimals.length} />

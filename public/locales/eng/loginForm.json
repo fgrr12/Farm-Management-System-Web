@@ -1,4 +1,13 @@
 {
+	"accessibility": {
+		"emailHelp": "Enter your email address to log in",
+		"forgotPasswordLink": "Reset your password if you forgot it",
+		"googleLoginHelp": "Sign in using your Google account",
+		"loginButtonHelp": "Submit the form to log in with email and password",
+		"orSeparator": "Or sign in with",
+		"passwordHelp": "Enter your password to log in",
+		"skipToLogin": "Skip to login form"
+	},
 	"email": "Email",
 	"forgotPassword": "Forgot your password?",
 	"google": "Login with Google",

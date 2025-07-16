@@ -259,7 +259,7 @@ const RelatedAnimalsForm = () => {
 				href="#main-content"
 				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded"
 			>
-				{t('skipToMainContent', 'Skip to main content')}
+				{t('accessibility.skipToMainContent')}
 			</a>
 
 			{currentAnimal && (
@@ -270,7 +270,7 @@ const RelatedAnimalsForm = () => {
 					<h1 id="selected-animal-heading" className="text-center text-2xl font-semibold">
 						{t('selectedAnimal')}
 					</h1>
-					<div role="img" aria-label={t('selectedAnimalCard', 'Selected animal information')}>
+					<div role="img" aria-label={t('accessibility.selectedAnimalCard')}>
 						<RelatedAnimalCard animal={currentAnimal} />
 					</div>
 					<Button
@@ -280,7 +280,7 @@ const RelatedAnimalsForm = () => {
 						{t('addExternalRelation')}
 					</Button>
 					<div id="external-relation-description" className="sr-only">
-						{t('addExternalRelationDescription', 'Opens dialog to add external animal relation')}
+						{t('accessibility.addExternalRelationDescription')}
 					</div>
 				</section>
 			)}
@@ -297,7 +297,7 @@ const RelatedAnimalsForm = () => {
 					title={t('animals')}
 					animals={animalsLists.animals}
 					location={0}
-					aria-label={t('availableAnimalsContainer', 'Available animals for creating relations')}
+					aria-label={t('accessibility.availableAnimalsContainer')}
 				/>
 			</section>
 
@@ -309,7 +309,7 @@ const RelatedAnimalsForm = () => {
 					title={t('parentsTitle')}
 					animals={animalsLists.parents}
 					location={1}
-					aria-label={t('parentsContainer', 'Parent animals of the selected animal')}
+					aria-label={t('accessibility.parentsContainer')}
 				/>
 			</section>
 
@@ -321,14 +321,14 @@ const RelatedAnimalsForm = () => {
 					title={t('childrenTitle')}
 					animals={animalsLists.children}
 					location={2}
-					aria-label={t('childrenContainer', 'Child animals of the selected animal')}
+					aria-label={t('accessibility.childrenContainer')}
 				/>
 			</section>
 
 			{currentAnimal && (
 				<ExternalRelationForm
 					currentAnimal={currentAnimal}
-					aria-label={t('externalRelationForm', 'Form to add external animal relations')}
+					aria-label={t('accessibility.externalRelationForm')}
 				/>
 			)}
 		</div>

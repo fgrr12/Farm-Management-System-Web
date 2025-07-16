@@ -1,4 +1,14 @@
 {
+	"accessibility": {
+		"addEmployeeDescription": "Navigate to form to add a new employee",
+		"employeesList": "Employees list",
+		"employeesTable": "Table showing {{count}} employees",
+		"results": "results",
+		"searchEmployees": "Search employees by name, email, or phone",
+		"searchHelp": "Search by name, last name, email, or phone number",
+		"searchSection": "Search and manage employees",
+		"skipToEmployees": "Skip to employees list"
+	},
 	"addEmployee": "Add employee",
 	"search": "Search",
 	"title": "Employees",

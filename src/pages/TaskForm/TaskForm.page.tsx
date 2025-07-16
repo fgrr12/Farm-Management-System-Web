@@ -70,7 +70,7 @@ const TaskForm = () => {
 				href="#task-form"
 				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
 			>
-				{t('skipToForm', 'Skip to task form')}
+				{t('accessibility.skipToForm')}
 			</a>
 
 			<form
@@ -82,7 +82,7 @@ const TaskForm = () => {
 				noValidate
 			>
 				<h2 id="form-heading" className="sr-only">
-					{t('addTaskForm', 'Add new task form')}
+					{t('accessibility.addTaskForm')}
 				</h2>
 
 				<TextField
@@ -97,7 +97,7 @@ const TaskForm = () => {
 					autoComplete="off"
 				/>
 				<div id="title-help" className="sr-only">
-					{t('titleHelp', 'Enter a descriptive name for this task')}
+					{t('accessibility.titleHelp')}
 				</div>
 
 				<Textarea
@@ -110,7 +110,7 @@ const TaskForm = () => {
 					aria-describedby="description-help"
 				/>
 				<div id="description-help" className="sr-only">
-					{t('descriptionHelp', 'Provide detailed instructions for this task')}
+					{t('accessibility.descriptionHelp')}
 				</div>
 
 				<Select
@@ -128,7 +128,7 @@ const TaskForm = () => {
 					aria-describedby="priority-help"
 				/>
 				<div id="priority-help" className="sr-only">
-					{t('priorityHelp', 'Select the urgency level for this task')}
+					{t('accessibility.priorityHelp')}
 				</div>
 
 				<Select
@@ -144,14 +144,14 @@ const TaskForm = () => {
 					aria-describedby="species-help"
 				/>
 				<div id="species-help" className="sr-only">
-					{t('speciesHelp', 'Select which animal species this task applies to')}
+					{t('accessibility.speciesHelp')}
 				</div>
 
 				<Button type="submit" aria-describedby="submit-help">
 					{t('addTask')}
 				</Button>
 				<div id="submit-help" className="sr-only">
-					{t('submitHelp', 'Create this new task for your farm')}
+					{t('accessibility.submitHelp')}
 				</div>
 			</form>
 		</div>

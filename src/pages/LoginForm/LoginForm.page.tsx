@@ -63,7 +63,7 @@ const LoginForm = () => {
 				href="#login-form"
 				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
 			>
-				{t('skipToLogin', 'Skip to login form')}
+				{t('accessibility.skipToLogin')}
 			</a>
 
 			<section
@@ -94,7 +94,7 @@ const LoginForm = () => {
 						autoComplete="email"
 					/>
 					<div id="email-help" className="sr-only">
-						{t('emailHelp', 'Enter your email address to log in')}
+						{t('accessibility.emailHelp')}
 					</div>
 
 					<PasswordField
@@ -107,13 +107,10 @@ const LoginForm = () => {
 						autoComplete="current-password"
 					/>
 					<div id="password-help" className="sr-only">
-						{t('passwordHelp', 'Enter your password to log in')}
+						{t('accessibility.passwordHelp')}
 					</div>
 
-					<Link
-						to={AppRoutes.LOGIN}
-						aria-label={t('forgotPasswordLink', 'Reset your password if you forgot it')}
-					>
+					<Link to={AppRoutes.LOGIN} aria-label={t('accessibility.forgotPasswordLink')}>
 						{t('forgotPassword')}
 					</Link>
 
@@ -121,7 +118,7 @@ const LoginForm = () => {
 						{t('login')}
 					</Button>
 					<div id="login-button-help" className="sr-only">
-						{t('loginButtonHelp', 'Submit the form to log in with email and password')}
+						{t('accessibility.loginButtonHelp')}
 					</div>
 				</form>
 
@@ -137,7 +134,7 @@ const LoginForm = () => {
 					{t('google')}
 				</button>
 				<div id="google-login-help" className="sr-only">
-					{t('googleLoginHelp', 'Sign in using your Google account')}
+					{t('accessibility.googleLoginHelp')}
 				</div>
 			</section>
 		</div>

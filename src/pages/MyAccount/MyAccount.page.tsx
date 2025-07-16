@@ -154,7 +154,7 @@ const MyAccount = () => {
 				href="#profile-section"
 				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
 			>
-				{t('skipToProfile', 'Skip to profile section')}
+				{t('accessibility.skipToProfile')}
 			</a>
 
 			<header>
@@ -168,13 +168,11 @@ const MyAccount = () => {
 							{t('myProfile.title')}
 						</h2>
 						<ActionButton
-							title={t('editProfile', 'Edit profile')}
+							title={t('accessibility.editProfile')}
 							icon="i-material-symbols-edit-square-outline"
 							onClick={handleEdit('user')}
 							aria-label={
-								edit.user
-									? t('cancelEditProfile', 'Cancel editing profile')
-									: t('editProfile', 'Edit profile')
+								edit.user ? t('accessibility.cancelEditProfile') : t('accessibility.editProfile')
 							}
 							aria-pressed={edit.user}
 						/>
@@ -188,9 +186,7 @@ const MyAccount = () => {
 						noValidate
 					>
 						<fieldset className="border-0 p-0 m-0">
-							<legend className="sr-only">
-								{t('personalInformation', 'Personal information')}
-							</legend>
+							<legend className="sr-only">{t('accessibility.personalInformation')}</legend>
 							<div className="grid grid-cols-3 items-center gap-4 w-full">
 								<TextField
 									name="name"
@@ -204,7 +200,7 @@ const MyAccount = () => {
 									autoComplete="given-name"
 								/>
 								<div id="name-help" className="sr-only">
-									{t('nameHelp', 'Enter your first name')}
+									{t('accessibility.nameHelp')}
 								</div>
 
 								<TextField
@@ -215,11 +211,11 @@ const MyAccount = () => {
 									onChange={handleChange('user')}
 									disabled={!edit.user}
 									required
-									aria-describedby="lastname-help"
+									aria-describedby="lastName-help"
 									autoComplete="family-name"
 								/>
-								<div id="lastname-help" className="sr-only">
-									{t('lastNameHelp', 'Enter your last name')}
+								<div id="lastName-help" className="sr-only">
+									{t('accessibility.lastNameHelp')}
 								</div>
 
 								<TextField
@@ -235,7 +231,7 @@ const MyAccount = () => {
 									type="email"
 								/>
 								<div id="email-help" className="sr-only">
-									{t('emailHelp', 'Enter your email address')}
+									{t('accessibility.emailHelp')}
 								</div>
 							</div>
 
@@ -253,7 +249,7 @@ const MyAccount = () => {
 									type="tel"
 								/>
 								<div id="phone-help" className="sr-only">
-									{t('phoneHelp', 'Enter your phone number')}
+									{t('accessibility.phoneHelp')}
 								</div>
 
 								<Select
@@ -268,7 +264,7 @@ const MyAccount = () => {
 									aria-describedby="language-help"
 								/>
 								<div id="language-help" className="sr-only">
-									{t('languageHelp', 'Select your preferred language')}
+									{t('accessibility.languageHelp')}
 								</div>
 							</div>
 						</fieldset>
@@ -277,7 +273,7 @@ const MyAccount = () => {
 							{t('myProfile.edit')}
 						</Button>
 						<div id="save-profile-help" className="sr-only">
-							{t('saveProfileHelp', 'Save changes to your profile information')}
+							{t('accessibility.saveProfileHelp')}
 						</div>
 					</form>
 				</div>
@@ -290,13 +286,11 @@ const MyAccount = () => {
 								{t('myFarm.title')}
 							</h2>
 							<ActionButton
-								title={t('editFarm', 'Edit farm')}
+								title={t('accessibility.editFarm')}
 								icon="i-material-symbols-edit-square-outline"
 								onClick={handleEdit('farm')}
 								aria-label={
-									edit.farm
-										? t('cancelEditFarm', 'Cancel editing farm')
-										: t('editFarm', 'Edit farm')
+									edit.farm ? t('accessibility.cancelEditFarm') : t('accessibility.editFarm')
 								}
 								aria-pressed={edit.farm}
 							/>
@@ -310,7 +304,7 @@ const MyAccount = () => {
 							noValidate
 						>
 							<fieldset className="border-0 p-0 m-0">
-								<legend className="sr-only">{t('farmInformation', 'Farm information')}</legend>
+								<legend className="sr-only">{t('accessibility.farmInformation')}</legend>
 								<div className="grid grid-cols-3 items-center gap-4 w-full">
 									<TextField
 										name="name"
@@ -324,7 +318,7 @@ const MyAccount = () => {
 										autoComplete="organization"
 									/>
 									<div id="farm-name-help" className="sr-only">
-										{t('farmNameHelp', 'Enter the name of your farm')}
+										{t('accessibility.farmNameHelp')}
 									</div>
 
 									<TextField
@@ -339,7 +333,7 @@ const MyAccount = () => {
 										autoComplete="street-address"
 									/>
 									<div id="farm-address-help" className="sr-only">
-										{t('farmAddressHelp', 'Enter the address of your farm')}
+										{t('accessibility.farmAddressHelp')}
 									</div>
 								</div>
 
@@ -356,7 +350,7 @@ const MyAccount = () => {
 										aria-describedby="liquid-unit-help"
 									/>
 									<div id="liquid-unit-help" className="sr-only">
-										{t('liquidUnitHelp', 'Select the unit for measuring liquids')}
+										{t('accessibility.liquidUnitHelp')}
 									</div>
 
 									<Select
@@ -371,7 +365,7 @@ const MyAccount = () => {
 										aria-describedby="weight-unit-help"
 									/>
 									<div id="weight-unit-help" className="sr-only">
-										{t('weightUnitHelp', 'Select the unit for measuring weight')}
+										{t('accessibility.weightUnitHelp')}
 									</div>
 
 									<Select
@@ -386,7 +380,7 @@ const MyAccount = () => {
 										aria-describedby="temperature-unit-help"
 									/>
 									<div id="temperature-unit-help" className="sr-only">
-										{t('temperatureUnitHelp', 'Select the unit for measuring temperature')}
+										{t('accessibility.temperatureUnitHelp')}
 									</div>
 								</div>
 							</fieldset>
@@ -395,7 +389,7 @@ const MyAccount = () => {
 								{t('myFarm.edit')}
 							</Button>
 							<div id="save-farm-help" className="sr-only">
-								{t('saveFarmHelp', 'Save changes to your farm information')}
+								{t('accessibility.saveFarmHelp')}
 							</div>
 						</form>
 					</div>
@@ -410,13 +404,13 @@ const MyAccount = () => {
 								{t('myBillingCard.title')}
 							</h2>
 							<ActionButton
-								title={t('editBilling', 'Edit billing')}
+								title={t('accessibility.editBilling')}
 								icon="i-material-symbols-edit-square-outline"
 								onClick={handleEdit('billingCard')}
 								aria-label={
 									edit.billingCard
-										? t('cancelEditBilling', 'Cancel editing billing')
-										: t('editBilling', 'Edit billing')
+										? t('accessibility.cancelEditBilling')
+										: t('accessibility.editBilling')
 								}
 								aria-pressed={edit.billingCard}
 							/>
@@ -430,9 +424,7 @@ const MyAccount = () => {
 							noValidate
 						>
 							<fieldset className="border-0 p-0 m-0">
-								<legend className="sr-only">
-									{t('billingInformation', 'Billing information')}
-								</legend>
+								<legend className="sr-only">{t('accessibility.billingInformation')}</legend>
 
 								<div className="flex flex-row gap-4 w-full items-center">
 									<p className="text-lg">{t('myBillingCard.subtitle')}</p>
@@ -451,7 +443,7 @@ const MyAccount = () => {
 										</span>
 									</label>
 									<div id="billing-status-help" className="sr-only">
-										{t('billingStatusHelp', 'Toggle to activate or deactivate billing card')}
+										{t('accessibility.billingStatusHelp')}
 									</div>
 								</div>
 
@@ -467,7 +459,7 @@ const MyAccount = () => {
 										aria-describedby="billing-id-help"
 									/>
 									<div id="billing-id-help" className="sr-only">
-										{t('billingIdHelp', 'Enter billing identification number')}
+										{t('accessibility.billingIdHelp')}
 									</div>
 
 									<TextField
@@ -482,7 +474,7 @@ const MyAccount = () => {
 										autoComplete="name"
 									/>
 									<div id="billing-name-help" className="sr-only">
-										{t('billingNameHelp', 'Enter name for billing')}
+										{t('accessibility.billingNameHelp')}
 									</div>
 
 									<TextField
@@ -498,7 +490,7 @@ const MyAccount = () => {
 										type="email"
 									/>
 									<div id="billing-email-help" className="sr-only">
-										{t('billingEmailHelp', 'Enter email for billing')}
+										{t('accessibility.billingEmailHelp')}
 									</div>
 								</div>
 
@@ -516,7 +508,7 @@ const MyAccount = () => {
 										type="tel"
 									/>
 									<div id="billing-phone-help" className="sr-only">
-										{t('billingPhoneHelp', 'Enter phone number for billing')}
+										{t('accessibility.billingPhoneHelp')}
 									</div>
 
 									<TextField
@@ -531,7 +523,7 @@ const MyAccount = () => {
 										autoComplete="billing street-address"
 									/>
 									<div id="billing-address-help" className="sr-only">
-										{t('billingAddressHelp', 'Enter billing address')}
+										{t('accessibility.billingAddressHelp')}
 									</div>
 								</div>
 							</fieldset>
@@ -544,7 +536,7 @@ const MyAccount = () => {
 								{t('myBillingCard.edit')}
 							</Button>
 							<div id="save-billing-help" className="sr-only">
-								{t('saveBillingHelp', 'Save changes to your billing information')}
+								{t('accessibility.saveBillingHelp')}
 							</div>
 						</form>
 					</div>
