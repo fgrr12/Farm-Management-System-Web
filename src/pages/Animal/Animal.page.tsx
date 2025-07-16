@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { useEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -21,19 +21,22 @@ import { ProductionRecordsTable } from '@/components/business/Animal/ProductionR
 import { RelatedAnimalsTable } from '@/components/business/Animal/RelatedAnimalsTable'
 import { ActionButton } from '@/components/ui/ActionButton'
 
-const DetailItem = ({ label, value }: { label: string; value: React.ReactNode }) => (
+import { usePagePerformance } from '@/hooks/usePagePerformance'
+
+const DetailItem = memo(({ label, value }: { label: string; value: React.ReactNode }) => (
 	<div className="flex flex-col gap-1 w-full justify-center items-center">
 		<span className="font-bold text-xl text-center">{label}</span>
 		<span className="text-xl text-center">{value}</span>
 	</div>
-)
+))
 
-const GenderIcon = ({ gender }: { gender: string }) =>
+const GenderIcon = memo(({ gender }: { gender: string }) =>
 	gender.toLowerCase() === 'male' ? (
 		<i className="i-tdesign-gender-male bg-blue-500! w-8! h-8!" />
 	) : (
 		<i className="i-tdesign-gender-female bg-pink-500! w-8! h-8!" />
 	)
+)
 
 const Animal = () => {
 	const { user } = useUserStore()
@@ -42,7 +45,8 @@ const Animal = () => {
 	const params = useParams()
 	const { t } = useTranslation(['animal'])
 
-	const { defaultModalData, setLoading, setModalData, setHeaderTitle, setToastData } = useAppStore()
+	const { defaultModalData, setModalData } = useAppStore()
+	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
 	const [animal, setAnimal] = useState(ANIMAL_INITIAL_STATE)
 	const [employees, setEmployees] = useState<User[]>([])
 	const [activeTab, setActiveTab] = useState<
@@ -56,11 +60,11 @@ const Animal = () => {
 		}
 	}, [breeds, animal.breedUuid, animal.speciesUuid, species])
 
-	const handleEditAnimal = () => {
+	const handleEditAnimal = useCallback(() => {
 		navigate(AppRoutes.EDIT_ANIMAL.replace(':animalUuid', animal.uuid))
-	}
+	}, [navigate, animal.uuid])
 
-	const buttonIcon = (key: string) => {
+	const buttonIcon = useCallback((key: string) => {
 		switch (key) {
 			case 'healthRecords':
 				return 'i-material-symbols-light-health-metrics-rounded bg-emerald-500! w-7! h-7!'
@@ -71,65 +75,66 @@ const Animal = () => {
 			default:
 				return ''
 		}
-	}
+	}, [])
 
-	const handleRemoveAnimal = async () => {
+	const handleRemoveAnimal = useCallback(async () => {
 		setModalData({
 			open: true,
 			title: t('modal.removeAnimal.title'),
 			message: t('modal.removeAnimal.message'),
 			onAccept: async () => {
-				try {
-					setLoading(true)
-					await AnimalsService.deleteAnimal(animal.uuid, false)
-					setModalData(defaultModalData)
-					setLoading(false)
-					setToastData({
-						message: t('toast.deleted'),
-						type: 'success',
-					})
-					navigate(AppRoutes.ANIMALS)
-				} catch (_error) {
-					setToastData({
-						message: t('toast.deleteError'),
-						type: 'error',
-					})
-				}
+				await withLoadingAndError(
+					async () => {
+						await AnimalsService.deleteAnimal(animal.uuid, false)
+						setModalData(defaultModalData)
+						showToast(t('toast.deleted'), 'success')
+						navigate(AppRoutes.ANIMALS)
+					},
+					t('toast.deleteError')
+				)
 			},
 			onCancel: () => {
 				setModalData(defaultModalData)
-				setToastData({
-					message: t('toast.notDeleted'),
-					type: 'info',
-				})
+				showToast(t('toast.notDeleted'), 'info')
 			},
 		})
-	}
+	}, [animal.uuid, t, setModalData, defaultModalData, withLoadingAndError, showToast, navigate])
 
-	const handleRemoveRelation = (uuid: string) => {
-		const updateParents = animal.relatedAnimals!.parents.filter((related) => related.uuid !== uuid)
-		const updateChildren = animal.relatedAnimals!.children.filter(
-			(related) => related.uuid !== uuid
-		)
-		setAnimal((prev) => ({
-			...prev,
-			relatedAnimals: { parents: updateParents, children: updateChildren },
-		}))
-	}
+	const handleRemoveRelation = useCallback(
+		(uuid: string) => {
+			const updateParents = animal.relatedAnimals!.parents.filter(
+				(related) => related.uuid !== uuid
+			)
+			const updateChildren = animal.relatedAnimals!.children.filter(
+				(related) => related.uuid !== uuid
+			)
+			setAnimal((prev) => ({
+				...prev,
+				relatedAnimals: { parents: updateParents, children: updateChildren },
+			}))
+		},
+		[animal.relatedAnimals]
+	)
 
-	const handleRemoveHealthRecord = (uuid: string) => {
-		const updateHealthRecords = animal.healthRecords!.filter((record) => record.uuid !== uuid)
-		setAnimal((prev) => ({ ...prev, healthRecords: updateHealthRecords }))
-	}
+	const handleRemoveHealthRecord = useCallback(
+		(uuid: string) => {
+			const updateHealthRecords = animal.healthRecords!.filter((record) => record.uuid !== uuid)
+			setAnimal((prev) => ({ ...prev, healthRecords: updateHealthRecords }))
+		},
+		[animal.healthRecords]
+	)
 
-	const handleRemoveProductionRecord = (uuid: string) => {
-		const updateProductionRecords = animal.productionRecords!.filter(
-			(record) => record.uuid !== uuid
-		)
-		setAnimal((prev) => ({ ...prev, productionRecords: updateProductionRecords }))
-	}
+	const handleRemoveProductionRecord = useCallback(
+		(uuid: string) => {
+			const updateProductionRecords = animal.productionRecords!.filter(
+				(record) => record.uuid !== uuid
+			)
+			setAnimal((prev) => ({ ...prev, productionRecords: updateProductionRecords }))
+		},
+		[animal.productionRecords]
+	)
 
-	const getHealthRecords = async () => {
+	const getHealthRecords = useCallback(async () => {
 		if (activeTab === 'healthRecords') return
 		setActiveTab('healthRecords')
 		const dbHealthRecords = await HealthRecordsService.getHealthRecords(animal.uuid)
@@ -137,16 +142,16 @@ const Animal = () => {
 			animal.weight = dbHealthRecords[0]?.weight ?? animal.weight
 		}
 		setAnimal((prev) => ({ ...prev, healthRecords: dbHealthRecords, weight: animal.weight }))
-	}
+	}, [activeTab, animal])
 
-	const getProductionRecords = async () => {
+	const getProductionRecords = useCallback(async () => {
 		if (activeTab === 'productionRecords') return
 		setActiveTab('productionRecords')
 		const dbProductionRecords = await ProductionRecordsService.getProductionRecords(animal.uuid)
 		setAnimal((prev) => ({ ...prev, productionRecords: dbProductionRecords }))
-	}
+	}, [activeTab, animal.uuid])
 
-	const getRelatedAnimals = async () => {
+	const getRelatedAnimals = useCallback(async () => {
 		if (activeTab === 'relatedAnimals') return
 		setActiveTab('relatedAnimals')
 		const dbRelatedAnimals = await RelatedAnimalsService.getRelatedAnimals(animal.uuid)
@@ -166,11 +171,10 @@ const Animal = () => {
 					}) as Animal
 			)
 		}
-	}
+	}, [activeTab, animal.uuid])
 
-	const getInitialData = async () => {
-		try {
-			setLoading(true)
+	const getInitialData = useCallback(async () => {
+		await withLoadingAndError(async () => {
 			const animalId = params.animalUuid as string
 
 			const dbAnimal = await AnimalsService.getAnimal(animalId!)
@@ -185,29 +189,24 @@ const Animal = () => {
 				setEmployees(await EmployeesService.getEmployees(farm.uuid))
 			}
 
-			setHeaderTitle(`Animal ${dbAnimal.animalId}`)
+			setPageTitle(`Animal ${dbAnimal.animalId}`)
 			const weight =
 				dbHealthRecords.length > 0 && dbHealthRecords[0]!.weight! > 0
 					? dbHealthRecords[0]!.weight
 					: dbAnimal.weight
 			dbAnimal.healthRecords = dbHealthRecords
 			setAnimal({ ...dbAnimal, weight: weight! })
-		} catch (_error) {
-			setToastData({
-				message: t('toast.errorGettingAnimal'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
+
+			return dbAnimal
+		}, t('toast.errorGettingAnimal'))
+	}, [params.animalUuid, farm, user, setFarm, setPageTitle, withLoadingAndError, t])
 
 	// biome-ignore lint: UseEffect is only called by farm and params.animalUuid
 	useEffect(() => {
-		setHeaderTitle('Animal')
+		setPageTitle('Animal')
 		setActiveTab('healthRecords')
 		getInitialData()
-	}, [params.animalUuid, farm])
+	}, [params.animalUuid, farm, getInitialData, setPageTitle])
 
 	return (
 		<div className="flex flex-col gap-4 lg:gap-10 p-4 w-full h-full overflow-auto">
@@ -382,4 +381,4 @@ const ANIMAL_INITIAL_STATE: Animal = {
 	deathDate: undefined,
 }
 
-export default Animal
+export default memo(Animal)

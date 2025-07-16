@@ -1,7 +1,6 @@
-import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
+import { type ChangeEvent, type FormEvent, memo, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
@@ -16,6 +15,8 @@ import { Button } from '@/components/ui/Button'
 import { Select } from '@/components/ui/Select'
 import { TextField } from '@/components/ui/TextField'
 
+import { usePagePerformance } from '@/hooks/usePagePerformance'
+
 const MyAccount = () => {
 	const { user: currentUser, setUser: updateUser } = useUserStore()
 	const {
@@ -24,8 +25,8 @@ const MyAccount = () => {
 		setFarm: updateFarm,
 		setBillingCard: updateBillingCard,
 	} = useFarmStore()
-	const { setHeaderTitle, setLoading, setToastData } = useAppStore()
 	const { t } = useTranslation(['myAccount'])
+	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
 
 	const [user, setUser] = useState<User>(INITIAL_USER_DATA)
 	const [farm, setFarm] = useState<Farm>(INITIAL_FARM_DATA)
@@ -52,109 +53,88 @@ const MyAccount = () => {
 		{ value: '°F', name: t('myFarm.temperatureUnitList.°F') },
 	]
 
-	const handleEdit = (key: 'farm' | 'user' | 'billingCard') => () => {
-		setEdit((prev) => ({ ...prev, [key]: !prev[key] }))
-	}
+	const handleEdit = useCallback(
+		(key: 'farm' | 'user' | 'billingCard') => () => {
+			setEdit((prev) => ({ ...prev, [key]: !prev[key] }))
+		},
+		[]
+	)
 
 	const handleChange =
 		<T extends 'farm' | 'user' | 'billingCard'>(key: T) =>
-		(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-			const { name, value, type } = event.target
-			const newValue = type === 'checkbox' ? (event.target as HTMLInputElement).checked : value
+			(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+				const { name, value, type } = event.target
+				const newValue = type === 'checkbox' ? (event.target as HTMLInputElement).checked : value
 
-			if (key === 'user') {
-				setUser((prev) => ({
-					...prev,
-					[name]: type === 'text' ? capitalizeFirstLetter(newValue as string) : newValue,
-				}))
-			} else if (key === 'farm') {
-				setFarm((prev) => ({
-					...prev,
-					[name]: type === 'text' ? capitalizeFirstLetter(newValue as string) : newValue,
-				}))
-			} else {
-				setBillingCard((prev) => ({
-					...prev,
-					[name]: type === 'text' ? capitalizeFirstLetter(newValue as string) : newValue,
-				}))
+				if (key === 'user') {
+					setUser((prev) => ({
+						...prev,
+						[name]: type === 'text' ? capitalizeFirstLetter(newValue as string) : newValue,
+					}))
+				} else if (key === 'farm') {
+					setFarm((prev) => ({
+						...prev,
+						[name]: type === 'text' ? capitalizeFirstLetter(newValue as string) : newValue,
+					}))
+				} else {
+					setBillingCard((prev) => ({
+						...prev,
+						[name]: type === 'text' ? capitalizeFirstLetter(newValue as string) : newValue,
+					}))
+				}
 			}
-		}
 
-	const handleSubmitUser = async (e: FormEvent) => {
+	const handleSubmitUser = useCallback(async (e: FormEvent) => {
 		e.preventDefault()
-		setLoading(true)
-		try {
-			await UserService.updateUser(user)
-			updateUser(user)
-			setEdit((prev) => ({ ...prev, user: false }))
-			setToastData({
-				message: t('myProfile.toast.edited'),
-				type: 'success',
-			})
-		} catch (_error) {
-			setToastData({
-				message: t('myProfile.toast.errorEditing'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
 
-	const handleSubmitFarm = async (e: FormEvent) => {
-		e.preventDefault()
-		try {
-			setLoading(true)
-			await FarmsService.updateFarm({ ...farm })
-			updateFarm({ ...farm })
-			setEdit((prev) => ({ ...prev, farm: false }))
-			setToastData({
-				message: t('myFarm.toast.edited'),
-				type: 'success',
-			})
-		} catch (_error) {
-			setToastData({
-				message: t('myFarm.toast.errorEditing'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
+		await withLoadingAndError(
+			async () => {
+				await UserService.updateUser(user)
+				updateUser(user)
+				setEdit((prev) => ({ ...prev, user: false }))
+				showToast(t('myProfile.toast.edited'), 'success')
+			},
+			t('myProfile.toast.errorEditing')
+		)
+	}, [user, updateUser, withLoadingAndError, showToast, t])
 
-	const handleSubmitBillingCard = async (e: FormEvent) => {
+	const handleSubmitFarm = useCallback(async (e: FormEvent) => {
 		e.preventDefault()
-		try {
-			setLoading(true)
-			const uuid = billingCard.uuid ?? crypto.randomUUID()
-			if (billingCard.uuid) {
-				await BillingCardsService.updateBillingCard(billingCard)
-				updateFarm({ ...farm })
-				setToastData({
-					message: t('myBillingCard.toast.edited'),
-					type: 'success',
-				})
-			} else {
-				farm.billingCardUuid = uuid
-				billingCard.uuid = uuid
-				await BillingCardsService.setBillingCard(billingCard)
+
+		await withLoadingAndError(
+			async () => {
 				await FarmsService.updateFarm({ ...farm })
-				setToastData({
-					message: t('myBillingCard.toast.added'),
-					type: 'success',
-				})
-			}
-			updateBillingCard(billingCard)
-			setEdit((prev) => ({ ...prev, billingCard: false }))
-		} catch (_error) {
-			setToastData({
-				message: t('myBillingCard.toast.errorEditing'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
+				updateFarm({ ...farm })
+				setEdit((prev) => ({ ...prev, farm: false }))
+				showToast(t('myFarm.toast.edited'), 'success')
+			},
+			t('myFarm.toast.errorEditing')
+		)
+	}, [farm, updateFarm, withLoadingAndError, showToast, t])
+
+	const handleSubmitBillingCard = useCallback(async (e: FormEvent) => {
+		e.preventDefault()
+
+		await withLoadingAndError(
+			async () => {
+				const uuid = billingCard.uuid ?? crypto.randomUUID()
+				if (billingCard.uuid) {
+					await BillingCardsService.updateBillingCard(billingCard)
+					updateFarm({ ...farm })
+					showToast(t('myBillingCard.toast.edited'), 'success')
+				} else {
+					farm.billingCardUuid = uuid
+					billingCard.uuid = uuid
+					await BillingCardsService.setBillingCard(billingCard)
+					await FarmsService.updateFarm({ ...farm })
+					showToast(t('myBillingCard.toast.added'), 'success')
+				}
+				updateBillingCard(billingCard)
+				setEdit((prev) => ({ ...prev, billingCard: false }))
+			},
+			t('myBillingCard.toast.errorEditing')
+		)
+	}, [billingCard, farm, updateFarm, updateBillingCard, withLoadingAndError, showToast, t])
 
 	// biome-ignore lint:: useEffect is only called once
 	useEffect(() => {
@@ -166,8 +146,8 @@ const MyAccount = () => {
 	}, [currentUser, currentFarm])
 
 	useEffect(() => {
-		setHeaderTitle(t('title'))
-	}, [setHeaderTitle, t])
+		setPageTitle(t('title'))
+	}, [setPageTitle, t])
 	return (
 		<div className="flex flex-col w-full h-full">
 			<div className="flex flex-col p-4">
@@ -450,4 +430,4 @@ const INITIAL_EDIT = {
 	billingCard: false,
 }
 
-export default MyAccount
+export default memo(MyAccount)

@@ -1,12 +1,11 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import { type ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { type ChangeEvent, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
 
-import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
@@ -17,6 +16,8 @@ import { Button } from '@/components/ui/Button'
 import { Search } from '@/components/ui/Search'
 import { Select } from '@/components/ui/Select'
 
+import { usePagePerformance } from '@/hooks/usePagePerformance'
+
 import type { AnimalCardProps, AnimalsFilters } from './Animals.types'
 
 const Animals = () => {
@@ -24,7 +25,7 @@ const Animals = () => {
 	const { farm, species, breeds } = useFarmStore()
 	const navigation = useNavigate()
 	const { t } = useTranslation(['animals'])
-	const { setLoading, setHeaderTitle, setToastData } = useAppStore()
+	const { setPageTitle, withLoadingAndError } = usePagePerformance()
 	const containerRef = useRef<HTMLDivElement>(null)
 
 	const [animals, setAnimals] = useState<AnimalCardProps[]>([])
@@ -85,49 +86,43 @@ const Animals = () => {
 		setFilters((prev) => ({ ...prev, [name]: value }))
 	}, [])
 
-	const navigateToAddAnimal = () => {
+	const navigateToAddAnimal = useCallback(() => {
 		navigation(AppRoutes.ADD_ANIMAL)
-	}
+	}, [navigation])
 
-	const getAnimals = async () => {
-		setLoading(true)
+	const getAnimals = useCallback(async () => {
+		await withLoadingAndError(
+			async () => {
+				if (!farm?.uuid) return []
 
-		try {
-			const dbAnimals = await AnimalsService.getAnimals(farm!.uuid)
+				const dbAnimals = await AnimalsService.getAnimals(farm.uuid)
 
-			const enrichedAnimals: AnimalCardProps[] = dbAnimals.map((animal) => {
-				const speciesName = species.find((sp) => sp.uuid === animal.speciesUuid)!.name
-				const breedName = breeds.find((br) => br.uuid === animal.breedUuid)!.name
+				const enrichedAnimals: AnimalCardProps[] = dbAnimals.map((animal) => {
+					const speciesName = species.find((sp) => sp.uuid === animal.speciesUuid)?.name || ''
+					const breedName = breeds.find((br) => br.uuid === animal.breedUuid)?.name || ''
 
-				return {
-					...animal,
-					speciesName,
-					breedName,
-				}
-			})
+					return {
+						...animal,
+						speciesName,
+						breedName,
+					}
+				})
 
-			setAnimals(enrichedAnimals)
-		} catch (error) {
-			console.error('Error loading animals:', error)
-
-			setToastData({
-				message: t('toast.errorGettingAnimals'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
+				setAnimals(enrichedAnimals)
+				return enrichedAnimals
+			},
+			t('toast.errorGettingAnimals')
+		)
+	}, [farm?.uuid, species, breeds, withLoadingAndError, t])
 
 	useEffect(() => {
-		setHeaderTitle(t('title'))
-	}, [setHeaderTitle, t])
+		setPageTitle(t('title'))
+	}, [setPageTitle, t])
 
-	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
 		if (!user || !farm) return
 		getAnimals()
-	}, [user, farm])
+	}, [user, farm, getAnimals])
 
 	useGSAP(() => {
 		if (!filteredAnimals.length) return
@@ -217,4 +212,4 @@ const INITIAL_FILTERS: AnimalsFilters = {
 	search: '',
 }
 
-export default Animals
+export default memo(Animals)

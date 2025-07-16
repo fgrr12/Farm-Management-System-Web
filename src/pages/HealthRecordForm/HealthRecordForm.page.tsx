@@ -1,11 +1,18 @@
 import dayjs from 'dayjs'
-import { type ChangeEvent, type FormEvent, useEffect, useMemo, useState } from 'react'
+import {
+	type ChangeEvent,
+	type FormEvent,
+	memo,
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
 
-import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
@@ -18,28 +25,36 @@ import { Select } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
+import { usePagePerformance } from '@/hooks/usePagePerformance'
+
 import type { HealthRecordFormType } from './HealthRecordForm.types'
 
 // Custom hook for form state management
 const useHealthRecordForm = (initialForm: HealthRecord) => {
 	const [form, setForm] = useState(initialForm)
 
-	const handleTextChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-		const { name, value } = event.target
-		setForm((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
-	}
+	const handleTextChange = useCallback(
+		(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+			const { name, value } = event.target
+			setForm((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
+		},
+		[]
+	)
 
-	const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
+	const handleSelectChange = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
 		const { name, value } = event.target
 		setForm((prev) => ({ ...prev, [name]: value }))
-	}
+	}, [])
 
-	const handleDateChange = () => (newDate: dayjs.Dayjs | null) => {
-		setForm((prev) => ({
-			...prev,
-			date: newDate ? dayjs(newDate).toISOString() : dayjs().toISOString(),
-		}))
-	}
+	const handleDateChange = useCallback(
+		() => (newDate: dayjs.Dayjs | null) => {
+			setForm((prev) => ({
+				...prev,
+				date: newDate ? dayjs(newDate).toISOString() : dayjs().toISOString(),
+			}))
+		},
+		[]
+	)
 
 	return { form, setForm, handleTextChange, handleSelectChange, handleDateChange }
 }
@@ -47,40 +62,30 @@ const useHealthRecordForm = (initialForm: HealthRecord) => {
 // Custom hook for form submission
 const useHealthRecordSubmit = (form: HealthRecord, userUuid: string, navigate: any) => {
 	const { t } = useTranslation(['healthRecordForm'])
-	const { setLoading, setToastData } = useAppStore()
 	const params = useParams()
+	const { showToast, withLoadingAndError } = usePagePerformance()
 
-	const handleSubmit = async (event: FormEvent) => {
-		try {
-			setLoading(true)
+	const handleSubmit = useCallback(
+		async (event: FormEvent) => {
 			event.preventDefault()
-			const healthRecordUuid = params.healthRecordUuid as string
-			form.uuid = healthRecordUuid ?? crypto.randomUUID()
 
-			if (healthRecordUuid) {
-				await HealthRecordsService.updateHealthRecord(form, userUuid)
-				setToastData({
-					message: t('toast.editHealthRecord'),
-					type: 'success',
-				})
-				navigate(AppRoutes.ANIMAL.replace(':animalUuid', form.animalUuid))
-			} else {
-				await HealthRecordsService.setHealthRecord(form, userUuid)
-				setToastData({
-					message: t('toast.addHealthRecord'),
-					type: 'success',
-				})
-				navigate(AppRoutes.ANIMAL.replace(':animalUuid', form.animalUuid))
-			}
-		} catch (_error) {
-			setToastData({
-				message: t('toast.errorAddingHealthRecord'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
+			await withLoadingAndError(async () => {
+				const healthRecordUuid = params.healthRecordUuid as string
+				form.uuid = healthRecordUuid ?? crypto.randomUUID()
+
+				if (healthRecordUuid) {
+					await HealthRecordsService.updateHealthRecord(form, userUuid)
+					showToast(t('toast.editHealthRecord'), 'success')
+					navigate(AppRoutes.ANIMAL.replace(':animalUuid', form.animalUuid))
+				} else {
+					await HealthRecordsService.setHealthRecord(form, userUuid)
+					showToast(t('toast.addHealthRecord'), 'success')
+					navigate(AppRoutes.ANIMAL.replace(':animalUuid', form.animalUuid))
+				}
+			}, t('toast.errorAddingHealthRecord'))
+		},
+		[form, userUuid, params.healthRecordUuid, withLoadingAndError, showToast, t, navigate]
+	)
 
 	return handleSubmit
 }
@@ -91,7 +96,7 @@ const HealthRecordForm = () => {
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation(['healthRecordForm'])
-	const { setLoading, setToastData, setHeaderTitle } = useAppStore()
+	const { setPageTitle, withLoadingAndError } = usePagePerformance()
 
 	const { form, setForm, handleTextChange, handleSelectChange, handleDateChange } =
 		useHealthRecordForm(INITIAL_HEALTH_RECORD_FORM)
@@ -112,21 +117,19 @@ const HealthRecordForm = () => {
 
 	const handleSubmit = useHealthRecordSubmit(form, user!.uuid, navigate)
 
-	const getHealthRecord = async () => {
-		try {
-			setLoading(true)
-			const healthRecordUuid = params.healthRecordUuid as string
-			const dbHealthRecord = await HealthRecordsService.getHealthRecord(healthRecordUuid)
-			setForm(dbHealthRecord)
-		} catch (_error) {
-			setToastData({
-				message: t('toast.errorGettingHealthRecord'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
+	const getHealthRecord = useCallback(async () => {
+		await withLoadingAndError(
+			async () => {
+				if (!params.healthRecordUuid) return null
+
+				const healthRecordUuid = params.healthRecordUuid as string
+				const dbHealthRecord = await HealthRecordsService.getHealthRecord(healthRecordUuid)
+				setForm(dbHealthRecord)
+				return dbHealthRecord
+			},
+			t('toast.errorGettingHealthRecord')
+		)
+	}, [params.healthRecordUuid, withLoadingAndError, t, setForm])
 
 	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
@@ -141,8 +144,8 @@ const HealthRecordForm = () => {
 
 	useEffect(() => {
 		const title = params.healthRecordUuid ? t('editHealthRecord') : t('addHealthRecord')
-		setHeaderTitle(title)
-	}, [setHeaderTitle, t, params.healthRecordUuid])
+		setPageTitle(title)
+	}, [setPageTitle, t, params.healthRecordUuid])
 
 	return (
 		<div className="flex flex-col justify-center items-center w-full overflow-auto p-5">
@@ -272,4 +275,4 @@ const INITIAL_HEALTH_RECORD_FORM: HealthRecord = {
 	status: true,
 }
 
-export default HealthRecordForm
+export default memo(HealthRecordForm)

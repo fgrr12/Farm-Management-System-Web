@@ -1,10 +1,9 @@
-import { type ChangeEvent, useEffect, useState } from 'react'
+import { type ChangeEvent, memo, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
 
-import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
@@ -14,71 +13,68 @@ import { Button } from '@/components/ui/Button'
 import { Search } from '@/components/ui/Search'
 import { Select } from '@/components/ui/Select'
 
+import { usePagePerformance } from '@/hooks/usePagePerformance'
+
 import type { DividedTasks, TaskFilters } from './Tasks.types'
 
 const Tasks = () => {
 	const { user } = useUserStore()
 	const { farm, species } = useFarmStore()
-	const { setHeaderTitle, setLoading, setToastData } = useAppStore()
 	const navigate = useNavigate()
 	const { t } = useTranslation(['tasks'])
+	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
 
 	const [tasks, setTasks] = useState(INITIAL_TASKS)
 	const [filters, setFilters] = useState(INITIAL_FILTERS)
 
-	const handleAddTask = () => {
+	const handleAddTask = useCallback(() => {
 		navigate(AppRoutes.ADD_TASK)
-	}
+	}, [navigate])
 
-	const handleDebounceSearch = (event: ChangeEvent<HTMLInputElement>) => {
+	const handleDebounceSearch = useCallback((event: ChangeEvent<HTMLInputElement>) => {
 		setFilters((prev) => ({ ...prev, search: event.target.value }))
-	}
+	}, [])
 
-	const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
+	const handleSelectChange = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
 		const { name, value } = event.target
 		setFilters((prev) => ({ ...prev, [name]: value }))
-	}
+	}, [])
 
-	const handleUpdateTask = (task: Task) => async () => {
-		try {
-			const status = task.status === 'COMPLETED' ? 'PENDING' : 'COMPLETED'
-			await TasksService.updateTaskStatus(task.uuid, status)
-			await getTasks()
-			setToastData({
-				message:
+	const getTasks = useCallback(async () => {
+		await withLoadingAndError(
+			async () => {
+				if (!farm?.uuid) return []
+
+				const { search, status, priority, speciesUuid } = filters
+				const farmUuid = farm.uuid
+				const tasks = await TasksService.getTasks({ search, status, priority, speciesUuid, farmUuid })
+				const pendingTasks = tasks.filter((task) => task.status === 'PENDING')
+				const completedTasks = tasks.filter((task) => task.status === 'COMPLETED')
+				setTasks({ pending: pendingTasks, completed: completedTasks })
+				return tasks
+			},
+			t('toast.errorGettingTasks')
+		)
+	}, [farm?.uuid, filters, withLoadingAndError, t])
+
+	const handleUpdateTask = useCallback(
+		(task: Task) => async () => {
+			await withLoadingAndError(async () => {
+				const status = task.status === 'COMPLETED' ? 'PENDING' : 'COMPLETED'
+				await TasksService.updateTaskStatus(task.uuid, status)
+				await getTasks()
+				showToast(
 					status === 'COMPLETED'
 						? t('toast.taskCompleted', { taskUuid: task.title })
 						: t('toast.taskPending', { taskUuid: task.title }),
-				type: status === 'COMPLETED' ? 'success' : 'warning',
-			})
-		} catch (_error) {
-			setToastData({
-				message: t('toast.errorUpdatingTaskStatus'),
-				type: 'error',
-			})
-		}
-	}
+					status === 'COMPLETED' ? 'success' : 'warning'
+				)
+			}, t('toast.errorUpdatingTaskStatus'))
+		},
+		[getTasks, showToast, t, withLoadingAndError]
+	)
 
-	const getTasks = async () => {
-		try {
-			setLoading(true)
-			const { search, status, priority, speciesUuid } = filters
-			const farmUuid = farm!.uuid
-			const tasks = await TasksService.getTasks({ search, status, priority, speciesUuid, farmUuid })
-			const pendingTasks = tasks.filter((task) => task.status === 'PENDING')
-			const completedTasks = tasks.filter((task) => task.status === 'COMPLETED')
-			setTasks({ pending: pendingTasks, completed: completedTasks })
-		} catch (_error) {
-			setToastData({
-				message: t('toast.errorGettingTasks'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
-
-	const handlePriorityColor = (priority: string) => {
+	const handlePriorityColor = useCallback((priority: string) => {
 		switch (priority) {
 			case 'low':
 				return 'bg-green-500'
@@ -89,25 +85,24 @@ const Tasks = () => {
 			default:
 				return 'bg-gray-500'
 		}
-	}
+	}, [])
 
 	// biome-ignore lint:: UseEffect used to update tasks list
 	useEffect(() => {
 		if (!user) return
 		getTasks()
-	}, [user, filters.priority, filters.speciesUuid, filters.status])
+	}, [user, filters.priority, filters.speciesUuid, filters.status, getTasks])
 
-	// biome-ignore lint:: UseEffect is only watching for search changes
 	useEffect(() => {
 		const debounceId = setTimeout(() => {
 			if (filters.search !== '') getTasks()
 		}, 500)
 		return () => clearTimeout(debounceId)
-	}, [filters.search])
+	}, [filters.search, getTasks])
 
 	useEffect(() => {
-		setHeaderTitle(t('title'))
-	}, [setHeaderTitle, t])
+		setPageTitle(t('title'))
+	}, [setPageTitle, t])
 
 	return (
 		<div className="flex flex-col gap-4 p-4 w-full h-full">
@@ -224,4 +219,4 @@ const INITIAL_FILTERS: TaskFilters = {
 	speciesUuid: '',
 }
 
-export default Tasks
+export default memo(Tasks)

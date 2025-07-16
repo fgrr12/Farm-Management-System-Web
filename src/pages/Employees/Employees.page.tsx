@@ -1,10 +1,9 @@
-import { type ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
+import { type ChangeEvent, memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
 
-import { useAppStore } from '@/store/useAppStore'
 import { useUserStore } from '@/store/useUserStore'
 
 import { EmployeesService } from '@/services/employees'
@@ -12,11 +11,13 @@ import { EmployeesService } from '@/services/employees'
 import { EmployeesTable } from '@/components/business/Employees/EmployeesTable'
 import { Search } from '@/components/ui/Search'
 
+import { usePagePerformance } from '@/hooks/usePagePerformance'
+
 const Employees = () => {
 	const { user } = useUserStore()
-	const { setHeaderTitle, setLoading, setToastData } = useAppStore()
 	const navigate = useNavigate()
 	const { t } = useTranslation(['employees'])
+	const { setPageTitle, withLoadingAndError } = usePagePerformance()
 
 	const [employees, setEmployees] = useState<User[]>([])
 	const [search, setSearch] = useState('')
@@ -31,13 +32,13 @@ const Employees = () => {
 		)
 	}, [employees, search])
 
-	const handleAddEmployee = () => {
+	const handleAddEmployee = useCallback(() => {
 		navigate(AppRoutes.ADD_EMPLOYEE)
-	}
+	}, [navigate])
 
-	const handleDebounceSearch = (event: ChangeEvent<HTMLInputElement>) => {
+	const handleDebounceSearch = useCallback((event: ChangeEvent<HTMLInputElement>) => {
 		setSearch(event.target.value)
-	}
+	}, [])
 
 	const handleRemoveEmployee = useCallback(
 		(employeeUuid: string) => async () => {
@@ -46,30 +47,27 @@ const Employees = () => {
 		[employees]
 	)
 
-	const initialData = async () => {
-		try {
-			setLoading(true)
-			const data = await EmployeesService.getEmployees(user!.farmUuid)
-			setEmployees(data)
-		} catch (_error) {
-			setToastData({
-				message: t('toast.errorGettingEmployees'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
+	const initialData = useCallback(async () => {
+		await withLoadingAndError(
+			async () => {
+				if (!user?.farmUuid) return []
 
-	// biome-ignore lint:: UseEffect is only called once
+				const data = await EmployeesService.getEmployees(user.farmUuid)
+				setEmployees(data)
+				return data
+			},
+			t('toast.errorGettingEmployees')
+		)
+	}, [user?.farmUuid, withLoadingAndError, t])
+
 	useEffect(() => {
 		if (!user) return
 		initialData()
-	}, [user])
+	}, [user, initialData])
 
 	useEffect(() => {
-		setHeaderTitle(t('title'))
-	}, [setHeaderTitle, t])
+		setPageTitle(t('title'))
+	}, [setPageTitle, t])
 	return (
 		<div className="flex flex-col gap-5 p-4 w-full h-full overflow-auto">
 			<div className="flex flex-col md:grid md:grid-cols-3 items-center justify-center gap-4 w-full">
@@ -87,4 +85,4 @@ const Employees = () => {
 	)
 }
 
-export default Employees
+export default memo(Employees)

@@ -1,11 +1,10 @@
 import dayjs from 'dayjs'
-import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
+import { type ChangeEvent, type FormEvent, memo, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
 
-import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
@@ -18,90 +17,86 @@ import { Button } from '@/components/ui/Button'
 import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
+import { usePagePerformance } from '@/hooks/usePagePerformance'
+
 const ProductionRecordForm = () => {
 	const { user } = useUserStore()
 	const { farm } = useFarmStore()
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation(['productionRecordForm'])
-	const { setLoading, setHeaderTitle, setToastData } = useAppStore()
+	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
 	const [productionRecordForm, setProductionRecordForm] = useState<ProductionRecord>(
 		INITIAL_PRODUCTION_RECORD_FORM
 	)
 
-	const handleTextChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-		const { name, value } = event.target
-		setProductionRecordForm((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
-	}
+	const handleTextChange = useCallback(
+		(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+			const { name, value } = event.target
+			setProductionRecordForm((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
+		},
+		[]
+	)
 
-	const handleDateChange = () => (newDate: dayjs.Dayjs | null) => {
-		setProductionRecordForm((prev) => ({ ...prev, date: dayjs(newDate).format('YYYY-MM-DD') }))
-	}
+	const handleDateChange = useCallback(
+		() => (newDate: dayjs.Dayjs | null) => {
+			setProductionRecordForm((prev) => ({ ...prev, date: dayjs(newDate).format('YYYY-MM-DD') }))
+		},
+		[]
+	)
 
-	const handleSubmit = async (event: FormEvent) => {
-		try {
-			setLoading(true)
-			event.preventDefault()
-			const productionRecordUuid = params.productionRecordUuid as string
-			productionRecordForm.uuid = productionRecordUuid ?? crypto.randomUUID()
+	const handleSubmit = useCallback(async (event: FormEvent) => {
+		if (!user) return
 
-			if (productionRecordUuid) {
-				await ProductionRecordsService.updateProductionRecord(productionRecordForm, user!.uuid)
-				setToastData({
-					message: t('toast.edited'),
-					type: 'success',
-				})
-				navigate(AppRoutes.ANIMAL.replace(':animalUuid', productionRecordForm.animalUuid))
-			} else {
-				ProductionRecordsService.setProductionRecord(productionRecordForm, user!.uuid)
-				setToastData({
-					message: t('toast.added'),
-					type: 'success',
-				})
-				navigate(AppRoutes.ANIMAL.replace(':animalUuid', productionRecordForm.animalUuid))
-			}
-		} catch (_error) {
-			setToastData({
-				message: t('toast.errorAddingProductionRecord'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
+		event.preventDefault()
 
-	const getProductionRecord = async () => {
-		try {
-			setLoading(true)
-			const productionRecordUuid = params.productionRecordUuid as string
-			const dbProductionRecord =
-				await ProductionRecordsService.getProductionRecord(productionRecordUuid)
-			setProductionRecordForm(dbProductionRecord)
-		} catch (_error) {
-			setToastData({
-				message: t('toast.errorGettingProductionRecord'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
+		await withLoadingAndError(
+			async () => {
+				const productionRecordUuid = params.productionRecordUuid as string
+				productionRecordForm.uuid = productionRecordUuid ?? crypto.randomUUID()
 
-	// biome-ignore lint:: UseEffect is only called once
+				if (productionRecordUuid) {
+					await ProductionRecordsService.updateProductionRecord(productionRecordForm, user.uuid)
+					showToast(t('toast.edited'), 'success')
+					navigate(AppRoutes.ANIMAL.replace(':animalUuid', productionRecordForm.animalUuid))
+				} else {
+					await ProductionRecordsService.setProductionRecord(productionRecordForm, user.uuid)
+					showToast(t('toast.added'), 'success')
+					navigate(AppRoutes.ANIMAL.replace(':animalUuid', productionRecordForm.animalUuid))
+				}
+			},
+			t('toast.errorAddingProductionRecord')
+		)
+	}, [user, params.productionRecordUuid, productionRecordForm, withLoadingAndError, showToast, t, navigate])
+
+	const getProductionRecord = useCallback(async () => {
+		await withLoadingAndError(
+			async () => {
+				if (!params.productionRecordUuid) return null
+
+				const productionRecordUuid = params.productionRecordUuid as string
+				const dbProductionRecord =
+					await ProductionRecordsService.getProductionRecord(productionRecordUuid)
+				setProductionRecordForm(dbProductionRecord)
+				return dbProductionRecord
+			},
+			t('toast.errorGettingProductionRecord')
+		)
+	}, [params.productionRecordUuid, withLoadingAndError, t])
+
 	useEffect(() => {
-		if (user) {
-			const animalUuid = params.animalUuid as string
-			setProductionRecordForm((prev) => ({ ...prev, animalUuid }))
-			if (params.productionRecordUuid) {
-				getProductionRecord()
-			}
+		if (!user) return
+		const animalUuid = params.animalUuid as string
+		setProductionRecordForm((prev) => ({ ...prev, animalUuid }))
+		if (params.productionRecordUuid) {
+			getProductionRecord()
 		}
-	}, [user])
+	}, [user, params.animalUuid, params.productionRecordUuid, getProductionRecord])
 
 	useEffect(() => {
 		const title = params.productionRecordUuid ? t('editProductionRecord') : t('addProductionRecord')
-		setHeaderTitle(title)
-	}, [setHeaderTitle, t, params.productionRecordUuid])
+		setPageTitle(title)
+	}, [setPageTitle, t, params.productionRecordUuid])
 
 	return (
 		<div className="flex flex-col justify-center items-center w-full overflow-auto p-5">
@@ -155,4 +150,4 @@ const INITIAL_PRODUCTION_RECORD_FORM: ProductionRecord = {
 	status: true,
 }
 
-export default ProductionRecordForm
+export default memo(ProductionRecordForm)

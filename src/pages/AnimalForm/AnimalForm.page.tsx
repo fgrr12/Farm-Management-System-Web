@@ -1,11 +1,18 @@
 import dayjs from 'dayjs'
-import { type ChangeEvent, type FormEvent, useEffect, useMemo, useState } from 'react'
+import {
+	type ChangeEvent,
+	type FormEvent,
+	memo,
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
 
-import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
@@ -21,33 +28,40 @@ import { Select } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
+import { usePagePerformance } from '@/hooks/usePagePerformance'
+
 // Custom hook for form state management
 const useAnimalForm = (initialForm: Animal) => {
 	const [animalForm, setAnimalForm] = useState<Animal>(initialForm)
 	const [pictureUrl, setPictureUrl] = useState<string>('')
 
-	const handleTextChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-		const { name, value } = event.target
-		setAnimalForm((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
-	}
+	const handleTextChange = useCallback(
+		(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+			const { name, value } = event.target
+			setAnimalForm((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
+		},
+		[]
+	)
 
-	const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
+	const handleSelectChange = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
 		const { name, value } = event.target
 		setAnimalForm((prev) => ({ ...prev, [name]: value }))
-	}
+	}, [])
 
-	const handleDateChange =
+	const handleDateChange = useCallback(
 		(key: 'birthDate' | 'purchaseDate' | 'soldDate' | 'deathDate') =>
-		(newDate: dayjs.Dayjs | null) => {
-			setAnimalForm((prev) => ({ ...prev, [key]: newDate ? newDate.format('YYYY-MM-DD') : null }))
-		}
+			(newDate: dayjs.Dayjs | null) => {
+				setAnimalForm((prev) => ({ ...prev, [key]: newDate ? newDate.format('YYYY-MM-DD') : null }))
+			},
+		[]
+	)
 
-	const handleFile = async (file: File) => {
+	const handleFile = useCallback(async (file: File) => {
 		const picture = await fileToBase64(file)
 		const fullDataUrl = `data:${picture.contentType};base64,${picture.data}`
 		setPictureUrl(fullDataUrl)
 		setAnimalForm((prev) => ({ ...prev, picture: picture.data }))
-	}
+	}, [])
 
 	return {
 		animalForm,
@@ -67,7 +81,7 @@ const AnimalForm = () => {
 	const params = useParams()
 	const { t } = useTranslation(['animalForm'])
 
-	const { setLoading, setHeaderTitle, setToastData } = useAppStore()
+	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
 	const {
 		animalForm,
 		pictureUrl,
@@ -82,81 +96,72 @@ const AnimalForm = () => {
 		return breeds.filter((breed) => breed.speciesUuid === animalForm.speciesUuid)
 	}, [breeds, animalForm.speciesUuid])
 
-	const getAnimal = async () => {
-		try {
-			setLoading(true)
-			const animalUuid = params.animalUuid as string
-			const dbAnimal = await AnimalsService.getAnimal(animalUuid)
-			setAnimalForm(dbAnimal)
-		} catch (_error) {
-			setToastData({
-				message: t('toast.errorGettingAnimal'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
+	const getAnimal = useCallback(async () => {
+		await withLoadingAndError(
+			async () => {
+				if (!params.animalUuid) return null
 
-	const handleSubmit = async (event: FormEvent) => {
-		try {
-			setLoading(true)
-			event.preventDefault()
-			const animalUuid = params.animalUuid as string
-			animalForm.uuid = animalUuid ?? crypto.randomUUID()
+				const animalUuid = params.animalUuid as string
+				const dbAnimal = await AnimalsService.getAnimal(animalUuid)
+				setAnimalForm(dbAnimal)
+				return dbAnimal
+			},
+			t('toast.errorGettingAnimal')
+		)
+	}, [params.animalUuid, withLoadingAndError, t, setAnimalForm])
 
-			if (animalForm.birthDate) {
-				animalForm.birthDate = formatDate(animalForm.birthDate)
-			}
+	const handleSubmit = useCallback(async (event: FormEvent) => {
+		if (!user) return
 
-			if (animalForm.purchaseDate) {
-				animalForm.purchaseDate = formatDate(animalForm.purchaseDate)
-			}
+		event.preventDefault()
 
-			if (animalForm.soldDate) {
-				animalForm.soldDate = formatDate(animalForm.soldDate)
-			}
+		await withLoadingAndError(
+			async () => {
+				const animalUuid = params.animalUuid as string
+				animalForm.uuid = animalUuid ?? crypto.randomUUID()
 
-			if (animalForm.deathDate) {
-				animalForm.deathDate = formatDate(animalForm.deathDate)
-			}
+				if (animalForm.birthDate) {
+					animalForm.birthDate = formatDate(animalForm.birthDate)
+				}
 
-			if (animalUuid) {
-				await AnimalsService.updateAnimal(animalForm, user!.uuid)
-				setToastData({
-					message: t('toast.edited'),
-					type: 'success',
-				})
-				setAnimalForm(INITIAL_ANIMAL_FORM)
-				navigate(AppRoutes.ANIMAL.replace(':animalUuid', animalUuid))
-			} else {
-				await AnimalsService.setAnimal(animalForm, user!.uuid, user!.farmUuid)
-				setToastData({
-					message: t('toast.added'),
-					type: 'success',
-				})
-				setAnimalForm(INITIAL_ANIMAL_FORM)
-			}
-		} catch (_error) {
-			setToastData({
-				message: t('toast.errorAddingAnimal'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
+				if (animalForm.purchaseDate) {
+					animalForm.purchaseDate = formatDate(animalForm.purchaseDate)
+				}
 
-	// biome-ignore lint:: UseEffect is only called once
+				if (animalForm.soldDate) {
+					animalForm.soldDate = formatDate(animalForm.soldDate)
+				}
+
+				if (animalForm.deathDate) {
+					animalForm.deathDate = formatDate(animalForm.deathDate)
+				}
+
+				if (animalUuid) {
+					await AnimalsService.updateAnimal(animalForm, user.uuid)
+					showToast(t('toast.edited'), 'success')
+					setAnimalForm(INITIAL_ANIMAL_FORM)
+					navigate(AppRoutes.ANIMAL.replace(':animalUuid', animalUuid))
+				} else {
+					await AnimalsService.setAnimal(animalForm, user.uuid, user.farmUuid)
+					showToast(t('toast.added'), 'success')
+					setAnimalForm(INITIAL_ANIMAL_FORM)
+				}
+			},
+			t('toast.errorAddingAnimal')
+		)
+	}, [user, params.animalUuid, animalForm, withLoadingAndError, showToast, t, setAnimalForm, navigate])
+
 	useEffect(() => {
 		if (!user) return
-		if (params.animalUuid) getAnimal()
-	}, [user])
+		if (params.animalUuid) {
+			getAnimal()
+		}
+	}, [user, params.animalUuid, getAnimal])
 
 	useEffect(() => {
 		const title = params.animalUuid ? t('editAnimal') : t('addAnimal')
-		setHeaderTitle(title)
-	}, [setHeaderTitle, t, params.animalUuid])
+		setPageTitle(title)
+	}, [setPageTitle, t, params.animalUuid])
 
 	return (
 		<div className="flex flex-col justify-center items-center w-full overflow-auto p-5">
@@ -302,4 +307,4 @@ const INITIAL_ANIMAL_FORM: Animal = {
 	deathDate: null,
 }
 
-export default AnimalForm
+export default memo(AnimalForm)

@@ -1,4 +1,4 @@
-import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
+import { type ChangeEvent, type FormEvent, memo, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAppStore } from '@/store/useAppStore'
@@ -14,6 +14,8 @@ import { Button } from '@/components/ui/Button'
 import { Search } from '@/components/ui/Search'
 import { TextField } from '@/components/ui/TextField'
 
+import { usePagePerformance } from '@/hooks/usePagePerformance'
+
 import type { MySpeciesI } from './MySpecies.types'
 
 const MySpecies = () => {
@@ -25,18 +27,22 @@ const MySpecies = () => {
 		setBreeds: setDbBreeds,
 		setSpecies: setDbSpecies,
 	} = useFarmStore()
-	const { defaultModalData, setModalData, setLoading, setHeaderTitle, setToastData } = useAppStore()
+	const { defaultModalData, setModalData } = useAppStore()
+	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
 
 	const [species, setSpecies] = useState<MySpeciesI[]>(INITIAL_SPECIES)
 	const [breeds, setBreeds] = useState<Breed[]>(INITIAL_BREEDS)
 
-	const handleSpecieChange = (specieUuid: string) => (event: ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = event.target
-		const sps = species.map((sp) =>
-			sp.uuid === specieUuid ? { ...sp, [name]: capitalizeFirstLetter(value) } : sp
-		)
-		setSpecies(sps)
-	}
+	const handleSpecieChange = useCallback(
+		(specieUuid: string) => (event: ChangeEvent<HTMLInputElement>) => {
+			const { name, value } = event.target
+			const sps = species.map((sp) =>
+				sp.uuid === specieUuid ? { ...sp, [name]: capitalizeFirstLetter(value) } : sp
+			)
+			setSpecies(sps)
+		},
+		[species]
+	)
 
 	const handleBreedChange = (breedUuid: string) => (event: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target
@@ -47,16 +53,18 @@ const MySpecies = () => {
 		)
 	}
 
-	const handleAddSpecie = () => {
+	const handleAddSpecie = useCallback(() => {
+		if (!farm?.uuid) return
+
 		const specie: MySpeciesI = {
 			uuid: crypto.randomUUID(),
-			farmUuid: farm!.uuid,
+			farmUuid: farm.uuid,
 			name: '',
 			editable: true,
 		}
 		const sps = species.concat(specie)
 		setSpecies(sps)
-	}
+	}, [farm?.uuid, species])
 
 	const handleAddBreed = (specie: MySpeciesI) => () => {
 		const breed: Breed = {
@@ -76,134 +84,98 @@ const MySpecies = () => {
 		setSpecies(sps)
 	}
 
-	const handleUpdateSpeciesAndBreeds = async (sps: MySpeciesI[]) => {
-		try {
-			for (const specie of sps) {
-				await SpeciesService.upsertSpecies({
-					uuid: specie.uuid,
-					farmUuid: farm!.uuid,
-					name: specie.name,
-				})
+	const handleUpdateSpeciesAndBreeds = useCallback(async (sps: MySpeciesI[]) => {
+		if (!farm?.uuid) return
 
-				for (const breed of breeds) {
-					if (breed.speciesUuid === specie.uuid) {
-						await BreedsService.upsertBreed({
-							...breed,
-							speciesUuid: specie.uuid,
-						})
-					}
+		for (const specie of sps) {
+			await SpeciesService.upsertSpecies({
+				uuid: specie.uuid,
+				farmUuid: farm.uuid,
+				name: specie.name,
+			})
+
+			for (const breed of breeds) {
+				if (breed.speciesUuid === specie.uuid) {
+					await BreedsService.upsertBreed({
+						...breed,
+						speciesUuid: specie.uuid,
+					})
 				}
 			}
-
-			setDbSpecies(sps)
-			setDbBreeds(breeds)
-			setSpecies(sps)
-		} catch (_error) {
-			setToastData({
-				message: t('toast.errorUpdatingSpecies'),
-				type: 'error',
-			})
 		}
-	}
 
-	const handleRemoveSpecie = (specieUuid: string) => () => {
+		setDbSpecies(sps)
+		setDbBreeds(breeds)
+		setSpecies(sps)
+	}, [farm?.uuid, breeds, setDbSpecies, setDbBreeds])
+
+	const handleRemoveSpecie = useCallback((specieUuid: string) => () => {
 		setModalData({
 			open: true,
 			title: t('modal.deleteSpecies.title'),
 			message: t('modal.deleteSpecies.message'),
 			onAccept: async () => {
-				setLoading(true)
-				try {
-					await BreedsService.deleteBreedsBySpecie(specieUuid)
-					await SpeciesService.deleteSpecies(specieUuid)
-					const sps = species.filter((specie) => specie.uuid !== specieUuid)
-					setSpecies(sps)
-					setDbSpecies(sps)
-					setDbBreeds(breeds)
-					setModalData(defaultModalData)
-					setToastData({
-						message: t('toast.deletedSpecies'),
-						type: 'success',
-					})
-				} catch (_error) {
-					setToastData({
-						message: t('toast.errorDeletingSpecies'),
-						type: 'error',
-					})
-				} finally {
-					setLoading(false)
-				}
+				await withLoadingAndError(
+					async () => {
+						await BreedsService.deleteBreedsBySpecie(specieUuid)
+						await SpeciesService.deleteSpecies(specieUuid)
+						const sps = species.filter((specie) => specie.uuid !== specieUuid)
+						setSpecies(sps)
+						setDbSpecies(sps)
+						setDbBreeds(breeds)
+						setModalData(defaultModalData)
+						showToast(t('toast.deletedSpecies'), 'success')
+					},
+					t('toast.errorDeletingSpecies')
+				)
 			},
 			onCancel: () => {
 				setModalData(defaultModalData)
-				setToastData({
-					message: t('toast.notDeletedSpecies'),
-					type: 'info',
-				})
+				showToast(t('toast.notDeletedSpecies'), 'info')
 			},
 		})
-	}
+	}, [species, breeds, setModalData, defaultModalData, withLoadingAndError, showToast, t, setDbSpecies, setDbBreeds])
 
-	const handleRemoveBreed = (breedUuid: string) => () => {
+	const handleRemoveBreed = useCallback((breedUuid: string) => () => {
 		setModalData({
 			open: true,
 			title: t('modal.deleteBreed.title'),
 			message: t('modal.deleteBreed.message'),
 			onAccept: async () => {
-				setLoading(true)
-				try {
-					await BreedsService.deleteBreed(breedUuid)
-					setBreeds((prev) => prev.filter((breed) => breed.uuid !== breedUuid))
-					setDbBreeds(breeds)
-					setModalData(defaultModalData)
-					setToastData({
-						message: t('toast.deletedBreed'),
-						type: 'success',
-					})
-				} catch (_error) {
-					setToastData({
-						message: t('toast.errorDeletingBreed'),
-						type: 'error',
-					})
-				} finally {
-					setLoading(false)
-				}
+				await withLoadingAndError(
+					async () => {
+						await BreedsService.deleteBreed(breedUuid)
+						setBreeds((prev) => prev.filter((breed) => breed.uuid !== breedUuid))
+						setDbBreeds(breeds)
+						setModalData(defaultModalData)
+						showToast(t('toast.deletedBreed'), 'success')
+					},
+					t('toast.errorDeletingBreed')
+				)
 			},
 			onCancel: () => {
 				setModalData(defaultModalData)
-				setToastData({
-					message: t('toast.notDeletedBreed'),
-					type: 'info',
-				})
+				showToast(t('toast.notDeletedBreed'), 'info')
 			},
 		})
-	}
+	}, [breeds, setModalData, defaultModalData, withLoadingAndError, showToast, t, setDbBreeds])
 
-	const handleSubmit = async (e: FormEvent) => {
+	const handleSubmit = useCallback(async (e: FormEvent) => {
 		e.preventDefault()
-		try {
-			setLoading(true)
 
-			const updatedSpecies = species.map((specie) => ({
-				...specie,
-				editable: false,
-			}))
+		await withLoadingAndError(
+			async () => {
+				const updatedSpecies = species.map((specie) => ({
+					...specie,
+					editable: false,
+				}))
 
-			await handleUpdateSpeciesAndBreeds(updatedSpecies)
-
-			setToastData({
-				message: t('toast.edited'),
-				type: 'success',
-			})
-		} catch (_error) {
-			setToastData({
-				message: t('toast.errorEditing'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
+				await handleUpdateSpeciesAndBreeds(updatedSpecies)
+				showToast(t('toast.edited'), 'success')
+			},
+			t('toast.errorEditing')
+		)
+	}, [species, handleUpdateSpeciesAndBreeds, withLoadingAndError, showToast, t])
 
 	useEffect(() => {
 		if (!farm) return
@@ -216,8 +188,8 @@ const MySpecies = () => {
 	}, [farm, dbBreeds, dbSpecies.map])
 
 	useEffect(() => {
-		setHeaderTitle(t('title'))
-	}, [setHeaderTitle, t])
+		setPageTitle(t('title'))
+	}, [setPageTitle, t])
 	return (
 		<div className="flex flex-col w-full h-full p-4 gap-4 overflow-auto">
 			<div className="flex flex-col sm:grid sm:grid-cols-3 items-center justify-center gap-4 w-full">
@@ -338,4 +310,4 @@ const INITIAL_BREEDS: Breed[] = [
 	},
 ]
 
-export default MySpecies
+export default memo(MySpecies)
