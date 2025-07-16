@@ -25,6 +25,6 @@ describe('Animals', () => {
 			</MemoryRouter>
 		)
 
-		expect(await screen.findByText(/no animals/i)).toBeInTheDocument()
+		expect(await screen.findByText('noAnimals')).toBeInTheDocument()
 	})
 })

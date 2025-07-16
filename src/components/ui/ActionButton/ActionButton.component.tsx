@@ -1,5 +1,6 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
+import type { FC } from 'react'
 import { useRef } from 'react'
 
 import { useAppStore } from '@/store/useAppStore'

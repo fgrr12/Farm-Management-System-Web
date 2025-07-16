@@ -1,4 +1,6 @@
-import type { DialogHTMLAttributes } from 'react'
+import type { DialogHTMLAttributes, RefObject } from 'react'
 
-export type LoadingProps = DialogHTMLAttributes<HTMLDialogElement>
+export type LoadingProps = DialogHTMLAttributes<HTMLDialogElement> & {
+	open?: boolean
+}
 export type LoadingRef = RefObject<HTMLDialogElement>

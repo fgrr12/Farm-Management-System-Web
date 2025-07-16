@@ -3,6 +3,11 @@
 		"return": "Return"
 	},
 	"loading": "Loading",
+	"offline": {
+		"noConnection": "No internet connection",
+		"pendingOperations": "{{count}} pending operation",
+		"pendingOperations_plural": "{{count}} pending operations"
+	},
 	"select": {
 		"default": "Select an option"
 	},

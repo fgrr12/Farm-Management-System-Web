@@ -3,6 +3,11 @@
 		"return": "Volver"
 	},
 	"loading": "Cargando",
+	"offline": {
+		"noConnection": "Sin conexión a internet",
+		"pendingOperations": "{{count}} operación pendiente",
+		"pendingOperations_plural": "{{count}} operaciones pendientes"
+	},
 	"select": {
 		"default": "Selecciona una opción"
 	},

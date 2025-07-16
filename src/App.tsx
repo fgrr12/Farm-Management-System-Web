@@ -20,6 +20,7 @@ import { UserService } from '@/services/user'
 import { Loading } from '@/components/layout/Loading'
 import { Modal } from '@/components/layout/Modal'
 import { Navbar } from '@/components/layout/Navbar'
+import { OfflineIndicator } from '@/components/layout/OfflineIndicator'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { ToastManager } from '@/components/layout/ToastManager'
 
@@ -256,6 +257,7 @@ export const App = () => {
 					<Loading open={appLoading || authLoading} />
 					<VoiceRecorder />
 					<ToastManager />
+					<OfflineIndicator />
 				</main>
 			</div>
 		</div>

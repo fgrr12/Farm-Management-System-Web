@@ -1,3 +1,4 @@
+import type { FC } from 'react'
 import { useEffect, useRef } from 'react'
 
 import type { ModalProps } from './Modal.types'
