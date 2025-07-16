@@ -1,4 +1,4 @@
-import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
+import { type ChangeEvent, type FormEvent, memo, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -12,51 +12,45 @@ import { UserService } from '@/services/user'
 import { Button } from '@/components/ui/Button'
 import { PasswordField, TextField } from '@/components/ui/TextField'
 
+import { usePagePerformance } from '@/hooks/usePagePerformance'
+
 import type { LoginCredentials } from './LoginForm.types'
 
 const LoginForm = () => {
 	const { user } = useUserStore()
-	const { setLoading, setToastData } = useAppStore()
+	const { setLoading } = useAppStore()
 	const navigate = useNavigate()
 	const [credentials, setCredentials] = useState(INITIAL_CREDENTIALS)
 	const { t } = useTranslation(['loginForm'])
+	const { withLoadingAndError } = usePagePerformance()
 
-	const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
+	const handleTextChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target
 		setCredentials((prev) => ({ ...prev, [name]: value }))
-	}
+	}, [])
 
-	const handleSubmit = async (e: FormEvent) => {
+	const handleSubmit = useCallback(async (e: FormEvent) => {
 		e.preventDefault()
-		try {
-			setLoading(true)
-			const { email, password } = credentials
-			await UserService.loginWithEmailAndPassword(email, password)
-			navigate(AppRoutes.ANIMALS)
-		} catch (_error) {
-			setToastData({
-				message: t('toast.errorLoggingIn'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
 
-	const handleGoogleLogin = async () => {
-		try {
-			setLoading(true)
-			await UserService.loginWithGoogle()
-			navigate(AppRoutes.ANIMALS)
-		} catch (_error) {
-			setToastData({
-				message: t('toast.errorLoggingIn'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
+		await withLoadingAndError(
+			async () => {
+				const { email, password } = credentials
+				await UserService.loginWithEmailAndPassword(email, password)
+				navigate(AppRoutes.ANIMALS)
+			},
+			t('toast.errorLoggingIn')
+		)
+	}, [credentials, withLoadingAndError, t, navigate])
+
+	const handleGoogleLogin = useCallback(async () => {
+		await withLoadingAndError(
+			async () => {
+				await UserService.loginWithGoogle()
+				navigate(AppRoutes.ANIMALS)
+			},
+			t('toast.errorLoggingIn')
+		)
+	}, [withLoadingAndError, t, navigate])
 
 	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
@@ -111,4 +105,4 @@ const INITIAL_CREDENTIALS: LoginCredentials = {
 	password: '',
 }
 
-export default LoginForm
+export default memo(LoginForm)

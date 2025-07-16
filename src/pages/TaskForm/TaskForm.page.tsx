@@ -1,10 +1,9 @@
-import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
+import { type ChangeEvent, type FormEvent, memo, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
 
-import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
@@ -17,45 +16,46 @@ import { Select } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
+import { usePagePerformance } from '@/hooks/usePagePerformance'
+
 const TaskForm = () => {
 	const { user } = useUserStore()
 	const { farm, species } = useFarmStore()
-	const { setLoading, setHeaderTitle, setToastData } = useAppStore()
 	const navigate = useNavigate()
 	const { t } = useTranslation(['taskForm'])
+	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
 
 	const [task, setTask] = useState(INITIAL_TASK)
 
-	const handleTextChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+	const handleTextChange = useCallback((event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		const { name, value } = event.target
 		setTask((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
-	}
+	}, [])
 
-	const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
+	const handleSelectChange = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
 		const { name, value } = event.target
 		setTask((prev) => ({ ...prev, [name]: value }))
-	}
+	}, [])
 
-	const handleSubmit = async (event: FormEvent) => {
+	const handleSubmit = useCallback(async (event: FormEvent) => {
+		if (!user || !farm) return
+
 		event.preventDefault()
-		try {
-			setLoading(true)
-			task.uuid = task.uuid || crypto.randomUUID()
-			await TasksService.setTask(task, user!.uuid, farm!.uuid)
-			navigate(AppRoutes.TASKS)
-		} catch (_error) {
-			setToastData({
-				message: t('toast.errorAddingTask'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
+
+		await withLoadingAndError(
+			async () => {
+				task.uuid = task.uuid || crypto.randomUUID()
+				await TasksService.setTask(task, user.uuid, farm.uuid)
+				showToast(t('toast.taskAdded'), 'success')
+				navigate(AppRoutes.TASKS)
+			},
+			t('toast.errorAddingTask')
+		)
+	}, [user, farm, task, withLoadingAndError, showToast, t, navigate])
 
 	useEffect(() => {
-		setHeaderTitle(t('title'))
-	}, [setHeaderTitle, t])
+		setPageTitle(t('title'))
+	}, [setPageTitle, t])
 
 	useEffect(() => {
 		if (!farm) return
@@ -125,4 +125,4 @@ const INITIAL_TASK: Task = {
 	farmUuid: '',
 }
 
-export default TaskForm
+export default memo(TaskForm)

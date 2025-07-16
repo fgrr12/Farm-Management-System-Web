@@ -1,17 +1,18 @@
-import { useEffect } from 'react'
+import { memo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 
-const BillingCard: FC = () => {
-	const { setHeaderTitle } = useAppStore()
+import { usePagePerformance } from '@/hooks/usePagePerformance'
+
+const BillingCard = () => {
 	const { billingCard } = useFarmStore()
 	const { t } = useTranslation('billingCard')
+	const { setPageTitle } = usePagePerformance()
 
 	useEffect(() => {
-		setHeaderTitle(t('title'))
-	}, [setHeaderTitle, t])
+		setPageTitle(t('title'))
+	}, [setPageTitle, t])
 
 	return (
 		<div className="flex justify-center items-center w-full h-full">
@@ -47,4 +48,4 @@ const BillingCard: FC = () => {
 	)
 }
 
-export default BillingCard
+export default memo(BillingCard)

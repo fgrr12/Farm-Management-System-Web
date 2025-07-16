@@ -1,10 +1,9 @@
-import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
+import { type ChangeEvent, type FormEvent, memo, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
 
-import { useAppStore } from '@/store/useAppStore'
 import { useUserStore } from '@/store/useUserStore'
 
 import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
@@ -15,83 +14,79 @@ import { Button } from '@/components/ui/Button'
 import { Select } from '@/components/ui/Select'
 import { TextField } from '@/components/ui/TextField'
 
+import { usePagePerformance } from '@/hooks/usePagePerformance'
+
 import type { RegisterEmployeeForm } from './EmployeeForm.types'
 
 const EmployeeForm = () => {
 	const { user } = useUserStore()
-	const { setHeaderTitle, setLoading, setToastData } = useAppStore()
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation(['employeeForm'])
+	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
 
 	const [employee, setEmployee] = useState(INITIAL_EMPLOYEE_DATA)
 
-	const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
+	const handleTextChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target
 		setEmployee((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
-	}
+	}, [])
 
-	const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
+	const handleSelectChange = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
 		const { name, value } = event.target
 		setEmployee((prev) => ({ ...prev, [name]: value }))
-	}
+	}, [])
 
-	const initialData = async () => {
-		try {
-			const employeeUuid = params.employeeUuid as string
-			const employeeData = await EmployeesService.getEmployee(employeeUuid)
-			setEmployee(employeeData)
-		} catch (error) {
-			console.error(error)
-		}
-	}
+	const initialData = useCallback(async () => {
+		await withLoadingAndError(
+			async () => {
+				if (!params.employeeUuid) return null
 
-	const handleSubmit = async (e: FormEvent) => {
+				const employeeUuid = params.employeeUuid as string
+				const employeeData = await EmployeesService.getEmployee(employeeUuid)
+				setEmployee(employeeData)
+				return employeeData
+			},
+			t('toast.errorGettingEmployee')
+		)
+	}, [params.employeeUuid, withLoadingAndError, t])
+
+	const handleSubmit = useCallback(async (e: FormEvent) => {
+		if (!user) return
+
 		e.preventDefault()
-		try {
-			setLoading(true)
-			employee.farmUuid = user!.farmUuid!
-			employee.uuid = employee.uuid ?? crypto.randomUUID()
 
-			if (params.employeeUuid) {
-				await EmployeesService.updateEmployee(employee)
-				setToastData({
-					message: t('toast.edited'),
-					type: 'success',
-				})
+		await withLoadingAndError(
+			async () => {
+				employee.farmUuid = user.farmUuid!
+				employee.uuid = employee.uuid ?? crypto.randomUUID()
+
+				if (params.employeeUuid) {
+					await EmployeesService.updateEmployee(employee)
+					showToast(t('toast.edited'), 'success')
+					navigate(AppRoutes.EMPLOYEES)
+					return
+				}
+
+				employee.createdBy = user.uuid
+				await EmployeesService.setEmployee(employee)
+				showToast(t('toast.added'), 'success')
 				navigate(AppRoutes.EMPLOYEES)
-				return
-			}
+			},
+			t('toast.errorAddingEmployee')
+		)
+	}, [user, employee, params.employeeUuid, withLoadingAndError, showToast, t, navigate])
 
-			employee.createdBy = user!.uuid
-			await EmployeesService.setEmployee(employee)
-			setToastData({
-				message: t('toast.added'),
-				type: 'success',
-			})
-			navigate(AppRoutes.EMPLOYEES)
-		} catch (_error) {
-			setToastData({
-				message: t('toast.errorAddingEmployee'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
-
-	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
 		if (user && params.employeeUuid) {
-			setHeaderTitle('Edit Employee')
 			initialData()
 		}
-	}, [user])
+	}, [user, params.employeeUuid, initialData])
 
 	useEffect(() => {
 		const title = params.employeeUuid ? t('editEmployee') : t('addEmployee')
-		setHeaderTitle(title)
-	}, [setHeaderTitle, t, params.employeeUuid])
+		setPageTitle(title)
+	}, [setPageTitle, t, params.employeeUuid])
 
 	return (
 		<div className="flex flex-col justify-center items-center w-full overflow-auto p-5">
@@ -168,4 +163,4 @@ const INITIAL_EMPLOYEE_DATA: RegisterEmployeeForm = {
 	language: 'spa',
 }
 
-export default EmployeeForm
+export default memo(EmployeeForm)
