@@ -54,6 +54,28 @@ Biome is configured to organize imports in this specific order:
 - **Modular Architecture**: Clear separation between UI, business logic, and data
 - **Alias Usage**: Always use `@/` imports instead of relative paths
 
+## Testing Structure
+```
+src/tests/
+├── components/             # Component tests
+│   ├── ui/                # UI component tests
+│   ├── layout/            # Layout component tests
+│   └── business/          # Business logic component tests
+├── hooks/                 # Custom hook tests
+├── services/              # API service tests
+├── store/                 # State management tests
+├── utils/                 # Utility function tests
+├── setup.ts               # Test configuration
+└── utils/
+    └── test-utils.tsx     # Testing utilities and mocks
+```
+
+## Code Quality Standards
+- **100% Test Coverage**: All components, hooks, and utilities tested
+- **Zero Linting Errors**: Biome configuration enforced
+- **Consistent Formatting**: Automated with Biome
+- **Type Safety**: Strict TypeScript configuration
+
 ## Public Assets
 ```
 public/

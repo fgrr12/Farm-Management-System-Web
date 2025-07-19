@@ -1,3 +1,4 @@
+import type { FC } from 'react'
 import { useId, useState } from 'react'
 
 import type { TextFieldProps } from './TextField.types'
@@ -23,7 +24,7 @@ export const TextField: FC<TextFieldProps> = ({ label, error, required, ...rest 
 	)
 }
 
-export const PasswordField: FC<TextFieldProps> = ({ label, error, required, ...rest }) => {
+export const PasswordField: FC<TextFieldProps> = ({ label, error, required = true, ...rest }) => {
 	const [showPassword, setShowPassword] = useState<boolean>(false)
 	const fieldId = useId()
 
@@ -61,11 +62,7 @@ export const PasswordField: FC<TextFieldProps> = ({ label, error, required, ...r
 					/>
 				</button>
 			</label>
-			{error && (
-				<div className="mt-1 text-sm text-red-600">
-					{error}
-				</div>
-			)}
+			{error && <div className="mt-1 text-sm text-red-600">{error}</div>}
 		</fieldset>
 	)
 }

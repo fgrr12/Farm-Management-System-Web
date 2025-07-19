@@ -9,8 +9,12 @@ export const Modal: FC<ModalProps> = ({ title, message, open, onAccept, onCancel
 	return (
 		<dialog className="modal" ref={modalRef} aria-modal="true" {...rest}>
 			<div className="modal-box">
-				<h3 className="font-bold text-lg" id="modal-title">{title}</h3>
-				<p className="py-4" id="modal-description">{message}</p>
+				<h3 className="font-bold text-lg" id="modal-title">
+					{title}
+				</h3>
+				<p className="py-4" id="modal-description">
+					{message}
+				</p>
 				<div className="modal-action">
 					<form method="dialog">
 						<button type="button" className="btn btn-primary mr-4" onClick={onAccept}>

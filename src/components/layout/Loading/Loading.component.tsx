@@ -12,10 +12,19 @@ export const Loading: FC<LoadingProps> = memo(({ open, ...rest }) => {
 	const dotsRef = useRef<HTMLSpanElement[]>([])
 	const iconsRef = useRef<HTMLSpanElement[]>([])
 
-	//biome-ignore lint:: ignore it
-	const setDotsRef = useCallback((i: number) => (el: HTMLElement | null) => (dotsRef.current[i] = el!), [])
-	//biome-ignore lint:: ignore it
-	const setIconsRef = useCallback((i: number) => (el: HTMLElement | null) => (iconsRef.current[i] = el!), [])
+	const setDotsRef = useCallback(
+		(i: number) => (el: HTMLElement | null) => {
+			if (el) dotsRef.current[i] = el
+		},
+		[]
+	)
+
+	const setIconsRef = useCallback(
+		(i: number) => (el: HTMLElement | null) => {
+			if (el) iconsRef.current[i] = el
+		},
+		[]
+	)
 
 	useEffect(() => {
 		if (dotsRef.current.length) {

@@ -41,11 +41,7 @@ export const Button: FC<ButtonProps> = ({ children, ...props }) => {
 			disabled={loading}
 			{...props}
 		>
-			{loading ? (
-				<span className="loading loading-spinner loading-sm" />
-			) : (
-				children
-			)}
+			{loading ? <span className="loading loading-spinner loading-sm" /> : children}
 		</button>
 	)
 }

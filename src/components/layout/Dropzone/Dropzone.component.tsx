@@ -105,7 +105,7 @@ export const Dropzone: FC<DropzoneProps> = ({ cleanFile, pictureUrl, onFile, ...
 				type="button"
 				onClick={handleClick}
 				className="relative w-full h-full flex flex-col justify-center items-center gap-4"
-				aria-label={hasImg ? "Change image" : "Select image"}
+				aria-label={hasImg ? 'Change image' : 'Select image'}
 			>
 				{!hasImg && (
 					<>

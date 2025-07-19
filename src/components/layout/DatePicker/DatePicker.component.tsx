@@ -90,7 +90,9 @@ export const DatePicker: FC<DatePickerProps> = ({ legend, label, date, onDateCha
 					className="input input-border w-full h-12 pl-2 pr-2 flex items-center justify-between"
 					ref={refs.setReference}
 					onClick={() => setOpen((prev) => !prev)}
-					aria-label={date?.isValid() ? `Selected date: ${dayjs(date).format('DD/MM/YYYY')}` : "Select date"}
+					aria-label={
+						date?.isValid() ? `Selected date: ${dayjs(date).format('DD/MM/YYYY')}` : 'Select date'
+					}
 					aria-expanded={open}
 					{...getReferenceProps()}
 				>

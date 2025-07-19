@@ -90,7 +90,9 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 					))}
 					{employees.length === 0 && (
 						<tr>
-							<td colSpan={6} className="text-center font-bold">{t('noEmployees')}</td>
+							<td colSpan={6} className="text-center font-bold">
+								{t('noEmployees')}
+							</td>
 						</tr>
 					)}
 				</tbody>

@@ -19,11 +19,7 @@ export const Textarea: FC<TextareaProps> = ({ label, error, required, ...rest })
 				aria-invalid={!!error}
 				{...rest}
 			/>
-			{error && (
-				<div className="mt-1 text-sm text-red-600">
-					{error}
-				</div>
-			)}
+			{error && <div className="mt-1 text-sm text-red-600">{error}</div>}
 		</fieldset>
 	)
 }

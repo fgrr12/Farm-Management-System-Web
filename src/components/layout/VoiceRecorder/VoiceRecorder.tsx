@@ -96,7 +96,7 @@ export const VoiceRecorder = () => {
 								type="button"
 								className="btn"
 								onClick={recording ? stopRecording : startRecording}
-								aria-label={recording ? "Stop recording" : "Start recording"}
+								aria-label={recording ? 'Stop recording' : 'Start recording'}
 							>
 								<i
 									className={`w-6! h-6! ${recording ? 'i-material-symbols-stop-circle-outline-rounded' : 'i-material-symbols-play-circle-outline-rounded'}`}
@@ -106,8 +106,9 @@ export const VoiceRecorder = () => {
 							<div className="flex flex-col gap-2 items-center flex-1 max-w-60">
 								<div className="w-full h-1 bg-gray-400 rounded-full">
 									<div
-										className={`w-full h-1 rounded-full animate-pulse ${recording ? 'bg-blue-500' : 'bg-gray-400'
-											}`}
+										className={`w-full h-1 rounded-full animate-pulse ${
+											recording ? 'bg-blue-500' : 'bg-gray-400'
+										}`}
 									/>
 								</div>
 								<div className="text-xs text-gray-500">
@@ -147,7 +148,7 @@ export const VoiceRecorder = () => {
 				className="btn bg-info border-none shadow-none rounded-4xl p-2"
 				icon={open ? 'i-lineicons-xmark' : 'i-lineicons-microphone-1'}
 				onClick={() => setOpen(!open)}
-				aria-label={open ? "Close voice recorder" : "Open voice recorder"}
+				aria-label={open ? 'Close voice recorder' : 'Open voice recorder'}
 			/>
 		</div>
 	)

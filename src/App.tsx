@@ -18,6 +18,7 @@ import { initializeSEO } from '@/utils/seo'
 
 import { UserService } from '@/services/user'
 
+import { DevelopmentBanner } from '@/components/layout/DevelopmentBanner'
 import { Loading } from '@/components/layout/Loading'
 import { Modal } from '@/components/layout/Modal'
 import { Navbar } from '@/components/layout/Navbar'
@@ -114,6 +115,7 @@ export const App = () => {
 	return (
 		<div className="flex flex-col w-full h-screen">
 			<SEO />
+			<DevelopmentBanner />
 			{location.pathname !== AppRoutes.LOGIN && <Navbar />}
 			<div className="flex flex-row w-full h-full overflow-hidden">
 				{location.pathname !== AppRoutes.LOGIN && <Sidebar />}

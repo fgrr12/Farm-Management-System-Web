@@ -28,23 +28,31 @@ export const Sidebar = memo(() => {
 		navigate(AppRoutes.LOGIN)
 	}, [user, setUser, setFarm, navigate])
 
-	const handleGoTo = useCallback((path: string) => () => {
-		if (location.pathname === path) return
-		navigate(path)
-	}, [location.pathname, navigate])
+	const handleGoTo = useCallback(
+		(path: string) => () => {
+			if (location.pathname === path) return
+			navigate(path)
+		},
+		[location.pathname, navigate]
+	)
 
-	const handleCheckActive = useCallback((path: string) => {
-		if (location.pathname === path) return 'bg-info rounded-sm'
-		return ''
-	}, [location.pathname])
+	const handleCheckActive = useCallback(
+		(path: string) => {
+			if (location.pathname === path) return 'bg-info rounded-sm'
+			return ''
+		},
+		[location.pathname]
+	)
 
-	const showAdminRoutes = useMemo(() =>
-		user?.role === 'admin' || user?.role === 'owner'
-		, [user?.role])
+	const showAdminRoutes = useMemo(
+		() => user?.role === 'admin' || user?.role === 'owner',
+		[user?.role]
+	)
 
-	const showBillingCard = useMemo(() =>
-		showAdminRoutes && billingCard !== null && billingCard.status
-		, [showAdminRoutes, billingCard])
+	const showBillingCard = useMemo(
+		() => showAdminRoutes && billingCard !== null && billingCard.status,
+		[showAdminRoutes, billingCard]
+	)
 
 	useEffect(() => {
 		localStorage.setItem('theme', theme)
@@ -66,7 +74,11 @@ export const Sidebar = memo(() => {
 		)
 	}, [location])
 	return (
-		<ul className="menu bg-base-100 h-full hidden lg:grid auto-rows-[50px] items-center shadow-sm overflow-auto scrollbar-hidden" role="navigation" aria-label="Main navigation">
+		<ul
+			className="menu bg-base-100 h-full hidden lg:grid auto-rows-[50px] items-center shadow-sm overflow-auto scrollbar-hidden"
+			role="navigation"
+			aria-label="Main navigation"
+		>
 			<li className={handleCheckActive(AppRoutes.ANIMALS)}>
 				<button
 					type="button"
@@ -135,7 +147,12 @@ export const Sidebar = memo(() => {
 				</button>
 			</li>
 			<li>
-				<button type="button" className="flex items-center gap-2 px-4 py-2" onClick={handleLogout} aria-label="Logout">
+				<button
+					type="button"
+					className="flex items-center gap-2 px-4 py-2"
+					onClick={handleLogout}
+					aria-label="Logout"
+				>
 					<i className="i-material-symbols-logout w-8! h-8!" />
 				</button>
 			</li>
