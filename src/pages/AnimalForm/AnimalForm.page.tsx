@@ -48,6 +48,7 @@ const AnimalForm = () => {
 		formState: { errors, isSubmitting },
 		transformToApiFormat,
 		getErrorMessage,
+		resetWithData,
 	} = form
 
 	const watchedSpeciesUuid = watch('speciesUuid')
@@ -83,23 +84,7 @@ const AnimalForm = () => {
 			const animalUuid = params.animalUuid as string
 			const dbAnimal = await AnimalsService.getAnimal(animalUuid)
 
-			reset({
-				uuid: dbAnimal.uuid,
-				animalId: dbAnimal.animalId,
-				gender: dbAnimal.gender as 'Male' | 'Female',
-				speciesUuid: dbAnimal.speciesUuid,
-				breedUuid: dbAnimal.breedUuid,
-				color: dbAnimal.color || '',
-				weight: dbAnimal.weight || undefined,
-				origin: dbAnimal.origin || '',
-				birthDate: dbAnimal.birthDate || '',
-				purchaseDate: dbAnimal.purchaseDate || '',
-				soldDate: dbAnimal.soldDate || '',
-				deathDate: dbAnimal.deathDate || '',
-				picture: dbAnimal.picture || '',
-				status: dbAnimal.status ?? true,
-				farmUuid: dbAnimal.farmUuid,
-			})
+			resetWithData(dbAnimal)
 
 			if (dbAnimal.picture) {
 				setPictureUrl(`data:image/jpeg;base64,${dbAnimal.picture}`)
@@ -107,7 +92,7 @@ const AnimalForm = () => {
 
 			return dbAnimal
 		}, t('toast.errorGettingAnimal'))
-	}, [params.animalUuid, withLoadingAndError, t, reset])
+	}, [params.animalUuid, withLoadingAndError, t, resetWithData])
 
 	const onSubmit = useCallback(
 		async (data: AnimalFormData) => {

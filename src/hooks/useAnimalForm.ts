@@ -22,7 +22,26 @@ const DEFAULT_VALUES: Partial<AnimalFormData> = {
 }
 
 export const useAnimalForm = (initialData?: Partial<Animal>) => {
-	const { t } = useTranslation(['animal'])
+	const { t } = useTranslation(['animalForm'])
+
+	const formatDateForForm = useCallback((dateValue: string | Date | null | undefined): string => {
+		if (!dateValue) return ''
+
+		try {
+			// Si es un string que ya está en formato YYYY-MM-DD, devolverlo tal como está
+			if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+				return dateValue
+			}
+
+			// Si es un timestamp o Date object, convertirlo
+			const date = new Date(dateValue)
+			if (Number.isNaN(date.getTime())) return ''
+
+			return date.toISOString().split('T')[0] // Formato YYYY-MM-DD
+		} catch {
+			return ''
+		}
+	}, [])
 
 	const getDefaultValues = useCallback((): Partial<AnimalFormData> => {
 		if (!initialData) return DEFAULT_VALUES
@@ -36,15 +55,15 @@ export const useAnimalForm = (initialData?: Partial<Animal>) => {
 			color: initialData.color || '',
 			weight: initialData.weight || undefined,
 			origin: initialData.origin || '',
-			birthDate: initialData.birthDate || '',
-			purchaseDate: initialData.purchaseDate || '',
-			soldDate: initialData.soldDate || '',
-			deathDate: initialData.deathDate || '',
+			birthDate: formatDateForForm(initialData.birthDate),
+			purchaseDate: formatDateForForm(initialData.purchaseDate),
+			soldDate: formatDateForForm(initialData.soldDate),
+			deathDate: formatDateForForm(initialData.deathDate),
 			picture: initialData.picture || '',
 			status: initialData.status ?? true,
 			farmUuid: initialData.farmUuid || '',
 		}
-	}, [initialData])
+	}, [initialData, formatDateForForm])
 
 	const form = useForm<AnimalFormData>({
 		resolver: zodResolver(animalSchemaWithRefinements),
@@ -76,7 +95,7 @@ export const useAnimalForm = (initialData?: Partial<Animal>) => {
 	const getErrorMessage = useCallback(
 		(error: string): string => {
 			if (error.startsWith('animal.validation.')) {
-				return t(error)
+				return t(error.replace('animal.', ''))
 			}
 			return error
 		},
@@ -85,10 +104,32 @@ export const useAnimalForm = (initialData?: Partial<Animal>) => {
 
 	const resetWithData = useCallback(
 		(data?: Partial<Animal>) => {
-			const newDefaults = data ? getDefaultValues() : DEFAULT_VALUES
-			form.reset(newDefaults)
+			if (!data) {
+				form.reset(DEFAULT_VALUES)
+				return
+			}
+
+			const formattedData: Partial<AnimalFormData> = {
+				uuid: data.uuid || '',
+				animalId: data.animalId || '',
+				gender: (data.gender as 'Male' | 'Female') || undefined,
+				speciesUuid: data.speciesUuid || '',
+				breedUuid: data.breedUuid || '',
+				color: data.color || '',
+				weight: data.weight || undefined,
+				origin: data.origin || '',
+				birthDate: formatDateForForm(data.birthDate),
+				purchaseDate: formatDateForForm(data.purchaseDate),
+				soldDate: formatDateForForm(data.soldDate),
+				deathDate: formatDateForForm(data.deathDate),
+				picture: data.picture || '',
+				status: data.status ?? true,
+				farmUuid: data.farmUuid || '',
+			}
+
+			form.reset(formattedData)
 		},
-		[form, getDefaultValues]
+		[form, formatDateForForm]
 	)
 
 	return {

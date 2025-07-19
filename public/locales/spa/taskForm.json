@@ -25,5 +25,14 @@
 	"toast": {
 		"errorAddingTask": "Se ha producido un error al añadir la tarea.",
 		"taskAdded": "Tarea añadida exitosamente"
+	},
+	"validation": {
+		"titleRequired": "El título de la tarea es requerido",
+		"titleTooLong": "El título de la tarea debe tener 100 caracteres o menos",
+		"descriptionRequired": "La descripción de la tarea es requerida",
+		"descriptionTooLong": "La descripción de la tarea debe tener 500 caracteres o menos",
+		"priorityRequired": "La prioridad es requerida",
+		"speciesRequired": "La especie es requerida",
+		"uuidRequired": "El UUID de la tarea es requerido"
 	}
 }
