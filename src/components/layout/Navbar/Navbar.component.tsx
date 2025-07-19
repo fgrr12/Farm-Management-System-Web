@@ -1,7 +1,7 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { SplitText } from 'gsap/SplitText'
-import { useEffect, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -17,7 +17,7 @@ import { BackButton } from '@/components/ui/Button'
 
 import { useBackRoute } from '@/hooks/useBackRoute'
 
-export const Navbar = () => {
+export const Navbar = memo(() => {
 	const drawerRef = useRef<HTMLInputElement>(null)
 	const titleRef = useRef<HTMLHeadingElement>(null)
 	const drawerTitleRef = useRef<HTMLHeadingElement>(null)
@@ -31,34 +31,35 @@ export const Navbar = () => {
 
 	const [theme, setTheme] = useState<string>(localStorage.getItem('theme') || 'light')
 
-	const backButtonHidden =
+	const backButtonHidden = useMemo(() =>
 		location.pathname === AppRoutes.ANIMALS ||
 		location.pathname === AppRoutes.EMPLOYEES ||
 		location.pathname === AppRoutes.TASKS ||
 		location.pathname === AppRoutes.MY_ACCOUNT ||
 		location.pathname === AppRoutes.MY_SPECIES ||
 		location.pathname === AppRoutes.BILLING_CARD
+		, [location.pathname])
 
-	const handleBack = () => {
+	const handleBack = useCallback(() => {
 		navigate(backRoute as string)
-	}
+	}, [navigate, backRoute])
 
-	const closeDrawer = () => {
+	const closeDrawer = useCallback(() => {
 		if (drawerRef.current) drawerRef.current.checked = false
-	}
+	}, [])
 
-	const goTo = (path: string) => () => {
+	const goTo = useCallback((path: string) => () => {
 		navigate(path)
 		closeDrawer()
-	}
+	}, [navigate, closeDrawer])
 
-	const handleLogout = async () => {
+	const handleLogout = useCallback(async () => {
 		if (!user) return
 		await UserService.logout()
 		setUser(null)
 		setFarm(null)
 		navigate(AppRoutes.LOGIN)
-	}
+	}, [user, setUser, setFarm, navigate])
 
 	useEffect(() => {
 		localStorage.setItem('theme', theme)
@@ -257,4 +258,4 @@ export const Navbar = () => {
 			</div>
 		</div>
 	)
-}
+})

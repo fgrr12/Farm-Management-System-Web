@@ -2,7 +2,7 @@ import { type RenderOptions, render } from '@testing-library/react'
 import type { ReactElement } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 
-// Wrapper personalizado para tests
+// Custom wrapper for tests
 const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
 	return <BrowserRouter>{children}</BrowserRouter>
 }

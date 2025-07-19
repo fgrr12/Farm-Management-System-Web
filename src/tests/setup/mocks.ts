@@ -1,6 +1,6 @@
 import { vi } from 'vitest'
 
-// Mock global para analytics
+// Global mock for analytics
 export const mockAnalytics = {
 	trackEvent: vi.fn(),
 	trackPage: vi.fn(),
@@ -33,7 +33,7 @@ export const mockAnalytics = {
 	},
 }
 
-// Mock global para Firebase
+// Global mock for Firebase
 export const mockFirebase = {
 	collection: vi.fn(),
 	doc: vi.fn(),
@@ -44,7 +44,7 @@ export const mockFirebase = {
 	where: vi.fn(),
 }
 
-// Mock global para servicios
+// Global mock for services
 export const mockServices = {
 	AnimalsService: {
 		getAnimals: vi.fn(),
@@ -70,7 +70,7 @@ export const mockServices = {
 	},
 }
 
-// Mock global para GSAP
+// Global mock for GSAP
 export const mockGsap = {
 	to: vi.fn(),
 	from: vi.fn(),
@@ -82,7 +82,7 @@ export const mockGsap = {
 	})),
 }
 
-// Mock global para storage
+// Global mock for storage
 export const mockStorage = {
 	setPicture: vi.fn(),
 	getPicture: vi.fn(),

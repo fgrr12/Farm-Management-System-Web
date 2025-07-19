@@ -1,11 +1,11 @@
 import gsap from 'gsap'
 import type { FC } from 'react'
-import { useEffect, useRef } from 'react'
+import { memo, useCallback, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { LoadingProps, LoadingRef } from './Loading.types'
 
-export const Loading: FC<LoadingProps> = ({ open, ...rest }) => {
+export const Loading: FC<LoadingProps> = memo(({ open, ...rest }) => {
 	const { t } = useTranslation(['common'])
 	const { loadingRef } = useLoading(open)
 
@@ -13,9 +13,9 @@ export const Loading: FC<LoadingProps> = ({ open, ...rest }) => {
 	const iconsRef = useRef<HTMLSpanElement[]>([])
 
 	//biome-ignore lint:: ignore it
-	const setDotsRef = (i: number) => (el: HTMLElement | null) => (dotsRef.current[i] = el!)
+	const setDotsRef = useCallback((i: number) => (el: HTMLElement | null) => (dotsRef.current[i] = el!), [])
 	//biome-ignore lint:: ignore it
-	const setIconsRef = (i: number) => (el: HTMLElement | null) => (iconsRef.current[i] = el!)
+	const setIconsRef = useCallback((i: number) => (el: HTMLElement | null) => (iconsRef.current[i] = el!), [])
 
 	useEffect(() => {
 		if (dotsRef.current.length) {
@@ -88,7 +88,7 @@ export const Loading: FC<LoadingProps> = ({ open, ...rest }) => {
 			</dialog>
 		</>
 	)
-}
+})
 
 const useLoading = (open?: boolean) => {
 	const loadingRef: LoadingRef = useRef(null!)
