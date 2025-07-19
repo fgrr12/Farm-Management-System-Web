@@ -39,18 +39,15 @@
 			}
 		}
 	},
+	"files": {
+		"includes": ["src/**/*", "*.ts", "*.tsx", "*.js", "*.jsx"],
+		"ignoreUnknown": true
+	},
 	"formatter": {
 		"enabled": true,
 		"formatWithErrors": false,
 		"indentStyle": "tab",
-		"lineWidth": 100,
-		"includes": [
-			"**",
-			"!**/node_modules/**",
-			"!**/dist/**",
-			"!**/tsconfig.json",
-			"!**/jsconfig.json"
-		]
+		"lineWidth": 100
 	},
 	"linter": {
 		"enabled": true,
@@ -106,13 +103,6 @@
 				"useKeyWithClickEvents": "off",
 				"useSemanticElements": "off"
 			}
-		},
-		"includes": [
-			"**",
-			"!**/node_modules/**",
-			"!**/dist/**",
-			"!**/tsconfig.json",
-			"!**/jsconfig.json"
-		]
+		}
 	}
 }

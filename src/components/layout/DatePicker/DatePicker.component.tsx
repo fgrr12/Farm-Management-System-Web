@@ -44,7 +44,7 @@ function CustomSelectDropdown(props: DropdownProps) {
 	)
 }
 
-export const DatePicker: FC<DatePickerProps> = ({ legend, label, date, onDateChange }) => {
+export const DatePicker: FC<DatePickerProps> = ({ legend, label, date, onDateChange, error }) => {
 	const { user } = useUserStore()
 	const [open, setOpen] = useState(false)
 
@@ -87,12 +87,13 @@ export const DatePicker: FC<DatePickerProps> = ({ legend, label, date, onDateCha
 				<div
 					role="button"
 					tabIndex={0}
-					className="input input-border w-full h-12 pl-2 pr-2 flex items-center justify-between"
+					className={`input input-border w-full h-12 pl-2 pr-2 flex items-center justify-between ${error ? 'input-error border-red-500' : ''}`}
 					ref={refs.setReference}
 					onClick={() => setOpen((prev) => !prev)}
 					aria-label={
 						date?.isValid() ? `Selected date: ${dayjs(date).format('DD/MM/YYYY')}` : 'Select date'
 					}
+					aria-invalid={!!error}
 					aria-expanded={open}
 					{...getReferenceProps()}
 				>
@@ -136,6 +137,12 @@ export const DatePicker: FC<DatePickerProps> = ({ legend, label, date, onDateCha
 						/>
 					</div>
 				</FloatingFocusManager>
+			)}
+
+			{error && (
+				<div className="mt-1 text-sm text-red-600" role="alert">
+					{error}
+				</div>
 			)}
 		</fieldset>
 	)

@@ -14,7 +14,7 @@ export const Textarea: FC<TextareaProps> = ({ label, error, required, ...rest })
 			</legend>
 			<textarea
 				id={fieldId}
-				className={`textarea h-24 w-full validator ${error ? 'textarea-error' : ''}`}
+				className={`textarea min-h-24 w-full validator field-sizing-content ${error ? 'textarea-error' : ''}`}
 				required={required}
 				aria-invalid={!!error}
 				{...rest}
