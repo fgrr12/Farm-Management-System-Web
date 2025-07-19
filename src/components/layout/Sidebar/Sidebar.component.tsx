@@ -58,12 +58,13 @@ export const Sidebar = () => {
 		)
 	}, [location])
 	return (
-		<ul className="menu bg-base-100 h-full hidden lg:grid auto-rows-[50px] items-center shadow-sm overflow-auto scrollbar-hidden">
+		<ul className="menu bg-base-100 h-full hidden lg:grid auto-rows-[50px] items-center shadow-sm overflow-auto scrollbar-hidden" role="navigation" aria-label="Main navigation">
 			<li className={handleCheckActive(AppRoutes.ANIMALS)}>
 				<button
 					type="button"
 					className="flex items-center gap-2 px-4 py-2"
 					onClick={handleGoTo(AppRoutes.ANIMALS)}
+					aria-label="Animals"
 				>
 					<i className="i-healthicons-animal-cow w-8! h-8!" />
 				</button>
@@ -73,6 +74,7 @@ export const Sidebar = () => {
 					type="button"
 					className="flex items-center gap-2 px-4 py-2"
 					onClick={handleGoTo(AppRoutes.TASKS)}
+					aria-label="Tasks"
 				>
 					<i className="i-fluent-tasks-app-24-filled w-8! h-8!" />
 				</button>
@@ -82,6 +84,7 @@ export const Sidebar = () => {
 					type="button"
 					className="flex items-center gap-2 px-4 py-2"
 					onClick={handleGoTo(AppRoutes.MY_SPECIES)}
+					aria-label="My Species"
 				>
 					<i className="i-solar-dna-bold-duotone w-8! h-8!" />
 				</button>
@@ -94,6 +97,7 @@ export const Sidebar = () => {
 						type="button"
 						className="flex items-center gap-2 px-4 py-2"
 						onClick={handleGoTo(AppRoutes.EMPLOYEES)}
+						aria-label="Employees"
 					>
 						<i className="i-clarity-employee-group-solid w-8! h-8!" />
 					</button>
@@ -107,6 +111,7 @@ export const Sidebar = () => {
 							type="button"
 							className="flex items-center gap-2 px-4 py-2"
 							onClick={handleGoTo(AppRoutes.BILLING_CARD)}
+							aria-label="Billing Card"
 						>
 							<i className="i-typcn-business-card w-8! h-8!" />
 						</button>
@@ -118,18 +123,19 @@ export const Sidebar = () => {
 					type="button"
 					className="flex items-center gap-2 px-4 py-2"
 					onClick={handleGoTo(AppRoutes.MY_ACCOUNT)}
+					aria-label="My Account"
 				>
 					<i className="i-material-symbols-account-circle w-8! h-8!" />
 				</button>
 			</li>
 			<li>
-				<button type="button" className="flex items-center gap-2 px-4 py-2" onClick={handleLogout}>
+				<button type="button" className="flex items-center gap-2 px-4 py-2" onClick={handleLogout} aria-label="Logout">
 					<i className="i-material-symbols-logout w-8! h-8!" />
 				</button>
 			</li>
 			<div className="divider" />
 			<li>
-				<label className="swap swap-rotate">
+				<label className="swap swap-rotate" aria-label="Toggle theme">
 					<input
 						type="checkbox"
 						className="theme-controller"

@@ -63,6 +63,8 @@ export const Loading: FC<LoadingProps> = ({ open, ...rest }) => {
 					backdrop:bg-neutral-500
 					z-50
 				"
+				aria-modal="true"
+				aria-label="Loading"
 			>
 				<div className="flex justify-center items-center h-10 mb-8!">
 					<span className="text-white text-4xl mx-1">{t('loading')}</span>

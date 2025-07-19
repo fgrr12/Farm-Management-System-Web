@@ -51,6 +51,8 @@ export const Toast = ({ id, message, type = 'info', duration = 5000, onClose }: 
 		<div
 			ref={toastRef}
 			className={`alert alert-${type} shadow-lg transition-all w-full max-w-[90%] sm:max-w-100`}
+			role="alert"
+			aria-live="polite"
 		>
 			<span>{message}</span>
 		</div>

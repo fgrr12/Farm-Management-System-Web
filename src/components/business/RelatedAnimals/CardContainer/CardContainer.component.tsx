@@ -51,6 +51,7 @@ export const CardContainer: FC<ContainerProps> = ({ title, location, animals, ..
 						placeholder={t('filterByID')}
 						value={search}
 						onChange={(e) => setSearch(e.target.value)}
+						aria-label={t('filterByID')}
 					/>
 				</label>
 			</div>

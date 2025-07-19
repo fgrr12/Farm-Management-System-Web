@@ -7,10 +7,10 @@ export const Modal: FC<ModalProps> = ({ title, message, open, onAccept, onCancel
 	const { modalRef } = useModal(open)
 
 	return (
-		<dialog className="modal" ref={modalRef} {...rest}>
+		<dialog className="modal" ref={modalRef} aria-modal="true" {...rest}>
 			<div className="modal-box">
-				<h3 className="font-bold text-lg">{title}</h3>
-				<p className="py-4">{message}</p>
+				<h3 className="font-bold text-lg" id="modal-title">{title}</h3>
+				<p className="py-4" id="modal-description">{message}</p>
 				<div className="modal-action">
 					<form method="dialog">
 						<button type="button" className="btn btn-primary mr-4" onClick={onAccept}>
@@ -25,7 +25,7 @@ export const Modal: FC<ModalProps> = ({ title, message, open, onAccept, onCancel
 				</div>
 			</div>
 			<form method="dialog" className="modal-backdrop">
-				<button type="button" onClick={onCancel ? onCancel : onAccept} />
+				<button type="button" onClick={onCancel ? onCancel : onAccept} aria-label="Close modal" />
 			</form>
 		</dialog>
 	)

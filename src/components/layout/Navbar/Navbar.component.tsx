@@ -117,7 +117,7 @@ export const Navbar = () => {
 				<div className="navbar bg-base-100 shadow-sm">
 					<div className="navbar-start">
 						<div className="dropdown">
-							<label htmlFor="my-drawer" className="btn btn-ghost btn-circle">
+							<label htmlFor="my-drawer" className="btn btn-ghost btn-circle" aria-label="Open menu">
 								<i className="i-flowbite-bars-from-left-outline w-8! h-8!" />
 							</label>
 							{!backButtonHidden && (
@@ -133,7 +133,7 @@ export const Navbar = () => {
 						</h2>
 					</div>
 					<div className="navbar-end">
-						<button type="button" className="btn btn-ghost btn-circle">
+						<button type="button" className="btn btn-ghost btn-circle" aria-label="Notifications">
 							<div className="indicator">
 								<i className="i-material-symbols-notifications-outline-sharp w-6! h-6!" />
 								<span className="badge badge-xs badge-primary indicator-item animate-pulse" />
@@ -144,7 +144,7 @@ export const Navbar = () => {
 			</div>
 			<div className="drawer-side z-10">
 				<label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay" />
-				<ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
+				<ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4" role="navigation" aria-label="Main navigation">
 					{farm && (
 						<h2 ref={drawerTitleRef} className="text-xl font-bold mb-2 text-center">
 							{farm!.name}
@@ -242,7 +242,7 @@ export const Navbar = () => {
 					</li>
 					<div className="divider" />
 					<li>
-						<label className="swap swap-rotate">
+						<label className="swap swap-rotate" aria-label="Toggle theme">
 							<input
 								type="checkbox"
 								className="theme-controller"

@@ -203,7 +203,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 				)}
 			</div>
 			<div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
-				<table className="table">
+				<table className="table" aria-label="Health records">
 					<thead>
 						<tr>
 							<th>{t('reason')}</th>
@@ -279,7 +279,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 						))}
 						{healthRecordsFiltered.length === 0 && (
 							<tr>
-								<td className="text-center font-bold" colSpan={haveUser ? 12 : 11}>
+								<td className="text-center font-bold" colSpan={haveUser ? 6 : 5}>
 									{t('noHealthRecords')}
 								</td>
 							</tr>

@@ -85,7 +85,7 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 				)}
 			</div>
 			<div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
-				<table className="table table-zebra">
+				<table className="table table-zebra" aria-label="Related animals">
 					<thead>
 						<tr>
 							<th>{t('animalId')}</th>
@@ -120,7 +120,7 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 						))}
 						{animals.length === 0 && (
 							<tr>
-								<td className="text-center font-bold" colSpan={haveUser ? 12 : 11}>
+								<td className="text-center font-bold" colSpan={haveUser ? 4 : 3}>
 									{t('noRelatedAnimals')}
 								</td>
 							</tr>

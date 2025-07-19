@@ -30,7 +30,7 @@ const iconColor = (icon: string | undefined) => {
 	}
 }
 
-export const ActionButton: FC<ActionButtonProps> = ({ icon, ...rest }) => {
+export const ActionButton: FC<ActionButtonProps> = ({ icon, title, ...rest }) => {
 	const btnRef = useRef<HTMLButtonElement>(null)
 	const { loading } = useAppStore()
 
@@ -63,6 +63,7 @@ export const ActionButton: FC<ActionButtonProps> = ({ icon, ...rest }) => {
 			className="btn btn-circle bg-transparent border-none shadow-none"
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
+			aria-label={title}
 			{...rest}
 		>
 			<i className={`${icon} h-8! w-8! ${rest.disabled ? 'bg-gray-400!' : iconColor(icon)}`} />
