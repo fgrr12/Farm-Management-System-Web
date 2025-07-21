@@ -3,8 +3,6 @@ import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { useFormTransforms } from '@/hooks/shared/useFormTransforms'
-
 import { type TaskFormData, taskSchema } from '@/schemas'
 
 const DEFAULT_VALUES: Partial<TaskFormData> = {
@@ -38,20 +36,6 @@ export const useTaskForm = (initialData?: Partial<Task>) => {
 		mode: 'onChange',
 		reValidateMode: 'onChange',
 	})
-
-	const { register, setValue } = form
-
-	const { registerCapitalized, registerTextareaCapitalized } = useFormTransforms(register, setValue)
-
-	const typedRegisterCapitalized = useCallback(
-		(fieldName: keyof TaskFormData) => registerCapitalized(fieldName),
-		[registerCapitalized]
-	)
-
-	const typedRegisterTextareaCapitalized = useCallback(
-		(fieldName: keyof TaskFormData) => registerTextareaCapitalized(fieldName),
-		[registerTextareaCapitalized]
-	)
 
 	const transformToApiFormat = useCallback((data: TaskFormData): Task => {
 		return {
@@ -88,8 +72,6 @@ export const useTaskForm = (initialData?: Partial<Task>) => {
 		transformToApiFormat,
 		getErrorMessage,
 		resetWithData,
-		registerCapitalized: typedRegisterCapitalized,
-		registerTextareaCapitalized: typedRegisterTextareaCapitalized,
 		isValid: form.formState.isValid,
 		isDirty: form.formState.isDirty,
 		isSubmitting: form.formState.isSubmitting,

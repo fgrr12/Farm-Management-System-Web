@@ -34,12 +34,11 @@ const ProductionRecordForm = () => {
 		handleSubmit,
 		control,
 		setValue,
+		register,
 		formState: { errors, isSubmitting },
 		transformToApiFormat,
 		getErrorMessage,
 		resetWithData,
-		registerNumber,
-		registerTextareaCapitalized,
 	} = form
 
 	const onSubmit = useCallback(
@@ -106,9 +105,10 @@ const ProductionRecordForm = () => {
 				className="flex flex-col sm:grid sm:grid-cols-2 items-center gap-4 max-w-[400px] w-full"
 				onSubmit={handleSubmit(onSubmit)}
 				autoComplete="off"
+				noValidate
 			>
 				<TextField
-					{...registerNumber('quantity')}
+					{...register('quantity', { valueAsNumber: true })}
 					type="number"
 					placeholder={`${t('quantity')} (${farm?.liquidUnit})`}
 					label={`${t('quantity')} (${farm?.liquidUnit})`}
@@ -133,7 +133,7 @@ const ProductionRecordForm = () => {
 				/>
 				<div className="col-span-2 w-full">
 					<Textarea
-						{...registerTextareaCapitalized('notes')}
+						{...register('notes')}
 						placeholder={t('notes')}
 						label={t('notes')}
 						required

@@ -3,8 +3,6 @@ import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { useFormTransforms } from '@/hooks/shared/useFormTransforms'
-
 import { type EmployeeFormData, employeeSchema } from '@/schemas'
 
 const DEFAULT_VALUES: Partial<EmployeeFormData> = {
@@ -12,10 +10,11 @@ const DEFAULT_VALUES: Partial<EmployeeFormData> = {
 	lastName: '',
 	email: '',
 	phone: '',
-	role: undefined,
+	role: 'employee',
 	status: true,
 	photoUrl: '',
 	language: 'spa',
+	createdBy: '',
 }
 
 export const useEmployeeForm = (initialData?: Partial<User>) => {
@@ -30,12 +29,12 @@ export const useEmployeeForm = (initialData?: Partial<User>) => {
 			lastName: initialData.lastName || '',
 			email: initialData.email || '',
 			phone: initialData.phone || '',
-			role: (initialData.role as 'employee' | 'owner' | 'admin') || undefined,
+			role: (initialData.role as 'employee' | 'owner' | 'admin') || 'employee',
 			status: initialData.status ?? true,
 			photoUrl: initialData.photoUrl || '',
 			language: initialData.language || 'spa',
-			farmUuid: initialData.farmUuid || '',
 			createdBy: initialData.createdBy || '',
+			farmUuid: initialData.farmUuid || '',
 		}
 	}, [initialData])
 
@@ -45,15 +44,6 @@ export const useEmployeeForm = (initialData?: Partial<User>) => {
 		mode: 'onChange',
 		reValidateMode: 'onChange',
 	})
-
-	const { register, setValue } = form
-
-	const { registerCapitalized } = useFormTransforms(register, setValue)
-
-	const typedRegisterCapitalized = useCallback(
-		(fieldName: keyof EmployeeFormData) => registerCapitalized(fieldName),
-		[registerCapitalized]
-	)
 
 	const transformToApiFormat = useCallback((data: EmployeeFormData): User => {
 		return {
@@ -94,12 +84,12 @@ export const useEmployeeForm = (initialData?: Partial<User>) => {
 				lastName: data.lastName || '',
 				email: data.email || '',
 				phone: data.phone || '',
-				role: (data.role as 'employee' | 'owner' | 'admin') || undefined,
+				role: (data.role as 'employee' | 'owner' | 'admin') || 'employee',
 				status: data.status ?? true,
 				photoUrl: data.photoUrl || '',
 				language: data.language || 'spa',
-				farmUuid: data.farmUuid || '',
 				createdBy: data.createdBy || '',
+				farmUuid: data.farmUuid || '',
 			}
 
 			form.reset(formattedData)
@@ -112,7 +102,6 @@ export const useEmployeeForm = (initialData?: Partial<User>) => {
 		transformToApiFormat,
 		getErrorMessage,
 		resetWithData,
-		registerCapitalized: typedRegisterCapitalized,
 		isValid: form.formState.isValid,
 		isDirty: form.formState.isDirty,
 		isSubmitting: form.formState.isSubmitting,

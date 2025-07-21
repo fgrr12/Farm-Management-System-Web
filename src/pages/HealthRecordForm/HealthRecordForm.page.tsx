@@ -45,9 +45,6 @@ const HealthRecordForm = () => {
 		transformToApiFormat,
 		getErrorMessage,
 		resetWithData,
-		registerCapitalized,
-		registerTextareaCapitalized,
-		registerNumber,
 	} = form
 
 	const healthRecordTypes: HealthRecordFormType[] = useMemo(
@@ -125,9 +122,10 @@ const HealthRecordForm = () => {
 				className="flex flex-col sm:grid sm:grid-cols-2 items-center gap-4 max-w-[800px] w-full"
 				onSubmit={handleSubmit(onSubmit)}
 				autoComplete="off"
+				noValidate
 			>
 				<TextField
-					{...registerCapitalized('reason')}
+					{...register('reason')}
 					type="text"
 					placeholder={t('reason')}
 					label={t('reason')}
@@ -149,7 +147,7 @@ const HealthRecordForm = () => {
 					)}
 				/>
 				<TextField
-					{...registerCapitalized('reviewedBy')}
+					{...register('reviewedBy')}
 					type="text"
 					placeholder={t('reviewedBy')}
 					label={t('reviewedBy')}
@@ -172,7 +170,7 @@ const HealthRecordForm = () => {
 					)}
 				/>
 				<TextField
-					{...registerNumber('weight')}
+					{...register('weight', { valueAsNumber: true })}
 					type="number"
 					placeholder={`${t('weight')} (${farm?.weightUnit})`}
 					label={`${t('weight')} (${farm?.weightUnit})`}
@@ -180,7 +178,7 @@ const HealthRecordForm = () => {
 					error={errors.weight ? getErrorMessage(errors.weight.message || '') : undefined}
 				/>
 				<TextField
-					{...registerNumber('temperature')}
+					{...register('temperature', { valueAsNumber: true })}
 					type="number"
 					placeholder={`${t('temperature')} (${farm?.temperatureUnit})`}
 					label={`${t('temperature')} (${farm?.temperatureUnit})`}
@@ -217,7 +215,7 @@ const HealthRecordForm = () => {
 				/>
 				<div className="col-span-2 w-full">
 					<Textarea
-						{...registerTextareaCapitalized('notes')}
+						{...register('notes')}
 						placeholder={t('notes')}
 						label={t('notes')}
 						required

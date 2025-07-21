@@ -4,8 +4,6 @@ import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { useFormTransforms } from '@/hooks/shared/useFormTransforms'
-
 import { type ProductionRecordFormData, productionRecordSchema } from '@/schemas'
 
 const DEFAULT_VALUES: Partial<ProductionRecordFormData> = {
@@ -55,20 +53,6 @@ export const useProductionRecordForm = (initialData?: Partial<ProductionRecord>)
 		reValidateMode: 'onChange',
 	})
 
-	const { register, setValue } = form
-
-	const { registerNumber, registerTextareaCapitalized } = useFormTransforms(register, setValue)
-
-	const typedRegisterNumber = useCallback(
-		(fieldName: keyof ProductionRecordFormData) => registerNumber(fieldName),
-		[registerNumber]
-	)
-
-	const typedRegisterTextareaCapitalized = useCallback(
-		(fieldName: keyof ProductionRecordFormData) => registerTextareaCapitalized(fieldName),
-		[registerTextareaCapitalized]
-	)
-
 	const transformToApiFormat = useCallback((data: ProductionRecordFormData): ProductionRecord => {
 		return {
 			uuid: data.uuid || crypto.randomUUID(),
@@ -116,8 +100,6 @@ export const useProductionRecordForm = (initialData?: Partial<ProductionRecord>)
 		transformToApiFormat,
 		getErrorMessage,
 		resetWithData,
-		registerNumber: typedRegisterNumber,
-		registerTextareaCapitalized: typedRegisterTextareaCapitalized,
 		isValid: form.formState.isValid,
 		isDirty: form.formState.isDirty,
 		isSubmitting: form.formState.isSubmitting,

@@ -34,7 +34,6 @@ const EmployeeForm = () => {
 		transformToApiFormat,
 		getErrorMessage,
 		resetWithData,
-		registerCapitalized,
 	} = form
 
 	const getEmployee = useCallback(async () => {
@@ -111,7 +110,7 @@ const EmployeeForm = () => {
 					<legend className="sr-only">{t('accessibility.employeeInformation')}</legend>
 
 					<TextField
-						{...registerCapitalized('name')}
+						{...register('name')}
 						type="text"
 						placeholder={t('name')}
 						label={t('name')}
@@ -125,7 +124,7 @@ const EmployeeForm = () => {
 					</div>
 
 					<TextField
-						{...registerCapitalized('lastName')}
+						{...register('lastName')}
 						type="text"
 						placeholder={t('lastName')}
 						label={t('lastName')}

@@ -31,11 +31,10 @@ const TaskForm = () => {
 	const {
 		handleSubmit,
 		control,
+		register,
 		formState: { errors, isSubmitting },
 		transformToApiFormat,
 		getErrorMessage,
-		registerCapitalized,
-		registerTextareaCapitalized,
 	} = form
 
 	const onSubmit = useCallback(
@@ -85,7 +84,7 @@ const TaskForm = () => {
 				</h2>
 
 				<TextField
-					{...registerCapitalized('title')}
+					{...register('title')}
 					type="text"
 					placeholder={t('name')}
 					label={t('name')}
@@ -99,7 +98,7 @@ const TaskForm = () => {
 				</div>
 
 				<Textarea
-					{...registerTextareaCapitalized('description')}
+					{...register('description')}
 					placeholder={t('description')}
 					label={t('description')}
 					required

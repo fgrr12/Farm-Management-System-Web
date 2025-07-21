@@ -43,13 +43,11 @@ const AnimalForm = () => {
 		watch,
 		setValue,
 		reset,
+		register,
 		formState: { errors, isSubmitting },
 		transformToApiFormat,
 		getErrorMessage,
 		resetWithData,
-		registerCapitalized,
-		registerNumber,
-		registerTextareaCapitalized,
 	} = form
 
 	const watchedSpeciesUuid = watch('speciesUuid')
@@ -195,7 +193,7 @@ const AnimalForm = () => {
 					<legend className="sr-only">{t('accessibility.basicInformation')}</legend>
 
 					<TextField
-						{...registerCapitalized('animalId')}
+						{...register('animalId')}
 						type="text"
 						placeholder={t('animalId')}
 						label={t('animalId')}
@@ -280,7 +278,7 @@ const AnimalForm = () => {
 					</div>
 
 					<TextField
-						{...registerCapitalized('color')}
+						{...register('color')}
 						type="text"
 						placeholder={t('color')}
 						label={t('color')}
@@ -293,7 +291,7 @@ const AnimalForm = () => {
 					</div>
 
 					<TextField
-						{...registerNumber('weight')}
+						{...register('weight', { valueAsNumber: true })}
 						type="number"
 						placeholder={`${t('weight')} (${farm?.weightUnit})`}
 						label={`${t('weight')} (${farm?.weightUnit})`}
@@ -412,7 +410,7 @@ const AnimalForm = () => {
 
 				<div className="col-span-2 w-full">
 					<Textarea
-						{...registerTextareaCapitalized('origin')}
+						{...register('origin')}
 						placeholder={t('origin')}
 						label={t('origin')}
 						error={errors.origin ? getErrorMessage(errors.origin.message || '') : undefined}

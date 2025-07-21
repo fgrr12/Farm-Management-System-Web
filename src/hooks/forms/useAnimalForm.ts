@@ -3,8 +3,6 @@ import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { useFormTransforms } from '@/hooks/shared/useFormTransforms'
-
 import { type AnimalFormData, animalSchemaWithRefinements } from '@/schemas'
 
 const DEFAULT_VALUES: Partial<AnimalFormData> = {
@@ -72,30 +70,6 @@ export const useAnimalForm = (initialData?: Partial<Animal>) => {
 		reValidateMode: 'onChange',
 	})
 
-	const { register, setValue } = form
-
-	const {
-		registerWithTransform,
-		registerCapitalized,
-		registerNumber,
-		registerTextareaCapitalized,
-	} = useFormTransforms(register, setValue)
-
-	const typedRegisterCapitalized = useCallback(
-		(fieldName: keyof AnimalFormData) => registerCapitalized(fieldName),
-		[registerCapitalized]
-	)
-
-	const typedRegisterNumber = useCallback(
-		(fieldName: keyof AnimalFormData) => registerNumber(fieldName),
-		[registerNumber]
-	)
-
-	const typedRegisterTextareaCapitalized = useCallback(
-		(fieldName: keyof AnimalFormData) => registerTextareaCapitalized(fieldName),
-		[registerTextareaCapitalized]
-	)
-
 	const transformToApiFormat = useCallback((data: AnimalFormData): Animal => {
 		return {
 			uuid: data.uuid || crypto.randomUUID(),
@@ -161,10 +135,6 @@ export const useAnimalForm = (initialData?: Partial<Animal>) => {
 		transformToApiFormat,
 		getErrorMessage,
 		resetWithData,
-		registerWithTransform,
-		registerCapitalized: typedRegisterCapitalized,
-		registerNumber: typedRegisterNumber,
-		registerTextareaCapitalized: typedRegisterTextareaCapitalized,
 		isValid: form.formState.isValid,
 		isDirty: form.formState.isDirty,
 		isSubmitting: form.formState.isSubmitting,

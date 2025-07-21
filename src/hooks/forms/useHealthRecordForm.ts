@@ -4,8 +4,6 @@ import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { useFormTransforms } from '@/hooks/shared/useFormTransforms'
-
 import { type HealthRecordFormData, healthRecordSchema } from '@/schemas'
 
 const DEFAULT_VALUES: Partial<HealthRecordFormData> = {
@@ -74,30 +72,6 @@ export const useHealthRecordForm = (initialData?: Partial<HealthRecord>) => {
 		reValidateMode: 'onChange',
 	})
 
-	const { register, setValue } = form
-
-	// Use shared form transforms
-	const { registerCapitalized, registerTextareaCapitalized, registerNumber } = useFormTransforms(
-		register,
-		setValue
-	)
-
-	// Create typed versions for this specific form
-	const typedRegisterCapitalized = useCallback(
-		(fieldName: keyof HealthRecordFormData) => registerCapitalized(fieldName),
-		[registerCapitalized]
-	)
-
-	const typedRegisterTextareaCapitalized = useCallback(
-		(fieldName: keyof HealthRecordFormData) => registerTextareaCapitalized(fieldName),
-		[registerTextareaCapitalized]
-	)
-
-	const typedRegisterNumber = useCallback(
-		(fieldName: keyof HealthRecordFormData) => registerNumber(fieldName),
-		[registerNumber]
-	)
-
 	const transformToApiFormat = useCallback((data: HealthRecordFormData): HealthRecord => {
 		return {
 			uuid: data.uuid || crypto.randomUUID(),
@@ -163,9 +137,6 @@ export const useHealthRecordForm = (initialData?: Partial<HealthRecord>) => {
 		transformToApiFormat,
 		getErrorMessage,
 		resetWithData,
-		registerCapitalized: typedRegisterCapitalized,
-		registerTextareaCapitalized: typedRegisterTextareaCapitalized,
-		registerNumber: typedRegisterNumber,
 		isValid: form.formState.isValid,
 		isDirty: form.formState.isDirty,
 		isSubmitting: form.formState.isSubmitting,
