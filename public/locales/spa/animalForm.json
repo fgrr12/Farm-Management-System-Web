@@ -49,22 +49,22 @@
 		"errorAddingAnimal": "Se ha producido un error al añadir el animal.",
 		"errorGettingAnimal": "Se ha producido un error al obtener el animal."
 	},
-	"weight": "Peso",
 	"validation": {
-		"idRequired": "El ID del animal es requerido",
-		"idTooLong": "El ID del animal debe tener 50 caracteres o menos",
-		"genderRequired": "El género es requerido",
-		"genderInvalid": "Por favor selecciona un género válido",
-		"speciesRequired": "La especie es requerida",
 		"breedRequired": "La raza es requerida",
 		"colorTooLong": "El color debe tener 100 caracteres o menos",
-		"weightPositive": "El peso debe ser un número positivo",
-		"weightTooHigh": "El peso no puede exceder 10,000",
-		"originTooLong": "La procedencia debe tener 200 caracteres o menos",
 		"dateFormat": "Por favor ingresa una fecha válida (YYYY-MM-DD)",
 		"deathAfterBirth": "La fecha de fallecimiento debe ser posterior a la fecha de nacimiento",
-		"soldAfterBirth": "La fecha de venta debe ser posterior a la fecha de nacimiento",
+		"genderInvalid": "Por favor selecciona un género válido",
+		"genderRequired": "El género es requerido",
+		"idRequired": "El ID del animal es requerido",
+		"idTooLong": "El ID del animal debe tener 50 caracteres o menos",
+		"originTooLong": "La procedencia debe tener 200 caracteres o menos",
 		"purchaseAfterBirth": "La fecha de compra debe ser posterior a la fecha de nacimiento",
-		"uuidRequired": "El UUID del animal es requerido"
-	}
+		"soldAfterBirth": "La fecha de venta debe ser posterior a la fecha de nacimiento",
+		"speciesRequired": "La especie es requerida",
+		"uuidRequired": "El UUID del animal es requerido",
+		"weightPositive": "El peso debe ser un número positivo",
+		"weightTooHigh": "El peso no puede exceder 10,000"
+	},
+	"weight": "Peso"
 }

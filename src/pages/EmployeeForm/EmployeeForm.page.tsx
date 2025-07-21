@@ -1,4 +1,5 @@
-import { type ChangeEvent, type FormEvent, memo, useCallback, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect } from 'react'
+import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -6,17 +7,16 @@ import { AppRoutes } from '@/config/constants/routes'
 
 import { useUserStore } from '@/store/useUserStore'
 
-import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
-
 import { EmployeesService } from '@/services/employees'
 
 import { Button } from '@/components/ui/Button'
 import { Select } from '@/components/ui/Select'
 import { TextField } from '@/components/ui/TextField'
 
+import { useEmployeeForm } from '@/hooks/useEmployeeForm'
 import { usePagePerformance } from '@/hooks/usePagePerformance'
 
-import type { RegisterEmployeeForm } from './EmployeeForm.types'
+import type { EmployeeFormData } from '@/schemas'
 
 const EmployeeForm = () => {
 	const { user } = useUserStore()
@@ -25,60 +25,59 @@ const EmployeeForm = () => {
 	const { t } = useTranslation(['employeeForm'])
 	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
 
-	const [employee, setEmployee] = useState(INITIAL_EMPLOYEE_DATA)
+	const form = useEmployeeForm()
+	const {
+		register,
+		handleSubmit,
+		control,
+		formState: { errors, isSubmitting },
+		transformToApiFormat,
+		getErrorMessage,
+		resetWithData,
+		registerCapitalized,
+	} = form
 
-	const handleTextChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = event.target
-		setEmployee((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
-	}, [])
-
-	const handleSelectChange = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
-		const { name, value } = event.target
-		setEmployee((prev) => ({ ...prev, [name]: value }))
-	}, [])
-
-	const initialData = useCallback(async () => {
+	const getEmployee = useCallback(async () => {
 		await withLoadingAndError(async () => {
 			if (!params.employeeUuid) return null
 
 			const employeeUuid = params.employeeUuid as string
 			const employeeData = await EmployeesService.getEmployee(employeeUuid)
-			setEmployee(employeeData)
+			resetWithData(employeeData)
 			return employeeData
 		}, t('toast.errorGettingEmployee'))
-	}, [params.employeeUuid, withLoadingAndError, t])
+	}, [params.employeeUuid, withLoadingAndError, t, resetWithData])
 
-	const handleSubmit = useCallback(
-		async (e: FormEvent) => {
+	const onSubmit = useCallback(
+		async (data: EmployeeFormData) => {
 			if (!user) return
 
-			e.preventDefault()
-
 			await withLoadingAndError(async () => {
-				employee.farmUuid = user.farmUuid!
-				employee.uuid = employee.uuid ?? crypto.randomUUID()
+				const employeeData = transformToApiFormat(data)
+				employeeData.farmUuid = user.farmUuid!
+				employeeData.uuid = employeeData.uuid || crypto.randomUUID()
 
 				if (params.employeeUuid) {
-					await EmployeesService.updateEmployee(employee)
+					await EmployeesService.updateEmployee(employeeData)
 					showToast(t('toast.edited'), 'success')
 					navigate(AppRoutes.EMPLOYEES)
 					return
 				}
 
-				employee.createdBy = user.uuid
-				await EmployeesService.setEmployee(employee)
+				employeeData.createdBy = user.uuid
+				await EmployeesService.setEmployee(employeeData)
 				showToast(t('toast.added'), 'success')
 				navigate(AppRoutes.EMPLOYEES)
 			}, t('toast.errorAddingEmployee'))
 		},
-		[user, employee, params.employeeUuid, withLoadingAndError, showToast, t, navigate]
+		[user, params.employeeUuid, transformToApiFormat, withLoadingAndError, showToast, t, navigate]
 	)
 
 	useEffect(() => {
 		if (user && params.employeeUuid) {
-			initialData()
+			getEmployee()
 		}
-	}, [user, params.employeeUuid, initialData])
+	}, [user, params.employeeUuid, getEmployee])
 
 	useEffect(() => {
 		const title = params.employeeUuid ? t('editEmployee') : t('addEmployee')
@@ -97,7 +96,7 @@ const EmployeeForm = () => {
 			<form
 				id="employee-form"
 				className="flex flex-col items-center gap-4 max-w-[400px] w-full"
-				onSubmit={handleSubmit}
+				onSubmit={handleSubmit(onSubmit)}
 				autoComplete="off"
 				aria-labelledby="form-heading"
 				noValidate
@@ -112,13 +111,12 @@ const EmployeeForm = () => {
 					<legend className="sr-only">{t('accessibility.employeeInformation')}</legend>
 
 					<TextField
-						name="name"
+						{...registerCapitalized('name')}
 						type="text"
 						placeholder={t('name')}
 						label={t('name')}
-						value={employee.name}
-						onChange={handleTextChange}
 						required
+						error={errors.name ? getErrorMessage(errors.name.message || '') : undefined}
 						aria-describedby="name-help"
 						autoComplete="given-name"
 					/>
@@ -127,13 +125,12 @@ const EmployeeForm = () => {
 					</div>
 
 					<TextField
-						name="lastName"
+						{...registerCapitalized('lastName')}
 						type="text"
 						placeholder={t('lastName')}
 						label={t('lastName')}
-						value={employee.lastName}
-						onChange={handleTextChange}
 						required
+						error={errors.lastName ? getErrorMessage(errors.lastName.message || '') : undefined}
 						aria-describedby="lastName-help"
 						autoComplete="family-name"
 					/>
@@ -142,13 +139,12 @@ const EmployeeForm = () => {
 					</div>
 
 					<TextField
-						name="email"
+						{...register('email')}
 						type="email"
 						placeholder={t('email')}
 						label={t('email')}
-						value={employee.email}
-						onChange={handleTextChange}
 						required
+						error={errors.email ? getErrorMessage(errors.email.message || '') : undefined}
 						aria-describedby="email-help"
 						autoComplete="email"
 					/>
@@ -157,13 +153,12 @@ const EmployeeForm = () => {
 					</div>
 
 					<TextField
-						name="phone"
+						{...register('phone')}
 						type="tel"
 						placeholder={t('phone')}
 						label={t('phone')}
-						value={employee.phone}
-						onChange={handleTextChange}
 						required
+						error={errors.phone ? getErrorMessage(errors.phone.message || '') : undefined}
 						aria-describedby="phone-help"
 						autoComplete="tel"
 					/>
@@ -171,26 +166,35 @@ const EmployeeForm = () => {
 						{t('accessibility.phoneHelp')}
 					</div>
 
-					<Select
+					<Controller
 						name="role"
-						legend={t('selectRole')}
-						defaultLabel={t('selectRole')}
-						value={employee.role}
-						items={[
-							{ value: 'employee', name: t('employee') },
-							{ value: 'owner', name: t('owner') },
-						]}
-						onChange={handleSelectChange}
-						required
-						aria-describedby="role-help"
+						control={control}
+						render={({ field }) => (
+							<Select
+								{...field}
+								legend={t('selectRole')}
+								defaultLabel={t('selectRole')}
+								items={[
+									{ value: 'employee', name: t('employee') },
+									{ value: 'owner', name: t('owner') },
+								]}
+								required
+								error={errors.role ? getErrorMessage(errors.role.message || '') : undefined}
+								aria-describedby="role-help"
+							/>
+						)}
 					/>
 					<div id="role-help" className="sr-only">
 						{t('accessibility.roleHelp')}
 					</div>
 				</fieldset>
 
-				<Button type="submit" aria-describedby="submit-help">
-					{params.employeeUuid ? t('editButton') : t('addButton')}
+				<Button type="submit" disabled={isSubmitting} aria-describedby="submit-help">
+					{isSubmitting
+						? t('common:loading')
+						: params.employeeUuid
+							? t('editButton')
+							: t('addButton')}
 				</Button>
 				<div id="submit-help" className="sr-only">
 					{params.employeeUuid
@@ -200,20 +204,6 @@ const EmployeeForm = () => {
 			</form>
 		</div>
 	)
-}
-
-const INITIAL_EMPLOYEE_DATA: RegisterEmployeeForm = {
-	uuid: '',
-	name: '',
-	lastName: '',
-	email: '',
-	phone: '',
-	role: '',
-	status: true,
-	farmUuid: '',
-	createdBy: '',
-	photoUrl: '',
-	language: 'spa',
 }
 
 export default memo(EmployeeForm)

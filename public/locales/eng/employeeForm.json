@@ -29,5 +29,18 @@
 		"edited": "Employee edited successfully.",
 		"errorAddingEmployee": "There was an error adding the employee.",
 		"errorGettingEmployee": "There was an error getting the employee."
+	},
+	"validation": {
+		"emailInvalid": "Email is invalid",
+		"emailRequired": "Email is required",
+		"emailTooLong": "Email must be 100 characters or less",
+		"lastNameRequired": "Last name is required",
+		"lastNameTooLong": "Last name must be 50 characters or less",
+		"nameRequired": "Name is required",
+		"nameTooLong": "Name must be 50 characters or less",
+		"phoneRequired": "Phone is required",
+		"phoneTooLong": "Phone must be 20 characters or less",
+		"roleRequired": "Role is required",
+		"uuidRequired": "Employee UUID is required"
 	}
 }

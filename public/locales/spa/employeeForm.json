@@ -29,5 +29,18 @@
 		"edited": "Empleado editado exitosamente.",
 		"errorAddingEmployee": "Se ha producido un error al añadir el empleado.",
 		"errorGettingEmployee": "Se ha producido un error al obtener el empleado."
+	},
+	"validation": {
+		"emailInvalid": "El correo electrónico es inválido",
+		"emailRequired": "El correo electrónico es requerido",
+		"emailTooLong": "El correo electrónico debe tener 100 caracteres o menos",
+		"lastNameRequired": "El apellido es requerido",
+		"lastNameTooLong": "El apellido debe tener 50 caracteres o menos",
+		"nameRequired": "El nombre es requerido",
+		"nameTooLong": "El nombre debe tener 50 caracteres o menos",
+		"phoneRequired": "El teléfono es requerido",
+		"phoneTooLong": "El teléfono debe tener 20 caracteres o menos",
+		"roleRequired": "El rol es requerido",
+		"uuidRequired": "El UUID del empleado es requerido"
 	}
 }

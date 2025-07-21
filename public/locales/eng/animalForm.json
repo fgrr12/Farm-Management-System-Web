@@ -49,22 +49,22 @@
 		"errorAddingAnimal": "There was an error adding the animal.",
 		"errorGettingAnimal": "There was an error getting the animal."
 	},
-	"weight": "Weight",
 	"validation": {
-		"idRequired": "Animal ID is required",
-		"idTooLong": "Animal ID must be 50 characters or less",
-		"genderRequired": "Gender is required",
-		"genderInvalid": "Please select a valid gender",
-		"speciesRequired": "Species is required",
 		"breedRequired": "Breed is required",
 		"colorTooLong": "Color must be 100 characters or less",
-		"weightPositive": "Weight must be a positive number",
-		"weightTooHigh": "Weight cannot exceed 10,000",
-		"originTooLong": "Origin must be 200 characters or less",
 		"dateFormat": "Please enter a valid date (YYYY-MM-DD)",
 		"deathAfterBirth": "Death date must be after birth date",
-		"soldAfterBirth": "Sold date must be after birth date",
+		"genderInvalid": "Please select a valid gender",
+		"genderRequired": "Gender is required",
+		"idRequired": "Animal ID is required",
+		"idTooLong": "Animal ID must be 50 characters or less",
+		"originTooLong": "Origin must be 200 characters or less",
 		"purchaseAfterBirth": "Purchase date must be after birth date",
-		"uuidRequired": "Animal UUID is required"
-	}
+		"soldAfterBirth": "Sold date must be after birth date",
+		"speciesRequired": "Species is required",
+		"uuidRequired": "Animal UUID is required",
+		"weightPositive": "Weight must be a positive number",
+		"weightTooHigh": "Weight cannot exceed 10,000"
+	},
+	"weight": "Weight"
 }

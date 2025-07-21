@@ -27,12 +27,12 @@
 		"taskAdded": "Task added successfully"
 	},
 	"validation": {
-		"titleRequired": "Task title is required",
-		"titleTooLong": "Task title must be 100 characters or less",
 		"descriptionRequired": "Task description is required",
 		"descriptionTooLong": "Task description must be 500 characters or less",
 		"priorityRequired": "Priority is required",
 		"speciesRequired": "Species is required",
+		"titleRequired": "Task title is required",
+		"titleTooLong": "Task title must be 100 characters or less",
 		"uuidRequired": "Task UUID is required"
 	}
 }
