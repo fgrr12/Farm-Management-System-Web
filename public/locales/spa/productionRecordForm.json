@@ -1,15 +1,25 @@
 {
-	"addButton": "Añadir",
-	"addProductionRecord": "Añadir registro de producción",
+	"addButton": "Añadir Registro",
+	"addProductionRecordTitle": "Añadir Registro de Producción",
 	"date": "Fecha",
-	"editButton": "Guardar",
-	"editProductionRecord": "Editar registro de producción",
+	"editButton": "Actualizar Registro",
+	"editProductionRecordTitle": "Editar Registro de Producción",
 	"notes": "Notas",
 	"quantity": "Cantidad",
 	"toast": {
-		"added": "Registro de producción añadido exitosamente.",
-		"edited": "Registro de producción editado exitosamente.",
+		"added": "Registro de producción añadido exitosamente",
+		"edited": "Registro de producción editado exitosamente",
 		"errorAddingProductionRecord": "Se ha producido un error al añadir el registro de producción.",
 		"errorGettingProductionRecord": "Se ha producido un error al obtener el registro de producción."
+	},
+	"validation": {
+		"animalUuidRequired": "El UUID del animal es requerido",
+		"dateFormat": "La fecha debe estar en formato YYYY-MM-DD",
+		"notesRequired": "Las notas son requeridas",
+		"notesTooLong": "Las notas deben tener 500 caracteres o menos",
+		"quantityInvalid": "La cantidad debe ser un número",
+		"quantityPositive": "La cantidad debe ser positiva",
+		"quantityTooHigh": "La cantidad debe ser menor a 10,000",
+		"uuidRequired": "El UUID del registro de producción es requerido"
 	}
 }

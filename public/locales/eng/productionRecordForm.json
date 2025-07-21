@@ -1,15 +1,25 @@
 {
-	"addButton": "Add",
-	"addProductionRecord": "Add Production Record",
+	"addButton": "Add Production Record",
+	"addProductionRecordTitle": "Add Production Record",
 	"date": "Date",
-	"editButton": "Save",
-	"editProductionRecord": "Edit Production Record",
+	"editButton": "Update Production Record",
+	"editProductionRecordTitle": "Edit Production Record",
 	"notes": "Notes",
 	"quantity": "Quantity",
 	"toast": {
-		"added": "Production record added successfully.",
-		"edited": "Production record edited successfully.",
+		"added": "Production record added successfully",
+		"edited": "Production record edited successfully",
 		"errorAddingProductionRecord": "There was an error adding the production record.",
 		"errorGettingProductionRecord": "There was an error getting the production record."
+	},
+	"validation": {
+		"animalUuidRequired": "Animal UUID is required",
+		"dateFormat": "Date must be in YYYY-MM-DD format",
+		"notesRequired": "Notes are required",
+		"notesTooLong": "Notes must be 500 characters or less",
+		"quantityInvalid": "Quantity must be a number",
+		"quantityPositive": "Quantity must be positive",
+		"quantityTooHigh": "Quantity must be less than 10,000",
+		"uuidRequired": "Production record UUID is required"
 	}
 }
