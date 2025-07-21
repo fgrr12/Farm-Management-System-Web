@@ -9,7 +9,6 @@ import { useAppStore } from '@/store/useAppStore'
 export const usePagePerformance = () => {
 	const { setHeaderTitle, setLoading, setToastData } = useAppStore()
 
-	// Memoized header title setter
 	const setPageTitle = useCallback(
 		(title: string) => {
 			setHeaderTitle(title)
@@ -17,7 +16,6 @@ export const usePagePerformance = () => {
 		[setHeaderTitle]
 	)
 
-	// Memoized loading state handler
 	const handleLoading = useCallback(
 		(loading: boolean) => {
 			setLoading(loading)
@@ -25,7 +23,6 @@ export const usePagePerformance = () => {
 		[setLoading]
 	)
 
-	// Memoized toast handler
 	const showToast = useCallback(
 		(message: string, type: 'success' | 'error' | 'info' | 'warning') => {
 			setToastData({ message, type })
@@ -33,7 +30,6 @@ export const usePagePerformance = () => {
 		[setToastData]
 	)
 
-	// Generic async operation wrapper with loading and error handling
 	const withLoadingAndError = useCallback(
 		async <T>(
 			operation: () => Promise<T>,
@@ -73,7 +69,6 @@ export const usePagePerformance = () => {
 export const useFormPerformance = <T extends Record<string, any>>(
 	setState: React.Dispatch<React.SetStateAction<T>>
 ) => {
-	// Memoized text input handler
 	const handleTextChange = useCallback(
 		(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 			const { name, value } = event.target
@@ -82,7 +77,6 @@ export const useFormPerformance = <T extends Record<string, any>>(
 		[setState]
 	)
 
-	// Memoized select handler
 	const handleSelectChange = useCallback(
 		(event: React.ChangeEvent<HTMLSelectElement>) => {
 			const { name, value } = event.target
@@ -91,7 +85,6 @@ export const useFormPerformance = <T extends Record<string, any>>(
 		[setState]
 	)
 
-	// Memoized checkbox handler
 	const handleCheckboxChange = useCallback(
 		(event: React.ChangeEvent<HTMLInputElement>) => {
 			const { name, checked } = event.target
@@ -100,7 +93,6 @@ export const useFormPerformance = <T extends Record<string, any>>(
 		[setState]
 	)
 
-	// Generic field updater
 	const updateField = useCallback(
 		(field: keyof T, value: any) => {
 			setState((prev) => ({ ...prev, [field]: value }))
@@ -124,14 +116,11 @@ export const useSearchAndFilter = <T>(items: T[], searchFields: (keyof T)[], deb
 	const [searchTerm, setSearchTerm] = useState('')
 	const [filters, setFilters] = useState<Record<string, any>>({})
 
-	// Debounced search term update
 	const debouncedSearchTerm = useDebounce(searchTerm, debounceMs)
 
-	// Memoized filtered results
 	const filteredItems = useMemo(() => {
 		let result = items
 
-		// Apply search filter
 		if (debouncedSearchTerm) {
 			const searchLower = debouncedSearchTerm.toLowerCase()
 			result = result.filter((item) =>
@@ -139,7 +128,6 @@ export const useSearchAndFilter = <T>(items: T[], searchFields: (keyof T)[], deb
 			)
 		}
 
-		// Apply additional filters
 		Object.entries(filters).forEach(([key, value]) => {
 			if (value && value !== '') {
 				result = result.filter((item) => item[key as keyof T] === value)
@@ -149,12 +137,10 @@ export const useSearchAndFilter = <T>(items: T[], searchFields: (keyof T)[], deb
 		return result
 	}, [items, debouncedSearchTerm, filters, searchFields])
 
-	// Memoized search handler
 	const handleSearch = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchTerm(event.target.value)
 	}, [])
 
-	// Memoized filter handler
 	const handleFilterChange = useCallback((key: string, value: any) => {
 		setFilters((prev: Record<string, any>) => ({ ...prev, [key]: value }))
 	}, [])
@@ -168,7 +154,6 @@ export const useSearchAndFilter = <T>(items: T[], searchFields: (keyof T)[], deb
 	}
 }
 
-// Simple debounce hook
 const useDebounce = <T>(value: T, delay: number): T => {
 	const [debouncedValue, setDebouncedValue] = useState<T>(value)
 

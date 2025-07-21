@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/Button'
 import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
-import { usePagePerformance } from '@/hooks/usePagePerformance'
+import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 const ProductionRecordForm = () => {
 	const { user } = useUserStore()

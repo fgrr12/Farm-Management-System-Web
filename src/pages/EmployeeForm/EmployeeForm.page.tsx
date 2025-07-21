@@ -13,8 +13,8 @@ import { Button } from '@/components/ui/Button'
 import { Select } from '@/components/ui/Select'
 import { TextField } from '@/components/ui/TextField'
 
-import { useEmployeeForm } from '@/hooks/useEmployeeForm'
-import { usePagePerformance } from '@/hooks/usePagePerformance'
+import { useEmployeeForm } from '@/hooks/forms/useEmployeeForm'
+import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 import type { EmployeeFormData } from '@/schemas'
 

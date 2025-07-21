@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
-import { useOffline } from '@/hooks/useOffline'
+import { useOffline } from '@/hooks/system/useOffline'
 
 export const OfflineIndicator = () => {
 	const { isOffline, queueLength } = useOffline()

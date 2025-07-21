@@ -31,10 +31,8 @@ export const usePageTracking = () => {
 	const { headerTitle } = useAppStore()
 
 	useEffect(() => {
-		// Get page name
 		const pageName = PAGE_NAMES[location.pathname] || headerTitle || 'Unknown Page'
 
-		// Track page view
 		trackEvent(ANALYTICS_EVENTS.PAGE_VIEW, {
 			page: pageName,
 			path: location.pathname,
@@ -42,7 +40,6 @@ export const usePageTracking = () => {
 			timestamp: new Date().toISOString(),
 		})
 
-		// Update document title (only if there's no more specific title)
 		if (!document.title.includes(' - ')) {
 			document.title = pageName
 				? `${pageName} - Cattle Farm Management System`

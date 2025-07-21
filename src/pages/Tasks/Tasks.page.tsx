@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/Button'
 import { Search } from '@/components/ui/Search'
 import { Select } from '@/components/ui/Select'
 
-import { usePagePerformance } from '@/hooks/usePagePerformance'
+import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 import type { DividedTasks, TaskFilters } from './Tasks.types'
 

@@ -12,7 +12,7 @@ import { UserService } from '@/services/user'
 import { Button } from '@/components/ui/Button'
 import { PasswordField, TextField } from '@/components/ui/TextField'
 
-import { usePagePerformance } from '@/hooks/usePagePerformance'
+import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 import type { LoginCredentials } from './LoginForm.types'
 

@@ -19,11 +19,24 @@ export const Select: FC<SelectProps> = ({
 	const ref = useRef<HTMLSelectElement>(null)
 	const fieldId = useId()
 
+	const normalizedValue = value === undefined || value === null ? '' : value
+	const hasValue = normalizedValue !== '' && normalizedValue !== undefined && normalizedValue !== null
+
 	const handleClear = (event: MouseEvent<HTMLButtonElement>) => {
 		event.stopPropagation()
-		if (!ref.current) return
-		ref.current.value = ''
-		ref.current.dispatchEvent(new Event('change', { bubbles: true }))
+
+		if (rest.onChange) {
+			const syntheticEvent = {
+				target: { value: '', name: rest.name },
+				currentTarget: { value: '', name: rest.name },
+			} as React.ChangeEvent<HTMLSelectElement>
+
+			rest.onChange(syntheticEvent)
+		}
+
+		if (ref.current) {
+			ref.current.value = ''
+		}
 	}
 
 	return (
@@ -36,13 +49,13 @@ export const Select: FC<SelectProps> = ({
 				<select
 					id={fieldId}
 					className={`input w-full h-12 validator cursor-pointer ${error ? 'input-error' : ''}`}
-					value={value}
+					value={normalizedValue}
 					ref={ref}
 					required={required}
 					aria-invalid={!!error}
 					{...rest}
 				>
-					<option value="" hidden disabled>
+					<option value="" disabled>
 						{defaultLabel ?? t('select.default')}
 					</option>
 					{items.map((item) => (
@@ -52,7 +65,7 @@ export const Select: FC<SelectProps> = ({
 					))}
 				</select>
 
-				{!value ? (
+				{!hasValue ? (
 					<div className="absolute inset-y-0 right-0 flex items-center px-1 pointer-events-none text-gray-500 hover:text-gray-700">
 						<i className="i-ic-outline-arrow-drop-down w-8! h-8!" />
 					</div>

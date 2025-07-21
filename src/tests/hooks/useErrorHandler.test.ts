@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { useErrorHandler } from '@/hooks/useErrorHandler'
+import { useErrorHandler } from '@/hooks/system/useErrorHandler'
 
 // Mock store
 const mockSetToastData = vi.fn()

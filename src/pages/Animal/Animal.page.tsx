@@ -21,7 +21,7 @@ import { ProductionRecordsTable } from '@/components/business/Animal/ProductionR
 import { RelatedAnimalsTable } from '@/components/business/Animal/RelatedAnimalsTable'
 import { ActionButton } from '@/components/ui/ActionButton'
 
-import { usePagePerformance } from '@/hooks/usePagePerformance'
+import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 const DetailItem = memo(({ label, value }: { label: string; value: React.ReactNode }) => (
 	<div className="flex flex-col gap-1 w-full justify-center items-center">

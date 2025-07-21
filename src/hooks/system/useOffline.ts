@@ -14,7 +14,6 @@ export const useOffline = () => {
 	const [isOffline, setIsOffline] = useState(!navigator.onLine)
 	const [offlineQueue, setOfflineQueue] = useState<OfflineQueueItem[]>([])
 
-	// Process offline queue when connection is restored
 	const processOfflineQueue = useCallback(async () => {
 		if (offlineQueue.length === 0) return
 
@@ -32,20 +31,17 @@ export const useOffline = () => {
 					retries: item.retries,
 				})
 
-				// Retry up to 3 times
 				if (item.retries < 3) {
 					failedItems.push({
 						...item,
 						retries: item.retries + 1,
 					})
 				} else {
-					// After 3 retries, mark as processed to remove it
 					processedItems.push(item.id)
 				}
 			}
 		}
 
-		// Update queue: remove processed, keep failed
 		setOfflineQueue((prev) => [
 			...failedItems,
 			...prev.filter(
@@ -55,7 +51,6 @@ export const useOffline = () => {
 		])
 	}, [offlineQueue])
 
-	// Load queue from localStorage on initialization
 	useEffect(() => {
 		const savedQueue = localStorage.getItem('offlineQueue')
 		if (savedQueue) {
@@ -68,7 +63,6 @@ export const useOffline = () => {
 		}
 	}, [])
 
-	// Save queue to localStorage when it changes
 	useEffect(() => {
 		if (offlineQueue.length > 0) {
 			localStorage.setItem('offlineQueue', JSON.stringify(offlineQueue))
@@ -77,7 +71,6 @@ export const useOffline = () => {
 		}
 	}, [offlineQueue])
 
-	// Listen for connectivity changes
 	useEffect(() => {
 		const handleOnline = () => {
 			setIsOffline(false)
@@ -97,7 +90,6 @@ export const useOffline = () => {
 		}
 	}, [processOfflineQueue])
 
-	// Add operation to offline queue
 	const addToOfflineQueue = useCallback((operation: () => Promise<any>, data: any) => {
 		const queueItem: OfflineQueueItem = {
 			id: crypto.randomUUID(),
@@ -110,7 +102,6 @@ export const useOffline = () => {
 		setOfflineQueue((prev) => [...prev, queueItem])
 	}, [])
 
-	// Clear offline queue
 	const clearOfflineQueue = useCallback(() => {
 		setOfflineQueue([])
 	}, [])
@@ -140,13 +131,11 @@ export const useOfflineOperation = () => {
 			try {
 				return await operation()
 			} catch (error) {
-				// If fails online, add to offline queue
 				addToOfflineQueue(operation, data)
 				if (fallback) fallback()
 				throw error
 			}
 		} else {
-			// If offline, add directly to queue
 			addToOfflineQueue(operation, data)
 			if (fallback) fallback()
 		}

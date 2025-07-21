@@ -28,7 +28,7 @@ import { Sidebar } from '@/components/layout/Sidebar'
 import { ToastManager } from '@/components/layout/ToastManager'
 
 import { VoiceRecorder } from './components/layout/VoiceRecorder/VoiceRecorder'
-import { usePreloadRoutes } from './hooks/usePreloadRoutes'
+import { usePreloadRoutes } from './hooks/ui/usePreloadRoutes'
 
 gsap.registerPlugin(SplitText, useGSAP)
 

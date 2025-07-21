@@ -1,10 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import type { ChangeEvent } from 'react'
 import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
+import { useFormTransforms } from '@/hooks/shared/useFormTransforms'
 
 import { type EmployeeFormData, employeeSchema } from '@/schemas'
 
@@ -49,36 +48,11 @@ export const useEmployeeForm = (initialData?: Partial<User>) => {
 
 	const { register, setValue } = form
 
-	const registerWithTransform = useCallback(
-		(fieldName: keyof EmployeeFormData, transform?: (value: string) => any) => {
-			const baseRegister = register(fieldName)
+	const { registerCapitalized } = useFormTransforms(register, setValue)
 
-			if (!transform) return baseRegister
-
-			return {
-				...baseRegister,
-				onChange: (e: ChangeEvent<HTMLInputElement>) => {
-					const transformedValue = transform(e.target.value)
-					setValue(fieldName, transformedValue)
-				},
-			}
-		},
-		[register, setValue]
-	)
-
-	// Helpers específicos para transformaciones comunes
-	const registerCapitalized = useCallback(
-		(fieldName: keyof EmployeeFormData) => registerWithTransform(fieldName, capitalizeFirstLetter),
-		[registerWithTransform]
-	)
-
-	const registerNumber = useCallback(
-		(fieldName: keyof EmployeeFormData) =>
-			registerWithTransform(fieldName, (val) => {
-				const num = Number.parseFloat(val)
-				return Number.isNaN(num) ? undefined : num
-			}),
-		[registerWithTransform]
+	const typedRegisterCapitalized = useCallback(
+		(fieldName: keyof EmployeeFormData) => registerCapitalized(fieldName),
+		[registerCapitalized]
 	)
 
 	const transformToApiFormat = useCallback((data: EmployeeFormData): User => {
@@ -138,9 +112,7 @@ export const useEmployeeForm = (initialData?: Partial<User>) => {
 		transformToApiFormat,
 		getErrorMessage,
 		resetWithData,
-		registerWithTransform,
-		registerCapitalized,
-		registerNumber,
+		registerCapitalized: typedRegisterCapitalized,
 		isValid: form.formState.isValid,
 		isDirty: form.formState.isDirty,
 		isSubmitting: form.formState.isSubmitting,

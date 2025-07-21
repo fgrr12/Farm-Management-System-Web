@@ -3,6 +3,8 @@ import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { useFormTransforms } from '@/hooks/shared/useFormTransforms'
+
 import { type AnimalFormData, animalSchemaWithRefinements } from '@/schemas'
 
 const DEFAULT_VALUES: Partial<AnimalFormData> = {
@@ -28,16 +30,14 @@ export const useAnimalForm = (initialData?: Partial<Animal>) => {
 		if (!dateValue) return ''
 
 		try {
-			// Si es un string que ya está en formato YYYY-MM-DD, devolverlo tal como está
 			if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
 				return dateValue
 			}
 
-			// Si es un timestamp o Date object, convertirlo
 			const date = new Date(dateValue)
 			if (Number.isNaN(date.getTime())) return ''
 
-			return date.toISOString().split('T')[0] // Formato YYYY-MM-DD
+			return date.toISOString().split('T')[0]
 		} catch {
 			return ''
 		}
@@ -71,6 +71,30 @@ export const useAnimalForm = (initialData?: Partial<Animal>) => {
 		mode: 'onChange',
 		reValidateMode: 'onChange',
 	})
+
+	const { register, setValue } = form
+
+	const {
+		registerWithTransform,
+		registerCapitalized,
+		registerNumber,
+		registerTextareaCapitalized,
+	} = useFormTransforms(register, setValue)
+
+	const typedRegisterCapitalized = useCallback(
+		(fieldName: keyof AnimalFormData) => registerCapitalized(fieldName),
+		[registerCapitalized]
+	)
+
+	const typedRegisterNumber = useCallback(
+		(fieldName: keyof AnimalFormData) => registerNumber(fieldName),
+		[registerNumber]
+	)
+
+	const typedRegisterTextareaCapitalized = useCallback(
+		(fieldName: keyof AnimalFormData) => registerTextareaCapitalized(fieldName),
+		[registerTextareaCapitalized]
+	)
 
 	const transformToApiFormat = useCallback((data: AnimalFormData): Animal => {
 		return {
@@ -137,6 +161,10 @@ export const useAnimalForm = (initialData?: Partial<Animal>) => {
 		transformToApiFormat,
 		getErrorMessage,
 		resetWithData,
+		registerWithTransform,
+		registerCapitalized: typedRegisterCapitalized,
+		registerNumber: typedRegisterNumber,
+		registerTextareaCapitalized: typedRegisterTextareaCapitalized,
 		isValid: form.formState.isValid,
 		isDirty: form.formState.isDirty,
 		isSubmitting: form.formState.isSubmitting,

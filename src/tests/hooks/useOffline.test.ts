@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { useOffline, useOfflineOperation } from '@/hooks/useOffline'
+import { useOffline, useOfflineOperation } from '@/hooks/system/useOffline'
 
 // Mock error handler
 vi.mock('@/utils/errorHandler', () => ({

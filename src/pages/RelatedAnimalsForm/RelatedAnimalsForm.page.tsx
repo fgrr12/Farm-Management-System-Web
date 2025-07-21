@@ -14,7 +14,7 @@ import { ExternalRelationForm } from '@/components/business/RelatedAnimals/Exter
 import { RelatedAnimalCard } from '@/components/business/RelatedAnimals/RelatedAnimalCard'
 import { Button } from '@/components/ui/Button'
 
-import { usePagePerformance } from '@/hooks/usePagePerformance'
+import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 import type {
 	DragSingularRelation,

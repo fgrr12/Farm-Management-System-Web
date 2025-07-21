@@ -1,6 +1,6 @@
 import { memo } from 'react'
 
-import { useEnvironment } from '@/hooks/useEnvironment'
+import { useEnvironment } from '@/hooks/system/useEnvironment'
 
 export const DevelopmentBanner = memo(() => {
 	const { isDevelopment, currentEnvironment, getEnvironmentColor, getEnvironmentIcon } =

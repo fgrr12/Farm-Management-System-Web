@@ -9,10 +9,6 @@ interface SEOOptions {
 	canonical?: string
 }
 
-/**
- * Hook for dynamic SEO in specific components
- * Useful for pages that need custom SEO based on data
- */
 export const useSEO = ({
 	title,
 	description,
@@ -22,7 +18,6 @@ export const useSEO = ({
 	canonical,
 }: SEOOptions) => {
 	useEffect(() => {
-		// Function to update or create meta tag
 		const updateMetaTag = (selector: string, content: string) => {
 			let element = document.querySelector(selector) as HTMLMetaElement
 			if (element) {
@@ -39,7 +34,6 @@ export const useSEO = ({
 			}
 		}
 
-		// Update title if provided
 		if (title) {
 			document.title = title
 			updateMetaTag('meta[name="title"]', title)
@@ -47,30 +41,25 @@ export const useSEO = ({
 			updateMetaTag('meta[property="twitter:title"]', title)
 		}
 
-		// Update description if provided
 		if (description) {
 			updateMetaTag('meta[name="description"]', description)
 			updateMetaTag('meta[property="og:description"]', description)
 			updateMetaTag('meta[property="twitter:description"]', description)
 		}
 
-		// Update keywords if provided
 		if (keywords) {
 			updateMetaTag('meta[name="keywords"]', keywords)
 		}
 
-		// Update image if provided
 		if (image) {
 			updateMetaTag('meta[property="og:image"]', image)
 			updateMetaTag('meta[property="twitter:image"]', image)
 		}
 
-		// Update robots if noIndex is specified
 		if (noIndex) {
 			updateMetaTag('meta[name="robots"]', 'noindex, nofollow')
 		}
 
-		// Update canonical URL if provided
 		if (canonical) {
 			let canonicalLink = document.querySelector('link[rel="canonical"]') as HTMLLinkElement
 			if (canonicalLink) {
@@ -83,10 +72,7 @@ export const useSEO = ({
 			}
 		}
 
-		// Cleanup function to restore default values if needed
-		return () => {
-			// No cleanup needed as the main SEO component handles default values
-		}
+		return () => {}
 	}, [title, description, keywords, image, noIndex, canonical])
 }
 
@@ -117,7 +103,7 @@ export const useAnimalSEO = (animal?: {
 		title,
 		description,
 		keywords,
-		noIndex: false, // Animal details can be indexed
+		noIndex: false,
 	})
 }
 
@@ -141,7 +127,7 @@ export const useEmployeeSEO = (employee?: { name: string; role: string }) => {
 		title,
 		description,
 		keywords,
-		noIndex: true, // Employee details should not be indexed for privacy
+		noIndex: true,
 	})
 }
 
@@ -165,6 +151,6 @@ export const useTaskSEO = (task?: { title: string; description?: string; type?: 
 		title: pageTitle,
 		description: pageDescription,
 		keywords,
-		noIndex: false, // Tasks can be indexed
+		noIndex: false,
 	})
 }

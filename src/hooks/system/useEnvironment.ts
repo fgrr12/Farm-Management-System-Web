@@ -6,17 +6,14 @@ import { currentEnvironment, isDevelopment, isProduction } from '@/config/enviro
  */
 export const useEnvironment = () => {
 	return {
-		// Environment checks
 		isDevelopment,
 		isProduction,
 		currentEnvironment,
 
-		// Environment-specific configurations
 		showDebugInfo: isDevelopment,
 		enableAnalytics: isProduction,
-		apiTimeout: isDevelopment ? 10000 : 5000, // Longer timeout in dev
+		apiTimeout: isDevelopment ? 10000 : 5000,
 
-		// Environment display helpers
 		getEnvironmentColor: () => {
 			switch (currentEnvironment) {
 				case 'development':

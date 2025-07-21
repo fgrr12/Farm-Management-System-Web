@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { usePageTracking } from '@/hooks/usePageTracking'
+import { usePageTracking } from '@/hooks/ui/usePageTracking'
 
 // Mock react-router-dom
 const mockLocation = {

@@ -11,7 +11,7 @@ import { EmployeesService } from '@/services/employees'
 import { EmployeesTable } from '@/components/business/Employees/EmployeesTable'
 import { Search } from '@/components/ui/Search'
 
-import { usePagePerformance } from '@/hooks/usePagePerformance'
+import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 const Employees = () => {
 	const { user } = useUserStore()

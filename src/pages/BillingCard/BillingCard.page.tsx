@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useFarmStore } from '@/store/useFarmStore'
 
-import { usePagePerformance } from '@/hooks/usePagePerformance'
+import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 const BillingCard = () => {
 	const { billingCard } = useFarmStore()

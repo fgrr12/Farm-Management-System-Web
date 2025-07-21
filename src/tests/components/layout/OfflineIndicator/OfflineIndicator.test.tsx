@@ -6,7 +6,7 @@ import { OfflineIndicator } from '@/components/layout/OfflineIndicator/OfflineIn
 import { render } from '@/tests/utils/test-utils'
 
 // Mock the offline hook
-vi.mock('@/hooks/useOffline', () => ({
+vi.mock('@/hooks/system/useOffline', () => ({
 	useOffline: vi.fn(),
 }))
 
@@ -29,7 +29,7 @@ describe('OfflineIndicator', () => {
 	})
 
 	it('should not render when online and no pending operations', async () => {
-		const { useOffline } = await import('@/hooks/useOffline')
+		const { useOffline } = await import('@/hooks/system/useOffline')
 		vi.mocked(useOffline).mockReturnValue({
 			isOffline: false,
 			queueLength: 0,
@@ -44,7 +44,7 @@ describe('OfflineIndicator', () => {
 	})
 
 	it('should show offline indicator when offline', async () => {
-		const { useOffline } = await import('@/hooks/useOffline')
+		const { useOffline } = await import('@/hooks/system/useOffline')
 		vi.mocked(useOffline).mockReturnValue({
 			isOffline: true,
 			queueLength: 0,
@@ -63,7 +63,7 @@ describe('OfflineIndicator', () => {
 	})
 
 	it('should show pending operations indicator', async () => {
-		const { useOffline } = await import('@/hooks/useOffline')
+		const { useOffline } = await import('@/hooks/system/useOffline')
 		vi.mocked(useOffline).mockReturnValue({
 			isOffline: false,
 			queueLength: 3,
@@ -82,7 +82,7 @@ describe('OfflineIndicator', () => {
 	})
 
 	it('should show both indicators when offline with pending operations', async () => {
-		const { useOffline } = await import('@/hooks/useOffline')
+		const { useOffline } = await import('@/hooks/system/useOffline')
 		vi.mocked(useOffline).mockReturnValue({
 			isOffline: true,
 			queueLength: 2,
@@ -102,7 +102,7 @@ describe('OfflineIndicator', () => {
 	})
 
 	it('should have proper styling and positioning', async () => {
-		const { useOffline } = await import('@/hooks/useOffline')
+		const { useOffline } = await import('@/hooks/system/useOffline')
 		vi.mocked(useOffline).mockReturnValue({
 			isOffline: true,
 			queueLength: 1,
@@ -119,7 +119,7 @@ describe('OfflineIndicator', () => {
 	})
 
 	it('should show appropriate icons', async () => {
-		const { useOffline } = await import('@/hooks/useOffline')
+		const { useOffline } = await import('@/hooks/system/useOffline')
 		vi.mocked(useOffline).mockReturnValue({
 			isOffline: true,
 			queueLength: 1,
@@ -139,7 +139,7 @@ describe('OfflineIndicator', () => {
 	})
 
 	it('should have spinning animation on sync icon', async () => {
-		const { useOffline } = await import('@/hooks/useOffline')
+		const { useOffline } = await import('@/hooks/system/useOffline')
 		vi.mocked(useOffline).mockReturnValue({
 			isOffline: false,
 			queueLength: 1,
@@ -156,7 +156,7 @@ describe('OfflineIndicator', () => {
 	})
 
 	it('should handle different queue lengths', async () => {
-		const { useOffline } = await import('@/hooks/useOffline')
+		const { useOffline } = await import('@/hooks/system/useOffline')
 		const testCases = [1, 5, 10, 99]
 
 		for (const queueLength of testCases) {
@@ -180,7 +180,7 @@ describe('OfflineIndicator', () => {
 	})
 
 	it('should handle state changes correctly', async () => {
-		const { useOffline } = await import('@/hooks/useOffline')
+		const { useOffline } = await import('@/hooks/system/useOffline')
 
 		// Start online with no queue
 		vi.mocked(useOffline).mockReturnValue({
@@ -238,7 +238,7 @@ describe('OfflineIndicator', () => {
 	})
 
 	it('should have accessible alert roles', async () => {
-		const { useOffline } = await import('@/hooks/useOffline')
+		const { useOffline } = await import('@/hooks/system/useOffline')
 		vi.mocked(useOffline).mockReturnValue({
 			isOffline: true,
 			queueLength: 2,

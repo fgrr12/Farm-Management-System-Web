@@ -9,7 +9,6 @@ import { AppRoutes } from '@/config/constants/routes'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
-import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 import { fileToBase64 } from '@/utils/fileToBase64'
 import { formatDate } from '@/utils/formatDate'
 
@@ -21,8 +20,8 @@ import { Select } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
-import { useAnimalForm } from '@/hooks/useAnimalForm'
-import { usePagePerformance } from '@/hooks/usePagePerformance'
+import { useAnimalForm } from '@/hooks/forms/useAnimalForm'
+import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 import type { AnimalFormData } from '@/schemas'
 
@@ -39,7 +38,6 @@ const AnimalForm = () => {
 
 	const form = useAnimalForm()
 	const {
-		register,
 		handleSubmit,
 		control,
 		watch,
@@ -49,6 +47,9 @@ const AnimalForm = () => {
 		transformToApiFormat,
 		getErrorMessage,
 		resetWithData,
+		registerCapitalized,
+		registerNumber,
+		registerTextareaCapitalized,
 	} = form
 
 	const watchedSpeciesUuid = watch('speciesUuid')
@@ -169,6 +170,7 @@ const AnimalForm = () => {
 				onSubmit={handleSubmit(onSubmit)}
 				autoComplete="off"
 				aria-labelledby="form-heading"
+				noValidate
 			>
 				<h2 id="form-heading" className="sr-only">
 					{params.animalUuid ? t('accessibility.editAnimalForm') : t('accessibility.addAnimalForm')}
@@ -193,12 +195,7 @@ const AnimalForm = () => {
 					<legend className="sr-only">{t('accessibility.basicInformation')}</legend>
 
 					<TextField
-						{...register('animalId', {
-							onChange: (e) => {
-								const value = capitalizeFirstLetter(e.target.value)
-								setValue('animalId', value as string)
-							},
-						})}
+						{...registerCapitalized('animalId')}
 						type="text"
 						placeholder={t('animalId')}
 						label={t('animalId')}
@@ -283,12 +280,7 @@ const AnimalForm = () => {
 					</div>
 
 					<TextField
-						{...register('color', {
-							onChange: (e) => {
-								const value = capitalizeFirstLetter(e.target.value)
-								setValue('color', value as string)
-							},
-						})}
+						{...registerCapitalized('color')}
 						type="text"
 						placeholder={t('color')}
 						label={t('color')}
@@ -300,27 +292,16 @@ const AnimalForm = () => {
 						{t('accessibility.colorHelp')}
 					</div>
 
-					<Controller
-						name="weight"
-						control={control}
-						render={({ field: { onChange, value, ...field } }) => (
-							<TextField
-								{...field}
-								type="number"
-								placeholder={`${t('weight')} (${farm?.weightUnit})`}
-								label={`${t('weight')} (${farm?.weightUnit})`}
-								value={value || ''}
-								onChange={(e) => {
-									const numValue = Number.parseFloat(e.target.value)
-									onChange(Number.isNaN(numValue) ? undefined : numValue)
-								}}
-								onWheel={(e) => e.currentTarget.blur()}
-								error={errors.weight ? getErrorMessage(errors.weight.message || '') : undefined}
-								aria-describedby="weight-help"
-								min="0"
-								step="0.1"
-							/>
-						)}
+					<TextField
+						{...registerNumber('weight')}
+						type="number"
+						placeholder={`${t('weight')} (${farm?.weightUnit})`}
+						label={`${t('weight')} (${farm?.weightUnit})`}
+						onWheel={(e) => e.currentTarget.blur()}
+						error={errors.weight ? getErrorMessage(errors.weight.message || '') : undefined}
+						aria-describedby="weight-help"
+						min="0"
+						step="0.1"
 					/>
 					<div id="weight-help" className="sr-only">
 						{t('accessibility.weightHelp', { unit: farm?.weightUnit })}
@@ -431,12 +412,7 @@ const AnimalForm = () => {
 
 				<div className="col-span-2 w-full">
 					<Textarea
-						{...register('origin', {
-							onChange: (e) => {
-								const value = capitalizeFirstLetter(e.target.value)
-								setValue('origin', value as string)
-							},
-						})}
+						{...registerTextareaCapitalized('origin')}
 						placeholder={t('origin')}
 						label={t('origin')}
 						error={errors.origin ? getErrorMessage(errors.origin.message || '') : undefined}

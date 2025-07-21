@@ -8,8 +8,6 @@ import { AppRoutes } from '@/config/constants/routes'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
-import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
-
 import { TasksService } from '@/services/tasks'
 
 import { Button } from '@/components/ui/Button'
@@ -17,8 +15,8 @@ import { Select } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
-import { usePagePerformance } from '@/hooks/usePagePerformance'
-import { useTaskForm } from '@/hooks/useTaskForm'
+import { useTaskForm } from '@/hooks/forms/useTaskForm'
+import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 import type { TaskFormData } from '@/schemas'
 
@@ -31,13 +29,13 @@ const TaskForm = () => {
 
 	const form = useTaskForm()
 	const {
-		register,
 		handleSubmit,
 		control,
-		setValue,
 		formState: { errors, isSubmitting },
 		transformToApiFormat,
 		getErrorMessage,
+		registerCapitalized,
+		registerTextareaCapitalized,
 	} = form
 
 	const onSubmit = useCallback(
@@ -87,12 +85,7 @@ const TaskForm = () => {
 				</h2>
 
 				<TextField
-					{...register('title', {
-						onChange: (e) => {
-							const value = capitalizeFirstLetter(e.target.value)
-							setValue('title', value as string)
-						},
-					})}
+					{...registerCapitalized('title')}
 					type="text"
 					placeholder={t('name')}
 					label={t('name')}
@@ -106,12 +99,7 @@ const TaskForm = () => {
 				</div>
 
 				<Textarea
-					{...register('description', {
-						onChange: (e) => {
-							const value = capitalizeFirstLetter(e.target.value)
-							setValue('description', value as string)
-						},
-					})}
+					{...registerTextareaCapitalized('description')}
 					placeholder={t('description')}
 					label={t('description')}
 					required

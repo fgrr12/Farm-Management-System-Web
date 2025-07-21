@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/Button'
 import { Search } from '@/components/ui/Search'
 import { TextField } from '@/components/ui/TextField'
 
-import { usePagePerformance } from '@/hooks/usePagePerformance'
+import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 import type { MySpeciesI } from './MySpecies.types'
 
