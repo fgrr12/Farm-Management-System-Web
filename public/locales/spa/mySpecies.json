@@ -18,6 +18,7 @@
 	"removeButton": "Eliminar",
 	"saveButton": "Guardar",
 	"search": "Buscar",
+	"speciesName": "Nombre de la especie",
 	"title": "Mis especies",
 	"toast": {
 		"deletedBreed": "Raza eliminada exitosamente",
@@ -29,5 +30,12 @@
 		"errorUpdatingSpecies": "Se ha producido un error al actualizar las especies",
 		"notDeletedBreed": "La raza no se ha eliminado",
 		"notDeletedSpecies": "La especie no se ha eliminado"
+	},
+	"validation": {
+		"gestationPeriodInvalid": "El período de gestación debe ser un número",
+		"gestationPeriodMax": "El período de gestación debe ser 1000 o menor",
+		"gestationPeriodMin": "El período de gestación debe ser 0 o mayor",
+		"nameRequired": "El nombre es requerido",
+		"nameTooLong": "El nombre debe tener 50 caracteres o menos"
 	}
 }

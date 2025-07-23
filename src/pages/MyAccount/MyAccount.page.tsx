@@ -1,10 +1,8 @@
-import { type ChangeEvent, type FormEvent, memo, useCallback, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
-
-import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 
 import { BillingCardsService } from '@/services/billingCards'
 import { FarmsService } from '@/services/farms'
@@ -15,6 +13,9 @@ import { Button } from '@/components/ui/Button'
 import { Select } from '@/components/ui/Select'
 import { TextField } from '@/components/ui/TextField'
 
+import { useBillingCardForm } from '@/hooks/forms/useBillingCardForm'
+import { useFarmForm } from '@/hooks/forms/useFarmForm'
+import { useUserForm } from '@/hooks/forms/useUserForm'
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 const MyAccount = () => {
@@ -28,10 +29,11 @@ const MyAccount = () => {
 	const { t } = useTranslation(['myAccount'])
 	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
 
-	const [user, setUser] = useState<User>(INITIAL_USER_DATA)
-	const [farm, setFarm] = useState<Farm>(INITIAL_FARM_DATA)
-	const [billingCard, setBillingCard] = useState<BillingCard>(INITIAL_BILLING_CARD)
 	const [edit, setEdit] = useState(INITIAL_EDIT)
+
+	const userForm = useUserForm()
+	const farmForm = useFarmForm()
+	const billingCardForm = useBillingCardForm()
 
 	const languages = [
 		{ value: 'spa', name: t('myProfile.languageList.spa') },
@@ -60,94 +62,108 @@ const MyAccount = () => {
 		[]
 	)
 
-	const handleChange =
-		<T extends 'farm' | 'user' | 'billingCard'>(key: T) =>
-		(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-			const { name, value, type } = event.target
-			const newValue = type === 'checkbox' ? (event.target as HTMLInputElement).checked : value
-
-			if (key === 'user') {
-				setUser((prev) => ({
-					...prev,
-					[name]: type === 'text' ? capitalizeFirstLetter(newValue as string) : newValue,
-				}))
-			} else if (key === 'farm') {
-				setFarm((prev) => ({
-					...prev,
-					[name]: type === 'text' ? capitalizeFirstLetter(newValue as string) : newValue,
-				}))
-			} else {
-				setBillingCard((prev) => ({
-					...prev,
-					[name]: type === 'text' ? capitalizeFirstLetter(newValue as string) : newValue,
-				}))
-			}
-		}
-
 	const handleSubmitUser = useCallback(
-		async (e: FormEvent) => {
-			e.preventDefault()
-
+		async (data: any) => {
 			await withLoadingAndError(async () => {
-				await UserService.updateUser(user)
-				updateUser(user)
+				const userData: User = {
+					...currentUser!,
+					...data,
+				}
+				await UserService.updateUser(userData)
+				updateUser(userData)
 				setEdit((prev) => ({ ...prev, user: false }))
 				showToast(t('myProfile.toast.edited'), 'success')
 			}, t('myProfile.toast.errorEditing'))
 		},
-		[user, updateUser, withLoadingAndError, showToast, t]
+		[currentUser, updateUser, withLoadingAndError, showToast, t]
 	)
 
 	const handleSubmitFarm = useCallback(
-		async (e: FormEvent) => {
-			e.preventDefault()
-
+		async (data: any) => {
 			await withLoadingAndError(async () => {
-				await FarmsService.updateFarm({ ...farm })
-				updateFarm({ ...farm })
+				const farmData: Farm = {
+					...currentFarm!,
+					...data,
+				}
+				await FarmsService.updateFarm(farmData)
+				updateFarm(farmData)
 				setEdit((prev) => ({ ...prev, farm: false }))
 				showToast(t('myFarm.toast.edited'), 'success')
 			}, t('myFarm.toast.errorEditing'))
 		},
-		[farm, updateFarm, withLoadingAndError, showToast, t]
+		[currentFarm, updateFarm, withLoadingAndError, showToast, t]
 	)
 
 	const handleSubmitBillingCard = useCallback(
-		async (e: FormEvent) => {
-			e.preventDefault()
-
+		async (data: any) => {
 			await withLoadingAndError(async () => {
-				const uuid = billingCard.uuid ?? crypto.randomUUID()
-				if (billingCard.uuid) {
-					await BillingCardsService.updateBillingCard(billingCard)
-					updateFarm({ ...farm })
+				const uuid = data.uuid ?? crypto.randomUUID()
+				const billingCardData: BillingCard = {
+					...currentBillingCard!,
+					...data,
+					uuid,
+				}
+
+				if (data.uuid) {
+					await BillingCardsService.updateBillingCard(billingCardData)
 					showToast(t('myBillingCard.toast.edited'), 'success')
 				} else {
-					farm.billingCardUuid = uuid
-					billingCard.uuid = uuid
-					await BillingCardsService.setBillingCard(billingCard)
-					await FarmsService.updateFarm({ ...farm })
+					const updatedFarm = { ...currentFarm!, billingCardUuid: uuid }
+					await BillingCardsService.setBillingCard(billingCardData)
+					await FarmsService.updateFarm(updatedFarm)
 					showToast(t('myBillingCard.toast.added'), 'success')
 				}
-				updateBillingCard(billingCard)
+				updateBillingCard(billingCardData)
 				setEdit((prev) => ({ ...prev, billingCard: false }))
 			}, t('myBillingCard.toast.errorEditing'))
 		},
-		[billingCard, farm, updateFarm, updateBillingCard, withLoadingAndError, showToast, t]
+		[currentFarm, currentBillingCard, updateBillingCard, withLoadingAndError, showToast, t]
 	)
 
-	// biome-ignore lint:: useEffect is only called once
 	useEffect(() => {
-		if (!user || !currentFarm) return
-
-		setUser(currentUser!)
-		setFarm({ ...currentFarm! })
-		setBillingCard({ ...currentBillingCard! })
-	}, [currentUser, currentFarm])
+		if (currentUser) {
+			userForm.reset({
+				name: currentUser.name,
+				lastName: currentUser.lastName,
+				email: currentUser.email,
+				phone: currentUser.phone,
+				language: currentUser.language as 'spa' | 'eng',
+				uuid: currentUser.uuid,
+				farmUuid: currentUser.farmUuid,
+				role: currentUser.role as 'admin' | 'owner' | 'employee',
+				status: currentUser.status,
+				photoUrl: currentUser.photoUrl,
+			})
+		}
+		if (currentFarm) {
+			farmForm.reset({
+				name: currentFarm.name,
+				address: currentFarm.address,
+				liquidUnit: currentFarm.liquidUnit as 'L' | 'Gal',
+				weightUnit: currentFarm.weightUnit as 'Kg' | 'Lb',
+				temperatureUnit: currentFarm.temperatureUnit as '°C' | '°F',
+				uuid: currentFarm.uuid,
+				billingCardUuid: currentFarm.billingCardUuid,
+				status: currentFarm.status,
+			})
+		}
+		if (currentBillingCard) {
+			billingCardForm.reset({
+				id: currentBillingCard.id,
+				name: currentBillingCard.name,
+				email: currentBillingCard.email,
+				phone: currentBillingCard.phone,
+				address: currentBillingCard.address,
+				uuid: currentBillingCard.uuid,
+				status: currentBillingCard.status,
+			})
+		}
+	}, [currentUser, currentFarm, currentBillingCard, userForm, farmForm, billingCardForm])
 
 	useEffect(() => {
 		setPageTitle(t('title'))
 	}, [setPageTitle, t])
+
 	return (
 		<div className="flex flex-col w-full h-full">
 			<a
@@ -180,7 +196,7 @@ const MyAccount = () => {
 					<p className="text-lg">{t('myProfile.subtitle')}</p>
 					<form
 						className="flex flex-col gap-4 w-full"
-						onSubmit={handleSubmitUser}
+						onSubmit={userForm.handleSubmit(handleSubmitUser)}
 						autoComplete="off"
 						aria-labelledby="profile-heading"
 						noValidate
@@ -189,46 +205,43 @@ const MyAccount = () => {
 							<legend className="sr-only">{t('accessibility.personalInformation')}</legend>
 							<div className="grid grid-cols-3 items-center gap-4 w-full">
 								<TextField
-									name="name"
+									{...userForm.register('name')}
 									label={t('myProfile.name')}
 									placeholder={t('myProfile.name')}
-									value={user.name}
-									onChange={handleChange('user')}
 									disabled={!edit.user}
 									required
 									aria-describedby="name-help"
 									autoComplete="given-name"
+									error={userForm.formState.errors.name?.message}
 								/>
 								<div id="name-help" className="sr-only">
 									{t('accessibility.nameHelp')}
 								</div>
 
 								<TextField
-									name="lastName"
+									{...userForm.register('lastName')}
 									label={t('myProfile.lastName')}
 									placeholder={t('myProfile.lastName')}
-									value={user.lastName}
-									onChange={handleChange('user')}
 									disabled={!edit.user}
 									required
 									aria-describedby="lastName-help"
 									autoComplete="family-name"
+									error={userForm.formState.errors.lastName?.message}
 								/>
 								<div id="lastName-help" className="sr-only">
 									{t('accessibility.lastNameHelp')}
 								</div>
 
 								<TextField
-									name="email"
+									{...userForm.register('email')}
 									label={t('myProfile.email')}
 									placeholder={t('myProfile.email')}
-									value={user.email}
-									onChange={handleChange('user')}
 									disabled={!edit.user}
 									required
 									aria-describedby="email-help"
 									autoComplete="email"
 									type="email"
+									error={userForm.formState.errors.email?.message}
 								/>
 								<div id="email-help" className="sr-only">
 									{t('accessibility.emailHelp')}
@@ -237,31 +250,29 @@ const MyAccount = () => {
 
 							<div className="grid grid-cols-3 items-center gap-4 w-full">
 								<TextField
-									name="phone"
+									{...userForm.register('phone')}
 									label={t('myProfile.phone')}
 									placeholder={t('myProfile.phone')}
-									value={user.phone}
-									onChange={handleChange('user')}
 									disabled={!edit.user}
 									required
 									aria-describedby="phone-help"
 									autoComplete="tel"
 									type="tel"
+									error={userForm.formState.errors.phone?.message}
 								/>
 								<div id="phone-help" className="sr-only">
 									{t('accessibility.phoneHelp')}
 								</div>
 
 								<Select
-									name="language"
+									{...userForm.register('language')}
 									legend={t('myProfile.selectLanguage')}
 									defaultLabel={t('myProfile.selectLanguage')}
-									value={user.language}
 									items={languages}
-									onChange={handleChange('user')}
 									disabled={!edit.user}
 									required
 									aria-describedby="language-help"
+									error={userForm.formState.errors.language?.message}
 								/>
 								<div id="language-help" className="sr-only">
 									{t('accessibility.languageHelp')}
@@ -278,7 +289,8 @@ const MyAccount = () => {
 					</form>
 				</div>
 			</section>
-			{(user.role === 'admin' || user.role === 'owner') && (
+
+			{(currentUser?.role === 'admin' || currentUser?.role === 'owner') && (
 				<section className="flex flex-col p-4" aria-labelledby="farm-heading">
 					<div className="flex flex-col p-4 gap-4 border-2 rounded-xl border-gray-200">
 						<header className="flex items-center gap-4">
@@ -298,7 +310,7 @@ const MyAccount = () => {
 						<p className="text-lg">{t('myFarm.subtitle')}</p>
 						<form
 							className="flex flex-col gap-4 w-full"
-							onSubmit={handleSubmitFarm}
+							onSubmit={farmForm.handleSubmit(handleSubmitFarm)}
 							autoComplete="off"
 							aria-labelledby="farm-heading"
 							noValidate
@@ -307,30 +319,28 @@ const MyAccount = () => {
 								<legend className="sr-only">{t('accessibility.farmInformation')}</legend>
 								<div className="grid grid-cols-3 items-center gap-4 w-full">
 									<TextField
-										name="name"
+										{...farmForm.register('name')}
 										label={t('myFarm.name')}
 										placeholder={t('myFarm.name')}
-										value={farm.name}
-										onChange={handleChange('farm')}
 										disabled={!edit.farm}
 										required
 										aria-describedby="farm-name-help"
 										autoComplete="organization"
+										error={farmForm.formState.errors.name?.message}
 									/>
 									<div id="farm-name-help" className="sr-only">
 										{t('accessibility.farmNameHelp')}
 									</div>
 
 									<TextField
-										name="address"
+										{...farmForm.register('address')}
 										label={t('myFarm.address')}
 										placeholder={t('myFarm.address')}
-										value={farm.address}
-										onChange={handleChange('farm')}
 										disabled={!edit.farm}
 										required
 										aria-describedby="farm-address-help"
 										autoComplete="street-address"
+										error={farmForm.formState.errors.address?.message}
 									/>
 									<div id="farm-address-help" className="sr-only">
 										{t('accessibility.farmAddressHelp')}
@@ -339,45 +349,42 @@ const MyAccount = () => {
 
 								<div className="grid grid-cols-3 items-center gap-4 w-full">
 									<Select
-										name="liquidUnit"
+										{...farmForm.register('liquidUnit')}
 										legend={t('myFarm.liquidUnit')}
 										defaultLabel={t('myFarm.liquidUnit')}
-										value={farm.liquidUnit}
 										items={liquidUnit}
-										onChange={handleChange('farm')}
 										disabled={!edit.farm}
 										required
 										aria-describedby="liquid-unit-help"
+										error={farmForm.formState.errors.liquidUnit?.message}
 									/>
 									<div id="liquid-unit-help" className="sr-only">
 										{t('accessibility.liquidUnitHelp')}
 									</div>
 
 									<Select
-										name="weightUnit"
+										{...farmForm.register('weightUnit')}
 										legend={t('myFarm.weightUnit')}
 										defaultLabel={t('myFarm.weightUnit')}
-										value={farm.weightUnit}
 										items={weightUnit}
-										onChange={handleChange('farm')}
 										disabled={!edit.farm}
 										required
 										aria-describedby="weight-unit-help"
+										error={farmForm.formState.errors.weightUnit?.message}
 									/>
 									<div id="weight-unit-help" className="sr-only">
 										{t('accessibility.weightUnitHelp')}
 									</div>
 
 									<Select
-										name="temperatureUnit"
+										{...farmForm.register('temperatureUnit')}
 										legend={t('myFarm.temperatureUnit')}
 										defaultLabel={t('myFarm.temperatureUnit')}
-										value={farm.temperatureUnit}
 										items={temperatureUnit}
-										onChange={handleChange('farm')}
 										disabled={!edit.farm}
 										required
 										aria-describedby="temperature-unit-help"
+										error={farmForm.formState.errors.temperatureUnit?.message}
 									/>
 									<div id="temperature-unit-help" className="sr-only">
 										{t('accessibility.temperatureUnitHelp')}
@@ -396,7 +403,7 @@ const MyAccount = () => {
 				</section>
 			)}
 
-			{(user.role === 'admin' || user.role === 'owner') && (
+			{(currentUser?.role === 'admin' || currentUser?.role === 'owner') && (
 				<section className="flex flex-col p-4" aria-labelledby="billing-heading">
 					<div className="flex flex-col p-4 gap-4 border-2 rounded-xl border-gray-200">
 						<header className="flex items-center gap-4">
@@ -418,7 +425,7 @@ const MyAccount = () => {
 
 						<form
 							className="flex flex-col gap-4 w-full"
-							onSubmit={handleSubmitBillingCard}
+							onSubmit={billingCardForm.handleSubmit(handleSubmitBillingCard)}
 							autoComplete="off"
 							aria-labelledby="billing-heading"
 							noValidate
@@ -430,16 +437,18 @@ const MyAccount = () => {
 									<p className="text-lg">{t('myBillingCard.subtitle')}</p>
 									<label className="label flex items-center gap-2">
 										<input
-											name="status"
+											{...billingCardForm.register('status')}
 											type="checkbox"
 											className="checkbox border-error bg-error checked:border-info checked:bg-info"
-											defaultChecked={billingCard.status}
-											onChange={handleChange('billingCard')}
 											disabled={!edit.billingCard}
 											aria-describedby="billing-status-help"
 										/>
 										<span>
-											{t(billingCard.status ? 'myBillingCard.active' : 'myBillingCard.inactive')}
+											{t(
+												billingCardForm.watch('status')
+													? 'myBillingCard.active'
+													: 'myBillingCard.inactive'
+											)}
 										</span>
 									</label>
 									<div id="billing-status-help" className="sr-only">
@@ -449,45 +458,42 @@ const MyAccount = () => {
 
 								<div className="grid grid-cols-3 items-center gap-4 w-full">
 									<TextField
-										name="id"
+										{...billingCardForm.register('id')}
 										label={t('myBillingCard.id')}
 										placeholder={t('myBillingCard.id')}
-										value={billingCard.id}
-										onChange={handleChange('billingCard')}
 										disabled={!edit.billingCard}
 										required
 										aria-describedby="billing-id-help"
+										error={billingCardForm.formState.errors.id?.message}
 									/>
 									<div id="billing-id-help" className="sr-only">
 										{t('accessibility.billingIdHelp')}
 									</div>
 
 									<TextField
-										name="name"
+										{...billingCardForm.register('name')}
 										label={t('myBillingCard.name')}
 										placeholder={t('myBillingCard.name')}
-										value={billingCard.name}
-										onChange={handleChange('billingCard')}
 										disabled={!edit.billingCard}
 										required
 										aria-describedby="billing-name-help"
 										autoComplete="name"
+										error={billingCardForm.formState.errors.name?.message}
 									/>
 									<div id="billing-name-help" className="sr-only">
 										{t('accessibility.billingNameHelp')}
 									</div>
 
 									<TextField
-										name="email"
+										{...billingCardForm.register('email')}
 										label={t('myBillingCard.email')}
 										placeholder={t('myBillingCard.email')}
-										value={billingCard.email}
-										onChange={handleChange('billingCard')}
 										disabled={!edit.billingCard}
 										required
 										aria-describedby="billing-email-help"
 										autoComplete="email"
 										type="email"
+										error={billingCardForm.formState.errors.email?.message}
 									/>
 									<div id="billing-email-help" className="sr-only">
 										{t('accessibility.billingEmailHelp')}
@@ -496,31 +502,29 @@ const MyAccount = () => {
 
 								<div className="grid grid-cols-3 items-center gap-4 w-full">
 									<TextField
-										name="phone"
+										{...billingCardForm.register('phone')}
 										label={t('myBillingCard.phone')}
 										placeholder={t('myBillingCard.phone')}
-										value={billingCard.phone}
-										onChange={handleChange('billingCard')}
 										disabled={!edit.billingCard}
 										required
 										aria-describedby="billing-phone-help"
 										autoComplete="tel"
 										type="tel"
+										error={billingCardForm.formState.errors.phone?.message}
 									/>
 									<div id="billing-phone-help" className="sr-only">
 										{t('accessibility.billingPhoneHelp')}
 									</div>
 
 									<TextField
-										name="address"
+										{...billingCardForm.register('address')}
 										label={t('myBillingCard.address')}
 										placeholder={t('myBillingCard.address')}
-										value={billingCard.address}
-										onChange={handleChange('billingCard')}
 										disabled={!edit.billingCard}
 										required
 										aria-describedby="billing-address-help"
 										autoComplete="billing street-address"
+										error={billingCardForm.formState.errors.address?.message}
 									/>
 									<div id="billing-address-help" className="sr-only">
 										{t('accessibility.billingAddressHelp')}
@@ -544,40 +548,6 @@ const MyAccount = () => {
 			)}
 		</div>
 	)
-}
-
-const INITIAL_USER_DATA: User = {
-	uuid: '',
-	name: '',
-	lastName: '',
-	email: '',
-	phone: '',
-	status: true,
-	role: 'employee',
-	photoUrl: '',
-	language: 'spa',
-	farmUuid: '',
-}
-
-const INITIAL_BILLING_CARD: BillingCard = {
-	uuid: '',
-	id: '',
-	name: '',
-	phone: '',
-	email: '',
-	address: '',
-	status: false,
-}
-
-const INITIAL_FARM_DATA: Farm = {
-	uuid: '',
-	billingCardUuid: '',
-	name: '',
-	address: '',
-	liquidUnit: 'L',
-	weightUnit: 'Kg',
-	temperatureUnit: '°C',
-	status: true,
 }
 
 const INITIAL_EDIT = {

@@ -96,5 +96,23 @@
 			"errorEditing": "There was an error updating your profile"
 		}
 	},
-	"title": "My Account"
+	"title": "My Account",
+	"validation": {
+		"addressRequired": "Address is required",
+		"addressTooLong": "Address must be 200 characters or less",
+		"emailInvalid": "Please enter a valid email address",
+		"emailRequired": "Email is required",
+		"idRequired": "ID is required",
+		"idTooLong": "ID must be 50 characters or less",
+		"languageRequired": "Language is required",
+		"lastNameRequired": "Last name is required",
+		"lastNameTooLong": "Last name must be 50 characters or less",
+		"liquidUnitRequired": "Liquid unit is required",
+		"nameRequired": "Name is required",
+		"nameTooLong": "Name must be 50 characters or less",
+		"phoneRequired": "Phone is required",
+		"phoneTooLong": "Phone must be 20 characters or less",
+		"temperatureUnitRequired": "Temperature unit is required",
+		"weightUnitRequired": "Weight unit is required"
+	}
 }

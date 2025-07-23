@@ -96,5 +96,23 @@
 			"errorEditing": "Ocurrió un error al actualizar tu perfil"
 		}
 	},
-	"title": "Mi Cuenta"
+	"title": "Mi Cuenta",
+	"validation": {
+		"addressRequired": "La dirección es requerida",
+		"addressTooLong": "La dirección debe tener 200 caracteres o menos",
+		"emailInvalid": "Por favor ingresa un email válido",
+		"emailRequired": "El email es requerido",
+		"idRequired": "El ID es requerido",
+		"idTooLong": "El ID debe tener 50 caracteres o menos",
+		"languageRequired": "El idioma es requerido",
+		"lastNameRequired": "El apellido es requerido",
+		"lastNameTooLong": "El apellido debe tener 50 caracteres o menos",
+		"liquidUnitRequired": "La unidad de líquido es requerida",
+		"nameRequired": "El nombre es requerido",
+		"nameTooLong": "El nombre debe tener 50 caracteres o menos",
+		"phoneRequired": "El teléfono es requerido",
+		"phoneTooLong": "El teléfono debe tener 20 caracteres o menos",
+		"temperatureUnitRequired": "La unidad de temperatura es requerida",
+		"weightUnitRequired": "La unidad de peso es requerida"
+	}
 }

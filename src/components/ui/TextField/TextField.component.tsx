@@ -10,7 +10,7 @@ export const TextField: FC<TextFieldProps> = ({ label, error, required, ...rest 
 		<fieldset className="fieldset w-full">
 			<legend className="fieldset-legend">
 				{label}
-				{required && <span className="text-red-500 ml-1">*</span>}
+				{label && required && <span className="text-red-500 ml-1">*</span>}
 			</legend>
 			<div className="relative w-full group">
 				<input
