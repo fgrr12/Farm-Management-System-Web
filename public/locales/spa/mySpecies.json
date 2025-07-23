@@ -17,6 +17,7 @@
 	},
 	"removeButton": "Eliminar",
 	"saveButton": "Guardar",
+	"saving": "Guardando...",
 	"search": "Buscar",
 	"speciesName": "Nombre de la especie",
 	"title": "Mis especies",

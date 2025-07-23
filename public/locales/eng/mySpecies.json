@@ -17,6 +17,7 @@
 	},
 	"removeButton": "Remove",
 	"saveButton": "Save",
+	"saving": "Saving...",
 	"search": "Search",
 	"speciesName": "Species Name",
 	"title": "My Species",

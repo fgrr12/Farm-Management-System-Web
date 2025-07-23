@@ -1,4 +1,5 @@
 import { memo, useCallback, useEffect, useState } from 'react'
+import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { useFarmStore } from '@/store/useFarmStore'
@@ -35,6 +36,9 @@ const MyAccount = () => {
 	const farmForm = useFarmForm()
 	const billingCardForm = useBillingCardForm()
 
+	const { control: userControl } = userForm
+	const { control: farmControl } = farmForm
+
 	const languages = [
 		{ value: 'spa', name: t('myProfile.languageList.spa') },
 		{ value: 'eng', name: t('myProfile.languageList.eng') },
@@ -65,50 +69,42 @@ const MyAccount = () => {
 	const handleSubmitUser = useCallback(
 		async (data: any) => {
 			await withLoadingAndError(async () => {
-				const userData: User = {
-					...currentUser!,
-					...data,
-				}
+				const userData = userForm.transformToApiFormat(data)
 				await UserService.updateUser(userData)
 				updateUser(userData)
 				setEdit((prev) => ({ ...prev, user: false }))
 				showToast(t('myProfile.toast.edited'), 'success')
 			}, t('myProfile.toast.errorEditing'))
 		},
-		[currentUser, updateUser, withLoadingAndError, showToast, t]
+		[userForm, updateUser, withLoadingAndError, showToast, t]
 	)
 
 	const handleSubmitFarm = useCallback(
 		async (data: any) => {
+			console.log(data);
+
 			await withLoadingAndError(async () => {
-				const farmData: Farm = {
-					...currentFarm!,
-					...data,
-				}
+				const farmData = farmForm.transformToApiFormat(data)
+
 				await FarmsService.updateFarm(farmData)
 				updateFarm(farmData)
 				setEdit((prev) => ({ ...prev, farm: false }))
 				showToast(t('myFarm.toast.edited'), 'success')
 			}, t('myFarm.toast.errorEditing'))
 		},
-		[currentFarm, updateFarm, withLoadingAndError, showToast, t]
+		[farmForm, updateFarm, withLoadingAndError, showToast, t]
 	)
 
 	const handleSubmitBillingCard = useCallback(
 		async (data: any) => {
 			await withLoadingAndError(async () => {
-				const uuid = data.uuid ?? crypto.randomUUID()
-				const billingCardData: BillingCard = {
-					...currentBillingCard!,
-					...data,
-					uuid,
-				}
+				const billingCardData = billingCardForm.transformToApiFormat(data)
 
 				if (data.uuid) {
 					await BillingCardsService.updateBillingCard(billingCardData)
 					showToast(t('myBillingCard.toast.edited'), 'success')
 				} else {
-					const updatedFarm = { ...currentFarm!, billingCardUuid: uuid }
+					const updatedFarm = { ...currentFarm!, billingCardUuid: billingCardData.uuid }
 					await BillingCardsService.setBillingCard(billingCardData)
 					await FarmsService.updateFarm(updatedFarm)
 					showToast(t('myBillingCard.toast.added'), 'success')
@@ -117,48 +113,29 @@ const MyAccount = () => {
 				setEdit((prev) => ({ ...prev, billingCard: false }))
 			}, t('myBillingCard.toast.errorEditing'))
 		},
-		[currentFarm, currentBillingCard, updateBillingCard, withLoadingAndError, showToast, t]
+		[currentFarm, billingCardForm, updateBillingCard, withLoadingAndError, showToast, t]
 	)
 
+	// biome-ignore lint: ignore form
 	useEffect(() => {
 		if (currentUser) {
-			userForm.reset({
-				name: currentUser.name,
-				lastName: currentUser.lastName,
-				email: currentUser.email,
-				phone: currentUser.phone,
-				language: currentUser.language as 'spa' | 'eng',
-				uuid: currentUser.uuid,
-				farmUuid: currentUser.farmUuid,
-				role: currentUser.role as 'admin' | 'owner' | 'employee',
-				status: currentUser.status,
-				photoUrl: currentUser.photoUrl,
-			})
+			userForm.resetWithData(currentUser)
 		}
+	}, [currentUser])
+
+	// biome-ignore lint: ignore form
+	useEffect(() => {
 		if (currentFarm) {
-			farmForm.reset({
-				name: currentFarm.name,
-				address: currentFarm.address,
-				liquidUnit: currentFarm.liquidUnit as 'L' | 'Gal',
-				weightUnit: currentFarm.weightUnit as 'Kg' | 'Lb',
-				temperatureUnit: currentFarm.temperatureUnit as '°C' | '°F',
-				uuid: currentFarm.uuid,
-				billingCardUuid: currentFarm.billingCardUuid,
-				status: currentFarm.status,
-			})
+			farmForm.resetWithData(currentFarm)
 		}
+	}, [currentFarm])
+
+	// biome-ignore lint: ignore form
+	useEffect(() => {
 		if (currentBillingCard) {
-			billingCardForm.reset({
-				id: currentBillingCard.id,
-				name: currentBillingCard.name,
-				email: currentBillingCard.email,
-				phone: currentBillingCard.phone,
-				address: currentBillingCard.address,
-				uuid: currentBillingCard.uuid,
-				status: currentBillingCard.status,
-			})
+			billingCardForm.resetWithData(currentBillingCard)
 		}
-	}, [currentUser, currentFarm, currentBillingCard, userForm, farmForm, billingCardForm])
+	}, [currentBillingCard])
 
 	useEffect(() => {
 		setPageTitle(t('title'))
@@ -264,15 +241,21 @@ const MyAccount = () => {
 									{t('accessibility.phoneHelp')}
 								</div>
 
-								<Select
-									{...userForm.register('language')}
-									legend={t('myProfile.selectLanguage')}
-									defaultLabel={t('myProfile.selectLanguage')}
-									items={languages}
-									disabled={!edit.user}
-									required
-									aria-describedby="language-help"
-									error={userForm.formState.errors.language?.message}
+								<Controller
+									name="language"
+									control={userControl}
+									render={({ field }) => (
+										<Select
+											{...field}
+											legend={t('myProfile.selectLanguage')}
+											defaultLabel={t('myProfile.selectLanguage')}
+											items={languages}
+											disabled={!edit.user}
+											required
+											aria-describedby="language-help"
+											error={userForm.formState.errors.language?.message}
+										/>
+									)}
 								/>
 								<div id="language-help" className="sr-only">
 									{t('accessibility.languageHelp')}
@@ -348,43 +331,61 @@ const MyAccount = () => {
 								</div>
 
 								<div className="grid grid-cols-3 items-center gap-4 w-full">
-									<Select
-										{...farmForm.register('liquidUnit')}
-										legend={t('myFarm.liquidUnit')}
-										defaultLabel={t('myFarm.liquidUnit')}
-										items={liquidUnit}
-										disabled={!edit.farm}
-										required
-										aria-describedby="liquid-unit-help"
-										error={farmForm.formState.errors.liquidUnit?.message}
+									<Controller
+										name="liquidUnit"
+										control={farmControl}
+										render={({ field }) => (
+											<Select
+												{...field}
+												legend={t('myFarm.liquidUnit')}
+												defaultLabel={t('myFarm.liquidUnit')}
+												items={liquidUnit}
+												disabled={!edit.farm}
+												required
+												aria-describedby="liquid-unit-help"
+												error={farmForm.formState.errors.liquidUnit?.message}
+											/>
+										)}
 									/>
 									<div id="liquid-unit-help" className="sr-only">
 										{t('accessibility.liquidUnitHelp')}
 									</div>
 
-									<Select
-										{...farmForm.register('weightUnit')}
-										legend={t('myFarm.weightUnit')}
-										defaultLabel={t('myFarm.weightUnit')}
-										items={weightUnit}
-										disabled={!edit.farm}
-										required
-										aria-describedby="weight-unit-help"
-										error={farmForm.formState.errors.weightUnit?.message}
+									<Controller
+										name="weightUnit"
+										control={farmControl}
+										render={({ field }) => (
+											<Select
+												{...field}
+												legend={t('myFarm.weightUnit')}
+												defaultLabel={t('myFarm.weightUnit')}
+												items={weightUnit}
+												disabled={!edit.farm}
+												required
+												aria-describedby="weight-unit-help"
+												error={farmForm.formState.errors.weightUnit?.message}
+											/>
+										)}
 									/>
 									<div id="weight-unit-help" className="sr-only">
 										{t('accessibility.weightUnitHelp')}
 									</div>
 
-									<Select
-										{...farmForm.register('temperatureUnit')}
-										legend={t('myFarm.temperatureUnit')}
-										defaultLabel={t('myFarm.temperatureUnit')}
-										items={temperatureUnit}
-										disabled={!edit.farm}
-										required
-										aria-describedby="temperature-unit-help"
-										error={farmForm.formState.errors.temperatureUnit?.message}
+									<Controller
+										name="temperatureUnit"
+										control={farmControl}
+										render={({ field }) => (
+											<Select
+												{...field}
+												legend={t('myFarm.temperatureUnit')}
+												defaultLabel={t('myFarm.temperatureUnit')}
+												items={temperatureUnit}
+												disabled={!edit.farm}
+												required
+												aria-describedby="temperature-unit-help"
+												error={farmForm.formState.errors.temperatureUnit?.message}
+											/>
+										)}
 									/>
 									<div id="temperature-unit-help" className="sr-only">
 										{t('accessibility.temperatureUnitHelp')}
