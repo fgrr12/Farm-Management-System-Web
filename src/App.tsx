@@ -29,7 +29,7 @@ import { ToastManager } from '@/components/layout/ToastManager'
 import { PWAInstallPrompt } from '@/components/pwa/PWAInstallPrompt.component'
 import { PWAUpdatePrompt } from '@/components/pwa/PWAUpdatePrompt.component'
 
-import { VoiceRecorder } from './components/layout/VoiceRecorder/VoiceRecorder'
+// import { VoiceRecorder } from './components/layout/VoiceRecorder/VoiceRecorder'
 import { usePreloadRoutes } from './hooks/ui/usePreloadRoutes'
 
 gsap.registerPlugin(SplitText, useGSAP)
@@ -296,7 +296,7 @@ export const App = () => {
 						onCancel={modalData.onCancel}
 					/>
 					<Loading open={appLoading || authLoading} />
-					{user && <VoiceRecorder />}
+					{/* {user && <VoiceRecorder />} */}
 					<ToastManager />
 					<OfflineIndicator />
 					<PWAUpdatePrompt />

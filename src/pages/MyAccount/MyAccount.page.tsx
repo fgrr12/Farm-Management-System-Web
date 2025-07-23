@@ -149,10 +149,14 @@ const MyAccount = () => {
 				<h1 className="sr-only">{t('title')}</h1>
 			</header>
 
-			<section id="profile-section" className="flex flex-col p-4" aria-labelledby="profile-heading">
-				<div className="flex flex-col p-4 gap-4 border-2 rounded-xl border-gray-200">
-					<header className="flex items-center gap-4">
-						<h2 id="profile-heading" className="text-xl font-bold">
+			<section
+				id="profile-section"
+				className="flex flex-col p-2 sm:p-4"
+				aria-labelledby="profile-heading"
+			>
+				<div className="flex flex-col p-3 sm:p-4 gap-3 sm:gap-4 border-2 rounded-xl border-gray-200">
+					<header className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+						<h2 id="profile-heading" className="text-lg sm:text-xl font-bold">
 							{t('myProfile.title')}
 						</h2>
 						<ActionButton
@@ -165,9 +169,9 @@ const MyAccount = () => {
 							aria-pressed={edit.user}
 						/>
 					</header>
-					<p className="text-lg">{t('myProfile.subtitle')}</p>
+					<p className="text-base sm:text-lg">{t('myProfile.subtitle')}</p>
 					<form
-						className="flex flex-col gap-4 w-full"
+						className="flex flex-col gap-3 sm:gap-4 w-full"
 						onSubmit={userForm.handleSubmit(handleSubmitUser)}
 						autoComplete="off"
 						aria-labelledby="profile-heading"
@@ -175,7 +179,7 @@ const MyAccount = () => {
 					>
 						<fieldset className="border-0 p-0 m-0">
 							<legend className="sr-only">{t('accessibility.personalInformation')}</legend>
-							<div className="grid grid-cols-3 items-center gap-4 w-full">
+							<div className="grid grid-cols-1 md:grid-cols-3 items-center gap-4 w-full">
 								<TextField
 									{...userForm.register('name')}
 									label={t('myProfile.name')}
@@ -220,7 +224,7 @@ const MyAccount = () => {
 								</div>
 							</div>
 
-							<div className="grid grid-cols-3 items-center gap-4 w-full">
+							<div className="grid grid-cols-1 md:grid-cols-3 items-center gap-4 w-full">
 								<TextField
 									{...userForm.register('phone')}
 									label={t('myProfile.phone')}
@@ -269,10 +273,10 @@ const MyAccount = () => {
 			</section>
 
 			{(currentUser?.role === 'admin' || currentUser?.role === 'owner') && (
-				<section className="flex flex-col p-4" aria-labelledby="farm-heading">
-					<div className="flex flex-col p-4 gap-4 border-2 rounded-xl border-gray-200">
-						<header className="flex items-center gap-4">
-							<h2 id="farm-heading" className="text-xl font-bold">
+				<section className="flex flex-col p-2 sm:p-4" aria-labelledby="farm-heading">
+					<div className="flex flex-col p-3 sm:p-4 gap-3 sm:gap-4 border-2 rounded-xl border-gray-200">
+						<header className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+							<h2 id="farm-heading" className="text-lg sm:text-xl font-bold">
 								{t('myFarm.title')}
 							</h2>
 							<ActionButton
@@ -285,9 +289,9 @@ const MyAccount = () => {
 								aria-pressed={edit.farm}
 							/>
 						</header>
-						<p className="text-lg">{t('myFarm.subtitle')}</p>
+						<p className="text-base sm:text-lg">{t('myFarm.subtitle')}</p>
 						<form
-							className="flex flex-col gap-4 w-full"
+							className="flex flex-col gap-3 sm:gap-4 w-full"
 							onSubmit={farmForm.handleSubmit(handleSubmitFarm)}
 							autoComplete="off"
 							aria-labelledby="farm-heading"
@@ -295,7 +299,7 @@ const MyAccount = () => {
 						>
 							<fieldset className="border-0 p-0 m-0">
 								<legend className="sr-only">{t('accessibility.farmInformation')}</legend>
-								<div className="grid grid-cols-3 items-center gap-4 w-full">
+								<div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4 w-full">
 									<TextField
 										{...farmForm.register('name')}
 										label={t('myFarm.name')}
@@ -325,7 +329,7 @@ const MyAccount = () => {
 									</div>
 								</div>
 
-								<div className="grid grid-cols-3 items-center gap-4 w-full">
+								<div className="grid grid-cols-1 md:grid-cols-3 items-center gap-4 w-full">
 									<Controller
 										name="liquidUnit"
 										control={farmForm.control}
@@ -400,10 +404,10 @@ const MyAccount = () => {
 			)}
 
 			{(currentUser?.role === 'admin' || currentUser?.role === 'owner') && (
-				<section className="flex flex-col p-4" aria-labelledby="billing-heading">
-					<div className="flex flex-col p-4 gap-4 border-2 rounded-xl border-gray-200">
-						<header className="flex items-center gap-4">
-							<h2 id="billing-heading" className="text-xl font-bold">
+				<section className="flex flex-col p-2 sm:p-4" aria-labelledby="billing-heading">
+					<div className="flex flex-col p-3 sm:p-4 gap-3 sm:gap-4 border-2 rounded-xl border-gray-200">
+						<header className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+							<h2 id="billing-heading" className="text-lg sm:text-xl font-bold">
 								{t('myBillingCard.title')}
 							</h2>
 							<ActionButton
@@ -420,7 +424,7 @@ const MyAccount = () => {
 						</header>
 
 						<form
-							className="flex flex-col gap-4 w-full"
+							className="flex flex-col gap-3 sm:gap-4 w-full"
 							onSubmit={billingCardForm.handleSubmit(handleSubmitBillingCard)}
 							autoComplete="off"
 							aria-labelledby="billing-heading"
@@ -429,8 +433,8 @@ const MyAccount = () => {
 							<fieldset className="border-0 p-0 m-0">
 								<legend className="sr-only">{t('accessibility.billingInformation')}</legend>
 
-								<div className="flex flex-row gap-4 w-full items-center">
-									<p className="text-lg">{t('myBillingCard.subtitle')}</p>
+								<div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full items-start sm:items-center">
+									<p className="text-base sm:text-lg">{t('myBillingCard.subtitle')}</p>
 									<label className="label flex items-center gap-2">
 										<input
 											{...billingCardForm.register('status')}
@@ -452,7 +456,7 @@ const MyAccount = () => {
 									</div>
 								</div>
 
-								<div className="grid grid-cols-3 items-center gap-4 w-full">
+								<div className="grid grid-cols-1 md:grid-cols-3 items-center gap-4 w-full">
 									<TextField
 										{...billingCardForm.register('id')}
 										label={t('myBillingCard.id')}
@@ -496,7 +500,7 @@ const MyAccount = () => {
 									</div>
 								</div>
 
-								<div className="grid grid-cols-3 items-center gap-4 w-full">
+								<div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4 w-full">
 									<TextField
 										{...billingCardForm.register('phone')}
 										label={t('myBillingCard.phone')}
