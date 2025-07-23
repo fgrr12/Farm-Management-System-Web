@@ -64,7 +64,7 @@ jobs:
           pnpm format:check
 
       - name: Ejecutar tests
-        run: pnpm test --run
+        run: pnpm test
 
       - name: Commit pnpm-lock.yaml si es nuevo
         if: ${{ !hashFiles('pnpm-lock.yaml') }}
