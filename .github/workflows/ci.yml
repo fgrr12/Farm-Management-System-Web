@@ -9,56 +9,76 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
 
     env:
       IS_PROD: ${{ github.ref == 'refs/heads/main' }}
-      FIREBASE_SERVICE_ACCOUNT: ${{ github.ref == 'refs/heads/main' && secrets.FIREBASE_SERVICE_ACCOUNT_PROD || secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}
       FIREBASE_PROJECT_ID: ${{ github.ref == 'refs/heads/main' && 'my-farm-8161d' || 'cattle-ea97b' }}
       FIREBASE_TARGET: ${{ github.ref == 'refs/heads/main' && 'production' || 'develop' }}
 
     steps:
       - name: Checkout código
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '22'
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
       - name: Instalar dependencias
-        run: npm install
+        run: pnpm install --frozen-lockfile
+
+      - name: Verificar calidad del código
+        run: |
+          pnpm lint:check
+          pnpm format:check
+
+      - name: Ejecutar tests
+        run: pnpm test --run
 
       - name: Crear archivo .env
         run: |
-          if [ "${{ env.IS_PROD }}" = "true" ]; then
-            echo "VITE_API_KEY=${{ secrets.VITE_API_KEY_PROD }}" >> .env
-            echo "VITE_AUTH_DOMAIN=${{ secrets.VITE_AUTH_DOMAIN_PROD }}" >> .env
-            echo "VITE_PROJECT_ID=${{ secrets.VITE_PROJECT_ID_PROD }}" >> .env
-            echo "VITE_STORAGE_BUCKET=${{ secrets.VITE_STORAGE_BUCKET_PROD }}" >> .env
-            echo "VITE_MESSAGING_SENDER_ID=${{ secrets.VITE_MESSAGING_SENDER_ID_PROD }}" >> .env
-            echo "VITE_APP_ID=${{ secrets.VITE_APP_ID_PROD }}" >> .env
-          else
-            echo "VITE_API_KEY=${{ secrets.VITE_API_KEY_DEV }}" >> .env
-            echo "VITE_AUTH_DOMAIN=${{ secrets.VITE_AUTH_DOMAIN_DEV }}" >> .env
-            echo "VITE_PROJECT_ID=${{ secrets.VITE_PROJECT_ID_DEV }}" >> .env
-            echo "VITE_STORAGE_BUCKET=${{ secrets.VITE_STORAGE_BUCKET_DEV }}" >> .env
-            echo "VITE_MESSAGING_SENDER_ID=${{ secrets.VITE_MESSAGING_SENDER_ID_DEV }}" >> .env
-            echo "VITE_APP_ID=${{ secrets.VITE_APP_ID_DEV }}" >> .env
-          fi
+          cat << EOF > .env
+          VITE_API_KEY=${{ secrets.VITE_API_KEY }}
+          VITE_AUTH_DOMAIN=${{ secrets.VITE_AUTH_DOMAIN }}
+          VITE_PROJECT_ID=${{ secrets.VITE_PROJECT_ID }}
+          VITE_STORAGE_BUCKET=${{ secrets.VITE_STORAGE_BUCKET }}
+          VITE_MESSAGING_SENDER_ID=${{ secrets.VITE_MESSAGING_SENDER_ID }}
+          VITE_APP_ID=${{ secrets.VITE_APP_ID }}
+          EOF
 
       - name: Build del proyecto
         run: |
           if [ "${{ env.IS_PROD }}" = "true" ]; then
-            npm run build:production
+            pnpm build:production
           else
-            npm run build:develop
+            pnpm build:develop
           fi
 
       - name: Deploy a Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: ${{ env.FIREBASE_SERVICE_ACCOUNT }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           projectId: ${{ env.FIREBASE_PROJECT_ID }}
           target: ${{ env.FIREBASE_TARGET }}
           channelId: 'live'
