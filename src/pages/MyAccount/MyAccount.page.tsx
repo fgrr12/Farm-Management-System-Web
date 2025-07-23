@@ -36,9 +36,6 @@ const MyAccount = () => {
 	const farmForm = useFarmForm()
 	const billingCardForm = useBillingCardForm()
 
-	const { control: userControl } = userForm
-	const { control: farmControl } = farmForm
-
 	const languages = [
 		{ value: 'spa', name: t('myProfile.languageList.spa') },
 		{ value: 'eng', name: t('myProfile.languageList.eng') },
@@ -81,8 +78,6 @@ const MyAccount = () => {
 
 	const handleSubmitFarm = useCallback(
 		async (data: any) => {
-			console.log(data);
-
 			await withLoadingAndError(async () => {
 				const farmData = farmForm.transformToApiFormat(data)
 
@@ -243,7 +238,7 @@ const MyAccount = () => {
 
 								<Controller
 									name="language"
-									control={userControl}
+									control={userForm.control}
 									render={({ field }) => (
 										<Select
 											{...field}
@@ -333,7 +328,7 @@ const MyAccount = () => {
 								<div className="grid grid-cols-3 items-center gap-4 w-full">
 									<Controller
 										name="liquidUnit"
-										control={farmControl}
+										control={farmForm.control}
 										render={({ field }) => (
 											<Select
 												{...field}
@@ -353,7 +348,7 @@ const MyAccount = () => {
 
 									<Controller
 										name="weightUnit"
-										control={farmControl}
+										control={farmForm.control}
 										render={({ field }) => (
 											<Select
 												{...field}
@@ -373,7 +368,7 @@ const MyAccount = () => {
 
 									<Controller
 										name="temperatureUnit"
-										control={farmControl}
+										control={farmForm.control}
 										render={({ field }) => (
 											<Select
 												{...field}

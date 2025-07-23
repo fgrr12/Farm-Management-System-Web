@@ -19,12 +19,12 @@ export const BreedFormRow = memo(({ breed, editable, onChange, onRemove }: Breed
 	// Form hook for breed validation
 	const breedForm = useBreedForm(breed)
 
-	// Update form when breed data changes
+	// biome-ignore lint: ignore unnecessary things
 	useEffect(() => {
 		if (editable) {
 			breedForm.resetWithData(breed)
 		}
-	}, [breed, editable, breedForm])
+	}, [breed, editable])
 
 	const handleFieldChange = useCallback(
 		(field: keyof Breed, value: string | number) => {

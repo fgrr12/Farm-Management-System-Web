@@ -40,11 +40,12 @@ export const SpeciesFormCard = memo(
 
 		const specieBreeds = breeds.filter((breed) => breed.speciesUuid === specie.uuid)
 
+		// biome-ignore lint: ignore unnecessary things
 		useEffect(() => {
 			if (specie.editable) {
 				speciesForm.resetWithData(specie)
 			}
-		}, [specie, speciesForm])
+		}, [specie])
 
 		const handleSpecieFieldChange = useCallback(
 			(field: keyof Species, value: string | number) => {
