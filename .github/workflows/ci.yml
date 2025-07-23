@@ -9,11 +9,10 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
+    environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
 
     env:
       IS_PROD: ${{ github.ref == 'refs/heads/main' }}
-      FIREBASE_SERVICE_ACCOUNT: ${{ github.ref == 'refs/heads/main' && secrets.FIREBASE_SERVICE_ACCOUNT_PROD || secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}
       FIREBASE_PROJECT_ID: ${{ github.ref == 'refs/heads/main' && 'my-farm-8161d' || 'cattle-ea97b' }}
       FIREBASE_TARGET: ${{ github.ref == 'refs/heads/main' && 'production' || 'develop' }}
 
