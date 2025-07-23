@@ -99,6 +99,16 @@ jobs:
             pnpm build:develop
           fi
 
+      - name: Debug información del deploy
+        run: |
+          echo "🔍 Información del Deploy:"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}"
+          echo "IS_PROD: ${{ env.IS_PROD }}"
+          echo "FIREBASE_PROJECT_ID: ${{ env.FIREBASE_PROJECT_ID }}"
+          echo "FIREBASE_TARGET: ${{ env.FIREBASE_TARGET }}"
+          echo "Build mode: ${{ env.IS_PROD == 'true' && 'production' || 'develop' }}"
+
       - name: Deploy a Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:

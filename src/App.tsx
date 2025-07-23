@@ -26,6 +26,8 @@ import { OfflineIndicator } from '@/components/layout/OfflineIndicator'
 import { SEO } from '@/components/layout/SEO'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { ToastManager } from '@/components/layout/ToastManager'
+import { PWAInstallPrompt } from '@/components/pwa/PWAInstallPrompt.component'
+import { PWAUpdatePrompt } from '@/components/pwa/PWAUpdatePrompt.component'
 
 import { VoiceRecorder } from './components/layout/VoiceRecorder/VoiceRecorder'
 import { usePreloadRoutes } from './hooks/ui/usePreloadRoutes'
@@ -297,6 +299,8 @@ export const App = () => {
 					{user && <VoiceRecorder />}
 					<ToastManager />
 					<OfflineIndicator />
+					<PWAUpdatePrompt />
+					<PWAInstallPrompt />
 				</main>
 			</div>
 		</div>
