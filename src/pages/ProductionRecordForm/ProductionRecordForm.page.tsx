@@ -100,9 +100,9 @@ const ProductionRecordForm = () => {
 	}, [params.productionRecordUuid, setPageTitle, t])
 
 	return (
-		<div className="flex flex-col justify-center items-center w-full overflow-auto p-5">
+		<div className="flex flex-col justify-center items-center w-full overflow-auto p-3 sm:p-5">
 			<form
-				className="flex flex-col sm:grid sm:grid-cols-2 items-center gap-4 max-w-[400px] w-full"
+				className="flex flex-col md:grid md:grid-cols-2 items-center gap-3 sm:gap-4 max-w-[500px] w-full"
 				onSubmit={handleSubmit(onSubmit)}
 				autoComplete="off"
 				noValidate

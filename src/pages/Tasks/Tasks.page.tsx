@@ -102,7 +102,7 @@ const Tasks = () => {
 	}, [setPageTitle, t])
 
 	return (
-		<div className="flex flex-col gap-4 p-4 w-full h-full">
+		<div className="flex flex-col gap-3 sm:gap-4 p-3 sm:p-4 w-full h-full">
 			<a
 				href="#tasks-content"
 				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
@@ -118,7 +118,7 @@ const Tasks = () => {
 				<h2 id="filters-heading" className="sr-only">
 					{t('accessibility.filtersSection')}
 				</h2>
-				<div className="flex flex-col md:grid md:grid-cols-6 items-center justify-center gap-4 w-full">
+				<div className="flex flex-col sm:grid sm:grid-cols-2 lg:grid-cols-6 items-center justify-center gap-3 sm:gap-4 w-full">
 					<Search
 						placeholder={t('search')}
 						onChange={handleDebounceSearch}
@@ -160,7 +160,7 @@ const Tasks = () => {
 						onChange={handleSelectChange}
 						aria-label={t('filterBySpecies')}
 					/>
-					<div className="col-start-6 w-full">
+					<div className="sm:col-span-2 lg:col-start-6 lg:col-span-1 w-full">
 						<Button onClick={handleAddTask} aria-describedby="add-task-description">
 							{t('addTask')}
 						</Button>

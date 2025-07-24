@@ -254,7 +254,7 @@ const RelatedAnimalsForm = () => {
 		setPageTitle(t('title'))
 	}, [setPageTitle, t])
 	return (
-		<div className="flex flex-col sm:grid sm:grid-cols-4 p-4 gap-4 sm:gap-6 w-full h-full">
+		<div className="flex flex-col md:grid md:grid-cols-2 lg:grid-cols-4 p-3 sm:p-4 gap-3 sm:gap-4 lg:gap-6 w-full h-full">
 			<a
 				href="#main-content"
 				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded"

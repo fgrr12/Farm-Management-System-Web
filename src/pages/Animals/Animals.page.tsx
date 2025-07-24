@@ -138,7 +138,7 @@ const Animals = () => {
 		}
 	}, [filteredAnimals])
 	return (
-		<div className="flex flex-col gap-5 p-4 w-full h-full overflow-auto relative pb-18">
+		<div className="flex flex-col gap-4 sm:gap-5 p-3 sm:p-4 w-full h-full overflow-auto relative pb-18">
 			<a
 				href="#animals-grid"
 				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
@@ -154,7 +154,7 @@ const Animals = () => {
 				<h2 id="filters-heading" className="sr-only">
 					{t('accessibility.filtersSection')}
 				</h2>
-				<div className="flex flex-col md:grid md:grid-cols-6 items-center justify-center md:gap-4 w-full">
+				<div className="flex flex-col sm:grid sm:grid-cols-2 lg:grid-cols-6 items-center justify-center gap-3 sm:gap-4 w-full">
 					<Search
 						placeholder={t('search')}
 						value={filters.search}
@@ -190,7 +190,7 @@ const Animals = () => {
 					/>
 					<Button
 						type="button"
-						className="btn btn-primary h-12 w-full text-lg col-start-6 mt-4 md:mt-0"
+						className="btn btn-primary h-12 w-full text-lg sm:col-span-2 lg:col-start-6 lg:col-span-1 mt-4 sm:mt-0"
 						onClick={navigateToAddAnimal}
 						aria-describedby="add-animal-description"
 					>

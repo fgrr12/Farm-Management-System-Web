@@ -206,7 +206,7 @@ const Animal = () => {
 	}, [params.animalUuid, farm, getInitialData, setPageTitle])
 
 	return (
-		<div className="flex flex-col gap-4 lg:gap-10 p-4 w-full h-full overflow-auto">
+		<div className="flex flex-col gap-3 sm:gap-4 lg:gap-10 p-3 sm:p-4 w-full h-full overflow-auto">
 			<div className="flex flex-col-reverse lg:flex-row gap-4 w-full">
 				<div className="flex flex-col gap-4 w-full">
 					<div className="flex flex-row justify-center items-center gap-4 w-full">
@@ -226,7 +226,7 @@ const Animal = () => {
 							/>
 						)}
 					</div>
-					<div className="grid grid-cols-2 gap-2 w-full justify-center items-center">
+					<div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-2 w-full justify-center items-center">
 						<div className="flex flex-col gap-2 w-full">
 							<DetailItem label={t('animalId')} value={animal.animalId} />
 							<DetailItem label={t('species')} value={specie?.name} />

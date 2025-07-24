@@ -63,7 +63,7 @@ const TaskForm = () => {
 	}, [farm])
 
 	return (
-		<div className="flex flex-col justify-center items-center w-full overflow-auto p-5">
+		<div className="flex flex-col justify-center items-center w-full overflow-auto p-3 sm:p-5">
 			<a
 				href="#task-form"
 				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
@@ -73,7 +73,7 @@ const TaskForm = () => {
 
 			<form
 				id="task-form"
-				className="flex flex-col items-center gap-4 max-w-[400px] w-full"
+				className="flex flex-col items-center gap-3 sm:gap-4 max-w-[500px] w-full"
 				onSubmit={handleSubmit(onSubmit)}
 				autoComplete="off"
 				aria-labelledby="form-heading"

@@ -66,7 +66,7 @@ const Employees = () => {
 		setPageTitle(t('title'))
 	}, [setPageTitle, t])
 	return (
-		<div className="flex flex-col gap-5 p-4 w-full h-full overflow-auto">
+		<div className="flex flex-col gap-4 sm:gap-5 p-3 sm:p-4 w-full h-full overflow-auto">
 			<a
 				href="#employees-table"
 				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
@@ -82,7 +82,7 @@ const Employees = () => {
 				<h2 id="search-heading" className="sr-only">
 					{t('accessibility.searchSection')}
 				</h2>
-				<div className="flex flex-col md:grid md:grid-cols-3 items-center justify-center gap-4 w-full">
+				<div className="flex flex-col sm:grid sm:grid-cols-2 lg:grid-cols-3 items-center justify-center gap-3 sm:gap-4 w-full">
 					<Search
 						placeholder={t('search')}
 						value={search}
@@ -96,7 +96,7 @@ const Employees = () => {
 
 					<button
 						type="button"
-						className="btn btn-primary h-12 w-full text-lg col-start-3"
+						className="btn btn-primary h-12 w-full text-lg sm:col-span-2 lg:col-start-3 lg:col-span-1"
 						onClick={handleAddEmployee}
 						aria-describedby="add-employee-description"
 					>

@@ -189,8 +189,8 @@ const MySpecies = () => {
 	}, [setPageTitle, t])
 
 	return (
-		<div className="flex flex-col w-full h-full p-4 gap-4 overflow-auto">
-			<div className="flex flex-col sm:grid sm:grid-cols-3 items-center justify-center gap-4 w-full">
+		<div className="flex flex-col w-full h-full p-3 sm:p-4 gap-3 sm:gap-4 overflow-auto">
+			<div className="flex flex-col sm:grid sm:grid-cols-3 items-center justify-center gap-3 sm:gap-4 w-full">
 				<Search placeholder={t('search')} />
 				<div className="col-start-3 w-full">
 					<Button title={t('addMoreSpecies')} onClick={handleAddSpecie}>
@@ -199,7 +199,7 @@ const MySpecies = () => {
 				</div>
 			</div>
 
-			<div className="grid grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-4 w-full">
+			<div className="grid grid-cols-1 lg:grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-3 sm:gap-4 w-full">
 				{species.map((specie) => (
 					<SpeciesFormCard
 						key={specie.uuid}
