@@ -148,6 +148,7 @@ build-storybook.log
 .netlify/
 
 # PWA
+dev-dist/
 sw.js
 workbox-*.js
 precache-manifest.*.js
