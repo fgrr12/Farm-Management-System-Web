@@ -1,88 +1,30 @@
 import dayjs from 'dayjs'
-import { type ChangeEvent, type FormEvent, useEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo } from 'react'
+import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
 
-import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
-
-import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 
 import { HealthRecordsService } from '@/services/healthRecords'
 
 import { DatePicker } from '@/components/layout/DatePicker'
+import { Button } from '@/components/ui/Button'
 import { Select } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
-import type { HealthRecordFormType } from './HealthRecordForm.types'
+import { useHealthRecordForm } from '@/hooks/forms/useHealthRecordForm'
+import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
-// Custom hook for form state management
-const useHealthRecordForm = (initialForm: HealthRecord) => {
-	const [form, setForm] = useState(initialForm)
+import type { HealthRecordFormData } from '@/schemas'
 
-	const handleTextChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-		const { name, value } = event.target
-		setForm((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
-	}
-
-	const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
-		const { name, value } = event.target
-		setForm((prev) => ({ ...prev, [name]: value }))
-	}
-
-	const handleDateChange = () => (newDate: dayjs.Dayjs | null) => {
-		setForm((prev) => ({
-			...prev,
-			date: newDate ? dayjs(newDate).toISOString() : dayjs().toISOString(),
-		}))
-	}
-
-	return { form, setForm, handleTextChange, handleSelectChange, handleDateChange }
-}
-
-// Custom hook for form submission
-const useHealthRecordSubmit = (form: HealthRecord, userUuid: string, navigate: any) => {
-	const { t } = useTranslation(['healthRecordForm'])
-	const { setLoading, setToastData } = useAppStore()
-	const params = useParams()
-
-	const handleSubmit = async (event: FormEvent) => {
-		try {
-			setLoading(true)
-			event.preventDefault()
-			const healthRecordUuid = params.healthRecordUuid as string
-			form.uuid = healthRecordUuid ?? crypto.randomUUID()
-
-			if (healthRecordUuid) {
-				await HealthRecordsService.updateHealthRecord(form, userUuid)
-				setToastData({
-					message: t('toast.editHealthRecord'),
-					type: 'success',
-				})
-				navigate(AppRoutes.ANIMAL.replace(':animalUuid', form.animalUuid))
-			} else {
-				await HealthRecordsService.setHealthRecord(form, userUuid)
-				setToastData({
-					message: t('toast.addHealthRecord'),
-					type: 'success',
-				})
-				navigate(AppRoutes.ANIMAL.replace(':animalUuid', form.animalUuid))
-			}
-		} catch (_error) {
-			setToastData({
-				message: t('toast.errorAddingHealthRecord'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
-
-	return handleSubmit
+interface HealthRecordFormType {
+	value: string
+	name: string
 }
 
 const HealthRecordForm = () => {
@@ -91,10 +33,19 @@ const HealthRecordForm = () => {
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation(['healthRecordForm'])
-	const { setLoading, setToastData, setHeaderTitle } = useAppStore()
+	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
 
-	const { form, setForm, handleTextChange, handleSelectChange, handleDateChange } =
-		useHealthRecordForm(INITIAL_HEALTH_RECORD_FORM)
+	const form = useHealthRecordForm()
+	const {
+		handleSubmit,
+		control,
+		setValue,
+		register,
+		formState: { errors, isSubmitting },
+		transformToApiFormat,
+		getErrorMessage,
+		resetWithData,
+	} = form
 
 	const healthRecordTypes: HealthRecordFormType[] = useMemo(
 		() => [
@@ -110,166 +61,179 @@ const HealthRecordForm = () => {
 		[t]
 	)
 
-	const handleSubmit = useHealthRecordSubmit(form, user!.uuid, navigate)
+	const onSubmit = useCallback(
+		async (data: HealthRecordFormData) => {
+			if (!user) return
 
-	const getHealthRecord = async () => {
-		try {
-			setLoading(true)
-			const healthRecordUuid = params.healthRecordUuid as string
-			const dbHealthRecord = await HealthRecordsService.getHealthRecord(healthRecordUuid)
-			setForm(dbHealthRecord)
-		} catch (_error) {
-			setToastData({
-				message: t('toast.errorGettingHealthRecord'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
+			await withLoadingAndError(async () => {
+				const healthRecordData = transformToApiFormat(data)
+				const healthRecordUuid = params.healthRecordUuid
+				healthRecordData.uuid = healthRecordUuid ?? crypto.randomUUID()
 
-	// biome-ignore lint:: UseEffect is only called once
+				if (healthRecordUuid) {
+					await HealthRecordsService.updateHealthRecord(healthRecordData, user.uuid)
+					showToast(t('toast.edited'), 'success')
+					navigate(AppRoutes.ANIMAL.replace(':animalUuid', healthRecordData.animalUuid))
+				} else {
+					await HealthRecordsService.setHealthRecord(healthRecordData, user.uuid)
+					showToast(t('toast.added'), 'success')
+					navigate(AppRoutes.ANIMAL.replace(':animalUuid', healthRecordData.animalUuid))
+				}
+			}, t('toast.errorAddingHealthRecord'))
+		},
+		[
+			user,
+			params.healthRecordUuid,
+			transformToApiFormat,
+			withLoadingAndError,
+			showToast,
+			t,
+			navigate,
+		]
+	)
+
+	const getHealthRecord = useCallback(async () => {
+		await withLoadingAndError(async () => {
+			if (!params.healthRecordUuid) return null
+
+			const healthRecordUuid = params.healthRecordUuid
+			const healthRecord = await HealthRecordsService.getHealthRecord(healthRecordUuid)
+			resetWithData(healthRecord)
+			return healthRecord
+		}, t('toast.errorGettingHealthRecord'))
+	}, [params.healthRecordUuid, withLoadingAndError, t, resetWithData])
+
 	useEffect(() => {
-		if (user) {
-			const animalUuid = params.animalUuid ?? ''
-			setForm((prev) => ({ ...prev, animalUuid }))
-			if (params.healthRecordUuid) {
-				getHealthRecord()
-			}
+		if (!user) return
+		const animalUuid = params.animalUuid
+		setValue('animalUuid', animalUuid || '')
+		if (params.healthRecordUuid) {
+			getHealthRecord()
 		}
-	}, [user])
+	}, [user, params.animalUuid, params.healthRecordUuid, getHealthRecord, setValue])
 
 	useEffect(() => {
-		const title = params.healthRecordUuid ? t('editHealthRecord') : t('addHealthRecord')
-		setHeaderTitle(title)
-	}, [setHeaderTitle, t, params.healthRecordUuid])
+		setPageTitle(params.healthRecordUuid ? t('editHealthRecordTitle') : t('addHealthRecordTitle'))
+	}, [params.healthRecordUuid, setPageTitle, t])
 
 	return (
-		<div className="flex flex-col justify-center items-center w-full overflow-auto p-5">
+		<div className="flex flex-col justify-center items-center w-full overflow-auto p-3 sm:p-5">
 			<form
-				className="flex flex-col sm:grid sm:grid-cols-2 items-center gap-4 max-w-[800px] w-full"
-				onSubmit={handleSubmit}
+				className="flex flex-col md:grid md:grid-cols-2 items-center gap-3 sm:gap-4 max-w-[600px] w-full"
+				onSubmit={handleSubmit(onSubmit)}
 				autoComplete="off"
+				noValidate
 			>
 				<TextField
-					name="reason"
+					{...register('reason')}
 					type="text"
 					placeholder={t('reason')}
 					label={t('reason')}
-					value={form.reason}
-					onChange={handleTextChange}
 					required
+					error={errors.reason ? getErrorMessage(errors.reason.message || '') : undefined}
 				/>
-				<Select
+				<Controller
 					name="type"
-					legend={t('selectType')}
-					defaultLabel={t('selectType')}
-					value={form.type}
-					items={healthRecordTypes}
-					onChange={handleSelectChange}
-					required
+					control={control}
+					render={({ field }) => (
+						<Select
+							{...field}
+							legend={t('selectType')}
+							defaultLabel={t('selectType')}
+							items={healthRecordTypes}
+							required
+							error={errors.type ? getErrorMessage(errors.type.message || '') : undefined}
+						/>
+					)}
 				/>
-
 				<TextField
-					name="reviewedBy"
+					{...register('reviewedBy')}
 					type="text"
 					placeholder={t('reviewedBy')}
 					label={t('reviewedBy')}
-					value={form.reviewedBy}
-					onChange={handleTextChange}
 					required
+					error={errors.reviewedBy ? getErrorMessage(errors.reviewedBy.message || '') : undefined}
 				/>
-				<DatePicker
-					legend={t('date')}
-					label={t('date')}
-					date={dayjs(form.date)}
-					onDateChange={handleDateChange()}
+				<Controller
+					name="date"
+					control={control}
+					render={({ field }) => (
+						<DatePicker
+							legend={t('date')}
+							label={t('date')}
+							date={dayjs(field.value)}
+							onDateChange={(date) => {
+								field.onChange(dayjs(date).format('YYYY-MM-DD'))
+							}}
+							error={errors.date ? getErrorMessage(errors.date.message || '') : undefined}
+						/>
+					)}
 				/>
 				<TextField
-					name="weight"
+					{...register('weight', { valueAsNumber: true })}
 					type="number"
 					placeholder={`${t('weight')} (${farm?.weightUnit})`}
 					label={`${t('weight')} (${farm?.weightUnit})`}
-					value={form.weight}
-					onChange={handleTextChange}
 					onWheel={(e) => e.currentTarget.blur()}
+					error={errors.weight ? getErrorMessage(errors.weight.message || '') : undefined}
 				/>
 				<TextField
-					name="temperature"
+					{...register('temperature', { valueAsNumber: true })}
 					type="number"
 					placeholder={`${t('temperature')} (${farm?.temperatureUnit})`}
 					label={`${t('temperature')} (${farm?.temperatureUnit})`}
-					value={form.temperature}
-					onChange={handleTextChange}
 					onWheel={(e) => e.currentTarget.blur()}
+					error={errors.temperature ? getErrorMessage(errors.temperature.message || '') : undefined}
 				/>
 				<TextField
-					name="medication"
+					{...register('medication')}
 					type="text"
 					placeholder="-"
 					label={t('medication')}
-					value={form.medication}
-					onChange={handleTextChange}
+					error={errors.medication ? getErrorMessage(errors.medication.message || '') : undefined}
 				/>
 				<TextField
-					name="dosage"
+					{...register('dosage')}
 					type="text"
 					placeholder="-"
 					label={t('dosage')}
-					value={form.dosage}
-					onChange={handleTextChange}
+					error={errors.dosage ? getErrorMessage(errors.dosage.message || '') : undefined}
 				/>
 				<TextField
-					name="frequency"
+					{...register('frequency')}
 					type="text"
 					placeholder="-"
 					label={t('frequency')}
-					value={form.frequency}
-					onChange={handleTextChange}
+					error={errors.frequency ? getErrorMessage(errors.frequency.message || '') : undefined}
 				/>
 				<TextField
-					name="duration"
+					{...register('duration')}
 					type="text"
 					placeholder="-"
 					label={t('duration')}
-					value={form.duration}
-					onChange={handleTextChange}
+					error={errors.duration ? getErrorMessage(errors.duration.message || '') : undefined}
 				/>
 				<div className="col-span-2 w-full">
 					<Textarea
-						name="notes"
+						{...register('notes')}
 						placeholder={t('notes')}
 						label={t('notes')}
-						value={form.notes}
-						onChange={handleTextChange}
 						required
+						error={errors.notes ? getErrorMessage(errors.notes.message || '') : undefined}
 					/>
 				</div>
-
-				<button type="submit" className="btn btn-primary h-12 w-full text-lg col-span-2">
-					{params.healthRecordUuid ? t('editButton') : t('addButton')}
-				</button>
+				<div className="col-span-2 w-full">
+					<Button type="submit" disabled={isSubmitting}>
+						{isSubmitting
+							? t('common:loading')
+							: params.healthRecordUuid
+								? t('editButton')
+								: t('addButton')}
+					</Button>
+				</div>
 			</form>
 		</div>
 	)
 }
 
-const INITIAL_HEALTH_RECORD_FORM: HealthRecord = {
-	uuid: crypto.randomUUID(),
-	animalUuid: '',
-	reason: '',
-	notes: '',
-	type: '',
-	reviewedBy: '',
-	createdBy: '',
-	date: dayjs().toISOString(),
-	weight: 0,
-	temperature: 0,
-	medication: '',
-	dosage: '',
-	frequency: '',
-	duration: '',
-	status: true,
-}
-
-export default HealthRecordForm
+export default memo(HealthRecordForm)

@@ -1,4 +1,17 @@
 {
+	"accessibility": {
+		"addTaskDescription": "Navegar al formulario para crear una nueva tarea",
+		"completedTaskStatusHelp": "Desmarca esta casilla para marcar la tarea como pendiente",
+		"completedTasksList": "Lista de {{count}} tareas completadas",
+		"filtersSection": "Filtrar y buscar tareas",
+		"markTaskComplete": "Marcar tarea \"{{title}}\" como completada",
+		"markTaskPending": "Marcar tarea \"{{title}}\" como pendiente",
+		"pendingTasksList": "Lista de {{count}} tareas pendientes",
+		"priorityIndicator": "Prioridad: {{priority}}",
+		"searchTasks": "Buscar tareas por título o descripción",
+		"skipToTasks": "Saltar a la lista de tareas",
+		"taskStatusHelp": "Marca esta casilla para marcar la tarea como completada"
+	},
 	"addTask": "Añadir tarea",
 	"completed": "Completadas",
 	"filterByPriority": "Filtra por prioridad",

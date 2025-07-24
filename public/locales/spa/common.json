@@ -3,6 +3,31 @@
 		"return": "Volver"
 	},
 	"loading": "Cargando",
+	"offline": {
+		"noConnection": "Sin conexión a internet",
+		"pendingOperations": "{{count}} operación pendiente",
+		"pendingOperations_plural": "{{count}} operaciones pendientes"
+	},
+	"pwa": {
+		"install": {
+			"title": "Instalar App Cattle",
+			"message": "Instala la aplicación para acceso rápido y funcionalidad sin conexión.",
+			"install": "Instalar",
+			"installing": "Instalando...",
+			"share": "Compartir",
+			"dismiss": "Ahora no"
+		},
+		"updateAvailable": {
+			"title": "Actualización Disponible",
+			"message": "Una nueva versión de la aplicación está disponible. Actualiza ahora para obtener las últimas funciones.",
+			"update": "Actualizar",
+			"later": "Más tarde"
+		},
+		"offlineReady": {
+			"title": "Listo para Uso Sin Conexión",
+			"message": "La aplicación ahora está en caché y lista para funcionar sin conexión."
+		}
+	},
 	"select": {
 		"default": "Selecciona una opción"
 	},

@@ -1,7 +1,7 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { SplitText } from 'gsap/SplitText'
-import { useEffect, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -15,9 +15,9 @@ import { UserService } from '@/services/user'
 
 import { BackButton } from '@/components/ui/Button'
 
-import { useBackRoute } from '@/hooks/useBackRoute'
+import { useBackRoute } from '@/hooks/ui/useBackRoute'
 
-export const Navbar = () => {
+export const Navbar = memo(() => {
 	const drawerRef = useRef<HTMLInputElement>(null)
 	const titleRef = useRef<HTMLHeadingElement>(null)
 	const drawerTitleRef = useRef<HTMLHeadingElement>(null)
@@ -31,34 +31,40 @@ export const Navbar = () => {
 
 	const [theme, setTheme] = useState<string>(localStorage.getItem('theme') || 'light')
 
-	const backButtonHidden =
-		location.pathname === AppRoutes.ANIMALS ||
-		location.pathname === AppRoutes.EMPLOYEES ||
-		location.pathname === AppRoutes.TASKS ||
-		location.pathname === AppRoutes.MY_ACCOUNT ||
-		location.pathname === AppRoutes.MY_SPECIES ||
-		location.pathname === AppRoutes.BILLING_CARD
+	const backButtonHidden = useMemo(
+		() =>
+			location.pathname === AppRoutes.ANIMALS ||
+			location.pathname === AppRoutes.EMPLOYEES ||
+			location.pathname === AppRoutes.TASKS ||
+			location.pathname === AppRoutes.MY_ACCOUNT ||
+			location.pathname === AppRoutes.MY_SPECIES ||
+			location.pathname === AppRoutes.BILLING_CARD,
+		[location.pathname]
+	)
 
-	const handleBack = () => {
+	const handleBack = useCallback(() => {
 		navigate(backRoute as string)
-	}
+	}, [navigate, backRoute])
 
-	const closeDrawer = () => {
+	const closeDrawer = useCallback(() => {
 		if (drawerRef.current) drawerRef.current.checked = false
-	}
+	}, [])
 
-	const goTo = (path: string) => () => {
-		navigate(path)
-		closeDrawer()
-	}
+	const goTo = useCallback(
+		(path: string) => () => {
+			navigate(path)
+			closeDrawer()
+		},
+		[navigate, closeDrawer]
+	)
 
-	const handleLogout = async () => {
+	const handleLogout = useCallback(async () => {
 		if (!user) return
 		await UserService.logout()
 		setUser(null)
 		setFarm(null)
 		navigate(AppRoutes.LOGIN)
-	}
+	}, [user, setUser, setFarm, navigate])
 
 	useEffect(() => {
 		localStorage.setItem('theme', theme)
@@ -117,7 +123,11 @@ export const Navbar = () => {
 				<div className="navbar bg-base-100 shadow-sm">
 					<div className="navbar-start">
 						<div className="dropdown">
-							<label htmlFor="my-drawer" className="btn btn-ghost btn-circle">
+							<label
+								htmlFor="my-drawer"
+								className="btn btn-ghost btn-circle"
+								aria-label="Open menu"
+							>
 								<i className="i-flowbite-bars-from-left-outline w-8! h-8!" />
 							</label>
 							{!backButtonHidden && (
@@ -133,7 +143,7 @@ export const Navbar = () => {
 						</h2>
 					</div>
 					<div className="navbar-end">
-						<button type="button" className="btn btn-ghost btn-circle">
+						<button type="button" className="btn btn-ghost btn-circle" aria-label="Notifications">
 							<div className="indicator">
 								<i className="i-material-symbols-notifications-outline-sharp w-6! h-6!" />
 								<span className="badge badge-xs badge-primary indicator-item animate-pulse" />
@@ -144,7 +154,11 @@ export const Navbar = () => {
 			</div>
 			<div className="drawer-side z-10">
 				<label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay" />
-				<ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
+				<ul
+					className="menu bg-base-200 text-base-content min-h-full w-80 p-4"
+					role="navigation"
+					aria-label="Main navigation"
+				>
 					{farm && (
 						<h2 ref={drawerTitleRef} className="text-xl font-bold mb-2 text-center">
 							{farm!.name}
@@ -242,7 +256,7 @@ export const Navbar = () => {
 					</li>
 					<div className="divider" />
 					<li>
-						<label className="swap swap-rotate">
+						<label className="swap swap-rotate" aria-label="Toggle theme">
 							<input
 								type="checkbox"
 								className="theme-controller"
@@ -257,4 +271,4 @@ export const Navbar = () => {
 			</div>
 		</div>
 	)
-}
+})

@@ -1,0 +1,41 @@
+{
+	"name": "Cattle Farm Management System",
+	"short_name": "Cattle Farm",
+	"description": "Professional farm management software for livestock operations. Track animals, manage employees, schedule tasks, and monitor health records.",
+	"start_url": "/",
+	"display": "standalone",
+	"background_color": "#ffffff",
+	"theme_color": "#1f2937",
+	"orientation": "portrait-primary",
+	"scope": "/",
+	"lang": "en",
+	"categories": ["business", "productivity", "agriculture"],
+	"icons": [
+		{
+			"src": "/vite.svg",
+			"sizes": "any",
+			"type": "image/svg+xml",
+			"purpose": "any"
+		}
+	],
+	"shortcuts": [
+		{
+			"name": "Animals",
+			"short_name": "Animals",
+			"description": "Manage your livestock",
+			"url": "/animals"
+		},
+		{
+			"name": "Tasks",
+			"short_name": "Tasks",
+			"description": "View and manage farm tasks",
+			"url": "/tasks"
+		},
+		{
+			"name": "Employees",
+			"short_name": "Staff",
+			"description": "Manage farm employees",
+			"url": "/employees"
+		}
+	]
+}

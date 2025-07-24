@@ -1,4 +1,15 @@
 {
+	"accessibility": {
+		"addAnimalDescription": "Navegar al formulario para añadir un nuevo animal",
+		"animalCardLabel": "Animal {{animalId}}, {{breedName}}, {{gender}}",
+		"animalsGrid": "Lista mostrando {{count}} animales",
+		"animalsListHeading": "Lista de animales",
+		"filtersSection": "Filtrar y buscar animales",
+		"results": "resultados",
+		"resultsCounter": "Contador de resultados",
+		"searchAnimals": "Buscar animales por ID",
+		"skipToAnimals": "Saltar a la lista de animales"
+	},
 	"addAnimal": "Añadir animal",
 	"filterByGender": "Filtrar por género",
 	"filterBySpecies": "Filtra por especie",

@@ -1,4 +1,17 @@
 {
+	"accessibility": {
+		"addTaskDescription": "Navigate to form to create a new task",
+		"completedTaskStatusHelp": "Uncheck this box to mark the task as pending",
+		"completedTasksList": "List of {{count}} completed tasks",
+		"filtersSection": "Filter and search tasks",
+		"markTaskComplete": "Mark task \"{{title}}\" as complete",
+		"markTaskPending": "Mark task \"{{title}}\" as pending",
+		"pendingTasksList": "List of {{count}} pending tasks",
+		"priorityIndicator": "Priority: {{priority}}",
+		"searchTasks": "Search tasks by title or description",
+		"skipToTasks": "Skip to tasks list",
+		"taskStatusHelp": "Check this box to mark the task as completed"
+	},
 	"addTask": "Add Task",
 	"completed": "Completed",
 	"filterByPriority": "Filter by priority",

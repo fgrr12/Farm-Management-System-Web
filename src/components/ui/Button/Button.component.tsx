@@ -38,9 +38,10 @@ export const Button: FC<ButtonProps> = ({ children, ...props }) => {
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 			className="btn btn-primary h-12 w-full text-lg"
+			disabled={loading}
 			{...props}
 		>
-			{children}
+			{loading ? <span className="loading loading-spinner loading-sm" /> : children}
 		</button>
 	)
 }
@@ -77,6 +78,7 @@ export const BackButton: FC<ButtonProps> = (props) => {
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 			className="btn bg-transparent border-none shadow-none hidden md:inline pl-0 ml-4"
+			aria-label="Go back"
 			{...props}
 		>
 			<i className="i-material-symbols-arrow-left-alt-rounded w-14! h-8!" />

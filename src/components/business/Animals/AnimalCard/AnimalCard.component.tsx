@@ -49,8 +49,15 @@ export const AnimalCard: FC<CardProps> = ({ uuid, animalId, breedName, gender })
 			tabIndex={0}
 			className="animal-card rounded-lg shadow-md hover:shadow-lg transition-shadow p-4 cursor-pointer hover:bg-gray-200 hover:animate-pulse w-full"
 			onClick={navigateToAnimal}
+			onKeyDown={(e) => {
+				if (e.key === 'Enter' || e.key === ' ') {
+					e.preventDefault()
+					navigateToAnimal(e as any)
+				}
+			}}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
+			aria-label={`Animal ${animalId}, ${breedName}, ${gender}`}
 		>
 			<div className="flex justify-center items-center">
 				<span className="text-3xl font-bold">#{animalId}</span>

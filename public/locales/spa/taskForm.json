@@ -1,4 +1,13 @@
 {
+	"accessibility": {
+		"addTaskForm": "Formulario para añadir nueva tarea",
+		"descriptionHelp": "Proporciona instrucciones detalladas para esta tarea",
+		"priorityHelp": "Selecciona el nivel de urgencia para esta tarea",
+		"skipToForm": "Saltar al formulario de tarea",
+		"speciesHelp": "Selecciona a qué especie de animal se aplica esta tarea",
+		"submitHelp": "Crear esta nueva tarea para tu granja",
+		"titleHelp": "Ingresa un nombre descriptivo para esta tarea"
+	},
 	"addTask": "Añadir",
 	"description": "Descripción",
 	"name": "Nombre",
@@ -14,6 +23,16 @@
 	"species": "Especie",
 	"title": "Añadir tarea",
 	"toast": {
-		"errorAddingTask": "Se ha producido un error al añadir la tarea."
+		"errorAddingTask": "Se ha producido un error al añadir la tarea.",
+		"taskAdded": "Tarea añadida exitosamente"
+	},
+	"validation": {
+		"descriptionRequired": "La descripción de la tarea es requerida",
+		"descriptionTooLong": "La descripción de la tarea debe tener 500 caracteres o menos",
+		"priorityRequired": "La prioridad es requerida",
+		"speciesRequired": "La especie es requerida",
+		"titleRequired": "El título de la tarea es requerido",
+		"titleTooLong": "El título de la tarea debe tener 100 caracteres o menos",
+		"uuidRequired": "El UUID de la tarea es requerido"
 	}
 }

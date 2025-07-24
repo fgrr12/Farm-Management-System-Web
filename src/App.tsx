@@ -14,27 +14,50 @@ import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
 import { PrivateRoute } from '@/utils/PrivateRoute'
+import { initializeSEO } from '@/utils/seo'
 
 import { UserService } from '@/services/user'
 
+import { DevelopmentBanner } from '@/components/layout/DevelopmentBanner'
 import { Loading } from '@/components/layout/Loading'
 import { Modal } from '@/components/layout/Modal'
 import { Navbar } from '@/components/layout/Navbar'
+import { OfflineIndicator } from '@/components/layout/OfflineIndicator'
+import { SEO } from '@/components/layout/SEO'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { ToastManager } from '@/components/layout/ToastManager'
+import { PWAInstallPrompt } from '@/components/pwa/PWAInstallPrompt.component'
+import { PWAUpdatePrompt } from '@/components/pwa/PWAUpdatePrompt.component'
 
 // import { VoiceRecorder } from './components/layout/VoiceRecorder/VoiceRecorder'
+import { usePreloadRoutes } from './hooks/ui/usePreloadRoutes'
 
 gsap.registerPlugin(SplitText, useGSAP)
 
-const Animal = lazy(() => import('@/pages/Animal/Animal.page'))
-const AnimalForm = lazy(() => import('@/pages/AnimalForm/AnimalForm.page'))
+// Core pages (loaded immediately)
 const Animals = lazy(() => import('@/pages/Animals/Animals.page'))
+const LoginForm = lazy(() => import('@/pages/LoginForm/LoginForm.page'))
+
+// Secondary pages (preloaded on user interaction)
+const Animal = lazy(() =>
+	import('@/pages/Animal/Animal.page').then((module) => {
+		import('@/pages/AnimalForm/AnimalForm.page')
+		import('@/pages/HealthRecordForm/HealthRecordForm.page')
+		import('@/pages/ProductionRecordForm/ProductionRecordForm.page')
+		return module
+	})
+)
+
+const AnimalForm = lazy(() => import('@/pages/AnimalForm/AnimalForm.page'))
 const BillingCard = lazy(() => import('@/pages/BillingCard/BillingCard.page'))
 const EmployeeForm = lazy(() => import('@/pages/EmployeeForm/EmployeeForm.page'))
-const Employees = lazy(() => import('@/pages/Employees/Employees.page'))
+const Employees = lazy(() =>
+	import('@/pages/Employees/Employees.page').then((module) => {
+		import('@/pages/EmployeeForm/EmployeeForm.page')
+		return module
+	})
+)
 const HealthRecordForm = lazy(() => import('@/pages/HealthRecordForm/HealthRecordForm.page'))
-const LoginForm = lazy(() => import('@/pages/LoginForm/LoginForm.page'))
 const MyAccount = lazy(() => import('@/pages/MyAccount/MyAccount.page'))
 const MySpecies = lazy(() => import('@/pages/MySpecies/MySpecies.page'))
 const ProductionRecordForm = lazy(
@@ -42,7 +65,12 @@ const ProductionRecordForm = lazy(
 )
 const RelatedAnimalsForm = lazy(() => import('@/pages/RelatedAnimalsForm/RelatedAnimalsForm.page'))
 const TaskForm = lazy(() => import('@/pages/TaskForm/TaskForm.page'))
-const Tasks = lazy(() => import('@/pages/Tasks/Tasks.page'))
+const Tasks = lazy(() =>
+	import('@/pages/Tasks/Tasks.page').then((module) => {
+		import('@/pages/TaskForm/TaskForm.page')
+		return module
+	})
+)
 
 export const App = () => {
 	const { user, setUser } = useUserStore()
@@ -52,6 +80,8 @@ export const App = () => {
 	const location = useLocation()
 	const [authLoading, setAuthLoading] = useState(true)
 	const browserLanguage = navigator.language === 'en' ? 'eng' : 'spa'
+
+	usePreloadRoutes()
 
 	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
@@ -80,13 +110,25 @@ export const App = () => {
 		i18n.changeLanguage(user?.language || browserLanguage)
 	}, [user])
 
+	useEffect(() => {
+		initializeSEO()
+	}, [])
+
 	return (
 		<div className="flex flex-col w-full h-screen">
+			<SEO />
+			<DevelopmentBanner />
 			{location.pathname !== AppRoutes.LOGIN && <Navbar />}
 			<div className="flex flex-row w-full h-full overflow-hidden">
 				{location.pathname !== AppRoutes.LOGIN && <Sidebar />}
 				<main className="w-full h-full overflow-auto relative">
-					<Suspense fallback={<Loading open={true} />}>
+					<Suspense
+						fallback={
+							<div className="flex items-center justify-center h-full">
+								<div className="loading loading-spinner loading-lg" />
+							</div>
+						}
+					>
 						<Routes>
 							<Route path="/" element={<Navigate to={AppRoutes.ANIMALS} />} key="home" />
 
@@ -254,8 +296,11 @@ export const App = () => {
 						onCancel={modalData.onCancel}
 					/>
 					<Loading open={appLoading || authLoading} />
-					{/* <VoiceRecorder /> */}
+					{/* {user && <VoiceRecorder />} */}
 					<ToastManager />
+					<OfflineIndicator />
+					<PWAUpdatePrompt />
+					<PWAInstallPrompt />
 				</main>
 			</div>
 		</div>

@@ -1,20 +1,30 @@
 import gsap from 'gsap'
-import { useEffect, useRef } from 'react'
+import type { FC } from 'react'
+import { memo, useCallback, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { LoadingProps, LoadingRef } from './Loading.types'
 
-export const Loading: FC<LoadingProps> = ({ open, ...rest }) => {
+export const Loading: FC<LoadingProps> = memo(({ open, ...rest }) => {
 	const { t } = useTranslation(['common'])
 	const { loadingRef } = useLoading(open)
 
 	const dotsRef = useRef<HTMLSpanElement[]>([])
 	const iconsRef = useRef<HTMLSpanElement[]>([])
 
-	//biome-ignore lint:: ignore it
-	const setDotsRef = (i: number) => (el: HTMLElement | null) => (dotsRef.current[i] = el!)
-	//biome-ignore lint:: ignore it
-	const setIconsRef = (i: number) => (el: HTMLElement | null) => (iconsRef.current[i] = el!)
+	const setDotsRef = useCallback(
+		(i: number) => (el: HTMLElement | null) => {
+			if (el) dotsRef.current[i] = el
+		},
+		[]
+	)
+
+	const setIconsRef = useCallback(
+		(i: number) => (el: HTMLElement | null) => {
+			if (el) iconsRef.current[i] = el
+		},
+		[]
+	)
 
 	useEffect(() => {
 		if (dotsRef.current.length) {
@@ -62,6 +72,8 @@ export const Loading: FC<LoadingProps> = ({ open, ...rest }) => {
 					backdrop:bg-neutral-500
 					z-50
 				"
+				aria-modal="true"
+				aria-label="Loading"
 			>
 				<div className="flex justify-center items-center h-10 mb-8!">
 					<span className="text-white text-4xl mx-1">{t('loading')}</span>
@@ -85,7 +97,7 @@ export const Loading: FC<LoadingProps> = ({ open, ...rest }) => {
 			</dialog>
 		</>
 	)
-}
+})
 
 const useLoading = (open?: boolean) => {
 	const loadingRef: LoadingRef = useRef(null!)

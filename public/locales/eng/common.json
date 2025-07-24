@@ -3,6 +3,31 @@
 		"return": "Return"
 	},
 	"loading": "Loading",
+	"offline": {
+		"noConnection": "No internet connection",
+		"pendingOperations": "{{count}} pending operation",
+		"pendingOperations_plural": "{{count}} pending operations"
+	},
+	"pwa": {
+		"install": {
+			"title": "Install Cattle App",
+			"message": "Install the app for quick access and offline functionality.",
+			"install": "Install",
+			"installing": "Installing...",
+			"share": "Share",
+			"dismiss": "Not now"
+		},
+		"updateAvailable": {
+			"title": "Update Available",
+			"message": "A new version of the app is available. Update now to get the latest features.",
+			"update": "Update",
+			"later": "Later"
+		},
+		"offlineReady": {
+			"title": "Ready for Offline Use",
+			"message": "The app is now cached and ready to work offline."
+		}
+	},
 	"select": {
 		"default": "Select an option"
 	},

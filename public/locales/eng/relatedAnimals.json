@@ -1,4 +1,13 @@
 {
+	"accessibility": {
+		"addExternalRelationDescription": "Opens dialog to add external animal relation",
+		"availableAnimalsContainer": "Available animals for creating relations",
+		"childrenContainer": "Child animals of the selected animal",
+		"externalRelationForm": "Form to add external animal relations",
+		"parentsContainer": "Parent animals of the selected animal",
+		"selectedAnimalCard": "Selected animal information",
+		"skipToMainContent": "Skip to main content"
+	},
 	"addExternalRelation": "Add External Relation",
 	"animals": "Animals",
 	"childrenTitle": "Children",

@@ -1,4 +1,17 @@
 {
+	"accessibility": {
+		"addEmployeeForm": "Add new employee form",
+		"addSubmitHelp": "Add this new employee to your farm",
+		"editEmployeeForm": "Edit employee form",
+		"editSubmitHelp": "Save changes to this employee",
+		"emailHelp": "Enter the employee's email address",
+		"employeeInformation": "Employee information",
+		"lastNameHelp": "Enter the employee's last name",
+		"nameHelp": "Enter the employee's first name",
+		"phoneHelp": "Enter the employee's phone number",
+		"roleHelp": "Select the employee's role and permissions level",
+		"skipToForm": "Skip to employee form"
+	},
 	"addButton": "Add",
 	"addEmployee": "Add Employee",
 	"editButton": "Save",
@@ -14,6 +27,20 @@
 	"toast": {
 		"added": "Employee added successfully.",
 		"edited": "Employee edited successfully.",
-		"errorAddingEmployee": "There was an error adding the employee."
+		"errorAddingEmployee": "There was an error adding the employee.",
+		"errorGettingEmployee": "There was an error getting the employee."
+	},
+	"validation": {
+		"emailInvalid": "Email is invalid",
+		"emailRequired": "Email is required",
+		"emailTooLong": "Email must be 100 characters or less",
+		"lastNameRequired": "Last name is required",
+		"lastNameTooLong": "Last name must be 50 characters or less",
+		"nameRequired": "Name is required",
+		"nameTooLong": "Name must be 50 characters or less",
+		"phoneRequired": "Phone is required",
+		"phoneTooLong": "Phone must be 20 characters or less",
+		"roleRequired": "Role is required",
+		"uuidRequired": "Employee UUID is required"
 	}
 }

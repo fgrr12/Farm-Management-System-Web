@@ -1,0 +1,39 @@
+User-agent: *
+Allow: /
+Allow: /login
+Allow: /animals
+Allow: /employees
+Allow: /tasks
+Allow: /my-species
+
+# Disallow private/sensitive areas
+Disallow: /my-account
+Disallow: /billing-card
+Disallow: /animals/edit/*
+Disallow: /employees/edit/*
+Disallow: /tasks/edit/*
+Disallow: /animal/*
+
+# Disallow API endpoints and admin areas
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /static/
+
+# Allow specific static resources
+Allow: /assets/
+Allow: /images/
+Allow: /*.css
+Allow: /*.js
+Allow: /*.png
+Allow: /*.jpg
+Allow: /*.jpeg
+Allow: /*.gif
+Allow: /*.svg
+Allow: /*.webp
+
+# Sitemap location
+Sitemap: https://cattle-farm.app/sitemap.xml
+
+# Crawl delay (optional - be respectful to servers)
+Crawl-delay: 1

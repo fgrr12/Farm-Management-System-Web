@@ -20,7 +20,11 @@ export const ToastManager = () => {
 	}, [toastData])
 
 	return (
-		<div className="fixed top-18 right-0 sm:right-4 space-y-2 z-50 w-full max-w-sm flex flex-col justify-end items-center">
+		<div
+			className="fixed top-18 right-0 sm:right-4 space-y-2 z-50 w-full max-w-sm flex flex-col justify-end items-center"
+			role="region"
+			aria-label="Notifications"
+		>
 			{toasts.map((toast) => (
 				<Toast key={toast.id} {...toast} onClose={removeToast} />
 			))}

@@ -1,13 +1,11 @@
-import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect } from 'react'
+import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
 
-import { useAppStore } from '@/store/useAppStore'
 import { useUserStore } from '@/store/useUserStore'
-
-import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 
 import { EmployeesService } from '@/services/employees'
 
@@ -15,157 +13,196 @@ import { Button } from '@/components/ui/Button'
 import { Select } from '@/components/ui/Select'
 import { TextField } from '@/components/ui/TextField'
 
-import type { RegisterEmployeeForm } from './EmployeeForm.types'
+import { useEmployeeForm } from '@/hooks/forms/useEmployeeForm'
+import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
+
+import type { EmployeeFormData } from '@/schemas'
 
 const EmployeeForm = () => {
 	const { user } = useUserStore()
-	const { setHeaderTitle, setLoading, setToastData } = useAppStore()
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation(['employeeForm'])
+	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
 
-	const [employee, setEmployee] = useState(INITIAL_EMPLOYEE_DATA)
+	const form = useEmployeeForm()
+	const {
+		register,
+		handleSubmit,
+		control,
+		formState: { errors, isSubmitting },
+		transformToApiFormat,
+		getErrorMessage,
+		resetWithData,
+	} = form
 
-	const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = event.target
-		setEmployee((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
-	}
+	const getEmployee = useCallback(async () => {
+		await withLoadingAndError(async () => {
+			if (!params.employeeUuid) return null
 
-	const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
-		const { name, value } = event.target
-		setEmployee((prev) => ({ ...prev, [name]: value }))
-	}
-
-	const initialData = async () => {
-		try {
 			const employeeUuid = params.employeeUuid as string
 			const employeeData = await EmployeesService.getEmployee(employeeUuid)
-			setEmployee(employeeData)
-		} catch (error) {
-			console.error(error)
-		}
-	}
+			resetWithData(employeeData)
+			return employeeData
+		}, t('toast.errorGettingEmployee'))
+	}, [params.employeeUuid, withLoadingAndError, t, resetWithData])
 
-	const handleSubmit = async (e: FormEvent) => {
-		e.preventDefault()
-		try {
-			setLoading(true)
-			employee.farmUuid = user!.farmUuid!
-			employee.uuid = employee.uuid ?? crypto.randomUUID()
+	const onSubmit = useCallback(
+		async (data: EmployeeFormData) => {
+			if (!user) return
 
-			if (params.employeeUuid) {
-				await EmployeesService.updateEmployee(employee)
-				setToastData({
-					message: t('toast.edited'),
-					type: 'success',
-				})
+			await withLoadingAndError(async () => {
+				const employeeData = transformToApiFormat(data)
+				employeeData.farmUuid = user.farmUuid!
+				employeeData.uuid = employeeData.uuid || crypto.randomUUID()
+
+				if (params.employeeUuid) {
+					await EmployeesService.updateEmployee(employeeData)
+					showToast(t('toast.edited'), 'success')
+					navigate(AppRoutes.EMPLOYEES)
+					return
+				}
+
+				employeeData.createdBy = user.uuid
+				await EmployeesService.setEmployee(employeeData)
+				showToast(t('toast.added'), 'success')
 				navigate(AppRoutes.EMPLOYEES)
-				return
-			}
+			}, t('toast.errorAddingEmployee'))
+		},
+		[user, params.employeeUuid, transformToApiFormat, withLoadingAndError, showToast, t, navigate]
+	)
 
-			employee.createdBy = user!.uuid
-			await EmployeesService.setEmployee(employee)
-			setToastData({
-				message: t('toast.added'),
-				type: 'success',
-			})
-			navigate(AppRoutes.EMPLOYEES)
-		} catch (_error) {
-			setToastData({
-				message: t('toast.errorAddingEmployee'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
-
-	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
 		if (user && params.employeeUuid) {
-			setHeaderTitle('Edit Employee')
-			initialData()
+			getEmployee()
 		}
-	}, [user])
+	}, [user, params.employeeUuid, getEmployee])
 
 	useEffect(() => {
 		const title = params.employeeUuid ? t('editEmployee') : t('addEmployee')
-		setHeaderTitle(title)
-	}, [setHeaderTitle, t, params.employeeUuid])
+		setPageTitle(title)
+	}, [setPageTitle, t, params.employeeUuid])
 
 	return (
-		<div className="flex flex-col justify-center items-center w-full overflow-auto p-5">
-			<form
-				className="flex flex-col items-center gap-4 max-w-[400px] w-full"
-				onSubmit={handleSubmit}
-				autoComplete="off"
+		<div className="flex flex-col justify-center items-center w-full overflow-auto p-3 sm:p-5">
+			<a
+				href="#employee-form"
+				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
 			>
-				<TextField
-					name="name"
-					type="text"
-					placeholder={t('name')}
-					label={t('name')}
-					value={employee.name}
-					onChange={handleTextChange}
-					required
-				/>
-				<TextField
-					name="lastName"
-					type="text"
-					placeholder={t('lastName')}
-					label={t('lastName')}
-					value={employee.lastName}
-					onChange={handleTextChange}
-					required
-				/>
-				<TextField
-					name="email"
-					type="email"
-					placeholder={t('email')}
-					label={t('email')}
-					value={employee.email}
-					onChange={handleTextChange}
-					required
-				/>
-				<TextField
-					name="phone"
-					type="tel"
-					placeholder={t('phone')}
-					label={t('phone')}
-					value={employee.phone}
-					onChange={handleTextChange}
-					required
-				/>
-				<Select
-					name="role"
-					legend={t('selectRole')}
-					defaultLabel={t('selectRole')}
-					value={employee.role}
-					items={[
-						{ value: 'employee', name: t('employee') },
-						{ value: 'owner', name: t('owner') },
-					]}
-					onChange={handleSelectChange}
-					required
-				/>
-				<Button type="submit">{params.employeeUuid ? t('editButton') : t('addButton')}</Button>
+				{t('accessibility.skipToForm')}
+			</a>
+
+			<form
+				id="employee-form"
+				className="flex flex-col items-center gap-3 sm:gap-4 max-w-[500px] w-full"
+				onSubmit={handleSubmit(onSubmit)}
+				autoComplete="off"
+				aria-labelledby="form-heading"
+				noValidate
+			>
+				<h2 id="form-heading" className="sr-only">
+					{params.employeeUuid
+						? t('accessibility.editEmployeeForm')
+						: t('accessibility.addEmployeeForm')}
+				</h2>
+
+				<fieldset className="contents">
+					<legend className="sr-only">{t('accessibility.employeeInformation')}</legend>
+
+					<TextField
+						{...register('name')}
+						type="text"
+						placeholder={t('name')}
+						label={t('name')}
+						required
+						error={errors.name ? getErrorMessage(errors.name.message || '') : undefined}
+						aria-describedby="name-help"
+						autoComplete="given-name"
+					/>
+					<div id="name-help" className="sr-only">
+						{t('accessibility.nameHelp')}
+					</div>
+
+					<TextField
+						{...register('lastName')}
+						type="text"
+						placeholder={t('lastName')}
+						label={t('lastName')}
+						required
+						error={errors.lastName ? getErrorMessage(errors.lastName.message || '') : undefined}
+						aria-describedby="lastName-help"
+						autoComplete="family-name"
+					/>
+					<div id="lastName-help" className="sr-only">
+						{t('accessibility.lastNameHelp')}
+					</div>
+
+					<TextField
+						{...register('email')}
+						type="email"
+						placeholder={t('email')}
+						label={t('email')}
+						required
+						error={errors.email ? getErrorMessage(errors.email.message || '') : undefined}
+						aria-describedby="email-help"
+						autoComplete="email"
+					/>
+					<div id="email-help" className="sr-only">
+						{t('accessibility.emailHelp')}
+					</div>
+
+					<TextField
+						{...register('phone')}
+						type="tel"
+						placeholder={t('phone')}
+						label={t('phone')}
+						required
+						error={errors.phone ? getErrorMessage(errors.phone.message || '') : undefined}
+						aria-describedby="phone-help"
+						autoComplete="tel"
+					/>
+					<div id="phone-help" className="sr-only">
+						{t('accessibility.phoneHelp')}
+					</div>
+
+					<Controller
+						name="role"
+						control={control}
+						render={({ field }) => (
+							<Select
+								{...field}
+								legend={t('selectRole')}
+								defaultLabel={t('selectRole')}
+								items={[
+									{ value: 'employee', name: t('employee') },
+									{ value: 'owner', name: t('owner') },
+								]}
+								required
+								error={errors.role ? getErrorMessage(errors.role.message || '') : undefined}
+								aria-describedby="role-help"
+							/>
+						)}
+					/>
+					<div id="role-help" className="sr-only">
+						{t('accessibility.roleHelp')}
+					</div>
+				</fieldset>
+
+				<Button type="submit" disabled={isSubmitting} aria-describedby="submit-help">
+					{isSubmitting
+						? t('common:loading')
+						: params.employeeUuid
+							? t('editButton')
+							: t('addButton')}
+				</Button>
+				<div id="submit-help" className="sr-only">
+					{params.employeeUuid
+						? t('accessibility.editSubmitHelp')
+						: t('accessibility.addSubmitHelp')}
+				</div>
 			</form>
 		</div>
 	)
 }
 
-const INITIAL_EMPLOYEE_DATA: RegisterEmployeeForm = {
-	uuid: '',
-	name: '',
-	lastName: '',
-	email: '',
-	phone: '',
-	role: '',
-	status: true,
-	farmUuid: '',
-	createdBy: '',
-	photoUrl: '',
-	language: 'spa',
-}
-
-export default EmployeeForm
+export default memo(EmployeeForm)

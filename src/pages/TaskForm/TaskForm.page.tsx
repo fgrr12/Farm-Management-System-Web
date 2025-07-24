@@ -1,14 +1,12 @@
-import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect } from 'react'
+import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
 
-import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
-
-import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 
 import { TasksService } from '@/services/tasks'
 
@@ -17,112 +15,155 @@ import { Select } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
+import { useTaskForm } from '@/hooks/forms/useTaskForm'
+import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
+
+import type { TaskFormData } from '@/schemas'
+
 const TaskForm = () => {
 	const { user } = useUserStore()
 	const { farm, species } = useFarmStore()
-	const { setLoading, setHeaderTitle, setToastData } = useAppStore()
 	const navigate = useNavigate()
 	const { t } = useTranslation(['taskForm'])
+	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
 
-	const [task, setTask] = useState(INITIAL_TASK)
+	const form = useTaskForm()
+	const {
+		handleSubmit,
+		control,
+		register,
+		formState: { errors, isSubmitting },
+		transformToApiFormat,
+		getErrorMessage,
+	} = form
 
-	const handleTextChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-		const { name, value } = event.target
-		setTask((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
-	}
+	const onSubmit = useCallback(
+		async (data: TaskFormData) => {
+			if (!user || !farm) return
 
-	const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
-		const { name, value } = event.target
-		setTask((prev) => ({ ...prev, [name]: value }))
-	}
+			await withLoadingAndError(async () => {
+				const taskData = transformToApiFormat(data)
+				taskData.uuid = taskData.uuid || crypto.randomUUID()
+				taskData.farmUuid = farm.uuid
 
-	const handleSubmit = async (event: FormEvent) => {
-		event.preventDefault()
-		try {
-			setLoading(true)
-			task.uuid = task.uuid || crypto.randomUUID()
-			await TasksService.setTask(task, user!.uuid, farm!.uuid)
-			navigate(AppRoutes.TASKS)
-		} catch (_error) {
-			setToastData({
-				message: t('toast.errorAddingTask'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
+				await TasksService.setTask(taskData, user.uuid, farm.uuid)
+				showToast(t('toast.taskAdded'), 'success')
+				navigate(AppRoutes.TASKS)
+			}, t('toast.errorAddingTask'))
+		},
+		[user, farm, transformToApiFormat, withLoadingAndError, showToast, t, navigate]
+	)
 
 	useEffect(() => {
-		setHeaderTitle(t('title'))
-	}, [setHeaderTitle, t])
+		setPageTitle(t('title'))
+	}, [setPageTitle, t])
 
 	useEffect(() => {
 		if (!farm) return
 	}, [farm])
 
 	return (
-		<div className="flex flex-col justify-center items-center w-full overflow-auto p-5">
-			<form
-				className="flex flex-col items-center gap-4 max-w-[400px] w-full"
-				onSubmit={handleSubmit}
-				autoComplete="off"
+		<div className="flex flex-col justify-center items-center w-full overflow-auto p-3 sm:p-5">
+			<a
+				href="#task-form"
+				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
 			>
+				{t('accessibility.skipToForm')}
+			</a>
+
+			<form
+				id="task-form"
+				className="flex flex-col items-center gap-3 sm:gap-4 max-w-[500px] w-full"
+				onSubmit={handleSubmit(onSubmit)}
+				autoComplete="off"
+				aria-labelledby="form-heading"
+				noValidate
+			>
+				<h2 id="form-heading" className="sr-only">
+					{t('accessibility.addTaskForm')}
+				</h2>
+
 				<TextField
-					name="title"
+					{...register('title')}
 					type="text"
 					placeholder={t('name')}
 					label={t('name')}
-					value={task.title}
-					onChange={handleTextChange}
 					required
+					error={errors.title ? getErrorMessage(errors.title.message || '') : undefined}
+					aria-describedby="title-help"
+					autoComplete="off"
 				/>
+				<div id="title-help" className="sr-only">
+					{t('accessibility.titleHelp')}
+				</div>
+
 				<Textarea
-					name="description"
+					{...register('description')}
 					placeholder={t('description')}
 					label={t('description')}
-					value={task.description}
-					onChange={handleTextChange}
 					required
+					error={errors.description ? getErrorMessage(errors.description.message || '') : undefined}
+					aria-describedby="description-help"
 				/>
-				<Select
+				<div id="description-help" className="sr-only">
+					{t('accessibility.descriptionHelp')}
+				</div>
+
+				<Controller
 					name="priority"
-					legend={t('selectPriority')}
-					defaultLabel={t('selectPriority')}
-					value={task.priority}
-					items={[
-						{ value: 'low', name: t('priorities.low') },
-						{ value: 'medium', name: t('priorities.medium') },
-						{ value: 'high', name: t('priorities.high') },
-					]}
-					onChange={handleSelectChange}
-					required
+					control={control}
+					render={({ field }) => (
+						<Select
+							{...field}
+							legend={t('selectPriority')}
+							defaultLabel={t('selectPriority')}
+							items={[
+								{ value: 'low', name: t('priorities.low') },
+								{ value: 'medium', name: t('priorities.medium') },
+								{ value: 'high', name: t('priorities.high') },
+							]}
+							required
+							error={errors.priority ? getErrorMessage(errors.priority.message || '') : undefined}
+							aria-describedby="priority-help"
+						/>
+					)}
 				/>
-				<Select
+				<div id="priority-help" className="sr-only">
+					{t('accessibility.priorityHelp')}
+				</div>
+
+				<Controller
 					name="speciesUuid"
-					legend={t('selectSpecies')}
-					defaultLabel={t('selectSpecies')}
-					optionValue="uuid"
-					optionLabel="name"
-					value={task.speciesUuid}
-					items={species}
-					onChange={handleSelectChange}
-					required
+					control={control}
+					render={({ field }) => (
+						<Select
+							{...field}
+							legend={t('selectSpecies')}
+							defaultLabel={t('selectSpecies')}
+							optionValue="uuid"
+							optionLabel="name"
+							items={species}
+							required
+							error={
+								errors.speciesUuid ? getErrorMessage(errors.speciesUuid.message || '') : undefined
+							}
+							aria-describedby="species-help"
+						/>
+					)}
 				/>
-				<Button type="submit">{t('addTask')}</Button>
+				<div id="species-help" className="sr-only">
+					{t('accessibility.speciesHelp')}
+				</div>
+
+				<Button type="submit" disabled={isSubmitting} aria-describedby="submit-help">
+					{isSubmitting ? t('common:loading') : t('addTask')}
+				</Button>
+				<div id="submit-help" className="sr-only">
+					{t('accessibility.submitHelp')}
+				</div>
 			</form>
 		</div>
 	)
 }
 
-const INITIAL_TASK: Task = {
-	uuid: '',
-	title: '',
-	description: '',
-	priority: '',
-	status: 'PENDING',
-	speciesUuid: '',
-	farmUuid: '',
-}
-
-export default TaskForm
+export default memo(TaskForm)

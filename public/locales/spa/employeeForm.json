@@ -1,4 +1,17 @@
 {
+	"accessibility": {
+		"addEmployeeForm": "Formulario para añadir nuevo empleado",
+		"addSubmitHelp": "Añadir este nuevo empleado a tu granja",
+		"editEmployeeForm": "Formulario para editar empleado",
+		"editSubmitHelp": "Guardar cambios en este empleado",
+		"emailHelp": "Ingresa la dirección de email del empleado",
+		"employeeInformation": "Información del empleado",
+		"lastNameHelp": "Ingresa el apellido del empleado",
+		"nameHelp": "Ingresa el nombre del empleado",
+		"phoneHelp": "Ingresa el número de teléfono del empleado",
+		"roleHelp": "Selecciona el rol y nivel de permisos del empleado",
+		"skipToForm": "Saltar al formulario de empleado"
+	},
 	"addButton": "Añadir",
 	"addEmployee": "Añadir empleado",
 	"editButton": "Guardar",
@@ -14,6 +27,20 @@
 	"toast": {
 		"added": "Empleado añadido exitosamente.",
 		"edited": "Empleado editado exitosamente.",
-		"errorAddingEmployee": "Se ha producido un error al añadir el empleado."
+		"errorAddingEmployee": "Se ha producido un error al añadir el empleado.",
+		"errorGettingEmployee": "Se ha producido un error al obtener el empleado."
+	},
+	"validation": {
+		"emailInvalid": "El correo electrónico es inválido",
+		"emailRequired": "El correo electrónico es requerido",
+		"emailTooLong": "El correo electrónico debe tener 100 caracteres o menos",
+		"lastNameRequired": "El apellido es requerido",
+		"lastNameTooLong": "El apellido debe tener 50 caracteres o menos",
+		"nameRequired": "El nombre es requerido",
+		"nameTooLong": "El nombre debe tener 50 caracteres o menos",
+		"phoneRequired": "El teléfono es requerido",
+		"phoneTooLong": "El teléfono debe tener 20 caracteres o menos",
+		"roleRequired": "El rol es requerido",
+		"uuidRequired": "El UUID del empleado es requerido"
 	}
 }

@@ -8,3 +8,8 @@ export const {
 	VITE_MEASUREMENT_ID,
 	VITE_FIREBASE_CONFIG,
 } = import.meta.env
+
+export const isDevelopment =
+	import.meta.env.MODE === 'develop' || import.meta.env.MODE === 'local-develop'
+export const isProduction = import.meta.env.MODE === 'production'
+export const currentEnvironment = import.meta.env.MODE

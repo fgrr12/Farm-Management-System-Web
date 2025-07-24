@@ -55,7 +55,7 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 	}
 	return (
 		<div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
-			<table className="table table-zebra">
+			<table className="table table-zebra" aria-label="Employees">
 				<thead>
 					<tr>
 						<th>{t('name')}</th>
@@ -90,7 +90,9 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 					))}
 					{employees.length === 0 && (
 						<tr>
-							<td colSpan={12}>{t('noEmployees')}</td>
+							<td colSpan={6} className="text-center font-bold">
+								{t('noEmployees')}
+							</td>
 						</tr>
 					)}
 				</tbody>

@@ -1,11 +1,9 @@
-import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
+import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
-
-import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 
 import { BillingCardsService } from '@/services/billingCards'
 import { FarmsService } from '@/services/farms'
@@ -16,6 +14,11 @@ import { Button } from '@/components/ui/Button'
 import { Select } from '@/components/ui/Select'
 import { TextField } from '@/components/ui/TextField'
 
+import { useBillingCardForm } from '@/hooks/forms/useBillingCardForm'
+import { useFarmForm } from '@/hooks/forms/useFarmForm'
+import { useUserForm } from '@/hooks/forms/useUserForm'
+import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
+
 const MyAccount = () => {
 	const { user: currentUser, setUser: updateUser } = useUserStore()
 	const {
@@ -24,13 +27,14 @@ const MyAccount = () => {
 		setFarm: updateFarm,
 		setBillingCard: updateBillingCard,
 	} = useFarmStore()
-	const { setHeaderTitle, setLoading, setToastData } = useAppStore()
 	const { t } = useTranslation(['myAccount'])
+	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
 
-	const [user, setUser] = useState<User>(INITIAL_USER_DATA)
-	const [farm, setFarm] = useState<Farm>(INITIAL_FARM_DATA)
-	const [billingCard, setBillingCard] = useState<BillingCard>(INITIAL_BILLING_CARD)
 	const [edit, setEdit] = useState(INITIAL_EDIT)
+
+	const userForm = useUserForm()
+	const farmForm = useFarmForm()
+	const billingCardForm = useBillingCardForm()
 
 	const languages = [
 		{ value: 'spa', name: t('myProfile.languageList.spa') },
@@ -52,396 +56,498 @@ const MyAccount = () => {
 		{ value: '°F', name: t('myFarm.temperatureUnitList.°F') },
 	]
 
-	const handleEdit = (key: 'farm' | 'user' | 'billingCard') => () => {
-		setEdit((prev) => ({ ...prev, [key]: !prev[key] }))
-	}
+	const handleEdit = useCallback(
+		(key: 'farm' | 'user' | 'billingCard') => () => {
+			setEdit((prev) => ({ ...prev, [key]: !prev[key] }))
+		},
+		[]
+	)
 
-	const handleChange =
-		<T extends 'farm' | 'user' | 'billingCard'>(key: T) =>
-		(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-			const { name, value, type } = event.target
-			const newValue = type === 'checkbox' ? (event.target as HTMLInputElement).checked : value
+	const handleSubmitUser = useCallback(
+		async (data: any) => {
+			await withLoadingAndError(async () => {
+				const userData = userForm.transformToApiFormat(data)
+				await UserService.updateUser(userData)
+				updateUser(userData)
+				setEdit((prev) => ({ ...prev, user: false }))
+				showToast(t('myProfile.toast.edited'), 'success')
+			}, t('myProfile.toast.errorEditing'))
+		},
+		[userForm, updateUser, withLoadingAndError, showToast, t]
+	)
 
-			if (key === 'user') {
-				setUser((prev) => ({
-					...prev,
-					[name]: type === 'text' ? capitalizeFirstLetter(newValue as string) : newValue,
-				}))
-			} else if (key === 'farm') {
-				setFarm((prev) => ({
-					...prev,
-					[name]: type === 'text' ? capitalizeFirstLetter(newValue as string) : newValue,
-				}))
-			} else {
-				setBillingCard((prev) => ({
-					...prev,
-					[name]: type === 'text' ? capitalizeFirstLetter(newValue as string) : newValue,
-				}))
-			}
-		}
+	const handleSubmitFarm = useCallback(
+		async (data: any) => {
+			await withLoadingAndError(async () => {
+				const farmData = farmForm.transformToApiFormat(data)
 
-	const handleSubmitUser = async (e: FormEvent) => {
-		e.preventDefault()
-		setLoading(true)
-		try {
-			await UserService.updateUser(user)
-			updateUser(user)
-			setEdit((prev) => ({ ...prev, user: false }))
-			setToastData({
-				message: t('myProfile.toast.edited'),
-				type: 'success',
-			})
-		} catch (_error) {
-			setToastData({
-				message: t('myProfile.toast.errorEditing'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
+				await FarmsService.updateFarm(farmData)
+				updateFarm(farmData)
+				setEdit((prev) => ({ ...prev, farm: false }))
+				showToast(t('myFarm.toast.edited'), 'success')
+			}, t('myFarm.toast.errorEditing'))
+		},
+		[farmForm, updateFarm, withLoadingAndError, showToast, t]
+	)
 
-	const handleSubmitFarm = async (e: FormEvent) => {
-		e.preventDefault()
-		try {
-			setLoading(true)
-			await FarmsService.updateFarm({ ...farm })
-			updateFarm({ ...farm })
-			setEdit((prev) => ({ ...prev, farm: false }))
-			setToastData({
-				message: t('myFarm.toast.edited'),
-				type: 'success',
-			})
-		} catch (_error) {
-			setToastData({
-				message: t('myFarm.toast.errorEditing'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
+	const handleSubmitBillingCard = useCallback(
+		async (data: any) => {
+			await withLoadingAndError(async () => {
+				const billingCardData = billingCardForm.transformToApiFormat(data)
 
-	const handleSubmitBillingCard = async (e: FormEvent) => {
-		e.preventDefault()
-		try {
-			setLoading(true)
-			const uuid = billingCard.uuid ?? crypto.randomUUID()
-			if (billingCard.uuid) {
-				await BillingCardsService.updateBillingCard(billingCard)
-				updateFarm({ ...farm })
-				setToastData({
-					message: t('myBillingCard.toast.edited'),
-					type: 'success',
-				})
-			} else {
-				farm.billingCardUuid = uuid
-				billingCard.uuid = uuid
-				await BillingCardsService.setBillingCard(billingCard)
-				await FarmsService.updateFarm({ ...farm })
-				setToastData({
-					message: t('myBillingCard.toast.added'),
-					type: 'success',
-				})
-			}
-			updateBillingCard(billingCard)
-			setEdit((prev) => ({ ...prev, billingCard: false }))
-		} catch (_error) {
-			setToastData({
-				message: t('myBillingCard.toast.errorEditing'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
+				if (data.uuid) {
+					await BillingCardsService.updateBillingCard(billingCardData)
+					showToast(t('myBillingCard.toast.edited'), 'success')
+				} else {
+					const updatedFarm = { ...currentFarm!, billingCardUuid: billingCardData.uuid }
+					await BillingCardsService.setBillingCard(billingCardData)
+					await FarmsService.updateFarm(updatedFarm)
+					showToast(t('myBillingCard.toast.added'), 'success')
+				}
+				updateBillingCard(billingCardData)
+				setEdit((prev) => ({ ...prev, billingCard: false }))
+			}, t('myBillingCard.toast.errorEditing'))
+		},
+		[currentFarm, billingCardForm, updateBillingCard, withLoadingAndError, showToast, t]
+	)
 
-	// biome-ignore lint:: useEffect is only called once
+	// biome-ignore lint: ignore form
 	useEffect(() => {
-		if (!user || !currentFarm) return
+		if (currentUser) {
+			userForm.resetWithData(currentUser)
+		}
+	}, [currentUser])
 
-		setUser(currentUser!)
-		setFarm({ ...currentFarm! })
-		setBillingCard({ ...currentBillingCard! })
-	}, [currentUser, currentFarm])
+	// biome-ignore lint: ignore form
+	useEffect(() => {
+		if (currentFarm) {
+			farmForm.resetWithData(currentFarm)
+		}
+	}, [currentFarm])
+
+	// biome-ignore lint: ignore form
+	useEffect(() => {
+		if (currentBillingCard) {
+			billingCardForm.resetWithData(currentBillingCard)
+		}
+	}, [currentBillingCard])
 
 	useEffect(() => {
-		setHeaderTitle(t('title'))
-	}, [setHeaderTitle, t])
+		setPageTitle(t('title'))
+	}, [setPageTitle, t])
+
 	return (
 		<div className="flex flex-col w-full h-full">
-			<div className="flex flex-col p-4">
-				<div className="flex flex-col p-4 gap-4 border-2 rounded-xl border-gray-200">
-					<h2 className="flex items-center gap-4 text-xl font-bold">
-						{t('myProfile.title')}
+			<a
+				href="#profile-section"
+				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
+			>
+				{t('accessibility.skipToProfile')}
+			</a>
+
+			<header>
+				<h1 className="sr-only">{t('title')}</h1>
+			</header>
+
+			<section
+				id="profile-section"
+				className="flex flex-col p-2 sm:p-4"
+				aria-labelledby="profile-heading"
+			>
+				<div className="flex flex-col p-3 sm:p-4 gap-3 sm:gap-4 border-2 rounded-xl border-gray-200">
+					<header className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+						<h2 id="profile-heading" className="text-lg sm:text-xl font-bold">
+							{t('myProfile.title')}
+						</h2>
 						<ActionButton
-							title="Edit"
+							title={t('accessibility.editProfile')}
 							icon="i-material-symbols-edit-square-outline"
 							onClick={handleEdit('user')}
+							aria-label={
+								edit.user ? t('accessibility.cancelEditProfile') : t('accessibility.editProfile')
+							}
+							aria-pressed={edit.user}
 						/>
-					</h2>
-					<p className="text-lg">{t('myProfile.subtitle')}</p>
+					</header>
+					<p className="text-base sm:text-lg">{t('myProfile.subtitle')}</p>
 					<form
-						className="flex flex-col gap-4 w-full"
-						onSubmit={handleSubmitUser}
+						className="flex flex-col gap-3 sm:gap-4 w-full"
+						onSubmit={userForm.handleSubmit(handleSubmitUser)}
 						autoComplete="off"
+						aria-labelledby="profile-heading"
+						noValidate
 					>
-						<div className="grid grid-cols-3 items-center gap-4 w-full">
-							<TextField
-								name="name"
-								label={t('myProfile.name')}
-								placeholder={t('myProfile.name')}
-								value={user.name}
-								onChange={handleChange('user')}
-								disabled={!edit.user}
-								required
-							/>
-							<TextField
-								name="lastName"
-								label={t('myProfile.lastName')}
-								placeholder={t('myProfile.lastName')}
-								value={user.lastName}
-								onChange={handleChange('user')}
-								disabled={!edit.user}
-								required
-							/>
-							<TextField
-								name="email"
-								label={t('myProfile.email')}
-								placeholder={t('myProfile.email')}
-								value={user.email}
-								onChange={handleChange('user')}
-								disabled={!edit.user}
-								required
-							/>
-						</div>
-						<div className="grid grid-cols-3 items-center gap-4 w-full">
-							<TextField
-								name="phone"
-								label={t('myProfile.phone')}
-								placeholder={t('myProfile.phone')}
-								value={user.phone}
-								onChange={handleChange('user')}
-								disabled={!edit.user}
-								required
-							/>
-							<Select
-								name="language"
-								legend={t('myProfile.selectLanguage')}
-								defaultLabel={t('myProfile.selectLanguage')}
-								value={user.language}
-								items={languages}
-								onChange={handleChange('user')}
-								disabled={!edit.user}
-								required
-							/>
-						</div>
-						<Button type="submit" disabled={!edit.user}>
+						<fieldset className="border-0 p-0 m-0">
+							<legend className="sr-only">{t('accessibility.personalInformation')}</legend>
+							<div className="grid grid-cols-1 md:grid-cols-3 items-center gap-4 w-full">
+								<TextField
+									{...userForm.register('name')}
+									label={t('myProfile.name')}
+									placeholder={t('myProfile.name')}
+									disabled={!edit.user}
+									required
+									aria-describedby="name-help"
+									autoComplete="given-name"
+									error={userForm.formState.errors.name?.message}
+								/>
+								<div id="name-help" className="sr-only">
+									{t('accessibility.nameHelp')}
+								</div>
+
+								<TextField
+									{...userForm.register('lastName')}
+									label={t('myProfile.lastName')}
+									placeholder={t('myProfile.lastName')}
+									disabled={!edit.user}
+									required
+									aria-describedby="lastName-help"
+									autoComplete="family-name"
+									error={userForm.formState.errors.lastName?.message}
+								/>
+								<div id="lastName-help" className="sr-only">
+									{t('accessibility.lastNameHelp')}
+								</div>
+
+								<TextField
+									{...userForm.register('email')}
+									label={t('myProfile.email')}
+									placeholder={t('myProfile.email')}
+									disabled={!edit.user}
+									required
+									aria-describedby="email-help"
+									autoComplete="email"
+									type="email"
+									error={userForm.formState.errors.email?.message}
+								/>
+								<div id="email-help" className="sr-only">
+									{t('accessibility.emailHelp')}
+								</div>
+							</div>
+
+							<div className="grid grid-cols-1 md:grid-cols-3 items-center gap-4 w-full">
+								<TextField
+									{...userForm.register('phone')}
+									label={t('myProfile.phone')}
+									placeholder={t('myProfile.phone')}
+									disabled={!edit.user}
+									required
+									aria-describedby="phone-help"
+									autoComplete="tel"
+									type="tel"
+									error={userForm.formState.errors.phone?.message}
+								/>
+								<div id="phone-help" className="sr-only">
+									{t('accessibility.phoneHelp')}
+								</div>
+
+								<Controller
+									name="language"
+									control={userForm.control}
+									render={({ field }) => (
+										<Select
+											{...field}
+											legend={t('myProfile.selectLanguage')}
+											defaultLabel={t('myProfile.selectLanguage')}
+											items={languages}
+											disabled={!edit.user}
+											required
+											aria-describedby="language-help"
+											error={userForm.formState.errors.language?.message}
+										/>
+									)}
+								/>
+								<div id="language-help" className="sr-only">
+									{t('accessibility.languageHelp')}
+								</div>
+							</div>
+						</fieldset>
+
+						<Button type="submit" disabled={!edit.user} aria-describedby="save-profile-help">
 							{t('myProfile.edit')}
 						</Button>
+						<div id="save-profile-help" className="sr-only">
+							{t('accessibility.saveProfileHelp')}
+						</div>
 					</form>
 				</div>
-			</div>
-			{(user.role === 'admin' || user.role === 'owner') && (
-				<div className="flex flex-col p-4">
-					<div className="flex flex-col p-4 gap-4 border-2 rounded-xl border-gray-200">
-						<h2 className="flex items-center gap-4 text-xl font-bold">
-							{t('myFarm.title')}
+			</section>
+
+			{(currentUser?.role === 'admin' || currentUser?.role === 'owner') && (
+				<section className="flex flex-col p-2 sm:p-4" aria-labelledby="farm-heading">
+					<div className="flex flex-col p-3 sm:p-4 gap-3 sm:gap-4 border-2 rounded-xl border-gray-200">
+						<header className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+							<h2 id="farm-heading" className="text-lg sm:text-xl font-bold">
+								{t('myFarm.title')}
+							</h2>
 							<ActionButton
-								title="Edit"
+								title={t('accessibility.editFarm')}
 								icon="i-material-symbols-edit-square-outline"
 								onClick={handleEdit('farm')}
+								aria-label={
+									edit.farm ? t('accessibility.cancelEditFarm') : t('accessibility.editFarm')
+								}
+								aria-pressed={edit.farm}
 							/>
-						</h2>
-						<p className="text-lg">{t('myFarm.subtitle')}</p>
+						</header>
+						<p className="text-base sm:text-lg">{t('myFarm.subtitle')}</p>
 						<form
-							className="flex flex-col gap-4 w-full"
-							onSubmit={handleSubmitFarm}
+							className="flex flex-col gap-3 sm:gap-4 w-full"
+							onSubmit={farmForm.handleSubmit(handleSubmitFarm)}
 							autoComplete="off"
+							aria-labelledby="farm-heading"
+							noValidate
 						>
-							<div className="grid grid-cols-3 items-center gap-4 w-full">
-								<TextField
-									name="name"
-									label={t('myFarm.name')}
-									placeholder={t('myFarm.name')}
-									value={farm.name}
-									onChange={handleChange('farm')}
-									disabled={!edit.farm}
-									required
-								/>
-								<TextField
-									name="address"
-									label={t('myFarm.address')}
-									placeholder={t('myFarm.address')}
-									value={farm.address}
-									onChange={handleChange('farm')}
-									disabled={!edit.farm}
-									required
-								/>
-							</div>
-							<div className="grid grid-cols-3 items-center gap-4 w-full">
-								<Select
-									name="liquidUnit"
-									legend={t('myFarm.liquidUnit')}
-									defaultLabel={t('myFarm.liquidUnit')}
-									value={farm.liquidUnit}
-									items={liquidUnit}
-									onChange={handleChange('farm')}
-									disabled={!edit.farm}
-									required
-								/>
-								<Select
-									name="weightUnit"
-									legend={t('myFarm.weightUnit')}
-									defaultLabel={t('myFarm.weightUnit')}
-									value={farm.weightUnit}
-									items={weightUnit}
-									onChange={handleChange('farm')}
-									disabled={!edit.farm}
-									required
-								/>
-								<Select
-									name="temperatureUnit"
-									legend={t('myFarm.temperatureUnit')}
-									defaultLabel={t('myFarm.temperatureUnit')}
-									value={farm.temperatureUnit}
-									items={temperatureUnit}
-									onChange={handleChange('farm')}
-									disabled={!edit.farm}
-									required
-								/>
-							</div>
-							<Button type="submit" disabled={!edit.farm}>
+							<fieldset className="border-0 p-0 m-0">
+								<legend className="sr-only">{t('accessibility.farmInformation')}</legend>
+								<div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4 w-full">
+									<TextField
+										{...farmForm.register('name')}
+										label={t('myFarm.name')}
+										placeholder={t('myFarm.name')}
+										disabled={!edit.farm}
+										required
+										aria-describedby="farm-name-help"
+										autoComplete="organization"
+										error={farmForm.formState.errors.name?.message}
+									/>
+									<div id="farm-name-help" className="sr-only">
+										{t('accessibility.farmNameHelp')}
+									</div>
+
+									<TextField
+										{...farmForm.register('address')}
+										label={t('myFarm.address')}
+										placeholder={t('myFarm.address')}
+										disabled={!edit.farm}
+										required
+										aria-describedby="farm-address-help"
+										autoComplete="street-address"
+										error={farmForm.formState.errors.address?.message}
+									/>
+									<div id="farm-address-help" className="sr-only">
+										{t('accessibility.farmAddressHelp')}
+									</div>
+								</div>
+
+								<div className="grid grid-cols-1 md:grid-cols-3 items-center gap-4 w-full">
+									<Controller
+										name="liquidUnit"
+										control={farmForm.control}
+										render={({ field }) => (
+											<Select
+												{...field}
+												legend={t('myFarm.liquidUnit')}
+												defaultLabel={t('myFarm.liquidUnit')}
+												items={liquidUnit}
+												disabled={!edit.farm}
+												required
+												aria-describedby="liquid-unit-help"
+												error={farmForm.formState.errors.liquidUnit?.message}
+											/>
+										)}
+									/>
+									<div id="liquid-unit-help" className="sr-only">
+										{t('accessibility.liquidUnitHelp')}
+									</div>
+
+									<Controller
+										name="weightUnit"
+										control={farmForm.control}
+										render={({ field }) => (
+											<Select
+												{...field}
+												legend={t('myFarm.weightUnit')}
+												defaultLabel={t('myFarm.weightUnit')}
+												items={weightUnit}
+												disabled={!edit.farm}
+												required
+												aria-describedby="weight-unit-help"
+												error={farmForm.formState.errors.weightUnit?.message}
+											/>
+										)}
+									/>
+									<div id="weight-unit-help" className="sr-only">
+										{t('accessibility.weightUnitHelp')}
+									</div>
+
+									<Controller
+										name="temperatureUnit"
+										control={farmForm.control}
+										render={({ field }) => (
+											<Select
+												{...field}
+												legend={t('myFarm.temperatureUnit')}
+												defaultLabel={t('myFarm.temperatureUnit')}
+												items={temperatureUnit}
+												disabled={!edit.farm}
+												required
+												aria-describedby="temperature-unit-help"
+												error={farmForm.formState.errors.temperatureUnit?.message}
+											/>
+										)}
+									/>
+									<div id="temperature-unit-help" className="sr-only">
+										{t('accessibility.temperatureUnitHelp')}
+									</div>
+								</div>
+							</fieldset>
+
+							<Button type="submit" disabled={!edit.farm} aria-describedby="save-farm-help">
 								{t('myFarm.edit')}
 							</Button>
+							<div id="save-farm-help" className="sr-only">
+								{t('accessibility.saveFarmHelp')}
+							</div>
 						</form>
 					</div>
-				</div>
+				</section>
 			)}
-			{(user.role === 'admin' || user.role === 'owner') && (
-				<div className="flex flex-col p-4">
-					<div className="flex flex-col p-4 gap-4 border-2 rounded-xl border-gray-200">
-						<h2 className="flex items-center gap-4 text-xl font-bold">
-							{t('myBillingCard.title')}
+
+			{(currentUser?.role === 'admin' || currentUser?.role === 'owner') && (
+				<section className="flex flex-col p-2 sm:p-4" aria-labelledby="billing-heading">
+					<div className="flex flex-col p-3 sm:p-4 gap-3 sm:gap-4 border-2 rounded-xl border-gray-200">
+						<header className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+							<h2 id="billing-heading" className="text-lg sm:text-xl font-bold">
+								{t('myBillingCard.title')}
+							</h2>
 							<ActionButton
-								title="Edit"
+								title={t('accessibility.editBilling')}
 								icon="i-material-symbols-edit-square-outline"
 								onClick={handleEdit('billingCard')}
+								aria-label={
+									edit.billingCard
+										? t('accessibility.cancelEditBilling')
+										: t('accessibility.editBilling')
+								}
+								aria-pressed={edit.billingCard}
 							/>
-						</h2>
+						</header>
 
 						<form
-							className="flex flex-col gap-4 w-full"
-							onSubmit={handleSubmitBillingCard}
+							className="flex flex-col gap-3 sm:gap-4 w-full"
+							onSubmit={billingCardForm.handleSubmit(handleSubmitBillingCard)}
 							autoComplete="off"
+							aria-labelledby="billing-heading"
+							noValidate
 						>
-							<div className="flex flex-row gap-4 w-full">
-								<p className="text-lg">{t('myBillingCard.subtitle')}</p>
-								<label className="label">
-									<input
-										name="status"
-										type="checkbox"
-										className="checkbox border-error bg-error checked:border-info checked:bg-info"
-										defaultChecked={billingCard.status}
-										onChange={handleChange('billingCard')}
-										disabled={!edit.billingCard}
-									/>
-									{t(billingCard.status ? 'myBillingCard.active' : 'myBillingCard.inactive')}
-								</label>
-							</div>
+							<fieldset className="border-0 p-0 m-0">
+								<legend className="sr-only">{t('accessibility.billingInformation')}</legend>
 
-							<div className="grid grid-cols-3 items-center gap-4 w-full">
-								<TextField
-									name="id"
-									label={t('myBillingCard.id')}
-									placeholder={t('myBillingCard.id')}
-									value={billingCard.id}
-									onChange={handleChange('billingCard')}
-									disabled={!edit.billingCard}
-									required
-								/>
-								<TextField
-									name="name"
-									label={t('myBillingCard.name')}
-									placeholder={t('myBillingCard.name')}
-									value={billingCard.name}
-									onChange={handleChange('billingCard')}
-									disabled={!edit.billingCard}
-									required
-								/>
-								<TextField
-									name="email"
-									label={t('myBillingCard.email')}
-									placeholder={t('myBillingCard.email')}
-									value={billingCard.email}
-									onChange={handleChange('billingCard')}
-									disabled={!edit.billingCard}
-									required
-								/>
-							</div>
-							<div className="grid grid-cols-3 items-center gap-4 w-full">
-								<TextField
-									name="phone"
-									label={t('myBillingCard.phone')}
-									placeholder={t('myBillingCard.phone')}
-									value={billingCard.phone}
-									onChange={handleChange('billingCard')}
-									disabled={!edit.billingCard}
-									required
-								/>
-								<TextField
-									name="address"
-									label={t('myBillingCard.address')}
-									placeholder={t('myBillingCard.address')}
-									value={billingCard.address}
-									onChange={handleChange('billingCard')}
-									disabled={!edit.billingCard}
-									required
-								/>
-							</div>
-							<Button type="submit" disabled={!edit.billingCard}>
+								<div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full items-start sm:items-center">
+									<p className="text-base sm:text-lg">{t('myBillingCard.subtitle')}</p>
+									<label className="label flex items-center gap-2">
+										<input
+											{...billingCardForm.register('status')}
+											type="checkbox"
+											className="checkbox border-error bg-error checked:border-info checked:bg-info"
+											disabled={!edit.billingCard}
+											aria-describedby="billing-status-help"
+										/>
+										<span>
+											{t(
+												billingCardForm.watch('status')
+													? 'myBillingCard.active'
+													: 'myBillingCard.inactive'
+											)}
+										</span>
+									</label>
+									<div id="billing-status-help" className="sr-only">
+										{t('accessibility.billingStatusHelp')}
+									</div>
+								</div>
+
+								<div className="grid grid-cols-1 md:grid-cols-3 items-center gap-4 w-full">
+									<TextField
+										{...billingCardForm.register('id')}
+										label={t('myBillingCard.id')}
+										placeholder={t('myBillingCard.id')}
+										disabled={!edit.billingCard}
+										required
+										aria-describedby="billing-id-help"
+										error={billingCardForm.formState.errors.id?.message}
+									/>
+									<div id="billing-id-help" className="sr-only">
+										{t('accessibility.billingIdHelp')}
+									</div>
+
+									<TextField
+										{...billingCardForm.register('name')}
+										label={t('myBillingCard.name')}
+										placeholder={t('myBillingCard.name')}
+										disabled={!edit.billingCard}
+										required
+										aria-describedby="billing-name-help"
+										autoComplete="name"
+										error={billingCardForm.formState.errors.name?.message}
+									/>
+									<div id="billing-name-help" className="sr-only">
+										{t('accessibility.billingNameHelp')}
+									</div>
+
+									<TextField
+										{...billingCardForm.register('email')}
+										label={t('myBillingCard.email')}
+										placeholder={t('myBillingCard.email')}
+										disabled={!edit.billingCard}
+										required
+										aria-describedby="billing-email-help"
+										autoComplete="email"
+										type="email"
+										error={billingCardForm.formState.errors.email?.message}
+									/>
+									<div id="billing-email-help" className="sr-only">
+										{t('accessibility.billingEmailHelp')}
+									</div>
+								</div>
+
+								<div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4 w-full">
+									<TextField
+										{...billingCardForm.register('phone')}
+										label={t('myBillingCard.phone')}
+										placeholder={t('myBillingCard.phone')}
+										disabled={!edit.billingCard}
+										required
+										aria-describedby="billing-phone-help"
+										autoComplete="tel"
+										type="tel"
+										error={billingCardForm.formState.errors.phone?.message}
+									/>
+									<div id="billing-phone-help" className="sr-only">
+										{t('accessibility.billingPhoneHelp')}
+									</div>
+
+									<TextField
+										{...billingCardForm.register('address')}
+										label={t('myBillingCard.address')}
+										placeholder={t('myBillingCard.address')}
+										disabled={!edit.billingCard}
+										required
+										aria-describedby="billing-address-help"
+										autoComplete="billing street-address"
+										error={billingCardForm.formState.errors.address?.message}
+									/>
+									<div id="billing-address-help" className="sr-only">
+										{t('accessibility.billingAddressHelp')}
+									</div>
+								</div>
+							</fieldset>
+
+							<Button
+								type="submit"
+								disabled={!edit.billingCard}
+								aria-describedby="save-billing-help"
+							>
 								{t('myBillingCard.edit')}
 							</Button>
+							<div id="save-billing-help" className="sr-only">
+								{t('accessibility.saveBillingHelp')}
+							</div>
 						</form>
 					</div>
-				</div>
+				</section>
 			)}
 		</div>
 	)
-}
-
-const INITIAL_USER_DATA: User = {
-	uuid: '',
-	name: '',
-	lastName: '',
-	email: '',
-	phone: '',
-	status: true,
-	role: 'employee',
-	photoUrl: '',
-	language: 'spa',
-	farmUuid: '',
-}
-
-const INITIAL_BILLING_CARD: BillingCard = {
-	uuid: '',
-	id: '',
-	name: '',
-	phone: '',
-	email: '',
-	address: '',
-	status: false,
-}
-
-const INITIAL_FARM_DATA: Farm = {
-	uuid: '',
-	billingCardUuid: '',
-	name: '',
-	address: '',
-	liquidUnit: 'L',
-	weightUnit: 'Kg',
-	temperatureUnit: '°C',
-	status: true,
 }
 
 const INITIAL_EDIT = {
@@ -450,4 +556,4 @@ const INITIAL_EDIT = {
 	billingCard: false,
 }
 
-export default MyAccount
+export default memo(MyAccount)

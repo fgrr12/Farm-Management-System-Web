@@ -1,11 +1,11 @@
 {
-	"addButton": "Add",
-	"addHealthRecord": "Add Health Record",
+	"addButton": "Add Health Record",
+	"addHealthRecordTitle": "Add Health Record",
 	"date": "Date",
 	"dosage": "Dosage",
 	"duration": "Duration",
-	"editButton": "Save",
-	"editHealthRecord": "Edit Health Record",
+	"editButton": "Update Health Record",
+	"editHealthRecordTitle": "Edit Health Record",
 	"frequency": "Frequency",
 	"healthRecordType": {
 		"birth": "Birth",
@@ -21,14 +21,25 @@
 	"notes": "Notes",
 	"reason": "Reason",
 	"reviewedBy": "Reviewed By",
-	"selectType": "Select a type",
+	"selectType": "Select Type",
 	"temperature": "Temperature",
 	"toast": {
-		"addHealthRecord": "Health record added successfully.",
-		"editHealthRecord": "Health record edited successfully.",
+		"added": "Health record added successfully",
+		"edited": "Health record edited successfully",
 		"errorAddingHealthRecord": "There was an error adding the health record.",
 		"errorGettingHealthRecord": "There was an error getting the health record."
 	},
-	"type": "Type",
+	"validation": {
+		"animalUuidRequired": "Animal UUID is required",
+		"dateFormat": "Date must be in YYYY-MM-DD format",
+		"notesRequired": "Notes are required",
+		"notesTooLong": "Notes must be 500 characters or less",
+		"reasonRequired": "Reason is required",
+		"reasonTooLong": "Reason must be 100 characters or less",
+		"reviewedByRequired": "Reviewed by is required",
+		"reviewedByTooLong": "Reviewed by must be 100 characters or less",
+		"typeRequired": "Type is required",
+		"uuidRequired": "Health record UUID is required"
+	},
 	"weight": "Weight"
 }

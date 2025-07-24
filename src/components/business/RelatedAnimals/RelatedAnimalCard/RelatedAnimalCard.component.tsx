@@ -24,6 +24,9 @@ export const RelatedAnimalCard: FC<CardProps> = ({ animal, ...props }) => {
 		<div
 			className={`card bg-base-100 w-full h-auto shadow-sm cursor-grab ${dragging && 'bg-warning'}`}
 			ref={ref}
+			role="button"
+			tabIndex={0}
+			aria-label={`Animal ${animal.animalId}, ${animal.breed}, ${animal.gender}`}
 			{...props}
 		>
 			<div className="card-body">
@@ -34,7 +37,7 @@ export const RelatedAnimalCard: FC<CardProps> = ({ animal, ...props }) => {
 								<img
 									className="pointer-events-none"
 									src={animal.picture || '/assets/default-imgs/cow.svg'}
-									alt="Animal"
+									alt={`Animal ${animal.animalId}`}
 								/>
 							</div>
 						</div>

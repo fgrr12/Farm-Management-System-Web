@@ -1,10 +1,9 @@
-import { type ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
+import { type ChangeEvent, memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
 
-import { useAppStore } from '@/store/useAppStore'
 import { useUserStore } from '@/store/useUserStore'
 
 import { EmployeesService } from '@/services/employees'
@@ -12,11 +11,13 @@ import { EmployeesService } from '@/services/employees'
 import { EmployeesTable } from '@/components/business/Employees/EmployeesTable'
 import { Search } from '@/components/ui/Search'
 
+import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
+
 const Employees = () => {
 	const { user } = useUserStore()
-	const { setHeaderTitle, setLoading, setToastData } = useAppStore()
 	const navigate = useNavigate()
 	const { t } = useTranslation(['employees'])
+	const { setPageTitle, withLoadingAndError } = usePagePerformance()
 
 	const [employees, setEmployees] = useState<User[]>([])
 	const [search, setSearch] = useState('')
@@ -31,13 +32,13 @@ const Employees = () => {
 		)
 	}, [employees, search])
 
-	const handleAddEmployee = () => {
+	const handleAddEmployee = useCallback(() => {
 		navigate(AppRoutes.ADD_EMPLOYEE)
-	}
+	}, [navigate])
 
-	const handleDebounceSearch = (event: ChangeEvent<HTMLInputElement>) => {
+	const handleDebounceSearch = useCallback((event: ChangeEvent<HTMLInputElement>) => {
 		setSearch(event.target.value)
-	}
+	}, [])
 
 	const handleRemoveEmployee = useCallback(
 		(employeeUuid: string) => async () => {
@@ -46,45 +47,82 @@ const Employees = () => {
 		[employees]
 	)
 
-	const initialData = async () => {
-		try {
-			setLoading(true)
-			const data = await EmployeesService.getEmployees(user!.farmUuid)
-			setEmployees(data)
-		} catch (_error) {
-			setToastData({
-				message: t('toast.errorGettingEmployees'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
+	const initialData = useCallback(async () => {
+		await withLoadingAndError(async () => {
+			if (!user?.farmUuid) return []
 
-	// biome-ignore lint:: UseEffect is only called once
+			const data = await EmployeesService.getEmployees(user.farmUuid)
+			setEmployees(data)
+			return data
+		}, t('toast.errorGettingEmployees'))
+	}, [user?.farmUuid, withLoadingAndError, t])
+
 	useEffect(() => {
 		if (!user) return
 		initialData()
-	}, [user])
+	}, [user, initialData])
 
 	useEffect(() => {
-		setHeaderTitle(t('title'))
-	}, [setHeaderTitle, t])
+		setPageTitle(t('title'))
+	}, [setPageTitle, t])
 	return (
-		<div className="flex flex-col gap-5 p-4 w-full h-full overflow-auto">
-			<div className="flex flex-col md:grid md:grid-cols-3 items-center justify-center gap-4 w-full">
-				<Search placeholder={t('search')} value={search} onChange={handleDebounceSearch} />
-				<button
-					type="button"
-					className="btn btn-primary h-12 w-full text-lg col-start-3"
-					onClick={handleAddEmployee}
-				>
-					{t('addEmployee')}
-				</button>
-			</div>
-			<EmployeesTable employees={filteredEmployees} removeEmployee={handleRemoveEmployee} />
+		<div className="flex flex-col gap-4 sm:gap-5 p-3 sm:p-4 w-full h-full overflow-auto">
+			<a
+				href="#employees-table"
+				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
+			>
+				{t('accessibility.skipToEmployees')}
+			</a>
+
+			<header>
+				<h1 className="sr-only">{t('title')}</h1>
+			</header>
+
+			<section aria-labelledby="search-heading" role="search">
+				<h2 id="search-heading" className="sr-only">
+					{t('accessibility.searchSection')}
+				</h2>
+				<div className="flex flex-col sm:grid sm:grid-cols-2 lg:grid-cols-3 items-center justify-center gap-3 sm:gap-4 w-full">
+					<Search
+						placeholder={t('search')}
+						value={search}
+						onChange={handleDebounceSearch}
+						aria-label={t('accessibility.searchEmployees')}
+						aria-describedby="search-help"
+					/>
+					<div id="search-help" className="sr-only">
+						{t('accessibility.searchHelp')}
+					</div>
+
+					<button
+						type="button"
+						className="btn btn-primary h-12 w-full text-lg sm:col-span-2 lg:col-start-3 lg:col-span-1"
+						onClick={handleAddEmployee}
+						aria-describedby="add-employee-description"
+					>
+						{t('addEmployee')}
+					</button>
+					<div id="add-employee-description" className="sr-only">
+						{t('accessibility.addEmployeeDescription')}
+					</div>
+				</div>
+			</section>
+
+			<section aria-labelledby="employees-heading" aria-live="polite">
+				<h2 id="employees-heading" className="sr-only">
+					{t('accessibility.employeesList')} ({filteredEmployees.length}{' '}
+					{t('accessibility.results')})
+				</h2>
+				<div id="employees-table">
+					<EmployeesTable
+						employees={filteredEmployees}
+						removeEmployee={handleRemoveEmployee}
+						aria-label={t('accessibility.employeesTable', { count: filteredEmployees.length })}
+					/>
+				</div>
+			</section>
 		</div>
 	)
 }
 
-export default Employees
+export default memo(Employees)

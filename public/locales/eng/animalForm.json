@@ -1,4 +1,27 @@
 {
+	"accessibility": {
+		"addAnimalForm": "Add new animal form",
+		"addSubmitHelp": "Add this new animal to your farm",
+		"animalIdHelp": "Unique identifier for this animal",
+		"animalPhoto": "Animal photo",
+		"basicInformation": "Basic animal information",
+		"birthDateHelp": "Select the birth date of this animal",
+		"breedHelp": "Select the breed of this animal. First select a species.",
+		"colorHelp": "Describe the color or markings of this animal",
+		"dateInformation": "Date information",
+		"deathDateHelp": "Select the death date if this animal has died (optional)",
+		"editAnimalForm": "Edit animal form",
+		"editSubmitHelp": "Save changes to this animal",
+		"genderHelp": "Select the gender of this animal",
+		"originHelp": "Describe the origin or source of this animal (optional)",
+		"photoHelp": "Click or drag to upload an animal photo",
+		"purchaseDateHelp": "Select when this animal was purchased (optional)",
+		"skipToForm": "Skip to animal form",
+		"soldDateHelp": "Select when this animal was sold (optional)",
+		"speciesHelp": "Select the species of this animal",
+		"uploadPhoto": "Upload animal photo",
+		"weightHelp": "Enter the weight of this animal in {{unit}}"
+	},
 	"addAnimal": "Add Animal",
 	"addButton": "Add",
 	"animalId": "Animal ID",
@@ -25,6 +48,23 @@
 		"edited": "Animal edited successfully.",
 		"errorAddingAnimal": "There was an error adding the animal.",
 		"errorGettingAnimal": "There was an error getting the animal."
+	},
+	"validation": {
+		"breedRequired": "Breed is required",
+		"colorTooLong": "Color must be 100 characters or less",
+		"dateFormat": "Please enter a valid date (YYYY-MM-DD)",
+		"deathAfterBirth": "Death date must be after birth date",
+		"genderInvalid": "Please select a valid gender",
+		"genderRequired": "Gender is required",
+		"idRequired": "Animal ID is required",
+		"idTooLong": "Animal ID must be 50 characters or less",
+		"originTooLong": "Origin must be 200 characters or less",
+		"purchaseAfterBirth": "Purchase date must be after birth date",
+		"soldAfterBirth": "Sold date must be after birth date",
+		"speciesRequired": "Species is required",
+		"uuidRequired": "Animal UUID is required",
+		"weightPositive": "Weight must be a positive number",
+		"weightTooHigh": "Weight cannot exceed 10,000"
 	},
 	"weight": "Weight"
 }

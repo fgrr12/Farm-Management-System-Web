@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.1.1/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.1.2/schema.json",
 	"javascript": {
 		"formatter": {
 			"quoteStyle": "single",
@@ -39,18 +39,15 @@
 			}
 		}
 	},
+	"files": {
+		"includes": ["src/**/*", "*.ts", "*.tsx", "*.js", "*.jsx", "public/locales/**/*"],
+		"ignoreUnknown": true
+	},
 	"formatter": {
 		"enabled": true,
 		"formatWithErrors": false,
 		"indentStyle": "tab",
-		"lineWidth": 100,
-		"includes": [
-			"**",
-			"!**/node_modules/**",
-			"!**/dist/**",
-			"!**/tsconfig.json",
-			"!**/jsconfig.json"
-		]
+		"lineWidth": 100
 	},
 	"linter": {
 		"enabled": true,
@@ -106,13 +103,6 @@
 				"useKeyWithClickEvents": "off",
 				"useSemanticElements": "off"
 			}
-		},
-		"includes": [
-			"**",
-			"!**/node_modules/**",
-			"!**/dist/**",
-			"!**/tsconfig.json",
-			"!**/jsconfig.json"
-		]
+		}
 	}
 }

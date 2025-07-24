@@ -1,15 +1,14 @@
 import dayjs from 'dayjs'
-import { type ChangeEvent, type FormEvent, useEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
 
-import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
-import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 import { fileToBase64 } from '@/utils/fileToBase64'
 import { formatDate } from '@/utils/formatDate'
 
@@ -21,44 +20,10 @@ import { Select } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
-// Custom hook for form state management
-const useAnimalForm = (initialForm: Animal) => {
-	const [animalForm, setAnimalForm] = useState<Animal>(initialForm)
-	const [pictureUrl, setPictureUrl] = useState<string>('')
+import { useAnimalForm } from '@/hooks/forms/useAnimalForm'
+import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
-	const handleTextChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-		const { name, value } = event.target
-		setAnimalForm((prev) => ({ ...prev, [name]: capitalizeFirstLetter(value) }))
-	}
-
-	const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
-		const { name, value } = event.target
-		setAnimalForm((prev) => ({ ...prev, [name]: value }))
-	}
-
-	const handleDateChange =
-		(key: 'birthDate' | 'purchaseDate' | 'soldDate' | 'deathDate') =>
-		(newDate: dayjs.Dayjs | null) => {
-			setAnimalForm((prev) => ({ ...prev, [key]: newDate ? newDate.format('YYYY-MM-DD') : null }))
-		}
-
-	const handleFile = async (file: File) => {
-		const picture = await fileToBase64(file)
-		const fullDataUrl = `data:${picture.contentType};base64,${picture.data}`
-		setPictureUrl(fullDataUrl)
-		setAnimalForm((prev) => ({ ...prev, picture: picture.data }))
-	}
-
-	return {
-		animalForm,
-		pictureUrl,
-		setAnimalForm,
-		handleTextChange,
-		handleSelectChange,
-		handleDateChange,
-		handleFile,
-	}
-}
+import type { AnimalFormData } from '@/schemas'
 
 const AnimalForm = () => {
 	const { user } = useUserStore()
@@ -67,239 +32,413 @@ const AnimalForm = () => {
 	const params = useParams()
 	const { t } = useTranslation(['animalForm'])
 
-	const { setLoading, setHeaderTitle, setToastData } = useAppStore()
+	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
+
+	const [pictureUrl, setPictureUrl] = useState<string>('')
+
+	const form = useAnimalForm()
 	const {
-		animalForm,
-		pictureUrl,
-		setAnimalForm,
-		handleTextChange,
-		handleSelectChange,
-		handleDateChange,
-		handleFile,
-	} = useAnimalForm(INITIAL_ANIMAL_FORM)
+		handleSubmit,
+		control,
+		watch,
+		setValue,
+		reset,
+		register,
+		formState: { errors, isSubmitting },
+		transformToApiFormat,
+		getErrorMessage,
+		resetWithData,
+	} = form
+
+	const watchedSpeciesUuid = watch('speciesUuid')
 
 	const filteredBreeds = useMemo(() => {
-		return breeds.filter((breed) => breed.speciesUuid === animalForm.speciesUuid)
-	}, [breeds, animalForm.speciesUuid])
+		return breeds.filter((breed) => breed.speciesUuid === watchedSpeciesUuid)
+	}, [breeds, watchedSpeciesUuid])
 
-	const getAnimal = async () => {
-		try {
-			setLoading(true)
+	useEffect(() => {
+		if (watchedSpeciesUuid) {
+			const currentBreedUuid = watch('breedUuid')
+			const isValidBreed = filteredBreeds.some((breed) => breed.uuid === currentBreedUuid)
+			if (!isValidBreed) {
+				setValue('breedUuid', '')
+			}
+		}
+	}, [watchedSpeciesUuid, filteredBreeds, setValue, watch])
+
+	const handleFile = useCallback(
+		async (file: File) => {
+			const picture = await fileToBase64(file)
+			const fullDataUrl = `data:${picture.contentType};base64,${picture.data}`
+			setPictureUrl(fullDataUrl)
+			setValue('picture', picture.data)
+		},
+		[setValue]
+	)
+
+	const getAnimal = useCallback(async () => {
+		await withLoadingAndError(async () => {
+			if (!params.animalUuid) return null
+
 			const animalUuid = params.animalUuid as string
 			const dbAnimal = await AnimalsService.getAnimal(animalUuid)
-			setAnimalForm(dbAnimal)
-		} catch (_error) {
-			setToastData({
-				message: t('toast.errorGettingAnimal'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
 
-	const handleSubmit = async (event: FormEvent) => {
-		try {
-			setLoading(true)
-			event.preventDefault()
-			const animalUuid = params.animalUuid as string
-			animalForm.uuid = animalUuid ?? crypto.randomUUID()
+			resetWithData(dbAnimal)
 
-			if (animalForm.birthDate) {
-				animalForm.birthDate = formatDate(animalForm.birthDate)
+			if (dbAnimal.picture) {
+				setPictureUrl(`data:image/jpeg;base64,${dbAnimal.picture}`)
 			}
 
-			if (animalForm.purchaseDate) {
-				animalForm.purchaseDate = formatDate(animalForm.purchaseDate)
-			}
+			return dbAnimal
+		}, t('toast.errorGettingAnimal'))
+	}, [params.animalUuid, withLoadingAndError, t, resetWithData])
 
-			if (animalForm.soldDate) {
-				animalForm.soldDate = formatDate(animalForm.soldDate)
-			}
+	const onSubmit = useCallback(
+		async (data: AnimalFormData) => {
+			if (!user) return
 
-			if (animalForm.deathDate) {
-				animalForm.deathDate = formatDate(animalForm.deathDate)
-			}
+			await withLoadingAndError(async () => {
+				const animalUuid = params.animalUuid as string
 
-			if (animalUuid) {
-				await AnimalsService.updateAnimal(animalForm, user!.uuid)
-				setToastData({
-					message: t('toast.edited'),
-					type: 'success',
-				})
-				setAnimalForm(INITIAL_ANIMAL_FORM)
-				navigate(AppRoutes.ANIMAL.replace(':animalUuid', animalUuid))
-			} else {
-				await AnimalsService.setAnimal(animalForm, user!.uuid, user!.farmUuid)
-				setToastData({
-					message: t('toast.added'),
-					type: 'success',
-				})
-				setAnimalForm(INITIAL_ANIMAL_FORM)
-			}
-		} catch (_error) {
-			setToastData({
-				message: t('toast.errorAddingAnimal'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
+				const animalData = transformToApiFormat(data)
+				animalData.uuid = animalUuid ?? crypto.randomUUID()
+				animalData.farmUuid = user.farmUuid
 
-	// biome-ignore lint:: UseEffect is only called once
+				if (animalData.birthDate) {
+					animalData.birthDate = formatDate(animalData.birthDate)
+				}
+				if (animalData.purchaseDate) {
+					animalData.purchaseDate = formatDate(animalData.purchaseDate)
+				}
+				if (animalData.soldDate) {
+					animalData.soldDate = formatDate(animalData.soldDate)
+				}
+				if (animalData.deathDate) {
+					animalData.deathDate = formatDate(animalData.deathDate)
+				}
+
+				if (animalUuid) {
+					await AnimalsService.updateAnimal(animalData, user.uuid)
+					showToast(t('toast.edited'), 'success')
+					navigate(AppRoutes.ANIMAL.replace(':animalUuid', animalUuid))
+				} else {
+					await AnimalsService.setAnimal(animalData, user.uuid, user.farmUuid)
+					showToast(t('toast.added'), 'success')
+					reset()
+					setPictureUrl('')
+				}
+			}, t('toast.errorAddingAnimal'))
+		},
+		[
+			user,
+			params.animalUuid,
+			transformToApiFormat,
+			withLoadingAndError,
+			showToast,
+			t,
+			navigate,
+			reset,
+		]
+	)
+
 	useEffect(() => {
 		if (!user) return
-		if (params.animalUuid) getAnimal()
-	}, [user])
+		if (params.animalUuid) {
+			getAnimal()
+		}
+	}, [user, params.animalUuid, getAnimal])
 
 	useEffect(() => {
 		const title = params.animalUuid ? t('editAnimal') : t('addAnimal')
-		setHeaderTitle(title)
-	}, [setHeaderTitle, t, params.animalUuid])
+		setPageTitle(title)
+	}, [setPageTitle, t, params.animalUuid])
 
 	return (
-		<div className="flex flex-col justify-center items-center w-full overflow-auto p-5">
-			<form
-				className="flex flex-col sm:grid sm:grid-cols-2 items-center gap-4 max-w-[800px] w-full"
-				onSubmit={handleSubmit}
-				autoComplete="off"
+		<div className="flex flex-col justify-center items-center w-full overflow-auto p-3 sm:p-5">
+			<a
+				href="#animal-form"
+				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
 			>
-				<div className="row-span-5 col-start-2 h-full">
+				{t('accessibility.skipToForm')}
+			</a>
+
+			<form
+				id="animal-form"
+				className="flex flex-col md:grid md:grid-cols-2 items-center gap-3 sm:gap-4 max-w-[600px] w-full"
+				onSubmit={handleSubmit(onSubmit)}
+				autoComplete="off"
+				aria-labelledby="form-heading"
+				noValidate
+			>
+				<h2 id="form-heading" className="sr-only">
+					{params.animalUuid ? t('accessibility.editAnimalForm') : t('accessibility.addAnimalForm')}
+				</h2>
+
+				<fieldset className="row-span-5 col-start-2 h-full border-0 p-0 m-0">
+					<legend className="sr-only">{t('accessibility.animalPhoto')}</legend>
 					<Dropzone
 						className="dropzone"
 						cleanFile={false}
-						pictureUrl={pictureUrl || animalForm.picture}
+						pictureUrl={pictureUrl}
 						onFile={handleFile}
+						aria-label={t('accessibility.uploadPhoto')}
+						aria-describedby="photo-help"
 					/>
-				</div>
-				<TextField
-					name="animalId"
-					type="text"
-					placeholder={t('animalId')}
-					label={t('animalId')}
-					value={animalForm.animalId}
-					onChange={handleTextChange}
-					required
-				/>
+					<div id="photo-help" className="sr-only">
+						{t('accessibility.photoHelp')}
+					</div>
+				</fieldset>
 
-				<Select
-					name="speciesUuid"
-					legend={t('selectSpecies')}
-					defaultLabel={t('selectSpecies')}
-					optionValue="uuid"
-					optionLabel="name"
-					value={animalForm.speciesUuid}
-					items={species}
-					onChange={handleSelectChange}
-					required
-				/>
-				<Select
-					name="breedUuid"
-					legend={t('selectBreed')}
-					defaultLabel={t('selectBreed')}
-					optionValue="uuid"
-					optionLabel="name"
-					value={animalForm.breedUuid}
-					items={filteredBreeds}
-					onChange={handleSelectChange}
-					disabled={!filteredBreeds.length}
-					required
-				/>
-				<Select
-					name="gender"
-					legend={t('selectGender')}
-					defaultLabel={t('selectGender')}
-					optionValue="value"
-					optionLabel="name"
-					value={animalForm.gender}
-					items={[
-						{ value: 'Male', name: t('genderList.male') },
-						{ value: 'Female', name: t('genderList.female') },
-					]}
-					onChange={handleSelectChange}
-					required
-				/>
-				<TextField
-					name="color"
-					type="text"
-					placeholder={t('color')}
-					label={t('color')}
-					value={animalForm.color}
-					onChange={handleTextChange}
-					required
-				/>
-				<TextField
-					name="weight"
-					type="number"
-					placeholder={`${t('weight')} (${farm?.weightUnit})`}
-					label={`${t('weight')} (${farm?.weightUnit})`}
-					value={animalForm.weight}
-					onChange={handleTextChange}
-					onWheel={(e) => e.currentTarget.blur()}
-					required
-				/>
-				<DatePicker
-					legend={t('birthDate')}
-					label={t('birthDate')}
-					date={dayjs(animalForm.birthDate)}
-					onDateChange={handleDateChange('birthDate')}
-				/>
-				<DatePicker
-					legend={t('purchaseDate')}
-					label={t('purchaseDate')}
-					date={dayjs(animalForm.purchaseDate)}
-					onDateChange={handleDateChange('purchaseDate')}
-				/>
-				{params.animalUuid && (
-					<DatePicker
-						legend={t('soldDate')}
-						label={t('soldDate')}
-						date={animalForm.soldDate ? dayjs(animalForm.soldDate) : null}
-						onDateChange={handleDateChange('soldDate')}
+				<fieldset className="contents">
+					<legend className="sr-only">{t('accessibility.basicInformation')}</legend>
+
+					<TextField
+						{...register('animalId')}
+						type="text"
+						placeholder={t('animalId')}
+						label={t('animalId')}
+						required
+						error={errors.animalId ? getErrorMessage(errors.animalId.message || '') : undefined}
+						aria-describedby="animal-id-help"
+						autoComplete="off"
 					/>
-				)}
-				{params.animalUuid && (
-					<DatePicker
-						legend={t('deathDate')}
-						label={t('deathDate')}
-						date={animalForm.deathDate ? dayjs(animalForm.deathDate) : null}
-						onDateChange={handleDateChange('deathDate')}
+					<div id="animal-id-help" className="sr-only">
+						{t('accessibility.animalIdHelp')}
+					</div>
+
+					<Controller
+						name="speciesUuid"
+						control={control}
+						render={({ field }) => (
+							<Select
+								{...field}
+								legend={t('selectSpecies')}
+								defaultLabel={t('selectSpecies')}
+								optionValue="uuid"
+								optionLabel="name"
+								items={species}
+								required
+								error={
+									errors.speciesUuid ? getErrorMessage(errors.speciesUuid.message || '') : undefined
+								}
+								aria-describedby="species-help"
+							/>
+						)}
 					/>
-				)}
+					<div id="species-help" className="sr-only">
+						{t('accessibility.speciesHelp')}
+					</div>
+
+					<Controller
+						name="breedUuid"
+						control={control}
+						render={({ field }) => (
+							<Select
+								{...field}
+								legend={t('selectBreed')}
+								defaultLabel={t('selectBreed')}
+								optionValue="uuid"
+								optionLabel="name"
+								items={filteredBreeds}
+								disabled={!filteredBreeds.length}
+								required
+								error={
+									errors.breedUuid ? getErrorMessage(errors.breedUuid.message || '') : undefined
+								}
+								aria-describedby="breed-help"
+							/>
+						)}
+					/>
+					<div id="breed-help" className="sr-only">
+						{t('accessibility.breedHelp')}
+					</div>
+
+					<Controller
+						name="gender"
+						control={control}
+						render={({ field }) => (
+							<Select
+								{...field}
+								legend={t('selectGender')}
+								defaultLabel={t('selectGender')}
+								optionValue="value"
+								optionLabel="name"
+								items={[
+									{ value: 'Male', name: t('genderList.male') },
+									{ value: 'Female', name: t('genderList.female') },
+								]}
+								required
+								error={errors.gender ? getErrorMessage(errors.gender.message || '') : undefined}
+								aria-describedby="gender-help"
+							/>
+						)}
+					/>
+					<div id="gender-help" className="sr-only">
+						{t('accessibility.genderHelp')}
+					</div>
+
+					<TextField
+						{...register('color')}
+						type="text"
+						placeholder={t('color')}
+						label={t('color')}
+						error={errors.color ? getErrorMessage(errors.color.message || '') : undefined}
+						aria-describedby="color-help"
+						autoComplete="off"
+					/>
+					<div id="color-help" className="sr-only">
+						{t('accessibility.colorHelp')}
+					</div>
+
+					<TextField
+						{...register('weight', { valueAsNumber: true })}
+						type="number"
+						placeholder={`${t('weight')} (${farm?.weightUnit})`}
+						label={`${t('weight')} (${farm?.weightUnit})`}
+						onWheel={(e) => e.currentTarget.blur()}
+						error={errors.weight ? getErrorMessage(errors.weight.message || '') : undefined}
+						aria-describedby="weight-help"
+						min="0"
+						step="0.1"
+					/>
+					<div id="weight-help" className="sr-only">
+						{t('accessibility.weightHelp', { unit: farm?.weightUnit })}
+					</div>
+				</fieldset>
+
+				<fieldset className="contents">
+					<legend className="sr-only">{t('accessibility.dateInformation')}</legend>
+
+					<Controller
+						name="birthDate"
+						control={control}
+						render={({ field: { onChange, value } }) => (
+							<DatePicker
+								legend={t('birthDate')}
+								label={t('birthDate')}
+								date={value ? dayjs(value) : null}
+								onDateChange={(newDate) => {
+									onChange(newDate ? newDate.format('YYYY-MM-DD') : '')
+								}}
+								error={
+									errors.birthDate ? getErrorMessage(errors.birthDate.message || '') : undefined
+								}
+								aria-describedby="birth-date-help"
+							/>
+						)}
+					/>
+					<div id="birth-date-help" className="sr-only">
+						{t('accessibility.birthDateHelp')}
+					</div>
+
+					<Controller
+						name="purchaseDate"
+						control={control}
+						render={({ field: { onChange, value } }) => (
+							<DatePicker
+								legend={t('purchaseDate')}
+								label={t('purchaseDate')}
+								date={value ? dayjs(value) : null}
+								onDateChange={(newDate) => {
+									onChange(newDate ? newDate.format('YYYY-MM-DD') : '')
+								}}
+								error={
+									errors.purchaseDate
+										? getErrorMessage(errors.purchaseDate.message || '')
+										: undefined
+								}
+								aria-describedby="purchase-date-help"
+							/>
+						)}
+					/>
+					<div id="purchase-date-help" className="sr-only">
+						{t('accessibility.purchaseDateHelp')}
+					</div>
+
+					{params.animalUuid && (
+						<>
+							<Controller
+								name="soldDate"
+								control={control}
+								render={({ field: { onChange, value } }) => (
+									<DatePicker
+										legend={t('soldDate')}
+										label={t('soldDate')}
+										date={value ? dayjs(value) : null}
+										onDateChange={(newDate) => {
+											onChange(newDate ? newDate.format('YYYY-MM-DD') : '')
+										}}
+										error={
+											errors.soldDate ? getErrorMessage(errors.soldDate.message || '') : undefined
+										}
+										aria-describedby="sold-date-help"
+									/>
+								)}
+							/>
+							<div id="sold-date-help" className="sr-only">
+								{t('accessibility.soldDateHelp')}
+							</div>
+						</>
+					)}
+
+					{params.animalUuid && (
+						<>
+							<Controller
+								name="deathDate"
+								control={control}
+								render={({ field: { onChange, value } }) => (
+									<DatePicker
+										legend={t('deathDate')}
+										label={t('deathDate')}
+										date={value ? dayjs(value) : null}
+										onDateChange={(newDate) => {
+											onChange(newDate ? newDate.format('YYYY-MM-DD') : '')
+										}}
+										error={
+											errors.deathDate ? getErrorMessage(errors.deathDate.message || '') : undefined
+										}
+										aria-describedby="death-date-help"
+									/>
+								)}
+							/>
+							<div id="death-date-help" className="sr-only">
+								{t('accessibility.deathDateHelp')}
+							</div>
+						</>
+					)}
+				</fieldset>
+
 				<div className="col-span-2 w-full">
 					<Textarea
-						name="origin"
+						{...register('origin')}
 						placeholder={t('origin')}
 						label={t('origin')}
-						value={animalForm.origin}
-						onChange={handleTextChange}
+						error={errors.origin ? getErrorMessage(errors.origin.message || '') : undefined}
+						aria-describedby="origin-help"
 					/>
+					<div id="origin-help" className="sr-only">
+						{t('accessibility.originHelp')}
+					</div>
 				</div>
-				<button type="submit" className="btn btn-primary h-12 w-full text-lg col-span-2">
-					{params.animalUuid ? t('editButton') : t('addButton')}
+
+				<button
+					type="submit"
+					disabled={isSubmitting}
+					className="btn btn-primary h-12 w-full text-lg col-span-2 disabled:loading"
+					aria-describedby="submit-help"
+				>
+					{isSubmitting
+						? t('common:loading')
+						: params.animalUuid
+							? t('editButton')
+							: t('addButton')}
 				</button>
+				<div id="submit-help" className="sr-only">
+					{params.animalUuid ? t('accessibility.editSubmitHelp') : t('accessibility.addSubmitHelp')}
+				</div>
 			</form>
 		</div>
 	)
 }
 
-const INITIAL_ANIMAL_FORM: Animal = {
-	uuid: '',
-	speciesUuid: '',
-	breedUuid: '',
-	farmUuid: '',
-	animalId: '',
-	gender: '',
-	color: '',
-	weight: 0,
-	picture: '',
-	status: true,
-	origin: '',
-	birthDate: dayjs().toISOString(),
-	purchaseDate: null,
-	soldDate: null,
-	deathDate: null,
-}
-
-export default AnimalForm
+export default memo(AnimalForm)

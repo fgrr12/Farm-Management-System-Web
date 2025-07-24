@@ -1,4 +1,14 @@
 {
+	"accessibility": {
+		"addEmployeeDescription": "Navegar al formulario para añadir un nuevo empleado",
+		"employeesList": "Lista de empleados",
+		"employeesTable": "Tabla mostrando {{count}} empleados",
+		"results": "resultados",
+		"searchEmployees": "Buscar empleados por nombre, email o teléfono",
+		"searchHelp": "Buscar por nombre, apellido, email o número de teléfono",
+		"searchSection": "Buscar y gestionar empleados",
+		"skipToEmployees": "Saltar a la lista de empleados"
+	},
 	"addEmployee": "Añadir empleado",
 	"search": "Buscar",
 	"title": "Empleados",

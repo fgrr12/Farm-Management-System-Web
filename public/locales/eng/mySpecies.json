@@ -17,7 +17,9 @@
 	},
 	"removeButton": "Remove",
 	"saveButton": "Save",
+	"saving": "Saving...",
 	"search": "Search",
+	"speciesName": "Species Name",
 	"title": "My Species",
 	"toast": {
 		"deletedBreed": "Breed deleted successfully",
@@ -29,5 +31,12 @@
 		"errorUpdatingSpecies": "There was an error updating the species",
 		"notDeletedBreed": "The breed was not deleted",
 		"notDeletedSpecies": "The species was not deleted"
+	},
+	"validation": {
+		"gestationPeriodInvalid": "Gestation period must be a number",
+		"gestationPeriodMax": "Gestation period must be 1000 or less",
+		"gestationPeriodMin": "Gestation period must be 0 or greater",
+		"nameRequired": "Name is required",
+		"nameTooLong": "Name must be 50 characters or less"
 	}
 }

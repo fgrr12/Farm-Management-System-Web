@@ -1,12 +1,11 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import { type ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { type ChangeEvent, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
 
-import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
@@ -17,6 +16,8 @@ import { Button } from '@/components/ui/Button'
 import { Search } from '@/components/ui/Search'
 import { Select } from '@/components/ui/Select'
 
+import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
+
 import type { AnimalCardProps, AnimalsFilters } from './Animals.types'
 
 const Animals = () => {
@@ -24,7 +25,7 @@ const Animals = () => {
 	const { farm, species, breeds } = useFarmStore()
 	const navigation = useNavigate()
 	const { t } = useTranslation(['animals'])
-	const { setLoading, setHeaderTitle, setToastData } = useAppStore()
+	const { setPageTitle, withLoadingAndError } = usePagePerformance()
 	const containerRef = useRef<HTMLDivElement>(null)
 
 	const [animals, setAnimals] = useState<AnimalCardProps[]>([])
@@ -85,19 +86,19 @@ const Animals = () => {
 		setFilters((prev) => ({ ...prev, [name]: value }))
 	}, [])
 
-	const navigateToAddAnimal = () => {
+	const navigateToAddAnimal = useCallback(() => {
 		navigation(AppRoutes.ADD_ANIMAL)
-	}
+	}, [navigation])
 
-	const getAnimals = async () => {
-		setLoading(true)
+	const getAnimals = useCallback(async () => {
+		await withLoadingAndError(async () => {
+			if (!farm?.uuid) return []
 
-		try {
-			const dbAnimals = await AnimalsService.getAnimals(farm!.uuid)
+			const dbAnimals = await AnimalsService.getAnimals(farm.uuid)
 
 			const enrichedAnimals: AnimalCardProps[] = dbAnimals.map((animal) => {
-				const speciesName = species.find((sp) => sp.uuid === animal.speciesUuid)!.name
-				const breedName = breeds.find((br) => br.uuid === animal.breedUuid)!.name
+				const speciesName = species.find((sp) => sp.uuid === animal.speciesUuid)?.name || ''
+				const breedName = breeds.find((br) => br.uuid === animal.breedUuid)?.name || ''
 
 				return {
 					...animal,
@@ -107,27 +108,18 @@ const Animals = () => {
 			})
 
 			setAnimals(enrichedAnimals)
-		} catch (error) {
-			console.error('Error loading animals:', error)
-
-			setToastData({
-				message: t('toast.errorGettingAnimals'),
-				type: 'error',
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
+			return enrichedAnimals
+		}, t('toast.errorGettingAnimals'))
+	}, [farm?.uuid, species, breeds, withLoadingAndError, t])
 
 	useEffect(() => {
-		setHeaderTitle(t('title'))
-	}, [setHeaderTitle, t])
+		setPageTitle(t('title'))
+	}, [setPageTitle, t])
 
-	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
 		if (!user || !farm) return
 		getAnimals()
-	}, [user, farm])
+	}, [user, farm, getAnimals])
 
 	useGSAP(() => {
 		if (!filteredAnimals.length) return
@@ -146,66 +138,121 @@ const Animals = () => {
 		}
 	}, [filteredAnimals])
 	return (
-		<div className="flex flex-col gap-5 p-4 w-full h-full overflow-auto relative pb-18">
-			<div className="flex flex-col md:grid md:grid-cols-6 items-center justify-center md:gap-4 w-full">
-				<Search placeholder={t('search')} value={filters.search} onChange={handleSearchChange} />
-				<Select
-					name="speciesUuid"
-					legend={t('filterBySpecies')}
-					defaultLabel={t('filterBySpecies')}
-					value={filters.speciesUuid}
-					items={speciesOptions}
-					onChange={handleSelectChange}
-				/>
-				<Select
-					name="gender"
-					legend={t('filterByGender')}
-					defaultLabel={t('filterByGender')}
-					value={filters.gender}
-					items={genderOptions}
-					onChange={handleSelectChange}
-				/>
-				<Select
-					name="status"
-					legend={t('filterByStatus')}
-					defaultLabel={t('filterByStatus')}
-					value={filters.status}
-					items={statusOptions}
-					onChange={handleSelectChange}
-				/>
-				<Button
-					type="button"
-					className="btn btn-primary h-12 w-full text-lg col-start-6 mt-4 md:mt-0"
-					onClick={navigateToAddAnimal}
-				>
-					{t('addAnimal')}
-				</Button>
-			</div>
-			<div
-				ref={containerRef}
-				className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 w-full"
+		<div className="flex flex-col gap-4 sm:gap-5 p-3 sm:p-4 w-full h-full overflow-auto relative pb-18">
+			<a
+				href="#animals-grid"
+				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
 			>
-				{filteredAnimals.map((animal) => (
-					<AnimalCard
-						key={animal.uuid}
-						uuid={animal.uuid}
-						animalId={animal.animalId}
-						breedName={animal.breedName}
-						gender={animal.gender}
+				{t('accessibility.skipToAnimals')}
+			</a>
+
+			<header>
+				<h1 className="sr-only">{t('title')}</h1>
+			</header>
+
+			<section aria-labelledby="filters-heading" role="search">
+				<h2 id="filters-heading" className="sr-only">
+					{t('accessibility.filtersSection')}
+				</h2>
+				<div className="flex flex-col sm:grid sm:grid-cols-2 lg:grid-cols-6 items-center justify-center gap-3 sm:gap-4 w-full">
+					<Search
+						placeholder={t('search')}
+						value={filters.search}
+						onChange={handleSearchChange}
+						aria-label={t('accessibility.searchAnimals')}
 					/>
-				))}
-			</div>
-			{filteredAnimals.length === 0 && (
-				<div className="flex flex-col items-center justify-center gap-2 w-full">
-					<div className="text-center text-2xl font-bold">{t('noAnimals')}</div>
-					<div className="text-center text-sm font-semibold">{t('noAnimalsSubtitle')}</div>
+					<Select
+						name="speciesUuid"
+						legend={t('filterBySpecies')}
+						defaultLabel={t('filterBySpecies')}
+						value={filters.speciesUuid}
+						items={speciesOptions}
+						onChange={handleSelectChange}
+						aria-label={t('filterBySpecies')}
+					/>
+					<Select
+						name="gender"
+						legend={t('filterByGender')}
+						defaultLabel={t('filterByGender')}
+						value={filters.gender}
+						items={genderOptions}
+						onChange={handleSelectChange}
+						aria-label={t('filterByGender')}
+					/>
+					<Select
+						name="status"
+						legend={t('filterByStatus')}
+						defaultLabel={t('filterByStatus')}
+						value={filters.status}
+						items={statusOptions}
+						onChange={handleSelectChange}
+						aria-label={t('filterByStatus')}
+					/>
+					<Button
+						type="button"
+						className="btn btn-primary h-12 w-full text-lg sm:col-span-2 lg:col-start-6 lg:col-span-1 mt-4 sm:mt-0"
+						onClick={navigateToAddAnimal}
+						aria-describedby="add-animal-description"
+					>
+						{t('addAnimal')}
+					</Button>
+					<div id="add-animal-description" className="sr-only">
+						{t('accessibility.addAnimalDescription')}
+					</div>
 				</div>
-			)}
-			<div className="fixed bottom-4 left-4 lg:left-23 shadow-md rounded-lg p-2 text-center bg-blue-100">
+			</section>
+
+			<section aria-labelledby="animals-heading" aria-live="polite" aria-atomic="false">
+				<h2 id="animals-heading" className="sr-only">
+					{t('accessibility.animalsListHeading')} ({filteredAnimals.length}{' '}
+					{t('accessibility.results')})
+				</h2>
+				<div
+					ref={containerRef}
+					className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 w-full"
+					id="animals-grid"
+					role="list"
+					aria-label={t('accessibility.animalsGrid', { count: filteredAnimals.length })}
+				>
+					{filteredAnimals.map((animal) => (
+						<div key={animal.uuid} role="listitem">
+							<AnimalCard
+								uuid={animal.uuid}
+								animalId={animal.animalId}
+								breedName={animal.breedName}
+								gender={animal.gender}
+								aria-label={t('accessibility.animalCardLabel', {
+									animalId: animal.animalId,
+									breedName: animal.breedName,
+									gender: animal.gender,
+								})}
+							/>
+						</div>
+					))}
+				</div>
+
+				{filteredAnimals.length === 0 && (
+					<div
+						className="flex flex-col items-center justify-center gap-2 w-full"
+						role="status"
+						aria-live="polite"
+					>
+						<h3 className="text-center text-2xl font-bold">{t('noAnimals')}</h3>
+						<p className="text-center text-sm font-semibold">{t('noAnimalsSubtitle')}</p>
+					</div>
+				)}
+			</section>
+
+			<aside
+				className="fixed bottom-4 left-4 lg:left-23 shadow-md rounded-lg p-2 text-center bg-blue-100"
+				role="status"
+				aria-live="polite"
+				aria-label={t('accessibility.resultsCounter')}
+			>
 				<p>
 					<Trans ns="animals" i18nKey="totalFilteredAnimals" count={filteredAnimals.length} />
 				</p>
-			</div>
+			</aside>
 		</div>
 	)
 }
@@ -217,4 +264,4 @@ const INITIAL_FILTERS: AnimalsFilters = {
 	search: '',
 }
 
-export default Animals
+export default memo(Animals)
