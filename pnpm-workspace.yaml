@@ -1,0 +1,62 @@
+# PNPM Workspace Configuration
+# This file defines the workspace structure for the Cattle farm management application
+
+packages:
+  # Main application package
+  - '.'
+  
+  # Exclude build outputs and cache directories
+  - '!**/node_modules'
+  - '!**/dist'
+  - '!**/build'
+  - '!**/.next'
+  - '!**/.nuxt'
+  - '!**/.vite'
+  - '!**/.cache'
+  - '!**/.firebase'
+  - '!**/.kiro'
+
+# Catalog configuration for dependency management
+catalog:
+  # React ecosystem
+  react: ^19.1.0
+  react-dom: ^19.1.0
+  '@types/react': ^19.1.8
+  '@types/react-dom': ^19.1.6
+  
+  # Build tools
+  vite: ^7.0.6
+  typescript: ^5.8.3
+  '@vitejs/plugin-react-swc': ^3.11.0
+  
+  # Testing
+  vitest: ^3.2.4
+  '@testing-library/react': ^16.3.0
+  '@testing-library/jest-dom': ^6.6.3
+  jsdom: ^26.1.0
+  
+  # Styling
+  tailwindcss: ^4.1.11
+  '@tailwindcss/vite': ^4.1.11
+  daisyui: ^5.0.46
+  unocss: ^66.3.3
+  
+  # Code quality
+  '@biomejs/biome': 2.1.2
+  
+  # Firebase
+  firebase: ^12.0.0
+
+# Dependency resolution configuration
+onlyBuiltDependencies:
+  - '@firebase/util'
+
+# Shared settings across workspace
+shared-workspace-lockfile: true
+save-workspace-protocol: true
+link-workspace-packages: true
+
+# Node.js version requirement
+engines:
+  node: '>=22.0.0'
+  pnpm: '>=10.0.0'
