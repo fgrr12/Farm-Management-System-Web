@@ -39,6 +39,7 @@
 			"taskCreated": "Task Created",
 			"taskStarted": "Task Started",
 			"taskCompleted": "Task Completed",
+			"taskArchived": "Task Archived",
 			"taskUpdated": "Task Updated"
 		},
 		"healthTypes": {

@@ -4,7 +4,7 @@ import Dashboard from '@/pages/Dashboard/Dashboard.page'
 
 import { render, screen } from '@/tests/utils/test-utils'
 
-// Mock the dashboard hook
+// Mock the dashboard hooks
 vi.mock('@/hooks/dashboard/useDashboardData', () => ({
 	useDashboardData: () => ({
 		stats: {
@@ -47,6 +47,19 @@ vi.mock('@/hooks/dashboard/useDashboardData', () => ({
 			},
 		],
 		loading: false,
+	}),
+}))
+
+// Mock the production data hook
+vi.mock('@/hooks/dashboard/useProductionData', () => ({
+	useProductionData: () => ({
+		productionData: [
+			{ month: 'Jan', value: 200 },
+			{ month: 'Feb', value: 250 },
+			{ month: 'Mar', value: 300 },
+		],
+		loading: false,
+		refetch: vi.fn(),
 	}),
 }))
 

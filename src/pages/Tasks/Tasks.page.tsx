@@ -47,8 +47,12 @@ const Tasks = () => {
 			const { search, status, priority, speciesUuid } = filters
 			const farmUuid = farm.uuid
 			const tasks = await TasksService.getTasks({ search, status, priority, speciesUuid, farmUuid })
-			const pendingTasks = tasks.filter((task) => task.status === 'PENDING')
-			const completedTasks = tasks.filter((task) => task.status === 'COMPLETED')
+			const pendingTasks = tasks.filter(
+				(task) => task.status === 'todo' || task.status === 'in-progress'
+			)
+			const completedTasks = tasks.filter(
+				(task) => task.status === 'done' || task.status === 'archived'
+			)
 			setTasks({ pending: pendingTasks, completed: completedTasks })
 			return tasks
 		}, t('toast.errorGettingTasks'))
@@ -57,14 +61,14 @@ const Tasks = () => {
 	const handleUpdateTask = useCallback(
 		(task: Task) => async () => {
 			await withLoadingAndError(async () => {
-				const status = task.status === 'COMPLETED' ? 'PENDING' : 'COMPLETED'
+				const status = task.status === 'done' || task.status === 'archived' ? 'todo' : 'done'
 				await TasksService.updateTaskStatus(task.uuid, status)
 				await getTasks()
 				showToast(
-					status === 'COMPLETED'
+					status === 'done'
 						? t('toast.taskCompleted', { taskUuid: task.title })
 						: t('toast.taskPending', { taskUuid: task.title }),
-					status === 'COMPLETED' ? 'success' : 'warning'
+					status === 'done' ? 'success' : 'warning'
 				)
 			}, t('toast.errorUpdatingTaskStatus'))
 		},

@@ -61,7 +61,7 @@ export const createMockTask = (overrides = {}) => ({
 	farmUuid: 'test-farm-id',
 	title: 'Test Task',
 	description: 'Test task description',
-	status: 'pending' as const,
+	status: 'todo' as const,
 	priority: 'medium' as const,
 	assignedTo: 'test-user-id',
 	dueDate: '2024-12-31',

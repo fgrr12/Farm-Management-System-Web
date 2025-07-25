@@ -4,8 +4,11 @@ interface Task {
 	farmUuid: string
 	title: string
 	description: string
-	status: string
-	priority: string
+	status: TaskStatus
+	priority: TaskPriority
 	createdAt?: string
 	updatedAt?: string
 }
+
+type TaskStatus = 'todo' | 'in-progress' | 'done' | 'archived'
+type TaskPriority = 'low' | 'medium' | 'high'

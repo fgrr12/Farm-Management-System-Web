@@ -39,6 +39,7 @@
 			"taskCreated": "Tarea Creada",
 			"taskStarted": "Tarea Iniciada",
 			"taskCompleted": "Tarea Completada",
+			"taskArchived": "Tarea Archivada",
 			"taskUpdated": "Tarea Actualizada"
 		},
 		"healthTypes": {

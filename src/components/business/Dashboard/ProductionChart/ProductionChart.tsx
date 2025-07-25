@@ -1,11 +1,23 @@
-import { memo, useMemo } from 'react'
+import dayjs from 'dayjs'
+import { memo, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useDashboardData } from '@/hooks/dashboard/useDashboardData'
+import { useProductionData } from '@/hooks/dashboard/useProductionData'
 
 export const ProductionChart = memo(() => {
 	const { t } = useTranslation(['dashboard'])
-	const { productionData, loading } = useDashboardData()
+	const [selectedYear, setSelectedYear] = useState(dayjs().year())
+	const { productionData, loading } = useProductionData(selectedYear)
+
+	// Generate year options (current year and 4 years back)
+	const yearOptions = useMemo(() => {
+		const currentYear = dayjs().year()
+		const years = []
+		for (let i = 0; i < 5; i++) {
+			years.push(currentYear - i)
+		}
+		return years
+	}, [])
 
 	const chartData = useMemo(() => {
 		if (!productionData?.length) return []
@@ -32,11 +44,22 @@ export const ProductionChart = memo(() => {
 		<div className="bg-white rounded-xl border border-gray-200 p-6">
 			<div className="flex items-center justify-between mb-6">
 				<h3 className="text-lg font-semibold text-gray-900">{t('charts.productionTrend')}</h3>
-				<div className="flex items-center gap-2">
+				<div className="flex items-center gap-4">
 					<div className="flex items-center gap-2">
 						<i className="i-material-symbols-water-drop w-6! h-6! bg-blue-500!" />
 						<span className="text-sm text-gray-600">{t('charts.production')}</span>
 					</div>
+					<select
+						value={selectedYear}
+						onChange={(e) => setSelectedYear(Number(e.target.value))}
+						className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+					>
+						{yearOptions.map((year) => (
+							<option key={year} value={year}>
+								{year}
+							</option>
+						))}
+					</select>
 				</div>
 			</div>
 

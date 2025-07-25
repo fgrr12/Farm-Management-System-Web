@@ -10,7 +10,7 @@ const DEFAULT_VALUES: Partial<TaskFormData> = {
 	description: '',
 	priority: undefined,
 	speciesUuid: '',
-	status: 'PENDING',
+	status: 'todo',
 }
 
 export const useTaskForm = (initialData?: Partial<Task>) => {
@@ -23,9 +23,9 @@ export const useTaskForm = (initialData?: Partial<Task>) => {
 			uuid: initialData.uuid || '',
 			title: initialData.title || '',
 			description: initialData.description || '',
-			priority: (initialData.priority as 'low' | 'medium' | 'high') || undefined,
+			priority: initialData.priority || undefined,
 			speciesUuid: initialData.speciesUuid || '',
-			status: (initialData.status as 'PENDING' | 'COMPLETED') || 'PENDING',
+			status: initialData.status || 'todo',
 			farmUuid: initialData.farmUuid || '',
 		}
 	}, [initialData])
@@ -45,7 +45,7 @@ export const useTaskForm = (initialData?: Partial<Task>) => {
 			description: data.description,
 			priority: data.priority,
 			speciesUuid: data.speciesUuid,
-			status: data.status || 'PENDING',
+			status: data.status || 'todo',
 		}
 	}, [])
 

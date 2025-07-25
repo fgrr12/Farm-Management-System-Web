@@ -6,13 +6,13 @@ import 'dayjs/locale/en'
 // Enable relative time plugin for dayjs
 dayjs.extend(relativeTime)
 
-import i18n from '@/i18n'
-
 import { AnimalsService } from '@/services/animals'
 import { HealthRecordsService } from '@/services/healthRecords'
 import { ProductionRecordsService } from '@/services/productionRecords'
 import { SpeciesService } from '@/services/species'
 import { TasksService } from '@/services/tasks'
+
+import i18n from '@/i18n'
 
 interface DashboardStats {
 	totalAnimals: number
@@ -61,16 +61,16 @@ const formatRelativeTime = (date: string | Date | undefined): string => {
 	if (!date) {
 		return i18n.t('dashboard:common.timeAgo.justNow')
 	}
-	
+
 	const currentLang = i18n.language
-	
+
 	// Set dayjs locale based on current language
 	if (currentLang === 'spa') {
 		dayjs.locale('es')
 	} else {
 		dayjs.locale('en')
 	}
-	
+
 	return dayjs(date).fromNow()
 }
 
@@ -92,7 +92,7 @@ const getDashboardStats = async (farmUuid: string): Promise<DashboardStats> => {
 			priority: '',
 			speciesUuid: '',
 		})
-		const pendingTasks = tasks.filter((task) => task.status === 'pending').length
+		const pendingTasks = tasks.filter((task) => task.status === 'todo').length
 
 		// Get production records for current month
 		const currentMonth = dayjs().month()
@@ -159,24 +159,24 @@ const getDashboardStats = async (farmUuid: string): Promise<DashboardStats> => {
 	}
 }
 
-const getProductionData = async (farmUuid: string): Promise<ProductionData[]> => {
+const getProductionData = async (farmUuid: string, year?: number): Promise<ProductionData[]> => {
 	try {
 		const animals = await AnimalsService.getAnimals(farmUuid)
 		const productionData: ProductionData[] = []
 
-		// Get last 12 months of data
-		for (let i = 11; i >= 0; i--) {
-			const targetMonth = dayjs().subtract(i, 'month')
-			const monthName = targetMonth.format('MMM')
+		// Get 12 months of data starting from January of the target year
+		const targetYear = year || dayjs().year()
+
+		for (let month = 0; month < 12; month++) {
+			const targetDate = dayjs().year(targetYear).month(month).startOf('month')
+			const monthName = targetDate.format('MMM')
 			let monthProduction = 0
 
 			for (const animal of animals) {
 				const productionRecords = await ProductionRecordsService.getProductionRecords(animal.uuid)
 				const monthlyRecords = productionRecords.filter((record) => {
 					const recordDate = dayjs(record.date)
-					return (
-						recordDate.month() === targetMonth.month() && recordDate.year() === targetMonth.year()
-					)
+					return recordDate.month() === month && recordDate.year() === targetYear
 				})
 				monthProduction += monthlyRecords.reduce((sum, record) => sum + (record.quantity || 0), 0)
 			}
@@ -401,9 +401,9 @@ const getTasksOverview = async (farmUuid: string): Promise<TasksOverview> => {
 			speciesUuid: '',
 		})
 
-		const pending = tasks.filter((task) => task.status === 'pending').length
-		const inProgress = tasks.filter((task) => task.status === 'in_progress').length
-		const completed = tasks.filter((task) => task.status === 'completed').length
+		const pending = tasks.filter((task) => task.status === 'todo').length
+		const inProgress = tasks.filter((task) => task.status === 'in-progress').length
+		const completed = tasks.filter((task) => task.status === 'done').length
 
 		return {
 			pending,
@@ -461,10 +461,12 @@ const getRecentActivities = async (farmUuid: string): Promise<RecentActivity[]> 
 					Drying: '🥛',
 				}
 				const typeEmoji = typeEmojiMap[record.type] || '📋'
-				
+
 				// Get translated health type
-				const translatedType = i18n.t(`dashboard:activities.healthTypes.${record.type}`, { defaultValue: record.type })
-				
+				const translatedType = i18n.t(`dashboard:activities.healthTypes.${record.type}`, {
+					defaultValue: record.type,
+				})
+
 				activities.push({
 					type: 'health_record',
 					title: `${typeEmoji} ${translatedType}`,
@@ -516,16 +518,18 @@ const getRecentActivities = async (farmUuid: string): Promise<RecentActivity[]> 
 
 		recentTasks.forEach((task) => {
 			const statusEmojiMap: Record<string, string> = {
-				pending: '⏳',
-				in_progress: '🔄',
-				completed: '✅',
+				PENDING: '⏳',
+				IN_PROGRESS: '🔄',
+				COMPLETED: '✅',
+				archived: '📦',
 			}
 			const statusEmoji = statusEmojiMap[task.status] || '📋'
 
 			const statusTextMap: Record<string, string> = {
-				pending: 'taskCreated',
-				in_progress: 'taskStarted',
-				completed: 'taskCompleted',
+				todo: 'taskCreated',
+				'in-progress': 'taskStarted',
+				done: 'taskCompleted',
+				archived: 'taskArchived',
 			}
 			const statusKey = statusTextMap[task.status] || 'taskUpdated'
 			const statusText = i18n.t(`dashboard:activities.types.${statusKey}`)
