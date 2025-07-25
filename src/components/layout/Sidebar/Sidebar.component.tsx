@@ -79,6 +79,16 @@ export const Sidebar = memo(() => {
 			role="navigation"
 			aria-label="Main navigation"
 		>
+			<li className={handleCheckActive(AppRoutes.DASHBOARD)}>
+				<button
+					type="button"
+					className="flex items-center gap-2 px-4 py-2"
+					onClick={handleGoTo(AppRoutes.DASHBOARD)}
+					aria-label="Dashboard"
+				>
+					<i className="i-material-symbols-dashboard w-8! h-8!" />
+				</button>
+			</li>
 			<li className={handleCheckActive(AppRoutes.ANIMALS)}>
 				<button
 					type="button"

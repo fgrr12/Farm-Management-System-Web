@@ -1,0 +1,1 @@
+export { AnimalDistribution } from './AnimalDistribution'

@@ -10,22 +10,22 @@
 	},
 	"pwa": {
 		"install": {
-			"title": "Instalar App Cattle",
-			"message": "Instala la aplicación para acceso rápido y funcionalidad sin conexión.",
+			"dismiss": "Ahora no",
 			"install": "Instalar",
 			"installing": "Instalando...",
+			"message": "Instala la aplicación para acceso rápido y funcionalidad sin conexión.",
 			"share": "Compartir",
-			"dismiss": "Ahora no"
-		},
-		"updateAvailable": {
-			"title": "Actualización Disponible",
-			"message": "Una nueva versión de la aplicación está disponible. Actualiza ahora para obtener las últimas funciones.",
-			"update": "Actualizar",
-			"later": "Más tarde"
+			"title": "Instalar App Cattle"
 		},
 		"offlineReady": {
-			"title": "Listo para Uso Sin Conexión",
-			"message": "La aplicación ahora está en caché y lista para funcionar sin conexión."
+			"message": "La aplicación ahora está en caché y lista para funcionar sin conexión.",
+			"title": "Listo para Uso Sin Conexión"
+		},
+		"updateAvailable": {
+			"later": "Más tarde",
+			"message": "Una nueva versión de la aplicación está disponible. Actualiza ahora para obtener las últimas funciones.",
+			"title": "Actualización Disponible",
+			"update": "Actualizar"
 		}
 	},
 	"select": {

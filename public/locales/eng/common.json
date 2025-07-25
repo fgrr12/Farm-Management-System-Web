@@ -10,22 +10,22 @@
 	},
 	"pwa": {
 		"install": {
-			"title": "Install Cattle App",
-			"message": "Install the app for quick access and offline functionality.",
+			"dismiss": "Not now",
 			"install": "Install",
 			"installing": "Installing...",
+			"message": "Install the app for quick access and offline functionality.",
 			"share": "Share",
-			"dismiss": "Not now"
-		},
-		"updateAvailable": {
-			"title": "Update Available",
-			"message": "A new version of the app is available. Update now to get the latest features.",
-			"update": "Update",
-			"later": "Later"
+			"title": "Install Cattle App"
 		},
 		"offlineReady": {
-			"title": "Ready for Offline Use",
-			"message": "The app is now cached and ready to work offline."
+			"message": "The app is now cached and ready to work offline.",
+			"title": "Ready for Offline Use"
+		},
+		"updateAvailable": {
+			"later": "Later",
+			"message": "A new version of the app is available. Update now to get the latest features.",
+			"title": "Update Available",
+			"update": "Update"
 		}
 	},
 	"select": {

@@ -71,6 +71,7 @@ const Tasks = lazy(() =>
 		return module
 	})
 )
+const Dashboard = lazy(() => import('@/pages/Dashboard/Dashboard.page'))
 
 export const App = () => {
 	const { user, setUser } = useUserStore()
@@ -130,7 +131,7 @@ export const App = () => {
 						}
 					>
 						<Routes>
-							<Route path="/" element={<Navigate to={AppRoutes.ANIMALS} />} key="home" />
+							<Route path="/" element={<Navigate to={AppRoutes.DASHBOARD} />} key="home" />
 
 							<Route path={AppRoutes.LOGIN} element={<LoginForm />} />
 							<Route
@@ -138,6 +139,15 @@ export const App = () => {
 								element={
 									<PrivateRoute>
 										<Animals />
+									</PrivateRoute>
+								}
+							/>
+
+							<Route
+								path={AppRoutes.DASHBOARD}
+								element={
+									<PrivateRoute>
+										<Dashboard />
 									</PrivateRoute>
 								}
 							/>

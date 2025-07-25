@@ -1,0 +1,72 @@
+{
+	"title": "Panel de Control",
+	"subtitle": "Resumen de las operaciones de tu granja y métricas clave",
+	"stats": {
+		"totalAnimals": "Total de Animales",
+		"healthyAnimals": "Animales Sanos",
+		"pendingTasks": "Tareas Pendientes",
+		"monthlyProduction": "Producción Mensual"
+	},
+	"charts": {
+		"productionTrend": "Tendencia de Producción",
+		"production": "Producción",
+		"totalProduction": "Producción Total",
+		"animalDistribution": "Distribución de Animales",
+		"totalAnimals": "Total"
+	},
+	"health": {
+		"title": "Resumen de Salud",
+		"healthy": "Sanos",
+		"sick": "Enfermos",
+		"treatment": "En Tratamiento",
+		"checkupDue": "Revisión Pendiente",
+		"totalAnimals": "Total de Animales"
+	},
+	"tasks": {
+		"title": "Resumen de Tareas",
+		"pending": "Pendientes",
+		"inProgress": "En Progreso",
+		"completed": "Completadas",
+		"tasks": "tareas",
+		"completionRate": "Tasa de Finalización"
+	},
+	"activities": {
+		"title": "Actividades Recientes",
+		"noActivities": "No hay actividades recientes",
+		"types": {
+			"healthRecord": "Registro de Salud",
+			"productionRecord": "Producción Registrada",
+			"taskCreated": "Tarea Creada",
+			"taskStarted": "Tarea Iniciada",
+			"taskCompleted": "Tarea Completada",
+			"taskUpdated": "Tarea Actualizada"
+		},
+		"healthTypes": {
+			"Checkup": "Revisión",
+			"Vaccination": "Vacunación",
+			"Medication": "Medicación",
+			"Surgery": "Cirugía",
+			"Pregnancy": "Embarazo",
+			"Birth": "Parto",
+			"Deworming": "Desparasitación",
+			"Drying": "Secado"
+		},
+		"descriptions": {
+			"healthRecordUpdated": "Registro de salud actualizado",
+			"productionRecorded": "leche",
+			"farmStaff": "Personal de Granja"
+		}
+	},
+	"common": {
+		"vsLastMonth": "vs mes anterior",
+		"timeAgo": {
+			"justNow": "ahora mismo",
+			"minutesAgo": "hace {{count}} minutos",
+			"hoursAgo": "hace {{count}} horas",
+			"daysAgo": "hace {{count}} días",
+			"weeksAgo": "hace {{count}} semanas",
+			"monthsAgo": "hace {{count}} meses",
+			"yearsAgo": "hace {{count}} años"
+		}
+	}
+}
