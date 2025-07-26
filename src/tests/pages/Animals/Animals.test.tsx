@@ -145,20 +145,14 @@ describe('Animals Page', () => {
 	it('should render animals page with filters and animals', async () => {
 		render(<Animals />)
 
-		// Check if filters are rendered
-		expect(screen.getByPlaceholderText('Search animals')).toBeInTheDocument()
+		// Check if filter button is rendered
+		expect(screen.getByRole('button', { name: 'filtersButton' })).toBeInTheDocument()
 		expect(screen.getByRole('button', { name: 'Add Animal' })).toBeInTheDocument()
 
-		// Check for filter legends
-		expect(screen.getByText('Search animals')).toBeInTheDocument()
-		expect(screen.getAllByText('Filter by species')).toHaveLength(2) // legend and option
-		expect(screen.getAllByText('Filter by gender')).toHaveLength(2) // legend and option
-		expect(screen.getAllByText('Filter by status')).toHaveLength(2) // legend and option
-
-		// Wait for animals to load
+		// Wait for animals to load (only female animals due to default filter)
 		await waitFor(() => {
 			expect(screen.getByTestId('animal-animal-1')).toBeInTheDocument()
-			// Note: Only one animal is being rendered due to filtering logic
+			// animal-2 is male, so it won't show with default female filter
 		})
 	})
 
@@ -179,10 +173,14 @@ describe('Animals Page', () => {
 	it('should filter animals by search term', async () => {
 		render(<Animals />)
 
-		// Wait for animals to load
+		// Wait for animals to load (only female animals due to default filter)
 		await waitFor(() => {
 			expect(screen.getByTestId('animal-animal-1')).toBeInTheDocument()
 		})
+
+		// Open filters dropdown
+		const filtersButton = screen.getByRole('button', { name: 'filtersButton' })
+		fireEvent.click(filtersButton)
 
 		// Search for specific animal
 		const searchInput = screen.getByPlaceholderText('Search animals')
@@ -190,24 +188,29 @@ describe('Animals Page', () => {
 
 		// Should show only matching animal
 		expect(screen.getByTestId('animal-animal-1')).toBeInTheDocument()
-		expect(screen.queryByTestId('animal-animal-2')).not.toBeInTheDocument()
 	})
 
 	it('should filter animals by gender', async () => {
 		render(<Animals />)
 
-		// Wait for animals to load
+		// Wait for animals to load (only female animals due to default filter)
 		await waitFor(() => {
 			expect(screen.getByTestId('animal-animal-1')).toBeInTheDocument()
 		})
 
+		// Open filters dropdown
+		const filtersButton = screen.getByRole('button', { name: 'filtersButton' })
+		fireEvent.click(filtersButton)
+
 		// Filter by male gender
-		const genderSelect = screen.getByDisplayValue('Female')
+		const genderSelect = screen.getByLabelText('Filter by gender')
 		fireEvent.change(genderSelect, { target: { value: 'male' } })
 
 		// Should show only male animals
-		expect(screen.queryByTestId('animal-animal-1')).not.toBeInTheDocument()
-		expect(screen.getByTestId('animal-animal-2')).toBeInTheDocument()
+		await waitFor(() => {
+			expect(screen.queryByTestId('animal-animal-1')).not.toBeInTheDocument()
+			expect(screen.getByTestId('animal-animal-2')).toBeInTheDocument()
+		})
 	})
 
 	it('should navigate to add animal page when button is clicked', () => {
@@ -222,10 +225,14 @@ describe('Animals Page', () => {
 	it('should show no animals message when no animals match filters', async () => {
 		render(<Animals />)
 
-		// Wait for animals to load
+		// Wait for animals to load (only female animals due to default filter)
 		await waitFor(() => {
 			expect(screen.getByTestId('animal-animal-1')).toBeInTheDocument()
 		})
+
+		// Open filters dropdown
+		const filtersButton = screen.getByRole('button', { name: 'filtersButton' })
+		fireEvent.click(filtersButton)
 
 		// Search for non-existent animal
 		const searchInput = screen.getByPlaceholderText('Search animals')
@@ -239,7 +246,7 @@ describe('Animals Page', () => {
 	it('should show total filtered animals count', async () => {
 		render(<Animals />)
 
-		// Wait for animals to load
+		// Wait for animals to load (only 1 female animal due to default filter)
 		await waitFor(() => {
 			expect(screen.getByText('1 animals found')).toBeInTheDocument()
 		})
@@ -262,21 +269,21 @@ describe('Animals Page', () => {
 	it('should filter animals by status', async () => {
 		render(<Animals />)
 
-		// Wait for animals to load
+		// Wait for animals to load (only female animals due to default filter)
 		await waitFor(() => {
 			expect(screen.getByTestId('animal-animal-1')).toBeInTheDocument()
 		})
 
-		// Test that status filter exists and can be interacted with
-		const allSelects = screen.getAllByRole('combobox')
-		const statusSelectElement = allSelects.find(
-			(select) => select.getAttribute('name') === 'status'
-		)
+		// Open filters dropdown
+		const filtersButton = screen.getByRole('button', { name: 'filtersButton' })
+		fireEvent.click(filtersButton)
 
+		// Test that status filter exists and can be interacted with
+		const statusSelectElement = screen.getByLabelText('Filter by status')
 		expect(statusSelectElement).toBeInTheDocument()
 
 		// Test that we can change the status filter
-		fireEvent.change(statusSelectElement!, { target: { value: 'sold' } })
+		fireEvent.change(statusSelectElement, { target: { value: 'sold' } })
 		expect(statusSelectElement).toHaveValue('sold')
 	})
 
