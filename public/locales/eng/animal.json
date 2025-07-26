@@ -1,10 +1,14 @@
 {
 	"animalId": "Animal ID",
+	"basicInfo": "Basic Information",
 	"birthDate": "Birth Date",
 	"breed": "Breed",
 	"childrenTitle": "Children",
 	"color": "Color",
+	"datesAndStatus": "Dates & Status",
 	"deathDate": "Death Date",
+	"delete": "Delete",
+	"edit": "Edit",
 	"gender": "Gender",
 	"genderList": {
 		"female": "Female",

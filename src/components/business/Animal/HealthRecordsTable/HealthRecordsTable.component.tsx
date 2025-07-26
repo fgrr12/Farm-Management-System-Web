@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { type ChangeEvent, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -10,11 +10,13 @@ import { useUserStore } from '@/store/useUserStore'
 
 import { HealthRecordsService } from '@/services/healthRecords'
 
-import { DatePicker } from '@/components/layout/DatePicker'
 import { ActionButton } from '@/components/ui/ActionButton'
-import { Select } from '@/components/ui/Select'
 
-import type { HealthRecordsFilters, HealthRecordsTableProps } from './HealthRecordsTable.types'
+import { HealthRecordsFilters } from '../HealthRecordsFilters'
+import type {
+	HealthRecordsFilters as HealthRecordsFiltersType,
+	HealthRecordsTableProps,
+} from './HealthRecordsTable.types'
 
 const trBgColor = (reason: HealthRecordType) => {
 	switch (reason) {
@@ -50,7 +52,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 	const params = useParams()
 	const { t } = useTranslation(['animalHealthRecords'])
 
-	const [filters, setFilters] = useState<HealthRecordsFilters>(INITIAL_FILTERS)
+	const [filters, setFilters] = useState<HealthRecordsFiltersType>(INITIAL_FILTERS)
 
 	const { healthRecordsFiltered } = useMemo(() => {
 		return {
@@ -81,13 +83,8 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 		)
 	}
 
-	const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
-		const { name, value } = event.target
-		setFilters((prev) => ({ ...prev, [name]: value }))
-	}
-
-	const handleDateChange = (name: string) => (date: dayjs.Dayjs | null) => {
-		setFilters((prev) => ({ ...prev, [name]: date }))
+	const handleFiltersChange = (newFilters: HealthRecordsFiltersType) => {
+		setFilters(newFilters)
 	}
 
 	const handleAddHealthRecord = () => {
@@ -140,67 +137,29 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 
 	return (
 		<div className="w-full xl:w-auto">
-			{user && (
-				<div className="w-full">
-					<div className="flex flex-col sm:flex-row justify-between items-center gap-4 w-full">
-						<DatePicker
-							legend={t('filter.fromDate')}
-							label={t('filter.fromDate')}
-							date={dayjs(filters.fromDate)}
-							onDateChange={handleDateChange('fromDate')}
+			{/* Header with Filters and Add Button */}
+			<div className="flex items-center justify-between gap-4 mb-6">
+				{user && (
+					<div className="flex-shrink-0">
+						<HealthRecordsFilters
+							filters={filters}
+							onFiltersChange={handleFiltersChange}
+							employees={employees}
+							userRole={user.role}
 						/>
-						<DatePicker
-							legend={t('filter.toDate')}
-							label={t('filter.toDate')}
-							date={dayjs(filters.toDate)}
-							onDateChange={handleDateChange('toDate')}
-						/>
-						<Select
-							name="type"
-							legend={t('filter.type')}
-							defaultLabel={t('filter.type')}
-							value={filters.type}
-							items={[
-								{ value: 'Checkup', name: t('healthRecordType.checkup') },
-								{ value: 'Vaccination', name: t('healthRecordType.vaccination') },
-								{ value: 'Medication', name: t('healthRecordType.medication') },
-								{ value: 'Surgery', name: t('healthRecordType.surgery') },
-								{ value: 'Pregnancy', name: t('healthRecordType.pregnancy') },
-								{ value: 'Deworming', name: t('healthRecordType.deworming') },
-								{ value: 'Birth', name: t('healthRecordType.birth') },
-								{ value: 'Drying', name: t('healthRecordType.drying') },
-							]}
-							onChange={handleSelectChange}
-						/>
-						{(user.role === 'admin' || user.role === 'owner') && (
-							<Select
-								name="createdBy"
-								legend={t('filter.createdBy')}
-								defaultLabel={t('filter.createdBy')}
-								value={filters.createdBy}
-								items={[
-									{ value: 'Me', name: t('createdBy.me') },
-									...employees.map((employee) => ({
-										value: employee.uuid,
-										name: employee.name,
-									})),
-								]}
-								onChange={handleSelectChange}
-							/>
-						)}
 					</div>
-				</div>
-			)}
-
-			<div className="flex justify-center items-center">
-				<div className="font-bold">{t('title')}</div>
-				{haveUser && (
-					<ActionButton
-						title="Add Health Record"
-						icon="i-material-symbols-add-circle-outline"
-						onClick={handleAddHealthRecord}
-					/>
 				)}
+
+				<div className="flex items-center gap-2">
+					<h2 className="text-lg font-semibold text-gray-900">{t('title')}</h2>
+					{haveUser && (
+						<ActionButton
+							title="Add Health Record"
+							icon="i-material-symbols-add-circle-outline"
+							onClick={handleAddHealthRecord}
+						/>
+					)}
+				</div>
 			</div>
 			<div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
 				<table className="table" aria-label="Health records">
@@ -291,7 +250,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 	)
 }
 
-const INITIAL_FILTERS: HealthRecordsFilters = {
+const INITIAL_FILTERS: HealthRecordsFiltersType = {
 	fromDate: null,
 	toDate: null,
 	type: '',

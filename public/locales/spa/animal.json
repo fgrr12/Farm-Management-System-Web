@@ -1,10 +1,14 @@
 {
 	"animalId": "ID del animal",
+	"basicInfo": "Información Básica",
 	"birthDate": "Fecha de nacimiento",
 	"breed": "Raza",
 	"childrenTitle": "Hijos",
 	"color": "Color",
+	"datesAndStatus": "Fechas y Estado",
 	"deathDate": "Fecha de fallecimiento",
+	"delete": "Eliminar",
+	"edit": "Editar",
 	"gender": "Género",
 	"genderList": {
 		"female": "Hembra",

@@ -24,9 +24,9 @@ import { ActionButton } from '@/components/ui/ActionButton'
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 const DetailItem = memo(({ label, value }: { label: string; value: React.ReactNode }) => (
-	<div className="flex flex-col gap-1 w-full justify-center items-center">
-		<span className="font-bold text-xl text-center">{label}</span>
-		<span className="text-xl text-center">{value}</span>
+	<div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+		<dt className="text-sm font-medium text-gray-500 mb-1">{label}</dt>
+		<dd className="text-lg font-semibold text-gray-900 flex items-center gap-2">{value}</dd>
 	</div>
 ))
 
@@ -63,19 +63,6 @@ const Animal = () => {
 	const handleEditAnimal = useCallback(() => {
 		navigate(AppRoutes.EDIT_ANIMAL.replace(':animalUuid', animal.uuid))
 	}, [navigate, animal.uuid])
-
-	const buttonIcon = useCallback((key: string) => {
-		switch (key) {
-			case 'healthRecords':
-				return 'i-material-symbols-light-health-metrics-rounded bg-emerald-500! w-7! h-7!'
-			case 'productionRecords':
-				return 'i-icon-park-outline-milk bg-gray-500! w-7! h-7!'
-			case 'relatedAnimals':
-				return 'i-tabler-circles-relation bg-yellow-500! w-7! h-7!'
-			default:
-				return ''
-		}
-	}, [])
 
 	const handleRemoveAnimal = useCallback(async () => {
 		setModalData({
@@ -206,149 +193,218 @@ const Animal = () => {
 	}, [params.animalUuid, farm, getInitialData, setPageTitle])
 
 	return (
-		<div className="flex flex-col gap-3 sm:gap-4 lg:gap-10 p-3 sm:p-4 w-full h-full overflow-auto">
-			<div className="flex flex-col-reverse lg:flex-row gap-4 w-full">
-				<div className="flex flex-col gap-4 w-full">
-					<div className="flex flex-row justify-center items-center gap-4 w-full">
-						<span className="text-md font-bold text-xl">{t('animalId')}</span>
-						{user && (
-							<ActionButton
-								title="Edit"
-								icon="i-material-symbols-edit-square-outline"
-								onClick={handleEditAnimal}
-							/>
-						)}
-						{user && (
-							<ActionButton
-								title="Delete"
-								icon="i-material-symbols-delete-outline"
-								onClick={handleRemoveAnimal}
-							/>
-						)}
+		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
+			<div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+				{/* Hero Section */}
+				<div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
+					<div className="bg-gradient-to-r from-blue-600 to-green-600 px-6 py-4">
+						<div className="flex items-center justify-between">
+							<div className="flex items-center gap-4">
+								<div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+									<i className="i-material-symbols-pets text-white w-6 h-6" />
+								</div>
+								<div>
+									<h1 className="text-2xl font-bold text-white">{animal.animalId}</h1>
+									<p className="text-blue-100">
+										{specie?.name} • {breed?.name}
+									</p>
+								</div>
+							</div>
+							{user && (
+								<div className="flex gap-2">
+									<ActionButton
+										icon="i-material-symbols-edit-square-outline"
+										title={t('addHealthRecord')}
+										onClick={handleEditAnimal}
+									/>
+									<ActionButton
+										icon="i-material-symbols-delete-outline"
+										title={t('addProductionRecord')}
+										onClick={handleRemoveAnimal}
+									/>
+								</div>
+							)}
+						</div>
 					</div>
-					<div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-2 w-full justify-center items-center">
-						<div className="flex flex-col gap-2 w-full">
-							<DetailItem label={t('animalId')} value={animal.animalId} />
-							<DetailItem label={t('species')} value={specie?.name} />
-							<DetailItem label={t('breed')} value={breed?.name} />
-							{animal.birthDate && (
-								<DetailItem
-									label={t('birthDate')}
-									value={dayjs(animal.birthDate).format('DD/MM/YYYY')}
-								/>
-							)}
-							{animal.deathDate && (
-								<DetailItem
-									label={t('deathDate')}
-									value={dayjs(animal.deathDate).format('DD/MM/YYYY')}
-								/>
-							)}
+
+					<div className="p-6">
+						<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+							{/* Animal Image */}
+							<div className="lg:col-span-1">
+								<div className="relative">
+									<img
+										className="w-full h-80 object-cover rounded-xl shadow-lg"
+										src={animal.picture || '/assets/default-imgs/cow.svg'}
+										alt={specie?.name || 'default'}
+									/>
+									<div className="absolute top-4 right-4">
+										<div
+											className={`px-3 py-1 rounded-full text-sm font-medium ${
+												animal.gender.toLowerCase() === 'male'
+													? 'bg-blue-100 text-blue-800'
+													: 'bg-pink-100 text-pink-800'
+											}`}
+										>
+											<div className="flex items-center gap-2">
+												<GenderIcon gender={animal.gender} />
+												{t(`genderList.${animal.gender.toLowerCase()}`)}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							{/* Animal Details */}
+							<div className="lg:col-span-2">
+								<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+									{/* Basic Info */}
+									<div className="space-y-4">
+										<h3 className="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2">
+											{t('basicInfo')}
+										</h3>
+										<DetailItem label={t('animalId')} value={animal.animalId} />
+										<DetailItem label={t('species')} value={specie?.name} />
+										<DetailItem label={t('breed')} value={breed?.name} />
+										{animal.color && <DetailItem label={t('color')} value={animal.color} />}
+										<DetailItem
+											label={t('weight')}
+											value={`${animal.weight} ${farm?.weightUnit}`}
+										/>
+									</div>
+
+									{/* Dates & Status */}
+									<div className="space-y-4">
+										<h3 className="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2">
+											{t('datesAndStatus')}
+										</h3>
+										{animal.birthDate && (
+											<DetailItem
+												label={t('birthDate')}
+												value={dayjs(animal.birthDate).format('DD/MM/YYYY')}
+											/>
+										)}
+										{animal.purchaseDate && (
+											<DetailItem
+												label={t('purchaseDate')}
+												value={dayjs(animal.purchaseDate).format('DD/MM/YYYY')}
+											/>
+										)}
+										{animal.soldDate && (
+											<DetailItem
+												label={t('soldDate')}
+												value={dayjs(animal.soldDate).format('DD/MM/YYYY')}
+											/>
+										)}
+										{animal.deathDate && (
+											<DetailItem
+												label={t('deathDate')}
+												value={dayjs(animal.deathDate).format('DD/MM/YYYY')}
+											/>
+										)}
+										{animal.origin && <DetailItem label={t('origin')} value={animal.origin} />}
+									</div>
+								</div>
+							</div>
 						</div>
-						<div className="flex flex-col gap-2 w-full">
-							<DetailItem
-								label={t('gender')}
-								value={
-									<>
-										{t(`genderList.${animal.gender.toLowerCase()}`)}
-										<GenderIcon gender={animal.gender} />
-									</>
-								}
-							/>
-							<DetailItem label={t('color')} value={animal.color} />
-							<DetailItem
-								label={t('weight')}
-								value={
-									<>
-										{animal.weight} {farm?.weightUnit}
-									</>
-								}
-							/>
-							{animal.purchaseDate && (
-								<DetailItem
-									label={t('purchaseDate')}
-									value={dayjs(animal.purchaseDate).format('DD/MM/YYYY')}
+					</div>
+				</div>
+				{/* Tabs Section */}
+				<div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+					{/* Tab Navigation */}
+					<div className="border-b border-gray-200">
+						<nav className="flex space-x-8 px-6" aria-label="Tabs">
+							{[
+								{
+									key: 'healthRecords',
+									label: t('healthRecords'),
+									onClick: getHealthRecords,
+									icon: 'i-material-symbols-light-health-metrics-rounded',
+									color: 'emerald',
+								},
+								{
+									key: 'productionRecords',
+									label: t('productionRecords'),
+									onClick: getProductionRecords,
+									icon: 'i-icon-park-outline-milk',
+									color: 'blue',
+								},
+								{
+									key: 'relatedAnimals',
+									label: t('relatedAnimals'),
+									onClick: getRelatedAnimals,
+									icon: 'i-tabler-circles-relation',
+									color: 'yellow',
+								},
+							].map((tab) => (
+								<button
+									key={tab.key}
+									type="button"
+									onClick={tab.onClick}
+									className={`
+										group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer
+										${
+											activeTab === tab.key
+												? `border-${tab.color}-500 text-${tab.color}-600`
+												: 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+										}
+									`}
+								>
+									<i
+										className={`${tab.icon} w-7! h-7! mr-2 ${
+											activeTab === tab.key
+												? `bg-${tab.color}-500!`
+												: 'text-gray-400 group-hover:text-gray-500'
+										}`}
+									/>
+									{tab.label}
+								</button>
+							))}
+						</nav>
+					</div>
+
+					{/* Tab Content */}
+					<div className="p-6">
+						{activeTab === 'healthRecords' && (
+							<div className="space-y-6">
+								<HealthRecordsTable
+									haveUser={!!user}
+									farm={farm}
+									healthRecords={animal?.healthRecords || []}
+									employees={employees}
+									removeHealthRecord={handleRemoveHealthRecord}
 								/>
-							)}
-							{animal.soldDate && (
-								<DetailItem
-									label={t('soldDate')}
-									value={dayjs(animal.soldDate).format('DD/MM/YYYY')}
+							</div>
+						)}
+						{activeTab === 'productionRecords' && (
+							<div className="space-y-6">
+								<ProductionRecordsTable
+									productionRecords={animal?.productionRecords || []}
+									haveUser={!!user}
+									farm={farm}
+									removeProductionRecord={handleRemoveProductionRecord}
 								/>
-							)}
-						</div>
-						{animal.origin && (
-							<div className="col-span-2 w-full">
-								<DetailItem label={t('origin')} value={animal.origin} />
+							</div>
+						)}
+						{activeTab === 'relatedAnimals' && (
+							<div className="space-y-8">
+								<RelatedAnimalsTable
+									title={t('parentsTitle')}
+									animals={animal?.relatedAnimals?.parents || []}
+									haveUser={!!user}
+									type="parent"
+									removeRelation={handleRemoveRelation}
+								/>
+								<RelatedAnimalsTable
+									title={t('childrenTitle')}
+									animals={animal?.relatedAnimals?.children || []}
+									haveUser={!!user}
+									type="child"
+									removeRelation={handleRemoveRelation}
+								/>
 							</div>
 						)}
 					</div>
 				</div>
-				<div className="flex justify-center items-center w-full">
-					<img
-						className="w-full h-full sm:w-75 sm:h-75 rounded-3xl object-cover"
-						src={animal.picture || '/assets/default-imgs/cow.svg'}
-						alt={specie?.name || 'default'}
-					/>
-				</div>
-			</div>
-			<div className="flex flex-col gap-4 justify-center items-center">
-				<div role="tablist" className="tabs tabs-box flex flex-col md:flex-row w-auto">
-					{[
-						{ key: 'healthRecords', label: t('healthRecords'), onClick: getHealthRecords },
-						{
-							key: 'productionRecords',
-							label: t('productionRecords'),
-							onClick: getProductionRecords,
-						},
-						{ key: 'relatedAnimals', label: t('relatedAnimals'), onClick: getRelatedAnimals },
-					].map((tab) => (
-						<button
-							key={tab.key}
-							type="button"
-							role="tab"
-							className={`tab ${activeTab === tab.key && 'tab-active'} flex items-center justify-center gap-2`}
-							onClick={tab.onClick}
-						>
-							<i className={buttonIcon(tab.key)} />
-							<span>{tab.label}</span>
-						</button>
-					))}
-				</div>
-				{activeTab === 'healthRecords' && (
-					<HealthRecordsTable
-						haveUser={!!user}
-						farm={farm}
-						healthRecords={animal?.healthRecords || []}
-						employees={employees}
-						removeHealthRecord={handleRemoveHealthRecord}
-					/>
-				)}
-				{activeTab === 'productionRecords' && (
-					<ProductionRecordsTable
-						productionRecords={animal?.productionRecords || []}
-						haveUser={!!user}
-						farm={farm}
-						removeProductionRecord={handleRemoveProductionRecord}
-					/>
-				)}
-				{activeTab === 'relatedAnimals' && (
-					<>
-						<RelatedAnimalsTable
-							title={t('parentsTitle')}
-							animals={animal?.relatedAnimals?.parents || []}
-							haveUser={!!user}
-							type="parent"
-							removeRelation={handleRemoveRelation}
-						/>
-						<RelatedAnimalsTable
-							title={t('childrenTitle')}
-							animals={animal?.relatedAnimals?.children || []}
-							haveUser={!!user}
-							type="child"
-							removeRelation={handleRemoveRelation}
-						/>
-					</>
-				)}
 			</div>
 		</div>
 	)
