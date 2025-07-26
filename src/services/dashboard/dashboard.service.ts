@@ -3,7 +3,6 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/es'
 import 'dayjs/locale/en'
 
-// Enable relative time plugin for dayjs
 dayjs.extend(relativeTime)
 
 import { AnimalsService } from '@/services/animals'
@@ -13,6 +12,48 @@ import { SpeciesService } from '@/services/species'
 import { TasksService } from '@/services/tasks'
 
 import i18n from '@/i18n'
+
+interface DynamicLimits {
+	animals: number | null
+	healthRecords: number
+	productionRecords: number
+	tasks: number
+	activities: number
+	batchSize: number
+}
+
+const getOptimalLimits = (animalCount: number): DynamicLimits => {
+	if (animalCount < 100) {
+		return {
+			animals: null,
+			healthRecords: 10,
+			productionRecords: 10,
+			tasks: 20,
+			activities: 20,
+			batchSize: 10,
+		}
+	}
+
+	if (animalCount < 500) {
+		return {
+			animals: 200,
+			healthRecords: 8,
+			productionRecords: 8,
+			tasks: 15,
+			activities: 15,
+			batchSize: 8,
+		}
+	}
+
+	return {
+		animals: 100,
+		healthRecords: 5,
+		productionRecords: 5,
+		tasks: 10,
+		activities: 10,
+		batchSize: 5,
+	}
+}
 
 interface DashboardStats {
 	totalAnimals: number
@@ -56,15 +97,12 @@ interface RecentActivity {
 	user: string
 }
 
-// Helper function to format relative time with translations
 const formatRelativeTime = (date: string | Date | undefined): string => {
 	if (!date) {
 		return i18n.t('dashboard:common.timeAgo.justNow')
 	}
 
 	const currentLang = i18n.language
-
-	// Set dayjs locale based on current language
 	if (currentLang === 'spa') {
 		dayjs.locale('es')
 	} else {
@@ -76,7 +114,6 @@ const formatRelativeTime = (date: string | Date | undefined): string => {
 
 const getDashboardStats = async (farmUuid: string): Promise<DashboardStats> => {
 	try {
-		// Get basic data in parallel for fast initial load
 		const [animals, tasks] = await Promise.all([
 			AnimalsService.getAnimals(farmUuid),
 			TasksService.getTasks({
@@ -88,32 +125,26 @@ const getDashboardStats = async (farmUuid: string): Promise<DashboardStats> => {
 			}),
 		])
 
+		const limits = getOptimalLimits(animals.length)
 		const totalAnimals = animals.length
 		const pendingTasks = tasks.filter(
 			(task) => task.status === 'todo' || task.status === 'in-progress'
 		).length
-
-		// Quick health calculation - just count active animals as healthy for initial load
-		// The detailed health overview will be loaded separately in phase 2
 		const healthyAnimals = animals.filter((animal) => animal.status).length
 
-		// Simplified production calculation for faster initial load
 		const currentMonth = dayjs().month()
 		const currentYear = dayjs().year()
 		let monthlyProduction = 0
 
-		// Process only first 20 animals for quick stats
-		const limitedAnimals = animals.slice(0, 20)
-		const batchSize = 5
+		const animalsToProcess = limits.animals ? animals.slice(0, limits.animals) : animals
 
-		for (let i = 0; i < limitedAnimals.length; i += batchSize) {
-			const batch = limitedAnimals.slice(i, i + batchSize)
+		for (let i = 0; i < animalsToProcess.length; i += limits.batchSize) {
+			const batch = animalsToProcess.slice(i, i + limits.batchSize)
 
 			const productionPromises = batch.map(async (animal) => {
-				// Limit to last 30 records for current month only
 				const productionRecords = await ProductionRecordsService.getProductionRecords(
 					animal.uuid,
-					30
+					limits.productionRecords
 				)
 
 				const monthlyRecords = productionRecords.filter((record) => {
@@ -136,7 +167,7 @@ const getDashboardStats = async (farmUuid: string): Promise<DashboardStats> => {
 			animalsChange: undefined,
 			healthChange: undefined,
 			tasksChange: undefined,
-			productionChange: undefined, // Will be calculated in detailed load
+			productionChange: undefined,
 		}
 	} catch (error) {
 		console.error('Error getting dashboard stats:', error)
@@ -153,7 +184,6 @@ const getDashboardStats = async (farmUuid: string): Promise<DashboardStats> => {
 	}
 }
 
-// Enhanced stats with production change calculation (for secondary load)
 const getDashboardStatsDetailed = async (farmUuid: string): Promise<DashboardStats> => {
 	try {
 		const animals = await AnimalsService.getAnimals(farmUuid)
@@ -164,18 +194,13 @@ const getDashboardStatsDetailed = async (farmUuid: string): Promise<DashboardSta
 		let monthlyProduction = 0
 		let previousMonthProduction = 0
 
-		// Process more animals for detailed calculation
-		const limitedAnimals = animals.slice(0, 50)
 		const batchSize = 10
 
-		for (let i = 0; i < limitedAnimals.length; i += batchSize) {
-			const batch = limitedAnimals.slice(i, i + batchSize)
+		for (let i = 0; i < animals.length; i += batchSize) {
+			const batch = animals.slice(i, i + batchSize)
 
 			const productionPromises = batch.map(async (animal) => {
-				const productionRecords = await ProductionRecordsService.getProductionRecords(
-					animal.uuid,
-					60
-				)
+				const productionRecords = await ProductionRecordsService.getProductionRecords(animal.uuid)
 
 				const monthlyRecords = productionRecords.filter((record) => {
 					const recordDate = dayjs(record.date)
@@ -213,8 +238,8 @@ const getDashboardStatsDetailed = async (farmUuid: string): Promise<DashboardSta
 
 		return {
 			totalAnimals: animals.length,
-			healthyAnimals: 0, // Will be updated by health overview
-			pendingTasks: 0, // Will be updated by tasks overview
+			healthyAnimals: 0,
+			pendingTasks: 0,
 			monthlyProduction,
 			animalsChange: undefined,
 			healthChange: undefined,
@@ -239,29 +264,23 @@ const getDashboardStatsDetailed = async (farmUuid: string): Promise<DashboardSta
 const getProductionData = async (farmUuid: string, year?: number): Promise<ProductionData[]> => {
 	try {
 		const animals = await AnimalsService.getAnimals(farmUuid)
+		const limits = getOptimalLimits(animals.length)
+		const animalsToProcess = limits.animals ? animals.slice(0, limits.animals) : animals
 		const productionData: ProductionData[] = []
-
-		// Get 12 months of data starting from January of the target year
 		const targetYear = year || dayjs().year()
-
-		// Limit to first 30 animals for performance
-		const limitedAnimals = animals.slice(0, 30)
 
 		for (let month = 0; month < 12; month++) {
 			const targetDate = dayjs().year(targetYear).month(month).startOf('month')
 			const monthName = targetDate.format('MMM')
 			let monthProduction = 0
 
-			// Process animals in batches
-			const batchSize = 5
-			for (let i = 0; i < limitedAnimals.length; i += batchSize) {
-				const batch = limitedAnimals.slice(i, i + batchSize)
+			for (let i = 0; i < animalsToProcess.length; i += limits.batchSize) {
+				const batch = animalsToProcess.slice(i, i + limits.batchSize)
 
 				const batchPromises = batch.map(async (animal) => {
-					// Limit to last 365 records (should cover the year)
 					const productionRecords = await ProductionRecordsService.getProductionRecords(
 						animal.uuid,
-						365
+						limits.productionRecords * 3
 					)
 					const monthlyRecords = productionRecords.filter((record) => {
 						const recordDate = dayjs(record.date)
@@ -276,7 +295,7 @@ const getProductionData = async (farmUuid: string, year?: number): Promise<Produ
 
 			productionData.push({
 				month: monthName,
-				value: Math.round(monthProduction * 100) / 100, // Round to 2 decimal places
+				value: Math.round(monthProduction * 100) / 100,
 			})
 		}
 
@@ -310,13 +329,10 @@ const getAnimalDistribution = async (farmUuid: string): Promise<AnimalDistributi
 	}
 }
 
-// Helper function to detect health issues in records
 const checkForHealthIssue = (record: HealthRecord): boolean => {
-	// Check reason field for health problems
 	const reason = record.reason?.toLowerCase() || ''
 	const notes = record.notes?.toLowerCase() || ''
 
-	// Keywords that indicate health problems
 	const healthIssueKeywords = [
 		'problema',
 		'enfermo',
@@ -356,15 +372,12 @@ const checkForHealthIssue = (record: HealthRecord): boolean => {
 		'illness',
 	]
 
-	// Check if reason or notes contain health issue keywords
 	const hasKeywords = healthIssueKeywords.some(
 		(keyword) => reason.includes(keyword) || notes.includes(keyword)
 	)
 
-	// Check if medication is prescribed (indicates treatment needed)
 	const hasMedication = Boolean(record.medication && record.medication.trim())
 
-	// Check for abnormal temperature (normal range: 38-39°C for cattle)
 	const hasAbnormalTemp = Boolean(
 		record.temperature && (record.temperature < 37.5 || record.temperature > 39.5)
 	)
@@ -375,28 +388,26 @@ const checkForHealthIssue = (record: HealthRecord): boolean => {
 const getHealthOverview = async (farmUuid: string): Promise<HealthOverview> => {
 	try {
 		const animals = await AnimalsService.getAnimals(farmUuid)
+		const limits = getOptimalLimits(animals.length)
+		const animalsToProcess = limits.animals ? animals.slice(0, limits.animals) : animals
 
-		// Initialize counters
 		let healthy = 0
 		let sick = 0
 		let inTreatment = 0
 		let checkupDue = 0
 
-		// Process animals in batches for better performance
-		const batchSize = 10
-		const limitedAnimals = animals.slice(0, 100) // Limit to first 100 animals for performance
+		for (let i = 0; i < animalsToProcess.length; i += limits.batchSize) {
+			const batch = animalsToProcess.slice(i, i + limits.batchSize)
 
-		for (let i = 0; i < limitedAnimals.length; i += batchSize) {
-			const batch = limitedAnimals.slice(i, i + batchSize)
-
-			// Process batch in parallel
 			const batchPromises = batch.map(async (animal) => {
 				if (!animal.status) {
 					return { sick: 1, healthy: 0, inTreatment: 0, checkupDue: 0 }
 				}
 
-				// Get only the most recent health record for performance
-				const healthRecords = await HealthRecordsService.getHealthRecords(animal.uuid, 1)
+				const healthRecords = await HealthRecordsService.getHealthRecords(
+					animal.uuid,
+					limits.healthRecords
+				)
 
 				if (healthRecords.length === 0) {
 					return { sick: 0, healthy: 0, inTreatment: 0, checkupDue: 1 }
@@ -405,11 +416,8 @@ const getHealthOverview = async (farmUuid: string): Promise<HealthOverview> => {
 				const recentRecord = healthRecords[0]
 				const recordDate = dayjs(recentRecord.date)
 				const daysSinceRecord = dayjs().diff(recordDate, 'days')
-
-				// Simplified health status logic for better performance
 				const hasHealthIssue = checkForHealthIssue(recentRecord)
 
-				// Quick categorization based on record type and age
 				if (recentRecord.type === 'Medication' || recentRecord.type === 'Surgery') {
 					return daysSinceRecord <= 30
 						? { sick: 0, healthy: 0, inTreatment: 1, checkupDue: 0 }
@@ -427,7 +435,6 @@ const getHealthOverview = async (farmUuid: string): Promise<HealthOverview> => {
 						: { sick: 0, healthy: 1, inTreatment: 0, checkupDue: 0 }
 				}
 
-				// Default categorization for other types
 				if (daysSinceRecord > 180) {
 					return { sick: 0, healthy: 0, inTreatment: 0, checkupDue: 1 }
 				}
@@ -435,7 +442,6 @@ const getHealthOverview = async (farmUuid: string): Promise<HealthOverview> => {
 				return { sick: 0, healthy: 1, inTreatment: 0, checkupDue: 0 }
 			})
 
-			// Wait for batch to complete and aggregate results
 			const batchResults = await Promise.all(batchPromises)
 
 			batchResults.forEach((result) => {
@@ -495,20 +501,20 @@ const getTasksOverview = async (farmUuid: string): Promise<TasksOverview> => {
 const getRecentActivities = async (farmUuid: string): Promise<RecentActivity[]> => {
 	try {
 		const animals = await AnimalsService.getAnimals(farmUuid)
+		const limits = getOptimalLimits(animals.length)
+		const animalsToProcess = limits.animals ? animals.slice(0, limits.animals) : animals
 
-		// Limit to first 15 animals for better performance
-		const limitedAnimals = animals.slice(0, 15)
-
-		// Get recent health records in parallel batches
 		const healthRecordsPromise = (async () => {
-			const batchSize = 5
 			const recentHealthRecords: (HealthRecord & { animalId?: string })[] = []
 
-			for (let i = 0; i < limitedAnimals.length; i += batchSize) {
-				const batch = limitedAnimals.slice(i, i + batchSize)
+			for (let i = 0; i < animalsToProcess.length; i += limits.batchSize) {
+				const batch = animalsToProcess.slice(i, i + limits.batchSize)
 
 				const batchPromises = batch.map(async (animal) => {
-					const healthRecords = await HealthRecordsService.getHealthRecords(animal.uuid, 1)
+					const healthRecords = await HealthRecordsService.getHealthRecords(
+						animal.uuid,
+						limits.healthRecords
+					)
 					return healthRecords.map((record) => ({
 						...record,
 						animalId: animal.animalId,
@@ -521,60 +527,55 @@ const getRecentActivities = async (farmUuid: string): Promise<RecentActivity[]> 
 
 			return recentHealthRecords
 				.sort((a, b) => dayjs(b.createdAt || b.date).diff(dayjs(a.createdAt || a.date)))
-				.slice(0, 3) // Reduced from 4 to 3
+				.slice(0, Math.floor(limits.activities * 0.4))
 		})()
 
-		// Get recent production records in parallel
 		const productionRecordsPromise = (async () => {
 			const recentProductionRecords: (ProductionRecord & { animalId?: string })[] = []
 
-			// Process only first 8 animals for production records
-			const productionAnimals = limitedAnimals.slice(0, 8)
+			for (let i = 0; i < animalsToProcess.length; i += limits.batchSize) {
+				const batch = animalsToProcess.slice(i, i + limits.batchSize)
 
-			const productionPromises = productionAnimals.map(async (animal) => {
-				const productionRecords = await ProductionRecordsService.getProductionRecords(
-					animal.uuid,
-					1
-				)
-				return productionRecords.map((record) => ({
-					...record,
-					animalId: animal.animalId,
-				}))
-			})
+				const batchPromises = batch.map(async (animal) => {
+					const productionRecords = await ProductionRecordsService.getProductionRecords(
+						animal.uuid,
+						limits.productionRecords
+					)
+					return productionRecords.map((record) => ({
+						...record,
+						animalId: animal.animalId,
+					}))
+				})
 
-			const results = await Promise.all(productionPromises)
-			recentProductionRecords.push(...results.flat())
+				const batchResults = await Promise.all(batchPromises)
+				recentProductionRecords.push(...batchResults.flat())
+			}
 
 			return recentProductionRecords
 				.sort((a, b) => dayjs(b.createdAt || b.date).diff(dayjs(a.createdAt || a.date)))
-				.slice(0, 2) // Reduced from 3 to 2
+				.slice(0, Math.floor(limits.activities * 0.4))
 		})()
 
-		// Get recent tasks
 		const tasksPromise = TasksService.getTasks({
 			farmUuid,
 			search: '',
 			status: '',
 			priority: '',
 			speciesUuid: '',
-		}).then(
-			(tasks) =>
-				tasks
-					.sort((a, b) => dayjs(b.updatedAt || b.createdAt).diff(dayjs(a.updatedAt || a.createdAt)))
-					.slice(0, 2) // Reduced from 3 to 2
+		}).then((tasks) =>
+			tasks
+				.sort((a, b) => dayjs(b.updatedAt || b.createdAt).diff(dayjs(a.updatedAt || a.createdAt)))
+				.slice(0, Math.floor(limits.activities * 0.2))
 		)
 
-		// Wait for all data in parallel
 		const [healthRecords, productionRecords, recentTasks] = await Promise.all([
 			healthRecordsPromise,
 			productionRecordsPromise,
 			tasksPromise,
 		])
 
-		// Create activities with raw dates for proper sorting
 		const activitiesWithDates: (RecentActivity & { rawDate: string })[] = []
 
-		// Process health records
 		healthRecords.forEach((record) => {
 			const typeEmojiMap: Record<string, string> = {
 				Checkup: '🩺',
@@ -602,7 +603,6 @@ const getRecentActivities = async (farmUuid: string): Promise<RecentActivity[]> 
 			})
 		})
 
-		// Process production records
 		productionRecords.forEach((record) => {
 			activitiesWithDates.push({
 				type: 'production_record',
@@ -614,7 +614,6 @@ const getRecentActivities = async (farmUuid: string): Promise<RecentActivity[]> 
 			})
 		})
 
-		// Process tasks
 		recentTasks.forEach((task) => {
 			const statusEmojiMap: Record<string, string> = {
 				todo: '⏳',
@@ -643,21 +642,18 @@ const getRecentActivities = async (farmUuid: string): Promise<RecentActivity[]> 
 			})
 		})
 
-		// Sort by actual dates (most recent first) and return top 8
 		return activitiesWithDates
 			.sort((a, b) => dayjs(b.rawDate).diff(dayjs(a.rawDate)))
-			.slice(0, 8)
-			.map(({ rawDate, ...activity }) => activity) // Remove rawDate from final result
+			.slice(0, 20)
+			.map(({ rawDate, ...activity }) => activity)
 	} catch (error) {
 		console.error('Error getting recent activities:', error)
 		return []
 	}
 }
 
-// Fast initial load - only essential data
 const getDashboardQuickStats = async (farmUuid: string): Promise<Partial<DashboardStats>> => {
 	try {
-		// Get only the most basic data for instant loading
 		const [animals, tasks] = await Promise.all([
 			AnimalsService.getAnimals(farmUuid),
 			TasksService.getTasks({
@@ -671,10 +667,10 @@ const getDashboardQuickStats = async (farmUuid: string): Promise<Partial<Dashboa
 
 		return {
 			totalAnimals: animals.length,
-			healthyAnimals: animals.filter((animal) => animal.status).length, // Simple active count
+			healthyAnimals: animals.filter((animal) => animal.status).length,
 			pendingTasks: tasks.filter((task) => task.status === 'todo' || task.status === 'in-progress')
 				.length,
-			monthlyProduction: 0, // Will be loaded in phase 2
+			monthlyProduction: 0,
 		}
 	} catch (error) {
 		console.error('Error getting quick dashboard stats:', error)
@@ -687,9 +683,7 @@ const getDashboardQuickStats = async (farmUuid: string): Promise<Partial<Dashboa
 	}
 }
 
-// Progressive loading phases
 const loadDashboardPhase2 = async (farmUuid: string) => {
-	// Load production data and health overview in parallel
 	const [productionStats, healthOverview, tasksOverview] = await Promise.all([
 		getDashboardStatsDetailed(farmUuid),
 		getHealthOverview(farmUuid),
@@ -704,7 +698,6 @@ const loadDashboardPhase2 = async (farmUuid: string) => {
 }
 
 const loadDashboardPhase3 = async (farmUuid: string, year?: number) => {
-	// Load charts and distribution data
 	const [productionData, animalDistribution, recentActivities] = await Promise.all([
 		getProductionData(farmUuid, year),
 		getAnimalDistribution(farmUuid),
@@ -719,7 +712,6 @@ const loadDashboardPhase3 = async (farmUuid: string, year?: number) => {
 }
 
 export const DashboardService = {
-	// Original methods for backward compatibility
 	getDashboardStats,
 	getDashboardStatsDetailed,
 	getProductionData,
@@ -727,8 +719,6 @@ export const DashboardService = {
 	getHealthOverview,
 	getTasksOverview,
 	getRecentActivities,
-
-	// New progressive loading methods
 	getDashboardQuickStats,
 	loadDashboardPhase2,
 	loadDashboardPhase3,

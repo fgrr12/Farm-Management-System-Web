@@ -80,7 +80,6 @@ export const useDashboardData = () => {
 	})
 	const [recentActivities, setRecentActivities] = useState<RecentActivity[]>([])
 
-	// Phase 1: Ultra-fast initial load - only critical stats
 	const fetchQuickData = useCallback(async () => {
 		if (!farm?.uuid) {
 			setLoading(false)
@@ -89,8 +88,6 @@ export const useDashboardData = () => {
 
 		try {
 			setLoading(true)
-
-			// Load only the most essential data for instant feedback
 			const quickStats = await DashboardService.getDashboardQuickStats(farm.uuid)
 
 			setStats((prevStats) => ({
@@ -104,7 +101,6 @@ export const useDashboardData = () => {
 		}
 	}, [farm?.uuid])
 
-	// Phase 2: Load secondary data using new optimized service methods
 	const fetchSecondaryData = useCallback(async () => {
 		if (!farm?.uuid) {
 			setLoadingSecondary(false)
@@ -113,13 +109,11 @@ export const useDashboardData = () => {
 
 		try {
 			setLoadingSecondary(true)
-
 			const phase2Data = await DashboardService.loadDashboardPhase2(farm.uuid)
 
 			setHealthOverview(phase2Data.healthOverview)
 			setTasksOverview(phase2Data.tasksOverview)
 
-			// Update stats with more accurate data
 			setStats((prevStats) => ({
 				...prevStats,
 				healthyAnimals: phase2Data.healthOverview.healthy,
@@ -134,7 +128,6 @@ export const useDashboardData = () => {
 		}
 	}, [farm?.uuid])
 
-	// Phase 3: Load charts and heavy data
 	const fetchTertiaryData = useCallback(async () => {
 		if (!farm?.uuid) {
 			setLoadingTertiary(false)
@@ -143,7 +136,6 @@ export const useDashboardData = () => {
 
 		try {
 			setLoadingTertiary(true)
-
 			const phase3Data = await DashboardService.loadDashboardPhase3(farm.uuid)
 
 			setProductionData(phase3Data.productionData)
@@ -156,23 +148,19 @@ export const useDashboardData = () => {
 		}
 	}, [farm?.uuid])
 
-	// Optimized progressive loading orchestration
 	const fetchDashboardData = useCallback(async () => {
-		// Phase 1: Load critical data immediately
 		await fetchQuickData()
 
-		// Phase 2: Load secondary data after UI renders
 		requestAnimationFrame(() => {
 			setTimeout(() => {
 				fetchSecondaryData()
-			}, 50) // Reduced delay for faster perceived performance
+			}, 50)
 		})
 
-		// Phase 3: Load heavy data after secondary completes or timeout
 		requestAnimationFrame(() => {
 			setTimeout(() => {
 				fetchTertiaryData()
-			}, 200) // Reduced delay
+			}, 200)
 		})
 	}, [fetchQuickData, fetchSecondaryData, fetchTertiaryData])
 
