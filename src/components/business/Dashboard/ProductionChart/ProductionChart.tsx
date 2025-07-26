@@ -2,12 +2,16 @@ import dayjs from 'dayjs'
 import { memo, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useDashboardData } from '@/hooks/dashboard/useDashboardData'
 import { useProductionData } from '@/hooks/dashboard/useProductionData'
 
 export const ProductionChart = memo(() => {
 	const { t } = useTranslation(['dashboard'])
 	const [selectedYear, setSelectedYear] = useState(dayjs().year())
-	const { productionData, loading } = useProductionData(selectedYear)
+	const { loadingTertiary } = useDashboardData()
+
+	// Use dedicated production data hook for year filtering
+	const { productionData, loading: productionLoading } = useProductionData(selectedYear)
 
 	// Generate year options (current year and 4 years back)
 	const yearOptions = useMemo(() => {
@@ -29,7 +33,7 @@ export const ProductionChart = memo(() => {
 		}))
 	}, [productionData])
 
-	if (loading) {
+	if (loadingTertiary || productionLoading) {
 		return (
 			<div className="bg-white rounded-xl border border-gray-200 p-6">
 				<div className="animate-pulse">

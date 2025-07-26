@@ -5,9 +5,9 @@ import { useDashboardData } from '@/hooks/dashboard/useDashboardData'
 
 export const TasksOverview = memo(() => {
 	const { t } = useTranslation(['dashboard'])
-	const { tasksOverview, loading } = useDashboardData()
+	const { tasksOverview, loading, loadingSecondary } = useDashboardData()
 
-	if (loading) {
+	if (loading || loadingSecondary) {
 		return (
 			<div className="bg-white rounded-xl border border-gray-200 p-6">
 				<div className="animate-pulse">

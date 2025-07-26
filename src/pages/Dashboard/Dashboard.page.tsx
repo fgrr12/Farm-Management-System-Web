@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { AnimalDistribution } from '@/components/business/Dashboard/AnimalDistribution'
@@ -8,10 +8,16 @@ import { ProductionChart } from '@/components/business/Dashboard/ProductionChart
 import { RecentActivities } from '@/components/business/Dashboard/RecentActivities'
 import { TasksOverview } from '@/components/business/Dashboard/TasksOverview'
 
+import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
+
 const Dashboard = () => {
 	const { t } = useTranslation(['dashboard'])
 
-	// Note: setHeaderTitle removed to avoid test issues
+	const { setPageTitle } = usePagePerformance()
+
+	useEffect(() => {
+		setPageTitle(t('title'))
+	}, [setPageTitle, t])
 
 	return (
 		<div className="flex flex-col w-full h-full p-4 gap-6 overflow-auto">

@@ -5,7 +5,7 @@ import { useDashboardData } from '@/hooks/dashboard/useDashboardData'
 
 export const AnimalDistribution = memo(() => {
 	const { t } = useTranslation(['dashboard'])
-	const { animalDistribution, loading } = useDashboardData()
+	const { animalDistribution, loading, loadingTertiary } = useDashboardData()
 
 	const chartData = useMemo(() => {
 		if (!animalDistribution?.length) return []
@@ -29,7 +29,7 @@ export const AnimalDistribution = memo(() => {
 		})
 	}, [animalDistribution])
 
-	if (loading) {
+	if (loading || loadingTertiary) {
 		return (
 			<div className="bg-white rounded-xl border border-gray-200 p-6">
 				<div className="animate-pulse">

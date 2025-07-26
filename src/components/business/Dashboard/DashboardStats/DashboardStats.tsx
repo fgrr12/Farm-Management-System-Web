@@ -7,7 +7,7 @@ import { StatCard } from './StatCard'
 
 export const DashboardStats = memo(() => {
 	const { t } = useTranslation(['dashboard'])
-	const { stats, loading } = useDashboardData()
+	const { stats, loading, loadingSecondary } = useDashboardData()
 
 	return (
 		<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -25,7 +25,7 @@ export const DashboardStats = memo(() => {
 				change={stats.healthChange}
 				icon="i-material-symbols-favorite"
 				color="green"
-				loading={loading}
+				loading={loading || loadingSecondary} // Shows loading until accurate health data is loaded
 			/>
 			<StatCard
 				title={t('stats.pendingTasks')}
@@ -33,7 +33,7 @@ export const DashboardStats = memo(() => {
 				change={stats.tasksChange}
 				icon="i-material-symbols-task-alt"
 				color="orange"
-				loading={loading}
+				loading={loading || loadingSecondary} // Shows loading until accurate task data is loaded
 			/>
 			<StatCard
 				title={t('stats.monthlyProduction')}
@@ -42,6 +42,8 @@ export const DashboardStats = memo(() => {
 				icon="i-material-symbols-water-drop"
 				color="purple"
 				loading={loading}
+				// Production change loads in secondary phase but initial value loads immediately
+				changeLoading={loadingSecondary && !stats.productionChange}
 			/>
 		</div>
 	)

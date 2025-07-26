@@ -47,6 +47,9 @@ vi.mock('@/hooks/dashboard/useDashboardData', () => ({
 			},
 		],
 		loading: false,
+		loadingSecondary: false,
+		loadingTertiary: false,
+		refetch: vi.fn(),
 	}),
 }))
 
@@ -60,6 +63,16 @@ vi.mock('@/hooks/dashboard/useProductionData', () => ({
 		],
 		loading: false,
 		refetch: vi.fn(),
+	}),
+}))
+
+// Mock the page performance hook to prevent infinite loops
+vi.mock('@/hooks/ui/usePagePerformance', () => ({
+	usePagePerformance: () => ({
+		setPageTitle: vi.fn(),
+		handleLoading: vi.fn(),
+		showToast: vi.fn(),
+		withLoadingAndError: vi.fn(),
 	}),
 }))
 

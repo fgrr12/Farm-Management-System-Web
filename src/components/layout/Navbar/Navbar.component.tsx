@@ -38,7 +38,8 @@ export const Navbar = memo(() => {
 			location.pathname === AppRoutes.TASKS ||
 			location.pathname === AppRoutes.MY_ACCOUNT ||
 			location.pathname === AppRoutes.MY_SPECIES ||
-			location.pathname === AppRoutes.BILLING_CARD,
+			location.pathname === AppRoutes.BILLING_CARD ||
+			location.pathname === AppRoutes.DASHBOARD,
 		[location.pathname]
 	)
 

@@ -8,6 +8,7 @@ interface StatCardProps {
 	icon: string
 	color: 'blue' | 'green' | 'orange' | 'purple'
 	loading?: boolean
+	changeLoading?: boolean
 }
 
 const colorClasses = {
@@ -34,7 +35,7 @@ const colorClasses = {
 }
 
 export const StatCard = memo<StatCardProps>(
-	({ title, value, change, icon, color, loading = false }) => {
+	({ title, value, change, icon, color, loading = false, changeLoading = false }) => {
 		const { t } = useTranslation('dashboard')
 		const colors = colorClasses[color]
 		const isPositive = change && change > 0
@@ -66,18 +67,26 @@ export const StatCard = memo<StatCardProps>(
 					<div className="flex-1">
 						<p className="text-sm font-medium text-gray-600 mb-1">{title}</p>
 						<p className="text-2xl font-bold text-gray-900">{value}</p>
-						{change !== undefined && change !== null && (
+						{changeLoading ? (
 							<div className="flex items-center mt-2">
-								<span
-									className={`text-sm font-medium ${
-										isPositive ? 'text-green-600' : isNegative ? 'text-red-600' : 'text-gray-500'
-									}`}
-								>
-									{isPositive && '+'}
-									{change}%
-								</span>
-								<span className="text-xs text-gray-500 ml-1">{t('common.vsLastMonth')}</span>
+								<div className="h-4 bg-gray-200 rounded w-12 animate-pulse" />
+								<div className="h-3 bg-gray-200 rounded w-20 ml-2 animate-pulse" />
 							</div>
+						) : (
+							change !== undefined &&
+							change !== null && (
+								<div className="flex items-center mt-2">
+									<span
+										className={`text-sm font-medium ${
+											isPositive ? 'text-green-600' : isNegative ? 'text-red-600' : 'text-gray-500'
+										}`}
+									>
+										{isPositive && '+'}
+										{change}%
+									</span>
+									<span className="text-xs text-gray-500 ml-1">{t('common.vsLastMonth')}</span>
+								</div>
+							)
 						)}
 					</div>
 					<div className={`p-3 rounded-lg ${colors.bg}`}>
