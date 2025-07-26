@@ -13,15 +13,6 @@ import { TasksService } from '@/services/tasks'
 
 import i18n from '@/i18n'
 
-interface DynamicLimits {
-	animals: number | null
-	healthRecords: number
-	productionRecords: number
-	tasks: number
-	activities: number
-	batchSize: number
-}
-
 const getOptimalLimits = (animalCount: number): DynamicLimits => {
 	if (animalCount < 100) {
 		return {
@@ -53,48 +44,6 @@ const getOptimalLimits = (animalCount: number): DynamicLimits => {
 		activities: 10,
 		batchSize: 5,
 	}
-}
-
-interface DashboardStats {
-	totalAnimals: number
-	healthyAnimals: number
-	pendingTasks: number
-	monthlyProduction: number
-	animalsChange?: number
-	healthChange?: number
-	tasksChange?: number
-	productionChange?: number
-}
-
-interface ProductionData {
-	month: string
-	value: number
-}
-
-interface AnimalDistribution {
-	species: string
-	count: number
-}
-
-interface HealthOverview {
-	healthy: number
-	sick: number
-	inTreatment: number
-	checkupDue: number
-}
-
-interface TasksOverview {
-	pending: number
-	inProgress: number
-	completed: number
-}
-
-interface RecentActivity {
-	type: string
-	title: string
-	description: string
-	time: string
-	user: string
 }
 
 const formatRelativeTime = (date: string | Date | undefined): string => {
@@ -683,7 +632,7 @@ const getDashboardQuickStats = async (farmUuid: string): Promise<Partial<Dashboa
 	}
 }
 
-const loadDashboardPhase2 = async (farmUuid: string) => {
+const loadDashboardPhase2 = async (farmUuid: string): Promise<DashboardPhase2Data> => {
 	const [productionStats, healthOverview, tasksOverview] = await Promise.all([
 		getDashboardStatsDetailed(farmUuid),
 		getHealthOverview(farmUuid),
@@ -697,7 +646,10 @@ const loadDashboardPhase2 = async (farmUuid: string) => {
 	}
 }
 
-const loadDashboardPhase3 = async (farmUuid: string, year?: number) => {
+const loadDashboardPhase3 = async (
+	farmUuid: string,
+	year?: number
+): Promise<DashboardPhase3Data> => {
 	const [productionData, animalDistribution, recentActivities] = await Promise.all([
 		getProductionData(farmUuid, year),
 		getAnimalDistribution(farmUuid),

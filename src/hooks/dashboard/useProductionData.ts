@@ -4,11 +4,6 @@ import { useFarmStore } from '@/store/useFarmStore'
 
 import { DashboardService } from '@/services/dashboard'
 
-interface ProductionData {
-	month: string
-	value: number
-}
-
 export const useProductionData = (year?: number) => {
 	const { farm } = useFarmStore()
 	const [loading, setLoading] = useState(true)
