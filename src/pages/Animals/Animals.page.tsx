@@ -1,6 +1,6 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import { type ChangeEvent, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -12,9 +12,8 @@ import { useUserStore } from '@/store/useUserStore'
 import { AnimalsService } from '@/services/animals'
 
 import { AnimalCard } from '@/components/business/Animals/AnimalCard'
+import { AnimalFilters } from '@/components/business/Animals/AnimalFilters'
 import { Button } from '@/components/ui/Button'
-import { Search } from '@/components/ui/Search'
-import { Select } from '@/components/ui/Select'
 
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
@@ -30,22 +29,6 @@ const Animals = () => {
 
 	const [animals, setAnimals] = useState<AnimalCardProps[]>([])
 	const [filters, setFilters] = useState(INITIAL_FILTERS)
-
-	const genderOptions = [
-		{ value: 'female', name: t('gender.female') },
-		{ value: 'male', name: t('gender.male') },
-	]
-
-	const statusOptions = [
-		{ value: 'inFarm', name: t('status.inFarm') },
-		{ value: 'dead', name: t('status.dead') },
-		{ value: 'sold', name: t('status.sold') },
-	]
-
-	const speciesOptions = useMemo(
-		() => species.map((specie) => ({ value: specie.uuid, name: specie.name })),
-		[species]
-	)
 
 	const filteredAnimals = useMemo(() => {
 		if (!animals.length) return []
@@ -76,14 +59,8 @@ const Animals = () => {
 		})
 	}, [animals, filters])
 
-	const handleSearchChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-		const { value } = event.target as HTMLInputElement
-		setFilters((prev) => ({ ...prev, search: value }))
-	}, [])
-
-	const handleSelectChange = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
-		const { name, value } = event.target
-		setFilters((prev) => ({ ...prev, [name]: value }))
+	const handleFiltersChange = useCallback((newFilters: AnimalsFilters) => {
+		setFilters(newFilters)
 	}, [])
 
 	const navigateToAddAnimal = useCallback(() => {
@@ -154,52 +131,31 @@ const Animals = () => {
 				<h2 id="filters-heading" className="sr-only">
 					{t('accessibility.filtersSection')}
 				</h2>
-				<div className="flex flex-col sm:grid sm:grid-cols-2 lg:grid-cols-6 items-center justify-center gap-3 sm:gap-4 w-full">
-					<Search
-						placeholder={t('search')}
-						value={filters.search}
-						onChange={handleSearchChange}
-						aria-label={t('accessibility.searchAnimals')}
-					/>
-					<Select
-						name="speciesUuid"
-						legend={t('filterBySpecies')}
-						defaultLabel={t('filterBySpecies')}
-						value={filters.speciesUuid}
-						items={speciesOptions}
-						onChange={handleSelectChange}
-						aria-label={t('filterBySpecies')}
-					/>
-					<Select
-						name="gender"
-						legend={t('filterByGender')}
-						defaultLabel={t('filterByGender')}
-						value={filters.gender}
-						items={genderOptions}
-						onChange={handleSelectChange}
-						aria-label={t('filterByGender')}
-					/>
-					<Select
-						name="status"
-						legend={t('filterByStatus')}
-						defaultLabel={t('filterByStatus')}
-						value={filters.status}
-						items={statusOptions}
-						onChange={handleSelectChange}
-						aria-label={t('filterByStatus')}
-					/>
-					<Button
-						type="button"
-						className="btn btn-primary h-12 w-full text-lg sm:col-span-2 lg:col-start-6 lg:col-span-1 mt-4 sm:mt-0"
-						onClick={navigateToAddAnimal}
-						aria-describedby="add-animal-description"
-					>
-						{t('addAnimal')}
-					</Button>
-					<div id="add-animal-description" className="sr-only">
-						{t('accessibility.addAnimalDescription')}
+
+				{/* Top Bar with Filters and Add Button */}
+				<header className="flex items-center justify-between gap-4">
+					<div className="flex-shrink-0">
+						<AnimalFilters
+							filters={filters}
+							onFiltersChange={handleFiltersChange}
+							species={species}
+						/>
 					</div>
-				</div>
+
+					<div className="flex-shrink-0">
+						<Button
+							type="button"
+							className="btn btn-primary h-12 text-lg"
+							onClick={navigateToAddAnimal}
+							aria-describedby="add-animal-description"
+						>
+							{t('addAnimal')}
+						</Button>
+						<div id="add-animal-description" className="sr-only">
+							{t('accessibility.addAnimalDescription')}
+						</div>
+					</div>
+				</header>
 			</section>
 
 			<section aria-labelledby="animals-heading" aria-live="polite" aria-atomic="false">
