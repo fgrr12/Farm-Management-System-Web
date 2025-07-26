@@ -1,35 +1,45 @@
 {
 	"accessibility": {
 		"addTaskDescription": "Navigate to form to create a new task",
-		"completedTaskStatusHelp": "Uncheck this box to mark the task as pending",
-		"completedTasksList": "List of {{count}} completed tasks",
 		"filtersSection": "Filter and search tasks",
-		"markTaskComplete": "Mark task \"{{title}}\" as complete",
-		"markTaskPending": "Mark task \"{{title}}\" as pending",
-		"pendingTasksList": "List of {{count}} pending tasks",
-		"priorityIndicator": "Priority: {{priority}}",
 		"searchTasks": "Search tasks by title or description",
-		"skipToTasks": "Skip to tasks list",
-		"taskStatusHelp": "Check this box to mark the task as completed"
+		"skipToTasks": "Skip to tasks list"
 	},
 	"addTask": "Add Task",
-	"completed": "Completed",
-	"filterByPriority": "Filter by priority",
-	"filterBySpecies": "Filter by species",
-	"filterByStatus": "Filter by status",
-	"high": "High",
-	"low": "Low",
-	"medium": "Medium",
-	"noTasks": "No tasks found",
-	"pending": "Pending",
+	"allPriorities": "All Priorities",
+	"allSpecies": "All Species",
+	"clearFilters": "Clear All",
+	"createdAt": "Created",
+	"done": "Done",
+	"dropTaskHere": "Drop task here",
+	"filterByPriority": "Priority",
+	"filterBySpecies": "Species",
+	"filters": "Filters",
+	"filtersActive": "Filters",
+	"filtersApplied": "{{count}} filter applied",
+	"filtersApplied_other": "{{count}} filters applied",
+	"filtersButton": "Open filters menu",
+	"noFiltersApplied": "No filters applied",
+	"noTasksFound": "No tasks found for your search",
+	"noTasksInColumn": "No tasks in this column",
+	"priority": {
+		"high": "High",
+		"low": "Low",
+		"medium": "Medium"
+	},
 	"search": "Search",
-	"species": "Species",
-	"status": "Status",
+	"searchInColumn": "Search in this column...",
+	"status": {
+		"archived": "Archived",
+		"done": "Done",
+		"in-progress": "In Progress",
+		"todo": "To Do"
+	},
 	"title": "Tasks",
 	"toast": {
 		"errorGettingTasks": "Error getting tasks",
 		"errorUpdatingTaskStatus": "Error updating task status",
-		"taskCompleted": "Task {{taskUuid}} is completed",
-		"taskPending": "Task {{taskUuid}} is pending"
-	}
+		"taskMoved": "Task moved to {{status}}"
+	},
+	"updatedAt": "Updated"
 }

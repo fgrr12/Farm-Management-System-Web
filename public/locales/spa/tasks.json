@@ -1,35 +1,45 @@
 {
 	"accessibility": {
 		"addTaskDescription": "Navegar al formulario para crear una nueva tarea",
-		"completedTaskStatusHelp": "Desmarca esta casilla para marcar la tarea como pendiente",
-		"completedTasksList": "Lista de {{count}} tareas completadas",
 		"filtersSection": "Filtrar y buscar tareas",
-		"markTaskComplete": "Marcar tarea \"{{title}}\" como completada",
-		"markTaskPending": "Marcar tarea \"{{title}}\" como pendiente",
-		"pendingTasksList": "Lista de {{count}} tareas pendientes",
-		"priorityIndicator": "Prioridad: {{priority}}",
 		"searchTasks": "Buscar tareas por título o descripción",
-		"skipToTasks": "Saltar a la lista de tareas",
-		"taskStatusHelp": "Marca esta casilla para marcar la tarea como completada"
+		"skipToTasks": "Saltar a la lista de tareas"
 	},
 	"addTask": "Añadir tarea",
-	"completed": "Completadas",
-	"filterByPriority": "Filtra por prioridad",
-	"filterBySpecies": "Filtra por especie",
-	"filterByStatus": "Filtra por estado",
-	"high": "Alta",
-	"low": "Baja",
-	"medium": "Media",
-	"noTasks": "No se encontraron tareas",
-	"pending": "Pendientes",
+	"allPriorities": "Todas las Prioridades",
+	"allSpecies": "Todas las Especies",
+	"clearFilters": "Limpiar Todo",
+	"createdAt": "Creada",
+	"done": "Listo",
+	"dropTaskHere": "Suelta la tarea aquí",
+	"filterByPriority": "Prioridad",
+	"filterBySpecies": "Especie",
+	"filters": "Filtros",
+	"filtersActive": "Filtros",
+	"filtersApplied": "{{count}} filtro aplicado",
+	"filtersApplied_other": "{{count}} filtros aplicados",
+	"filtersButton": "Abrir menú de filtros",
+	"noFiltersApplied": "Sin filtros aplicados",
+	"noTasksFound": "No se encontraron tareas para tu búsqueda",
+	"noTasksInColumn": "No hay tareas en esta columna",
+	"priority": {
+		"high": "Alta",
+		"low": "Baja",
+		"medium": "Media"
+	},
 	"search": "Buscar",
-	"species": "Especie",
-	"status": "Estado",
+	"searchInColumn": "Buscar en esta columna...",
+	"status": {
+		"archived": "Archivadas",
+		"done": "Completadas",
+		"in-progress": "En Progreso",
+		"todo": "Por Hacer"
+	},
 	"title": "Tareas",
 	"toast": {
 		"errorGettingTasks": "Error al obtener las tareas",
 		"errorUpdatingTaskStatus": "Error al actualizar el estado de la tarea",
-		"taskCompleted": "La tarea {{taskUuid}} está completada",
-		"taskPending": "La tarea {{taskUuid}} está pendiente"
-	}
+		"taskMoved": "Tarea movida a {{status}}"
+	},
+	"updatedAt": "Actualizada"
 }
