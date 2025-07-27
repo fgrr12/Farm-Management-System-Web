@@ -16,7 +16,7 @@ const iconColor = (icon: string | undefined) => {
 		case 'i-material-symbols-light-health-metrics-rounded':
 			return 'bg-emerald-500!'
 		case 'i-icon-park-outline-milk':
-			return 'bg-gray-500!'
+			return 'bg-blue-500!'
 		case 'i-tabler-circles-relation':
 			return 'bg-yellow-500!'
 		case 'i-lucide-circle-x':

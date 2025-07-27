@@ -114,7 +114,7 @@ const TaskForm = () => {
 									<TextField
 										{...register('title')}
 										type="text"
-										placeholder={t('name')}
+										placeholder={t('placeholders.taskName')}
 										label={t('name')}
 										required
 										error={errors.title ? getErrorMessage(errors.title.message || '') : undefined}
@@ -127,7 +127,7 @@ const TaskForm = () => {
 
 									<Textarea
 										{...register('description')}
-										placeholder={t('description')}
+										placeholder={t('placeholders.taskDescription')}
 										label={t('description')}
 										required
 										error={
@@ -157,7 +157,7 @@ const TaskForm = () => {
 											<Select
 												{...field}
 												legend={t('selectPriority')}
-												defaultLabel={t('selectPriority')}
+												defaultLabel={t('placeholders.priorityHint')}
 												items={[
 													{ value: 'low', name: t('priorities.low') },
 													{ value: 'medium', name: t('priorities.medium') },
@@ -184,7 +184,7 @@ const TaskForm = () => {
 											<Select
 												{...field}
 												legend={t('selectSpecies')}
-												defaultLabel={t('selectSpecies')}
+												defaultLabel={t('placeholders.speciesHint')}
 												optionValue="uuid"
 												optionLabel="name"
 												items={species}

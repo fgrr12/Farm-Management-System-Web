@@ -239,7 +239,7 @@ const AnimalForm = () => {
 												<TextField
 													{...register('animalId')}
 													type="text"
-													placeholder={t('animalId')}
+													placeholder={t('placeholders.animalId')}
 													label={t('animalId')}
 													required
 													error={
@@ -261,7 +261,7 @@ const AnimalForm = () => {
 														<Select
 															{...field}
 															legend={t('selectSpecies')}
-															defaultLabel={t('selectSpecies')}
+															defaultLabel={t('placeholders.speciesHint')}
 															optionValue="uuid"
 															optionLabel="name"
 															items={species}
@@ -286,7 +286,7 @@ const AnimalForm = () => {
 														<Select
 															{...field}
 															legend={t('selectBreed')}
-															defaultLabel={t('selectBreed')}
+															defaultLabel={t('placeholders.breedHint')}
 															optionValue="uuid"
 															optionLabel="name"
 															items={filteredBreeds}
@@ -312,7 +312,7 @@ const AnimalForm = () => {
 														<Select
 															{...field}
 															legend={t('selectGender')}
-															defaultLabel={t('selectGender')}
+															defaultLabel={t('placeholders.genderHint')}
 															optionValue="value"
 															optionLabel="name"
 															items={[
@@ -336,7 +336,7 @@ const AnimalForm = () => {
 												<TextField
 													{...register('color')}
 													type="text"
-													placeholder={t('color')}
+													placeholder={t('placeholders.color')}
 													label={t('color')}
 													error={
 														errors.color ? getErrorMessage(errors.color.message || '') : undefined
@@ -351,7 +351,7 @@ const AnimalForm = () => {
 												<TextField
 													{...register('weight', { valueAsNumber: true })}
 													type="number"
-													placeholder={`${t('weight')} (${farm?.weightUnit})`}
+													placeholder={`${t('placeholders.weight')} (${farm?.weightUnit})`}
 													label={`${t('weight')} (${farm?.weightUnit})`}
 													onWheel={(e) => e.currentTarget.blur()}
 													error={
@@ -492,7 +492,7 @@ const AnimalForm = () => {
 										</h3>
 										<Textarea
 											{...register('origin')}
-											placeholder={t('origin')}
+											placeholder={t('placeholders.origin')}
 											label={t('origin')}
 											error={
 												errors.origin ? getErrorMessage(errors.origin.message || '') : undefined

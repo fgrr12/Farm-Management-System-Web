@@ -12,15 +12,21 @@
 	"basicInformation": "Basic Information",
 	"description": "Description",
 	"name": "Name",
+	"placeholders": {
+		"priorityHint": "Consider medical urgency, production impact, and available resources",
+		"speciesHint": "Select the primary species affected by this task",
+		"taskDescription": "Detail the steps: 1) Prepare materials, 2) Perform procedure, 3) Document results...",
+		"taskName": "E.g: Vaccinate cattle, Clean water troughs, Check fences..."
+	},
 	"priorities": {
-		"default": "Select a priority",
-		"high": "High",
-		"low": "Low",
-		"medium": "Medium"
+		"default": "How urgent is this task?",
+		"high": "High - Requires immediate attention",
+		"low": "Low - Can wait several days",
+		"medium": "Medium - Complete within 1-2 days"
 	},
 	"priority": "Priority",
-	"selectPriority": "Select a priority",
-	"selectSpecies": "Select a species",
+	"selectPriority": "How urgent is this task?",
+	"selectSpecies": "Which animal type is this task for?",
 	"species": "Species",
 	"subtitle": "Create a new task for your farm",
 	"taskSettings": "Task Settings",

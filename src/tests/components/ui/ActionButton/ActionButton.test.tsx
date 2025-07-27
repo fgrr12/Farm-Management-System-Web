@@ -81,7 +81,7 @@ describe('ActionButton', () => {
 		render(<ActionButton icon="i-icon-park-outline-milk" />)
 
 		const icon = screen.getByRole('button').querySelector('i')
-		expect(icon).toHaveClass('bg-gray-500!')
+		expect(icon).toHaveClass('bg-blue-500!')
 	})
 
 	it('should apply correct color for relation icon', () => {

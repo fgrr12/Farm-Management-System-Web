@@ -44,10 +44,19 @@
 	},
 	"origin": "Origin",
 	"photoHint": "Upload a clear photo of your animal (optional)",
+	"placeholders": {
+		"animalId": "E.g: A001, Cow-123, Bull-Main...",
+		"breedHint": "Specific breed within the selected species",
+		"color": "E.g: Black with white spots, Light brown, Pinto...",
+		"genderHint": "Biological sex of the animal",
+		"origin": "E.g: Purchased at Livestock Fair, Born on farm, Trade with neighbor...",
+		"speciesHint": "Type of animal (cattle, swine, sheep, etc.)",
+		"weight": "Enter weight in kilograms or pounds..."
+	},
 	"purchaseDate": "Purchase Date",
-	"selectBreed": "Select a breed",
-	"selectGender": "Select a gender",
-	"selectSpecies": "Select a species",
+	"selectBreed": "What specific breed is this animal?",
+	"selectGender": "Is it male or female?",
+	"selectSpecies": "What type of animal is this?",
 	"soldDate": "Sold Date",
 	"species": "Species",
 	"toast": {
