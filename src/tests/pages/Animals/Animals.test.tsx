@@ -248,7 +248,14 @@ describe('Animals Page', () => {
 
 		// Wait for animals to load (only 1 female animal due to default filter)
 		await waitFor(() => {
-			expect(screen.getByText('1 animals found')).toBeInTheDocument()
+			// Check that the filtered count shows 1 in the stats card
+			expect(screen.getByText('1')).toBeInTheDocument()
+			// Check that it shows "filtered" label since there are filters applied
+			expect(screen.getByText('filtered')).toBeInTheDocument()
+			// Check that total animals shows 2 (using getAllByText to handle multiple "2"s)
+			const twos = screen.getAllByText('2')
+			expect(twos.length).toBeGreaterThan(0)
+			expect(screen.getByText('allAnimals')).toBeInTheDocument()
 		})
 	})
 

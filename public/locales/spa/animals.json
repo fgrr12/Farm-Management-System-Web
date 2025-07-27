@@ -11,6 +11,8 @@
 		"skipToAnimals": "Saltar a la lista de animales"
 	},
 	"addAnimal": "Añadir animal",
+	"addFirstAnimal": "Añadir Primer Animal",
+	"allAnimals": "Todos los Animales",
 	"allGenders": "Todos los Géneros",
 	"allSpecies": "Todas las Especies",
 	"allStatuses": "Todos los Estados",
@@ -19,6 +21,7 @@
 	"filterByGender": "Filtrar por género",
 	"filterBySpecies": "Filtra por especie",
 	"filterByStatus": "Filtrar por estado",
+	"filtered": "Filtrados",
 	"filters": "Filtros",
 	"filtersActive": "Filtros",
 	"filtersApplied": "{{count}} filtro aplicado",
@@ -31,6 +34,7 @@
 	"noAnimals": "No hay animales",
 	"noAnimalsSubtitle": "Agrega un animal a tu granja para comenzar",
 	"noFiltersApplied": "Sin filtros aplicados",
+	"results": "resultados",
 	"search": "Buscar",
 	"species": "Especies",
 	"status": {
@@ -38,9 +42,11 @@
 		"inFarm": "En granja",
 		"sold": "Vendido"
 	},
+	"subtitle": "Gestiona los animales de tu granja",
 	"title": "Animales",
 	"toast": {
 		"errorGettingAnimals": "Se ha producido un error al obtener los animales."
 	},
+	"total": "Total",
 	"totalFilteredAnimals": "Animales filtrados: <strong>{{count}}</strong>"
 }

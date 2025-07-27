@@ -201,9 +201,9 @@ export const HealthRecordsFilters: FC<HealthRecordsFiltersProps> = memo(
 						/>
 					</button>
 
-					{/* Active Filters Preview */}
+					{/* Active Filters Preview - Only show on larger screens to avoid overlap */}
 					{hasActiveFilters && !isOpen && (
-						<div className="absolute top-full sm:bottom-full right-0 mt-1 sm:mt-0 sm:mb-1 px-3 py-1 bg-emerald-100 text-emerald-800 text-xs rounded-md whitespace-nowrap z-10 max-w-xs truncate">
+						<div className="hidden sm:block absolute bottom-full right-0 mb-1 px-3 py-1 bg-emerald-100 text-emerald-800 text-xs rounded-md whitespace-nowrap z-10 max-w-xs truncate">
 							{getActiveFiltersText}
 						</div>
 					)}
