@@ -203,7 +203,7 @@ const Animal = () => {
 						<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
 							<div className="flex items-center gap-3 sm:gap-4">
 								<div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
-									<i className="i-material-symbols-pets text-white w-5 h-5 sm:w-6 sm:h-6" />
+									<i className="i-material-symbols-pets bg-white! w-6! h-6! sm:w-6 sm:h-6" />
 								</div>
 								<div className="min-w-0">
 									<h1 className="text-xl sm:text-2xl font-bold text-white truncate">

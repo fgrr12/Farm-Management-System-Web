@@ -189,31 +189,108 @@ const MySpecies = () => {
 	}, [setPageTitle, t])
 
 	return (
-		<div className="flex flex-col w-full h-full p-3 sm:p-4 gap-3 sm:gap-4 overflow-auto">
-			<div className="flex flex-col sm:grid sm:grid-cols-3 items-center justify-center gap-3 sm:gap-4 w-full">
-				<Search placeholder={t('search')} />
-				<div className="col-start-3 w-full">
-					<Button title={t('addMoreSpecies')} onClick={handleAddSpecie}>
-						{t('addMoreSpecies')}
-					</Button>
-				</div>
-			</div>
+		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 overflow-y-auto">
+			<div className="max-w-7xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
+				{/* Hero Header */}
+				<div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-6 sm:mb-8">
+					<div className="bg-gradient-to-r from-blue-600 to-green-600 px-4 sm:px-6 py-6 sm:py-8">
+						<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+							<div className="flex items-center gap-3 sm:gap-4">
+								<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+									<i className="i-material-symbols-category bg-white! w-6! h-6! sm:w-8 sm:h-8" />
+								</div>
+								<div className="min-w-0">
+									<h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
+										{t('title')}
+									</h1>
+									<p className="text-blue-100 text-sm sm:text-base mt-1">{t('subtitle')}</p>
+								</div>
+							</div>
 
-			<div className="grid grid-cols-1 lg:grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-3 sm:gap-4 w-full">
-				{species.map((specie) => (
-					<SpeciesFormCard
-						key={specie.uuid}
-						specie={specie}
-						breeds={breeds}
-						onSpecieChange={handleSpecieChange}
-						onBreedChange={handleBreedChange}
-						onAddBreed={handleAddBreed}
-						onRemoveBreed={handleRemoveBreed}
-						onEdit={handleEdit}
-						onRemove={handleRemoveSpecie}
-						onSubmit={handleSpeciesSubmit}
-					/>
-				))}
+							{/* Stats Cards */}
+							<div className="flex gap-2 sm:gap-4">
+								<div className="bg-white/10 backdrop-blur-sm rounded-lg px-3 py-2 text-center">
+									<div className="text-lg sm:text-xl font-bold text-white">{species.length}</div>
+									<div className="text-xs text-blue-100">{t('totalSpecies')}</div>
+								</div>
+								<div className="bg-white/10 backdrop-blur-sm rounded-lg px-3 py-2 text-center">
+									<div className="text-lg sm:text-xl font-bold text-white">{breeds.length}</div>
+									<div className="text-xs text-blue-100">{t('totalBreeds')}</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					{/* Actions Bar */}
+					<div className="p-4 sm:p-6 bg-gray-50 border-t border-gray-200">
+						<div className="flex items-center justify-between gap-4">
+							<div className="flex-1 max-w-md">
+								<Search placeholder={t('search')} />
+							</div>
+
+							<div className="flex-shrink-0">
+								<Button
+									title={t('addMoreSpecies')}
+									onClick={handleAddSpecie}
+									className="btn btn-primary h-12 text-base sm:text-lg px-6 sm:px-8"
+								>
+									<i className="i-material-symbols-add-circle-outline w-5! h-5! mr-2" />
+									{t('addMoreSpecies')}
+								</Button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				{/* Species Grid */}
+				{species.length > 0 ? (
+					<div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+						{/* Species Cards Grid */}
+						<div className="p-4 sm:p-6">
+							<div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+								{species.map((specie) => (
+									<SpeciesFormCard
+										key={specie.uuid}
+										specie={specie}
+										breeds={breeds}
+										onSpecieChange={handleSpecieChange}
+										onBreedChange={handleBreedChange}
+										onAddBreed={handleAddBreed}
+										onRemoveBreed={handleRemoveBreed}
+										onEdit={handleEdit}
+										onRemove={handleRemoveSpecie}
+										onSubmit={handleSpeciesSubmit}
+									/>
+								))}
+							</div>
+						</div>
+					</div>
+				) : (
+					/* Empty State */
+					<div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+						<div className="px-4 sm:px-6 py-12 sm:py-16 text-center">
+							<div className="flex flex-col items-center justify-center gap-4 sm:gap-6">
+								<div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-full flex items-center justify-center">
+									<i className="i-material-symbols-category w-8! h-8! sm:w-10 sm:h-10 bg-gray-400!" />
+								</div>
+								<div className="space-y-2">
+									<h3 className="text-xl sm:text-2xl font-bold text-gray-900">{t('noSpecies')}</h3>
+									<p className="text-sm sm:text-base text-gray-600 max-w-md mx-auto">
+										{t('noSpeciesSubtitle')}
+									</p>
+								</div>
+								<Button
+									title={t('addFirstSpecies')}
+									onClick={handleAddSpecie}
+									className="btn btn-primary mt-4"
+								>
+									<i className="i-material-symbols-add-circle-outline w-5! h-5! mr-2" />
+									{t('addFirstSpecies')}
+								</Button>
+							</div>
+						</div>
+					</div>
+				)}
 			</div>
 		</div>
 	)

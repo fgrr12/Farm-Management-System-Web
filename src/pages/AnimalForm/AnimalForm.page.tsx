@@ -168,7 +168,7 @@ const AnimalForm = () => {
 					<div className="bg-gradient-to-r from-blue-600 to-green-600 px-4 sm:px-6 py-6 sm:py-8">
 						<div className="flex items-center gap-3 sm:gap-4">
 							<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
-								<i className="i-material-symbols-pets text-white w-6 h-6 sm:w-8 sm:h-8" />
+								<i className="i-material-symbols-pets bg-white! w-6! h-6! sm:w-8 sm:h-8" />
 							</div>
 							<div className="min-w-0">
 								<h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
@@ -203,7 +203,7 @@ const AnimalForm = () => {
 							<div className="lg:col-span-1">
 								<div className="bg-gray-50 rounded-xl p-4 sm:p-6 h-full">
 									<h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-										<i className="i-material-symbols-photo-camera w-5 h-5 text-blue-600" />
+										<i className="i-material-symbols-photo-camera w-5! h-5! bg-blue-600!" />
 										{t('animalPhoto')}
 									</h3>
 									<fieldset className="border-0 p-0 m-0">
@@ -230,7 +230,7 @@ const AnimalForm = () => {
 									{/* Basic Info Card */}
 									<div className="bg-gray-50 rounded-xl p-4 sm:p-6">
 										<h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-											<i className="i-material-symbols-info w-5 h-5 text-blue-600" />
+											<i className="i-material-symbols-info w-5! h-5! bg-blue-600!" />
 											{t('basicInformation')}
 										</h3>
 										<fieldset className="border-0 p-0 m-0">
@@ -371,7 +371,7 @@ const AnimalForm = () => {
 									{/* Dates Card */}
 									<div className="bg-gray-50 rounded-xl p-4 sm:p-6">
 										<h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-											<i className="i-material-symbols-calendar-month w-5 h-5 text-blue-600" />
+											<i className="i-material-symbols-calendar-month w-5! h-5! bg-blue-600!" />
 											{t('dateInformation')}
 										</h3>
 										<fieldset className="border-0 p-0 m-0">
@@ -487,7 +487,7 @@ const AnimalForm = () => {
 									{/* Origin Card */}
 									<div className="bg-gray-50 rounded-xl p-4 sm:p-6">
 										<h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-											<i className="i-material-symbols-location-on w-5 h-5 text-blue-600" />
+											<i className="i-material-symbols-location-on w-5! h-5! bg-blue-600!" />
 											{t('additionalInfo')}
 										</h3>
 										<Textarea
@@ -517,13 +517,13 @@ const AnimalForm = () => {
 							>
 								{isSubmitting ? (
 									<>
-										<i className="i-material-symbols-hourglass-empty w-5 h-5 animate-spin" />
+										<i className="i-material-symbols-hourglass-empty w-!5 h-5! animate-spin" />
 										{t('common:loading')}
 									</>
 								) : (
 									<>
 										<i
-											className={`w-5 h-5 ${params.animalUuid ? 'i-material-symbols-edit' : 'i-material-symbols-add'}`}
+											className={`w-5! h-5! ${params.animalUuid ? 'i-material-symbols-edit' : 'i-material-symbols-add'}`}
 										/>
 										{params.animalUuid ? t('editButton') : t('addButton')}
 									</>

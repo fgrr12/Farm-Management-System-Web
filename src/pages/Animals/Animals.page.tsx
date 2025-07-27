@@ -130,7 +130,7 @@ const Animals = () => {
 						<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
 							<div className="flex items-center gap-3 sm:gap-4">
 								<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
-									<i className="i-material-symbols-pets text-white w-6 h-6 sm:w-8 sm:h-8" />
+									<i className="i-material-symbols-pets bg-white! w-6! h-6! sm:w-8 sm:h-8" />
 								</div>
 								<div className="min-w-0">
 									<h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
@@ -241,7 +241,7 @@ const Animals = () => {
 									aria-live="polite"
 								>
 									<div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-full flex items-center justify-center">
-										<i className="i-material-symbols-pets w-8 h-8 sm:w-10 sm:h-10 text-gray-400" />
+										<i className="i-material-symbols-pets w-8! h-8! sm:w-10 sm:h-10 bg-gray-400!" />
 									</div>
 									<div className="space-y-2">
 										<h3 className="text-xl sm:text-2xl font-bold text-gray-900">
