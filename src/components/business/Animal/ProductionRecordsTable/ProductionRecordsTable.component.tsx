@@ -71,9 +71,10 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 		})
 	}
 	return (
-		<div className="w-full xl:w-auto">
-			<div className="flex justify-center items-center">
-				<div className="font-bold">{t('title')}</div>
+		<div className="w-full">
+			{/* Header with Title and Add Button */}
+			<div className="flex items-center justify-between gap-4 mb-6">
+				<h2 className="text-lg font-semibold text-gray-900">{t('title')}</h2>
 				{haveUser && (
 					<ActionButton
 						title="Add Production Record"
@@ -82,50 +83,80 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 					/>
 				)}
 			</div>
-			<div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
-				<table className="table table-zebra" aria-label="Production records">
-					<thead>
-						<tr>
-							<th>{t('date')}</th>
-							<th>{t('quantity')}</th>
-							<th>{t('notes')}</th>
-							{haveUser && <th>{t('actions')}</th>}
-						</tr>
-					</thead>
-					<tbody>
-						{productionRecords.map((productionRecord) => (
-							<tr key={productionRecord.uuid}>
-								<td>{dayjs(productionRecord.date).format('DD/MM/YYYY')}</td>
-								<td>
-									{productionRecord.quantity}
-									{farm!.liquidUnit}
-								</td>
-								<td>{productionRecord.notes}</td>
+
+			{/* Modern Table Design */}
+			<div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+				<div className="overflow-x-auto">
+					<table className="min-w-full divide-y divide-gray-200" aria-label="Production records">
+						<thead className="bg-gray-50">
+							<tr>
+								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+									{t('date')}
+								</th>
+								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+									{t('quantity')}
+								</th>
+								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+									{t('notes')}
+								</th>
 								{haveUser && (
-									<td>
-										<ActionButton
-											title="Edit"
-											icon="i-material-symbols-edit-square-outline"
-											onClick={handleEditHealthRecord(productionRecord.uuid)}
-										/>
-										<ActionButton
-											title="Delete"
-											icon="i-material-symbols-delete-outline"
-											onClick={handleDeleteHealthRecord(productionRecord.uuid)}
-										/>
-									</td>
+									<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+										{t('actions')}
+									</th>
 								)}
 							</tr>
-						))}
-						{productionRecords.length === 0 && (
-							<tr>
-								<td className="text-center font-bold" colSpan={haveUser ? 4 : 3}>
-									{t('noProductionRecords')}
-								</td>
-							</tr>
-						)}
-					</tbody>
-				</table>
+						</thead>
+						<tbody className="bg-white divide-y divide-gray-200">
+							{productionRecords.map((productionRecord, index) => (
+								<tr
+									key={productionRecord.uuid}
+									className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
+								>
+									<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+										{dayjs(productionRecord.date).format('DD/MM/YYYY')}
+									</td>
+									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+										<div className="flex items-center gap-1">
+											<span className="font-semibold">{productionRecord.quantity}</span>
+											<span className="text-gray-500">{farm!.liquidUnit}</span>
+										</div>
+									</td>
+									<td className="px-6 py-4 text-sm text-gray-900">
+										<div className="max-w-xs truncate" title={productionRecord.notes}>
+											{productionRecord.notes}
+										</div>
+									</td>
+									{haveUser && (
+										<td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+											<div className="flex items-center gap-2">
+												<ActionButton
+													title="Edit"
+													icon="i-material-symbols-edit-square-outline"
+													onClick={handleEditHealthRecord(productionRecord.uuid)}
+												/>
+												<ActionButton
+													title="Delete"
+													icon="i-material-symbols-delete-outline"
+													onClick={handleDeleteHealthRecord(productionRecord.uuid)}
+												/>
+											</div>
+										</td>
+									)}
+								</tr>
+							))}
+							{productionRecords.length === 0 && (
+								<tr>
+									<td className="px-6 py-12 text-center text-gray-500" colSpan={haveUser ? 4 : 3}>
+										<div className="flex flex-col items-center gap-2">
+											<i className="i-material-symbols-production-quantity-limits w-12 h-12 text-gray-300" />
+											<span className="font-medium">{t('noProductionRecords')}</span>
+										</div>
+									</td>
+								</tr>
+							)}
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	)

@@ -136,22 +136,24 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 	}
 
 	return (
-		<div className="w-full xl:w-auto">
+		<div className="w-full">
 			{/* Header with Filters and Add Button */}
-			<div className="flex items-center justify-between gap-4 mb-6">
-				{user && (
-					<div className="flex-shrink-0">
-						<HealthRecordsFilters
-							filters={filters}
-							onFiltersChange={handleFiltersChange}
-							employees={employees}
-							userRole={user.role}
-						/>
-					</div>
-				)}
-
-				<div className="flex items-center gap-2">
+			<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+				<div className="flex items-center gap-4">
 					<h2 className="text-lg font-semibold text-gray-900">{t('title')}</h2>
+					{user && (
+						<div className="flex-shrink-0">
+							<HealthRecordsFilters
+								filters={filters}
+								onFiltersChange={handleFiltersChange}
+								employees={employees}
+								userRole={user.role}
+							/>
+						</div>
+					)}
+				</div>
+
+				<div className="flex-shrink-0">
 					{haveUser && (
 						<ActionButton
 							title="Add Health Record"
@@ -161,90 +163,164 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 					)}
 				</div>
 			</div>
-			<div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
-				<table className="table" aria-label="Health records">
-					<thead>
-						<tr>
-							<th>{t('reason')}</th>
-							<th>{t('notes')}</th>
-							<th>{t('type')}</th>
-							<th>{t('reviewedBy')}</th>
-							<th>{t('date')}</th>
-							{haveUser && <th>{t('actions')}</th>}
-						</tr>
-					</thead>
-					<tbody>
-						{healthRecordsFiltered.map((healthRecord) => (
-							<tr key={healthRecord.uuid} className={trBgColor(healthRecord.type)}>
-								<td className="text-black">{healthRecord.reason}</td>
-								<td className="text-black">
-									<div className="flex flex-col gap-1">
-										<span>{healthRecord.notes}</span>
-										{additionalInfoExists(healthRecord) && (
-											<span className="text-sm text-gray-600 mt-4">{t('additionalInfo')}</span>
-										)}
-										{healthRecord.weight! > 0 && (
-											<span>
-												{t('weight')}: {healthRecord.weight} {farm!.weightUnit}
-											</span>
-										)}
-										{healthRecord.temperature! > 0 && (
-											<span>
-												{t('temperature')}: {healthRecord.temperature} {farm!.temperatureUnit}
-											</span>
-										)}
-										{healthRecord.medication && (
-											<span>
-												{t('medication')}: {healthRecord.medication}
-											</span>
-										)}
-										{healthRecord.dosage && (
-											<span>
-												{t('dosage')}: {healthRecord.dosage}
-											</span>
-										)}
-										{healthRecord.frequency && (
-											<span>
-												{t('frequency')}: {healthRecord.frequency}
-											</span>
-										)}
-										{healthRecord.duration && (
-											<span>
-												{t('duration')}: {healthRecord.duration}
-											</span>
-										)}
-									</div>
-								</td>
-								<td className="text-black">
-									{t(`healthRecordType.${healthRecord.type.toLowerCase()}`)}
-								</td>
-								<td className="text-black">{healthRecord.reviewedBy}</td>
-								<td className="text-black">{dayjs(healthRecord.date).format('DD/MM/YYYY')}</td>
+			{/* Modern Table Design */}
+			<div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+				<div className="overflow-x-auto">
+					<table className="min-w-full divide-y divide-gray-200" aria-label="Health records">
+						<thead className="bg-gray-50">
+							<tr>
+								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+									{t('reason')}
+								</th>
+								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+									{t('notes')}
+								</th>
+								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+									{t('type')}
+								</th>
+								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+									{t('reviewedBy')}
+								</th>
+								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+									{t('date')}
+								</th>
 								{haveUser && (
-									<td>
-										<ActionButton
-											title="Edit"
-											icon="i-material-symbols-edit-square-outline"
-											onClick={handleEditHealthRecord(healthRecord.uuid)}
-										/>
-										<ActionButton
-											title="Delete"
-											icon="i-material-symbols-delete-outline"
-											onClick={handleDeleteHealthRecord(healthRecord.uuid)}
-										/>
-									</td>
+									<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+										{t('actions')}
+									</th>
 								)}
 							</tr>
-						))}
-						{healthRecordsFiltered.length === 0 && (
-							<tr>
-								<td className="text-center font-bold" colSpan={haveUser ? 6 : 5}>
-									{t('noHealthRecords')}
-								</td>
-							</tr>
-						)}
-					</tbody>
-				</table>
+						</thead>
+						<tbody className="bg-white divide-y divide-gray-200">
+							{healthRecordsFiltered.map((healthRecord) => (
+								<tr
+									key={healthRecord.uuid}
+									className={`${trBgColor(healthRecord.type)} hover:bg-opacity-80 transition-colors`}
+								>
+									<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+										{healthRecord.reason}
+									</td>
+									<td className="px-6 py-4 text-sm text-gray-900">
+										<div className="space-y-2">
+											<div className="font-medium">{healthRecord.notes}</div>
+											{additionalInfoExists(healthRecord) && (
+												<div className="space-y-1 text-xs text-gray-600 bg-gray-50 p-2 rounded">
+													<div className="font-medium text-gray-700">{t('additionalInfo')}:</div>
+													{healthRecord.weight! > 0 && (
+														<div className="flex items-center gap-1">
+															<i className="i-material-symbols-monitor-weight w-3 h-3" />
+															<span>
+																{t('weight')}: {healthRecord.weight} {farm!.weightUnit}
+															</span>
+														</div>
+													)}
+													{healthRecord.temperature! > 0 && (
+														<div className="flex items-center gap-1">
+															<i className="i-material-symbols-device-thermostat w-3 h-3" />
+															<span>
+																{t('temperature')}: {healthRecord.temperature}{' '}
+																{farm!.temperatureUnit}
+															</span>
+														</div>
+													)}
+													{healthRecord.medication && (
+														<div className="flex items-center gap-1">
+															<i className="i-material-symbols-medication w-3 h-3" />
+															<span>
+																{t('medication')}: {healthRecord.medication}
+															</span>
+														</div>
+													)}
+													{healthRecord.dosage && (
+														<div className="flex items-center gap-1">
+															<i className="i-material-symbols-syringe w-3 h-3" />
+															<span>
+																{t('dosage')}: {healthRecord.dosage}
+															</span>
+														</div>
+													)}
+													{healthRecord.frequency && (
+														<div className="flex items-center gap-1">
+															<i className="i-material-symbols-schedule w-3 h-3" />
+															<span>
+																{t('frequency')}: {healthRecord.frequency}
+															</span>
+														</div>
+													)}
+													{healthRecord.duration && (
+														<div className="flex items-center gap-1">
+															<i className="i-material-symbols-timer w-3 h-3" />
+															<span>
+																{t('duration')}: {healthRecord.duration}
+															</span>
+														</div>
+													)}
+												</div>
+											)}
+										</div>
+									</td>
+									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+										<span
+											className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+												healthRecord.type === 'Checkup'
+													? 'bg-sky-100 text-sky-800'
+													: healthRecord.type === 'Vaccination'
+														? 'bg-emerald-100 text-emerald-800'
+														: healthRecord.type === 'Medication'
+															? 'bg-teal-100 text-teal-800'
+															: healthRecord.type === 'Surgery'
+																? 'bg-indigo-100 text-indigo-800'
+																: healthRecord.type === 'Pregnancy'
+																	? 'bg-rose-100 text-rose-800'
+																	: healthRecord.type === 'Deworming'
+																		? 'bg-pink-100 text-pink-800'
+																		: healthRecord.type === 'Birth'
+																			? 'bg-yellow-100 text-yellow-800'
+																			: healthRecord.type === 'Drying'
+																				? 'bg-orange-100 text-orange-800'
+																				: 'bg-gray-100 text-gray-800'
+											}`}
+										>
+											{t(`healthRecordType.${healthRecord.type.toLowerCase()}`)}
+										</span>
+									</td>
+									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+										{healthRecord.reviewedBy}
+									</td>
+									<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+										{dayjs(healthRecord.date).format('DD/MM/YYYY')}
+									</td>
+									{haveUser && (
+										<td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+											<div className="flex items-center gap-2">
+												<ActionButton
+													title="Edit"
+													icon="i-material-symbols-edit-square-outline"
+													onClick={handleEditHealthRecord(healthRecord.uuid)}
+												/>
+												<ActionButton
+													title="Delete"
+													icon="i-material-symbols-delete-outline"
+													onClick={handleDeleteHealthRecord(healthRecord.uuid)}
+												/>
+											</div>
+										</td>
+									)}
+								</tr>
+							))}
+							{healthRecordsFiltered.length === 0 && (
+								<tr>
+									<td className="px-6 py-12 text-center text-gray-500" colSpan={haveUser ? 6 : 5}>
+										<div className="flex flex-col items-center gap-2">
+											<i className="i-material-symbols-health-and-safety w-12 h-12 text-gray-300" />
+											<span className="font-medium">{t('noHealthRecords')}</span>
+										</div>
+									</td>
+								</tr>
+							)}
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	)

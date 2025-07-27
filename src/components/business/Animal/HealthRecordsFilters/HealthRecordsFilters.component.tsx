@@ -1,5 +1,14 @@
 import dayjs from 'dayjs'
-import { type ChangeEvent, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {
+	type ChangeEvent,
+	type FC,
+	memo,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { DatePicker } from '@/components/layout/DatePicker'
@@ -11,7 +20,9 @@ export const HealthRecordsFilters: FC<HealthRecordsFiltersProps> = memo(
 	({ filters, onFiltersChange, employees, userRole }) => {
 		const { t } = useTranslation(['animalHealthRecords'])
 		const [isOpen, setIsOpen] = useState(false)
+		const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0, width: 320 })
 		const dropdownRef = useRef<HTMLDivElement>(null)
+		const buttonRef = useRef<HTMLButtonElement>(null)
 
 		const handleSelectChange = useCallback(
 			(event: ChangeEvent<HTMLSelectElement>) => {
@@ -78,78 +89,137 @@ export const HealthRecordsFilters: FC<HealthRecordsFiltersProps> = memo(
 			return activeFilters.join(', ')
 		}, [filters, employees, t])
 
+		// Calculate dropdown position
+		const calculateDropdownPosition = useCallback(() => {
+			if (buttonRef.current) {
+				const rect = buttonRef.current.getBoundingClientRect()
+				const dropdownHeight = 400 // Approximate height of dropdown
+				const spaceAbove = rect.top
+				const spaceBelow = window.innerHeight - rect.bottom
+				const isMobile = window.innerWidth < 640 // sm breakpoint
+
+				// Always show above (like before), but improve mobile positioning
+				const showAbove = spaceAbove > dropdownHeight || spaceBelow < dropdownHeight
+
+				// Calculate width and left position
+				const dropdownWidth = isMobile ? Math.min(320, window.innerWidth - 16) : 320
+				let leftPosition = rect.right - dropdownWidth
+
+				// On mobile, center the dropdown or ensure it fits on screen
+				if (isMobile) {
+					leftPosition = Math.max(8, Math.min(leftPosition, window.innerWidth - dropdownWidth - 8))
+				}
+
+				setDropdownPosition({
+					top: showAbove ? rect.top - dropdownHeight - 8 : rect.bottom + 8,
+					left: leftPosition,
+					width: dropdownWidth,
+				})
+			}
+		}, [])
+
 		// Close dropdown when clicking outside
 		const handleClickOutside = useCallback((event: MouseEvent) => {
-			if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+			if (
+				dropdownRef.current &&
+				!dropdownRef.current.contains(event.target as Node) &&
+				buttonRef.current &&
+				!buttonRef.current.contains(event.target as Node)
+			) {
 				setIsOpen(false)
 			}
 		}, [])
 
-		// Add/remove event listener for clicking outside
+		// Toggle dropdown and calculate position
+		const toggleDropdown = useCallback(() => {
+			if (!isOpen) {
+				calculateDropdownPosition()
+			}
+			setIsOpen(!isOpen)
+		}, [isOpen, calculateDropdownPosition])
+
+		// Add/remove event listener for clicking outside and window resize
 		useEffect(() => {
 			if (isOpen) {
 				document.addEventListener('mousedown', handleClickOutside)
+				window.addEventListener('resize', calculateDropdownPosition)
+				window.addEventListener('scroll', calculateDropdownPosition)
 			} else {
 				document.removeEventListener('mousedown', handleClickOutside)
+				window.removeEventListener('resize', calculateDropdownPosition)
+				window.removeEventListener('scroll', calculateDropdownPosition)
 			}
 
 			return () => {
 				document.removeEventListener('mousedown', handleClickOutside)
+				window.removeEventListener('resize', calculateDropdownPosition)
+				window.removeEventListener('scroll', calculateDropdownPosition)
 			}
-		}, [isOpen, handleClickOutside])
+		}, [isOpen, handleClickOutside, calculateDropdownPosition])
 
 		return (
-			<div className="relative" ref={dropdownRef}>
-				{/* Filter Button */}
-				<button
-					type="button"
-					onClick={() => setIsOpen(!isOpen)}
-					className={`
-					flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200
-					${
-						hasActiveFilters
-							? 'border-emerald-500 bg-emerald-50 text-emerald-700'
-							: 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
-					}
-					focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent
-				`}
-					aria-expanded={isOpen}
-					aria-haspopup="true"
-					aria-label={t('filter.filtersButton')}
-				>
-					{/* Filter Icon */}
-					<div
-						className={`w-5 h-5 i-material-symbols-filter-list ${hasActiveFilters ? 'text-emerald-600' : 'text-gray-500'}`}
-					/>
+			<>
+				<div className="relative">
+					{/* Filter Button */}
+					<button
+						ref={buttonRef}
+						type="button"
+						onClick={toggleDropdown}
+						className={`
+						flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200
+						${
+							hasActiveFilters
+								? 'border-emerald-500 bg-emerald-50 text-emerald-700'
+								: 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
+						}
+						focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent
+					`}
+						aria-expanded={isOpen}
+						aria-haspopup="true"
+						aria-label={t('filter.filtersButton')}
+					>
+						{/* Filter Icon */}
+						<div
+							className={`w-5 h-5 i-material-symbols-filter-list ${hasActiveFilters ? 'text-emerald-600' : 'text-gray-500'}`}
+						/>
 
-					{/* Button Text */}
-					<span className="font-medium">
-						{hasActiveFilters ? t('filter.filtersActive') : t('filter.filters')}
-					</span>
-
-					{/* Active Filters Count */}
-					{hasActiveFilters && (
-						<span className="ml-1 px-2 py-0.5 text-xs bg-emerald-600 text-white rounded-full">
-							{activeFiltersCount}
+						{/* Button Text */}
+						<span className="font-medium">
+							{hasActiveFilters ? t('filter.filtersActive') : t('filter.filters')}
 						</span>
+
+						{/* Active Filters Count */}
+						{hasActiveFilters && (
+							<span className="ml-1 px-2 py-0.5 text-xs bg-emerald-600 text-white rounded-full">
+								{activeFiltersCount}
+							</span>
+						)}
+
+						{/* Dropdown Arrow */}
+						<div
+							className={`w-4 h-4 i-material-symbols-keyboard-arrow-down transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+						/>
+					</button>
+
+					{/* Active Filters Preview */}
+					{hasActiveFilters && !isOpen && (
+						<div className="absolute top-full sm:bottom-full right-0 mt-1 sm:mt-0 sm:mb-1 px-3 py-1 bg-emerald-100 text-emerald-800 text-xs rounded-md whitespace-nowrap z-10 max-w-xs truncate">
+							{getActiveFiltersText}
+						</div>
 					)}
+				</div>
 
-					{/* Dropdown Arrow */}
-					<div
-						className={`w-4 h-4 i-material-symbols-keyboard-arrow-down transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-					/>
-				</button>
-
-				{/* Active Filters Preview */}
-				{hasActiveFilters && !isOpen && (
-					<div className="absolute top-full left-0 mt-1 px-3 py-1 bg-emerald-100 text-emerald-800 text-xs rounded-md whitespace-nowrap z-10 max-w-xs truncate">
-						{getActiveFiltersText}
-					</div>
-				)}
-
-				{/* Dropdown Menu */}
+				{/* Dropdown Menu - Portal to body to avoid overflow issues */}
 				{isOpen && (
-					<div className="absolute top-full left-0 mt-2 w-96 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
+					<div
+						ref={dropdownRef}
+						className="fixed bg-white border border-gray-200 rounded-lg shadow-xl z-[9999]"
+						style={{
+							top: `${dropdownPosition.top}px`,
+							left: `${dropdownPosition.left}px`,
+							width: `${dropdownPosition.width}px`,
+						}}
+					>
 						<div className="p-4">
 							{/* Header */}
 							<div className="flex items-center justify-between mb-4">
@@ -168,7 +238,7 @@ export const HealthRecordsFilters: FC<HealthRecordsFiltersProps> = memo(
 							{/* Filter Controls */}
 							<div className="space-y-4">
 								{/* Date Range Filters */}
-								<div className="grid grid-cols-2 gap-3">
+								<div className="space-y-3">
 									<div>
 										<DatePicker
 											legend={t('filter.fromDate')}
@@ -251,7 +321,7 @@ export const HealthRecordsFilters: FC<HealthRecordsFiltersProps> = memo(
 						</div>
 					</div>
 				)}
-			</div>
+			</>
 		)
 	}
 )
