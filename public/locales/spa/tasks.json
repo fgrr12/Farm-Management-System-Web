@@ -5,10 +5,12 @@
 		"searchTasks": "Buscar tareas por título o descripción",
 		"skipToTasks": "Saltar a la lista de tareas"
 	},
+	"activeTasks": "Activas",
 	"addTask": "Añadir tarea",
 	"allPriorities": "Todas las Prioridades",
 	"allSpecies": "Todas las Especies",
 	"clearFilters": "Limpiar Todo",
+	"completedTasks": "Completadas",
 	"createdAt": "Creada",
 	"done": "Listo",
 	"dropTaskHere": "Suelta la tarea aquí",
@@ -35,6 +37,7 @@
 		"in-progress": "En Progreso",
 		"todo": "Por Hacer"
 	},
+	"subtitle": "Organiza y rastrea las tareas de tu granja",
 	"title": "Tareas",
 	"toast": {
 		"errorGettingTasks": "Error al obtener las tareas",

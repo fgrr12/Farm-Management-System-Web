@@ -5,10 +5,12 @@
 		"searchTasks": "Search tasks by title or description",
 		"skipToTasks": "Skip to tasks list"
 	},
+	"activeTasks": "Active",
 	"addTask": "Add Task",
 	"allPriorities": "All Priorities",
 	"allSpecies": "All Species",
 	"clearFilters": "Clear All",
+	"completedTasks": "Completed",
 	"createdAt": "Created",
 	"done": "Done",
 	"dropTaskHere": "Drop task here",
@@ -35,6 +37,7 @@
 		"in-progress": "In Progress",
 		"todo": "To Do"
 	},
+	"subtitle": "Organize and track your farm tasks",
 	"title": "Tasks",
 	"toast": {
 		"errorGettingTasks": "Error getting tasks",

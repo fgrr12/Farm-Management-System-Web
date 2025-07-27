@@ -176,7 +176,7 @@ export const AnimalFilters: FC<AnimalFiltersProps> = memo(
 					>
 						{/* Filter Icon */}
 						<div
-							className={`w-5 h-5 i-material-symbols-filter-list ${hasActiveFilters ? 'text-blue-600' : 'text-gray-500'}`}
+							className={`w-5! h-5! i-material-symbols-filter-list ${hasActiveFilters ? 'bg-blue-600!' : 'bg-gray-500!'}`}
 						/>
 
 						{/* Button Text */}
@@ -193,7 +193,7 @@ export const AnimalFilters: FC<AnimalFiltersProps> = memo(
 
 						{/* Dropdown Arrow */}
 						<div
-							className={`w-4 h-4 i-material-symbols-keyboard-arrow-down transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+							className={`w-4! h-4! i-material-symbols-keyboard-arrow-down transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
 						/>
 					</button>
 

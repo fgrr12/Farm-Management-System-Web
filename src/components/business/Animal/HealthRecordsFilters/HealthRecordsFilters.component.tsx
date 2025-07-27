@@ -180,7 +180,7 @@ export const HealthRecordsFilters: FC<HealthRecordsFiltersProps> = memo(
 					>
 						{/* Filter Icon */}
 						<div
-							className={`w-5 h-5 i-material-symbols-filter-list ${hasActiveFilters ? 'text-emerald-600' : 'text-gray-500'}`}
+							className={`w-5! h-5! i-material-symbols-filter-list ${hasActiveFilters ? 'bg-emerald-600!' : 'bg-gray-500!'}`}
 						/>
 
 						{/* Button Text */}
