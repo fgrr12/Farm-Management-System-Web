@@ -9,6 +9,7 @@
 		"titleHelp": "Enter a descriptive name for this task"
 	},
 	"addTask": "Add",
+	"basicInformation": "Basic Information",
 	"description": "Description",
 	"name": "Name",
 	"priorities": {
@@ -21,6 +22,8 @@
 	"selectPriority": "Select a priority",
 	"selectSpecies": "Select a species",
 	"species": "Species",
+	"subtitle": "Create a new task for your farm",
+	"taskSettings": "Task Settings",
 	"title": "Add Task",
 	"toast": {
 		"errorAddingTask": "There was an error adding the task.",

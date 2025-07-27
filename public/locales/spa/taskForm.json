@@ -9,6 +9,7 @@
 		"titleHelp": "Ingresa un nombre descriptivo para esta tarea"
 	},
 	"addTask": "Añadir",
+	"basicInformation": "Información Básica",
 	"description": "Descripción",
 	"name": "Nombre",
 	"priorities": {
@@ -21,7 +22,9 @@
 	"selectPriority": "Selecciona una prioridad",
 	"selectSpecies": "Selecciona una especie",
 	"species": "Especie",
-	"title": "Añadir tarea",
+	"subtitle": "Crear una nueva tarea para tu granja",
+	"taskSettings": "Configuración de Tarea",
+	"title": "Añadir Tarea",
 	"toast": {
 		"errorAddingTask": "Se ha producido un error al añadir la tarea.",
 		"taskAdded": "Tarea añadida exitosamente"
