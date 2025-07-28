@@ -1,5 +1,4 @@
 import { memo, useCallback, useEffect, useState } from 'react'
-import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { useFarmStore } from '@/store/useFarmStore'
@@ -9,10 +8,9 @@ import { BillingCardsService } from '@/services/billingCards'
 import { FarmsService } from '@/services/farms'
 import { UserService } from '@/services/user'
 
-import { ActionButton } from '@/components/ui/ActionButton'
-import { Button } from '@/components/ui/Button'
-import { Select } from '@/components/ui/Select'
-import { TextField } from '@/components/ui/TextField'
+import { BillingSection } from '@/components/business/MyAccount/BillingSection'
+import { FarmSection } from '@/components/business/MyAccount/FarmSection'
+import { ProfileSection } from '@/components/business/MyAccount/ProfileSection'
 
 import { useBillingCardForm } from '@/hooks/forms/useBillingCardForm'
 import { useFarmForm } from '@/hooks/forms/useFarmForm'
@@ -35,26 +33,6 @@ const MyAccount = () => {
 	const userForm = useUserForm()
 	const farmForm = useFarmForm()
 	const billingCardForm = useBillingCardForm()
-
-	const languages = [
-		{ value: 'spa', name: t('myProfile.languageList.spa') },
-		{ value: 'eng', name: t('myProfile.languageList.eng') },
-	]
-
-	const liquidUnit = [
-		{ value: 'L', name: t('myFarm.liquidUnitList.L') },
-		{ value: 'Gal', name: t('myFarm.liquidUnitList.Gal') },
-	]
-
-	const weightUnit = [
-		{ value: 'Kg', name: t('myFarm.weightUnitList.Kg') },
-		{ value: 'Lb', name: t('myFarm.weightUnitList.Lb') },
-	]
-
-	const temperatureUnit = [
-		{ value: '°C', name: t('myFarm.temperatureUnitList.°C') },
-		{ value: '°F', name: t('myFarm.temperatureUnitList.°F') },
-	]
 
 	const handleEdit = useCallback(
 		(key: 'farm' | 'user' | 'billingCard') => () => {
@@ -137,415 +115,69 @@ const MyAccount = () => {
 	}, [setPageTitle, t])
 
 	return (
-		<div className="flex flex-col w-full h-full">
-			<a
-				href="#profile-section"
-				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
-			>
-				{t('accessibility.skipToProfile')}
-			</a>
+		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 overflow-y-auto">
+			<div className="max-w-4xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
+				<a
+					href="#profile-section"
+					className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
+				>
+					{t('accessibility.skipToProfile')}
+				</a>
 
-			<header>
-				<h1 className="sr-only">{t('title')}</h1>
-			</header>
-
-			<section
-				id="profile-section"
-				className="flex flex-col p-2 sm:p-4"
-				aria-labelledby="profile-heading"
-			>
-				<div className="flex flex-col p-3 sm:p-4 gap-3 sm:gap-4 border-2 rounded-xl border-gray-200">
-					<header className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-						<h2 id="profile-heading" className="text-lg sm:text-xl font-bold">
-							{t('myProfile.title')}
-						</h2>
-						<ActionButton
-							title={t('accessibility.editProfile')}
-							icon="i-material-symbols-edit-square-outline"
-							onClick={handleEdit('user')}
-							aria-label={
-								edit.user ? t('accessibility.cancelEditProfile') : t('accessibility.editProfile')
-							}
-							aria-pressed={edit.user}
-						/>
-					</header>
-					<p className="text-base sm:text-lg">{t('myProfile.subtitle')}</p>
-					<form
-						className="flex flex-col gap-3 sm:gap-4 w-full"
-						onSubmit={userForm.handleSubmit(handleSubmitUser)}
-						autoComplete="off"
-						aria-labelledby="profile-heading"
-						noValidate
-					>
-						<fieldset className="border-0 p-0 m-0">
-							<legend className="sr-only">{t('accessibility.personalInformation')}</legend>
-							<div className="grid grid-cols-1 md:grid-cols-3 items-center gap-4 w-full">
-								<TextField
-									{...userForm.register('name')}
-									label={t('myProfile.name')}
-									placeholder={t('myProfile.name')}
-									disabled={!edit.user}
-									required
-									aria-describedby="name-help"
-									autoComplete="given-name"
-									error={userForm.formState.errors.name?.message}
-								/>
-								<div id="name-help" className="sr-only">
-									{t('accessibility.nameHelp')}
-								</div>
-
-								<TextField
-									{...userForm.register('lastName')}
-									label={t('myProfile.lastName')}
-									placeholder={t('myProfile.lastName')}
-									disabled={!edit.user}
-									required
-									aria-describedby="lastName-help"
-									autoComplete="family-name"
-									error={userForm.formState.errors.lastName?.message}
-								/>
-								<div id="lastName-help" className="sr-only">
-									{t('accessibility.lastNameHelp')}
-								</div>
-
-								<TextField
-									{...userForm.register('email')}
-									label={t('myProfile.email')}
-									placeholder={t('myProfile.email')}
-									disabled={!edit.user}
-									required
-									aria-describedby="email-help"
-									autoComplete="email"
-									type="email"
-									error={userForm.formState.errors.email?.message}
-								/>
-								<div id="email-help" className="sr-only">
-									{t('accessibility.emailHelp')}
-								</div>
+				{/* Hero Header */}
+				<div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-6 sm:mb-8">
+					<div className="bg-gradient-to-r from-blue-600 to-green-600 px-4 sm:px-6 py-6 sm:py-8">
+						<div className="flex items-center gap-3 sm:gap-4">
+							<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+								<i className="i-material-symbols-account-circle bg-white! w-6! h-6! sm:w-8 sm:h-8" />
 							</div>
-
-							<div className="grid grid-cols-1 md:grid-cols-3 items-center gap-4 w-full">
-								<TextField
-									{...userForm.register('phone')}
-									label={t('myProfile.phone')}
-									placeholder={t('myProfile.phone')}
-									disabled={!edit.user}
-									required
-									aria-describedby="phone-help"
-									autoComplete="tel"
-									type="tel"
-									error={userForm.formState.errors.phone?.message}
-								/>
-								<div id="phone-help" className="sr-only">
-									{t('accessibility.phoneHelp')}
-								</div>
-
-								<Controller
-									name="language"
-									control={userForm.control}
-									render={({ field }) => (
-										<Select
-											{...field}
-											legend={t('myProfile.selectLanguage')}
-											defaultLabel={t('myProfile.selectLanguage')}
-											items={languages}
-											disabled={!edit.user}
-											required
-											aria-describedby="language-help"
-											error={userForm.formState.errors.language?.message}
-										/>
-									)}
-								/>
-								<div id="language-help" className="sr-only">
-									{t('accessibility.languageHelp')}
-								</div>
+							<div className="min-w-0">
+								<h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
+									{t('title')}
+								</h1>
+								<p className="text-blue-100 text-sm sm:text-base mt-1">{t('subtitle')}</p>
 							</div>
-						</fieldset>
-
-						<Button type="submit" disabled={!edit.user} aria-describedby="save-profile-help">
-							{t('myProfile.edit')}
-						</Button>
-						<div id="save-profile-help" className="sr-only">
-							{t('accessibility.saveProfileHelp')}
 						</div>
-					</form>
+					</div>
 				</div>
-			</section>
 
-			{(currentUser?.role === 'admin' || currentUser?.role === 'owner') && (
-				<section className="flex flex-col p-2 sm:p-4" aria-labelledby="farm-heading">
-					<div className="flex flex-col p-3 sm:p-4 gap-3 sm:gap-4 border-2 rounded-xl border-gray-200">
-						<header className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-							<h2 id="farm-heading" className="text-lg sm:text-xl font-bold">
-								{t('myFarm.title')}
-							</h2>
-							<ActionButton
-								title={t('accessibility.editFarm')}
-								icon="i-material-symbols-edit-square-outline"
-								onClick={handleEdit('farm')}
-								aria-label={
-									edit.farm ? t('accessibility.cancelEditFarm') : t('accessibility.editFarm')
-								}
-								aria-pressed={edit.farm}
+				{/* Sections */}
+				<div className="space-y-6">
+					{/* Profile Section */}
+					<section id="profile-section">
+						<ProfileSection
+							userForm={userForm}
+							isEditing={edit.user}
+							onToggleEdit={handleEdit('user')}
+							onSubmit={handleSubmitUser}
+						/>
+					</section>
+
+					{/* Farm Section - Only for admin/owner */}
+					{(currentUser?.role === 'admin' || currentUser?.role === 'owner') && (
+						<section>
+							<FarmSection
+								farmForm={farmForm}
+								isEditing={edit.farm}
+								onToggleEdit={handleEdit('farm')}
+								onSubmit={handleSubmitFarm}
 							/>
-						</header>
-						<p className="text-base sm:text-lg">{t('myFarm.subtitle')}</p>
-						<form
-							className="flex flex-col gap-3 sm:gap-4 w-full"
-							onSubmit={farmForm.handleSubmit(handleSubmitFarm)}
-							autoComplete="off"
-							aria-labelledby="farm-heading"
-							noValidate
-						>
-							<fieldset className="border-0 p-0 m-0">
-								<legend className="sr-only">{t('accessibility.farmInformation')}</legend>
-								<div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4 w-full">
-									<TextField
-										{...farmForm.register('name')}
-										label={t('myFarm.name')}
-										placeholder={t('myFarm.name')}
-										disabled={!edit.farm}
-										required
-										aria-describedby="farm-name-help"
-										autoComplete="organization"
-										error={farmForm.formState.errors.name?.message}
-									/>
-									<div id="farm-name-help" className="sr-only">
-										{t('accessibility.farmNameHelp')}
-									</div>
+						</section>
+					)}
 
-									<TextField
-										{...farmForm.register('address')}
-										label={t('myFarm.address')}
-										placeholder={t('myFarm.address')}
-										disabled={!edit.farm}
-										required
-										aria-describedby="farm-address-help"
-										autoComplete="street-address"
-										error={farmForm.formState.errors.address?.message}
-									/>
-									<div id="farm-address-help" className="sr-only">
-										{t('accessibility.farmAddressHelp')}
-									</div>
-								</div>
-
-								<div className="grid grid-cols-1 md:grid-cols-3 items-center gap-4 w-full">
-									<Controller
-										name="liquidUnit"
-										control={farmForm.control}
-										render={({ field }) => (
-											<Select
-												{...field}
-												legend={t('myFarm.liquidUnit')}
-												defaultLabel={t('myFarm.liquidUnit')}
-												items={liquidUnit}
-												disabled={!edit.farm}
-												required
-												aria-describedby="liquid-unit-help"
-												error={farmForm.formState.errors.liquidUnit?.message}
-											/>
-										)}
-									/>
-									<div id="liquid-unit-help" className="sr-only">
-										{t('accessibility.liquidUnitHelp')}
-									</div>
-
-									<Controller
-										name="weightUnit"
-										control={farmForm.control}
-										render={({ field }) => (
-											<Select
-												{...field}
-												legend={t('myFarm.weightUnit')}
-												defaultLabel={t('myFarm.weightUnit')}
-												items={weightUnit}
-												disabled={!edit.farm}
-												required
-												aria-describedby="weight-unit-help"
-												error={farmForm.formState.errors.weightUnit?.message}
-											/>
-										)}
-									/>
-									<div id="weight-unit-help" className="sr-only">
-										{t('accessibility.weightUnitHelp')}
-									</div>
-
-									<Controller
-										name="temperatureUnit"
-										control={farmForm.control}
-										render={({ field }) => (
-											<Select
-												{...field}
-												legend={t('myFarm.temperatureUnit')}
-												defaultLabel={t('myFarm.temperatureUnit')}
-												items={temperatureUnit}
-												disabled={!edit.farm}
-												required
-												aria-describedby="temperature-unit-help"
-												error={farmForm.formState.errors.temperatureUnit?.message}
-											/>
-										)}
-									/>
-									<div id="temperature-unit-help" className="sr-only">
-										{t('accessibility.temperatureUnitHelp')}
-									</div>
-								</div>
-							</fieldset>
-
-							<Button type="submit" disabled={!edit.farm} aria-describedby="save-farm-help">
-								{t('myFarm.edit')}
-							</Button>
-							<div id="save-farm-help" className="sr-only">
-								{t('accessibility.saveFarmHelp')}
-							</div>
-						</form>
-					</div>
-				</section>
-			)}
-
-			{(currentUser?.role === 'admin' || currentUser?.role === 'owner') && (
-				<section className="flex flex-col p-2 sm:p-4" aria-labelledby="billing-heading">
-					<div className="flex flex-col p-3 sm:p-4 gap-3 sm:gap-4 border-2 rounded-xl border-gray-200">
-						<header className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-							<h2 id="billing-heading" className="text-lg sm:text-xl font-bold">
-								{t('myBillingCard.title')}
-							</h2>
-							<ActionButton
-								title={t('accessibility.editBilling')}
-								icon="i-material-symbols-edit-square-outline"
-								onClick={handleEdit('billingCard')}
-								aria-label={
-									edit.billingCard
-										? t('accessibility.cancelEditBilling')
-										: t('accessibility.editBilling')
-								}
-								aria-pressed={edit.billingCard}
+					{/* Billing Section - Only for admin/owner */}
+					{(currentUser?.role === 'admin' || currentUser?.role === 'owner') && (
+						<section>
+							<BillingSection
+								billingCardForm={billingCardForm}
+								isEditing={edit.billingCard}
+								onToggleEdit={handleEdit('billingCard')}
+								onSubmit={handleSubmitBillingCard}
 							/>
-						</header>
-
-						<form
-							className="flex flex-col gap-3 sm:gap-4 w-full"
-							onSubmit={billingCardForm.handleSubmit(handleSubmitBillingCard)}
-							autoComplete="off"
-							aria-labelledby="billing-heading"
-							noValidate
-						>
-							<fieldset className="border-0 p-0 m-0">
-								<legend className="sr-only">{t('accessibility.billingInformation')}</legend>
-
-								<div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full items-start sm:items-center">
-									<p className="text-base sm:text-lg">{t('myBillingCard.subtitle')}</p>
-									<label className="label flex items-center gap-2">
-										<input
-											{...billingCardForm.register('status')}
-											type="checkbox"
-											className="checkbox border-error bg-error checked:border-info checked:bg-info"
-											disabled={!edit.billingCard}
-											aria-describedby="billing-status-help"
-										/>
-										<span>
-											{t(
-												billingCardForm.watch('status')
-													? 'myBillingCard.active'
-													: 'myBillingCard.inactive'
-											)}
-										</span>
-									</label>
-									<div id="billing-status-help" className="sr-only">
-										{t('accessibility.billingStatusHelp')}
-									</div>
-								</div>
-
-								<div className="grid grid-cols-1 md:grid-cols-3 items-center gap-4 w-full">
-									<TextField
-										{...billingCardForm.register('id')}
-										label={t('myBillingCard.id')}
-										placeholder={t('myBillingCard.id')}
-										disabled={!edit.billingCard}
-										required
-										aria-describedby="billing-id-help"
-										error={billingCardForm.formState.errors.id?.message}
-									/>
-									<div id="billing-id-help" className="sr-only">
-										{t('accessibility.billingIdHelp')}
-									</div>
-
-									<TextField
-										{...billingCardForm.register('name')}
-										label={t('myBillingCard.name')}
-										placeholder={t('myBillingCard.name')}
-										disabled={!edit.billingCard}
-										required
-										aria-describedby="billing-name-help"
-										autoComplete="name"
-										error={billingCardForm.formState.errors.name?.message}
-									/>
-									<div id="billing-name-help" className="sr-only">
-										{t('accessibility.billingNameHelp')}
-									</div>
-
-									<TextField
-										{...billingCardForm.register('email')}
-										label={t('myBillingCard.email')}
-										placeholder={t('myBillingCard.email')}
-										disabled={!edit.billingCard}
-										required
-										aria-describedby="billing-email-help"
-										autoComplete="email"
-										type="email"
-										error={billingCardForm.formState.errors.email?.message}
-									/>
-									<div id="billing-email-help" className="sr-only">
-										{t('accessibility.billingEmailHelp')}
-									</div>
-								</div>
-
-								<div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4 w-full">
-									<TextField
-										{...billingCardForm.register('phone')}
-										label={t('myBillingCard.phone')}
-										placeholder={t('myBillingCard.phone')}
-										disabled={!edit.billingCard}
-										required
-										aria-describedby="billing-phone-help"
-										autoComplete="tel"
-										type="tel"
-										error={billingCardForm.formState.errors.phone?.message}
-									/>
-									<div id="billing-phone-help" className="sr-only">
-										{t('accessibility.billingPhoneHelp')}
-									</div>
-
-									<TextField
-										{...billingCardForm.register('address')}
-										label={t('myBillingCard.address')}
-										placeholder={t('myBillingCard.address')}
-										disabled={!edit.billingCard}
-										required
-										aria-describedby="billing-address-help"
-										autoComplete="billing street-address"
-										error={billingCardForm.formState.errors.address?.message}
-									/>
-									<div id="billing-address-help" className="sr-only">
-										{t('accessibility.billingAddressHelp')}
-									</div>
-								</div>
-							</fieldset>
-
-							<Button
-								type="submit"
-								disabled={!edit.billingCard}
-								aria-describedby="save-billing-help"
-							>
-								{t('myBillingCard.edit')}
-							</Button>
-							<div id="save-billing-help" className="sr-only">
-								{t('accessibility.saveBillingHelp')}
-							</div>
-						</form>
-					</div>
-				</section>
-			)}
+						</section>
+					)}
+				</div>
+			</div>
 		</div>
 	)
 }
