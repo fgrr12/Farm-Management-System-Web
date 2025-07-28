@@ -1,8 +1,16 @@
 {
 	"header": {
+		"back": "Atrás",
 		"return": "Volver"
 	},
 	"loading": "Cargando",
+	"modal": {
+		"accept": "Aceptar",
+		"cancel": "Cancelar",
+		"close": "Cerrar",
+		"confirm": "Confirmar",
+		"delete": "Eliminar"
+	},
 	"offline": {
 		"noConnection": "Sin conexión a internet",
 		"pendingOperations": "{{count}} operación pendiente",

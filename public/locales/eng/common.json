@@ -1,8 +1,16 @@
 {
 	"header": {
+		"back": "Back",
 		"return": "Return"
 	},
 	"loading": "Loading",
+	"modal": {
+		"accept": "Accept",
+		"cancel": "Cancel",
+		"close": "Close",
+		"confirm": "Confirm",
+		"delete": "Delete"
+	},
 	"offline": {
 		"noConnection": "No internet connection",
 		"pendingOperations": "{{count}} pending operation",
