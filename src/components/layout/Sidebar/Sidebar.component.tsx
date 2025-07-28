@@ -9,24 +9,14 @@ import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
-import { UserService } from '@/services/user'
-
 export const Sidebar = memo(() => {
-	const { user, setUser } = useUserStore()
-	const { billingCard, setFarm } = useFarmStore()
+	const { user } = useUserStore()
+	const { billingCard } = useFarmStore()
 	const { loading } = useAppStore()
 	const navigate = useNavigate()
 	const location = useLocation()
 
 	const [theme, setTheme] = useState<string>(localStorage.getItem('theme') || 'light')
-
-	const handleLogout = useCallback(async () => {
-		if (!user) return
-		await UserService.logout()
-		setUser(null)
-		setFarm(null)
-		navigate(AppRoutes.LOGIN)
-	}, [user, setUser, setFarm, navigate])
 
 	const handleGoTo = useCallback(
 		(path: string) => () => {
@@ -36,10 +26,22 @@ export const Sidebar = memo(() => {
 		[location.pathname, navigate]
 	)
 
-	const handleCheckActive = useCallback(
+	const getButtonClasses = useCallback(
+		(path: string, colorFrom: string, colorTo: string) => {
+			const isActive = location.pathname.includes(path)
+			return `w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 ${
+				isActive
+					? `bg-gradient-to-br ${colorFrom} ${colorTo} shadow-lg`
+					: 'hover:bg-gray-100 bg-gray-50'
+			}`
+		},
+		[location.pathname]
+	)
+
+	const getIconClasses = useCallback(
 		(path: string) => {
-			if (location.pathname === path) return 'bg-info rounded-sm'
-			return ''
+			const isActive = location.pathname.includes(path)
+			return `w-6! h-6! ${isActive ? 'bg-white!' : 'bg-gray-600!'}`
 		},
 		[location.pathname]
 	)
@@ -74,111 +76,102 @@ export const Sidebar = memo(() => {
 		)
 	}, [location])
 	return (
-		<ul
-			className="menu bg-base-100 h-full hidden lg:grid auto-rows-[50px] items-center shadow-sm overflow-auto scrollbar-hidden"
+		<div
+			className="bg-white h-full hidden lg:flex flex-col items-center py-4 shadow-lg border-r border-gray-100 w-20"
 			role="navigation"
 			aria-label="Main navigation"
 		>
-			<li className={handleCheckActive(AppRoutes.DASHBOARD)}>
+			{/* Main Navigation */}
+			<div className="flex flex-col gap-3">
 				<button
 					type="button"
-					className="flex items-center gap-2 px-4 py-2"
+					className={getButtonClasses(AppRoutes.DASHBOARD, 'from-cyan-500', 'to-cyan-600')}
 					onClick={handleGoTo(AppRoutes.DASHBOARD)}
 					aria-label="Dashboard"
 				>
-					<i className="i-material-symbols-dashboard w-8! h-8!" />
+					<i className={`i-material-symbols-dashboard ${getIconClasses(AppRoutes.DASHBOARD)}`} />
 				</button>
-			</li>
-			<li className={handleCheckActive(AppRoutes.ANIMALS)}>
+
 				<button
 					type="button"
-					className="flex items-center gap-2 px-4 py-2"
+					className={getButtonClasses(AppRoutes.ANIMALS, 'from-blue-500', 'to-blue-600')}
 					onClick={handleGoTo(AppRoutes.ANIMALS)}
 					aria-label="Animals"
 				>
-					<i className="i-healthicons-animal-cow w-8! h-8!" />
+					<i className={`i-healthicons-animal-cow ${getIconClasses(AppRoutes.ANIMALS)}`} />
 				</button>
-			</li>
-			<li className={handleCheckActive(AppRoutes.TASKS)}>
+
 				<button
 					type="button"
-					className="flex items-center gap-2 px-4 py-2"
+					className={getButtonClasses(AppRoutes.TASKS, 'from-green-500', 'to-green-600')}
 					onClick={handleGoTo(AppRoutes.TASKS)}
 					aria-label="Tasks"
 				>
-					<i className="i-fluent-tasks-app-24-filled w-8! h-8!" />
+					<i className={`i-fluent-tasks-app-24-filled ${getIconClasses(AppRoutes.TASKS)}`} />
 				</button>
-			</li>
-			<li className={handleCheckActive(AppRoutes.MY_SPECIES)}>
+
 				<button
 					type="button"
-					className="flex items-center gap-2 px-4 py-2"
+					className={getButtonClasses(AppRoutes.MY_SPECIES, 'from-purple-500', 'to-purple-600')}
 					onClick={handleGoTo(AppRoutes.MY_SPECIES)}
 					aria-label="My Species"
 				>
-					<i className="i-solar-dna-bold-duotone w-8! h-8!" />
+					<i className={`i-solar-dna-bold-duotone ${getIconClasses(AppRoutes.MY_SPECIES)}`} />
 				</button>
-			</li>
+			</div>
 
-			{showAdminRoutes && <div className="divider" />}
+			{/* Admin Section */}
 			{showAdminRoutes && (
-				<li className={handleCheckActive(AppRoutes.EMPLOYEES)}>
-					<button
-						type="button"
-						className="flex items-center gap-2 px-4 py-2"
-						onClick={handleGoTo(AppRoutes.EMPLOYEES)}
-						aria-label="Employees"
-					>
-						<i className="i-clarity-employee-group-solid w-8! h-8!" />
-					</button>
-				</li>
+				<>
+					<div className="w-8 h-px bg-gray-200 my-4" />
+					<div className="flex flex-col gap-3">
+						<button
+							type="button"
+							className={getButtonClasses(AppRoutes.EMPLOYEES, 'from-orange-500', 'to-orange-600')}
+							onClick={handleGoTo(AppRoutes.EMPLOYEES)}
+							aria-label="Employees"
+						>
+							<i
+								className={`i-clarity-employee-group-solid ${getIconClasses(AppRoutes.EMPLOYEES)}`}
+							/>
+						</button>
+
+						{showBillingCard && (
+							<button
+								type="button"
+								className={getButtonClasses(
+									AppRoutes.BILLING_CARD,
+									'from-indigo-500',
+									'to-indigo-600'
+								)}
+								onClick={handleGoTo(AppRoutes.BILLING_CARD)}
+								aria-label="Billing Card"
+							>
+								<i className={`i-typcn-business-card ${getIconClasses(AppRoutes.BILLING_CARD)}`} />
+							</button>
+						)}
+					</div>
+				</>
 			)}
-			{showBillingCard && (
-				<li className={handleCheckActive(AppRoutes.BILLING_CARD)}>
-					<button
-						type="button"
-						className="flex items-center gap-2 px-4 py-2"
-						onClick={handleGoTo(AppRoutes.BILLING_CARD)}
-						aria-label="Billing Card"
-					>
-						<i className="i-typcn-business-card w-8! h-8!" />
-					</button>
-				</li>
-			)}
-			<div className="divider" />
-			<li className={handleCheckActive(AppRoutes.MY_ACCOUNT)}>
-				<button
-					type="button"
-					className="flex items-center gap-2 px-4 py-2"
-					onClick={handleGoTo(AppRoutes.MY_ACCOUNT)}
-					aria-label="My Account"
+
+			{/* Bottom Section */}
+			<div className="mt-auto flex flex-col gap-3">
+				<label
+					className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 hover:bg-gray-100 bg-gray-50 cursor-pointer"
+					aria-label="Toggle theme"
 				>
-					<i className="i-material-symbols-account-circle w-8! h-8!" />
-				</button>
-			</li>
-			<li>
-				<button
-					type="button"
-					className="flex items-center gap-2 px-4 py-2"
-					onClick={handleLogout}
-					aria-label="Logout"
-				>
-					<i className="i-material-symbols-logout w-8! h-8!" />
-				</button>
-			</li>
-			<div className="divider" />
-			<li>
-				<label className="swap swap-rotate" aria-label="Toggle theme">
-					<input
-						type="checkbox"
-						className="theme-controller"
-						value="synthwave"
-						onChange={() => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'))}
-					/>
-					<i className="i-line-md-moon-alt-to-sunny-outline-loop-transition swap-off h-8! w-8! fill-current" />
-					<i className="i-line-md-sunny-outline-to-moon-alt-loop-transition swap-on h-8! w-8! fill-current" />
+					<div className="swap swap-rotate">
+						<input
+							type="checkbox"
+							className="theme-controller"
+							value="synthwave"
+							onChange={() => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'))}
+						/>
+						<i className="i-line-md-moon-alt-to-sunny-outline-loop-transition swap-off h-6! w-6! fill-current bg-gray-600!" />
+						<i className="i-line-md-sunny-outline-to-moon-alt-loop-transition swap-on h-6! w-6! fill-current bg-gray-600!" />
+					</div>
 				</label>
-			</li>
-		</ul>
+			</div>
+		</div>
 	)
 })
