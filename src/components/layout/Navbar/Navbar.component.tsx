@@ -31,6 +31,58 @@ export const Navbar = memo(() => {
 
 	const [theme, setTheme] = useState<string>(localStorage.getItem('theme') || 'light')
 
+	const getCurrentPageIcon = useMemo(() => {
+		if (location.pathname.includes(AppRoutes.ANIMALS)) {
+			return 'i-healthicons-animal-cow'
+		}
+		if (location.pathname.includes(AppRoutes.TASKS)) {
+			return 'i-fluent-tasks-app-24-filled'
+		}
+		if (location.pathname.includes(AppRoutes.MY_SPECIES)) {
+			return 'i-solar-dna-bold-duotone'
+		}
+		if (location.pathname.includes(AppRoutes.EMPLOYEES)) {
+			return 'i-clarity-employee-group-solid'
+		}
+		if (location.pathname.includes(AppRoutes.BILLING_CARD)) {
+			return 'i-typcn-business-card'
+		}
+		if (location.pathname.includes(AppRoutes.MY_ACCOUNT)) {
+			return 'i-material-symbols-account-circle'
+		}
+		if (location.pathname.includes(AppRoutes.DASHBOARD)) {
+			return 'i-material-symbols-dashboard'
+		}
+		// Default icon
+		return 'i-healthicons-animal-cow'
+	}, [location.pathname])
+
+	const getCurrentPageColor = useMemo(() => {
+		if (location.pathname.includes(AppRoutes.ANIMALS)) {
+			return 'from-blue-500 to-blue-600'
+		}
+		if (location.pathname.includes(AppRoutes.TASKS)) {
+			return 'from-green-500 to-green-600'
+		}
+		if (location.pathname.includes(AppRoutes.MY_SPECIES)) {
+			return 'from-purple-500 to-purple-600'
+		}
+		if (location.pathname.includes(AppRoutes.EMPLOYEES)) {
+			return 'from-orange-500 to-orange-600'
+		}
+		if (location.pathname.includes(AppRoutes.BILLING_CARD)) {
+			return 'from-indigo-500 to-indigo-600'
+		}
+		if (location.pathname.includes(AppRoutes.MY_ACCOUNT)) {
+			return 'from-gray-500 to-gray-600'
+		}
+		if (location.pathname.includes(AppRoutes.DASHBOARD)) {
+			return 'from-cyan-500 to-cyan-600'
+		}
+		// Default color
+		return 'from-blue-500 to-purple-600'
+	}, [location.pathname])
+
 	const backButtonHidden = useMemo(
 		() =>
 			location.pathname === AppRoutes.ANIMALS ||
@@ -121,15 +173,15 @@ export const Navbar = memo(() => {
 		<div className="drawer">
 			<input id="my-drawer" type="checkbox" className="drawer-toggle" ref={drawerRef} />
 			<div className="drawer-content">
-				<div className="navbar bg-base-100 shadow-sm">
+				<div className="navbar bg-gradient-to-r from-white to-gray-50 shadow-lg border-b border-gray-100">
 					<div className="navbar-start">
-						<div className="dropdown">
+						<div className="flex items-center gap-2">
 							<label
 								htmlFor="my-drawer"
-								className="btn btn-ghost btn-circle"
+								className="btn btn-ghost btn-circle hover:bg-blue-50 hover:text-blue-600 transition-all duration-200"
 								aria-label="Open menu"
 							>
-								<i className="i-flowbite-bars-from-left-outline w-8! h-8!" />
+								<i className="i-flowbite-bars-from-left-outline w-6! h-6!" />
 							</label>
 							{!backButtonHidden && (
 								<BackButton disabled={!user} onClick={handleBack}>
@@ -139,136 +191,298 @@ export const Navbar = memo(() => {
 						</div>
 					</div>
 					<div className="navbar-center">
-						<h2 ref={titleRef} className="text-2xl font-bold">
-							{headerTitle}
-						</h2>
+						<div className="flex items-center gap-3">
+							<div
+								className={`w-8 h-8 bg-gradient-to-br ${getCurrentPageColor} rounded-lg flex items-center justify-center shadow-md transition-all duration-300`}
+							>
+								<i className={`${getCurrentPageIcon} w-5! h-5! bg-white!`} />
+							</div>
+							<h2 ref={titleRef} className="text-xl font-bold text-gray-800 tracking-tight">
+								{headerTitle}
+							</h2>
+						</div>
 					</div>
 					<div className="navbar-end">
-						<button type="button" className="btn btn-ghost btn-circle" aria-label="Notifications">
-							<div className="indicator">
-								<i className="i-material-symbols-notifications-outline-sharp w-6! h-6!" />
-								<span className="badge badge-xs badge-primary indicator-item animate-pulse" />
+						<div className="flex items-center gap-2">
+							{/* User Avatar */}
+							<div className="dropdown dropdown-end">
+								<div
+									tabIndex={0}
+									role="button"
+									className="btn btn-ghost btn-circle avatar hover:bg-blue-50 transition-all duration-200"
+								>
+									<div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+										<span className="text-white text-sm font-semibold leading-none h-full flex items-center justify-center">
+											{user?.name?.charAt(0)?.toUpperCase() || 'U'}
+										</span>
+									</div>
+								</div>
+								<ul className="menu dropdown-content bg-white rounded-xl shadow-xl border border-gray-100 z-[1] mt-3 w-52 p-2">
+									<li className="menu-title text-xs text-gray-500 px-3 py-1">
+										<span>
+											{user?.name} {user?.lastName}
+										</span>
+									</li>
+									<div className="divider my-1" />
+									<li>
+										<button
+											type="button"
+											onClick={goTo(AppRoutes.MY_ACCOUNT)}
+											className="flex items-center gap-3 px-3 py-2 hover:bg-blue-50 rounded-lg transition-colors"
+										>
+											<i className="i-material-symbols-account-circle w-4! h-4! bg-blue-600!" />
+											<span className="text-sm">{t('sidebar.myAccount')}</span>
+										</button>
+									</li>
+									<li>
+										<button
+											type="button"
+											onClick={handleLogout}
+											className="flex items-center gap-3 px-3 py-2 hover:bg-red-50 rounded-lg transition-colors text-red-600"
+										>
+											<i className="i-material-symbols-logout w-4! h-4! bg-red-600!" />
+											<span className="text-sm">{t('sidebar.logout')}</span>
+										</button>
+									</li>
+								</ul>
 							</div>
-						</button>
+
+							{/* Notifications */}
+							<button
+								type="button"
+								className="btn btn-ghost btn-circle hover:bg-blue-50 hover:text-blue-600 transition-all duration-200"
+								aria-label="Notifications"
+							>
+								<div className="indicator">
+									<i className="i-material-symbols-notifications-outline-sharp w-5! h-5!" />
+									<span className="badge badge-xs bg-gradient-to-r from-red-500 to-pink-500 border-none indicator-item animate-pulse" />
+								</div>
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>
 			<div className="drawer-side z-10">
 				<label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay" />
-				<ul
-					className="menu bg-base-200 text-base-content min-h-full w-80 p-4"
+				<div
+					className="bg-white min-h-full w-80 shadow-2xl border-r border-gray-100"
 					role="navigation"
 					aria-label="Main navigation"
 				>
+					{/* Sidebar Header */}
 					{farm && (
-						<h2 ref={drawerTitleRef} className="text-xl font-bold mb-2 text-center">
-							{farm!.name}
-						</h2>
+						<div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white">
+							<div className="flex items-center gap-3 mb-2">
+								<div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+									<i className="i-healthicons-animal-cow w-6! h-6! bg-white!" />
+								</div>
+								<div>
+									<h2 ref={drawerTitleRef} className="font-bold">
+										{farm!.name}
+									</h2>
+									<p className="text-blue-100 text-sm opacity-90">{t('sidebar.farmManagement')}</p>
+								</div>
+							</div>
+						</div>
 					)}
-					<li className={location.pathname.includes(AppRoutes.ANIMALS) ? 'bg-info rounded-sm' : ''}>
-						<button
-							type="button"
-							className="flex items-center gap-2 px-4 py-2 selection:bg-red"
-							onClick={goTo(AppRoutes.ANIMALS)}
-						>
-							<i className="i-healthicons-animal-cow w-8! h-8!" />
-							<span className="text-sm">{t('sidebar.animals')}</span>
-						</button>
-					</li>
-					<li className={location.pathname.includes(AppRoutes.TASKS) ? 'bg-info rounded-sm' : ''}>
-						<button
-							type="button"
-							className="flex items-center gap-2 px-4 py-2 selection:bg-red"
-							onClick={goTo(AppRoutes.TASKS)}
-						>
-							<i className="i-fluent-tasks-app-24-filled w-8! h-8!" />
-							<span className="text-sm">{t('sidebar.tasks')}</span>
-						</button>
-					</li>
-					<li
-						className={location.pathname.includes(AppRoutes.MY_SPECIES) ? 'bg-info rounded-sm' : ''}
-					>
-						<button
-							type="button"
-							className="flex items-center gap-2 px-4 py-2 selection:bg-red"
-							onClick={goTo(AppRoutes.MY_SPECIES)}
-						>
-							<i className="i-solar-dna-bold-duotone w-8! h-8!" />
-							<span className="text-sm">{t('sidebar.mySpecies')}</span>
-						</button>
-					</li>
-					{(user?.role === 'admin' || user?.role === 'owner') && <div className="divider" />}
-					{(user?.role === 'admin' || user?.role === 'owner') && (
-						<li
-							className={
-								location.pathname.includes(AppRoutes.EMPLOYEES) ? 'bg-info rounded-sm' : ''
-							}
-						>
+
+					{/* Navigation Menu */}
+					<div className="p-4">
+						{/* Main Navigation */}
+						<div className="space-y-2">
+							<div className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
+								{t('sidebar.mainMenu')}
+							</div>
+
 							<button
 								type="button"
-								className="flex items-center gap-2 px-4 py-2 selection:bg-red"
-								onClick={goTo(AppRoutes.EMPLOYEES)}
+								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+									location.pathname.includes(AppRoutes.DASHBOARD)
+										? 'bg-gradient-to-r from-cyan-500 to-cyan-600 text-white shadow-lg'
+										: 'hover:bg-gray-50 text-gray-700'
+								}`}
+								onClick={goTo(AppRoutes.DASHBOARD)}
 							>
-								<i className="i-clarity-employee-group-solid w-8! h-8!" />
-								<span className="text-sm">{t('sidebar.employees')}</span>
+								<div
+									className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+										location.pathname.includes(AppRoutes.DASHBOARD) ? 'bg-white/20' : 'bg-cyan-100'
+									}`}
+								>
+									<i
+										className={`i-material-symbols-dashboard w-5! h-5! ${
+											location.pathname.includes(AppRoutes.DASHBOARD) ? 'bg-white!' : 'bg-cyan-600!'
+										}`}
+									/>
+								</div>
+								<span className="font-medium">{t('sidebar.dashboard')}</span>
 							</button>
-						</li>
-					)}
-					{(user?.role === 'admin' || user?.role === 'owner') &&
-						billingCard !== null &&
-						billingCard.status && (
-							<li
-								className={
-									location.pathname.includes(AppRoutes.BILLING_CARD) ? 'bg-info rounded-sm' : ''
-								}
+
+							<button
+								type="button"
+								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+									location.pathname.includes(AppRoutes.ANIMALS)
+										? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg'
+										: 'hover:bg-gray-50 text-gray-700'
+								}`}
+								onClick={goTo(AppRoutes.ANIMALS)}
 							>
+								<div
+									className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+										location.pathname.includes(AppRoutes.ANIMALS) ? 'bg-white/20' : 'bg-blue-100'
+									}`}
+								>
+									<i
+										className={`i-healthicons-animal-cow w-5! h-5! ${
+											location.pathname.includes(AppRoutes.ANIMALS) ? 'bg-white!' : 'bg-blue-600!'
+										}`}
+									/>
+								</div>
+								<span className="font-medium">{t('sidebar.animals')}</span>
+							</button>
+
+							<button
+								type="button"
+								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+									location.pathname.includes(AppRoutes.TASKS)
+										? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg'
+										: 'hover:bg-gray-50 text-gray-700'
+								}`}
+								onClick={goTo(AppRoutes.TASKS)}
+							>
+								<div
+									className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+										location.pathname.includes(AppRoutes.TASKS) ? 'bg-white/20' : 'bg-green-100'
+									}`}
+								>
+									<i
+										className={`i-fluent-tasks-app-24-filled w-5! h-5! ${
+											location.pathname.includes(AppRoutes.TASKS) ? 'bg-white!' : 'bg-green-600!'
+										}`}
+									/>
+								</div>
+								<span className="font-medium">{t('sidebar.tasks')}</span>
+							</button>
+
+							<button
+								type="button"
+								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+									location.pathname.includes(AppRoutes.MY_SPECIES)
+										? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg'
+										: 'hover:bg-gray-50 text-gray-700'
+								}`}
+								onClick={goTo(AppRoutes.MY_SPECIES)}
+							>
+								<div
+									className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+										location.pathname.includes(AppRoutes.MY_SPECIES)
+											? 'bg-white/20'
+											: 'bg-purple-100'
+									}`}
+								>
+									<i
+										className={`i-solar-dna-bold-duotone w-5! h-5! ${
+											location.pathname.includes(AppRoutes.MY_SPECIES)
+												? 'bg-white!'
+												: 'bg-purple-600!'
+										}`}
+									/>
+								</div>
+								<span className="font-medium">{t('sidebar.mySpecies')}</span>
+							</button>
+						</div>
+
+						{/* Admin Section */}
+						{(user?.role === 'admin' || user?.role === 'owner') && (
+							<div className="mt-6 space-y-2">
+								<div className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
+									{t('sidebar.administration')}
+								</div>
+
 								<button
 									type="button"
-									className="flex items-center gap-2 px-4 py-2"
-									onClick={goTo(AppRoutes.BILLING_CARD)}
+									className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+										location.pathname.includes(AppRoutes.EMPLOYEES)
+											? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg'
+											: 'hover:bg-gray-50 text-gray-700'
+									}`}
+									onClick={goTo(AppRoutes.EMPLOYEES)}
 								>
-									<i className="i-typcn-business-card w-8! h-8!" />
-									<span className="text-sm">{t('sidebar.businessCard')}</span>
+									<div
+										className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+											location.pathname.includes(AppRoutes.EMPLOYEES)
+												? 'bg-white/20'
+												: 'bg-orange-100'
+										}`}
+									>
+										<i
+											className={`i-clarity-employee-group-solid w-5! h-5! ${
+												location.pathname.includes(AppRoutes.EMPLOYEES)
+													? 'bg-white!'
+													: 'bg-orange-600!'
+											}`}
+										/>
+									</div>
+									<span className="font-medium">{t('sidebar.employees')}</span>
 								</button>
-							</li>
+
+								{billingCard !== null && billingCard.status && (
+									<button
+										type="button"
+										className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+											location.pathname.includes(AppRoutes.BILLING_CARD)
+												? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-lg'
+												: 'hover:bg-gray-50 text-gray-700'
+										}`}
+										onClick={goTo(AppRoutes.BILLING_CARD)}
+									>
+										<div
+											className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+												location.pathname.includes(AppRoutes.BILLING_CARD)
+													? 'bg-white/20'
+													: 'bg-indigo-100'
+											}`}
+										>
+											<i
+												className={`i-typcn-business-card w-5! h-5! ${
+													location.pathname.includes(AppRoutes.BILLING_CARD)
+														? 'bg-white!'
+														: 'bg-indigo-600!'
+												}`}
+											/>
+										</div>
+										<span className="font-medium">{t('sidebar.businessCard')}</span>
+									</button>
+								)}
+							</div>
 						)}
-					<div className="divider" />
-					<li
-						className={location.pathname.includes(AppRoutes.MY_ACCOUNT) ? 'bg-info rounded-sm' : ''}
-					>
-						<button
-							type="button"
-							className="flex items-center gap-2 px-4 py-2 selection:bg-red"
-							onClick={goTo(AppRoutes.MY_ACCOUNT)}
-						>
-							<i className="i-material-symbols-account-circle w-8! h-8!" />
-							<span className="text-sm">{t('sidebar.myAccount')}</span>
-						</button>
-					</li>
-					<li>
-						<button
-							type="button"
-							className="flex items-center gap-2 px-4 py-2 selection:bg-red"
-							onClick={handleLogout}
-						>
-							<i className="i-material-symbols-logout w-8! h-8!" />
-							<span className="text-sm">{t('sidebar.logout')}</span>
-						</button>
-					</li>
-					<div className="divider" />
-					<li>
-						<label className="swap swap-rotate" aria-label="Toggle theme">
-							<input
-								type="checkbox"
-								className="theme-controller"
-								value="synthwave"
-								onChange={() => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'))}
-							/>
-							<i className="i-line-md-moon-alt-to-sunny-outline-loop-transition swap-off h-8! w-8! fill-current" />
-							<i className="i-line-md-sunny-outline-to-moon-alt-loop-transition swap-on h-8! w-8! fill-current" />
-						</label>
-					</li>
-				</ul>
+
+						{/* Settings Section */}
+						<div className="mt-6 space-y-2">
+							<div className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
+								{t('sidebar.settings')}
+							</div>
+
+							<label className="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-gray-50 rounded-lg transition-colors">
+								<div className="flex items-center gap-3">
+									<div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+										<i className="i-line-md-moon-alt-to-sunny-outline-loop-transition w-5! h-5! bg-gray-600!" />
+									</div>
+									<span className="font-medium text-gray-700">{t('sidebar.theme')}</span>
+								</div>
+								<div className="swap swap-rotate">
+									<input
+										type="checkbox"
+										className="theme-controller"
+										value="synthwave"
+										onChange={() => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'))}
+									/>
+									<i className="i-line-md-moon-alt-to-sunny-outline-loop-transition swap-off h-5! w-5! fill-current bg-gray-600!" />
+									<i className="i-line-md-sunny-outline-to-moon-alt-loop-transition swap-on h-5! w-5! fill-current bg-gray-600!" />
+								</div>
+							</label>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	)

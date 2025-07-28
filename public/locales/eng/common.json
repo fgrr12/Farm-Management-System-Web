@@ -32,12 +32,17 @@
 		"default": "Select an option"
 	},
 	"sidebar": {
+		"administration": "Administration",
 		"animals": "Animals",
 		"businessCard": "Business Card",
+		"dashboard": "Dashboard",
 		"employees": "Employees",
+		"farmManagement": "Farm Management",
 		"logout": "Logout",
+		"mainMenu": "Main Menu",
 		"myAccount": "My Account",
 		"mySpecies": "My Species",
+		"settings": "Settings",
 		"tasks": "Tasks",
 		"theme": "Theme"
 	}

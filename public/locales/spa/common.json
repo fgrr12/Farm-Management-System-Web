@@ -32,12 +32,17 @@
 		"default": "Selecciona una opción"
 	},
 	"sidebar": {
+		"administration": "Administración",
 		"animals": "Animales",
 		"businessCard": "Tarjeta de Negocio",
+		"dashboard": "Panel de Control",
 		"employees": "Empleados",
+		"farmManagement": "Gestión Ganadera",
 		"logout": "Cerrar Sesión",
+		"mainMenu": "Menú Principal",
 		"myAccount": "Mi Cuenta",
 		"mySpecies": "Mis Especies",
+		"settings": "Configuración",
 		"tasks": "Tareas",
 		"theme": "Tema"
 	}
