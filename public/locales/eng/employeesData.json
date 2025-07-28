@@ -1,6 +1,13 @@
 {
 	"actions": "Actions",
+	"contact": "Contact Information",
+	"delete": "Delete",
+	"deleteEmployee": "Delete employee",
+	"edit": "Edit",
+	"editEmployee": "Edit employee",
 	"email": "Email",
+	"employee": "Employee",
+	"employeeNumber": "Employee #{{number}}",
 	"lastName": "Last Name",
 	"modal": {
 		"deleteEmployee": {
@@ -10,6 +17,8 @@
 	},
 	"name": "Name",
 	"noEmployees": "No employees",
+	"noEmployeesMessage": "Start building your team by adding your first employee. They'll be able to help manage your farm operations.",
+	"noEmployeesTitle": "No team members yet",
 	"phone": "Phone",
 	"role": "Role",
 	"roleList": {

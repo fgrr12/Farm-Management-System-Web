@@ -9,10 +9,14 @@
 		"searchSection": "Buscar y gestionar empleados",
 		"skipToEmployees": "Saltar a la lista de empleados"
 	},
-	"addEmployee": "Añadir empleado",
-	"search": "Buscar",
-	"title": "Empleados",
+	"addEmployee": "Añadir Empleado",
+	"filteredResults": "Resultados Filtrados",
+	"owners": "Propietarios",
+	"search": "Buscar empleados...",
+	"subtitle": "Gestiona los miembros de tu equipo de granja y sus roles",
+	"title": "Gestión de Equipo",
 	"toast": {
 		"errorGettingEmployees": "Se ha producido un error al obtener los empleados."
-	}
+	},
+	"totalEmployees": "Total de Miembros"
 }

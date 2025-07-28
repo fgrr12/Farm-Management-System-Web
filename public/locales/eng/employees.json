@@ -9,10 +9,14 @@
 		"searchSection": "Search and manage employees",
 		"skipToEmployees": "Skip to employees list"
 	},
-	"addEmployee": "Add employee",
-	"search": "Search",
-	"title": "Employees",
+	"addEmployee": "Add Employee",
+	"filteredResults": "Filtered Results",
+	"owners": "Owners",
+	"search": "Search employees...",
+	"subtitle": "Manage your farm team members and their roles",
+	"title": "Team Management",
 	"toast": {
 		"errorGettingEmployees": "There was an error getting the employees."
-	}
+	},
+	"totalEmployees": "Total Team Members"
 }
