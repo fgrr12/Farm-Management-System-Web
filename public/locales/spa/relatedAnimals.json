@@ -11,10 +11,14 @@
 	"addExternalRelation": "Agregar relación externa",
 	"animals": "Animales",
 	"childrenTitle": "Hijos",
-	"filterByID": "Filtra por ID",
+	"dropHere": "Suelta el animal aquí",
+	"filterByID": "Filtrar por ID",
+	"noAnimalsAvailable": "No hay animales disponibles",
+	"noAnimalsFound": "No se encontraron animales que coincidan con tu búsqueda",
 	"parentsTitle": "Padres",
-	"selectedAnimal": "Animal seleccionado",
-	"title": "Crear relaciones",
+	"selectedAnimal": "Animal Seleccionado",
+	"subtitle": "Crear y gestionar relaciones familiares entre animales",
+	"title": "Relaciones de Animales",
 	"toast": {
 		"errorGettingAnimals": "Se ha producido un error al obtener los animales."
 	}

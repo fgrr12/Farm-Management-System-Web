@@ -1,10 +1,27 @@
 {
+	"accessibility": {
+		"addProductionRecordForm": "Add new production record form",
+		"dateHelp": "Select the date when this production occurred",
+		"editProductionRecordForm": "Edit production record form",
+		"notesHelp": "Add any relevant notes about this production record",
+		"quantityHelp": "Enter the quantity of production for this date",
+		"skipToForm": "Skip to production record form",
+		"submitHelp": "Save this production record"
+	},
 	"addButton": "Add Production Record",
 	"addProductionRecordTitle": "Add Production Record",
+	"addSubtitle": "Create a new production record for this animal",
+	"additionalNotes": "Additional Notes",
 	"date": "Date",
 	"editButton": "Update Production Record",
 	"editProductionRecordTitle": "Edit Production Record",
+	"editSubtitle": "Update production record information",
 	"notes": "Notes",
+	"placeholders": {
+		"notes": "Describe production conditions, quality observations, feeding details, weather impact, or any relevant notes...",
+		"quantity": "Enter the amount produced (e.g., 5.5, 12.0, 8.2)..."
+	},
+	"productionInformation": "Production Information",
 	"quantity": "Quantity",
 	"toast": {
 		"added": "Production record added successfully",

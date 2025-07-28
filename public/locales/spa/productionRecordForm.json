@@ -1,10 +1,27 @@
 {
+	"accessibility": {
+		"addProductionRecordForm": "Formulario para añadir nuevo registro de producción",
+		"dateHelp": "Selecciona la fecha cuando ocurrió esta producción",
+		"editProductionRecordForm": "Formulario para editar registro de producción",
+		"notesHelp": "Añade cualquier nota relevante sobre este registro de producción",
+		"quantityHelp": "Ingresa la cantidad de producción para esta fecha",
+		"skipToForm": "Saltar al formulario de registro de producción",
+		"submitHelp": "Guardar este registro de producción"
+	},
 	"addButton": "Añadir Registro",
 	"addProductionRecordTitle": "Añadir Registro de Producción",
+	"addSubtitle": "Crear un nuevo registro de producción para este animal",
+	"additionalNotes": "Notas Adicionales",
 	"date": "Fecha",
 	"editButton": "Actualizar Registro",
 	"editProductionRecordTitle": "Editar Registro de Producción",
+	"editSubtitle": "Actualizar información del registro de producción",
 	"notes": "Notas",
+	"placeholders": {
+		"notes": "Describe condiciones de producción, observaciones de calidad, detalles de alimentación, impacto del clima, o cualquier nota relevante...",
+		"quantity": "Ingresa la cantidad producida (ej: 5.5, 12.0, 8.2)..."
+	},
+	"productionInformation": "Información de Producción",
 	"quantity": "Cantidad",
 	"toast": {
 		"added": "Registro de producción añadido exitosamente",

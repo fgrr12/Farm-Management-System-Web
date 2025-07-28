@@ -253,84 +253,102 @@ const RelatedAnimalsForm = () => {
 	useEffect(() => {
 		setPageTitle(t('title'))
 	}, [setPageTitle, t])
+
 	return (
-		<div className="flex flex-col md:grid md:grid-cols-2 lg:grid-cols-4 p-3 sm:p-4 gap-3 sm:gap-4 lg:gap-6 w-full h-full">
-			<a
-				href="#main-content"
-				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded"
-			>
-				{t('accessibility.skipToMainContent')}
-			</a>
-
-			{currentAnimal && (
-				<section
-					className="flex flex-col gap-4 w-full h-full p-4"
-					aria-labelledby="selected-animal-heading"
+		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 overflow-y-auto">
+			<div className="max-w-7xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
+				<a
+					href="#main-content"
+					className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
 				>
-					<h1 id="selected-animal-heading" className="text-center text-2xl font-semibold">
-						{t('selectedAnimal')}
-					</h1>
-					<div role="img" aria-label={t('accessibility.selectedAnimalCard')}>
-						<RelatedAnimalCard animal={currentAnimal} />
+					{t('accessibility.skipToMainContent')}
+				</a>
+
+				{/* Hero Header */}
+				<div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-6 sm:mb-8">
+					<div className="bg-gradient-to-r from-blue-600 to-green-600 px-4 sm:px-6 py-6 sm:py-8">
+						<div className="flex items-center gap-3 sm:gap-4">
+							<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+								<i className="i-material-symbols-family-restroom bg-white! w-6! h-6! sm:w-8 sm:h-8" />
+							</div>
+							<div className="min-w-0">
+								<h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
+									{t('title')}
+								</h1>
+								<p className="text-blue-100 text-sm sm:text-base mt-1">{t('subtitle')}</p>
+							</div>
+						</div>
 					</div>
-					<Button
-						onClick={() => document?.querySelector('dialog')?.showModal()}
-						aria-describedby="external-relation-description"
-					>
-						{t('addExternalRelation')}
-					</Button>
-					<div id="external-relation-description" className="sr-only">
-						{t('accessibility.addExternalRelationDescription')}
-					</div>
-				</section>
-			)}
+				</div>
 
-			<section
-				className="h-[calc(100vh-100px)]"
-				aria-labelledby="available-animals-heading"
-				id="main-content"
-			>
-				<h2 id="available-animals-heading" className="sr-only">
-					{t('animals')}
-				</h2>
-				<CardContainer
-					title={t('animals')}
-					animals={animalsLists.animals}
-					location={0}
-					aria-label={t('accessibility.availableAnimalsContainer')}
-				/>
-			</section>
+				{/* Main Content */}
+				<div
+					className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
+					id="main-content"
+				>
+					{currentAnimal && (
+						<section
+							className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 flex flex-col gap-4"
+							aria-labelledby="selected-animal-heading"
+						>
+							<div className="flex items-center gap-2 mb-4">
+								<i className="i-material-symbols-pets bg-blue-600! w-5! h-5!" />
+								<h2 id="selected-animal-heading" className="text-lg font-semibold text-gray-900">
+									{t('selectedAnimal')}
+								</h2>
+							</div>
+							<div role="img" aria-label={t('accessibility.selectedAnimalCard')}>
+								<RelatedAnimalCard animal={currentAnimal} />
+							</div>
+							<Button
+								onClick={() => document?.querySelector('dialog')?.showModal()}
+								aria-describedby="external-relation-description"
+								className="btn btn-outline btn-primary flex items-center gap-2"
+							>
+								<i className="i-material-symbols-add-link w-4! h-4!" />
+								{t('addExternalRelation')}
+							</Button>
+							<div id="external-relation-description" className="sr-only">
+								{t('accessibility.addExternalRelationDescription')}
+							</div>
+						</section>
+					)}
 
-			<section className="h-[calc(100vh-100px)]" aria-labelledby="parents-heading">
-				<h2 id="parents-heading" className="sr-only">
-					{t('parentsTitle')}
-				</h2>
-				<CardContainer
-					title={t('parentsTitle')}
-					animals={animalsLists.parents}
-					location={1}
-					aria-label={t('accessibility.parentsContainer')}
-				/>
-			</section>
+					<CardContainer
+						title={t('animals')}
+						animals={animalsLists.animals}
+						location={0}
+						icon="i-material-symbols-pets"
+						iconColor="bg-green-600!"
+						aria-label={t('accessibility.availableAnimalsContainer')}
+					/>
 
-			<section className="h-[calc(100vh-100px)]" aria-labelledby="children-heading">
-				<h2 id="children-heading" className="sr-only">
-					{t('childrenTitle')}
-				</h2>
-				<CardContainer
-					title={t('childrenTitle')}
-					animals={animalsLists.children}
-					location={2}
-					aria-label={t('accessibility.childrenContainer')}
-				/>
-			</section>
+					<CardContainer
+						title={t('parentsTitle')}
+						animals={animalsLists.parents}
+						location={1}
+						icon="i-material-symbols-family-restroom"
+						iconColor="bg-purple-600!"
+						aria-label={t('accessibility.parentsContainer')}
+					/>
 
-			{currentAnimal && (
-				<ExternalRelationForm
-					currentAnimal={currentAnimal}
-					aria-label={t('accessibility.externalRelationForm')}
-				/>
-			)}
+					<CardContainer
+						title={t('childrenTitle')}
+						animals={animalsLists.children}
+						location={2}
+						icon="i-material-symbols-child-care"
+						iconColor="bg-orange-600!"
+						aria-label={t('accessibility.childrenContainer')}
+					/>
+
+					{currentAnimal && (
+						<ExternalRelationForm
+							currentAnimal={currentAnimal}
+							aria-label={t('accessibility.externalRelationForm')}
+						/>
+					)}
+				</div>
+			</div>
 		</div>
 	)
 }

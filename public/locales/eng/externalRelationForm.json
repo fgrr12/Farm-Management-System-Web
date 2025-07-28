@@ -1,6 +1,8 @@
 {
 	"animalId": "Animal ID",
+	"animalIdPlaceholder": "Enter animal ID (e.g., A001, COW-123)",
 	"breed": "Breed",
+	"breedPlaceholder": "Enter breed name (e.g., Holstein, Angus)",
 	"cancel": "Cancel",
 	"female": "Female",
 	"gender": "Gender",
@@ -10,6 +12,9 @@
 		"child": "Son/Daughter",
 		"parent": "Parent"
 	},
+	"relationPreview": "Relationship Preview",
+	"relationTypeLabel": "What type of relationship do you want to create?",
 	"save": "Save",
+	"selectGender": "Select gender",
 	"title": "Add External Relation"
 }

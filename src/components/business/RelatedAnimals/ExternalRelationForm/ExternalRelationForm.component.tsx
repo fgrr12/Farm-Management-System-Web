@@ -71,72 +71,120 @@ export const ExternalRelationForm: FC<ExternalRelationFormProps> = ({ currentAni
 
 	return (
 		<dialog className="modal">
-			<div className="modal-box">
-				<h3 className="font-bold text-lg text-center p-4">{t('title')}</h3>
-				<div className="grid grid-cols-9 p-4">
+			<div className="modal-box max-w-md">
+				{/* Header */}
+				<div className="flex items-center justify-between mb-6">
+					<div className="flex items-center gap-3">
+						<div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+							<i className="i-material-symbols-add-link w-5! h-5! text-blue-600" />
+						</div>
+						<h3 className="text-xl font-semibold text-gray-900">{t('title')}</h3>
+					</div>
 					<button
 						type="button"
-						className={`btn ${relation.relation === 'Child' ? 'btn-success' : 'btn-error'} col-span-4`}
-						onClick={() => setRelation({ ...relation, relation: 'Child' })}
+						className="btn btn-sm btn-ghost btn-circle"
+						onClick={handleClose}
+						aria-label="Close"
 					>
-						{t('relation.parent')}
-					</button>
-					<div className="divider divider-horizontal m-0 w-auto!" />
-					<button
-						type="button"
-						className={`btn ${relation.relation === 'Parent' ? 'btn-success' : 'btn-error'} col-span-4`}
-						onClick={() => setRelation({ ...relation, relation: 'Parent' })}
-					>
-						{t('relation.child')}
+						<i className="i-material-symbols-close w-5! h-5!" />
 					</button>
 				</div>
-				<form
-					method="dialog"
-					className="flex flex-col w-full h-full px-4 gap-4"
-					autoComplete="off"
-					onSubmit={handleSubmit}
-				>
-					<TextField
-						label={t('animalId')}
-						name="animalId"
-						value={relation.animalId}
-						onChange={handleChange}
-						required
-					/>
-					<Select
-						legend={t('gender')}
-						name="gender"
-						items={[
-							{ value: 'Female', name: t('female') },
-							{ value: 'Male', name: t('male') },
-						]}
-						value={relation.gender}
-						onChange={handleChange}
-						required
-					/>
-					<TextField
-						label={t('breed')}
-						name="breed"
-						value={relation.breed}
-						onChange={handleChange}
-						required
-					/>
+
+				{/* Relation Type Selector */}
+				<div className="bg-gray-50 rounded-lg p-4 mb-6">
+					<p className="text-sm text-gray-600 mb-3">{t('relationTypeLabel')}</p>
+					<div className="grid grid-cols-2 gap-2">
+						<button
+							type="button"
+							className={`btn btn-sm ${
+								relation.relation === 'Child' ? 'btn-primary' : 'btn-outline btn-primary'
+							} flex items-center gap-2`}
+							onClick={() => setRelation({ ...relation, relation: 'Child' })}
+						>
+							<i className="i-material-symbols-family-restroom w-4! h-4!" />
+							{t('relation.parent')}
+						</button>
+						<button
+							type="button"
+							className={`btn btn-sm ${
+								relation.relation === 'Parent' ? 'btn-primary' : 'btn-outline btn-primary'
+							} flex items-center gap-2`}
+							onClick={() => setRelation({ ...relation, relation: 'Parent' })}
+						>
+							<i className="i-material-symbols-child-care w-4! h-4!" />
+							{t('relation.child')}
+						</button>
+					</div>
+				</div>
+
+				<form method="dialog" className="space-y-4" autoComplete="off" onSubmit={handleSubmit}>
+					{/* Animal Information */}
+					<div className="space-y-4">
+						<TextField
+							label={t('animalId')}
+							name="animalId"
+							value={relation.animalId}
+							onChange={handleChange}
+							placeholder={t('animalIdPlaceholder')}
+							required
+						/>
+						<Select
+							legend={t('gender')}
+							name="gender"
+							items={[
+								{ value: 'Female', name: t('female') },
+								{ value: 'Male', name: t('male') },
+							]}
+							value={relation.gender}
+							onChange={handleChange}
+							defaultLabel={t('selectGender')}
+							required
+						/>
+						<TextField
+							label={t('breed')}
+							name="breed"
+							value={relation.breed}
+							onChange={handleChange}
+							placeholder={t('breedPlaceholder')}
+							required
+						/>
+					</div>
+
+					{/* Relation Preview */}
 					{relation.animalId && (
-						<p>
-							{t('newRelationPhrase', {
-								currentAnimal: currentAnimal.animalId,
-								animalId: relation.animalId,
-								relation:
-									relation.relation === 'Parent' ? t('relation.child') : t('relation.parent'),
-							})}
-						</p>
-					)}
-					<div className="grid grid-cols-3 gap-4">
-						<div className=" col-span-2">
-							<Button type="submit">{t('save')}</Button>
+						<div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+							<div className="flex items-center gap-2 mb-2">
+								<i className="i-material-symbols-info w-4! h-4! text-blue-600" />
+								<span className="text-sm font-medium text-blue-800">{t('relationPreview')}</span>
+							</div>
+							<p className="text-sm text-blue-700">
+								{t('newRelationPhrase', {
+									currentAnimal: currentAnimal.animalId,
+									animalId: relation.animalId,
+									relation:
+										relation.relation === 'Parent' ? t('relation.child') : t('relation.parent'),
+								})}
+							</p>
 						</div>
-						<button type="button" className="btn btn-error h-full" onClick={handleClose}>
-							Cancelar
+					)}
+
+					{/* Action Buttons */}
+					<div className="flex gap-3 pt-4">
+						<Button
+							type="submit"
+							className="flex-1 btn btn-primary flex items-center gap-2"
+							disabled={!relation.animalId || !relation.gender || !relation.breed}
+						>
+							<i className="i-material-symbols-save w-4! h-4!" />
+							{t('save')}
+						</Button>
+						<button
+							type="button"
+							className="btn btn-outline btn-error flex items-center gap-2"
+							onClick={handleClose}
+						>
+							<i className="i-material-symbols-cancel w-4! h-4!" />
+							{t('cancel')}
 						</button>
 					</div>
 				</form>
