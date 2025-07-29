@@ -3,7 +3,7 @@ import type { InputHTMLAttributes } from 'react'
 export type TextFieldVariant = 'default' | 'filled' | 'outlined'
 export type TextFieldSize = 'sm' | 'md' | 'lg'
 
-export interface TextFieldProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface TextFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
 	label?: string
 	error?: string
 	helperText?: string

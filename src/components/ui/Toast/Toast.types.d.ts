@@ -14,7 +14,6 @@ export interface ToastProps {
 	message: ReactNode
 	type?: ToastType
 	duration?: number
-	position?: ToastPosition
 	dismissible?: boolean
 	action?: {
 		label: string

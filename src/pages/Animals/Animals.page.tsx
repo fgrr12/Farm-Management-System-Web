@@ -216,10 +216,7 @@ const Animals = () => {
 									{filteredAnimals.map((animal) => (
 										<div key={animal.uuid} role="listitem" className="animal-card">
 											<AnimalCard
-												uuid={animal.uuid}
-												animalId={animal.animalId}
-												breedName={animal.breedName}
-												gender={animal.gender}
+												animal={animal}
 												aria-label={t('accessibility.animalCardLabel', {
 													animalId: animal.animalId,
 													breedName: animal.breedName,

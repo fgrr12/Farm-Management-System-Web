@@ -10,7 +10,6 @@ export const Toast = memo(
 		message,
 		type = 'info',
 		duration = 5000,
-		position = 'top-right',
 		dismissible = true,
 		action,
 		onClose,
@@ -53,51 +52,15 @@ export const Toast = memo(
 			return configs[type]
 		}, [type])
 
-		const positionClasses = useMemo(() => {
-			const positions = {
-				'top-right': 'top-4 right-4',
-				'top-left': 'top-4 left-4',
-				'bottom-right': 'bottom-4 right-4',
-				'bottom-left': 'bottom-4 left-4',
-				'top-center': 'top-4 left-1/2 transform -translate-x-1/2',
-				'bottom-center': 'bottom-4 left-1/2 transform -translate-x-1/2',
-			}
-			return positions[position]
-		}, [position])
-
 		const getInitialPosition = useCallback(() => {
-			switch (position) {
-				case 'top-right':
-				case 'bottom-right':
-					return { x: 400, y: 0 }
-				case 'top-left':
-				case 'bottom-left':
-					return { x: -400, y: 0 }
-				case 'top-center':
-					return { x: 0, y: -100 }
-				case 'bottom-center':
-					return { x: 0, y: 100 }
-				default:
-					return { x: 400, y: 0 }
-			}
-		}, [position])
+			// Para el ToastManager que está en top-right, las animaciones vienen desde la derecha
+			return { x: 300, y: 0 }
+		}, [])
 
 		const getExitPosition = useCallback(() => {
-			switch (position) {
-				case 'top-right':
-				case 'bottom-right':
-					return { x: 400, y: 0 }
-				case 'top-left':
-				case 'bottom-left':
-					return { x: -400, y: 0 }
-				case 'top-center':
-					return { x: 0, y: -100 }
-				case 'bottom-center':
-					return { x: 0, y: 100 }
-				default:
-					return { x: 400, y: 0 }
-			}
-		}, [position])
+			// Salida hacia la derecha
+			return { x: 300, y: 0 }
+		}, [])
 
 		const handleClose = useCallback(() => {
 			if (timeoutRef.current) {
@@ -139,15 +102,27 @@ export const Toast = memo(
 				scale: 0.9,
 			})
 
-			// Entrance animation
+			// Entrance animation with improved easing
 			gsap.to(el, {
 				x: 0,
 				y: 0,
 				opacity: 1,
 				scale: 1,
-				duration: 0.5,
-				ease: 'back.out(1.7)',
+				duration: 0.6,
+				ease: 'back.out(1.4)',
 			})
+
+			// Add subtle bounce effect on hover
+			const handleMouseEnter = () => {
+				gsap.to(el, { scale: 1.02, duration: 0.2, ease: 'power1.out' })
+			}
+
+			const handleMouseLeave = () => {
+				gsap.to(el, { scale: 1, duration: 0.2, ease: 'power1.out' })
+			}
+
+			el.addEventListener('mouseenter', handleMouseEnter)
+			el.addEventListener('mouseleave', handleMouseLeave)
 
 			// Progress bar animation
 			if (progressEl && duration > 0) {
@@ -158,9 +133,14 @@ export const Toast = memo(
 						width: '0%',
 						duration: duration / 1000,
 						ease: 'none',
-						delay: 0.5, // Start after entrance animation
+						delay: 0.6, // Start after entrance animation
 					}
 				)
+			}
+
+			return () => {
+				el.removeEventListener('mouseenter', handleMouseEnter)
+				el.removeEventListener('mouseleave', handleMouseLeave)
 			}
 		}, [getInitialPosition, duration])
 
@@ -180,13 +160,16 @@ export const Toast = memo(
 			<div
 				ref={toastRef}
 				className={`
-				fixed z-50 max-w-sm w-full
+				relative w-full max-w-sm
 				${toastConfig.bgColor} ${toastConfig.borderColor} ${toastConfig.textColor}
 				border rounded-xl shadow-2xl backdrop-blur-sm
-				${positionClasses}
 			`}
 				role="alert"
 				aria-live="polite"
+				style={{
+					transform: 'translateZ(0)', // Force hardware acceleration
+					willChange: 'transform, opacity', // Optimize for animations
+				}}
 			>
 				{/* Progress Bar */}
 				{duration > 0 && (

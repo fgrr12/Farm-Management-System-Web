@@ -1,4 +1,6 @@
-import { memo } from 'react'
+import { useGSAP } from '@gsap/react'
+import gsap from 'gsap'
+import { memo, useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useDashboardData } from '@/hooks/dashboard/useDashboardData'
@@ -7,20 +9,11 @@ export const HealthOverview = memo(() => {
 	const { t } = useTranslation(['dashboard'])
 	const { healthOverview, loading, loadingSecondary } = useDashboardData()
 
-	if (loading || loadingSecondary) {
-		return (
-			<div className="bg-white rounded-xl border border-gray-200 p-6">
-				<div className="animate-pulse">
-					<div className="h-6 bg-gray-200 rounded w-1/2 mb-4" />
-					<div className="space-y-3">
-						{Array.from({ length: 4 }).map((_, index) => (
-							<div key={index} className="h-4 bg-gray-200 rounded" />
-						))}
-					</div>
-				</div>
-			</div>
-		)
-	}
+	const containerRef = useRef<HTMLDivElement>(null)
+	const itemsRef = useRef<HTMLDivElement[]>([])
+	const totalRef = useRef<HTMLSpanElement>(null)
+	const [displayCounts, setDisplayCounts] = useState<number[]>([0, 0, 0, 0])
+	const [displayTotal, setDisplayTotal] = useState(0)
 
 	const healthItems = [
 		{
@@ -29,6 +22,8 @@ export const HealthOverview = memo(() => {
 			color: 'bg-green-500',
 			textColor: 'text-green-700',
 			bgColor: 'bg-green-50',
+			hoverBg: 'hover:bg-green-100',
+			icon: 'i-material-symbols-favorite',
 		},
 		{
 			label: t('health.sick'),
@@ -36,6 +31,8 @@ export const HealthOverview = memo(() => {
 			color: 'bg-red-500',
 			textColor: 'text-red-700',
 			bgColor: 'bg-red-50',
+			hoverBg: 'hover:bg-red-100',
+			icon: 'i-material-symbols-sick',
 		},
 		{
 			label: t('health.treatment'),
@@ -43,6 +40,8 @@ export const HealthOverview = memo(() => {
 			color: 'bg-yellow-500',
 			textColor: 'text-yellow-700',
 			bgColor: 'bg-yellow-50',
+			hoverBg: 'hover:bg-yellow-100',
+			icon: 'i-material-symbols-medication',
 		},
 		{
 			label: t('health.checkupDue'),
@@ -50,22 +49,148 @@ export const HealthOverview = memo(() => {
 			color: 'bg-blue-500',
 			textColor: 'text-blue-700',
 			bgColor: 'bg-blue-50',
+			hoverBg: 'hover:bg-blue-100',
+			icon: 'i-material-symbols-schedule',
 		},
 	]
 
+	// Container entrance animation
+	useGSAP(() => {
+		if (containerRef.current && !loading && !loadingSecondary) {
+			gsap.fromTo(
+				containerRef.current,
+				{ y: 30, opacity: 0 },
+				{ y: 0, opacity: 1, duration: 0.6, ease: 'power2.out' }
+			)
+		}
+	}, [loading, loadingSecondary])
+
+	// Items stagger animation
+	useGSAP(() => {
+		if (itemsRef.current.length && !loading && !loadingSecondary) {
+			gsap.fromTo(
+				itemsRef.current,
+				{ x: -30, opacity: 0 },
+				{
+					x: 0,
+					opacity: 1,
+					duration: 0.5,
+					ease: 'power2.out',
+					stagger: 0.1,
+					delay: 0.3,
+				}
+			)
+		}
+	}, [loading, loadingSecondary])
+
+	// Animate counters
+	useGSAP(() => {
+		if (!loading && !loadingSecondary && healthItems.length) {
+			healthItems.forEach((item, index) => {
+				const obj = { value: 0 }
+				gsap.to(obj, {
+					value: item.count,
+					duration: 1.2,
+					ease: 'power2.out',
+					delay: 0.5 + index * 0.1,
+					onUpdate: () => {
+						setDisplayCounts((prev) => {
+							const newCounts = [...prev]
+							newCounts[index] = Math.round(obj.value)
+							return newCounts
+						})
+					},
+				})
+			})
+
+			// Animate total
+			const totalValue = healthItems.reduce((sum, item) => sum + item.count, 0)
+			const totalObj = { value: 0 }
+			gsap.to(totalObj, {
+				value: totalValue,
+				duration: 1.5,
+				ease: 'power2.out',
+				delay: 1,
+				onUpdate: () => {
+					setDisplayTotal(Math.round(totalObj.value))
+				},
+			})
+		}
+	}, [loading, loadingSecondary, healthOverview])
+
+	const setItemRef = useCallback(
+		(index: number) => (el: HTMLDivElement | null) => {
+			if (el) itemsRef.current[index] = el
+		},
+		[]
+	)
+
+	const handleMouseEnter = useCallback(() => {
+		if (containerRef.current) {
+			gsap.to(containerRef.current, {
+				y: -2,
+				duration: 0.3,
+				ease: 'power2.out',
+			})
+		}
+	}, [])
+
+	const handleMouseLeave = useCallback(() => {
+		if (containerRef.current) {
+			gsap.to(containerRef.current, {
+				y: 0,
+				duration: 0.3,
+				ease: 'power2.out',
+			})
+		}
+	}, [])
+
 	return (
-		<div className="bg-white rounded-xl border border-gray-200 p-6">
+		<div
+			ref={containerRef}
+			className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-300"
+			role="region"
+			aria-label="Health Overview"
+			onMouseEnter={handleMouseEnter}
+			onMouseLeave={handleMouseLeave}
+			style={{
+				transform: 'translateZ(0)',
+				willChange: 'transform',
+			}}
+		>
 			<h3 className="text-lg font-semibold text-gray-900 mb-6">{t('health.title')}</h3>
 
-			<div className="space-y-4">
+			<div className="space-y-3">
 				{healthItems.map((item, index) => (
-					<div key={index} className={`p-4 rounded-lg ${item.bgColor}`}>
+					<div
+						key={index}
+						ref={setItemRef(index)}
+						className={`p-4 rounded-lg ${item.bgColor} ${item.hoverBg} transition-all duration-200 cursor-pointer group`}
+					>
 						<div className="flex items-center justify-between">
 							<div className="flex items-center gap-3">
-								<div className={`w-3 h-3 rounded-full ${item.color}`} />
-								<span className={`font-medium ${item.textColor}`}>{item.label}</span>
+								<div className="relative">
+									<div
+										className={`w-3 h-3 rounded-full ${item.color} group-hover:scale-110 transition-transform`}
+									/>
+									<div
+										className={`absolute inset-0 w-3 h-3 rounded-full ${item.color} opacity-30 group-hover:scale-150 transition-transform`}
+									/>
+								</div>
+								<i
+									className={`${item.icon} w-4! h-4! ${item.textColor.replace('text-', 'bg-').replace('700', '600')}! group-hover:scale-110 transition-transform`}
+								/>
+								<span
+									className={`font-medium ${item.textColor} group-hover:font-semibold transition-all`}
+								>
+									{item.label}
+								</span>
 							</div>
-							<span className={`text-xl font-bold ${item.textColor}`}>{item.count}</span>
+							<span
+								className={`text-xl font-bold ${item.textColor} tabular-nums group-hover:scale-105 transition-transform`}
+							>
+								{loading || loadingSecondary ? '...' : displayCounts[index]}
+							</span>
 						</div>
 					</div>
 				))}
@@ -73,9 +198,9 @@ export const HealthOverview = memo(() => {
 
 			<div className="mt-6 pt-4 border-t border-gray-100">
 				<div className="flex items-center justify-between">
-					<span className="text-sm text-gray-600">{t('health.totalAnimals')}</span>
-					<span className="text-lg font-semibold text-gray-900">
-						{healthItems.reduce((sum, item) => sum + item.count, 0)}
+					<span className="text-sm text-gray-600 font-medium">{t('health.totalAnimals')}</span>
+					<span ref={totalRef} className="text-lg font-semibold text-gray-900 tabular-nums">
+						{loading || loadingSecondary ? '...' : displayTotal}
 					</span>
 				</div>
 			</div>

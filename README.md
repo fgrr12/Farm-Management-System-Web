@@ -36,6 +36,7 @@ A comprehensive livestock farm management application built with React, TypeScri
 - Offline-capable with service worker support
 - Installable on mobile devices and desktop
 - Touch-friendly interfaces with drag-and-drop functionality
+- Enhanced UI with GSAP animations and smooth transitions
 
 ## Tech Stack
 
@@ -44,7 +45,7 @@ A comprehensive livestock farm management application built with React, TypeScri
 - **State Management**: Zustand
 - **Backend**: Firebase (Authentication + Firestore + Storage)
 - **PWA**: Vite PWA Plugin with Workbox for offline support
-- **Animations**: GSAP with SplitText
+- **Animations**: GSAP with advanced micro-interactions and UI enhancements
 - **Testing**: Vitest + Testing Library (275 tests, 100% passing)
 - **Code Quality**: Biome (ESLint + Prettier replacement)
 - **Internationalization**: i18next + react-i18next
@@ -59,6 +60,7 @@ A comprehensive livestock farm management application built with React, TypeScri
 - ✅ **Performance**: Optimized with intelligent code splitting
 - ✅ **PWA**: Lighthouse score optimized for mobile
 - ✅ **Accessibility**: WCAG compliant components
+- ✅ **UI/UX**: Enhanced with GSAP animations and improved component reliability
 
 ## Getting Started
 

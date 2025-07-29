@@ -10,7 +10,7 @@ export interface SelectOption {
 	group?: string
 }
 
-export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
+export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'size'> {
 	items: SelectOption[] | any[]
 	legend?: string
 	label?: string

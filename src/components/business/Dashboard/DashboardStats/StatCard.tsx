@@ -1,4 +1,6 @@
-import { memo } from 'react'
+import { useGSAP } from '@gsap/react'
+import gsap from 'gsap'
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 interface StatCardProps {
@@ -38,8 +40,95 @@ export const StatCard = memo<StatCardProps>(
 	({ title, value, change, icon, color, loading = false, changeLoading = false }) => {
 		const { t } = useTranslation('dashboard')
 		const colors = colorClasses[color]
-		const isPositive = change && change > 0
-		const isNegative = change && change < 0
+
+		const cardRef = useRef<HTMLDivElement>(null)
+		const valueRef = useRef<HTMLParagraphElement>(null)
+		const changeRef = useRef<HTMLSpanElement>(null)
+		const iconRef = useRef<HTMLElement>(null)
+		const [displayValue, setDisplayValue] = useState<string | number>(0)
+		const [displayChange, setDisplayChange] = useState<number>(0)
+
+		// Extract numeric value for animation
+		const numericValue =
+			typeof value === 'string' ? Number.parseFloat(value.replace(/[^\d.-]/g, '')) || 0 : value || 0
+
+		// Animate counter when value changes
+		useEffect(() => {
+			if (loading || numericValue === 0) return
+
+			const obj = { value: 0 }
+			gsap.to(obj, {
+				value: numericValue,
+				duration: 1.5,
+				ease: 'power2.out',
+				onUpdate: () => {
+					const currentValue = Math.round(obj.value)
+					if (typeof value === 'string' && value.includes('L')) {
+						setDisplayValue(`${currentValue}L`)
+					} else {
+						setDisplayValue(currentValue)
+					}
+				},
+			})
+		}, [numericValue, loading, value])
+
+		// Animate change percentage
+		useEffect(() => {
+			if (changeLoading || change === undefined || change === null) return
+
+			const obj = { change: 0 }
+			gsap.to(obj, {
+				change: change,
+				duration: 1,
+				ease: 'power2.out',
+				delay: 0.5,
+				onUpdate: () => {
+					setDisplayChange(Math.round(obj.change * 10) / 10)
+				},
+			})
+		}, [change, changeLoading])
+
+		// Card entrance animation
+		useGSAP(() => {
+			if (cardRef.current && !loading) {
+				gsap.fromTo(
+					cardRef.current,
+					{ y: 30, opacity: 0, scale: 0.95 },
+					{ y: 0, opacity: 1, scale: 1, duration: 0.6, ease: 'power2.out' }
+				)
+			}
+		}, [loading])
+
+		// Icon pulse animation
+		useGSAP(() => {
+			if (iconRef.current && !loading) {
+				gsap.fromTo(
+					iconRef.current,
+					{ scale: 0, rotation: -180 },
+					{ scale: 1, rotation: 0, duration: 0.8, ease: 'back.out(1.7)', delay: 0.3 }
+				)
+			}
+		}, [loading])
+
+		const handleMouseEnter = useCallback(() => {
+			if (cardRef.current && !loading) {
+				gsap.to(cardRef.current, {
+					y: -4,
+					duration: 0.3,
+					ease: 'power2.out',
+				})
+			}
+		}, [loading])
+
+		const handleMouseLeave = useCallback(() => {
+			if (cardRef.current && !loading) {
+				gsap.to(cardRef.current, {
+					y: 0,
+					duration: 0.3,
+					ease: 'power2.out',
+				})
+			}
+		}, [loading])
 
 		if (loading) {
 			return (
@@ -62,11 +151,24 @@ export const StatCard = memo<StatCardProps>(
 		}
 
 		return (
-			<div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md transition-shadow">
+			<div
+				ref={cardRef}
+				className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 cursor-pointer"
+				role="button"
+				tabIndex={0}
+				onMouseEnter={handleMouseEnter}
+				onMouseLeave={handleMouseLeave}
+				style={{
+					transform: 'translateZ(0)',
+					willChange: 'transform',
+				}}
+			>
 				<div className="flex items-center justify-between">
 					<div className="flex-1">
 						<p className="text-sm font-medium text-gray-600 mb-1">{title}</p>
-						<p className="text-2xl font-bold text-gray-900">{value}</p>
+						<p ref={valueRef} className="text-3xl font-bold text-gray-900 tabular-nums">
+							{loading ? '...' : displayValue}
+						</p>
 						{changeLoading ? (
 							<div className="flex items-center mt-2">
 								<div className="h-4 bg-gray-200 rounded w-12 animate-pulse" />
@@ -77,20 +179,25 @@ export const StatCard = memo<StatCardProps>(
 							change !== null && (
 								<div className="flex items-center mt-2">
 									<span
-										className={`text-sm font-medium ${
-											isPositive ? 'text-green-600' : isNegative ? 'text-red-600' : 'text-gray-500'
+										ref={changeRef}
+										className={`text-sm font-medium tabular-nums ${
+											displayChange > 0
+												? 'text-green-600'
+												: displayChange < 0
+													? 'text-red-600'
+													: 'text-gray-500'
 										}`}
 									>
-										{isPositive && '+'}
-										{change}%
+										{displayChange > 0 && '+'}
+										{displayChange}%
 									</span>
 									<span className="text-xs text-gray-500 ml-1">{t('common.vsLastMonth')}</span>
 								</div>
 							)
 						)}
 					</div>
-					<div className={`p-3 rounded-lg ${colors.bg}`}>
-						<i className={`w-6! h-6! ${icon} ${colors.icon}`} />
+					<div className={`p-3 rounded-lg ${colors.bg} transition-all duration-300`}>
+						<i ref={iconRef} className={`w-6! h-6! ${icon} ${colors.icon}`} />
 					</div>
 				</div>
 			</div>

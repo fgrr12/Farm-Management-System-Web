@@ -178,10 +178,10 @@ export const Navbar = memo(() => {
 						<div className="flex items-center gap-2">
 							<label
 								htmlFor="my-drawer"
-								className="btn btn-ghost btn-circle hover:bg-blue-50 hover:text-blue-600 transition-all duration-200"
+								className="btn btn-ghost btn-circle hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 hover:scale-110 active:scale-95"
 								aria-label="Open menu"
 							>
-								<i className="i-flowbite-bars-from-left-outline w-6! h-6!" />
+								<i className="i-flowbite-bars-from-left-outline w-6! h-6! transition-transform duration-200 hover:rotate-180" />
 							</label>
 							{!backButtonHidden && (
 								<BackButton disabled={!user} onClick={handleBack}>
@@ -193,9 +193,11 @@ export const Navbar = memo(() => {
 					<div className="navbar-center">
 						<div className="flex items-center gap-3">
 							<div
-								className={`w-8 h-8 bg-gradient-to-br ${getCurrentPageColor} rounded-lg flex items-center justify-center shadow-md transition-all duration-300`}
+								className={`w-8 h-8 bg-gradient-to-br ${getCurrentPageColor} rounded-lg flex items-center justify-center shadow-md transition-all duration-300 hover:scale-110 hover:rotate-12`}
 							>
-								<i className={`${getCurrentPageIcon} w-5! h-5! bg-white!`} />
+								<i
+									className={`${getCurrentPageIcon} w-5! h-5! bg-white! transition-transform duration-200`}
+								/>
 							</div>
 							<h2 ref={titleRef} className="text-xl font-bold text-gray-800 tracking-tight">
 								{headerTitle}
@@ -209,10 +211,10 @@ export const Navbar = memo(() => {
 								<div
 									tabIndex={0}
 									role="button"
-									className="btn btn-ghost btn-circle avatar hover:bg-blue-50 transition-all duration-200"
+									className="btn btn-ghost btn-circle avatar hover:bg-blue-50 transition-all duration-200 hover:scale-110"
 								>
-									<div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-										<span className="text-white text-sm font-semibold leading-none h-full flex items-center justify-center">
+									<div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center transition-all duration-200 hover:shadow-lg">
+										<span className="text-white text-sm font-semibold leading-none h-full flex items-center justify-center transition-transform duration-200 hover:scale-110">
 											{user?.name?.charAt(0)?.toUpperCase() || 'U'}
 										</span>
 									</div>
@@ -250,12 +252,12 @@ export const Navbar = memo(() => {
 							{/* Notifications */}
 							<button
 								type="button"
-								className="btn btn-ghost btn-circle hover:bg-blue-50 hover:text-blue-600 transition-all duration-200"
+								className="btn btn-ghost btn-circle hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 hover:scale-110 active:scale-95"
 								aria-label="Notifications"
 							>
 								<div className="indicator">
-									<i className="i-material-symbols-notifications-outline-sharp w-5! h-5!" />
-									<span className="badge badge-xs bg-gradient-to-r from-red-500 to-pink-500 border-none indicator-item animate-pulse" />
+									<i className="i-material-symbols-notifications-outline-sharp w-5! h-5! transition-transform duration-200 hover:rotate-12" />
+									<span className="badge badge-xs bg-gradient-to-r from-red-500 to-pink-500 border-none indicator-item animate-pulse hover:animate-bounce" />
 								</div>
 							</button>
 						</div>
@@ -296,7 +298,7 @@ export const Navbar = memo(() => {
 
 							<button
 								type="button"
-								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
 									location.pathname.includes(AppRoutes.DASHBOARD)
 										? 'bg-gradient-to-r from-cyan-500 to-cyan-600 text-white shadow-lg'
 										: 'hover:bg-gray-50 text-gray-700'
@@ -319,7 +321,7 @@ export const Navbar = memo(() => {
 
 							<button
 								type="button"
-								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
 									location.pathname.includes(AppRoutes.ANIMALS)
 										? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg'
 										: 'hover:bg-gray-50 text-gray-700'
@@ -342,7 +344,7 @@ export const Navbar = memo(() => {
 
 							<button
 								type="button"
-								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
 									location.pathname.includes(AppRoutes.TASKS)
 										? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg'
 										: 'hover:bg-gray-50 text-gray-700'
@@ -365,7 +367,7 @@ export const Navbar = memo(() => {
 
 							<button
 								type="button"
-								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
 									location.pathname.includes(AppRoutes.MY_SPECIES)
 										? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg'
 										: 'hover:bg-gray-50 text-gray-700'
@@ -400,7 +402,7 @@ export const Navbar = memo(() => {
 
 								<button
 									type="button"
-									className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+									className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
 										location.pathname.includes(AppRoutes.EMPLOYEES)
 											? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg'
 											: 'hover:bg-gray-50 text-gray-700'
@@ -428,7 +430,7 @@ export const Navbar = memo(() => {
 								{billingCard !== null && billingCard.status && (
 									<button
 										type="button"
-										className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+										className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
 											location.pathname.includes(AppRoutes.BILLING_CARD)
 												? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-lg'
 												: 'hover:bg-gray-50 text-gray-700'

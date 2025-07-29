@@ -1,7 +1,7 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import type { FC } from 'react'
-import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/Button'
@@ -29,7 +29,7 @@ export const Modal: FC<ModalProps> = memo(
 		...rest
 	}) => {
 		const { t } = useTranslation('common')
-		const { modalRef, backdropRef, contentRef } = useModal(open)
+		const { modalRef, backdropRef, contentRef, touchHandlers } = useModal(open)
 
 		const modalClasses = useMemo(() => {
 			const sizeClasses = {
@@ -40,7 +40,7 @@ export const Modal: FC<ModalProps> = memo(
 			}
 
 			const baseClasses =
-				'modal-box relative bg-white rounded-2xl shadow-2xl border-0 p-0 overflow-hidden'
+				'modal-box relative bg-white rounded-2xl shadow-2xl border-0 p-0 overflow-hidden transition-all duration-300'
 
 			return `${baseClasses} ${sizeClasses[size]} ${className || ''}`
 		}, [size, className])
@@ -94,10 +94,18 @@ export const Modal: FC<ModalProps> = memo(
 				<div
 					role="dialog"
 					ref={backdropRef}
-					className="modal-backdrop bg-black/50"
+					className="modal-backdrop bg-black/50 backdrop-blur-sm transition-all duration-300"
 					onClick={handleBackdropClick}
 				/>
-				<div ref={contentRef} className={modalClasses}>
+				<div
+					ref={contentRef}
+					className={modalClasses}
+					{...touchHandlers}
+					style={{
+						transform: 'translateZ(0)',
+						willChange: 'transform, opacity',
+					}}
+				>
 					{/* Header */}
 					{title && (
 						<div className={`${variantConfig.headerBg} px-6 py-4 text-white relative`}>
@@ -116,10 +124,10 @@ export const Modal: FC<ModalProps> = memo(
 									type="button"
 									onClick={handleCancel}
 									disabled={loading}
-									className="absolute top-4 right-4 w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors duration-200 disabled:opacity-50"
+									className="absolute top-4 right-4 w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-all duration-200 disabled:opacity-50 hover:scale-110 active:scale-95"
 									aria-label={t('modal.close')}
 								>
-									<i className="i-material-symbols-close w-5! h-5! bg-white!" />
+									<i className="i-material-symbols-close w-5! h-5! bg-white! transition-transform duration-200 hover:rotate-90" />
 								</button>
 							)}
 						</div>
@@ -186,43 +194,150 @@ const useModal = (open?: boolean) => {
 	const modalRef = useRef<HTMLDialogElement>(null)
 	const backdropRef = useRef<HTMLDivElement>(null)
 	const contentRef = useRef<HTMLDivElement>(null)
+	const [isDragging, setIsDragging] = useState(false)
+	const [startY, setStartY] = useState(0)
+	const [currentY, setCurrentY] = useState(0)
 
+	// Enhanced animations with smoother backdrop
 	useGSAP(() => {
 		if (!modalRef.current || !backdropRef.current || !contentRef.current) return
 
 		if (open) {
-			// Entrance animation
-			gsap.set(backdropRef.current, { opacity: 0 })
-			gsap.set(contentRef.current, { scale: 0.8, opacity: 0, y: 50 })
+			// Smoother entrance animation
+			gsap.set(backdropRef.current, { opacity: 0, backdropFilter: 'blur(0px)' })
+			gsap.set(contentRef.current, { scale: 0.9, opacity: 0, y: 30, rotationX: -10 })
 
 			const tl = gsap.timeline()
-			tl.to(backdropRef.current, { opacity: 1, duration: 0.3, ease: 'power2.out' })
+			tl.to(backdropRef.current, {
+				opacity: 1,
+				backdropFilter: 'blur(4px)',
+				duration: 0.4,
+				ease: 'power2.out',
+			})
 			tl.to(
 				contentRef.current,
 				{
 					scale: 1,
 					opacity: 1,
 					y: 0,
-					duration: 0.4,
-					ease: 'back.out(1.7)',
+					rotationX: 0,
+					duration: 0.5,
+					ease: 'back.out(1.4)',
 				},
-				'-=0.1'
+				'-=0.2'
 			)
 		} else {
-			// Exit animation
+			// Smoother exit animation
 			if (backdropRef.current && contentRef.current) {
 				const tl = gsap.timeline()
 				tl.to(contentRef.current, {
-					scale: 0.8,
+					scale: 0.9,
 					opacity: 0,
-					y: -30,
+					y: -20,
+					rotationX: 10,
 					duration: 0.3,
 					ease: 'power2.in',
 				})
-				tl.to(backdropRef.current, { opacity: 0, duration: 0.2, ease: 'power2.in' }, '-=0.1')
+				tl.to(
+					backdropRef.current,
+					{
+						opacity: 0,
+						backdropFilter: 'blur(0px)',
+						duration: 0.3,
+						ease: 'power2.in',
+					},
+					'-=0.1'
+				)
 			}
 		}
 	}, [open])
+
+	// Touch/swipe gestures for mobile
+	const handleTouchStart = useCallback((e: React.TouchEvent) => {
+		setIsDragging(true)
+		setStartY(e.touches[0].clientY)
+		setCurrentY(e.touches[0].clientY)
+	}, [])
+
+	const handleTouchMove = useCallback(
+		(e: React.TouchEvent) => {
+			if (!isDragging || !contentRef.current) return
+
+			const touchY = e.touches[0].clientY
+			const deltaY = touchY - startY
+			setCurrentY(touchY)
+
+			// Only allow downward swipe to close
+			if (deltaY > 0) {
+				const progress = Math.min(deltaY / 200, 1) // 200px to fully close
+				gsap.set(contentRef.current, {
+					y: deltaY * 0.5, // Reduced movement for better feel
+					scale: 1 - progress * 0.1,
+					opacity: 1 - progress * 0.3,
+				})
+
+				if (backdropRef.current) {
+					gsap.set(backdropRef.current, {
+						opacity: 1 - progress * 0.5,
+					})
+				}
+			}
+		},
+		[isDragging, startY]
+	)
+
+	const handleTouchEnd = useCallback(() => {
+		if (!isDragging || !contentRef.current) return
+
+		const deltaY = currentY - startY
+		setIsDragging(false)
+
+		if (deltaY > 100) {
+			// Threshold to close
+			// Close modal
+			const tl = gsap.timeline()
+			tl.to(contentRef.current, {
+				y: 300,
+				scale: 0.8,
+				opacity: 0,
+				duration: 0.3,
+				ease: 'power2.in',
+			})
+			if (backdropRef.current) {
+				tl.to(
+					backdropRef.current,
+					{
+						opacity: 0,
+						duration: 0.3,
+						ease: 'power2.in',
+					},
+					'-=0.1'
+				)
+			}
+
+			// Trigger close after animation
+			setTimeout(() => {
+				modalRef.current?.close()
+				document.body.style.overflow = 'unset'
+			}, 300)
+		} else {
+			// Snap back to original position
+			gsap.to(contentRef.current, {
+				y: 0,
+				scale: 1,
+				opacity: 1,
+				duration: 0.3,
+				ease: 'back.out(1.7)',
+			})
+			if (backdropRef.current) {
+				gsap.to(backdropRef.current, {
+					opacity: 1,
+					duration: 0.3,
+					ease: 'power2.out',
+				})
+			}
+		}
+	}, [isDragging, currentY, startY])
 
 	useEffect(() => {
 		if (!modalRef.current) return
@@ -236,7 +351,7 @@ const useModal = (open?: boolean) => {
 			setTimeout(() => {
 				modalRef.current?.close()
 				document.body.style.overflow = 'unset'
-			}, 500)
+			}, 400)
 		}
 
 		return () => {
@@ -244,5 +359,14 @@ const useModal = (open?: boolean) => {
 		}
 	}, [open])
 
-	return { modalRef, backdropRef, contentRef }
+	return {
+		modalRef,
+		backdropRef,
+		contentRef,
+		touchHandlers: {
+			onTouchStart: handleTouchStart,
+			onTouchMove: handleTouchMove,
+			onTouchEnd: handleTouchEnd,
+		},
+	}
 }

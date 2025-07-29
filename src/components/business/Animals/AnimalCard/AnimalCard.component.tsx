@@ -11,23 +11,20 @@ import type { AnimalCardProps, CardProps } from './AnimalCard.types'
 
 export const AnimalCard: FC<AnimalCardProps> = memo(
 	({
-		uuid,
-		animalId,
-		breedName,
-		gender,
+		animal,
 		healthStatus = 'unknown',
 		lastHealthCheck,
 		productionStatus,
 		age,
 		weight,
 		notes,
-		imageUrl,
 		variant = 'default',
 		className,
 		...rest
 	}) => {
 		const navigate = useNavigate()
 		const cardRef = useRef<HTMLDivElement>(null)
+		const { uuid, animalId, breedName, gender, picture } = animal
 
 		const cardClasses = useMemo(() => {
 			const baseClasses =
@@ -195,10 +192,10 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 
 				{/* Animal Avatar/Image */}
 				<div className="flex justify-center mb-4">
-					{imageUrl ? (
+					{picture ? (
 						<div className="w-16 h-16 rounded-full overflow-hidden border-4 border-white shadow-lg">
 							<img
-								src={imageUrl}
+								src={picture}
 								alt={`Animal ${animalId}`}
 								className="w-full h-full object-cover"
 							/>

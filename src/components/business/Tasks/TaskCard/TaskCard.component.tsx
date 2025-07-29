@@ -1,4 +1,6 @@
 import { draggable } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
+import { useGSAP } from '@gsap/react'
+import gsap from 'gsap'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -50,6 +52,37 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task, draggable: isDraggable 
 		}
 	}, [])
 
+	// GSAP animations
+	useGSAP(() => {
+		if (ref.current) {
+			gsap.fromTo(
+				ref.current,
+				{ y: 20, opacity: 0, scale: 0.95 },
+				{ y: 0, opacity: 1, scale: 1, duration: 0.5, ease: 'power2.out' }
+			)
+		}
+	}, [])
+
+	const handleMouseEnter = useCallback(() => {
+		if (ref.current && !dragging) {
+			gsap.to(ref.current, {
+				y: -4,
+				duration: 0.2,
+				ease: 'power1.out',
+			})
+		}
+	}, [dragging])
+
+	const handleMouseLeave = useCallback(() => {
+		if (ref.current && !dragging) {
+			gsap.to(ref.current, {
+				y: 0,
+				duration: 0.2,
+				ease: 'power1.out',
+			})
+		}
+	}, [dragging])
+
 	useEffect(() => {
 		const el = ref.current
 		if (!el || !isDraggable) return
@@ -61,8 +94,18 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task, draggable: isDraggable 
 				currentStatus: task.status,
 				type: 'task',
 			}),
-			onDragStart: () => setDragging(true),
-			onDrop: () => setDragging(false),
+			onDragStart: () => {
+				setDragging(true)
+				if (el) {
+					gsap.to(el, { scale: 1.03, rotation: 3, duration: 0.2, ease: 'power1.out' })
+				}
+			},
+			onDrop: () => {
+				setDragging(false)
+				if (el) {
+					gsap.to(el, { scale: 1, rotation: 0, duration: 0.3, ease: 'power2.out' })
+				}
+			},
 		})
 	}, [isDraggable, task.uuid, task.status])
 
@@ -70,13 +113,20 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task, draggable: isDraggable 
 		<div
 			ref={ref}
 			className={`
-				card bg-base-100 w-full shadow-sm border border-gray-200 transition-all duration-200
-				${isDraggable ? 'cursor-grab hover:shadow-md' : ''}
-				${dragging ? 'opacity-50 scale-95 shadow-lg' : ''}
+				card bg-white w-full shadow-sm border border-gray-200 rounded-xl overflow-hidden
+				transition-all duration-200 hover:shadow-xl hover:border-gray-300
+				${isDraggable ? 'cursor-grab' : ''}
+				${dragging ? 'opacity-90 shadow-2xl z-10 ring-2 ring-blue-300' : ''}
 			`}
 			role="article"
 			aria-labelledby={`task-${task.uuid}-title`}
 			aria-describedby={`task-${task.uuid}-description`}
+			onMouseEnter={handleMouseEnter}
+			onMouseLeave={handleMouseLeave}
+			style={{
+				transform: 'translateZ(0)', // Force hardware acceleration
+				willChange: 'transform, opacity', // Optimize for animations
+			}}
 		>
 			<div className="card-body p-4">
 				{/* Header with status and priority */}
@@ -106,9 +156,21 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task, draggable: isDraggable 
 					</p>
 				</div>
 
-				{/* Priority indicator bar */}
+				{/* Priority indicator bar with gradient */}
 				<div className="mt-3">
-					<div className={`h-1 w-full rounded-full ${getPriorityColor(task.priority)}`} />
+					<div className="h-1 w-full bg-gray-200 rounded-full overflow-hidden">
+						<div
+							className={`h-full rounded-full transition-all duration-300 ${getPriorityColor(task.priority)}`}
+							style={{
+								background:
+									task.priority === 'high'
+										? 'linear-gradient(90deg, #ef4444, #dc2626)'
+										: task.priority === 'medium'
+											? 'linear-gradient(90deg, #eab308, #ca8a04)'
+											: 'linear-gradient(90deg, #22c55e, #16a34a)',
+							}}
+						/>
+					</div>
 				</div>
 
 				{/* Timestamps */}
