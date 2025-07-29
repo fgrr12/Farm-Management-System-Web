@@ -196,9 +196,12 @@ export const Loading: FC<LoadingProps> = memo(
 						<div className="flex flex-col items-center gap-6">
 							<span className={`text-white font-medium ${sizeClasses.text}`}>{displayMessage}</span>
 							<div className="flex items-center gap-2">
-								{[0, 1, 2].map((i) => (
-									<span key={i} ref={setDotsRef(i)} className="w-3 h-3 bg-white rounded-full" />
-								))}
+								{[0, 1, 2].map((i) => {
+									const refCallback = setDotsRef(i)
+									return (
+										<span key={i} ref={refCallback} className="w-3 h-3 bg-white rounded-full" />
+									)
+								})}
 							</div>
 						</div>
 					)
@@ -229,11 +232,12 @@ export const Loading: FC<LoadingProps> = memo(
 								<span className={`text-white font-medium ${sizeClasses.text}`}>
 									{displayMessage}
 								</span>
-								{[0, 1, 2].map((i) => (
-									<span key={i} ref={setDotsRef(i)} className="text-white text-3xl">
-										.
-									</span>
-								))}
+								{[0, 1, 2].map((i) => {
+									const refCallback = setDotsRef(i)
+									return (
+										<span key={i} ref={refCallback} className="w-3 h-3 bg-white rounded-full" />
+									)
+								})}
 							</div>
 
 							{/* Elliptical Carousel Animal Icons */}
@@ -243,13 +247,16 @@ export const Loading: FC<LoadingProps> = memo(
 									className="relative flex items-center justify-center"
 									style={{ width: '320px', height: '80px' }}
 								>
-									{animalIcons.map((icon, i) => (
-										<i
-											key={i}
-											ref={setIconsRef(i)}
-											className={`${icon} ${sizeClasses.icon} absolute`}
-										/>
-									))}
+									{animalIcons.map((icon, i) => {
+										const refCallback = setIconsRef(i)
+										return (
+											<i
+												key={i}
+												ref={refCallback}
+												className={`${icon} ${sizeClasses.icon} absolute`}
+											/>
+										)
+									})}
 								</div>
 							</div>
 						</div>

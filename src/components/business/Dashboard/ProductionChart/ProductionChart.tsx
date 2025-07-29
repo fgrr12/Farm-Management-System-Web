@@ -160,23 +160,26 @@ export const ProductionChart = memo(() => {
 			</div>
 
 			<div className="space-y-4">
-				{chartData.map((item, index) => (
-					<div key={index} className="flex items-center gap-4 group">
-						<div className="w-16 text-sm text-gray-600 font-medium">{item.month}</div>
-						<div className="flex-1 bg-gray-100 rounded-full h-8 relative overflow-hidden group-hover:bg-gray-200 transition-colors">
-							<div
-								ref={setBarRef(index)}
-								className="bg-gradient-to-r from-blue-500 to-blue-600 h-full rounded-full flex items-center justify-end pr-3 group-hover:from-blue-600 group-hover:to-blue-700 transition-colors"
-								style={{ width: '0%' }}
-							>
-								<span className="text-white text-sm font-medium tabular-nums">{item.value}L</span>
+				{chartData.map((item, index) => {
+					const refCallback = setBarRef(index)
+					return (
+						<div key={index} className="flex items-center gap-4 group">
+							<div className="w-16 text-sm text-gray-600 font-medium">{item.month}</div>
+							<div className="flex-1 bg-gray-100 rounded-full h-8 relative overflow-hidden group-hover:bg-gray-200 transition-colors">
+								<div
+									ref={refCallback}
+									className="bg-gradient-to-r from-blue-500 to-blue-600 h-full rounded-full flex items-center justify-end pr-3 group-hover:from-blue-600 group-hover:to-blue-700 transition-colors"
+									style={{ width: '0%' }}
+								>
+									<span className="text-white text-sm font-medium tabular-nums">{item.value}L</span>
+								</div>
+							</div>
+							<div className="w-16 text-sm text-gray-900 font-semibold text-right tabular-nums">
+								{item.value}L
 							</div>
 						</div>
-						<div className="w-16 text-sm text-gray-900 font-semibold text-right tabular-nums">
-							{item.value}L
-						</div>
-					</div>
-				))}
+					)
+				})}
 			</div>
 
 			<div className="mt-6 pt-4 border-t border-gray-100">

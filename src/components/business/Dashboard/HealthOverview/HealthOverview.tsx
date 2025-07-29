@@ -161,39 +161,42 @@ export const HealthOverview = memo(() => {
 			<h3 className="text-lg font-semibold text-gray-900 mb-6">{t('health.title')}</h3>
 
 			<div className="space-y-3">
-				{healthItems.map((item, index) => (
-					<div
-						key={index}
-						ref={setItemRef(index)}
-						className={`p-4 rounded-lg ${item.bgColor} ${item.hoverBg} transition-all duration-200 cursor-pointer group`}
-					>
-						<div className="flex items-center justify-between">
-							<div className="flex items-center gap-3">
-								<div className="relative">
-									<div
-										className={`w-3 h-3 rounded-full ${item.color} group-hover:scale-110 transition-transform`}
+				{healthItems.map((item, index) => {
+					const refCallback = setItemRef(index)
+					return (
+						<div
+							key={index}
+							ref={refCallback}
+							className={`p-4 rounded-lg ${item.bgColor} ${item.hoverBg} transition-all duration-200 cursor-pointer group`}
+						>
+							<div className="flex items-center justify-between">
+								<div className="flex items-center gap-3">
+									<div className="relative">
+										<div
+											className={`w-3 h-3 rounded-full ${item.color} group-hover:scale-110 transition-transform`}
+										/>
+										<div
+											className={`absolute inset-0 w-3 h-3 rounded-full ${item.color} opacity-30 group-hover:scale-150 transition-transform`}
+										/>
+									</div>
+									<i
+										className={`${item.icon} w-4! h-4! ${item.textColor.replace('text-', 'bg-').replace('700', '600')}! group-hover:scale-110 transition-transform`}
 									/>
-									<div
-										className={`absolute inset-0 w-3 h-3 rounded-full ${item.color} opacity-30 group-hover:scale-150 transition-transform`}
-									/>
+									<span
+										className={`font-medium ${item.textColor} group-hover:font-semibold transition-all`}
+									>
+										{item.label}
+									</span>
 								</div>
-								<i
-									className={`${item.icon} w-4! h-4! ${item.textColor.replace('text-', 'bg-').replace('700', '600')}! group-hover:scale-110 transition-transform`}
-								/>
 								<span
-									className={`font-medium ${item.textColor} group-hover:font-semibold transition-all`}
+									className={`text-xl font-bold ${item.textColor} tabular-nums group-hover:scale-105 transition-transform`}
 								>
-									{item.label}
+									{loading || loadingSecondary ? '...' : displayCounts[index]}
 								</span>
 							</div>
-							<span
-								className={`text-xl font-bold ${item.textColor} tabular-nums group-hover:scale-105 transition-transform`}
-							>
-								{loading || loadingSecondary ? '...' : displayCounts[index]}
-							</span>
 						</div>
-					</div>
-				))}
+					)
+				})}
 			</div>
 
 			<div className="mt-6 pt-4 border-t border-gray-100">
