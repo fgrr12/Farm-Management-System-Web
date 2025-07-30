@@ -109,9 +109,9 @@ const BillingCard = () => {
 			<body>
 				<div class="page">
 					${Array(8)
-				.fill(0)
-				.map(
-					() => `
+						.fill(0)
+						.map(
+							() => `
 						<div class="card">
 							<div class="card-title">
 								${t('billingCardTitle')}<br>
@@ -143,8 +143,8 @@ const BillingCard = () => {
 							</div>
 						</div>
 					`
-				)
-				.join('')}
+						)
+						.join('')}
 				</div>
 			</body>
 			</html>

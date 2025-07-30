@@ -84,9 +84,7 @@ const LoginForm = () => {
 					<h1 id="login-heading" className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
 						{t('title')}
 					</h1>
-					<p className="text-gray-600 dark:text-gray-300 text-sm">
-						{t('subtitle')}
-					</p>
+					<p className="text-gray-600 dark:text-gray-300 text-sm">{t('subtitle')}</p>
 				</header>
 
 				<form
@@ -132,7 +130,9 @@ const LoginForm = () => {
 								type="checkbox"
 								className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
 							/>
-							<span className="ml-2 text-sm text-gray-600 dark:text-gray-300">{t('rememberMe')}</span>
+							<span className="ml-2 text-sm text-gray-600 dark:text-gray-300">
+								{t('rememberMe')}
+							</span>
 						</label>
 						<Link
 							to={AppRoutes.LOGIN}
@@ -164,7 +164,9 @@ const LoginForm = () => {
 						<div className="w-full border-t border-gray-300 dark:border-gray-600" />
 					</div>
 					<div className="relative flex justify-center text-sm">
-						<span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">{t('orContinueWith')}</span>
+						<span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+							{t('orContinueWith')}
+						</span>
 					</div>
 				</div>
 
@@ -183,8 +185,6 @@ const LoginForm = () => {
 				<div id="google-login-help" className="sr-only">
 					{t('accessibility.googleLoginHelp')}
 				</div>
-
-
 			</section>
 		</div>
 	)

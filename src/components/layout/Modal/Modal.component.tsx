@@ -48,7 +48,8 @@ export const Modal: FC<ModalProps> = memo(
 		const variantConfig = useMemo(() => {
 			const configs = {
 				default: {
-					headerBg: 'bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600',
+					headerBg:
+						'bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600',
 					icon: 'i-material-symbols-info',
 					iconColor: 'bg-white!',
 				},
@@ -58,12 +59,14 @@ export const Modal: FC<ModalProps> = memo(
 					iconColor: 'bg-white!',
 				},
 				success: {
-					headerBg: 'bg-gradient-to-r from-green-600 to-green-700 dark:from-green-500 dark:to-green-600',
+					headerBg:
+						'bg-gradient-to-r from-green-600 to-green-700 dark:from-green-500 dark:to-green-600',
 					icon: 'i-material-symbols-check-circle',
 					iconColor: 'bg-white!',
 				},
 				warning: {
-					headerBg: 'bg-gradient-to-r from-yellow-600 to-orange-600 dark:from-yellow-500 dark:to-orange-500',
+					headerBg:
+						'bg-gradient-to-r from-yellow-600 to-orange-600 dark:from-yellow-500 dark:to-orange-500',
 					icon: 'i-material-symbols-warning',
 					iconColor: 'bg-white!',
 				},
@@ -136,7 +139,10 @@ export const Modal: FC<ModalProps> = memo(
 					{/* Content */}
 					<div className="px-6 py-6">
 						{message && (
-							<p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4" id="modal-description">
+							<p
+								className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4"
+								id="modal-description"
+							>
 								{message}
 							</p>
 						)}

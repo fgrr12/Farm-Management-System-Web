@@ -216,7 +216,10 @@ export const Select: FC<SelectProps> = memo(
 					<div className="absolute inset-y-0 right-0 flex items-center">
 						{error && (
 							<div className="flex items-center px-2">
-								<i className="i-material-symbols-error w-4! h-4! bg-red-500! dark:bg-red-400!" title={error} />
+								<i
+									className="i-material-symbols-error w-4! h-4! bg-red-500! dark:bg-red-400!"
+									title={error}
+								/>
 							</div>
 						)}
 

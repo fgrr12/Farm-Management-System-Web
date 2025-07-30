@@ -271,24 +271,26 @@ export const PasswordField: FC<PasswordFieldProps> = memo(
 						<div className="flex items-center justify-between mb-1">
 							<span className="text-xs text-gray-600">Password strength</span>
 							<span
-								className={`text-xs font-medium ${passwordStrength.level === 'weak'
-									? 'text-red-600'
-									: passwordStrength.level === 'medium'
-										? 'text-yellow-600'
-										: 'text-green-600'
-									}`}
+								className={`text-xs font-medium ${
+									passwordStrength.level === 'weak'
+										? 'text-red-600'
+										: passwordStrength.level === 'medium'
+											? 'text-yellow-600'
+											: 'text-green-600'
+								}`}
 							>
 								{strengthText[passwordStrength.level as keyof typeof strengthText]}
 							</span>
 						</div>
 						<div className="w-full bg-gray-200 rounded-full h-2">
 							<div
-								className={`h-2 rounded-full transition-all duration-300 ${passwordStrength.level === 'weak'
-									? 'bg-red-500'
-									: passwordStrength.level === 'medium'
-										? 'bg-yellow-500'
-										: 'bg-green-500'
-									}`}
+								className={`h-2 rounded-full transition-all duration-300 ${
+									passwordStrength.level === 'weak'
+										? 'bg-red-500'
+										: passwordStrength.level === 'medium'
+											? 'bg-yellow-500'
+											: 'bg-green-500'
+								}`}
 								style={{ width: passwordStrength.width }}
 							/>
 						</div>

@@ -119,8 +119,6 @@ export const Navbar = memo(() => {
 		navigate(AppRoutes.LOGIN)
 	}, [user, setUser, setFarm, navigate])
 
-
-
 	useGSAP(() => {
 		const el = titleRef.current
 		if (!el || loading || !headerTitle.trim()) return
@@ -196,7 +194,10 @@ export const Navbar = memo(() => {
 									className={`${getCurrentPageIcon} w-5! h-5! bg-white! transition-transform duration-200`}
 								/>
 							</div>
-							<h2 ref={titleRef} className="text-xl font-bold text-gray-800 dark:text-gray-200 tracking-tight">
+							<h2
+								ref={titleRef}
+								className="text-xl font-bold text-gray-800 dark:text-gray-200 tracking-tight"
+							>
 								{headerTitle}
 							</h2>
 						</div>
@@ -295,19 +296,22 @@ export const Navbar = memo(() => {
 
 							<button
 								type="button"
-								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${location.pathname.includes(AppRoutes.DASHBOARD)
-									? 'bg-gradient-to-r from-cyan-500 to-cyan-600 text-white shadow-lg'
-									: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
-									}`}
+								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
+									location.pathname.includes(AppRoutes.DASHBOARD)
+										? 'bg-gradient-to-r from-cyan-500 to-cyan-600 text-white shadow-lg'
+										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+								}`}
 								onClick={goTo(AppRoutes.DASHBOARD)}
 							>
 								<div
-									className={`w-8 h-8 rounded-lg flex items-center justify-center ${location.pathname.includes(AppRoutes.DASHBOARD) ? 'bg-white/20' : 'bg-cyan-100'
-										}`}
+									className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+										location.pathname.includes(AppRoutes.DASHBOARD) ? 'bg-white/20' : 'bg-cyan-100'
+									}`}
 								>
 									<i
-										className={`i-material-symbols-dashboard w-5! h-5! ${location.pathname.includes(AppRoutes.DASHBOARD) ? 'bg-white!' : 'bg-cyan-600!'
-											}`}
+										className={`i-material-symbols-dashboard w-5! h-5! ${
+											location.pathname.includes(AppRoutes.DASHBOARD) ? 'bg-white!' : 'bg-cyan-600!'
+										}`}
 									/>
 								</div>
 								<span className="font-medium">{t('sidebar.dashboard')}</span>
@@ -315,19 +319,22 @@ export const Navbar = memo(() => {
 
 							<button
 								type="button"
-								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${location.pathname.includes(AppRoutes.ANIMALS)
-									? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg'
-									: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
-									}`}
+								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
+									location.pathname.includes(AppRoutes.ANIMALS)
+										? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg'
+										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+								}`}
 								onClick={goTo(AppRoutes.ANIMALS)}
 							>
 								<div
-									className={`w-8 h-8 rounded-lg flex items-center justify-center ${location.pathname.includes(AppRoutes.ANIMALS) ? 'bg-white/20' : 'bg-blue-100'
-										}`}
+									className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+										location.pathname.includes(AppRoutes.ANIMALS) ? 'bg-white/20' : 'bg-blue-100'
+									}`}
 								>
 									<i
-										className={`i-healthicons-animal-cow w-5! h-5! ${location.pathname.includes(AppRoutes.ANIMALS) ? 'bg-white!' : 'bg-blue-600!'
-											}`}
+										className={`i-healthicons-animal-cow w-5! h-5! ${
+											location.pathname.includes(AppRoutes.ANIMALS) ? 'bg-white!' : 'bg-blue-600!'
+										}`}
 									/>
 								</div>
 								<span className="font-medium">{t('sidebar.animals')}</span>
@@ -335,19 +342,22 @@ export const Navbar = memo(() => {
 
 							<button
 								type="button"
-								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${location.pathname.includes(AppRoutes.TASKS)
-									? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg'
-									: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
-									}`}
+								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
+									location.pathname.includes(AppRoutes.TASKS)
+										? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg'
+										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+								}`}
 								onClick={goTo(AppRoutes.TASKS)}
 							>
 								<div
-									className={`w-8 h-8 rounded-lg flex items-center justify-center ${location.pathname.includes(AppRoutes.TASKS) ? 'bg-white/20' : 'bg-green-100'
-										}`}
+									className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+										location.pathname.includes(AppRoutes.TASKS) ? 'bg-white/20' : 'bg-green-100'
+									}`}
 								>
 									<i
-										className={`i-fluent-tasks-app-24-filled w-5! h-5! ${location.pathname.includes(AppRoutes.TASKS) ? 'bg-white!' : 'bg-green-600!'
-											}`}
+										className={`i-fluent-tasks-app-24-filled w-5! h-5! ${
+											location.pathname.includes(AppRoutes.TASKS) ? 'bg-white!' : 'bg-green-600!'
+										}`}
 									/>
 								</div>
 								<span className="font-medium">{t('sidebar.tasks')}</span>
@@ -355,23 +365,26 @@ export const Navbar = memo(() => {
 
 							<button
 								type="button"
-								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${location.pathname.includes(AppRoutes.MY_SPECIES)
-									? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg'
-									: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
-									}`}
+								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
+									location.pathname.includes(AppRoutes.MY_SPECIES)
+										? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg'
+										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+								}`}
 								onClick={goTo(AppRoutes.MY_SPECIES)}
 							>
 								<div
-									className={`w-8 h-8 rounded-lg flex items-center justify-center ${location.pathname.includes(AppRoutes.MY_SPECIES)
-										? 'bg-white/20'
-										: 'bg-purple-100'
-										}`}
+									className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+										location.pathname.includes(AppRoutes.MY_SPECIES)
+											? 'bg-white/20'
+											: 'bg-purple-100'
+									}`}
 								>
 									<i
-										className={`i-solar-dna-bold-duotone w-5! h-5! ${location.pathname.includes(AppRoutes.MY_SPECIES)
-											? 'bg-white!'
-											: 'bg-purple-600!'
-											}`}
+										className={`i-solar-dna-bold-duotone w-5! h-5! ${
+											location.pathname.includes(AppRoutes.MY_SPECIES)
+												? 'bg-white!'
+												: 'bg-purple-600!'
+										}`}
 									/>
 								</div>
 								<span className="font-medium">{t('sidebar.mySpecies')}</span>
@@ -387,23 +400,26 @@ export const Navbar = memo(() => {
 
 								<button
 									type="button"
-									className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${location.pathname.includes(AppRoutes.EMPLOYEES)
-										? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg'
-										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
-										}`}
+									className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
+										location.pathname.includes(AppRoutes.EMPLOYEES)
+											? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg'
+											: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+									}`}
 									onClick={goTo(AppRoutes.EMPLOYEES)}
 								>
 									<div
-										className={`w-8 h-8 rounded-lg flex items-center justify-center ${location.pathname.includes(AppRoutes.EMPLOYEES)
-											? 'bg-white/20'
-											: 'bg-orange-100'
-											}`}
+										className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+											location.pathname.includes(AppRoutes.EMPLOYEES)
+												? 'bg-white/20'
+												: 'bg-orange-100'
+										}`}
 									>
 										<i
-											className={`i-clarity-employee-group-solid w-5! h-5! ${location.pathname.includes(AppRoutes.EMPLOYEES)
-												? 'bg-white!'
-												: 'bg-orange-600!'
-												}`}
+											className={`i-clarity-employee-group-solid w-5! h-5! ${
+												location.pathname.includes(AppRoutes.EMPLOYEES)
+													? 'bg-white!'
+													: 'bg-orange-600!'
+											}`}
 										/>
 									</div>
 									<span className="font-medium">{t('sidebar.employees')}</span>
@@ -412,23 +428,26 @@ export const Navbar = memo(() => {
 								{billingCard !== null && billingCard.status && (
 									<button
 										type="button"
-										className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${location.pathname.includes(AppRoutes.BILLING_CARD)
-											? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-lg'
-											: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
-											}`}
+										className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
+											location.pathname.includes(AppRoutes.BILLING_CARD)
+												? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-lg'
+												: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+										}`}
 										onClick={goTo(AppRoutes.BILLING_CARD)}
 									>
 										<div
-											className={`w-8 h-8 rounded-lg flex items-center justify-center ${location.pathname.includes(AppRoutes.BILLING_CARD)
-												? 'bg-white/20'
-												: 'bg-indigo-100'
-												}`}
+											className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+												location.pathname.includes(AppRoutes.BILLING_CARD)
+													? 'bg-white/20'
+													: 'bg-indigo-100'
+											}`}
 										>
 											<i
-												className={`i-typcn-business-card w-5! h-5! ${location.pathname.includes(AppRoutes.BILLING_CARD)
-													? 'bg-white!'
-													: 'bg-indigo-600!'
-													}`}
+												className={`i-typcn-business-card w-5! h-5! ${
+													location.pathname.includes(AppRoutes.BILLING_CARD)
+														? 'bg-white!'
+														: 'bg-indigo-600!'
+												}`}
 											/>
 										</div>
 										<span className="font-medium">{t('sidebar.businessCard')}</span>
@@ -458,10 +477,16 @@ export const Navbar = memo(() => {
 											<i className="i-material-symbols-light-mode w-5! h-5! bg-gray-600! dark:bg-gray-300!" />
 										)}
 									</div>
-									<span className="font-medium text-gray-700 dark:text-gray-300">{t('sidebar.theme')}</span>
+									<span className="font-medium text-gray-700 dark:text-gray-300">
+										{t('sidebar.theme')}
+									</span>
 								</div>
 								<span className="text-xs text-gray-500 dark:text-gray-400 capitalize">
-									{theme === 'system' ? t('theme.system') : theme === 'dark' ? t('theme.dark') : t('theme.light')}
+									{theme === 'system'
+										? t('theme.system')
+										: theme === 'dark'
+											? t('theme.dark')
+											: t('theme.light')}
 								</span>
 							</button>
 						</div>
