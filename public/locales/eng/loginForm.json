@@ -13,7 +13,10 @@
 	"google": "Login with Google",
 	"login": "Login",
 	"or": "Or",
+	"orContinueWith": "or continue with",
 	"password": "Password",
+	"rememberMe": "Remember me",
+	"subtitle": "Manage your livestock intelligently",
 	"title": "Login",
 	"toast": {
 		"errorLoggingIn": "There was an error logging in"

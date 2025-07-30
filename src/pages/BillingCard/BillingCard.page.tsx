@@ -109,9 +109,9 @@ const BillingCard = () => {
 			<body>
 				<div class="page">
 					${Array(8)
-						.fill(0)
-						.map(
-							() => `
+				.fill(0)
+				.map(
+					() => `
 						<div class="card">
 							<div class="card-title">
 								${t('billingCardTitle')}<br>
@@ -143,8 +143,8 @@ const BillingCard = () => {
 							</div>
 						</div>
 					`
-						)
-						.join('')}
+				)
+				.join('')}
 				</div>
 			</body>
 			</html>
@@ -216,7 +216,7 @@ const BillingCard = () => {
 								</div>
 
 								{/* Title */}
-								<div className="text-center mb-4 relative z-10">
+								<div className="text-center mb-4 relative z-1">
 									<h2 className="text-base font-bold text-gray-900 uppercase tracking-wide leading-tight">
 										{t('billingCardTitle')}
 										<br />
@@ -226,7 +226,7 @@ const BillingCard = () => {
 								</div>
 
 								{/* Information Grid */}
-								<div className="space-y-2.5 relative z-10">
+								<div className="space-y-2.5 relative z-1">
 									<div className="flex items-center">
 										<span className="font-bold text-gray-900 min-w-[85px] text-base">
 											{t('name')}:
@@ -270,7 +270,7 @@ const BillingCard = () => {
 								</div>
 
 								{/* Chicken Image */}
-								<div className="absolute bottom-4 right-4 z-10">
+								<div className="absolute bottom-4 right-4 z-1">
 									<div className="w-14 h-14 bg-white rounded-full p-1 shadow-lg">
 										<img
 											src="/assets/billing/hen.jpeg"

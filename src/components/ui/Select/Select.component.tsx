@@ -231,7 +231,7 @@ export const Select: FC<SelectProps> = memo(
 								<i className="i-material-symbols-check-circle w-5! h-5! bg-green-500!" />
 							</div>
 						) : hasValue && clearable ? (
-							<div className="flex items-center px-2 z-10">
+							<div className="flex items-center px-2 z-1">
 								<ActionButton
 									title="Clear"
 									icon="i-lucide-circle-x"
@@ -250,7 +250,7 @@ export const Select: FC<SelectProps> = memo(
 					{error && (
 						<div
 							id={`${fieldId}-error`}
-							className="absolute top-full left-0 mt-2 p-3 bg-red-50 border border-red-200 rounded-lg shadow-lg z-30 max-w-xs opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200 ease-in-out"
+							className="absolute top-full left-0 mt-2 p-3 bg-red-50 border border-red-200 rounded-lg shadow-lg z-20 max-w-xs opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200 ease-in-out"
 							role="tooltip"
 							aria-live="polite"
 						>

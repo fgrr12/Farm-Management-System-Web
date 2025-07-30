@@ -49,7 +49,7 @@ export const TextField: FC<TextFieldProps> = memo(
 					? 'border-green-500 focus:border-green-500 focus:ring-green-200'
 					: ''
 
-			const iconPadding = leftIcon ? 'pl-12' : rightIcon ? 'pr-12' : ''
+			const iconPadding = leftIcon ? 'pl-10' : rightIcon ? 'pr-10' : ''
 
 			return `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${stateClasses} ${iconPadding} ${className || ''}`
 		}, [variant, size, error, success, leftIcon, rightIcon, className])
@@ -111,7 +111,7 @@ export const TextField: FC<TextFieldProps> = memo(
 				<div className="relative group">
 					{/* Left Icon */}
 					{leftIcon && (
-						<div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+						<div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none z-10">
 							<i
 								className={`${leftIcon} w-5! h-5! ${error ? 'bg-red-500!' : success ? 'bg-green-500!' : 'bg-gray-400!'}`}
 							/>
@@ -141,7 +141,7 @@ export const TextField: FC<TextFieldProps> = memo(
 
 					{/* Right Icon or Loading */}
 					{(rightIcon || loading || error || success) && (
-						<div className="absolute inset-y-0 right-0 flex items-center pr-3">
+						<div className="absolute inset-y-0 right-0 flex items-center pr-3 z-10">
 							{loading ? (
 								<div className="animate-spin">
 									<i className="i-material-symbols-progress-activity w-5! h-5! bg-blue-500!" />
@@ -236,7 +236,7 @@ export const PasswordField: FC<PasswordFieldProps> = memo(
 		}, [])
 
 		return (
-			<div className="w-full">
+			<div className="w-full relative">
 				<TextField
 					{...rest}
 					id={fieldId}
@@ -250,12 +250,12 @@ export const PasswordField: FC<PasswordFieldProps> = memo(
 
 				{/* Custom Right Icon for Password Toggle */}
 				<div
-					className="absolute inset-y-0 right-0 flex items-center"
+					className="absolute inset-y-0 right-0 flex items-center z-10"
 					style={{ top: label ? '32px' : '0' }}
 				>
 					<button
 						type="button"
-						className="p-3 text-gray-400 hover:text-gray-600 focus:outline-none focus:text-gray-600 transition-colors duration-200"
+						className="flex items-center justify-center w-12 h-12 text-gray-400 hover:text-gray-600 focus:outline-none focus:text-gray-600 transition-colors duration-200"
 						onClick={togglePasswordVisibility}
 						aria-label={showPassword ? 'Hide password' : 'Show password'}
 					>
@@ -271,26 +271,24 @@ export const PasswordField: FC<PasswordFieldProps> = memo(
 						<div className="flex items-center justify-between mb-1">
 							<span className="text-xs text-gray-600">Password strength</span>
 							<span
-								className={`text-xs font-medium ${
-									passwordStrength.level === 'weak'
-										? 'text-red-600'
-										: passwordStrength.level === 'medium'
-											? 'text-yellow-600'
-											: 'text-green-600'
-								}`}
+								className={`text-xs font-medium ${passwordStrength.level === 'weak'
+									? 'text-red-600'
+									: passwordStrength.level === 'medium'
+										? 'text-yellow-600'
+										: 'text-green-600'
+									}`}
 							>
 								{strengthText[passwordStrength.level as keyof typeof strengthText]}
 							</span>
 						</div>
 						<div className="w-full bg-gray-200 rounded-full h-2">
 							<div
-								className={`h-2 rounded-full transition-all duration-300 ${
-									passwordStrength.level === 'weak'
-										? 'bg-red-500'
-										: passwordStrength.level === 'medium'
-											? 'bg-yellow-500'
-											: 'bg-green-500'
-								}`}
+								className={`h-2 rounded-full transition-all duration-300 ${passwordStrength.level === 'weak'
+									? 'bg-red-500'
+									: passwordStrength.level === 'medium'
+										? 'bg-yellow-500'
+										: 'bg-green-500'
+									}`}
 								style={{ width: passwordStrength.width }}
 							/>
 						</div>

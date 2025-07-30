@@ -29,11 +29,10 @@ export const Sidebar = memo(() => {
 	const getButtonClasses = useCallback(
 		(path: string, colorFrom: string, colorTo: string) => {
 			const isActive = location.pathname.includes(path)
-			return `w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 ${
-				isActive
+			return `w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 ${isActive
 					? `bg-gradient-to-br ${colorFrom} ${colorTo} shadow-lg`
 					: 'hover:bg-gray-100 bg-gray-50'
-			}`
+				}`
 		},
 		[location.pathname]
 	)
@@ -77,7 +76,7 @@ export const Sidebar = memo(() => {
 	}, [location])
 	return (
 		<div
-			className="bg-white h-full hidden lg:flex flex-col items-center py-4 shadow-lg border-r border-gray-100 w-20"
+			className="bg-white h-full hidden lg:flex flex-col items-center py-4 shadow-lg border-r border-gray-100 w-20 z-100"
 			role="navigation"
 			aria-label="Main navigation"
 		>
