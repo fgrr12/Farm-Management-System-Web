@@ -166,21 +166,21 @@ export const HealthRecordsFilters: FC<HealthRecordsFiltersProps> = memo(
 						type="button"
 						onClick={toggleDropdown}
 						className={`
-						flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200
-						${
-							hasActiveFilters
-								? 'border-emerald-500 bg-emerald-50 text-emerald-700'
-								: 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
-						}
-						focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent
-					`}
+				flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200
+				${
+					hasActiveFilters
+						? 'border-emerald-500 dark:border-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300'
+						: 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-500'
+				}
+				focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:border-transparent
+			`}
 						aria-expanded={isOpen}
 						aria-haspopup="true"
 						aria-label={t('filter.filtersButton')}
 					>
 						{/* Filter Icon */}
 						<div
-							className={`w-5! h-5! i-material-symbols-filter-list ${hasActiveFilters ? 'bg-emerald-600!' : 'bg-gray-500!'}`}
+							className={`w-5! h-5! i-material-symbols-filter-list ${hasActiveFilters ? 'bg-emerald-600 dark:bg-emerald-400!' : 'bg-gray-500 dark:bg-gray-400!'}`}
 						/>
 
 						{/* Button Text */}
@@ -190,20 +190,20 @@ export const HealthRecordsFilters: FC<HealthRecordsFiltersProps> = memo(
 
 						{/* Active Filters Count */}
 						{hasActiveFilters && (
-							<span className="ml-1 px-2 py-0.5 text-xs bg-emerald-600 text-white rounded-full">
+							<span className="ml-1 px-2 py-0.5 text-xs bg-emerald-600 dark:bg-emerald-500 text-white dark:text-gray-100 rounded-full">
 								{activeFiltersCount}
 							</span>
 						)}
 
 						{/* Dropdown Arrow */}
 						<div
-							className={`w-4 h-4 i-material-symbols-keyboard-arrow-down transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+							className={`w-4 h-4 i-material-symbols-keyboard-arrow-down transition-transform duration-200 ${isOpen ? 'rotate-180' : ''} ${hasActiveFilters ? 'bg-emerald-600 dark:bg-emerald-400!' : 'bg-gray-500 dark:bg-gray-400!'}`}
 						/>
 					</button>
 
 					{/* Active Filters Preview - Only show on larger screens to avoid overlap */}
 					{hasActiveFilters && !isOpen && (
-						<div className="hidden sm:block absolute bottom-full right-0 mb-1 px-3 py-1 bg-emerald-100 text-emerald-800 text-xs rounded-md whitespace-nowrap z-10 max-w-xs truncate">
+						<div className="hidden sm:block absolute bottom-full right-0 mb-1 px-3 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-200 text-xs rounded-md whitespace-nowrap z-10 max-w-xs truncate border border-emerald-200 dark:border-emerald-700">
 							{getActiveFiltersText}
 						</div>
 					)}
@@ -213,7 +213,7 @@ export const HealthRecordsFilters: FC<HealthRecordsFiltersProps> = memo(
 				{isOpen && (
 					<div
 						ref={dropdownRef}
-						className="fixed bg-white border border-gray-200 rounded-lg shadow-xl z-[9999]"
+						className="fixed bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl dark:shadow-2xl z-[9999]"
 						style={{
 							top: `${dropdownPosition.top}px`,
 							left: `${dropdownPosition.left}px`,
@@ -223,12 +223,14 @@ export const HealthRecordsFilters: FC<HealthRecordsFiltersProps> = memo(
 						<div className="p-4">
 							{/* Header */}
 							<div className="flex items-center justify-between mb-4">
-								<h3 className="text-lg font-semibold text-gray-900">{t('filter.filters')}</h3>
+								<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+									{t('filter.filters')}
+								</h3>
 								{hasActiveFilters && (
 									<button
 										type="button"
 										onClick={clearFilters}
-										className="text-sm text-emerald-600 hover:text-emerald-800 font-medium"
+										className="text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 font-medium transition-colors"
 									>
 										{t('filter.clearFilters')}
 									</button>
@@ -302,9 +304,9 @@ export const HealthRecordsFilters: FC<HealthRecordsFiltersProps> = memo(
 							</div>
 
 							{/* Footer */}
-							<div className="mt-6 pt-4 border-t border-gray-200">
+							<div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
 								<div className="flex items-center justify-between">
-									<span className="text-sm text-gray-500">
+									<span className="text-sm text-gray-500 dark:text-gray-400">
 										{hasActiveFilters
 											? t('filter.filtersApplied', { count: activeFiltersCount })
 											: t('filter.noFiltersApplied')}
@@ -312,7 +314,7 @@ export const HealthRecordsFilters: FC<HealthRecordsFiltersProps> = memo(
 									<button
 										type="button"
 										onClick={() => setIsOpen(false)}
-										className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors"
+										className="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-md transition-colors"
 									>
 										{t('filter.done')}
 									</button>

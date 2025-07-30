@@ -162,7 +162,7 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 				ref={cardRef}
 				role="button"
 				tabIndex={0}
-				className={cardClasses}
+				className={`${cardClasses} bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl transition-all duration-200`}
 				onClick={navigateToAnimal}
 				onKeyDown={(e) => {
 					if (e.key === 'Enter' || e.key === ' ') {
@@ -177,13 +177,13 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 			>
 				{/* Background Gradient */}
 				<div
-					className={`absolute inset-0 bg-gradient-to-br ${healthConfig.color} opacity-5 group-hover:opacity-10 transition-opacity duration-300`}
+					className={`absolute inset-0 bg-gradient-to-br ${healthConfig.color} opacity-3 dark:opacity-8 group-hover:opacity-8 dark:group-hover:opacity-12 transition-opacity duration-300 rounded-lg`}
 				/>
 
 				{/* Health Status Indicator */}
 				<div className="absolute top-4 right-4">
 					<div
-						className={`${healthConfig.bgColor} ${healthConfig.textColor} px-2 py-1 rounded-full flex items-center gap-1 text-xs font-medium`}
+						className={`${healthConfig.bgColor} ${healthConfig.textColor} px-2 py-1 rounded-full flex items-center gap-1 text-xs font-medium shadow-sm dark:shadow-md`}
 					>
 						<i className={`${healthConfig.icon} w-3! h-3! bg-current!`} />
 						<span className="hidden sm:inline">{healthConfig.text}</span>
@@ -193,7 +193,7 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 				{/* Animal Avatar/Image */}
 				<div className="flex justify-center mb-4">
 					{picture ? (
-						<div className="w-16 h-16 rounded-full overflow-hidden border-4 border-white shadow-lg">
+						<div className="w-16 h-16 rounded-full overflow-hidden border-4 border-white dark:border-gray-600 shadow-lg dark:shadow-xl">
 							<img
 								src={picture}
 								alt={`Animal ${animalId}`}
@@ -202,23 +202,23 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 						</div>
 					) : (
 						<div
-							className={`w-16 h-16 rounded-full bg-gradient-to-br ${healthConfig.color} flex items-center justify-center shadow-lg`}
+							className={`w-16 h-16 rounded-full bg-gradient-to-br ${healthConfig.color} flex items-center justify-center shadow-lg dark:shadow-xl border-2 border-white dark:border-gray-600`}
 						>
-							<i className="i-healthicons-animal-cow w-8! h-8! bg-white!" />
+							<i className="i-healthicons-animal-cow w-8! h-8! !bg-white dark:bg-gray-100!" />
 						</div>
 					)}
 				</div>
 
 				{/* Animal ID */}
 				<div className="text-center mb-3">
-					<h3 className="text-2xl font-bold text-gray-900">#{animalId}</h3>
+					<h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">#{animalId}</h3>
 				</div>
 
 				{/* Breed and Gender */}
 				<div className="flex items-center justify-center gap-2 mb-4">
-					<span className="text-lg font-medium text-gray-700">{breedName}</span>
+					<span className="text-lg font-medium text-gray-700 dark:text-gray-300">{breedName}</span>
 					<div
-						className={`${genderConfig.bgColor} ${genderConfig.textColor} px-2 py-1 rounded-full flex items-center gap-1`}
+						className={`${genderConfig.bgColor} ${genderConfig.textColor} px-2 py-1 rounded-full flex items-center gap-1 shadow-sm dark:shadow-md`}
 					>
 						<i className={`${genderConfig.icon} w-4! h-4! ${genderConfig.color}`} />
 						<span className="text-xs font-medium capitalize">{gender}</span>
@@ -229,15 +229,15 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 				{variant === 'detailed' && (
 					<div className="grid grid-cols-2 gap-2 mb-4 text-sm">
 						{age && (
-							<div className="bg-gray-50 rounded-lg p-2 text-center">
-								<div className="text-gray-500 text-xs">Age</div>
-								<div className="font-semibold">{age}y</div>
+							<div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-2 text-center border border-gray-100 dark:border-gray-700">
+								<div className="text-gray-500 dark:text-gray-400 text-xs">Age</div>
+								<div className="font-semibold text-gray-900 dark:text-gray-100">{age}y</div>
 							</div>
 						)}
 						{weight && (
-							<div className="bg-gray-50 rounded-lg p-2 text-center">
-								<div className="text-gray-500 text-xs">Weight</div>
-								<div className="font-semibold">{weight}kg</div>
+							<div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-2 text-center border border-gray-100 dark:border-gray-700">
+								<div className="text-gray-500 dark:text-gray-400 text-xs">Weight</div>
+								<div className="font-semibold text-gray-900 dark:text-gray-100">{weight}kg</div>
 							</div>
 						)}
 					</div>
@@ -246,7 +246,7 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 				{/* Notes (if any) */}
 				{notes && variant !== 'compact' && (
 					<div className="mb-4">
-						<p className="text-sm text-gray-600 italic line-clamp-2">{notes}</p>
+						<p className="text-sm text-gray-600 dark:text-gray-400 italic line-clamp-2">{notes}</p>
 					</div>
 				)}
 
@@ -271,7 +271,7 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 
 				{/* Last Health Check (if available) */}
 				{lastHealthCheck && variant !== 'compact' && (
-					<div className="absolute bottom-2 left-4 text-xs text-gray-500">
+					<div className="absolute bottom-2 left-4 text-xs text-gray-500 dark:text-gray-400">
 						Last check: {lastHealthCheck}
 					</div>
 				)}
