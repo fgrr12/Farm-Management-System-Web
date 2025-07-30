@@ -33,15 +33,15 @@ export const Button: FC<ButtonProps> = memo(
 
 			const variantClasses = {
 				primary:
-					'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white border-none shadow-lg hover:shadow-xl focus:ring-blue-500',
+					'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 dark:from-blue-500 dark:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-700 text-white border-none shadow-lg hover:shadow-xl focus:ring-blue-500 dark:focus:ring-blue-400',
 				secondary:
-					'bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 text-gray-800 border border-gray-300 shadow-sm hover:shadow-md focus:ring-gray-500',
+					'bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 dark:from-gray-700 dark:to-gray-600 dark:hover:from-gray-600 dark:hover:to-gray-500 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 shadow-sm hover:shadow-md focus:ring-gray-500 dark:focus:ring-gray-400',
 				danger:
-					'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white border-none shadow-lg hover:shadow-xl focus:ring-red-500',
+					'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 dark:from-red-500 dark:to-red-600 dark:hover:from-red-600 dark:hover:to-red-700 text-white border-none shadow-lg hover:shadow-xl focus:ring-red-500 dark:focus:ring-red-400',
 				ghost:
-					'bg-transparent hover:bg-gray-100 text-gray-700 border-none shadow-none focus:ring-gray-500',
+					'bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 border-none shadow-none focus:ring-gray-500 dark:focus:ring-gray-400',
 				outline:
-					'bg-transparent hover:bg-blue-50 text-blue-600 border-2 border-blue-600 hover:border-blue-700 shadow-sm hover:shadow-md focus:ring-blue-500',
+					'bg-transparent hover:bg-blue-50 dark:hover:bg-blue-900/20 text-blue-600 dark:text-blue-400 border-2 border-blue-600 dark:border-blue-400 hover:border-blue-700 dark:hover:border-blue-300 shadow-sm hover:shadow-md focus:ring-blue-500 dark:focus:ring-blue-400',
 			}
 
 			const sizeClasses = {
@@ -145,7 +145,7 @@ export const BackButton: FC<BackButtonProps> = memo((props) => {
 			type="button"
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
-			className="items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-all duration-200 hidden md:inline-flex ml-4 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+			className="items-center gap-2 px-3 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-all duration-200 hidden md:inline-flex ml-4 focus:outline-none focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
 			aria-label={t('header.back')}
 			{...props}
 		>

@@ -53,5 +53,12 @@
 		"settings": "Configuración",
 		"tasks": "Tareas",
 		"theme": "Tema"
+	},
+	"theme": {
+		"clickToChange": "Haz clic para cambiar tema",
+		"current": "Tema actual",
+		"dark": "Oscuro",
+		"light": "Claro",
+		"system": "Sistema"
 	}
 }

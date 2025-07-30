@@ -40,7 +40,7 @@ export const Modal: FC<ModalProps> = memo(
 			}
 
 			const baseClasses =
-				'modal-box relative bg-white rounded-2xl shadow-2xl border-0 p-0 overflow-hidden transition-all duration-300'
+				'modal-box relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border-0 p-0 overflow-hidden transition-all duration-300'
 
 			return `${baseClasses} ${sizeClasses[size]} ${className || ''}`
 		}, [size, className])
@@ -48,22 +48,22 @@ export const Modal: FC<ModalProps> = memo(
 		const variantConfig = useMemo(() => {
 			const configs = {
 				default: {
-					headerBg: 'bg-gradient-to-r from-blue-600 to-blue-700',
+					headerBg: 'bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600',
 					icon: 'i-material-symbols-info',
 					iconColor: 'bg-white!',
 				},
 				danger: {
-					headerBg: 'bg-gradient-to-r from-red-600 to-red-700',
+					headerBg: 'bg-gradient-to-r from-red-600 to-red-700 dark:from-red-500 dark:to-red-600',
 					icon: 'i-material-symbols-warning',
 					iconColor: 'bg-white!',
 				},
 				success: {
-					headerBg: 'bg-gradient-to-r from-green-600 to-green-700',
+					headerBg: 'bg-gradient-to-r from-green-600 to-green-700 dark:from-green-500 dark:to-green-600',
 					icon: 'i-material-symbols-check-circle',
 					iconColor: 'bg-white!',
 				},
 				warning: {
-					headerBg: 'bg-gradient-to-r from-yellow-600 to-orange-600',
+					headerBg: 'bg-gradient-to-r from-yellow-600 to-orange-600 dark:from-yellow-500 dark:to-orange-500',
 					icon: 'i-material-symbols-warning',
 					iconColor: 'bg-white!',
 				},
@@ -94,7 +94,7 @@ export const Modal: FC<ModalProps> = memo(
 				<div
 					role="dialog"
 					ref={backdropRef}
-					className="modal-backdrop bg-black/50 backdrop-blur-sm transition-all duration-300"
+					className="modal-backdrop bg-black/50 dark:bg-black/70 backdrop-blur-sm transition-all duration-300"
 					onClick={handleBackdropClick}
 				/>
 				<div
@@ -136,7 +136,7 @@ export const Modal: FC<ModalProps> = memo(
 					{/* Content */}
 					<div className="px-6 py-6">
 						{message && (
-							<p className="text-gray-700 leading-relaxed mb-4" id="modal-description">
+							<p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4" id="modal-description">
 								{message}
 							</p>
 						)}
@@ -145,7 +145,7 @@ export const Modal: FC<ModalProps> = memo(
 
 					{/* Actions */}
 					{(onAccept || onCancel) && (
-						<div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-end gap-3">
+						<div className="px-6 py-4 bg-gray-50 dark:bg-gray-700 border-t border-gray-100 dark:border-gray-600 flex justify-end gap-3">
 							{onCancel && (
 								<Button
 									variant="secondary"

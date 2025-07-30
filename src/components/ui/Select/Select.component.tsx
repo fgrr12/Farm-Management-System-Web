@@ -41,11 +41,11 @@ export const Select: FC<SelectProps> = memo(
 
 			const variantClasses = {
 				default:
-					'input bg-white border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200',
+					'input bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 text-gray-900 dark:text-gray-100',
 				filled:
-					'bg-gray-100 border-0 border-b-2 border-gray-300 focus:border-blue-500 focus:bg-white rounded-t-lg rounded-b-none px-4',
+					'bg-gray-100 dark:bg-gray-700 border-0 border-b-2 border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:bg-white dark:focus:bg-gray-800 rounded-t-lg rounded-b-none px-4 text-gray-900 dark:text-gray-100',
 				outlined:
-					'bg-transparent border-2 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200',
+					'bg-transparent border-2 border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 text-gray-900 dark:text-gray-100',
 			}
 
 			const sizeClasses = {
@@ -55,9 +55,9 @@ export const Select: FC<SelectProps> = memo(
 			}
 
 			const stateClasses = error
-				? 'border-red-500 focus:border-red-500 focus:ring-red-200'
+				? 'border-red-500 dark:border-red-400 focus:border-red-500 dark:focus:border-red-400 focus:ring-red-200 dark:focus:ring-red-800'
 				: success
-					? 'border-green-500 focus:border-green-500 focus:ring-green-200'
+					? 'border-green-500 dark:border-green-400 focus:border-green-500 dark:focus:border-green-400 focus:ring-green-200 dark:focus:ring-green-800'
 					: ''
 
 			const iconPadding = leftIcon ? 'pl-12' : ''
@@ -69,12 +69,12 @@ export const Select: FC<SelectProps> = memo(
 		const labelClasses = useMemo(() => {
 			const baseClasses = 'block text-sm font-medium mb-2 transition-colors duration-200'
 			const stateClasses = error
-				? 'text-red-700'
+				? 'text-red-700 dark:text-red-400'
 				: success
-					? 'text-green-700'
+					? 'text-green-700 dark:text-green-400'
 					: isFocused
-						? 'text-blue-700'
-						: 'text-gray-700'
+						? 'text-blue-700 dark:text-blue-400'
+						: 'text-gray-700 dark:text-gray-300'
 
 			return `${baseClasses} ${stateClasses}`
 		}, [error, success, isFocused])
@@ -179,7 +179,7 @@ export const Select: FC<SelectProps> = memo(
 					{leftIcon && (
 						<div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
 							<i
-								className={`${leftIcon} w-5! h-5! ${error ? 'bg-red-500!' : success ? 'bg-green-500!' : 'bg-gray-400!'}`}
+								className={`${leftIcon} w-5! h-5! ${error ? 'bg-red-500! dark:bg-red-400!' : success ? 'bg-green-500! dark:bg-green-400!' : 'bg-gray-400! dark:bg-gray-500!'}`}
 							/>
 						</div>
 					)}
@@ -216,19 +216,19 @@ export const Select: FC<SelectProps> = memo(
 					<div className="absolute inset-y-0 right-0 flex items-center">
 						{error && (
 							<div className="flex items-center px-2">
-								<i className="i-material-symbols-error w-4! h-4! bg-red-500!" title={error} />
+								<i className="i-material-symbols-error w-4! h-4! bg-red-500! dark:bg-red-400!" title={error} />
 							</div>
 						)}
 
 						{loading ? (
 							<div className="flex items-center px-2">
 								<div className="animate-spin">
-									<i className="i-material-symbols-progress-activity w-5! h-5! bg-blue-500!" />
+									<i className="i-material-symbols-progress-activity w-5! h-5! bg-blue-500! dark:bg-blue-400!" />
 								</div>
 							</div>
 						) : success ? (
 							<div className="flex items-center px-2">
-								<i className="i-material-symbols-check-circle w-5! h-5! bg-green-500!" />
+								<i className="i-material-symbols-check-circle w-5! h-5! bg-green-500! dark:bg-green-400!" />
 							</div>
 						) : hasValue && clearable ? (
 							<div className="flex items-center px-2 z-1">
@@ -240,8 +240,8 @@ export const Select: FC<SelectProps> = memo(
 								/>
 							</div>
 						) : (
-							<div className="flex items-center px-1 pointer-events-none text-gray-500">
-								<i className="i-material-symbols-keyboard-arrow-down w-8! h-8! bg-gray-400!" />
+							<div className="flex items-center px-1 pointer-events-none text-gray-500 dark:text-gray-400">
+								<i className="i-material-symbols-keyboard-arrow-down w-8! h-8! bg-gray-400! dark:bg-gray-500!" />
 							</div>
 						)}
 					</div>
@@ -250,19 +250,19 @@ export const Select: FC<SelectProps> = memo(
 					{error && (
 						<div
 							id={`${fieldId}-error`}
-							className="absolute top-full left-0 mt-2 p-3 bg-red-50 border border-red-200 rounded-lg shadow-lg z-20 max-w-xs opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200 ease-in-out"
+							className="absolute top-full left-0 mt-2 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg shadow-lg z-20 max-w-xs opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200 ease-in-out"
 							role="tooltip"
 							aria-live="polite"
 						>
-							<div className="text-sm text-red-700 font-medium">{error}</div>
-							<div className="absolute -top-2 left-4 w-4 h-4 bg-red-50 border-l border-t border-red-200 transform rotate-45" />
+							<div className="text-sm text-red-700 dark:text-red-400 font-medium">{error}</div>
+							<div className="absolute -top-2 left-4 w-4 h-4 bg-red-50 dark:bg-red-900/20 border-l border-t border-red-200 dark:border-red-800 transform rotate-45" />
 						</div>
 					)}
 				</div>
 
 				{/* Helper Text */}
 				{helperText && !error && (
-					<div id={`${fieldId}-helper`} className="text-sm text-gray-600 mt-1">
+					<div id={`${fieldId}-helper`} className="text-sm text-gray-600 dark:text-gray-400 mt-1">
 						{helperText}
 					</div>
 				)}
@@ -271,9 +271,9 @@ export const Select: FC<SelectProps> = memo(
 				{success && successMessage && (
 					<div
 						id={`${fieldId}-success`}
-						className="text-sm text-green-600 mt-1 flex items-center gap-1"
+						className="text-sm text-green-600 dark:text-green-400 mt-1 flex items-center gap-1"
 					>
-						<i className="i-material-symbols-check-circle w-4! h-4! bg-green-500!" />
+						<i className="i-material-symbols-check-circle w-4! h-4! bg-green-500! dark:bg-green-400!" />
 						<span>{successMessage}</span>
 					</div>
 				)}

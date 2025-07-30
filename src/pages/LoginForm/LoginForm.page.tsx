@@ -58,7 +58,7 @@ const LoginForm = () => {
 	}, [user, navigate])
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center p-4">
+		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
 			<a
 				href="#login-form"
 				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
@@ -73,7 +73,7 @@ const LoginForm = () => {
 			</div>
 
 			<section
-				className="relative bg-white/80 backdrop-blur-sm shadow-2xl rounded-3xl border border-white/20 p-8 w-full max-w-md"
+				className="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-2xl rounded-3xl border border-white/20 dark:border-gray-700/20 p-8 w-full max-w-md"
 				aria-labelledby="login-heading"
 			>
 				{/* Logo/Brand Section */}
@@ -81,10 +81,10 @@ const LoginForm = () => {
 					<div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
 						<i className="i-healthicons-animal-cow w-8! h-8! bg-white!" aria-hidden="true" />
 					</div>
-					<h1 id="login-heading" className="text-3xl font-bold text-gray-900 mb-2">
+					<h1 id="login-heading" className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
 						{t('title')}
 					</h1>
-					<p className="text-gray-600 text-sm">
+					<p className="text-gray-600 dark:text-gray-300 text-sm">
 						{t('subtitle')}
 					</p>
 				</header>
@@ -132,7 +132,7 @@ const LoginForm = () => {
 								type="checkbox"
 								className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
 							/>
-							<span className="ml-2 text-sm text-gray-600">{t('rememberMe')}</span>
+							<span className="ml-2 text-sm text-gray-600 dark:text-gray-300">{t('rememberMe')}</span>
 						</label>
 						<Link
 							to={AppRoutes.LOGIN}
@@ -161,17 +161,17 @@ const LoginForm = () => {
 				{/* Divider */}
 				<div className="relative my-6">
 					<div className="absolute inset-0 flex items-center">
-						<div className="w-full border-t border-gray-300" />
+						<div className="w-full border-t border-gray-300 dark:border-gray-600" />
 					</div>
 					<div className="relative flex justify-center text-sm">
-						<span className="px-2 bg-white text-gray-500">{t('orContinueWith')}</span>
+						<span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">{t('orContinueWith')}</span>
 					</div>
 				</div>
 
 				{/* Google Login */}
 				<button
 					type="button"
-					className="w-full h-12 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-medium rounded-xl shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-center gap-3 group"
+					className="w-full h-12 bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 text-gray-700 dark:text-gray-200 font-medium rounded-xl shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-center gap-3 group"
 					onClick={handleGoogleLogin}
 					aria-describedby="google-login-help"
 				>

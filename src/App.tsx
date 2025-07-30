@@ -29,6 +29,8 @@ import { ToastManager } from '@/components/layout/ToastManager'
 import { PWAInstallPrompt } from '@/components/pwa/PWAInstallPrompt.component'
 import { PWAUpdatePrompt } from '@/components/pwa/PWAUpdatePrompt.component'
 
+import { useTheme } from '@/hooks/useTheme'
+
 // import { VoiceRecorder } from './components/layout/VoiceRecorder/VoiceRecorder'
 import { usePreloadRoutes } from './hooks/ui/usePreloadRoutes'
 
@@ -81,6 +83,9 @@ export const App = () => {
 	const location = useLocation()
 	const [authLoading, setAuthLoading] = useState(true)
 	const browserLanguage = navigator.language === 'en' ? 'eng' : 'spa'
+
+	// Initialize theme system
+	useTheme()
 
 	usePreloadRoutes()
 

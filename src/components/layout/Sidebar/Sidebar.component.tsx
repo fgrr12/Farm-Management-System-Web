@@ -1,6 +1,6 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
@@ -9,14 +9,15 @@ import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
+import { useTheme } from '@/hooks/useTheme'
+
 export const Sidebar = memo(() => {
 	const { user } = useUserStore()
 	const { billingCard } = useFarmStore()
 	const { loading } = useAppStore()
 	const navigate = useNavigate()
 	const location = useLocation()
-
-	const [theme, setTheme] = useState<string>(localStorage.getItem('theme') || 'light')
+	const { theme, resolvedTheme, toggleTheme } = useTheme()
 
 	const handleGoTo = useCallback(
 		(path: string) => () => {
@@ -30,8 +31,8 @@ export const Sidebar = memo(() => {
 		(path: string, colorFrom: string, colorTo: string) => {
 			const isActive = location.pathname.includes(path)
 			return `w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 ${isActive
-					? `bg-gradient-to-br ${colorFrom} ${colorTo} shadow-lg`
-					: 'hover:bg-gray-100 bg-gray-50'
+				? `bg-gradient-to-br ${colorFrom} ${colorTo} shadow-lg`
+				: 'hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50 dark:bg-gray-800'
 				}`
 		},
 		[location.pathname]
@@ -40,7 +41,7 @@ export const Sidebar = memo(() => {
 	const getIconClasses = useCallback(
 		(path: string) => {
 			const isActive = location.pathname.includes(path)
-			return `w-6! h-6! ${isActive ? 'bg-white!' : 'bg-gray-600!'}`
+			return `w-6! h-6! ${isActive ? 'bg-white!' : 'bg-gray-600! dark:bg-gray-300!'}`
 		},
 		[location.pathname]
 	)
@@ -55,10 +56,7 @@ export const Sidebar = memo(() => {
 		[showAdminRoutes, billingCard]
 	)
 
-	useEffect(() => {
-		localStorage.setItem('theme', theme)
-		document.querySelector('html')!.setAttribute('data-theme', theme)
-	}, [theme])
+
 
 	useGSAP(() => {
 		if (loading) return
@@ -76,7 +74,7 @@ export const Sidebar = memo(() => {
 	}, [location])
 	return (
 		<div
-			className="bg-white h-full hidden lg:flex flex-col items-center py-4 shadow-lg border-r border-gray-100 w-20 z-100"
+			className="bg-white dark:bg-gray-900 h-full hidden lg:flex flex-col items-center py-4 shadow-lg border-r border-gray-100 dark:border-gray-700 w-20"
 			role="navigation"
 			aria-label="Main navigation"
 		>
@@ -122,7 +120,7 @@ export const Sidebar = memo(() => {
 			{/* Admin Section */}
 			{showAdminRoutes && (
 				<>
-					<div className="w-8 h-px bg-gray-200 my-4" />
+					<div className="w-8 h-px bg-gray-200 dark:bg-gray-600 my-4" />
 					<div className="flex flex-col gap-3">
 						<button
 							type="button"
@@ -155,21 +153,21 @@ export const Sidebar = memo(() => {
 
 			{/* Bottom Section */}
 			<div className="mt-auto flex flex-col gap-3">
-				<label
-					className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 hover:bg-gray-100 bg-gray-50 cursor-pointer"
-					aria-label="Toggle theme"
+				<button
+					type="button"
+					className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50 dark:bg-gray-800"
+					onClick={toggleTheme}
+					aria-label={`Current theme: ${theme}. Click to change theme`}
+					title={`Theme: ${theme}`}
 				>
-					<div className="swap swap-rotate">
-						<input
-							type="checkbox"
-							className="theme-controller"
-							value="synthwave"
-							onChange={() => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'))}
-						/>
-						<i className="i-line-md-moon-alt-to-sunny-outline-loop-transition swap-off h-6! w-6! fill-current bg-gray-600!" />
-						<i className="i-line-md-sunny-outline-to-moon-alt-loop-transition swap-on h-6! w-6! fill-current bg-gray-600!" />
-					</div>
-				</label>
+					{theme === 'system' ? (
+						<i className="i-material-symbols-computer w-6! h-6! bg-gray-600! dark:bg-gray-300!" />
+					) : resolvedTheme === 'dark' ? (
+						<i className="i-material-symbols-dark-mode w-6! h-6! bg-gray-600! dark:bg-gray-300!" />
+					) : (
+						<i className="i-material-symbols-light-mode w-6! h-6! bg-gray-600! dark:bg-gray-300!" />
+					)}
+				</button>
 			</div>
 		</div>
 	)

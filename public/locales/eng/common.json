@@ -53,5 +53,12 @@
 		"settings": "Settings",
 		"tasks": "Tasks",
 		"theme": "Theme"
+	},
+	"theme": {
+		"clickToChange": "Click to change theme",
+		"current": "Current theme",
+		"dark": "Dark",
+		"light": "Light",
+		"system": "System"
 	}
 }
