@@ -1,6 +1,7 @@
 @import "tailwindcss";
-@tailwind utilities;
 @plugin "daisyui";
+
+@variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /* Dark mode transitions */
 html {
