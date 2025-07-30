@@ -29,7 +29,7 @@ import { ToastManager } from '@/components/layout/ToastManager'
 import { PWAInstallPrompt } from '@/components/pwa/PWAInstallPrompt.component'
 import { PWAUpdatePrompt } from '@/components/pwa/PWAUpdatePrompt.component'
 
-import { useTheme } from '@/hooks/useTheme'
+import { useTheme } from '@/hooks/system/useTheme'
 
 // import { VoiceRecorder } from './components/layout/VoiceRecorder/VoiceRecorder'
 import { usePreloadRoutes } from './hooks/ui/usePreloadRoutes'

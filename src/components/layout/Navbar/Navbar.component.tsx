@@ -15,8 +15,8 @@ import { UserService } from '@/services/user'
 
 import { BackButton } from '@/components/ui/Button'
 
+import { useTheme } from '@/hooks/system/useTheme'
 import { useBackRoute } from '@/hooks/ui/useBackRoute'
-import { useTheme } from '@/hooks/useTheme'
 
 export const Navbar = memo(() => {
 	const drawerRef = useRef<HTMLInputElement>(null)

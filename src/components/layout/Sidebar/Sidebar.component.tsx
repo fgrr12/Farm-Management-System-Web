@@ -9,7 +9,7 @@ import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
-import { useTheme } from '@/hooks/useTheme'
+import { useTheme } from '@/hooks/system/useTheme'
 
 export const Sidebar = memo(() => {
 	const { user } = useUserStore()
