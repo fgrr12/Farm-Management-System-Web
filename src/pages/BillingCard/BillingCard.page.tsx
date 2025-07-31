@@ -170,8 +170,12 @@ const BillingCard = () => {
 						<div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
 							<i className="i-material-symbols-credit-card w-8! h-8! text-gray-400" />
 						</div>
-						<h2 className="text-xl font-semibold text-gray-900 mb-2">{t('noBillingCard')}</h2>
-						<p className="text-gray-600 text-center max-w-md">{t('noBillingCardMessage')}</p>
+						<h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
+							{t('noBillingCard')}
+						</h2>
+						<p className="text-gray-600 dark:text-gray-400 text-center max-w-md">
+							{t('noBillingCardMessage')}
+						</p>
 					</div>
 				</div>
 			</div>
@@ -179,10 +183,10 @@ const BillingCard = () => {
 	}
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 overflow-y-auto">
+		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto">
 			<div className="max-w-4xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
 				{/* Hero Header */}
-				<div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-6 sm:mb-8">
+				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden mb-6 sm:mb-8 border border-gray-100 dark:border-gray-700">
 					<div className="bg-gradient-to-r from-purple-600 to-blue-600 px-4 sm:px-6 py-6 sm:py-8">
 						<div className="flex items-center gap-3 sm:gap-4">
 							<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
@@ -290,31 +294,31 @@ const BillingCard = () => {
 					{/* Card Information */}
 					<div className="space-y-6">
 						{/* Contact Information */}
-						<div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6">
-							<h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+						<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-2xl p-4 sm:p-6 border border-gray-100 dark:border-gray-700">
+							<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
 								<i className="i-material-symbols-contact-mail w-5! h-5! text-blue-600" />
 								{t('contactInformation')}
 							</h3>
 							<div className="space-y-4">
-								<div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-									<i className="i-material-symbols-mail w-5! h-5! text-gray-600" />
+								<div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+									<i className="i-material-symbols-mail w-5! h-5! text-gray-600 dark:text-gray-400" />
 									<div>
-										<div className="text-xs text-gray-500">{t('email')}</div>
+										<div className="text-xs text-gray-500 dark:text-gray-400">{t('email')}</div>
 										<a
 											href={`mailto:${billingCard.email}`}
-											className="text-sm font-medium text-blue-600 hover:text-blue-800"
+											className="text-sm font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
 										>
 											{billingCard.email}
 										</a>
 									</div>
 								</div>
-								<div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-									<i className="i-material-symbols-phone w-5! h-5! text-gray-600" />
+								<div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+									<i className="i-material-symbols-phone w-5! h-5! text-gray-600 dark:text-gray-400" />
 									<div>
-										<div className="text-xs text-gray-500">{t('phone')}</div>
+										<div className="text-xs text-gray-500 dark:text-gray-400">{t('phone')}</div>
 										<a
 											href={`tel:${billingCard.phone}`}
-											className="text-sm font-medium text-blue-600 hover:text-blue-800"
+											className="text-sm font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
 										>
 											{billingCard.phone}
 										</a>
@@ -324,29 +328,35 @@ const BillingCard = () => {
 						</div>
 
 						{/* Billing Address */}
-						<div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6">
-							<h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+						<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-2xl p-4 sm:p-6 border border-gray-100 dark:border-gray-700">
+							<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
 								<i className="i-material-symbols-location-on w-5! h-5! text-blue-600" />
 								{t('billingAddress')}
 							</h3>
-							<div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
-								<i className="i-material-symbols-home w-5! h-5! text-gray-600 mt-0.5" />
+							<div className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+								<i className="i-material-symbols-home w-5! h-5! text-gray-600 dark:text-gray-400 mt-0.5" />
 								<div>
-									<div className="text-xs text-gray-500 mb-1">{t('address')}</div>
-									<div className="text-sm font-medium text-gray-900">{billingCard.address}</div>
+									<div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+										{t('address')}
+									</div>
+									<div className="text-sm font-medium text-gray-900 dark:text-gray-100">
+										{billingCard.address}
+									</div>
 								</div>
 							</div>
 						</div>
 
 						{/* Card Details */}
-						<div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6">
-							<h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+						<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-2xl p-4 sm:p-6 border border-gray-100 dark:border-gray-700">
+							<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
 								<i className="i-material-symbols-info w-5! h-5! text-blue-600" />
 								{t('cardDetails')}
 							</h3>
-							<div className="p-3 bg-gray-50 rounded-lg">
-								<div className="text-xs text-gray-500 mb-1">{t('cardId')}</div>
-								<div className="text-sm font-mono font-medium text-gray-900">{billingCard.id}</div>
+							<div className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+								<div className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t('cardId')}</div>
+								<div className="text-sm font-mono font-medium text-gray-900 dark:text-gray-100">
+									{billingCard.id}
+								</div>
 							</div>
 						</div>
 

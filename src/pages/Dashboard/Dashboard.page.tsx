@@ -23,7 +23,9 @@ const Dashboard = () => {
 		<div className="flex flex-col w-full h-full p-4 gap-6 overflow-auto bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
 			{/* Header */}
 			<header className="flex flex-col gap-2">
-				<h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">{t('title')}</h1>
+				<h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+					{t('title')}
+				</h1>
 				<p className="text-base sm:text-lg text-gray-600 dark:text-gray-300">{t('subtitle')}</p>
 			</header>
 

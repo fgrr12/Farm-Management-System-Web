@@ -166,7 +166,10 @@ export const StatCard = memo<StatCardProps>(
 				<div className="flex items-center justify-between">
 					<div className="flex-1">
 						<p className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">{title}</p>
-						<p ref={valueRef} className="text-3xl font-bold text-gray-900 dark:text-white tabular-nums">
+						<p
+							ref={valueRef}
+							className="text-3xl font-bold text-gray-900 dark:text-white tabular-nums"
+						>
 							{loading ? '...' : displayValue}
 						</p>
 						{changeLoading ? (
@@ -180,17 +183,20 @@ export const StatCard = memo<StatCardProps>(
 								<div className="flex items-center mt-2">
 									<span
 										ref={changeRef}
-										className={`text-sm font-medium tabular-nums ${displayChange > 0
-											? 'text-green-600 dark:text-green-400'
-											: displayChange < 0
-												? 'text-red-600 dark:text-red-400'
-												: 'text-gray-500 dark:text-gray-400'
-											}`}
+										className={`text-sm font-medium tabular-nums ${
+											displayChange > 0
+												? 'text-green-600 dark:text-green-400'
+												: displayChange < 0
+													? 'text-red-600 dark:text-red-400'
+													: 'text-gray-500 dark:text-gray-400'
+										}`}
 									>
 										{displayChange > 0 && '+'}
 										{displayChange}%
 									</span>
-									<span className="text-xs text-gray-500 dark:text-gray-400 ml-1">{t('common.vsLastMonth')}</span>
+									<span className="text-xs text-gray-500 dark:text-gray-400 ml-1">
+										{t('common.vsLastMonth')}
+									</span>
 								</div>
 							)
 						)}

@@ -139,11 +139,15 @@ export const ProductionChart = memo(() => {
 			}}
 		>
 			<div className="flex items-center justify-between mb-6">
-				<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{t('charts.productionTrend')}</h3>
+				<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+					{t('charts.productionTrend')}
+				</h3>
 				<div className="flex items-center gap-4">
 					<div className="flex items-center gap-2">
 						<i className="i-material-symbols-water-drop w-6! h-6! bg-blue-500!" />
-						<span className="text-sm text-gray-600 dark:text-gray-400">{t('charts.production')}</span>
+						<span className="text-sm text-gray-600 dark:text-gray-400">
+							{t('charts.production')}
+						</span>
 					</div>
 					<select
 						value={selectedYear}
@@ -164,7 +168,9 @@ export const ProductionChart = memo(() => {
 					const refCallback = setBarRef(index)
 					return (
 						<div key={index} className="flex items-center gap-4 group">
-							<div className="w-16 text-sm text-gray-600 dark:text-gray-400 font-medium">{item.month}</div>
+							<div className="w-16 text-sm text-gray-600 dark:text-gray-400 font-medium">
+								{item.month}
+							</div>
 							<div className="flex-1 bg-gray-100 dark:bg-gray-700 rounded-full h-8 relative overflow-hidden group-hover:bg-gray-200 dark:group-hover:bg-gray-600 transition-colors">
 								<div
 									ref={refCallback}
@@ -185,7 +191,10 @@ export const ProductionChart = memo(() => {
 			<div className="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700">
 				<div className="flex items-center justify-between text-sm">
 					<span className="text-gray-600 dark:text-gray-400">{t('charts.totalProduction')}</span>
-					<span ref={totalRef} className="font-semibold text-gray-900 dark:text-gray-100 tabular-nums">
+					<span
+						ref={totalRef}
+						className="font-semibold text-gray-900 dark:text-gray-100 tabular-nums"
+					>
 						0L
 					</span>
 				</div>

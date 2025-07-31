@@ -54,7 +54,9 @@ export const TasksOverview = memo(() => {
 
 	return (
 		<div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-			<h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">{t('tasks.title')}</h3>
+			<h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
+				{t('tasks.title')}
+			</h3>
 
 			<div className="space-y-4">
 				{taskItems.map((item, index) => (
@@ -80,12 +82,14 @@ export const TasksOverview = memo(() => {
 
 			<div className="mt-6">
 				<div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-					<span className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('tasks.completionRate')}</span>
+					<span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+						{t('tasks.completionRate')}
+					</span>
 					<span className="text-lg font-bold text-gray-900 dark:text-white">
 						{Math.round(
 							(tasksOverview.completed /
 								(tasksOverview.pending + tasksOverview.inProgress + tasksOverview.completed)) *
-							100
+								100
 						) || 0}
 						%
 					</span>
