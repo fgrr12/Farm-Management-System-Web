@@ -21,21 +21,21 @@ import type {
 const trBgColor = (reason: HealthRecordType) => {
 	switch (reason) {
 		case 'Checkup':
-			return 'bg-sky-100'
+			return 'bg-sky-100 dark:bg-sky-900/20'
 		case 'Vaccination':
-			return 'bg-emerald-100'
+			return 'bg-emerald-100 dark:bg-emerald-900/20'
 		case 'Medication':
-			return 'bg-teal-100'
+			return 'bg-teal-100 dark:bg-teal-900/20'
 		case 'Surgery':
-			return 'bg-indigo-100'
+			return 'bg-indigo-100 dark:bg-indigo-900/20'
 		case 'Pregnancy':
-			return 'bg-rose-200'
+			return 'bg-rose-200 dark:bg-rose-900/30'
 		case 'Deworming':
-			return 'bg-pink-100'
+			return 'bg-pink-100 dark:bg-pink-900/20'
 		case 'Birth':
-			return 'bg-yellow-100'
+			return 'bg-yellow-100 dark:bg-yellow-900/20'
 		case 'Drying':
-			return 'bg-orange-100'
+			return 'bg-orange-100 dark:bg-orange-900/20'
 	}
 }
 
@@ -140,7 +140,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 			{/* Header with Filters and Add Button */}
 			<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
 				<div className="flex items-center gap-4">
-					<h2 className="text-lg font-semibold text-gray-900">{t('title')}</h2>
+					<h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t('title')}</h2>
 					{user && (
 						<div className="flex-shrink-0">
 							<HealthRecordsFilters
@@ -164,48 +164,53 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 				</div>
 			</div>
 			{/* Modern Table Design */}
-			<div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+			<div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
 				<div className="overflow-x-auto">
-					<table className="min-w-full divide-y divide-gray-200" aria-label="Health records">
-						<thead className="bg-gray-50">
+					<table
+						className="min-w-full divide-y divide-gray-200 dark:divide-gray-700"
+						aria-label="Health records"
+					>
+						<thead className="bg-gray-50 dark:bg-gray-900">
 							<tr>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
 									{t('reason')}
 								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
 									{t('notes')}
 								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
 									{t('type')}
 								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
 									{t('reviewedBy')}
 								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
 									{t('date')}
 								</th>
 								{haveUser && (
-									<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+									<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
 										{t('actions')}
 									</th>
 								)}
 							</tr>
 						</thead>
-						<tbody className="bg-white divide-y divide-gray-200">
+						<tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
 							{healthRecordsFiltered.map((healthRecord) => (
 								<tr
 									key={healthRecord.uuid}
 									className={`${trBgColor(healthRecord.type)} hover:bg-opacity-80 transition-colors`}
 								>
-									<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+									<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
 										{healthRecord.reason}
 									</td>
-									<td className="px-6 py-4 text-sm text-gray-900">
+									<td className="px-6 py-4 text-sm text-gray-900 dark:text-white">
 										<div className="space-y-2">
 											<div className="font-medium">{healthRecord.notes}</div>
 											{additionalInfoExists(healthRecord) && (
-												<div className="space-y-1 text-xs text-gray-600 bg-gray-50 p-2 rounded">
-													<div className="font-medium text-gray-700">{t('additionalInfo')}:</div>
+												<div className="space-y-1 text-xs text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 p-2 rounded">
+													<div className="font-medium text-gray-700 dark:text-gray-200">
+														{t('additionalInfo')}:
+													</div>
 													{healthRecord.weight! > 0 && (
 														<div className="flex items-center gap-1">
 															<i className="i-material-symbols-monitor-weight w-3 h-3" />
@@ -259,35 +264,35 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 											)}
 										</div>
 									</td>
-									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
 										<span
 											className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
 												healthRecord.type === 'Checkup'
-													? 'bg-sky-100 text-sky-800'
+													? 'bg-sky-100 text-sky-800 dark:bg-sky-900 dark:text-sky-200 dark:border dark:border-sky-700'
 													: healthRecord.type === 'Vaccination'
-														? 'bg-emerald-100 text-emerald-800'
+														? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200 dark:border dark:border-emerald-700'
 														: healthRecord.type === 'Medication'
-															? 'bg-teal-100 text-teal-800'
+															? 'bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200 dark:border dark:border-teal-700'
 															: healthRecord.type === 'Surgery'
-																? 'bg-indigo-100 text-indigo-800'
+																? 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200 dark:border dark:border-indigo-700'
 																: healthRecord.type === 'Pregnancy'
-																	? 'bg-rose-100 text-rose-800'
+																	? 'bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-200 dark:border dark:border-rose-700'
 																	: healthRecord.type === 'Deworming'
-																		? 'bg-pink-100 text-pink-800'
+																		? 'bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200 dark:border dark:border-pink-700'
 																		: healthRecord.type === 'Birth'
-																			? 'bg-yellow-100 text-yellow-800'
+																			? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 dark:border dark:border-yellow-700'
 																			: healthRecord.type === 'Drying'
-																				? 'bg-orange-100 text-orange-800'
-																				: 'bg-gray-100 text-gray-800'
+																				? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200 dark:border dark:border-orange-700'
+																				: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 dark:border dark:border-gray-600'
 											}`}
 										>
 											{t(`healthRecordType.${healthRecord.type.toLowerCase()}`)}
 										</span>
 									</td>
-									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
 										{healthRecord.reviewedBy}
 									</td>
-									<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+									<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
 										{dayjs(healthRecord.date).format('DD/MM/YYYY')}
 									</td>
 									{haveUser && (
@@ -310,9 +315,12 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 							))}
 							{healthRecordsFiltered.length === 0 && (
 								<tr>
-									<td className="px-6 py-12 text-center text-gray-500" colSpan={haveUser ? 6 : 5}>
+									<td
+										className="px-6 py-12 text-center text-gray-500 dark:text-gray-400"
+										colSpan={haveUser ? 6 : 5}
+									>
 										<div className="flex flex-col items-center gap-2">
-											<i className="i-material-symbols-health-and-safety w-12 h-12 text-gray-300" />
+											<i className="i-material-symbols-health-and-safety w-12 h-12 text-gray-300 dark:text-gray-600" />
 											<span className="font-medium">{t('noHealthRecords')}</span>
 										</div>
 									</td>

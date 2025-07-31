@@ -84,7 +84,7 @@ const EmployeeForm = () => {
 	}, [setPageTitle, t, params.employeeUuid])
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 overflow-y-auto">
+		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto">
 			<div className="max-w-3xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
 				<a
 					href="#employee-form"
@@ -94,7 +94,7 @@ const EmployeeForm = () => {
 				</a>
 
 				{/* Hero Header */}
-				<div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-6 sm:mb-8">
+				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden mb-6 sm:mb-8 border border-gray-100 dark:border-gray-700">
 					<div className="bg-gradient-to-r from-blue-600 to-green-600 px-4 sm:px-6 py-6 sm:py-8">
 						<div className="flex items-center gap-3 sm:gap-4">
 							<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
@@ -113,7 +113,7 @@ const EmployeeForm = () => {
 				</div>
 
 				{/* Form Container */}
-				<div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden border border-gray-100 dark:border-gray-700">
 					<form
 						id="employee-form"
 						className="p-4 sm:p-6 lg:p-8"
@@ -130,8 +130,8 @@ const EmployeeForm = () => {
 
 						<div className="space-y-6">
 							{/* Personal Information Card */}
-							<div className="bg-gray-50 rounded-xl p-4 sm:p-6">
-								<h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+							<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
+								<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
 									<i className="i-material-symbols-person bg-blue-600! w-5! h-5!" />
 									{t('personalInformation')}
 								</h3>
@@ -169,8 +169,8 @@ const EmployeeForm = () => {
 							</div>
 
 							{/* Contact Information Card */}
-							<div className="bg-gray-50 rounded-xl p-4 sm:p-6">
-								<h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+							<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
+								<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
 									<i className="i-material-symbols-contact-mail bg-blue-600! w-5! h-5!" />
 									{t('contactInformation')}
 								</h3>
@@ -206,8 +206,8 @@ const EmployeeForm = () => {
 							</div>
 
 							{/* Role Information Card */}
-							<div className="bg-gray-50 rounded-xl p-4 sm:p-6">
-								<h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+							<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
+								<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
 									<i className="i-material-symbols-admin-panel-settings bg-blue-600! w-5! h-5!" />
 									{t('roleInformation')}
 								</h3>
@@ -236,7 +236,7 @@ const EmployeeForm = () => {
 						</div>
 
 						{/* Submit Button */}
-						<div className="mt-8 pt-6 border-t border-gray-200">
+						<div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-600">
 							<Button
 								type="submit"
 								disabled={isSubmitting}

@@ -195,21 +195,21 @@ const Animal = () => {
 	}, [params.animalUuid, farm, getInitialData, setPageTitle])
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
+		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
 			<div className="max-w-7xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
 				{/* Hero Section */}
-				<div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
-					<div className="bg-gradient-to-r from-blue-600 to-green-600 px-4 sm:px-6 py-4">
+				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden mb-8 border border-gray-200 dark:border-gray-700">
+					<div className="bg-gradient-to-r from-blue-600 to-green-600 dark:from-blue-700 dark:to-green-700 px-4 sm:px-6 py-4">
 						<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
 							<div className="flex items-center gap-3 sm:gap-4">
-								<div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+								<div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 dark:bg-white/30 rounded-full flex items-center justify-center flex-shrink-0">
 									<i className="i-material-symbols-pets bg-white! w-6! h-6! sm:w-6 sm:h-6" />
 								</div>
 								<div className="min-w-0">
 									<h1 className="text-xl sm:text-2xl font-bold text-white truncate">
 										{animal.animalId}
 									</h1>
-									<p className="text-blue-100 text-sm sm:text-base truncate">
+									<p className="text-blue-100 dark:text-blue-200 text-sm sm:text-base truncate">
 										{specie?.name} • {breed?.name}
 									</p>
 								</div>
@@ -237,7 +237,7 @@ const Animal = () => {
 							<div className="lg:col-span-1">
 								<div className="relative">
 									<img
-										className="w-full h-64 sm:h-80 object-cover rounded-xl shadow-lg"
+										className="w-full h-64 sm:h-80 object-cover rounded-xl shadow-lg border border-gray-200 dark:border-gray-600"
 										src={animal.picture || '/assets/default-imgs/cow.svg'}
 										alt={specie?.name || 'default'}
 									/>
@@ -245,8 +245,8 @@ const Animal = () => {
 										<div
 											className={`px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-medium ${
 												animal.gender.toLowerCase() === 'male'
-													? 'bg-blue-100 text-blue-800'
-													: 'bg-pink-100 text-pink-800'
+													? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 dark:border dark:border-blue-700'
+													: 'bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200 dark:border dark:border-pink-700'
 											}`}
 										>
 											<div className="flex items-center gap-1 sm:gap-2">
@@ -265,7 +265,7 @@ const Animal = () => {
 								<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
 									{/* Basic Info */}
 									<div className="space-y-3 sm:space-y-4">
-										<h3 className="text-base sm:text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2">
+										<h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-600 pb-2">
 											{t('basicInfo')}
 										</h3>
 										<DetailItem label={t('animalId')} value={animal.animalId} />
@@ -280,7 +280,7 @@ const Animal = () => {
 
 									{/* Dates & Status */}
 									<div className="space-y-3 sm:space-y-4">
-										<h3 className="text-base sm:text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2">
+										<h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-600 pb-2">
 											{t('datesAndStatus')}
 										</h3>
 										{animal.birthDate && (
@@ -315,9 +315,9 @@ const Animal = () => {
 					</div>
 				</div>
 				{/* Tabs Section */}
-				<div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700">
 					{/* Tab Navigation */}
-					<div className="border-b border-gray-200 overflow-x-auto">
+					<div className="border-b border-gray-200 dark:border-gray-600 overflow-x-auto">
 						<nav className="flex space-x-4 sm:space-x-8 px-4 sm:px-6 min-w-max" aria-label="Tabs">
 							{[
 								{
@@ -347,19 +347,19 @@ const Animal = () => {
 									type="button"
 									onClick={tab.onClick}
 									className={`
-										group inline-flex items-center py-3 sm:py-4 px-1 border-b-2 font-medium text-xs sm:text-sm transition-colors cursor-pointer whitespace-nowrap
-										${
-											activeTab === tab.key
-												? `border-${tab.color}-500 text-${tab.color}-600`
-												: 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-										}
-									`}
+								group inline-flex items-center py-3 sm:py-4 px-1 border-b-2 font-medium text-xs sm:text-sm transition-colors cursor-pointer whitespace-nowrap
+								${
+									activeTab === tab.key
+										? `border-${tab.color}-500 text-${tab.color}-600 dark:text-${tab.color}-400`
+										: 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-500'
+								}
+							`}
 								>
 									<i
 										className={`${tab.icon} w-5! h-5! sm:w-7! sm:h-7! mr-1 sm:mr-2 ${
 											activeTab === tab.key
-												? `bg-${tab.color}-500!`
-												: 'text-gray-400 group-hover:text-gray-500'
+												? `bg-${tab.color}-500! dark:bg-${tab.color}-400!`
+												: 'text-gray-400 dark:text-gray-500 group-hover:text-gray-500 dark:group-hover:text-gray-400'
 										}`}
 									/>
 									<span className="hidden sm:inline">{tab.label}</span>

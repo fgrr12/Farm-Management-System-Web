@@ -54,7 +54,7 @@
 		"weight": "Enter weight in kilograms or pounds..."
 	},
 	"purchaseDate": "Purchase Date",
-	"selectBreed": "What specific breed is this animal?",
+	"selectBreed": "What breed is?",
 	"selectGender": "Is it male or female?",
 	"selectSpecies": "What type of animal is this?",
 	"soldDate": "Sold Date",

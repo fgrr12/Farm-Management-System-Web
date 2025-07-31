@@ -56,11 +56,15 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 	if (employees.length === 0) {
 		return (
 			<div className="flex flex-col items-center justify-center py-12 px-4">
-				<div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-					<i className="i-material-symbols-group w-8! h-8! text-gray-400" />
+				<div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4">
+					<i className="i-material-symbols-group w-8! h-8! text-gray-500 dark:text-gray-400" />
 				</div>
-				<h3 className="text-lg font-semibold text-gray-900 mb-2">{t('noEmployeesTitle')}</h3>
-				<p className="text-gray-600 text-center max-w-md">{t('noEmployeesMessage')}</p>
+				<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+					{t('noEmployeesTitle')}
+				</h3>
+				<p className="text-gray-600 dark:text-gray-400 text-center max-w-md">
+					{t('noEmployeesMessage')}
+				</p>
 			</div>
 		)
 	}
@@ -71,33 +75,36 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 			<div className="hidden md:block overflow-x-auto">
 				<table className="w-full" aria-label="Employees">
 					<thead>
-						<tr className="border-b border-gray-200 bg-gray-50">
-							<th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+						<tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+							<th className="px-6 py-4 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">
 								<div className="flex items-center gap-2">
 									<i className="i-material-symbols-person w-4! h-4!" />
 									{t('employee')}
 								</div>
 							</th>
-							<th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+							<th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
 								<div className="flex items-center gap-2">
 									<i className="i-material-symbols-contact-mail w-4! h-4!" />
 									{t('contact')}
 								</div>
 							</th>
-							<th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+							<th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
 								<div className="flex items-center gap-2">
 									<i className="i-material-symbols-admin-panel-settings w-4! h-4!" />
 									{t('role')}
 								</div>
 							</th>
-							<th className="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+							<th className="px-6 py-4 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
 								{t('actions')}
 							</th>
 						</tr>
 					</thead>
-					<tbody className="bg-white divide-y divide-gray-200">
+					<tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
 						{employees.map((employee, index) => (
-							<tr key={employee.uuid} className="hover:bg-gray-50 transition-colors duration-150">
+							<tr
+								key={employee.uuid}
+								className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150"
+							>
 								{/* Employee Info */}
 								<td className="px-6 py-4 whitespace-nowrap">
 									<div className="flex items-center">
@@ -106,10 +113,10 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 											{employee.lastName.charAt(0)}
 										</div>
 										<div className="ml-4">
-											<div className="text-sm font-medium text-gray-900">
+											<div className="text-sm font-medium text-gray-900 dark:text-gray-100">
 												{employee.name} {employee.lastName}
 											</div>
-											<div className="text-sm text-gray-500">
+											<div className="text-sm text-gray-600 dark:text-gray-400">
 												{t('employeeNumber', { number: index + 1 })}
 											</div>
 										</div>
@@ -119,8 +126,9 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 								{/* Contact Info */}
 								<td className="px-6 py-4 whitespace-nowrap">
 									<div className="space-y-1">
-										<div className="flex items-center text-sm text-gray-900">
-											<i className="i-material-symbols-mail w-4! h-4! text-gray-400 mr-2" />
+										<div className="flex items-center text-sm text-gray-900 dark:text-gray-100">
+											<i className="i-material-symbols-mail w-4! h-4! text-gray-500 dark:text-gray-400 mr-2" />
+
 											<a
 												href={`mailto:${employee.email}`}
 												className="hover:text-blue-600 transition-colors"
@@ -128,8 +136,9 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 												{employee.email}
 											</a>
 										</div>
-										<div className="flex items-center text-sm text-gray-500">
-											<i className="i-material-symbols-phone w-4! h-4! text-gray-400 mr-2" />
+										<div className="flex items-center text-sm text-gray-700 dark:text-gray-300">
+											<i className="i-material-symbols-phone w-4! h-4! text-gray-500 dark:text-gray-400 mr-2" />
+
 											<a
 												href={`tel:${employee.phone}`}
 												className="hover:text-blue-600 transition-colors"
@@ -145,8 +154,8 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 									<span
 										className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
 											employee.role.toLowerCase() === 'owner'
-												? 'bg-purple-100 text-purple-800'
-												: 'bg-blue-100 text-blue-800'
+												? 'bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300'
+												: 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300'
 										}`}
 									>
 										<i
@@ -180,13 +189,12 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 					</tbody>
 				</table>
 			</div>
-
 			{/* Mobile Cards */}
 			<div className="md:hidden space-y-4 p-4">
 				{employees.map((employee, index) => (
 					<div
 						key={employee.uuid}
-						className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm"
+						className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm"
 					>
 						{/* Employee Header */}
 						<div className="flex items-center justify-between mb-3">
@@ -196,10 +204,10 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 									{employee.lastName.charAt(0)}
 								</div>
 								<div className="ml-3">
-									<h3 className="text-sm font-medium text-gray-900">
+									<h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">
 										{employee.name} {employee.lastName}
 									</h3>
-									<p className="text-xs text-gray-500">
+									<p className="text-xs text-gray-600 dark:text-gray-400">
 										{t('employeeNumber', { number: index + 1 })}
 									</p>
 								</div>
@@ -207,8 +215,8 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 							<span
 								className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
 									employee.role.toLowerCase() === 'owner'
-										? 'bg-purple-100 text-purple-800'
-										: 'bg-blue-100 text-blue-800'
+										? 'bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300'
+										: 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300'
 								}`}
 							>
 								<i
@@ -224,8 +232,9 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 
 						{/* Contact Info */}
 						<div className="space-y-2 mb-4">
-							<div className="flex items-center text-sm text-gray-600">
-								<i className="i-material-symbols-mail w-4! h-4! text-gray-400 mr-2 flex-shrink-0" />
+							<div className="flex items-center text-sm text-gray-800 dark:text-gray-200">
+								<i className="i-material-symbols-mail w-4! h-4! text-gray-500 dark:text-gray-400 mr-2 flex-shrink-0" />
+
 								<a
 									href={`mailto:${employee.email}`}
 									className="hover:text-blue-600 transition-colors truncate"
@@ -233,8 +242,8 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 									{employee.email}
 								</a>
 							</div>
-							<div className="flex items-center text-sm text-gray-600">
-								<i className="i-material-symbols-phone w-4! h-4! text-gray-400 mr-2 flex-shrink-0" />
+							<div className="flex items-center text-sm text-gray-800 dark:text-gray-200">
+								<i className="i-material-symbols-phone w-4! h-4! text-gray-500 dark:text-gray-400 mr-2 flex-shrink-0" />
 								<a href={`tel:${employee.phone}`} className="hover:text-blue-600 transition-colors">
 									{employee.phone}
 								</a>
@@ -242,7 +251,7 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 						</div>
 
 						{/* Actions */}
-						<div className="flex items-center justify-end gap-2 pt-3 border-t border-gray-100">
+						<div className="flex items-center justify-end gap-2 pt-3 border-t border-gray-200 dark:border-gray-700">
 							<ActionButton
 								title={t('editEmployee')}
 								icon="i-material-symbols-edit-square-outline"

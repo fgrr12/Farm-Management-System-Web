@@ -74,7 +74,7 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 		<div className="w-full">
 			{/* Header with Title and Add Button */}
 			<div className="flex items-center justify-between gap-4 mb-6">
-				<h2 className="text-lg font-semibold text-gray-900">{t('title')}</h2>
+				<h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t('title')}</h2>
 				{haveUser && (
 					<ActionButton
 						title="Add Production Record"
@@ -85,43 +85,48 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 			</div>
 
 			{/* Modern Table Design */}
-			<div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+			<div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
 				<div className="overflow-x-auto">
-					<table className="min-w-full divide-y divide-gray-200" aria-label="Production records">
-						<thead className="bg-gray-50">
+					<table
+						className="min-w-full divide-y divide-gray-200 dark:divide-gray-700"
+						aria-label="Production records"
+					>
+						<thead className="bg-gray-50 dark:bg-gray-900">
 							<tr>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
 									{t('date')}
 								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
 									{t('quantity')}
 								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
 									{t('notes')}
 								</th>
 								{haveUser && (
-									<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+									<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
 										{t('actions')}
 									</th>
 								)}
 							</tr>
 						</thead>
-						<tbody className="bg-white divide-y divide-gray-200">
+						<tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
 							{productionRecords.map((productionRecord, index) => (
 								<tr
 									key={productionRecord.uuid}
-									className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
+									className={
+										index % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-700'
+									}
 								>
-									<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+									<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-100">
 										{dayjs(productionRecord.date).format('DD/MM/YYYY')}
 									</td>
-									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-100">
 										<div className="flex items-center gap-1">
 											<span className="font-semibold">{productionRecord.quantity}</span>
-											<span className="text-gray-500">{farm!.liquidUnit}</span>
+											<span className="text-gray-500 dark:text-gray-400">{farm!.liquidUnit}</span>
 										</div>
 									</td>
-									<td className="px-6 py-4 text-sm text-gray-900">
+									<td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-100">
 										<div className="max-w-xs truncate" title={productionRecord.notes}>
 											{productionRecord.notes}
 										</div>
@@ -146,9 +151,12 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 							))}
 							{productionRecords.length === 0 && (
 								<tr>
-									<td className="px-6 py-12 text-center text-gray-500" colSpan={haveUser ? 4 : 3}>
+									<td
+										className="px-6 py-12 text-center text-gray-500 dark:text-gray-400"
+										colSpan={haveUser ? 4 : 3}
+									>
 										<div className="flex flex-col items-center gap-2">
-											<i className="i-material-symbols-production-quantity-limits w-12 h-12 text-gray-300" />
+											<i className="i-material-symbols-production-quantity-limits w-12 h-12 text-gray-300 dark:text-gray-600" />
 											<span className="font-medium">{t('noProductionRecords')}</span>
 										</div>
 									</td>

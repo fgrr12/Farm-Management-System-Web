@@ -28,7 +28,7 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 
 		const cardClasses = useMemo(() => {
 			const baseClasses =
-				'relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden group'
+				'relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden group border border-gray-100 dark:border-gray-700'
 
 			const variantClasses = {
 				default: 'p-6',
@@ -204,7 +204,7 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 						<div
 							className={`w-16 h-16 rounded-full bg-gradient-to-br ${healthConfig.color} flex items-center justify-center shadow-lg dark:shadow-xl border-2 border-white dark:border-gray-600`}
 						>
-							<i className="i-healthicons-animal-cow w-8! h-8! !bg-white dark:bg-gray-100!" />
+							<i className="i-healthicons-animal-cow w-8! h-8! bg-white dark:bg-gray-100!" />
 						</div>
 					)}
 				</div>

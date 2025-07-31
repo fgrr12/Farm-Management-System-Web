@@ -25,20 +25,13 @@ export const useTheme = () => {
 
 			setResolvedTheme(newResolvedTheme)
 
-			// Update HTML class
-			root.classList.remove('light', 'dark')
-			root.classList.add(newResolvedTheme)
-
-			// Update data-theme for DaisyUI
 			root.setAttribute('data-theme', newResolvedTheme)
 
-			// Store preference
 			localStorage.setItem('theme', theme)
 		}
 
 		updateTheme()
 
-		// Listen for system theme changes
 		const handleChange = () => {
 			if (theme === 'system') {
 				updateTheme()

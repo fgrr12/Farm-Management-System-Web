@@ -54,7 +54,7 @@
 		"weight": "Ingresa el peso en kilogramos o libras..."
 	},
 	"purchaseDate": "Fecha de compra",
-	"selectBreed": "¿Qué raza específica es este animal?",
+	"selectBreed": "¿Qué raza es?",
 	"selectGender": "¿Es macho o hembra?",
 	"selectSpecies": "¿Qué tipo de animal es?",
 	"soldDate": "Fecha de venta",

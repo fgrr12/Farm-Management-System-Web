@@ -16,6 +16,7 @@ import { AnimalsService } from '@/services/animals'
 
 import { DatePicker } from '@/components/layout/DatePicker'
 import { Dropzone } from '@/components/layout/Dropzone'
+import { Button } from '@/components/ui/Button'
 import { Select } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
@@ -154,27 +155,27 @@ const AnimalForm = () => {
 	}, [setPageTitle, t, params.animalUuid])
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 overflow-y-auto">
+		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto transition-colors duration-300">
 			<div className="max-w-4xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
 				<a
 					href="#animal-form"
-					className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
+					className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white p-2 rounded z-50 transition-colors duration-200"
 				>
 					{t('accessibility.skipToForm')}
 				</a>
 
 				{/* Hero Header */}
-				<div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-6 sm:mb-8">
-					<div className="bg-gradient-to-r from-blue-600 to-green-600 px-4 sm:px-6 py-6 sm:py-8">
+				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl dark:shadow-black/30 overflow-hidden mb-6 sm:mb-8 border border-gray-100 dark:border-gray-700 transition-all duration-300">
+					<div className="bg-gradient-to-r from-blue-600 to-green-600 dark:from-blue-700 dark:to-green-700 px-4 sm:px-6 py-6 sm:py-8">
 						<div className="flex items-center gap-3 sm:gap-4">
-							<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
-								<i className="i-material-symbols-pets bg-white! w-6! h-6! sm:w-8 sm:h-8" />
+							<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 dark:bg-white/30 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg dark:shadow-black/20 backdrop-blur-sm">
+								<i className="i-material-symbols-pets bg-white! w-6! h-6! sm:w-8 sm:h-8 drop-shadow-sm" />
 							</div>
 							<div className="min-w-0">
-								<h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
+								<h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white drop-shadow-sm">
 									{params.animalUuid ? t('editAnimal') : t('addAnimal')}
 								</h1>
-								<p className="text-blue-100 text-sm sm:text-base mt-1">
+								<p className="text-blue-100 dark:text-blue-200 text-sm sm:text-base mt-1 drop-shadow-sm">
 									{params.animalUuid ? t('editSubtitle') : t('addSubtitle')}
 								</p>
 							</div>
@@ -183,7 +184,7 @@ const AnimalForm = () => {
 				</div>
 
 				{/* Form Container */}
-				<div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl dark:shadow-black/30 overflow-hidden border border-gray-100 dark:border-gray-700 transition-all duration-300">
 					<form
 						id="animal-form"
 						className="p-4 sm:p-6 lg:p-8"
@@ -201,15 +202,15 @@ const AnimalForm = () => {
 						<div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
 							{/* Photo Section */}
 							<div className="lg:col-span-1">
-								<div className="bg-gray-50 rounded-xl p-4 sm:p-6 h-full">
-									<h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-										<i className="i-material-symbols-photo-camera w-5! h-5! bg-blue-600!" />
+								<div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4 sm:p-6 h-full border border-gray-200 dark:border-gray-600 transition-all duration-300 hover:shadow-md dark:hover:shadow-lg dark:hover:shadow-black/20">
+									<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+										<i className="i-material-symbols-photo-camera w-5! h-5! bg-blue-600! dark:bg-blue-500!" />
 										{t('animalPhoto')}
 									</h3>
 									<fieldset className="border-0 p-0 m-0">
 										<legend className="sr-only">{t('accessibility.animalPhoto')}</legend>
 										<Dropzone
-											className="dropzone w-full h-64 sm:h-80"
+											className="dropzone w-full h-64 sm:h-80 transition-all duration-300"
 											cleanFile={false}
 											pictureUrl={pictureUrl}
 											onFile={handleFile}
@@ -220,7 +221,9 @@ const AnimalForm = () => {
 											{t('accessibility.photoHelp')}
 										</div>
 									</fieldset>
-									<p className="text-xs text-gray-500 mt-2 text-center">{t('photoHint')}</p>
+									<p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center transition-colors duration-300">
+										{t('photoHint')}
+									</p>
 								</div>
 							</div>
 
@@ -228,9 +231,9 @@ const AnimalForm = () => {
 							<div className="lg:col-span-2">
 								<div className="space-y-6">
 									{/* Basic Info Card */}
-									<div className="bg-gray-50 rounded-xl p-4 sm:p-6">
-										<h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-											<i className="i-material-symbols-info w-5! h-5! bg-blue-600!" />
+									<div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4 sm:p-6 border border-gray-200 dark:border-gray-600 transition-all duration-300 hover:shadow-md dark:hover:shadow-lg dark:hover:shadow-black/20">
+										<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+											<i className="i-material-symbols-info w-5! h-5! bg-blue-600! dark:bg-blue-500!" />
 											{t('basicInformation')}
 										</h3>
 										<fieldset className="border-0 p-0 m-0">
@@ -369,9 +372,9 @@ const AnimalForm = () => {
 									</div>
 
 									{/* Dates Card */}
-									<div className="bg-gray-50 rounded-xl p-4 sm:p-6">
-										<h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-											<i className="i-material-symbols-calendar-month w-5! h-5! bg-blue-600!" />
+									<div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4 sm:p-6 border border-gray-200 dark:border-gray-600 transition-all duration-300 hover:shadow-md dark:hover:shadow-lg dark:hover:shadow-black/20">
+										<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+											<i className="i-material-symbols-calendar-month w-5! h-5! bg-blue-600! dark:bg-blue-500!" />
 											{t('dateInformation')}
 										</h3>
 										<fieldset className="border-0 p-0 m-0">
@@ -485,9 +488,9 @@ const AnimalForm = () => {
 									</div>
 
 									{/* Origin Card */}
-									<div className="bg-gray-50 rounded-xl p-4 sm:p-6">
-										<h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-											<i className="i-material-symbols-location-on w-5! h-5! bg-blue-600!" />
+									<div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4 sm:p-6 border border-gray-200 dark:border-gray-600 transition-all duration-300 hover:shadow-md dark:hover:shadow-lg dark:hover:shadow-black/20">
+										<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+											<i className="i-material-symbols-location-on w-5! h-5! bg-blue-600! dark:bg-blue-500!" />
 											{t('additionalInfo')}
 										</h3>
 										<Textarea
@@ -508,27 +511,27 @@ const AnimalForm = () => {
 						</div>
 
 						{/* Submit Button */}
-						<div className="mt-8 pt-6 border-t border-gray-200">
-							<button
+						<div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-600">
+							<Button
 								type="submit"
+								className="btn btn-primary h-12 text-lg disabled:loading flex items-center justify-center gap-2 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl dark:shadow-blue-900/20 dark:hover:shadow-blue-800/30"
+								aria-describedby="add-animal-description"
 								disabled={isSubmitting}
-								className="btn btn-primary h-12 w-full text-lg disabled:loading flex items-center justify-center gap-2"
-								aria-describedby="submit-help"
 							>
 								{isSubmitting ? (
 									<>
-										<i className="i-material-symbols-hourglass-empty w-!5 h-5! animate-spin" />
+										<i className="i-material-symbols-hourglass-empty w-6! h-6! animate-spin" />
 										{t('common:loading')}
 									</>
 								) : (
 									<>
 										<i
-											className={`w-5! h-5! ${params.animalUuid ? 'i-material-symbols-edit' : 'i-material-symbols-add'}`}
+											className={`w-6! h-6! ${params.animalUuid ? 'i-material-symbols-edit' : 'i-material-symbols-add'}`}
 										/>
 										{params.animalUuid ? t('editButton') : t('addButton')}
 									</>
 								)}
-							</button>
+							</Button>
 							<div id="submit-help" className="sr-only">
 								{params.animalUuid
 									? t('accessibility.editSubmitHelp')
