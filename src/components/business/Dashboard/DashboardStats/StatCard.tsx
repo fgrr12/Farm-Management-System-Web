@@ -15,24 +15,24 @@ interface StatCardProps {
 
 const colorClasses = {
 	blue: {
-		bg: 'bg-blue-50',
-		icon: 'bg-blue-600!',
-		change: 'text-blue-600',
+		bg: 'bg-blue-50 dark:bg-blue-900/20',
+		icon: 'bg-blue-600! dark:bg-blue-500!',
+		change: 'text-blue-600 dark:text-blue-400',
 	},
 	green: {
-		bg: 'bg-green-50',
-		icon: 'bg-green-600!',
-		change: 'text-green-600',
+		bg: 'bg-green-50 dark:bg-green-900/20',
+		icon: 'bg-green-600! dark:bg-green-500!',
+		change: 'text-green-600 dark:text-green-400',
 	},
 	orange: {
-		bg: 'bg-orange-50',
-		icon: 'bg-orange-600!',
-		change: 'text-orange-600',
+		bg: 'bg-orange-50 dark:bg-orange-900/20',
+		icon: 'bg-orange-600! dark:bg-orange-500!',
+		change: 'text-orange-600 dark:text-orange-400',
 	},
 	purple: {
-		bg: 'bg-purple-50',
-		icon: 'bg-purple-600!',
-		change: 'text-purple-600',
+		bg: 'bg-purple-50 dark:bg-purple-900/20',
+		icon: 'bg-purple-600! dark:bg-purple-500!',
+		change: 'text-purple-600 dark:text-purple-400',
 	},
 }
 
@@ -132,18 +132,18 @@ export const StatCard = memo<StatCardProps>(
 
 		if (loading) {
 			return (
-				<div className="bg-white rounded-xl border border-gray-200 p-6 animate-pulse">
+				<div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 animate-pulse">
 					<div className="flex items-center justify-between">
 						<div className="flex-1">
-							<div className="h-4 bg-gray-200 rounded w-24 mb-2" />
-							<div className="h-8 bg-gray-200 rounded w-16 mb-2" />
+							<div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24 mb-2" />
+							<div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-16 mb-2" />
 							<div className="flex items-center mt-2">
-								<div className="h-4 bg-gray-200 rounded w-12" />
-								<div className="h-3 bg-gray-200 rounded w-20 ml-2" />
+								<div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-12" />
+								<div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-20 ml-2" />
 							</div>
 						</div>
 						<div className={`p-3 rounded-lg ${colors.bg}`}>
-							<div className="w-6 h-6 bg-gray-200 rounded" />
+							<div className="w-6 h-6 bg-gray-200 dark:bg-gray-700 rounded" />
 						</div>
 					</div>
 				</div>
@@ -153,7 +153,7 @@ export const StatCard = memo<StatCardProps>(
 		return (
 			<div
 				ref={cardRef}
-				className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 cursor-pointer"
+				className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg dark:hover:shadow-xl dark:hover:shadow-gray-900/25 transition-all duration-300 cursor-pointer"
 				role="button"
 				tabIndex={0}
 				onMouseEnter={handleMouseEnter}
@@ -165,14 +165,14 @@ export const StatCard = memo<StatCardProps>(
 			>
 				<div className="flex items-center justify-between">
 					<div className="flex-1">
-						<p className="text-sm font-medium text-gray-600 mb-1">{title}</p>
-						<p ref={valueRef} className="text-3xl font-bold text-gray-900 tabular-nums">
+						<p className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">{title}</p>
+						<p ref={valueRef} className="text-3xl font-bold text-gray-900 dark:text-white tabular-nums">
 							{loading ? '...' : displayValue}
 						</p>
 						{changeLoading ? (
 							<div className="flex items-center mt-2">
-								<div className="h-4 bg-gray-200 rounded w-12 animate-pulse" />
-								<div className="h-3 bg-gray-200 rounded w-20 ml-2 animate-pulse" />
+								<div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-12 animate-pulse" />
+								<div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-20 ml-2 animate-pulse" />
 							</div>
 						) : (
 							change !== undefined &&
@@ -180,18 +180,17 @@ export const StatCard = memo<StatCardProps>(
 								<div className="flex items-center mt-2">
 									<span
 										ref={changeRef}
-										className={`text-sm font-medium tabular-nums ${
-											displayChange > 0
-												? 'text-green-600'
-												: displayChange < 0
-													? 'text-red-600'
-													: 'text-gray-500'
-										}`}
+										className={`text-sm font-medium tabular-nums ${displayChange > 0
+											? 'text-green-600 dark:text-green-400'
+											: displayChange < 0
+												? 'text-red-600 dark:text-red-400'
+												: 'text-gray-500 dark:text-gray-400'
+											}`}
 									>
 										{displayChange > 0 && '+'}
 										{displayChange}%
 									</span>
-									<span className="text-xs text-gray-500 ml-1">{t('common.vsLastMonth')}</span>
+									<span className="text-xs text-gray-500 dark:text-gray-400 ml-1">{t('common.vsLastMonth')}</span>
 								</div>
 							)
 						)}

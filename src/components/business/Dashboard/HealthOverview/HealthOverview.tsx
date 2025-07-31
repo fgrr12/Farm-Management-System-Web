@@ -20,37 +20,41 @@ export const HealthOverview = memo(() => {
 			label: t('health.healthy'),
 			count: healthOverview.healthy,
 			color: 'bg-green-500',
-			textColor: 'text-green-700',
-			bgColor: 'bg-green-50',
-			hoverBg: 'hover:bg-green-100',
+			textColor: 'text-green-700 dark:text-green-400',
+			bgColor: 'bg-green-50 dark:bg-green-900/20',
+			hoverBg: 'hover:bg-green-100 dark:hover:bg-green-900/30',
 			icon: 'i-material-symbols-favorite',
+			iconColor: 'bg-green-600! dark:bg-green-500!',
 		},
 		{
 			label: t('health.sick'),
 			count: healthOverview.sick,
 			color: 'bg-red-500',
-			textColor: 'text-red-700',
-			bgColor: 'bg-red-50',
-			hoverBg: 'hover:bg-red-100',
+			textColor: 'text-red-700 dark:text-red-400',
+			bgColor: 'bg-red-50 dark:bg-red-900/20',
+			hoverBg: 'hover:bg-red-100 dark:hover:bg-red-900/30',
 			icon: 'i-material-symbols-sick',
+			iconColor: 'bg-red-600! dark:bg-red-500!',
 		},
 		{
 			label: t('health.treatment'),
 			count: healthOverview.inTreatment,
 			color: 'bg-yellow-500',
-			textColor: 'text-yellow-700',
-			bgColor: 'bg-yellow-50',
-			hoverBg: 'hover:bg-yellow-100',
+			textColor: 'text-yellow-700 dark:text-yellow-400',
+			bgColor: 'bg-yellow-50 dark:bg-yellow-900/20',
+			hoverBg: 'hover:bg-yellow-100 dark:hover:bg-yellow-900/30',
 			icon: 'i-material-symbols-medication',
+			iconColor: 'bg-yellow-600! dark:bg-yellow-500!',
 		},
 		{
 			label: t('health.checkupDue'),
 			count: healthOverview.checkupDue,
 			color: 'bg-blue-500',
-			textColor: 'text-blue-700',
-			bgColor: 'bg-blue-50',
-			hoverBg: 'hover:bg-blue-100',
+			textColor: 'text-blue-700 dark:text-blue-400',
+			bgColor: 'bg-blue-50 dark:bg-blue-900/20',
+			hoverBg: 'hover:bg-blue-100 dark:hover:bg-blue-900/30',
 			icon: 'i-material-symbols-schedule',
+			iconColor: 'bg-blue-600! dark:bg-blue-500!',
 		},
 	]
 
@@ -148,7 +152,7 @@ export const HealthOverview = memo(() => {
 	return (
 		<div
 			ref={containerRef}
-			className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-300"
+			className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg dark:hover:shadow-2xl transition-all duration-300"
 			role="region"
 			aria-label="Health Overview"
 			onMouseEnter={handleMouseEnter}
@@ -158,7 +162,7 @@ export const HealthOverview = memo(() => {
 				willChange: 'transform',
 			}}
 		>
-			<h3 className="text-lg font-semibold text-gray-900 mb-6">{t('health.title')}</h3>
+			<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">{t('health.title')}</h3>
 
 			<div className="space-y-3">
 				{healthItems.map((item, index) => {
@@ -180,7 +184,7 @@ export const HealthOverview = memo(() => {
 										/>
 									</div>
 									<i
-										className={`${item.icon} w-4! h-4! ${item.textColor.replace('text-', 'bg-').replace('700', '600')}! group-hover:scale-110 transition-transform`}
+										className={`${item.icon} w-4! h-4! ${item.iconColor} group-hover:scale-110 transition-transform`}
 									/>
 									<span
 										className={`font-medium ${item.textColor} group-hover:font-semibold transition-all`}
@@ -199,10 +203,10 @@ export const HealthOverview = memo(() => {
 				})}
 			</div>
 
-			<div className="mt-6 pt-4 border-t border-gray-100">
+			<div className="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700">
 				<div className="flex items-center justify-between">
-					<span className="text-sm text-gray-600 font-medium">{t('health.totalAnimals')}</span>
-					<span ref={totalRef} className="text-lg font-semibold text-gray-900 tabular-nums">
+					<span className="text-sm text-gray-600 dark:text-gray-400 font-medium">{t('health.totalAnimals')}</span>
+					<span ref={totalRef} className="text-lg font-semibold text-gray-900 dark:text-gray-100 tabular-nums">
 						{loading || loadingSecondary ? '...' : displayTotal}
 					</span>
 				</div>

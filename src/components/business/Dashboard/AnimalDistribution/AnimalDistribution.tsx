@@ -31,25 +31,25 @@ export const AnimalDistribution = memo(() => {
 
 	if (loading || loadingTertiary) {
 		return (
-			<div className="bg-white rounded-xl border border-gray-200 p-6">
+			<div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
 				<div className="animate-pulse">
-					<div className="h-6 bg-gray-200 rounded w-1/2 mb-4" />
-					<div className="h-48 bg-gray-200 rounded-full mx-auto w-48" />
+					<div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-4" />
+					<div className="h-48 bg-gray-200 dark:bg-gray-700 rounded-full mx-auto w-48" />
 				</div>
 			</div>
 		)
 	}
 
 	return (
-		<div className="bg-white rounded-xl border border-gray-200 p-6">
-			<h3 className="text-lg font-semibold text-gray-900 mb-6">{t('charts.animalDistribution')}</h3>
+		<div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+			<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">{t('charts.animalDistribution')}</h3>
 
 			<div className="flex flex-col items-center">
 				{/* Simple Donut Chart */}
 				<div className="relative w-48 h-48 mb-6">
 					<svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
 						<title>{t('charts.animalDistribution')}</title>
-						<circle cx="50" cy="50" r="40" fill="none" stroke="#f3f4f6" strokeWidth="8" />
+						<circle cx="50" cy="50" r="40" fill="none" stroke="#f3f4f6 dark:#374151" strokeWidth="8" className="stroke-gray-200 dark:stroke-gray-600" />
 						{chartData.map((item, index) => {
 							const circumference = 2 * Math.PI * 40
 							const strokeDasharray = `${(item.percentage / 100) * circumference} ${circumference}`
@@ -73,10 +73,10 @@ export const AnimalDistribution = memo(() => {
 					</svg>
 					<div className="absolute inset-0 flex items-center justify-center">
 						<div className="text-center">
-							<div className="text-2xl font-bold text-gray-900">
+							<div className="text-2xl font-bold text-gray-900 dark:text-gray-100">
 								{chartData.reduce((sum, item) => sum + item.count, 0)}
 							</div>
-							<div className="text-sm text-gray-600">{t('charts.totalAnimals')}</div>
+							<div className="text-sm text-gray-600 dark:text-gray-400">{t('charts.totalAnimals')}</div>
 						</div>
 					</div>
 				</div>
@@ -87,11 +87,11 @@ export const AnimalDistribution = memo(() => {
 						<div key={index} className="flex items-center justify-between">
 							<div className="flex items-center gap-2">
 								<div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
-								<span className="text-sm text-gray-700">{item.species}</span>
+								<span className="text-sm text-gray-700 dark:text-gray-300">{item.species}</span>
 							</div>
 							<div className="flex items-center gap-2">
-								<span className="text-sm font-medium text-gray-900">{item.count}</span>
-								<span className="text-xs text-gray-500">({item.percentage}%)</span>
+								<span className="text-sm font-medium text-gray-900 dark:text-gray-100">{item.count}</span>
+								<span className="text-xs text-gray-500 dark:text-gray-400">({item.percentage}%)</span>
 							</div>
 						</div>
 					))}

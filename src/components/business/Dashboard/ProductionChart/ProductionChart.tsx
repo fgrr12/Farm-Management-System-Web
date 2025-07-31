@@ -116,10 +116,10 @@ export const ProductionChart = memo(() => {
 
 	if (loadingTertiary || productionLoading) {
 		return (
-			<div className="bg-white rounded-xl border border-gray-200 p-6">
+			<div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
 				<div className="animate-pulse">
-					<div className="h-6 bg-gray-200 rounded w-1/3 mb-4" />
-					<div className="h-64 bg-gray-200 rounded" />
+					<div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mb-4" />
+					<div className="h-64 bg-gray-200 dark:bg-gray-700 rounded" />
 				</div>
 			</div>
 		)
@@ -128,7 +128,7 @@ export const ProductionChart = memo(() => {
 	return (
 		<div
 			ref={chartRef}
-			className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-300"
+			className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg dark:hover:shadow-2xl transition-all duration-300"
 			role="region"
 			aria-label="Production Chart"
 			onMouseEnter={handleMouseEnter}
@@ -139,16 +139,16 @@ export const ProductionChart = memo(() => {
 			}}
 		>
 			<div className="flex items-center justify-between mb-6">
-				<h3 className="text-lg font-semibold text-gray-900">{t('charts.productionTrend')}</h3>
+				<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{t('charts.productionTrend')}</h3>
 				<div className="flex items-center gap-4">
 					<div className="flex items-center gap-2">
 						<i className="i-material-symbols-water-drop w-6! h-6! bg-blue-500!" />
-						<span className="text-sm text-gray-600">{t('charts.production')}</span>
+						<span className="text-sm text-gray-600 dark:text-gray-400">{t('charts.production')}</span>
 					</div>
 					<select
 						value={selectedYear}
 						onChange={(e) => setSelectedYear(Number(e.target.value))}
-						className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent hover:border-blue-400 transition-colors"
+						className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent hover:border-blue-400 dark:hover:border-blue-500 transition-colors"
 					>
 						{yearOptions.map((year) => (
 							<option key={year} value={year}>
@@ -164,8 +164,8 @@ export const ProductionChart = memo(() => {
 					const refCallback = setBarRef(index)
 					return (
 						<div key={index} className="flex items-center gap-4 group">
-							<div className="w-16 text-sm text-gray-600 font-medium">{item.month}</div>
-							<div className="flex-1 bg-gray-100 rounded-full h-8 relative overflow-hidden group-hover:bg-gray-200 transition-colors">
+							<div className="w-16 text-sm text-gray-600 dark:text-gray-400 font-medium">{item.month}</div>
+							<div className="flex-1 bg-gray-100 dark:bg-gray-700 rounded-full h-8 relative overflow-hidden group-hover:bg-gray-200 dark:group-hover:bg-gray-600 transition-colors">
 								<div
 									ref={refCallback}
 									className="bg-gradient-to-r from-blue-500 to-blue-600 h-full rounded-full flex items-center justify-end pr-3 group-hover:from-blue-600 group-hover:to-blue-700 transition-colors"
@@ -174,7 +174,7 @@ export const ProductionChart = memo(() => {
 									<span className="text-white text-sm font-medium tabular-nums">{item.value}L</span>
 								</div>
 							</div>
-							<div className="w-16 text-sm text-gray-900 font-semibold text-right tabular-nums">
+							<div className="w-16 text-sm text-gray-900 dark:text-gray-100 font-semibold text-right tabular-nums">
 								{item.value}L
 							</div>
 						</div>
@@ -182,10 +182,10 @@ export const ProductionChart = memo(() => {
 				})}
 			</div>
 
-			<div className="mt-6 pt-4 border-t border-gray-100">
+			<div className="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700">
 				<div className="flex items-center justify-between text-sm">
-					<span className="text-gray-600">{t('charts.totalProduction')}</span>
-					<span ref={totalRef} className="font-semibold text-gray-900 tabular-nums">
+					<span className="text-gray-600 dark:text-gray-400">{t('charts.totalProduction')}</span>
+					<span ref={totalRef} className="font-semibold text-gray-900 dark:text-gray-100 tabular-nums">
 						0L
 					</span>
 				</div>
