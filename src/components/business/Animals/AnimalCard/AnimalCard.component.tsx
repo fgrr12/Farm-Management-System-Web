@@ -76,17 +76,17 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 		const genderConfig = useMemo(() => {
 			return gender.toLowerCase() === 'male'
 				? {
-						icon: 'i-tdesign-gender-male',
-						color: 'bg-blue-500!',
-						bgColor: 'bg-blue-100',
-						textColor: 'text-blue-800',
-					}
+					icon: 'i-tdesign-gender-male',
+					color: 'bg-blue-500!',
+					bgColor: 'bg-blue-100',
+					textColor: 'text-blue-800',
+				}
 				: {
-						icon: 'i-tdesign-gender-female',
-						color: 'bg-pink-500!',
-						bgColor: 'bg-pink-100',
-						textColor: 'text-pink-800',
-					}
+					icon: 'i-tdesign-gender-female',
+					color: 'bg-pink-500!',
+					bgColor: 'bg-pink-100',
+					textColor: 'text-pink-800',
+				}
 		}, [gender])
 
 		useGSAP(() => {
@@ -204,7 +204,7 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 						<div
 							className={`w-16 h-16 rounded-full bg-gradient-to-br ${healthConfig.color} flex items-center justify-center shadow-lg dark:shadow-xl border-2 border-white dark:border-gray-600`}
 						>
-							<i className="i-healthicons-animal-cow w-8! h-8! bg-white dark:bg-gray-100!" />
+							<i className="i-healthicons-animal-cow w-8! h-8! bg-white! dark:bg-gray-100!" />
 						</div>
 					)}
 				</div>
