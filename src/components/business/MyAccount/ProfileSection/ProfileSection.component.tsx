@@ -22,7 +22,7 @@ export const ProfileSection: FC<ProfileSectionProps> = ({
 	]
 
 	return (
-		<div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+		<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-xl dark:shadow-gray-900/25 overflow-hidden">
 			{/* Header */}
 			<div className="bg-gradient-to-r from-blue-600 to-green-600 px-4 sm:px-6 py-4">
 				<div className="flex items-center justify-between">
@@ -58,8 +58,8 @@ export const ProfileSection: FC<ProfileSectionProps> = ({
 				>
 					{/* Personal Information */}
 					<div className="space-y-4">
-						<h3 className="text-sm font-medium text-gray-900 flex items-center gap-2">
-							<i className="i-material-symbols-badge w-4! h-4! text-gray-600" />
+						<h3 className="text-sm font-medium text-gray-900 dark:text-white flex items-center gap-2">
+							<i className="i-material-symbols-badge w-4! h-4! text-gray-600 dark:text-gray-300" />
 							{t('personalInformation')}
 						</h3>
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -86,8 +86,8 @@ export const ProfileSection: FC<ProfileSectionProps> = ({
 
 					{/* Contact Information */}
 					<div className="space-y-4">
-						<h3 className="text-sm font-medium text-gray-900 flex items-center gap-2">
-							<i className="i-material-symbols-contact-mail w-4! h-4! text-gray-600" />
+						<h3 className="text-sm font-medium text-gray-900 dark:text-white flex items-center gap-2">
+							<i className="i-material-symbols-contact-mail w-4! h-4! text-gray-600 dark:text-gray-300" />
 							{t('contactInformation')}
 						</h3>
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -116,8 +116,8 @@ export const ProfileSection: FC<ProfileSectionProps> = ({
 
 					{/* Preferences */}
 					<div className="space-y-4">
-						<h3 className="text-sm font-medium text-gray-900 flex items-center gap-2">
-							<i className="i-material-symbols-settings w-4! h-4! text-gray-600" />
+						<h3 className="text-sm font-medium text-gray-900 dark:text-white flex items-center gap-2">
+							<i className="i-material-symbols-settings w-4! h-4! text-gray-600 dark:text-gray-300" />
 							{t('preferences')}
 						</h3>
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -141,7 +141,7 @@ export const ProfileSection: FC<ProfileSectionProps> = ({
 
 					{/* Submit Button */}
 					{isEditing && (
-						<div className="pt-4 border-t border-gray-200">
+						<div className="pt-4 border-t border-gray-200 dark:border-gray-700">
 							<Button
 								type="submit"
 								className="btn btn-primary w-full flex items-center justify-center gap-2"

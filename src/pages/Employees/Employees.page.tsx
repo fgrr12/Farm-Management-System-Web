@@ -9,6 +9,7 @@ import { useUserStore } from '@/store/useUserStore'
 import { EmployeesService } from '@/services/employees'
 
 import { EmployeesTable } from '@/components/business/Employees/EmployeesTable'
+import { Button } from '@/components/ui/Button'
 import { Search } from '@/components/ui/Search'
 
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
@@ -66,7 +67,7 @@ const Employees = () => {
 		setPageTitle(t('title'))
 	}, [setPageTitle, t])
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 overflow-y-auto">
+		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto">
 			<div className="max-w-7xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
 				<a
 					href="#employees-table"
@@ -76,7 +77,7 @@ const Employees = () => {
 				</a>
 
 				{/* Hero Header */}
-				<div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-6 sm:mb-8">
+				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl dark:shadow-gray-900/50 overflow-hidden mb-6 sm:mb-8">
 					<div className="bg-gradient-to-r from-blue-600 to-green-600 px-4 sm:px-6 py-6 sm:py-8">
 						<div className="flex items-center gap-3 sm:gap-4">
 							<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
@@ -92,28 +93,36 @@ const Employees = () => {
 					</div>
 
 					{/* Stats Cards */}
-					<div className="bg-white px-4 sm:px-6 py-4">
+					<div className="bg-white dark:bg-gray-800 px-4 sm:px-6 py-4">
 						<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-							<div className="bg-blue-50 rounded-lg p-4 text-center">
-								<div className="text-2xl font-bold text-blue-600">{employees.length}</div>
-								<div className="text-sm text-blue-600">{t('totalEmployees')}</div>
+							<div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 text-center">
+								<div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+									{employees.length}
+								</div>
+								<div className="text-sm text-blue-600 dark:text-blue-400">
+									{t('totalEmployees')}
+								</div>
 							</div>
-							<div className="bg-green-50 rounded-lg p-4 text-center">
-								<div className="text-2xl font-bold text-green-600">{filteredEmployees.length}</div>
-								<div className="text-sm text-green-600">{t('filteredResults')}</div>
+							<div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 text-center">
+								<div className="text-2xl font-bold text-green-600 dark:text-green-400">
+									{filteredEmployees.length}
+								</div>
+								<div className="text-sm text-green-600 dark:text-green-400">
+									{t('filteredResults')}
+								</div>
 							</div>
-							<div className="bg-purple-50 rounded-lg p-4 text-center">
-								<div className="text-2xl font-bold text-purple-600">
+							<div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 text-center">
+								<div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
 									{employees.filter((emp) => emp.role === 'owner').length}
 								</div>
-								<div className="text-sm text-purple-600">{t('owners')}</div>
+								<div className="text-sm text-purple-600 dark:text-purple-400">{t('owners')}</div>
 							</div>
 						</div>
 					</div>
 				</div>
 
 				{/* Search and Actions */}
-				<div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-6">
+				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-xl dark:shadow-gray-900/25 p-4 sm:p-6 mb-6">
 					<section aria-labelledby="search-heading" role="search">
 						<h2 id="search-heading" className="sr-only">
 							{t('accessibility.searchSection')}
@@ -132,15 +141,14 @@ const Employees = () => {
 								</div>
 							</div>
 
-							<button
-								type="button"
+							<Button
 								className="btn btn-primary h-12 px-6 flex items-center gap-2 whitespace-nowrap w-full sm:w-auto"
 								onClick={handleAddEmployee}
 								aria-describedby="add-employee-description"
 							>
 								<i className="i-material-symbols-person-add w-5! h-5!" />
 								{t('addEmployee')}
-							</button>
+							</Button>
 							<div id="add-employee-description" className="sr-only">
 								{t('accessibility.addEmployeeDescription')}
 							</div>
@@ -149,7 +157,7 @@ const Employees = () => {
 				</div>
 
 				{/* Employees Table */}
-				<div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-xl dark:shadow-gray-900/25 overflow-hidden">
 					<section aria-labelledby="employees-heading" aria-live="polite">
 						<h2 id="employees-heading" className="sr-only">
 							{t('accessibility.employeesList')} ({filteredEmployees.length}{' '}

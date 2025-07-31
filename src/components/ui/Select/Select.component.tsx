@@ -41,11 +41,11 @@ export const Select: FC<SelectProps> = memo(
 
 			const variantClasses = {
 				default:
-					'input bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 text-gray-900 dark:text-gray-100',
+					'input bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800/30 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400',
 				filled:
-					'bg-gray-100 dark:bg-gray-700 border-0 border-b-2 border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:bg-white dark:focus:bg-gray-800 rounded-t-lg rounded-b-none px-4 text-gray-900 dark:text-gray-100',
+					'bg-gray-100 dark:bg-gray-800 border-0 border-b-2 border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:bg-white dark:focus:bg-gray-900 rounded-t-lg rounded-b-none px-4 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400',
 				outlined:
-					'bg-transparent border-2 border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 text-gray-900 dark:text-gray-100',
+					'bg-transparent dark:bg-transparent border-2 border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800/30 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400',
 			}
 
 			const sizeClasses = {
@@ -55,13 +55,13 @@ export const Select: FC<SelectProps> = memo(
 			}
 
 			const stateClasses = error
-				? 'border-red-500 dark:border-red-400 focus:border-red-500 dark:focus:border-red-400 focus:ring-red-200 dark:focus:ring-red-800'
+				? 'border-red-500 dark:border-red-400 focus:border-red-500 dark:focus:border-red-400 focus:ring-red-200 dark:focus:ring-red-800/30'
 				: success
-					? 'border-green-500 dark:border-green-400 focus:border-green-500 dark:focus:border-green-400 focus:ring-green-200 dark:focus:ring-green-800'
+					? 'border-green-500 dark:border-green-400 focus:border-green-500 dark:focus:border-green-400 focus:ring-green-200 dark:focus:ring-green-800/30'
 					: ''
 
 			const iconPadding = leftIcon ? 'pl-12' : ''
-			const rightPadding = error ? 'pr-20' : 'pr-12' // More space when error icon is present
+			const rightPadding = error ? 'pr-20' : 'pr-12'
 
 			return `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${stateClasses} ${iconPadding} ${rightPadding} ${className || ''}`
 		}, [variant, size, error, success, leftIcon, className])
@@ -69,11 +69,11 @@ export const Select: FC<SelectProps> = memo(
 		const labelClasses = useMemo(() => {
 			const baseClasses = 'block text-sm font-medium mb-2 transition-colors duration-200'
 			const stateClasses = error
-				? 'text-red-700 dark:text-red-400'
+				? 'text-red-600 dark:text-red-400'
 				: success
-					? 'text-green-700 dark:text-green-400'
+					? 'text-green-600 dark:text-green-400'
 					: isFocused
-						? 'text-blue-700 dark:text-blue-400'
+						? 'text-blue-600 dark:text-blue-400'
 						: 'text-gray-700 dark:text-gray-300'
 
 			return `${baseClasses} ${stateClasses}`
@@ -136,7 +136,6 @@ export const Select: FC<SelectProps> = memo(
 		)
 
 		const renderOptions = () => {
-			// Group options if they have a group property
 			const groupedOptions = items.reduce((acc: any, item: any) => {
 				const group = item.group || 'default'
 				if (!acc[group]) acc[group] = []
@@ -148,9 +147,18 @@ export const Select: FC<SelectProps> = memo(
 
 			if (hasGroups && !groupedOptions.default) {
 				return Object.entries(groupedOptions).map(([groupName, groupItems]: [string, any]) => (
-					<optgroup key={groupName} label={groupName}>
+					<optgroup
+						key={groupName}
+						label={groupName}
+						className="text-gray-700 dark:text-gray-300 font-medium bg-gray-50 dark:bg-gray-800"
+					>
 						{(groupItems as any[]).map((item) => (
-							<option key={item[optionValue]} value={item[optionValue]} disabled={item.disabled}>
+							<option
+								key={item[optionValue]}
+								value={item[optionValue]}
+								disabled={item.disabled}
+								className="text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:text-gray-400 dark:disabled:text-gray-600"
+							>
 								{item[optionLabel] || item.name}
 							</option>
 						))}
@@ -159,7 +167,12 @@ export const Select: FC<SelectProps> = memo(
 			}
 
 			return items.map((item) => (
-				<option key={item[optionValue]} value={item[optionValue]} disabled={item.disabled}>
+				<option
+					key={item[optionValue]}
+					value={item[optionValue]}
+					disabled={item.disabled}
+					className="text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:text-gray-400 dark:disabled:text-gray-600"
+				>
 					{item[optionLabel] || item.name}
 				</option>
 			))
@@ -170,7 +183,7 @@ export const Select: FC<SelectProps> = memo(
 				{displayLabel && (
 					<label htmlFor={fieldId} className={labelClasses}>
 						{displayLabel}
-						{required && <span className="text-red-500 ml-1">*</span>}
+						{required && <span className="text-red-500 dark:text-red-400 ml-1">*</span>}
 					</label>
 				)}
 
@@ -179,7 +192,13 @@ export const Select: FC<SelectProps> = memo(
 					{leftIcon && (
 						<div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
 							<i
-								className={`${leftIcon} w-5! h-5! ${error ? 'bg-red-500! dark:bg-red-400!' : success ? 'bg-green-500! dark:bg-green-400!' : 'bg-gray-400! dark:bg-gray-500!'}`}
+								className={`${leftIcon} w-5! h-5! ${
+									error
+										? 'bg-red-500! dark:bg-red-400!'
+										: success
+											? 'bg-green-500! dark:bg-green-400!'
+											: 'bg-gray-400! dark:bg-gray-500! group-focus-within:bg-blue-500! dark:group-focus-within:bg-blue-400!'
+								}`}
 							/>
 						</div>
 					)}
@@ -206,7 +225,11 @@ export const Select: FC<SelectProps> = memo(
 						onBlur={handleBlur}
 						{...rest}
 					>
-						<option value="" disabled>
+						<option
+							value=""
+							disabled
+							className="text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-900"
+						>
 							{defaultLabel ?? t('select.default')}
 						</option>
 						{renderOptions()}
@@ -244,7 +267,7 @@ export const Select: FC<SelectProps> = memo(
 							</div>
 						) : (
 							<div className="flex items-center px-1 pointer-events-none text-gray-500 dark:text-gray-400">
-								<i className="i-material-symbols-keyboard-arrow-down w-8! h-8! bg-gray-400! dark:bg-gray-500!" />
+								<i className="i-material-symbols-keyboard-arrow-down w-8! h-8! bg-gray-400! dark:bg-gray-500! group-focus-within:bg-blue-500! dark:group-focus-within:bg-blue-400!" />
 							</div>
 						)}
 					</div>
@@ -253,12 +276,12 @@ export const Select: FC<SelectProps> = memo(
 					{error && (
 						<div
 							id={`${fieldId}-error`}
-							className="absolute top-full left-0 mt-2 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg shadow-lg z-20 max-w-xs opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200 ease-in-out"
+							className="absolute top-full left-0 mt-2 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-lg shadow-lg dark:shadow-red-900/20 z-20 max-w-xs opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200 ease-in-out backdrop-blur-sm"
 							role="tooltip"
 							aria-live="polite"
 						>
-							<div className="text-sm text-red-700 dark:text-red-400 font-medium">{error}</div>
-							<div className="absolute -top-2 left-4 w-4 h-4 bg-red-50 dark:bg-red-900/20 border-l border-t border-red-200 dark:border-red-800 transform rotate-45" />
+							<div className="text-sm text-red-700 dark:text-red-300 font-medium">{error}</div>
+							<div className="absolute -top-2 left-4 w-4 h-4 bg-red-50 dark:bg-red-900/30 border-l border-t border-red-200 dark:border-red-700 transform rotate-45" />
 						</div>
 					)}
 				</div>

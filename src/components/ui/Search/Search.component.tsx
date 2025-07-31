@@ -42,16 +42,16 @@ export const Search: FC<SearchProps> = memo(({ placeholder, ...rest }) => {
 	return (
 		<div ref={containerRef} className="w-full">
 			<fieldset className="fieldset w-full">
-				<legend className="fieldset-legend">{placeholder}</legend>
+				<legend className="fieldset-legend dark:text-gray-300">{placeholder}</legend>
 				<label
 					ref={labelRef}
-					className="input p-2 w-full h-12 rounded-md transition-all duration-200"
+					className="input p-2 w-full h-12 rounded-md transition-all duration-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus-within:border-blue-500 dark:focus-within:border-blue-400"
 				>
-					<i className="i-ph-magnifying-glass-duotone h-6! w-6! opacity-50" />
+					<i className="i-ph-magnifying-glass-duotone h-6! w-6! opacity-50 dark:opacity-60 text-gray-600 dark:text-gray-300" />
 					<input
 						id={fieldId}
 						type="search"
-						className="grow"
+						className="grow bg-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none"
 						placeholder={placeholder}
 						autoComplete="off"
 						aria-label={placeholder}
