@@ -82,6 +82,7 @@ export const useAnimalForm = (initialData?: Partial<Animal>) => {
 			weight: data.weight || 0,
 			status: data.status ?? true,
 			origin: data.origin || '',
+			healthStatus: data.healthStatus || 'unknown',
 			picture: data.picture || '',
 			birthDate: data.birthDate || '',
 			purchaseDate: data.purchaseDate || '',

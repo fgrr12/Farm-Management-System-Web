@@ -87,7 +87,7 @@ export const DatePicker: FC<DatePickerProps> = ({ legend, label, date, onDateCha
 				<div
 					role="button"
 					tabIndex={0}
-					className={`input input-border w-full h-12 pl-2 pr-2 flex items-center justify-between ${error ? 'border-red-500' : ''}`}
+					className={`input input-border w-full h-12 pl-2 pr-2 flex items-center justify-between bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 focus:border-blue-500 dark:focus:border-blue-400 ${error ? 'border-red-500 dark:border-red-400' : ''}`}
 					ref={refs.setReference}
 					onClick={() => setOpen((prev) => !prev)}
 					aria-label={
@@ -98,10 +98,15 @@ export const DatePicker: FC<DatePickerProps> = ({ legend, label, date, onDateCha
 					aria-describedby={error ? 'datepicker-error' : undefined}
 					{...getReferenceProps()}
 				>
-					{date?.isValid() ? dayjs(date).format('DD/MM/YYYY') : label}
+					<span className="text-gray-900 dark:text-gray-100">
+						{date?.isValid() ? dayjs(date).format('DD/MM/YYYY') : label}
+					</span>
 					<div className="flex items-center gap-1">
 						{error && (
-							<i className="i-lucide-alert-circle text-red-500 w-4 h-4 cursor-help" title={error} />
+							<i
+								className="i-lucide-alert-circle text-red-500 dark:text-red-400 w-4 h-4 cursor-help"
+								title={error}
+							/>
 						)}
 						{!date?.isValid() ? (
 							<ActionButton
@@ -122,12 +127,12 @@ export const DatePicker: FC<DatePickerProps> = ({ legend, label, date, onDateCha
 				{error && (
 					<div
 						id="datepicker-error"
-						className="absolute top-full left-0 mt-2 p-3 bg-red-50 border border-red-200 rounded-lg shadow-lg z-30 max-w-xs opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200 ease-in-out"
+						className="absolute top-full left-0 mt-2 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg shadow-lg dark:shadow-gray-900/20 z-30 max-w-xs opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200 ease-in-out"
 						role="tooltip"
 						aria-live="polite"
 					>
-						<div className="text-sm text-red-700 font-medium">{error}</div>
-						<div className="absolute -top-2 left-4 w-4 h-4 bg-red-50 border-l border-t border-red-200 transform rotate-45" />
+						<div className="text-sm text-red-700 dark:text-red-300 font-medium">{error}</div>
+						<div className="absolute -top-2 left-4 w-4 h-4 bg-red-50 dark:bg-red-900/20 border-l border-t border-red-200 dark:border-red-800 transform rotate-45" />
 					</div>
 				)}
 			</div>
@@ -135,13 +140,13 @@ export const DatePicker: FC<DatePickerProps> = ({ legend, label, date, onDateCha
 			{open && (
 				<FloatingFocusManager context={context} modal={false}>
 					<div
-						className="z-50"
+						className="z-50 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg dark:shadow-gray-900/20"
 						ref={refs.setFloating}
 						style={floatingStyles}
 						{...getFloatingProps()}
 					>
 						<DayPicker
-							className="react-day-picker p-2"
+							className="react-day-picker p-2 text-gray-900 dark:text-gray-100"
 							mode="single"
 							captionLayout="dropdown"
 							fromYear={2010}

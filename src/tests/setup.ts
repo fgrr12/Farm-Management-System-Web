@@ -102,6 +102,45 @@ Object.defineProperty(navigator, 'clipboard', {
 	},
 })
 
+// Mock GSAP
+const gsapMock = {
+	fromTo: vi.fn().mockReturnValue({}),
+	to: vi.fn().mockReturnValue({}),
+	set: vi.fn().mockReturnValue({}),
+	from: vi.fn().mockReturnValue({}),
+	timeline: vi.fn(() => ({
+		to: vi.fn().mockReturnThis(),
+		from: vi.fn().mockReturnThis(),
+		fromTo: vi.fn().mockReturnThis(),
+	})),
+	registerPlugin: vi.fn(),
+}
+
+vi.mock('gsap', () => ({
+	default: gsapMock,
+	gsap: gsapMock,
+}))
+
+// Mock GSAP SplitText
+vi.mock('gsap/SplitText', () => ({
+	SplitText: vi.fn().mockImplementation(() => ({
+		chars: [],
+		words: [],
+		lines: [],
+		revert: vi.fn(),
+	})),
+}))
+
+// Mock @gsap/react
+vi.mock('@gsap/react', () => ({
+	useGSAP: vi.fn((callback) => {
+		// Execute the callback immediately in tests
+		if (typeof callback === 'function') {
+			callback()
+		}
+	}),
+}))
+
 // Mock console methods to reduce noise in tests
 beforeAll(() => {
 	vi.spyOn(console, 'warn').mockImplementation(() => {})

@@ -16,7 +16,7 @@ const iconColor = (icon: string | undefined) => {
 		case 'i-material-symbols-light-health-metrics-rounded':
 			return 'bg-emerald-500!'
 		case 'i-icon-park-outline-milk':
-			return 'bg-gray-500!'
+			return 'bg-blue-500!'
 		case 'i-tabler-circles-relation':
 			return 'bg-yellow-500!'
 		case 'i-lucide-circle-x':
@@ -60,13 +60,15 @@ export const ActionButton: FC<ActionButtonProps> = memo(({ icon, title, ...rest 
 		<button
 			ref={btnRef}
 			type="button"
-			className="btn btn-circle bg-transparent border-none shadow-none"
+			className="btn btn-circle btn-ghost hover:bg-base-200"
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 			aria-label={title}
 			{...rest}
 		>
-			<i className={`${icon} h-8! w-8! ${rest.disabled ? 'bg-gray-400!' : iconColor(icon)}`} />
+			<i
+				className={`${icon} h-6! w-6! ${rest.disabled ? 'text-base-content/30!' : iconColor(icon)}`}
+			/>
 		</button>
 	)
 })

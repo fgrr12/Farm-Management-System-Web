@@ -9,19 +9,28 @@
 		"titleHelp": "Ingresa un nombre descriptivo para esta tarea"
 	},
 	"addTask": "Añadir",
+	"basicInformation": "Información Básica",
 	"description": "Descripción",
 	"name": "Nombre",
+	"placeholders": {
+		"priorityHint": "Considera urgencia médica, impacto en producción, y recursos disponibles",
+		"speciesHint": "Selecciona la especie principal afectada por esta tarea",
+		"taskDescription": "Detalla los pasos: 1) Preparar materiales, 2) Realizar procedimiento, 3) Documentar resultados...",
+		"taskName": "Ej: Vacunar ganado, Limpiar bebederos, Revisar cercas..."
+	},
 	"priorities": {
-		"default": "Selecciona una prioridad",
-		"high": "Alta",
-		"low": "Baja",
-		"medium": "Media"
+		"default": "¿Qué tan urgente es esta tarea?",
+		"high": "Alta - Requiere atención inmediata",
+		"low": "Baja - Puede esperar varios días",
+		"medium": "Media - Completar en 1-2 días"
 	},
 	"priority": "Prioridad",
-	"selectPriority": "Selecciona una prioridad",
-	"selectSpecies": "Selecciona una especie",
+	"selectPriority": "¿Qué tan urgente es esta tarea?",
+	"selectSpecies": "¿Para qué tipo de animal es esta tarea?",
 	"species": "Especie",
-	"title": "Añadir tarea",
+	"subtitle": "Crear una nueva tarea para tu granja",
+	"taskSettings": "Configuración de Tarea",
+	"title": "Añadir Tarea",
 	"toast": {
 		"errorAddingTask": "Se ha producido un error al añadir la tarea.",
 		"taskAdded": "Tarea añadida exitosamente"

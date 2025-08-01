@@ -22,39 +22,53 @@ export const RelatedAnimalCard: FC<CardProps> = ({ animal, ...props }) => {
 	}, [dragging, animal])
 	return (
 		<div
-			className={`card bg-base-100 w-full h-auto shadow-sm cursor-grab ${dragging && 'bg-warning'}`}
+			className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600 p-4 cursor-grab transition-all duration-200 hover:shadow-md dark:hover:shadow-lg ${
+				dragging
+					? 'shadow-lg scale-105 bg-blue-50 dark:bg-blue-900/20 border-blue-300 dark:border-blue-500'
+					: 'hover:border-gray-300 dark:hover:border-gray-500'
+			}`}
 			ref={ref}
 			role="button"
 			tabIndex={0}
 			aria-label={`Animal ${animal.animalId}, ${animal.breed}, ${animal.gender}`}
 			{...props}
 		>
-			<div className="card-body">
-				<div className="flex justify-between">
-					<div className="flex items-center">
-						<div className="avatar">
-							<div className="w-14 h-14 rounded-full bg-primary-100 shadow-lg">
-								<img
-									className="pointer-events-none"
-									src={animal.picture || '/assets/default-imgs/cow.svg'}
-									alt={`Animal ${animal.animalId}`}
-								/>
-							</div>
-						</div>
-						<div className="ml-4 user-select-none">
-							<h2 className="card-title">
-								<span className="text-3xl">#{animal.animalId}</span>
-							</h2>
-							<p className="card-subtitle font-medium text-gray-500 text-xl user-select-none">
-								{animal.breed}
-								{animal.gender.toLowerCase() === 'male' ? (
-									<i className="i-tdesign-gender-male bg-blue-500! w-8! h-8!" />
-								) : (
-									<i className="i-tdesign-gender-female bg-pink-500! w-8! h-8!" />
-								)}
-							</p>
-						</div>
+			<div className="flex items-center gap-4">
+				{/* Animal Avatar */}
+				<div className="relative flex-shrink-0">
+					<div className="w-18 h-18 rounded-full bg-gray-100 dark:bg-gray-700 overflow-hidden border-2 border-gray-200 dark:border-gray-600">
+						<img
+							className="w-full h-full object-cover pointer-events-none"
+							src={animal.picture || '/assets/default-imgs/cow.svg'}
+							alt={`Animal ${animal.animalId}`}
+						/>
 					</div>
+					{/* Gender indicator */}
+					<div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 flex items-center justify-center">
+						{animal.gender.toLowerCase() === 'male' ? (
+							<i className="i-material-symbols-male bg-blue-500! dark:bg-blue-400! w-6! h-6!" />
+						) : (
+							<i className="i-material-symbols-female bg-pink-500! dark:bg-pink-400! w-6! h-6!" />
+						)}
+					</div>
+				</div>
+
+				{/* Animal Info */}
+				<div className="flex-1 min-w-0">
+					<div className="flex items-center gap-2 mb-2">
+						<span className="font-bold text-gray-900 dark:text-gray-100 text-xl">
+							#{animal.animalId}
+						</span>
+						{dragging && (
+							<i className="i-material-symbols-drag-indicator w-5! h-5! text-gray-400 dark:text-gray-500" />
+						)}
+					</div>
+					<p className="text-gray-600 dark:text-gray-300 font-medium">{animal.breed}</p>
+				</div>
+
+				{/* Drag Handle */}
+				<div className="flex-shrink-0 opacity-40 hover:opacity-60 transition-opacity">
+					<i className="i-material-symbols-drag-handle w-5! h-5! text-gray-400 dark:text-gray-500" />
 				</div>
 			</div>
 		</div>

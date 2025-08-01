@@ -1,11 +1,20 @@
 {
+	"accessibility": {
+		"addHealthRecordForm": "Formulario para añadir nuevo registro de salud",
+		"editHealthRecordForm": "Formulario para editar registro de salud",
+		"skipToForm": "Saltar al formulario de registro de salud"
+	},
 	"addButton": "Añadir Registro",
 	"addHealthRecordTitle": "Añadir Registro de Salud",
+	"addSubtitle": "Crear un nuevo registro de salud para este animal",
+	"additionalNotes": "Notas Adicionales",
+	"basicInformation": "Información Básica",
 	"date": "Fecha",
 	"dosage": "Dosis",
 	"duration": "Duración",
 	"editButton": "Actualizar Registro",
 	"editHealthRecordTitle": "Editar Registro de Salud",
+	"editSubtitle": "Actualizar información del registro de salud",
 	"frequency": "Frecuencia",
 	"healthRecordType": {
 		"birth": "Nacimiento",
@@ -17,8 +26,33 @@
 		"surgery": "Cirugía",
 		"vaccination": "Vacunación"
 	},
+	"healthStatus": {
+		"critical": "Crítico",
+		"healthy": "Saludable",
+		"sick": "Enfermo",
+		"treatment": "En Tratamiento",
+		"unknown": "Desconocido"
+	},
+	"healthStatusHelp": "Deja vacío para calcular automáticamente basado en este registro de salud, o selecciona un estado específico para anular el cálculo.",
+	"healthStatusOverride": "Anular Estado de Salud",
+	"manualHealthStatus": "Estado de Salud Manual",
 	"medication": "Medicamento",
+	"medicationDetails": "Detalles de Medicación",
 	"notes": "Notas",
+	"physicalMeasurements": "Medidas Físicas",
+	"placeholders": {
+		"autoCalculate": "Auto-calcular del registro",
+		"dosage": "Ej: 10ml, 2 tabletas, 5mg/kg, 1 jeringa...",
+		"duration": "Ej: 5 días, 1 semana, Hasta que se resuelvan síntomas, Dosis única...",
+		"frequency": "Ej: Una vez al día, Cada 12 horas, Dos veces al día, Según necesidad...",
+		"medication": "Ej: Penicilina G, Ivermectina, Vitamina B12, Antibióticos...",
+		"notes": "Describe síntomas, tratamiento dado, comportamiento del animal, progreso de recuperación, seguimiento necesario...",
+		"reason": "Ej: Revisión rutinaria, Cojera, Pérdida de apetito, Fiebre...",
+		"reviewedBy": "Ej: Dr. García, Veterinario López, Encargado de granja...",
+		"selectType": "¿Qué tipo de evento de salud es este?",
+		"temperature": "Registra la temperatura corporal si se midió...",
+		"weight": "Ingresa la medida de peso actual..."
+	},
 	"reason": "Razón",
 	"reviewedBy": "Revisado Por",
 	"selectType": "Seleccionar Tipo",

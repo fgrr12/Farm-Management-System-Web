@@ -14,27 +14,39 @@ const getTasks = async ({
 	priority,
 	speciesUuid,
 }: GetTasksParams): Promise<Task[]> => {
-	let response = []
-	let queryBase = query(collection(firestore, collectionName), where('farmUuid', '==', farmUuid))
+	try {
+		let response = []
+		let queryBase = query(collection(firestore, collectionName), where('farmUuid', '==', farmUuid))
 
-	if (status !== '') queryBase = query(queryBase, where('status', '==', status))
-	if (priority !== '') queryBase = query(queryBase, where('priority', '==', priority))
-	if (speciesUuid !== '') queryBase = query(queryBase, where('speciesUuid', '==', speciesUuid))
+		if (status !== '') queryBase = query(queryBase, where('status', '==', status))
+		if (priority !== '') queryBase = query(queryBase, where('priority', '==', priority))
+		if (speciesUuid !== '') queryBase = query(queryBase, where('speciesUuid', '==', speciesUuid))
 
-	const tasksDocs = await getDocs(queryBase)
-	response = tasksDocs.docs.map((doc) => doc.data()) as Task[]
+		const tasksDocs = await getDocs(queryBase)
+		response = tasksDocs.docs.map((doc) => doc.data()) as Task[]
 
-	if (search) {
-		response = response.filter((task) => task.title.toLowerCase().includes(search.toLowerCase()))
+		if (search) {
+			response = response.filter((task) => task.title.toLowerCase().includes(search.toLowerCase()))
+		}
+
+		response = response.sort((a, b) => {
+			// First sort by priority (high > medium > low)
+			const priorityOrder = ['high', 'medium', 'low']
+			const priorityDiff = priorityOrder.indexOf(a.priority) - priorityOrder.indexOf(b.priority)
+
+			if (priorityDiff !== 0) {
+				return priorityDiff
+			}
+
+			// Then sort by creation date (newest first)
+			return dayjs(b.createdAt || b.updatedAt).diff(dayjs(a.createdAt || a.updatedAt))
+		})
+
+		return response
+	} catch (error) {
+		console.error('Error in getTasks:', error)
+		return []
 	}
-
-	response = response.sort(
-		(a, b) =>
-			dayjs(b.createdAt).diff(dayjs(a.createdAt)) &&
-			['high', 'medium', 'low'].indexOf(a.priority) - ['high', 'medium', 'low'].indexOf(b.priority)
-	)
-
-	return response
 }
 
 const setTask = async (task: Task, createdBy: string, farmUuid: string): Promise<void> => {

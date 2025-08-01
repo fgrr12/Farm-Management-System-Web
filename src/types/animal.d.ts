@@ -9,6 +9,7 @@ interface Animal {
 	weight: number
 	status: boolean
 	origin: string
+	healthStatus: HealthStatus
 	picture?: string
 	birthDate?: string
 	purchaseDate?: string | null

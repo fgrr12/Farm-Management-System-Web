@@ -1,6 +1,13 @@
 {
 	"actions": "Acciones",
+	"contact": "Información de Contacto",
+	"delete": "Eliminar",
+	"deleteEmployee": "Eliminar empleado",
+	"edit": "Editar",
+	"editEmployee": "Editar empleado",
 	"email": "Email",
+	"employee": "Empleado",
+	"employeeNumber": "Empleado #{{number}}",
 	"lastName": "Apellido",
 	"modal": {
 		"deleteEmployee": {
@@ -10,6 +17,8 @@
 	},
 	"name": "Nombre",
 	"noEmployees": "No hay empleados",
+	"noEmployeesMessage": "Comienza a construir tu equipo agregando tu primer empleado. Podrán ayudar a gestionar las operaciones de tu granja.",
+	"noEmployeesTitle": "Aún no hay miembros del equipo",
 	"phone": "Teléfono",
 	"role": "Rol",
 	"roleList": {

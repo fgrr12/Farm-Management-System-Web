@@ -30,6 +30,10 @@
 		"temperatureUnitHelp": "Selecciona la unidad para medir temperatura",
 		"weightUnitHelp": "Selecciona la unidad para medir peso"
 	},
+	"basicInformation": "Información Básica",
+	"billingInformation": "Información de Facturación",
+	"billingStatus": "Estado de Facturación",
+	"contactInformation": "Información de Contacto",
 	"myBillingCard": {
 		"active": "Tu tarjeta de facturación está activa",
 		"address": "Dirección",
@@ -96,7 +100,28 @@
 			"errorEditing": "Ocurrió un error al actualizar tu perfil"
 		}
 	},
+	"personalInformation": "Información Personal",
+	"placeholders": {
+		"billingAddress": "Ingresa dirección de facturación...",
+		"billingEmail": "Ingresa email para notificaciones de facturación...",
+		"billingId": "Ingresa ID de facturación o número fiscal...",
+		"billingName": "Ingresa nombre para propósitos de facturación...",
+		"billingPhone": "Ingresa teléfono para contacto de facturación...",
+		"email": "Ingresa tu dirección de email (ej: juan@ejemplo.com)...",
+		"farmAddress": "Ingresa la dirección de tu granja (ej: Calle Rural 123, Ciudad)...",
+		"farmName": "Ingresa el nombre de tu granja (ej: Granja Valle Verde)...",
+		"language": "Selecciona tu idioma preferido",
+		"lastName": "Ingresa tu apellido (ej: García, López)...",
+		"liquidUnit": "Selecciona unidad para medir líquidos",
+		"name": "Ingresa tu nombre (ej: Juan, María)...",
+		"phone": "Ingresa tu número de teléfono (ej: +34-600-123-456)...",
+		"temperatureUnit": "Selecciona unidad para medir temperatura",
+		"weightUnit": "Selecciona unidad para medir peso"
+	},
+	"preferences": "Preferencias",
+	"subtitle": "Gestiona tu información personal, configuración de granja y detalles de facturación",
 	"title": "Mi Cuenta",
+	"unitsConfiguration": "Configuración de Unidades",
 	"validation": {
 		"addressRequired": "La dirección es requerida",
 		"addressTooLong": "La dirección debe tener 200 caracteres o menos",

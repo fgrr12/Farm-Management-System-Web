@@ -13,6 +13,8 @@
 		}
 	},
 	"mother": "Madre",
+	"noChildrenMessage": "No se han agregado relaciones de hijos aún",
+	"noParentsMessage": "No se han agregado relaciones de padres aún",
 	"noRelatedAnimals": "No hay animales relacionados",
 	"relation": "Relación",
 	"son": "Hijo",

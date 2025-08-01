@@ -1,0 +1,73 @@
+{
+	"title": "Dashboard",
+	"subtitle": "Overview of your farm operations and key metrics",
+	"stats": {
+		"totalAnimals": "Total Animals",
+		"healthyAnimals": "Healthy Animals",
+		"pendingTasks": "Pending Tasks",
+		"monthlyProduction": "Monthly Production"
+	},
+	"charts": {
+		"productionTrend": "Production Trend",
+		"production": "Production",
+		"totalProduction": "Total Production",
+		"animalDistribution": "Animal Distribution",
+		"totalAnimals": "Total"
+	},
+	"health": {
+		"title": "Health Overview",
+		"healthy": "Healthy",
+		"sick": "Sick",
+		"treatment": "In Treatment",
+		"checkupDue": "Checkup Due",
+		"totalAnimals": "Total Animals"
+	},
+	"tasks": {
+		"title": "Tasks Overview",
+		"pending": "Pending",
+		"inProgress": "In Progress",
+		"completed": "Completed",
+		"tasks": "tasks",
+		"completionRate": "Completion Rate"
+	},
+	"activities": {
+		"title": "Recent Activities",
+		"noActivities": "No recent activities",
+		"types": {
+			"healthRecord": "Health Record",
+			"productionRecord": "Production Recorded",
+			"taskCreated": "Task Created",
+			"taskStarted": "Task Started",
+			"taskCompleted": "Task Completed",
+			"taskArchived": "Task Archived",
+			"taskUpdated": "Task Updated"
+		},
+		"healthTypes": {
+			"Checkup": "Checkup",
+			"Vaccination": "Vaccination",
+			"Medication": "Medication",
+			"Surgery": "Surgery",
+			"Pregnancy": "Pregnancy",
+			"Birth": "Birth",
+			"Deworming": "Deworming",
+			"Drying": "Drying"
+		},
+		"descriptions": {
+			"healthRecordUpdated": "Health record updated",
+			"productionRecorded": "milk",
+			"farmStaff": "Farm Staff"
+		}
+	},
+	"common": {
+		"vsLastMonth": "vs last month",
+		"timeAgo": {
+			"justNow": "just now",
+			"minutesAgo": "{{count}} minutes ago",
+			"hoursAgo": "{{count}} hours ago",
+			"daysAgo": "{{count}} days ago",
+			"weeksAgo": "{{count}} weeks ago",
+			"monthsAgo": "{{count}} months ago",
+			"yearsAgo": "{{count}} years ago"
+		}
+	}
+}

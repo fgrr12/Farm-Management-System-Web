@@ -9,6 +9,7 @@ import { useUserStore } from '@/store/useUserStore'
 import { EmployeesService } from '@/services/employees'
 
 import { EmployeesTable } from '@/components/business/Employees/EmployeesTable'
+import { Button } from '@/components/ui/Button'
 import { Search } from '@/components/ui/Search'
 
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
@@ -66,61 +67,112 @@ const Employees = () => {
 		setPageTitle(t('title'))
 	}, [setPageTitle, t])
 	return (
-		<div className="flex flex-col gap-4 sm:gap-5 p-3 sm:p-4 w-full h-full overflow-auto">
-			<a
-				href="#employees-table"
-				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
-			>
-				{t('accessibility.skipToEmployees')}
-			</a>
+		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto">
+			<div className="max-w-7xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
+				<a
+					href="#employees-table"
+					className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
+				>
+					{t('accessibility.skipToEmployees')}
+				</a>
 
-			<header>
-				<h1 className="sr-only">{t('title')}</h1>
-			</header>
-
-			<section aria-labelledby="search-heading" role="search">
-				<h2 id="search-heading" className="sr-only">
-					{t('accessibility.searchSection')}
-				</h2>
-				<div className="flex flex-col sm:grid sm:grid-cols-2 lg:grid-cols-3 items-center justify-center gap-3 sm:gap-4 w-full">
-					<Search
-						placeholder={t('search')}
-						value={search}
-						onChange={handleDebounceSearch}
-						aria-label={t('accessibility.searchEmployees')}
-						aria-describedby="search-help"
-					/>
-					<div id="search-help" className="sr-only">
-						{t('accessibility.searchHelp')}
+				{/* Hero Header */}
+				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl dark:shadow-gray-900/50 overflow-hidden mb-6 sm:mb-8">
+					<div className="bg-gradient-to-r from-blue-600 to-green-600 px-4 sm:px-6 py-6 sm:py-8">
+						<div className="flex items-center gap-3 sm:gap-4">
+							<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+								<i className="i-material-symbols-group bg-white! w-6! h-6! sm:w-8 sm:h-8" />
+							</div>
+							<div className="min-w-0 flex-1">
+								<h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
+									{t('title')}
+								</h1>
+								<p className="text-blue-100 text-sm sm:text-base mt-1">{t('subtitle')}</p>
+							</div>
+						</div>
 					</div>
 
-					<button
-						type="button"
-						className="btn btn-primary h-12 w-full text-lg sm:col-span-2 lg:col-start-3 lg:col-span-1"
-						onClick={handleAddEmployee}
-						aria-describedby="add-employee-description"
-					>
-						{t('addEmployee')}
-					</button>
-					<div id="add-employee-description" className="sr-only">
-						{t('accessibility.addEmployeeDescription')}
+					{/* Stats Cards */}
+					<div className="bg-white dark:bg-gray-800 px-4 sm:px-6 py-4">
+						<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+							<div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 text-center">
+								<div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+									{employees.length}
+								</div>
+								<div className="text-sm text-blue-600 dark:text-blue-400">
+									{t('totalEmployees')}
+								</div>
+							</div>
+							<div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 text-center">
+								<div className="text-2xl font-bold text-green-600 dark:text-green-400">
+									{filteredEmployees.length}
+								</div>
+								<div className="text-sm text-green-600 dark:text-green-400">
+									{t('filteredResults')}
+								</div>
+							</div>
+							<div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 text-center">
+								<div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+									{employees.filter((emp) => emp.role === 'owner').length}
+								</div>
+								<div className="text-sm text-purple-600 dark:text-purple-400">{t('owners')}</div>
+							</div>
+						</div>
 					</div>
 				</div>
-			</section>
 
-			<section aria-labelledby="employees-heading" aria-live="polite">
-				<h2 id="employees-heading" className="sr-only">
-					{t('accessibility.employeesList')} ({filteredEmployees.length}{' '}
-					{t('accessibility.results')})
-				</h2>
-				<div id="employees-table">
-					<EmployeesTable
-						employees={filteredEmployees}
-						removeEmployee={handleRemoveEmployee}
-						aria-label={t('accessibility.employeesTable', { count: filteredEmployees.length })}
-					/>
+				{/* Search and Actions */}
+				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-xl dark:shadow-gray-900/25 p-4 sm:p-6 mb-6">
+					<section aria-labelledby="search-heading" role="search">
+						<h2 id="search-heading" className="sr-only">
+							{t('accessibility.searchSection')}
+						</h2>
+						<div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+							<div className="flex-1 w-full sm:max-w-md">
+								<Search
+									placeholder={t('search')}
+									value={search}
+									onChange={handleDebounceSearch}
+									aria-label={t('accessibility.searchEmployees')}
+									aria-describedby="search-help"
+								/>
+								<div id="search-help" className="sr-only">
+									{t('accessibility.searchHelp')}
+								</div>
+							</div>
+
+							<Button
+								className="btn btn-primary h-12 px-6 flex items-center gap-2 whitespace-nowrap w-full sm:w-auto"
+								onClick={handleAddEmployee}
+								aria-describedby="add-employee-description"
+							>
+								<i className="i-material-symbols-person-add w-5! h-5!" />
+								{t('addEmployee')}
+							</Button>
+							<div id="add-employee-description" className="sr-only">
+								{t('accessibility.addEmployeeDescription')}
+							</div>
+						</div>
+					</section>
 				</div>
-			</section>
+
+				{/* Employees Table */}
+				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-xl dark:shadow-gray-900/25 overflow-hidden">
+					<section aria-labelledby="employees-heading" aria-live="polite">
+						<h2 id="employees-heading" className="sr-only">
+							{t('accessibility.employeesList')} ({filteredEmployees.length}{' '}
+							{t('accessibility.results')})
+						</h2>
+						<div id="employees-table">
+							<EmployeesTable
+								employees={filteredEmployees}
+								removeEmployee={handleRemoveEmployee}
+								aria-label={t('accessibility.employeesTable', { count: filteredEmployees.length })}
+							/>
+						</div>
+					</section>
+				</div>
+			</div>
 		</div>
 	)
 }

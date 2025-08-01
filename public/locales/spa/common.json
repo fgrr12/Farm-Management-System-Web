@@ -1,8 +1,16 @@
 {
 	"header": {
+		"back": "Atrás",
 		"return": "Volver"
 	},
 	"loading": "Cargando",
+	"modal": {
+		"accept": "Aceptar",
+		"cancel": "Cancelar",
+		"close": "Cerrar",
+		"confirm": "Confirmar",
+		"delete": "Eliminar"
+	},
 	"offline": {
 		"noConnection": "Sin conexión a internet",
 		"pendingOperations": "{{count}} operación pendiente",
@@ -10,35 +18,47 @@
 	},
 	"pwa": {
 		"install": {
-			"title": "Instalar App Cattle",
-			"message": "Instala la aplicación para acceso rápido y funcionalidad sin conexión.",
+			"dismiss": "Ahora no",
 			"install": "Instalar",
 			"installing": "Instalando...",
+			"message": "Instala la aplicación para acceso rápido y funcionalidad sin conexión.",
 			"share": "Compartir",
-			"dismiss": "Ahora no"
-		},
-		"updateAvailable": {
-			"title": "Actualización Disponible",
-			"message": "Una nueva versión de la aplicación está disponible. Actualiza ahora para obtener las últimas funciones.",
-			"update": "Actualizar",
-			"later": "Más tarde"
+			"title": "Instalar App Cattle"
 		},
 		"offlineReady": {
-			"title": "Listo para Uso Sin Conexión",
-			"message": "La aplicación ahora está en caché y lista para funcionar sin conexión."
+			"message": "La aplicación ahora está en caché y lista para funcionar sin conexión.",
+			"title": "Listo para Uso Sin Conexión"
+		},
+		"updateAvailable": {
+			"later": "Más tarde",
+			"message": "Una nueva versión de la aplicación está disponible. Actualiza ahora para obtener las últimas funciones.",
+			"title": "Actualización Disponible",
+			"update": "Actualizar"
 		}
 	},
 	"select": {
 		"default": "Selecciona una opción"
 	},
 	"sidebar": {
+		"administration": "Administración",
 		"animals": "Animales",
 		"businessCard": "Tarjeta de Negocio",
+		"dashboard": "Panel de Control",
 		"employees": "Empleados",
+		"farmManagement": "Gestión Ganadera",
 		"logout": "Cerrar Sesión",
+		"mainMenu": "Menú Principal",
 		"myAccount": "Mi Cuenta",
 		"mySpecies": "Mis Especies",
+		"settings": "Configuración",
 		"tasks": "Tareas",
 		"theme": "Tema"
+	},
+	"theme": {
+		"clickToChange": "Haz clic para cambiar tema",
+		"current": "Tema actual",
+		"dark": "Oscuro",
+		"light": "Claro",
+		"system": "Sistema"
 	}
 }

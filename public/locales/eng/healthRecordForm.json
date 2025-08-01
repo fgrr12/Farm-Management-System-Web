@@ -1,11 +1,20 @@
 {
+	"accessibility": {
+		"addHealthRecordForm": "Add new health record form",
+		"editHealthRecordForm": "Edit health record form",
+		"skipToForm": "Skip to health record form"
+	},
 	"addButton": "Add Health Record",
 	"addHealthRecordTitle": "Add Health Record",
+	"addSubtitle": "Create a new health record for this animal",
+	"additionalNotes": "Additional Notes",
+	"basicInformation": "Basic Information",
 	"date": "Date",
 	"dosage": "Dosage",
 	"duration": "Duration",
 	"editButton": "Update Health Record",
 	"editHealthRecordTitle": "Edit Health Record",
+	"editSubtitle": "Update health record information",
 	"frequency": "Frequency",
 	"healthRecordType": {
 		"birth": "Birth",
@@ -17,8 +26,33 @@
 		"surgery": "Surgery",
 		"vaccination": "Vaccination"
 	},
+	"healthStatus": {
+		"critical": "Critical",
+		"healthy": "Healthy",
+		"sick": "Sick",
+		"treatment": "Under Treatment",
+		"unknown": "Unknown"
+	},
+	"healthStatusHelp": "Leave empty to automatically calculate based on this health record, or select a specific status to override the calculation.",
+	"healthStatusOverride": "Health Status Override",
+	"manualHealthStatus": "Manual Health Status",
 	"medication": "Medication",
+	"medicationDetails": "Medication Details",
 	"notes": "Notes",
+	"physicalMeasurements": "Physical Measurements",
+	"placeholders": {
+		"autoCalculate": "Auto-calculate from record",
+		"dosage": "E.g: 10ml, 2 tablets, 5mg/kg, 1 syringe...",
+		"duration": "E.g: 5 days, 1 week, Until symptoms resolve, Single dose...",
+		"frequency": "E.g: Once daily, Every 12 hours, Twice a day, As needed...",
+		"medication": "E.g: Penicillin G, Ivermectin, Vitamin B12, Antibiotics...",
+		"notes": "Describe symptoms, treatment given, animal behavior, recovery progress, follow-up needed...",
+		"reason": "E.g: Routine checkup, Limping, Loss of appetite, Fever...",
+		"reviewedBy": "E.g: Dr. Smith, Veterinarian Johnson, Farm Manager...",
+		"selectType": "What type of health event is this?",
+		"temperature": "Record body temperature if measured...",
+		"weight": "Enter current weight measurement..."
+	},
 	"reason": "Reason",
 	"reviewedBy": "Reviewed By",
 	"selectType": "Select Type",

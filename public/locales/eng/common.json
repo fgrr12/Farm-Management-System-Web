@@ -1,8 +1,16 @@
 {
 	"header": {
+		"back": "Back",
 		"return": "Return"
 	},
 	"loading": "Loading",
+	"modal": {
+		"accept": "Accept",
+		"cancel": "Cancel",
+		"close": "Close",
+		"confirm": "Confirm",
+		"delete": "Delete"
+	},
 	"offline": {
 		"noConnection": "No internet connection",
 		"pendingOperations": "{{count}} pending operation",
@@ -10,35 +18,47 @@
 	},
 	"pwa": {
 		"install": {
-			"title": "Install Cattle App",
-			"message": "Install the app for quick access and offline functionality.",
+			"dismiss": "Not now",
 			"install": "Install",
 			"installing": "Installing...",
+			"message": "Install the app for quick access and offline functionality.",
 			"share": "Share",
-			"dismiss": "Not now"
-		},
-		"updateAvailable": {
-			"title": "Update Available",
-			"message": "A new version of the app is available. Update now to get the latest features.",
-			"update": "Update",
-			"later": "Later"
+			"title": "Install Cattle App"
 		},
 		"offlineReady": {
-			"title": "Ready for Offline Use",
-			"message": "The app is now cached and ready to work offline."
+			"message": "The app is now cached and ready to work offline.",
+			"title": "Ready for Offline Use"
+		},
+		"updateAvailable": {
+			"later": "Later",
+			"message": "A new version of the app is available. Update now to get the latest features.",
+			"title": "Update Available",
+			"update": "Update"
 		}
 	},
 	"select": {
 		"default": "Select an option"
 	},
 	"sidebar": {
+		"administration": "Administration",
 		"animals": "Animals",
 		"businessCard": "Business Card",
+		"dashboard": "Dashboard",
 		"employees": "Employees",
+		"farmManagement": "Farm Management",
 		"logout": "Logout",
+		"mainMenu": "Main Menu",
 		"myAccount": "My Account",
 		"mySpecies": "My Species",
+		"settings": "Settings",
 		"tasks": "Tasks",
 		"theme": "Theme"
+	},
+	"theme": {
+		"clickToChange": "Click to change theme",
+		"current": "Current theme",
+		"dark": "Dark",
+		"light": "Light",
+		"system": "System"
 	}
 }

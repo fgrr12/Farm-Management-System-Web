@@ -13,7 +13,10 @@
 	"google": "Iniciar sesión con Google",
 	"login": "Iniciar sesión",
 	"or": "O",
+	"orContinueWith": "o continúa con",
 	"password": "Contraseña",
+	"rememberMe": "Recordarme",
+	"subtitle": "Gestiona tu ganado de manera inteligente",
 	"title": "Iniciar sesión",
 	"toast": {
 		"errorLoggingIn": "Se ha producido un error al iniciar sesión"

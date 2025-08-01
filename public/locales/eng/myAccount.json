@@ -30,6 +30,10 @@
 		"temperatureUnitHelp": "Select the unit for measuring temperature",
 		"weightUnitHelp": "Select the unit for measuring weight"
 	},
+	"basicInformation": "Basic Information",
+	"billingInformation": "Billing Information",
+	"billingStatus": "Billing Status",
+	"contactInformation": "Contact Information",
 	"myBillingCard": {
 		"active": "Your billing card is active",
 		"address": "Address",
@@ -96,7 +100,28 @@
 			"errorEditing": "There was an error updating your profile"
 		}
 	},
+	"personalInformation": "Personal Information",
+	"placeholders": {
+		"billingAddress": "Enter billing address...",
+		"billingEmail": "Enter email for billing notifications...",
+		"billingId": "Enter billing ID or tax number...",
+		"billingName": "Enter name for billing purposes...",
+		"billingPhone": "Enter phone for billing contact...",
+		"email": "Enter your email address (e.g., john@example.com)...",
+		"farmAddress": "Enter your farm address (e.g., 123 Farm Road, City, State)...",
+		"farmName": "Enter your farm name (e.g., Green Valley Farm)...",
+		"language": "Select your preferred language",
+		"lastName": "Enter your last name (e.g., Smith, García)...",
+		"liquidUnit": "Select unit for measuring liquids",
+		"name": "Enter your first name (e.g., John, María)...",
+		"phone": "Enter your phone number (e.g., +1-555-0123)...",
+		"temperatureUnit": "Select unit for measuring temperature",
+		"weightUnit": "Select unit for measuring weight"
+	},
+	"preferences": "Preferences",
+	"subtitle": "Manage your personal information, farm settings, and billing details",
 	"title": "My Account",
+	"unitsConfiguration": "Units Configuration",
 	"validation": {
 		"addressRequired": "Address is required",
 		"addressTooLong": "Address must be 200 characters or less",

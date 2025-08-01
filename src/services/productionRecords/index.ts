@@ -9,7 +9,10 @@ const collectionName = 'productionRecords'
 
 // Gets
 
-const getProductionRecords = async (animalUuid: string): Promise<ProductionRecord[]> => {
+const getProductionRecords = async (
+	animalUuid: string,
+	limit?: number
+): Promise<ProductionRecord[]> => {
 	const productionRecords = await getDocs(
 		query(
 			collection(firestore, collectionName),
@@ -17,7 +20,18 @@ const getProductionRecords = async (animalUuid: string): Promise<ProductionRecor
 			where('status', '==', true)
 		)
 	)
-	const response = productionRecords.docs.map((doc) => ({ ...doc.data(), uuid: doc.id }))
+	let response = productionRecords.docs.map((doc) => ({
+		...doc.data(),
+		uuid: doc.id,
+	})) as ProductionRecord[]
+
+	// Sort by date descending
+	response = response.sort((a, b) => dayjs(b.date).diff(dayjs(a.date)))
+
+	// Apply limit if specified (for performance optimization)
+	if (limit && limit > 0) {
+		response = response.slice(0, limit)
+	}
 
 	return response as ProductionRecord[]
 }

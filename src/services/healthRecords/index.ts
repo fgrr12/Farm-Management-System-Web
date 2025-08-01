@@ -12,7 +12,7 @@ const collectionName = 'healthRecords'
 
 // Gets
 
-const getHealthRecords = async (animalUuid: string): Promise<HealthRecord[]> => {
+const getHealthRecords = async (animalUuid: string, limit?: number): Promise<HealthRecord[]> => {
 	const healthRecords = await getDocs(
 		query(
 			collection(firestore, collectionName),
@@ -20,11 +20,16 @@ const getHealthRecords = async (animalUuid: string): Promise<HealthRecord[]> => 
 			where('status', '==', true)
 		)
 	)
-	const response = healthRecords.docs
+	let response = healthRecords.docs
 		.map((doc) => ({ ...doc.data() }))
 		.sort((a, b) => {
 			return dayjs(b.date).diff(dayjs(a.date))
 		})
+
+	// Apply limit if specified (for performance optimization)
+	if (limit && limit > 0) {
+		response = response.slice(0, limit)
+	}
 
 	return response as HealthRecord[]
 }

@@ -29,7 +29,10 @@ import { ToastManager } from '@/components/layout/ToastManager'
 import { PWAInstallPrompt } from '@/components/pwa/PWAInstallPrompt.component'
 import { PWAUpdatePrompt } from '@/components/pwa/PWAUpdatePrompt.component'
 
-// import { VoiceRecorder } from './components/layout/VoiceRecorder/VoiceRecorder'
+import { useTheme } from '@/hooks/system/useTheme'
+
+import { VoiceRecorder } from './components/layout/VoiceRecorder/VoiceRecorder'
+import { isDevelopment } from './config/environment'
 import { usePreloadRoutes } from './hooks/ui/usePreloadRoutes'
 
 gsap.registerPlugin(SplitText, useGSAP)
@@ -71,6 +74,7 @@ const Tasks = lazy(() =>
 		return module
 	})
 )
+const Dashboard = lazy(() => import('@/pages/Dashboard/Dashboard.page'))
 
 export const App = () => {
 	const { user, setUser } = useUserStore()
@@ -80,6 +84,9 @@ export const App = () => {
 	const location = useLocation()
 	const [authLoading, setAuthLoading] = useState(true)
 	const browserLanguage = navigator.language === 'en' ? 'eng' : 'spa'
+
+	// Initialize theme system
+	useTheme()
 
 	usePreloadRoutes()
 
@@ -130,7 +137,7 @@ export const App = () => {
 						}
 					>
 						<Routes>
-							<Route path="/" element={<Navigate to={AppRoutes.ANIMALS} />} key="home" />
+							<Route path="/" element={<Navigate to={AppRoutes.DASHBOARD} />} key="home" />
 
 							<Route path={AppRoutes.LOGIN} element={<LoginForm />} />
 							<Route
@@ -138,6 +145,15 @@ export const App = () => {
 								element={
 									<PrivateRoute>
 										<Animals />
+									</PrivateRoute>
+								}
+							/>
+
+							<Route
+								path={AppRoutes.DASHBOARD}
+								element={
+									<PrivateRoute>
+										<Dashboard />
 									</PrivateRoute>
 								}
 							/>
@@ -296,7 +312,7 @@ export const App = () => {
 						onCancel={modalData.onCancel}
 					/>
 					<Loading open={appLoading || authLoading} />
-					{/* {user && <VoiceRecorder />} */}
+					{user && isDevelopment && <VoiceRecorder />}
 					<ToastManager />
 					<OfflineIndicator />
 					<PWAUpdatePrompt />

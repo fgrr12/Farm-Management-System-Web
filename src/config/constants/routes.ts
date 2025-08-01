@@ -29,4 +29,7 @@ export enum AppRoutes {
 
 	// Billing Card
 	BILLING_CARD = '/billing-card',
+
+	// Dashboard
+	DASHBOARD = '/dashboard',
 }

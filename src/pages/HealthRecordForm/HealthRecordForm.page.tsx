@@ -9,6 +9,8 @@ import { AppRoutes } from '@/config/constants/routes'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
+import { updateAnimalHealthStatus } from '@/utils/healthStatusUpdater'
+
 import { HealthRecordsService } from '@/services/healthRecords'
 
 import { DatePicker } from '@/components/layout/DatePicker'
@@ -70,15 +72,33 @@ const HealthRecordForm = () => {
 				const healthRecordUuid = params.healthRecordUuid
 				healthRecordData.uuid = healthRecordUuid ?? crypto.randomUUID()
 
+				let newHealthRecord: HealthRecord
+
 				if (healthRecordUuid) {
 					await HealthRecordsService.updateHealthRecord(healthRecordData, user.uuid)
+					newHealthRecord = healthRecordData
 					showToast(t('toast.edited'), 'success')
-					navigate(AppRoutes.ANIMAL.replace(':animalUuid', healthRecordData.animalUuid))
 				} else {
 					await HealthRecordsService.setHealthRecord(healthRecordData, user.uuid)
+					newHealthRecord = healthRecordData
 					showToast(t('toast.added'), 'success')
-					navigate(AppRoutes.ANIMAL.replace(':animalUuid', healthRecordData.animalUuid))
 				}
+
+				// Update animal health status automatically
+				try {
+					const newHealthStatus = await updateAnimalHealthStatus(
+						healthRecordData.animalUuid,
+						newHealthRecord,
+						data.manualHealthStatus // If user set it manually
+					)
+
+					showToast(`${t('toast.added')} - Animal status: ${newHealthStatus}`, 'success')
+				} catch (error) {
+					console.error('Failed to update animal health status:', error)
+					// Don't fail the whole operation if health status update fails
+				}
+
+				navigate(AppRoutes.ANIMAL.replace(':animalUuid', healthRecordData.animalUuid))
 			}, t('toast.errorAddingHealthRecord'))
 		},
 		[
@@ -117,121 +137,265 @@ const HealthRecordForm = () => {
 	}, [params.healthRecordUuid, setPageTitle, t])
 
 	return (
-		<div className="flex flex-col justify-center items-center w-full overflow-auto p-3 sm:p-5">
-			<form
-				className="flex flex-col md:grid md:grid-cols-2 items-center gap-3 sm:gap-4 max-w-[600px] w-full"
-				onSubmit={handleSubmit(onSubmit)}
-				autoComplete="off"
-				noValidate
-			>
-				<TextField
-					{...register('reason')}
-					type="text"
-					placeholder={t('reason')}
-					label={t('reason')}
-					required
-					error={errors.reason ? getErrorMessage(errors.reason.message || '') : undefined}
-				/>
-				<Controller
-					name="type"
-					control={control}
-					render={({ field }) => (
-						<Select
-							{...field}
-							legend={t('selectType')}
-							defaultLabel={t('selectType')}
-							items={healthRecordTypes}
-							required
-							error={errors.type ? getErrorMessage(errors.type.message || '') : undefined}
-						/>
-					)}
-				/>
-				<TextField
-					{...register('reviewedBy')}
-					type="text"
-					placeholder={t('reviewedBy')}
-					label={t('reviewedBy')}
-					required
-					error={errors.reviewedBy ? getErrorMessage(errors.reviewedBy.message || '') : undefined}
-				/>
-				<Controller
-					name="date"
-					control={control}
-					render={({ field }) => (
-						<DatePicker
-							legend={t('date')}
-							label={t('date')}
-							date={dayjs(field.value)}
-							onDateChange={(date) => {
-								field.onChange(dayjs(date).format('YYYY-MM-DD'))
-							}}
-							error={errors.date ? getErrorMessage(errors.date.message || '') : undefined}
-						/>
-					)}
-				/>
-				<TextField
-					{...register('weight', { valueAsNumber: true })}
-					type="number"
-					placeholder={`${t('weight')} (${farm?.weightUnit})`}
-					label={`${t('weight')} (${farm?.weightUnit})`}
-					onWheel={(e) => e.currentTarget.blur()}
-					error={errors.weight ? getErrorMessage(errors.weight.message || '') : undefined}
-				/>
-				<TextField
-					{...register('temperature', { valueAsNumber: true })}
-					type="number"
-					placeholder={`${t('temperature')} (${farm?.temperatureUnit})`}
-					label={`${t('temperature')} (${farm?.temperatureUnit})`}
-					onWheel={(e) => e.currentTarget.blur()}
-					error={errors.temperature ? getErrorMessage(errors.temperature.message || '') : undefined}
-				/>
-				<TextField
-					{...register('medication')}
-					type="text"
-					placeholder="-"
-					label={t('medication')}
-					error={errors.medication ? getErrorMessage(errors.medication.message || '') : undefined}
-				/>
-				<TextField
-					{...register('dosage')}
-					type="text"
-					placeholder="-"
-					label={t('dosage')}
-					error={errors.dosage ? getErrorMessage(errors.dosage.message || '') : undefined}
-				/>
-				<TextField
-					{...register('frequency')}
-					type="text"
-					placeholder="-"
-					label={t('frequency')}
-					error={errors.frequency ? getErrorMessage(errors.frequency.message || '') : undefined}
-				/>
-				<TextField
-					{...register('duration')}
-					type="text"
-					placeholder="-"
-					label={t('duration')}
-					error={errors.duration ? getErrorMessage(errors.duration.message || '') : undefined}
-				/>
-				<div className="col-span-2 w-full">
-					<Textarea
-						{...register('notes')}
-						placeholder={t('notes')}
-						label={t('notes')}
-						required
-						error={errors.notes ? getErrorMessage(errors.notes.message || '') : undefined}
-					/>
+		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto">
+			<div className="max-w-4xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
+				<a
+					href="#health-record-form"
+					className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
+				>
+					{t('accessibility.skipToForm')}
+				</a>
+
+				{/* Hero Header */}
+				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden mb-6 sm:mb-8 border border-gray-100 dark:border-gray-700">
+					<div className="bg-gradient-to-r from-blue-600 to-green-600 px-4 sm:px-6 py-6 sm:py-8">
+						<div className="flex items-center gap-3 sm:gap-4">
+							<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+								<i className="i-material-symbols-health-and-safety bg-white! w-6! h-6! sm:w-8! sm:h-8!" />
+							</div>
+							<div className="min-w-0">
+								<h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
+									{params.healthRecordUuid ? t('editHealthRecordTitle') : t('addHealthRecordTitle')}
+								</h1>
+								<p className="text-blue-100 text-sm sm:text-base mt-1">
+									{params.healthRecordUuid ? t('editSubtitle') : t('addSubtitle')}
+								</p>
+							</div>
+						</div>
+					</div>
 				</div>
-				<div className="col-span-2 w-full">
-					<Button type="submit" disabled={isSubmitting}>
-						{isSubmitting
-							? t('common:loading')
-							: params.healthRecordUuid
-								? t('editButton')
-								: t('addButton')}
-					</Button>
+
+				{/* Form Container */}
+				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden border border-gray-100 dark:border-gray-700">
+					<form
+						id="health-record-form"
+						className="p-4 sm:p-6 lg:p-8"
+						onSubmit={handleSubmit(onSubmit)}
+						autoComplete="off"
+						aria-labelledby="form-heading"
+						noValidate
+					>
+						<h2 id="form-heading" className="sr-only">
+							{params.healthRecordUuid
+								? t('accessibility.editHealthRecordForm')
+								: t('accessibility.addHealthRecordForm')}
+						</h2>
+
+						<div className="space-y-6">
+							{/* Basic Information Card */}
+							<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
+								<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+									<i className="i-material-symbols-info bg-blue-600! w-5! h-5!" />
+									{t('basicInformation')}
+								</h3>
+								<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+									<TextField
+										{...register('reason')}
+										type="text"
+										placeholder={t('placeholders.reason')}
+										label={t('reason')}
+										required
+										error={errors.reason ? getErrorMessage(errors.reason.message || '') : undefined}
+									/>
+									<Controller
+										name="type"
+										control={control}
+										render={({ field }) => (
+											<Select
+												{...field}
+												legend={t('selectType')}
+												defaultLabel={t('placeholders.selectType')}
+												items={healthRecordTypes}
+												required
+												error={errors.type ? getErrorMessage(errors.type.message || '') : undefined}
+											/>
+										)}
+									/>
+									<TextField
+										{...register('reviewedBy')}
+										type="text"
+										placeholder={t('placeholders.reviewedBy')}
+										label={t('reviewedBy')}
+										required
+										error={
+											errors.reviewedBy
+												? getErrorMessage(errors.reviewedBy.message || '')
+												: undefined
+										}
+									/>
+									<Controller
+										name="date"
+										control={control}
+										render={({ field }) => (
+											<DatePicker
+												legend={t('date')}
+												label={t('date')}
+												date={dayjs(field.value)}
+												onDateChange={(date) => {
+													field.onChange(dayjs(date).format('YYYY-MM-DD'))
+												}}
+												error={errors.date ? getErrorMessage(errors.date.message || '') : undefined}
+											/>
+										)}
+									/>
+								</div>
+							</div>
+
+							{/* Physical Measurements Card */}
+							<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
+								<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+									<i className="i-material-symbols-monitor-weight bg-blue-600! w-5! h-5!" />
+									{t('physicalMeasurements')}
+								</h3>
+								<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+									<TextField
+										{...register('weight', { valueAsNumber: true })}
+										type="number"
+										placeholder={`${t('placeholders.weight')} (${farm?.weightUnit})`}
+										label={`${t('weight')} (${farm?.weightUnit})`}
+										onWheel={(e) => e.currentTarget.blur()}
+										error={errors.weight ? getErrorMessage(errors.weight.message || '') : undefined}
+										min="0"
+										step="0.1"
+									/>
+									<TextField
+										{...register('temperature', { valueAsNumber: true })}
+										type="number"
+										placeholder={`${t('placeholders.temperature')} (${farm?.temperatureUnit})`}
+										label={`${t('temperature')} (${farm?.temperatureUnit})`}
+										onWheel={(e) => e.currentTarget.blur()}
+										error={
+											errors.temperature
+												? getErrorMessage(errors.temperature.message || '')
+												: undefined
+										}
+										min="0"
+										step="0.1"
+									/>
+								</div>
+							</div>
+
+							{/* Medication Details Card */}
+							<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
+								<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+									<i className="i-material-symbols-medication bg-blue-600! w-5! h-5!" />
+									{t('medicationDetails')}
+								</h3>
+								<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+									<TextField
+										{...register('medication')}
+										type="text"
+										placeholder={t('placeholders.medication')}
+										label={t('medication')}
+										error={
+											errors.medication
+												? getErrorMessage(errors.medication.message || '')
+												: undefined
+										}
+									/>
+									<TextField
+										{...register('dosage')}
+										type="text"
+										placeholder={t('placeholders.dosage')}
+										label={t('dosage')}
+										error={errors.dosage ? getErrorMessage(errors.dosage.message || '') : undefined}
+									/>
+									<TextField
+										{...register('frequency')}
+										type="text"
+										placeholder={t('placeholders.frequency')}
+										label={t('frequency')}
+										error={
+											errors.frequency ? getErrorMessage(errors.frequency.message || '') : undefined
+										}
+									/>
+									<TextField
+										{...register('duration')}
+										type="text"
+										placeholder={t('placeholders.duration')}
+										label={t('duration')}
+										error={
+											errors.duration ? getErrorMessage(errors.duration.message || '') : undefined
+										}
+									/>
+								</div>
+							</div>
+
+							{/* Health Status Override Card */}
+							<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
+								<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+									<i className="i-material-symbols-health-and-safety bg-blue-600! w-5! h-5!" />
+									{t('healthStatusOverride')}
+								</h3>
+								<Controller
+									name="manualHealthStatus"
+									control={control}
+									render={({ field }) => (
+										<Select
+											{...field}
+											legend={t('manualHealthStatus')}
+											defaultLabel={t('placeholders.autoCalculate')}
+											items={[
+												{ value: 'healthy', name: t('healthStatus.healthy') },
+												{ value: 'sick', name: t('healthStatus.sick') },
+												{ value: 'treatment', name: t('healthStatus.treatment') },
+												{ value: 'critical', name: t('healthStatus.critical') },
+												{ value: 'unknown', name: t('healthStatus.unknown') },
+											]}
+											error={
+												errors.manualHealthStatus
+													? getErrorMessage(errors.manualHealthStatus.message || '')
+													: undefined
+											}
+										/>
+									)}
+								/>
+								<p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+									{t('healthStatusHelp')}
+								</p>
+							</div>
+
+							{/* Notes Card */}
+							<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
+								<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+									<i className="i-material-symbols-notes bg-blue-600! w-5! h-5!" />
+									{t('additionalNotes')}
+								</h3>
+								<Textarea
+									{...register('notes')}
+									placeholder={t('placeholders.notes')}
+									label={t('notes')}
+									required
+									error={errors.notes ? getErrorMessage(errors.notes.message || '') : undefined}
+								/>
+							</div>
+						</div>
+
+						{/* Submit Button */}
+						<div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-600">
+							<Button
+								type="submit"
+								disabled={isSubmitting}
+								className="btn btn-primary h-12 w-full text-lg disabled:loading flex items-center justify-center gap-2"
+							>
+								{isSubmitting ? (
+									<>
+										<i className="i-material-symbols-hourglass-empty bg-white! w-5! h-5! animate-spin" />
+										{t('common:loading')}
+									</>
+								) : (
+									<>
+										<i
+											className={`${params.healthRecordUuid ? 'i-material-symbols-edit' : 'i-material-symbols-add'} bg-white! w-5! h-5!`}
+										/>
+										{params.healthRecordUuid ? t('editButton') : t('addButton')}
+									</>
+								)}
+							</Button>
+						</div>
+					</form>
 				</div>
-			</form>
+			</div>
 		</div>
 	)
 }

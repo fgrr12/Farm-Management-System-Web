@@ -100,56 +100,147 @@ const ProductionRecordForm = () => {
 	}, [params.productionRecordUuid, setPageTitle, t])
 
 	return (
-		<div className="flex flex-col justify-center items-center w-full overflow-auto p-3 sm:p-5">
-			<form
-				className="flex flex-col md:grid md:grid-cols-2 items-center gap-3 sm:gap-4 max-w-[500px] w-full"
-				onSubmit={handleSubmit(onSubmit)}
-				autoComplete="off"
-				noValidate
-			>
-				<TextField
-					{...register('quantity', { valueAsNumber: true })}
-					type="number"
-					placeholder={`${t('quantity')} (${farm?.liquidUnit})`}
-					label={`${t('quantity')} (${farm?.liquidUnit})`}
-					onWheel={(e) => e.currentTarget.blur()}
-					required
-					error={errors.quantity ? getErrorMessage(errors.quantity.message || '') : undefined}
-				/>
-				<Controller
-					name="date"
-					control={control}
-					render={({ field }) => (
-						<DatePicker
-							legend={t('date')}
-							label={t('date')}
-							date={dayjs(field.value)}
-							onDateChange={(date) => {
-								field.onChange(dayjs(date).format('YYYY-MM-DD'))
-							}}
-							error={errors.date ? getErrorMessage(errors.date.message || '') : undefined}
-						/>
-					)}
-				/>
-				<div className="col-span-2 w-full">
-					<Textarea
-						{...register('notes')}
-						placeholder={t('notes')}
-						label={t('notes')}
-						required
-						error={errors.notes ? getErrorMessage(errors.notes.message || '') : undefined}
-					/>
+		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto">
+			<div className="max-w-3xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
+				<a
+					href="#production-record-form"
+					className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
+				>
+					{t('accessibility.skipToForm')}
+				</a>
+
+				{/* Hero Header */}
+				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden mb-6 sm:mb-8 border border-gray-100 dark:border-gray-700">
+					<div className="bg-gradient-to-r from-blue-600 to-green-600 px-4 sm:px-6 py-6 sm:py-8">
+						<div className="flex items-center gap-3 sm:gap-4">
+							<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+								<i className="i-material-symbols-analytics bg-white! w-6! h-6! sm:w-8 sm:h-8" />
+							</div>
+							<div className="min-w-0">
+								<h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
+									{params.productionRecordUuid
+										? t('editProductionRecordTitle')
+										: t('addProductionRecordTitle')}
+								</h1>
+								<p className="text-blue-100 text-sm sm:text-base mt-1">
+									{params.productionRecordUuid ? t('editSubtitle') : t('addSubtitle')}
+								</p>
+							</div>
+						</div>
+					</div>
 				</div>
-				<div className="col-span-2 w-full">
-					<Button type="submit" disabled={isSubmitting}>
-						{isSubmitting
-							? t('common:loading')
-							: params.productionRecordUuid
-								? t('editButton')
-								: t('addButton')}
-					</Button>
+
+				{/* Form Container */}
+				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden border border-gray-100 dark:border-gray-700">
+					<form
+						id="production-record-form"
+						className="p-4 sm:p-6 lg:p-8"
+						onSubmit={handleSubmit(onSubmit)}
+						autoComplete="off"
+						aria-labelledby="form-heading"
+						noValidate
+					>
+						<h2 id="form-heading" className="sr-only">
+							{params.productionRecordUuid
+								? t('accessibility.editProductionRecordForm')
+								: t('accessibility.addProductionRecordForm')}
+						</h2>
+
+						<div className="space-y-6">
+							{/* Production Information Card */}
+							<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
+								<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+									<i className="i-material-symbols-analytics bg-blue-600! w-5! h-5!" />
+									{t('productionInformation')}
+								</h3>
+								<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+									<TextField
+										{...register('quantity', { valueAsNumber: true })}
+										type="number"
+										placeholder={t('placeholders.quantity')}
+										label={`${t('quantity')} (${farm?.liquidUnit})`}
+										onWheel={(e) => e.currentTarget.blur()}
+										required
+										error={
+											errors.quantity ? getErrorMessage(errors.quantity.message || '') : undefined
+										}
+										min="0"
+										step="0.1"
+										aria-describedby="quantity-help"
+									/>
+									<div id="quantity-help" className="sr-only">
+										{t('accessibility.quantityHelp')}
+									</div>
+
+									<Controller
+										name="date"
+										control={control}
+										render={({ field }) => (
+											<DatePicker
+												legend={t('date')}
+												label={t('date')}
+												date={dayjs(field.value)}
+												onDateChange={(date) => {
+													field.onChange(dayjs(date).format('YYYY-MM-DD'))
+												}}
+												error={errors.date ? getErrorMessage(errors.date.message || '') : undefined}
+												aria-describedby="date-help"
+											/>
+										)}
+									/>
+									<div id="date-help" className="sr-only">
+										{t('accessibility.dateHelp')}
+									</div>
+								</div>
+							</div>
+
+							{/* Additional Notes Card */}
+							<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
+								<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+									<i className="i-material-symbols-notes bg-blue-600! w-5! h-5!" />
+									{t('additionalNotes')}
+								</h3>
+								<Textarea
+									{...register('notes')}
+									placeholder={t('placeholders.notes')}
+									label={t('notes')}
+									required
+									error={errors.notes ? getErrorMessage(errors.notes.message || '') : undefined}
+									aria-describedby="notes-help"
+								/>
+								<div id="notes-help" className="sr-only">
+									{t('accessibility.notesHelp')}
+								</div>
+							</div>
+						</div>
+
+						{/* Submit Button */}
+						<div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-600">
+							<Button
+								type="submit"
+								disabled={isSubmitting}
+								aria-describedby="submit-help"
+								className="btn btn-primary h-12 w-full text-lg disabled:loading flex items-center justify-center gap-2"
+							>
+								{isSubmitting ? (
+									<>
+										<i className="i-material-symbols-hourglass-empty w-5! h-5! animate-spin" />
+										{t('common:loading')}
+									</>
+								) : (
+									<>
+										<i className="i-material-symbols-add-chart w-5! h-5!" />
+										{params.productionRecordUuid ? t('editButton') : t('addButton')}
+									</>
+								)}
+							</Button>
+							<div id="submit-help" className="sr-only">
+								{t('accessibility.submitHelp')}
+							</div>
+						</div>
+					</form>
 				</div>
-			</form>
+			</div>
 		</div>
 	)
 }

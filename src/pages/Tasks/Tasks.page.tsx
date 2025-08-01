@@ -1,4 +1,5 @@
-import { type ChangeEvent, memo, useCallback, useEffect, useState } from 'react'
+import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -9,13 +10,13 @@ import { useUserStore } from '@/store/useUserStore'
 
 import { TasksService } from '@/services/tasks'
 
+import { TaskColumn } from '@/components/business/Tasks/TaskColumn'
+import { TaskFilters } from '@/components/business/Tasks/TaskFilters'
 import { Button } from '@/components/ui/Button'
-import { Search } from '@/components/ui/Search'
-import { Select } from '@/components/ui/Select'
 
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
-import type { DividedTasks, TaskFilters } from './Tasks.types'
+import type { TaskColumnInfo, TaskColumns, TaskFilters as TaskFiltersType } from './Tasks.types'
 
 const Tasks = () => {
 	const { user } = useUserStore()
@@ -24,272 +25,225 @@ const Tasks = () => {
 	const { t } = useTranslation(['tasks'])
 	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
 
-	const [tasks, setTasks] = useState(INITIAL_TASKS)
-	const [filters, setFilters] = useState(INITIAL_FILTERS)
+	const [taskColumns, setTaskColumns] = useState<TaskColumns>(INITIAL_TASK_COLUMNS)
+	const [filters, setFilters] = useState<TaskFiltersType>(INITIAL_FILTERS)
 
 	const handleAddTask = useCallback(() => {
 		navigate(AppRoutes.ADD_TASK)
 	}, [navigate])
 
-	const handleDebounceSearch = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-		setFilters((prev) => ({ ...prev, search: event.target.value }))
-	}, [])
-
-	const handleSelectChange = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
-		const { name, value } = event.target
-		setFilters((prev) => ({ ...prev, [name]: value }))
+	const handleFiltersChange = useCallback((newFilters: TaskFiltersType) => {
+		setFilters(newFilters)
 	}, [])
 
 	const getTasks = useCallback(async () => {
 		await withLoadingAndError(async () => {
-			if (!farm?.uuid) return []
+			if (!farm?.uuid) return
 
-			const { search, status, priority, speciesUuid } = filters
+			const { priority, speciesUuid } = filters
 			const farmUuid = farm.uuid
-			const tasks = await TasksService.getTasks({ search, status, priority, speciesUuid, farmUuid })
-			const pendingTasks = tasks.filter((task) => task.status === 'PENDING')
-			const completedTasks = tasks.filter((task) => task.status === 'COMPLETED')
-			setTasks({ pending: pendingTasks, completed: completedTasks })
-			return tasks
+			const tasks = await TasksService.getTasks({
+				search: '', // No global search, each column has its own
+				status: '', // Get all statuses for kanban
+				priority,
+				speciesUuid,
+				farmUuid,
+			})
+
+			// Group tasks by status
+			const groupedTasks: TaskColumns = {
+				todo: tasks.filter((task) => task.status === 'todo'),
+				'in-progress': tasks.filter((task) => task.status === 'in-progress'),
+				done: tasks.filter((task) => task.status === 'done'),
+				archived: tasks.filter((task) => task.status === 'archived'),
+			}
+
+			setTaskColumns(groupedTasks)
 		}, t('toast.errorGettingTasks'))
 	}, [farm?.uuid, filters, withLoadingAndError, t])
 
-	const handleUpdateTask = useCallback(
-		(task: Task) => async () => {
+	const handleTaskMove = useCallback(
+		async (taskId: string, fromStatus: TaskStatus, toStatus: TaskStatus) => {
+			if (fromStatus === toStatus) return
+
 			await withLoadingAndError(async () => {
-				const status = task.status === 'COMPLETED' ? 'PENDING' : 'COMPLETED'
-				await TasksService.updateTaskStatus(task.uuid, status)
+				await TasksService.updateTaskStatus(taskId, toStatus)
 				await getTasks()
+
 				showToast(
-					status === 'COMPLETED'
-						? t('toast.taskCompleted', { taskUuid: task.title })
-						: t('toast.taskPending', { taskUuid: task.title }),
-					status === 'COMPLETED' ? 'success' : 'warning'
+					t('toast.taskMoved', {
+						status: t(`status.${toStatus}`),
+					}),
+					'success'
 				)
 			}, t('toast.errorUpdatingTaskStatus'))
 		},
 		[getTasks, showToast, t, withLoadingAndError]
 	)
 
-	const handlePriorityColor = useCallback((priority: string) => {
-		switch (priority) {
-			case 'low':
-				return 'bg-green-500'
-			case 'medium':
-				return 'bg-yellow-500'
-			case 'high':
-				return 'bg-red-500'
-			default:
-				return 'bg-gray-500'
-		}
-	}, [])
+	// Drag and drop monitor
+	useEffect(() => {
+		return monitorForElements({
+			onDrop({ source, location }) {
+				const destination = location.current.dropTargets[0]
+				if (!destination) return
 
-	// biome-ignore lint:: UseEffect used to update tasks list
+				const taskId = source.data.taskId as string
+				const currentStatus = source.data.currentStatus as TaskStatus
+				const newStatus = destination.data.status as TaskStatus
+
+				if (currentStatus !== newStatus) {
+					handleTaskMove(taskId, currentStatus, newStatus)
+				}
+			},
+		})
+	}, [handleTaskMove])
+
+	//biome-ignore lint: only the required
 	useEffect(() => {
 		if (!user) return
 		getTasks()
-	}, [user, filters.priority, filters.speciesUuid, filters.status, getTasks])
-
-	useEffect(() => {
-		const debounceId = setTimeout(() => {
-			if (filters.search !== '') getTasks()
-		}, 500)
-		return () => clearTimeout(debounceId)
-	}, [filters.search, getTasks])
+	}, [user, filters.priority, filters.speciesUuid, getTasks])
 
 	useEffect(() => {
 		setPageTitle(t('title'))
 	}, [setPageTitle, t])
 
 	return (
-		<div className="flex flex-col gap-3 sm:gap-4 p-3 sm:p-4 w-full h-full">
-			<a
-				href="#tasks-content"
-				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
-			>
-				{t('accessibility.skipToTasks')}
-			</a>
+		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto">
+			<div className="max-w-7xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
+				<a
+					href="#kanban-board"
+					className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 dark:bg-blue-500 text-white p-2 rounded z-50"
+				>
+					{t('accessibility.skipToTasks')}
+				</a>
 
-			<header>
-				<h1 className="sr-only">{t('title')}</h1>
-			</header>
+				{/* Hero Header */}
+				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden mb-6 sm:mb-8">
+					<div className="bg-gradient-to-r from-blue-600 to-green-600 dark:from-blue-700 dark:to-green-700 px-4 sm:px-6 py-6 sm:py-8">
+						<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+							<div className="flex items-center gap-3 sm:gap-4">
+								<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 dark:bg-white/30 rounded-full flex items-center justify-center flex-shrink-0">
+									<i className="i-material-symbols-task bg-white! w-6! h-6! sm:w-8 sm:h-8" />
+								</div>
+								<div className="min-w-0">
+									<h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
+										{t('title')}
+									</h1>
+									<p className="text-blue-100 dark:text-blue-200 text-sm sm:text-base mt-1">
+										{t('subtitle')}
+									</p>
+								</div>
+							</div>
 
-			<section aria-labelledby="filters-heading" role="search">
-				<h2 id="filters-heading" className="sr-only">
-					{t('accessibility.filtersSection')}
-				</h2>
-				<div className="flex flex-col sm:grid sm:grid-cols-2 lg:grid-cols-6 items-center justify-center gap-3 sm:gap-4 w-full">
-					<Search
-						placeholder={t('search')}
-						onChange={handleDebounceSearch}
-						aria-label={t('accessibility.searchTasks')}
-					/>
-					<Select
-						name="status"
-						legend={t('filterByStatus')}
-						defaultLabel={t('filterByStatus')}
-						value={filters.status}
-						items={[
-							{ value: 'COMPLETED', name: t('completed') },
-							{ value: 'PENDING', name: t('pending') },
-						]}
-						onChange={handleSelectChange}
-						aria-label={t('filterByStatus')}
-					/>
-					<Select
-						name="priority"
-						legend={t('filterByPriority')}
-						defaultLabel={t('filterByPriority')}
-						value={filters.priority}
-						items={[
-							{ value: 'high', name: t('high') },
-							{ value: 'medium', name: t('medium') },
-							{ value: 'low', name: t('low') },
-						]}
-						onChange={handleSelectChange}
-						aria-label={t('filterByPriority')}
-					/>
-					<Select
-						name="speciesUuid"
-						legend={t('filterBySpecies')}
-						defaultLabel={t('filterBySpecies')}
-						optionValue="uuid"
-						optionLabel="name"
-						value={filters.speciesUuid}
-						items={species}
-						onChange={handleSelectChange}
-						aria-label={t('filterBySpecies')}
-					/>
-					<div className="sm:col-span-2 lg:col-start-6 lg:col-span-1 w-full">
-						<Button onClick={handleAddTask} aria-describedby="add-task-description">
-							{t('addTask')}
-						</Button>
-						<div id="add-task-description" className="sr-only">
-							{t('accessibility.addTaskDescription')}
+							{/* Stats Cards */}
+							<div className="flex gap-2 sm:gap-4">
+								<div className="bg-white/10 dark:bg-white/20 backdrop-blur-sm rounded-lg px-3 py-2 text-center">
+									<div className="text-lg sm:text-xl font-bold text-white">
+										{taskColumns.todo.length + taskColumns['in-progress'].length}
+									</div>
+									<div className="text-xs text-blue-100 dark:text-blue-200">{t('activeTasks')}</div>
+								</div>
+								<div className="bg-white/10 dark:bg-white/20 backdrop-blur-sm rounded-lg px-3 py-2 text-center">
+									<div className="text-lg sm:text-xl font-bold text-white">
+										{taskColumns.done.length}
+									</div>
+									<div className="text-xs text-blue-100 dark:text-blue-200">
+										{t('completedTasks')}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					{/* Actions Bar */}
+					<div className="p-4 sm:p-6 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600">
+						<div className="flex items-center justify-between gap-4">
+							<div className="flex-1 max-w-md">
+								<TaskFilters
+									filters={filters}
+									onFiltersChange={handleFiltersChange}
+									species={species}
+								/>
+							</div>
+
+							<div className="flex-shrink-0">
+								<Button
+									onClick={handleAddTask}
+									aria-describedby="add-task-description"
+									className="btn btn-primary h-12 text-base sm:text-lg px-6 sm:px-8 dark:bg-blue-600 dark:hover:bg-blue-700"
+								>
+									<i className="i-material-symbols-add-circle-outline w-5! h-5! mr-2" />
+									{t('addTask')}
+								</Button>
+								<div id="add-task-description" className="sr-only">
+									{t('accessibility.addTaskDescription')}
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
-			</section>
 
-			<div id="tasks-content">
-				{filters.status !== 'COMPLETED' && (
-					<section aria-labelledby="pending-tasks-heading" aria-live="polite">
-						<h2 id="pending-tasks-heading" className="text-2xl font-semibold">
-							{t('pending')} ({tasks.pending.length})
-						</h2>
-						<div
-							className="flex flex-col gap-4 p-4 w-full border-2 rounded-xl border-gray-300"
-							role="list"
-							aria-label={t('accessibility.pendingTasksList', { count: tasks.pending.length })}
-						>
-							{tasks.pending.map((task) => (
-								<div
-									key={task.uuid}
-									className="flex flex-row gap-4 items-center p-4 w-full border-2 rounded-xl border-gray-300 relative"
-									role="listitem"
-									aria-labelledby={`task-${task.uuid}-title`}
-									aria-describedby={`task-${task.uuid}-description task-${task.uuid}-priority`}
-								>
-									<input
-										type="checkbox"
-										className="checkbox checkbox-success"
-										onChange={handleUpdateTask(task)}
-										aria-label={t('accessibility.markTaskComplete', { title: task.title })}
-										aria-describedby={`task-${task.uuid}-status-help`}
-									/>
-									<div id={`task-${task.uuid}-status-help`} className="sr-only">
-										{t('accessibility.taskStatusHelp')}
-									</div>
-
-									<div className="flex flex-col w-[85%] sm:w-[90%]">
-										<h3 id={`task-${task.uuid}-title`} className="text-xl font-semibold">
-											{task.title}
-										</h3>
-										<p id={`task-${task.uuid}-description`}>{task.description}</p>
-									</div>
-
-									<div
-										className={`${handlePriorityColor(task.priority)} absolute right-0 top-0 bottom-0 w-10 rounded-r-lg`}
-										role="img"
-										aria-label={t('accessibility.priorityIndicator', { priority: task.priority })}
-										id={`task-${task.uuid}-priority`}
-									/>
-								</div>
+				{/* Kanban Board */}
+				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden">
+					<main id="kanban-board" className="p-4 sm:p-6">
+						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 min-h-[600px]">
+							{COLUMN_CONFIG.map((column) => (
+								<TaskColumn
+									key={column.id}
+									status={column.id}
+									title={t(`status.${column.id}`)}
+									tasks={taskColumns[column.id]}
+									color={column.color}
+									bgColor={column.bgColor}
+								/>
 							))}
-							{tasks && tasks.pending.length === 0 && (
-								<div className="text-center text-2xl font-semibold" role="status">
-									{t('noTasks')}
-								</div>
-							)}
 						</div>
-					</section>
-				)}
-
-				{filters.status !== 'PENDING' && (
-					<section aria-labelledby="completed-tasks-heading" aria-live="polite">
-						<h2 id="completed-tasks-heading" className="text-2xl font-semibold">
-							{t('completed')} ({tasks.completed.length})
-						</h2>
-						<div
-							className="flex flex-col gap-4 p-4 w-full border-2 rounded-xl border-gray-300"
-							role="list"
-							aria-label={t('accessibility.completedTasksList', { count: tasks.completed.length })}
-						>
-							{tasks.completed.map((task) => (
-								<div
-									key={task.uuid}
-									className="flex flex-row gap-4 items-center p-4 w-full border-2 rounded-xl border-gray-300 relative"
-									role="listitem"
-									aria-labelledby={`task-${task.uuid}-title`}
-									aria-describedby={`task-${task.uuid}-description task-${task.uuid}-priority`}
-								>
-									<input
-										type="checkbox"
-										className="checkbox checkbox-success"
-										onChange={handleUpdateTask(task)}
-										checked
-										aria-label={t('accessibility.markTaskPending', { title: task.title })}
-										aria-describedby={`task-${task.uuid}-status-help`}
-									/>
-									<div id={`task-${task.uuid}-status-help`} className="sr-only">
-										{t('accessibility.completedTaskStatusHelp')}
-									</div>
-
-									<div className="flex flex-col w-[85%] sm:w-[90%]">
-										<h3 id={`task-${task.uuid}-title`} className="text-xl font-semibold">
-											{task.title}
-										</h3>
-										<p id={`task-${task.uuid}-description`}>{task.description}</p>
-									</div>
-
-									<div
-										className={`${handlePriorityColor(task.priority)} absolute right-0 top-0 bottom-0 w-10 rounded-r-lg`}
-										role="img"
-										aria-label={t('accessibility.priorityIndicator', { priority: task.priority })}
-										id={`task-${task.uuid}-priority`}
-									/>
-								</div>
-							))}
-							{tasks && tasks.completed.length === 0 && (
-								<div className="text-center text-2xl font-semibold" role="status">
-									{t('noTasks')}
-								</div>
-							)}
-						</div>
-					</section>
-				)}
+					</main>
+				</div>
 			</div>
 		</div>
 	)
 }
 
-const INITIAL_TASKS: DividedTasks = { pending: [], completed: [] }
+const INITIAL_TASK_COLUMNS: TaskColumns = {
+	todo: [],
+	'in-progress': [],
+	done: [],
+	archived: [],
+}
 
-const INITIAL_FILTERS: TaskFilters = {
-	search: '',
-	status: '',
+const INITIAL_FILTERS: TaskFiltersType = {
 	priority: '',
 	speciesUuid: '',
 }
+
+const COLUMN_CONFIG: TaskColumnInfo[] = [
+	{
+		id: 'todo',
+		title: 'To Do',
+		color: 'gray-500',
+		bgColor: 'gray-50',
+	},
+	{
+		id: 'in-progress',
+		title: 'In Progress',
+		color: 'blue-500',
+		bgColor: 'blue-50',
+	},
+	{
+		id: 'done',
+		title: 'Done',
+		color: 'green-500',
+		bgColor: 'green-50',
+	},
+	{
+		id: 'archived',
+		title: 'Archived',
+		color: 'purple-500',
+		bgColor: 'purple-50',
+	},
+]
 
 export default memo(Tasks)

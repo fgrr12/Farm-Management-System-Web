@@ -1,8 +1,12 @@
 import type { HTMLAttributes } from 'react'
 
-export type CardProps = HTMLAttributes<HTMLDivElement> & {
-	uuid: string
-	animalId: string
-	breedName: string
-	gender: Gender
+export interface AnimalCardProps extends HTMLAttributes<HTMLDivElement> {
+	animal: Animal & { breedName: string; lastHealthCheck?: string; hasActiveIssues?: boolean }
+	healthStatus?: HealthStatus
+	lastHealthCheck?: string
+	productionStatus?: 'active' | 'inactive' | 'pregnant'
+	age?: number
+	weight?: number
+	notes?: string
+	variant?: 'default' | 'compact' | 'detailed'
 }

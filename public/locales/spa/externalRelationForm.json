@@ -1,6 +1,8 @@
 {
 	"animalId": "ID del animal",
+	"animalIdPlaceholder": "Ingresa ID del animal (ej: A001, VACA-123)",
 	"breed": "Raza",
+	"breedPlaceholder": "Ingresa nombre de la raza (ej: Holstein, Angus)",
 	"cancel": "Cancelar",
 	"female": "Femenino",
 	"gender": "Género",
@@ -10,6 +12,9 @@
 		"child": "Hijo\\a",
 		"parent": "Padre\\Madre"
 	},
+	"relationPreview": "Vista Previa de la Relación",
+	"relationTypeLabel": "¿Qué tipo de relación quieres crear?",
 	"save": "Guardar",
-	"title": "Agregar relación externa"
+	"selectGender": "Seleccionar género",
+	"title": "Agregar Relación Externa"
 }
