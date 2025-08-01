@@ -8,18 +8,20 @@ export default defineConfig({
 		...minimal2023Preset,
 		maskable: {
 			sizes: [512],
-			padding: 0.3,
+			padding: 0,
 			resizeOptions: {
-				background: '#10b981',
+				background: 'transparent',
+				fit: 'cover',
 			},
 		},
 		apple: {
 			sizes: [180],
-			padding: 0.3,
+			padding: 0,
 			resizeOptions: {
-				background: '#10b981',
+				background: 'transparent',
+				fit: 'cover',
 			},
 		},
 	},
-	images: ['public/vite.svg'],
+	images: ['public/logo.png'],
 })
