@@ -7,7 +7,7 @@ import { AppRoutes } from '@/config/constants/routes'
 
 import { ActionButton } from '@/components/ui/ActionButton'
 
-import type { AnimalCardProps, CardProps } from './AnimalCard.types'
+import type { AnimalCardProps } from './AnimalCard.types'
 
 export const AnimalCard: FC<AnimalCardProps> = memo(
 	({
@@ -26,7 +26,6 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 		const cardRef = useRef<HTMLDivElement>(null)
 		const { uuid, animalId, breedName, gender, picture } = animal
 
-		// Use health status from animal model, fallback to prop, then unknown
 		const currentHealthStatus = animal.healthStatus || healthStatus || 'unknown'
 
 		const cardClasses = useMemo(() => {
@@ -43,7 +42,6 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 		}, [variant, className])
 
 		const healthConfig = useMemo(() => {
-			// Check if animal is sold or dead first
 			if (animal.soldDate) {
 				return {
 					color: 'from-blue-400 to-blue-500',
@@ -310,8 +308,3 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 		)
 	}
 )
-
-// Legacy support
-export const LegacyAnimalCard: FC<CardProps> = (props) => {
-	return <AnimalCard {...props} />
-}

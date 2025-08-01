@@ -10,6 +10,3 @@ export interface AnimalCardProps extends HTMLAttributes<HTMLDivElement> {
 	notes?: string
 	variant?: 'default' | 'compact' | 'detailed'
 }
-
-// Legacy support
-export type CardProps = AnimalCardProps

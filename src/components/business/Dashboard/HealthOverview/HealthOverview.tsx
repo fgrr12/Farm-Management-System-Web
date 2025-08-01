@@ -58,7 +58,6 @@ export const HealthOverview = memo(() => {
 		},
 	]
 
-	// Container entrance animation
 	useGSAP(() => {
 		if (containerRef.current && !loading && !loadingSecondary) {
 			gsap.fromTo(
@@ -69,7 +68,6 @@ export const HealthOverview = memo(() => {
 		}
 	}, [loading, loadingSecondary])
 
-	// Items stagger animation
 	useGSAP(() => {
 		if (itemsRef.current.length && !loading && !loadingSecondary) {
 			gsap.fromTo(
@@ -87,7 +85,6 @@ export const HealthOverview = memo(() => {
 		}
 	}, [loading, loadingSecondary])
 
-	// Animate counters
 	useGSAP(() => {
 		if (!loading && !loadingSecondary && healthItems.length) {
 			healthItems.forEach((item, index) => {
@@ -107,7 +104,6 @@ export const HealthOverview = memo(() => {
 				})
 			})
 
-			// Animate total
 			const totalValue = healthItems.reduce((sum, item) => sum + item.count, 0)
 			const totalObj = { value: 0 }
 			gsap.to(totalObj, {

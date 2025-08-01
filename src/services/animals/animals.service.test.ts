@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { AnimalsService } from '../index'
+import { AnimalsService } from './index'
 
 // Mock Firebase
 vi.mock('@/config/firebaseConfig', () => ({

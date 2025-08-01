@@ -25,7 +25,7 @@ export const DashboardStats = memo(() => {
 				change={stats.healthChange}
 				icon="i-material-symbols-favorite"
 				color="green"
-				loading={loading || loadingSecondary} // Shows loading until accurate health data is loaded
+				loading={loading || loadingSecondary}
 			/>
 			<StatCard
 				title={t('stats.pendingTasks')}
@@ -33,7 +33,7 @@ export const DashboardStats = memo(() => {
 				change={stats.tasksChange}
 				icon="i-material-symbols-task-alt"
 				color="orange"
-				loading={loading || loadingSecondary} // Shows loading until accurate task data is loaded
+				loading={loading || loadingSecondary}
 			/>
 			<StatCard
 				title={t('stats.monthlyProduction')}
@@ -42,7 +42,6 @@ export const DashboardStats = memo(() => {
 				icon="i-material-symbols-water-drop"
 				color="purple"
 				loading={loading}
-				// Production change loads in secondary phase but initial value loads immediately
 				changeLoading={loadingSecondary && !stats.productionChange}
 			/>
 		</div>

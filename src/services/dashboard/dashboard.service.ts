@@ -75,13 +75,11 @@ const getDashboardStats = async (farmUuid: string): Promise<DashboardStats> => {
 		])
 
 		const limits = getOptimalLimits(animals.length)
-		// Count only live animals (exclude dead animals)
 		const liveAnimals = animals.filter((animal) => !animal.deathDate)
 		const totalAnimals = liveAnimals.length
 		const pendingTasks = tasks.filter(
 			(task) => task.status === 'todo' || task.status === 'in-progress'
 		).length
-		// Count animals that are healthy and still in the farm (not sold or dead)
 		const healthyAnimals = animals.filter(
 			(animal) => animal.healthStatus === 'healthy' && !animal.soldDate && !animal.deathDate
 		).length

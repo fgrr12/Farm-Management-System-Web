@@ -4,22 +4,23 @@ import gsap from 'gsap'
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useFarmStore } from '@/store/useFarmStore'
+
 import { useDashboardData } from '@/hooks/dashboard/useDashboardData'
 import { useProductionData } from '@/hooks/dashboard/useProductionData'
 
 export const ProductionChart = memo(() => {
 	const { t } = useTranslation(['dashboard'])
+	const { farm } = useFarmStore()
 	const [selectedYear, setSelectedYear] = useState(dayjs().year())
 	const { loadingTertiary } = useDashboardData()
 
-	// Use dedicated production data hook for year filtering
 	const { productionData, loading: productionLoading } = useProductionData(selectedYear)
 
 	const chartRef = useRef<HTMLDivElement>(null)
 	const barsRef = useRef<HTMLDivElement[]>([])
 	const totalRef = useRef<HTMLSpanElement>(null)
 
-	// Generate year options (current year and 4 years back)
 	const yearOptions = useMemo(() => {
 		const currentYear = dayjs().year()
 		const years = []
@@ -39,7 +40,6 @@ export const ProductionChart = memo(() => {
 		}))
 	}, [productionData])
 
-	// Animate chart entrance
 	useGSAP(() => {
 		if (chartRef.current && !loadingTertiary && !productionLoading) {
 			gsap.fromTo(
@@ -50,13 +50,10 @@ export const ProductionChart = memo(() => {
 		}
 	}, [loadingTertiary, productionLoading])
 
-	// Animate bars when data changes
 	useGSAP(() => {
 		if (barsRef.current.length && chartData.length && !loadingTertiary && !productionLoading) {
-			// Reset bars to 0 width
 			gsap.set(barsRef.current, { width: '0%' })
 
-			// Animate bars with stagger
 			gsap.to(barsRef.current, {
 				width: (i) => `${chartData[i]?.percentage || 0}%`,
 				duration: 1.2,
@@ -67,7 +64,6 @@ export const ProductionChart = memo(() => {
 		}
 	}, [chartData, loadingTertiary, productionLoading])
 
-	// Animate total counter
 	useGSAP(() => {
 		if (totalRef.current && chartData.length && !loadingTertiary && !productionLoading) {
 			const totalValue = chartData.reduce((sum, item) => sum + item.value, 0)
@@ -80,7 +76,7 @@ export const ProductionChart = memo(() => {
 				delay: 0.8,
 				onUpdate: () => {
 					if (totalRef.current) {
-						totalRef.current.textContent = `${Math.round(obj.value)}L`
+						totalRef.current.textContent = `${Math.round(obj.value)}${farm?.liquidUnit}`
 					}
 				},
 			})
@@ -177,11 +173,15 @@ export const ProductionChart = memo(() => {
 									className="bg-gradient-to-r from-blue-500 to-blue-600 h-full rounded-full flex items-center justify-end pr-3 group-hover:from-blue-600 group-hover:to-blue-700 transition-colors"
 									style={{ width: '0%' }}
 								>
-									<span className="text-white text-sm font-medium tabular-nums">{item.value}L</span>
+									<span className="text-white text-sm font-medium tabular-nums">
+										{item.value}
+										{farm?.liquidUnit}
+									</span>
 								</div>
 							</div>
 							<div className="w-16 text-sm text-gray-900 dark:text-gray-100 font-semibold text-right tabular-nums">
-								{item.value}L
+								{item.value}
+								{farm?.liquidUnit}
 							</div>
 						</div>
 					)
@@ -195,7 +195,7 @@ export const ProductionChart = memo(() => {
 						ref={totalRef}
 						className="font-semibold text-gray-900 dark:text-gray-100 tabular-nums"
 					>
-						0L
+						0{farm?.liquidUnit}
 					</span>
 				</div>
 			</div>
