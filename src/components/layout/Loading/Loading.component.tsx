@@ -1,4 +1,3 @@
-import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import type { FC } from 'react'
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
@@ -59,121 +58,59 @@ export const Loading: FC<LoadingProps> = memo(
 			[]
 		)
 
-		useGSAP(() => {
-			if (!open) return
+		useEffect(() => {
+			if (!open || variant !== 'default') return
 
-			const container = containerRef.current
-			if (container) {
-				gsap.fromTo(
-					container,
-					{ scale: 0.8, opacity: 0 },
-					{ scale: 1, opacity: 1, duration: 0.4, ease: 'back.out(1.7)' }
-				)
-			}
+			const ellipseWidth = 280
+			const ellipseHeight = 40
+			const tweens: gsap.core.Tween[] = []
 
-			// Variant-specific animations
-			switch (variant) {
-				case 'dots':
-					if (dotsRef.current.length) {
-						gsap.to(dotsRef.current, {
-							scale: 1.3,
-							repeat: -1,
-							yoyo: true,
-							ease: 'power2.inOut',
-							stagger: 0.15,
-							duration: 0.6,
-						})
-					}
-					break
+			iconsRef.current.forEach((icon, i) => {
+				const startAngle = (i / iconsRef.current.length) * Math.PI * 2
+				const angleObj = { angle: startAngle }
 
-				case 'default':
-					// Elliptical carousel - simulates a circle viewed from the side
-					if (iconsRef.current.length && circularContainerRef.current) {
-						const ellipseWidth = 280 // Increased ellipse width
-						const ellipseHeight = 40 // Increased ellipse height for better visibility
+				const tween = gsap.to(angleObj, {
+					angle: startAngle + Math.PI * 2,
+					duration: 5,
+					repeat: -1,
+					ease: 'none',
+					onUpdate: () => {
+						const currentAngle = angleObj.angle
+						const x = Math.cos(currentAngle) * (ellipseWidth / 2)
+						const y = Math.sin(currentAngle) * (ellipseHeight / 2)
+						const distanceFromCenter = Math.abs(x) / (ellipseWidth / 2)
+						const depthFactor = 1 - distanceFromCenter
+						const isVisible = Math.sin(currentAngle) >= -0.1
 
-						// Create elliptical movement for each icon
-						iconsRef.current.forEach((icon, i) => {
-							const startAngle = (i / iconsRef.current.length) * Math.PI * 2
+						if (isVisible) {
+							const scale = 0.6 + depthFactor * 0.8
+							const opacity = 0.3 + depthFactor * 0.7
 
-							// Create a timeline for each icon
-							const tl = gsap.timeline({ repeat: -1, ease: 'none' })
+							gsap.set(icon, {
+								x,
+								y,
+								scale,
+								opacity,
+								visibility: 'visible',
+								zIndex: Math.round(depthFactor * 10),
+							})
+						} else {
+							gsap.set(icon, {
+								x,
+								y,
+								opacity: 0,
+								visibility: 'hidden',
+								zIndex: 0,
+							})
+						}
+					},
+				})
 
-							// Animate the angle from 0 to 2π
-							tl.to(
-								{ angle: startAngle },
-								{
-									angle: startAngle + Math.PI * 2,
-									duration: 5, // Slightly slower for better visibility
-									ease: 'none',
-									onUpdate: function () {
-										const currentAngle = this.targets()[0].angle
+				tweens.push(tween)
+			})
 
-										// Calculate elliptical position (centered in container)
-										const x = Math.cos(currentAngle) * (ellipseWidth / 2)
-										const y = Math.sin(currentAngle) * (ellipseHeight / 2)
-
-										// Calculate depth effect based on distance from center
-										// When x is close to 0 (center), icon should be largest
-										// When x is far from center (sides), icon should be smallest
-										const distanceFromCenter = Math.abs(x) / (ellipseWidth / 2) // 0 to 1
-										const depthFactor = 1 - distanceFromCenter // 1 at center, 0 at sides
-
-										// Hide icons when they're behind (sin(angle) < 0)
-										// Only show icons in the front half of the ellipse
-										const isVisible = Math.sin(currentAngle) >= -0.1 // Small buffer for smoother transition
-
-										if (isVisible) {
-											const scale = 0.6 + depthFactor * 0.8 // 0.6 to 1.4 (bigger range)
-											const opacity = 0.3 + depthFactor * 0.7 // 0.3 to 1.0
-
-											gsap.set(icon, {
-												x: x,
-												y: y,
-												scale: scale,
-												opacity: opacity,
-												visibility: 'visible',
-												zIndex: Math.round(depthFactor * 10),
-											})
-										} else {
-											// Hide icons when they're behind
-											gsap.set(icon, {
-												x: x,
-												y: y,
-												opacity: 0,
-												visibility: 'hidden',
-												zIndex: 0,
-											})
-										}
-									},
-								}
-							)
-						})
-					}
-					break
-
-				case 'pulse':
-					if (container) {
-						gsap.to(container, {
-							scale: 1.05,
-							repeat: -1,
-							yoyo: true,
-							ease: 'power2.inOut',
-							duration: 1,
-						})
-					}
-					break
-
-				case 'spinner':
-					if (spinnerRef.current) {
-						gsap.to(spinnerRef.current, {
-							rotation: 360,
-							repeat: -1,
-							ease: 'none',
-							duration: 1,
-						})
-					}
-					break
+			return () => {
+				tweens.forEach((t) => t.kill())
 			}
 		}, [open, variant])
 
@@ -225,7 +162,7 @@ export const Loading: FC<LoadingProps> = memo(
 						</div>
 					)
 
-				default: // 'default' variant with circular farm animals
+				default:
 					return (
 						<div className="flex flex-col items-center gap-8">
 							<div className="flex items-center gap-1">
@@ -240,7 +177,6 @@ export const Loading: FC<LoadingProps> = memo(
 								})}
 							</div>
 
-							{/* Elliptical Carousel Animal Icons */}
 							<div className="relative flex items-center justify-center">
 								<div
 									ref={circularContainerRef}
@@ -264,7 +200,6 @@ export const Loading: FC<LoadingProps> = memo(
 			}
 		}
 
-		// Don't render anything if not open
 		if (!open) return null
 
 		return (
