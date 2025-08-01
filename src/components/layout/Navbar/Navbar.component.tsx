@@ -217,7 +217,7 @@ export const Navbar = memo(() => {
 										</span>
 									</div>
 								</div>
-								<ul className="menu dropdown-content bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 z-[1] mt-3 w-52 p-2">
+								<ul className="menu dropdown-content bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 z-[10] mt-3 w-52 p-2">
 									<li className="menu-title text-xs text-gray-500 dark:text-gray-400 px-3 py-1">
 										<span>
 											{user?.name} {user?.lastName}

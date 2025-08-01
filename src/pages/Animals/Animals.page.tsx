@@ -104,7 +104,7 @@ const Animals = () => {
 		const cards = containerRef.current?.querySelectorAll('.animal-card')
 
 		if (cards && cards.length > 0) {
-			gsap.from(cards, {
+			const animation = gsap.from(cards, {
 				opacity: 0,
 				x: 30,
 				stagger: 0.1,
@@ -112,6 +112,15 @@ const Animals = () => {
 				ease: 'power2.out',
 				clearProps: 'opacity,transform',
 			})
+
+			return () => {
+				// Kill the animation if component unmounts or filteredAnimals changes
+				if (animation) {
+					animation.kill()
+				}
+				// Kill any remaining tweens on the cards
+				gsap.killTweensOf(cards)
+			}
 		}
 	}, [filteredAnimals])
 	return (

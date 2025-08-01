@@ -208,19 +208,21 @@ const useModal = (open?: boolean) => {
 	useGSAP(() => {
 		if (!modalRef.current || !backdropRef.current || !contentRef.current) return
 
+		let timeline: gsap.core.Timeline | null = null
+
 		if (open) {
 			// Smoother entrance animation
 			gsap.set(backdropRef.current, { opacity: 0, backdropFilter: 'blur(0px)' })
 			gsap.set(contentRef.current, { scale: 0.9, opacity: 0, y: 30, rotationX: -10 })
 
-			const tl = gsap.timeline()
-			tl.to(backdropRef.current, {
+			timeline = gsap.timeline()
+			timeline.to(backdropRef.current, {
 				opacity: 1,
 				backdropFilter: 'blur(4px)',
 				duration: 0.4,
 				ease: 'power2.out',
 			})
-			tl.to(
+			timeline.to(
 				contentRef.current,
 				{
 					scale: 1,
@@ -235,8 +237,8 @@ const useModal = (open?: boolean) => {
 		} else {
 			// Smoother exit animation
 			if (backdropRef.current && contentRef.current) {
-				const tl = gsap.timeline()
-				tl.to(contentRef.current, {
+				timeline = gsap.timeline()
+				timeline.to(contentRef.current, {
 					scale: 0.9,
 					opacity: 0,
 					y: -20,
@@ -244,7 +246,7 @@ const useModal = (open?: boolean) => {
 					duration: 0.3,
 					ease: 'power2.in',
 				})
-				tl.to(
+				timeline.to(
 					backdropRef.current,
 					{
 						opacity: 0,
@@ -255,6 +257,15 @@ const useModal = (open?: boolean) => {
 					'-=0.1'
 				)
 			}
+		}
+
+		return () => {
+			// Kill the timeline and all animations
+			if (timeline) {
+				timeline.kill()
+			}
+			// Kill any remaining tweens on modal elements
+			gsap.killTweensOf([backdropRef.current, contentRef.current])
 		}
 	}, [open])
 
@@ -276,6 +287,9 @@ const useModal = (open?: boolean) => {
 			// Only allow downward swipe to close
 			if (deltaY > 0) {
 				const progress = Math.min(deltaY / 200, 1) // 200px to fully close
+
+				// Kill any existing animations before setting new values
+				gsap.killTweensOf(contentRef.current)
 				gsap.set(contentRef.current, {
 					y: deltaY * 0.5, // Reduced movement for better feel
 					scale: 1 - progress * 0.1,
@@ -283,6 +297,7 @@ const useModal = (open?: boolean) => {
 				})
 
 				if (backdropRef.current) {
+					gsap.killTweensOf(backdropRef.current)
 					gsap.set(backdropRef.current, {
 						opacity: 1 - progress * 0.5,
 					})
@@ -300,6 +315,9 @@ const useModal = (open?: boolean) => {
 
 		if (deltaY > 100) {
 			// Threshold to close
+			// Kill any existing animations before starting close animation
+			gsap.killTweensOf([contentRef.current, backdropRef.current])
+
 			// Close modal
 			const tl = gsap.timeline()
 			tl.to(contentRef.current, {
@@ -327,6 +345,9 @@ const useModal = (open?: boolean) => {
 				document.body.style.overflow = 'unset'
 			}, 300)
 		} else {
+			// Kill any existing animations before snapping back
+			gsap.killTweensOf([contentRef.current, backdropRef.current])
+
 			// Snap back to original position
 			gsap.to(contentRef.current, {
 				y: 0,

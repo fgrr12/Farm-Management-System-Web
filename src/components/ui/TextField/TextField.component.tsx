@@ -69,11 +69,20 @@ export const TextField: FC<TextFieldProps> = memo(
 
 		useGSAP(() => {
 			if (inputRef.current) {
-				gsap.fromTo(
+				const animation = gsap.fromTo(
 					inputRef.current,
 					{ y: 10, opacity: 0 },
 					{ y: 0, opacity: 1, duration: 0.4, ease: 'power2.out' }
 				)
+
+				return () => {
+					// Kill the animation if component unmounts
+					if (animation) {
+						animation.kill()
+					}
+					// Kill any remaining tweens on this element
+					gsap.killTweensOf(inputRef.current)
+				}
 			}
 		}, [])
 
@@ -81,6 +90,8 @@ export const TextField: FC<TextFieldProps> = memo(
 			(e: React.FocusEvent<HTMLInputElement>) => {
 				setIsFocused(true)
 				if (inputRef.current) {
+					// Kill any existing scale animations before starting new one
+					gsap.killTweensOf(inputRef.current, 'scale')
 					gsap.to(inputRef.current, { scale: 1.01, duration: 0.2, ease: 'power1.out' })
 				}
 				rest.onFocus?.(e)
@@ -92,6 +103,8 @@ export const TextField: FC<TextFieldProps> = memo(
 			(e: React.FocusEvent<HTMLInputElement>) => {
 				setIsFocused(false)
 				if (inputRef.current) {
+					// Kill any existing scale animations before starting new one
+					gsap.killTweensOf(inputRef.current, 'scale')
 					gsap.to(inputRef.current, { scale: 1, duration: 0.2, ease: 'power1.out' })
 				}
 				rest.onBlur?.(e)

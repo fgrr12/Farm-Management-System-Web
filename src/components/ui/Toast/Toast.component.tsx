@@ -103,7 +103,7 @@ export const Toast = memo(
 			})
 
 			// Entrance animation with improved easing
-			gsap.to(el, {
+			const entranceAnimation = gsap.to(el, {
 				x: 0,
 				y: 0,
 				opacity: 1,
@@ -125,8 +125,9 @@ export const Toast = memo(
 			el.addEventListener('mouseleave', handleMouseLeave)
 
 			// Progress bar animation
+			let progressAnimation: gsap.core.Tween | null = null
 			if (progressEl && duration > 0) {
-				gsap.fromTo(
+				progressAnimation = gsap.fromTo(
 					progressEl,
 					{ width: '100%' },
 					{
@@ -139,8 +140,23 @@ export const Toast = memo(
 			}
 
 			return () => {
+				// Clean up event listeners
 				el.removeEventListener('mouseenter', handleMouseEnter)
 				el.removeEventListener('mouseleave', handleMouseLeave)
+
+				// Kill all GSAP animations for this element
+				gsap.killTweensOf(el)
+				if (progressEl) {
+					gsap.killTweensOf(progressEl)
+				}
+
+				// Kill specific animations
+				if (entranceAnimation) {
+					entranceAnimation.kill()
+				}
+				if (progressAnimation) {
+					progressAnimation.kill()
+				}
 			}
 		}, [getInitialPosition, duration])
 

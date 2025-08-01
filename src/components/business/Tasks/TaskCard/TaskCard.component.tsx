@@ -1,7 +1,7 @@
 import { draggable } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { type FC, memo, useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { TaskCardProps } from './TaskCard.types'
@@ -67,16 +67,27 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task, draggable: isDraggable 
 	// GSAP animations
 	useGSAP(() => {
 		if (ref.current) {
-			gsap.fromTo(
+			const animation = gsap.fromTo(
 				ref.current,
 				{ y: 20, opacity: 0, scale: 0.95 },
 				{ y: 0, opacity: 1, scale: 1, duration: 0.5, ease: 'power2.out' }
 			)
+
+			return () => {
+				// Kill the animation if component unmounts
+				if (animation) {
+					animation.kill()
+				}
+				// Kill any remaining tweens on this element
+				gsap.killTweensOf(ref.current)
+			}
 		}
 	}, [])
 
 	const handleMouseEnter = useCallback(() => {
 		if (ref.current && !dragging) {
+			// Kill any existing hover animations before starting new one
+			gsap.killTweensOf(ref.current, 'y')
 			gsap.to(ref.current, {
 				y: -4,
 				duration: 0.2,
@@ -87,6 +98,8 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task, draggable: isDraggable 
 
 	const handleMouseLeave = useCallback(() => {
 		if (ref.current && !dragging) {
+			// Kill any existing hover animations before starting new one
+			gsap.killTweensOf(ref.current, 'y')
 			gsap.to(ref.current, {
 				y: 0,
 				duration: 0.2,
@@ -99,7 +112,7 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task, draggable: isDraggable 
 		const el = ref.current
 		if (!el || !isDraggable) return
 
-		return draggable({
+		const cleanup = draggable({
 			element: el,
 			getInitialData: () => ({
 				taskId: task.uuid,
@@ -109,16 +122,31 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task, draggable: isDraggable 
 			onDragStart: () => {
 				setDragging(true)
 				if (el) {
+					// Kill any existing drag animations before starting new one
+					gsap.killTweensOf(el, 'scale,rotation')
 					gsap.to(el, { scale: 1.03, rotation: 3, duration: 0.2, ease: 'power1.out' })
 				}
 			},
 			onDrop: () => {
 				setDragging(false)
 				if (el) {
+					// Kill any existing drag animations before starting new one
+					gsap.killTweensOf(el, 'scale,rotation')
 					gsap.to(el, { scale: 1, rotation: 0, duration: 0.3, ease: 'power2.out' })
 				}
 			},
 		})
+
+		return () => {
+			// Clean up drag and drop
+			if (cleanup) {
+				cleanup()
+			}
+			// Kill any remaining GSAP animations on this element
+			if (el) {
+				gsap.killTweensOf(el)
+			}
+		}
 	}, [isDraggable, task.uuid, task.status])
 
 	return (

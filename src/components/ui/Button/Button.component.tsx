@@ -1,6 +1,6 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import { memo, useCallback, useMemo, useRef } from 'react'
+import { type FC, memo, useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAppStore } from '@/store/useAppStore'
@@ -58,22 +58,35 @@ export const Button: FC<ButtonProps> = memo(
 
 		useGSAP(() => {
 			if (!globalLoading && btnRef.current) {
-				gsap.fromTo(
+				const animation = gsap.fromTo(
 					btnRef.current,
 					{ y: 20, opacity: 0 },
 					{ y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }
 				)
+
+				return () => {
+					// Kill the animation if component unmounts
+					if (animation) {
+						animation.kill()
+					}
+					// Kill any remaining tweens on this element
+					gsap.killTweensOf(btnRef.current)
+				}
 			}
 		}, [globalLoading])
 
 		const handleMouseEnter = useCallback(() => {
 			if (btnRef.current && !isDisabled) {
+				// Kill any existing scale animations before starting new one
+				gsap.killTweensOf(btnRef.current, 'scale')
 				gsap.to(btnRef.current, { scale: 1.02, duration: 0.2, ease: 'power1.out' })
 			}
 		}, [isDisabled])
 
 		const handleMouseLeave = useCallback(() => {
 			if (btnRef.current && !isDisabled) {
+				// Kill any existing scale animations before starting new one
+				gsap.killTweensOf(btnRef.current, 'scale')
 				gsap.to(btnRef.current, { scale: 1, duration: 0.2, ease: 'power1.out' })
 			}
 		}, [isDisabled])
@@ -119,22 +132,35 @@ export const BackButton: FC<BackButtonProps> = memo((props) => {
 
 	useGSAP(() => {
 		if (!loading && btnRef.current) {
-			gsap.fromTo(
+			const animation = gsap.fromTo(
 				btnRef.current,
 				{ x: -30, opacity: 0 },
 				{ x: 0, opacity: 1, duration: 0.5, ease: 'power2.out', delay: 0.2 }
 			)
+
+			return () => {
+				// Kill the animation if component unmounts
+				if (animation) {
+					animation.kill()
+				}
+				// Kill any remaining tweens on this element
+				gsap.killTweensOf(btnRef.current)
+			}
 		}
 	}, [loading])
 
 	const handleMouseEnter = useCallback(() => {
 		if (btnRef.current) {
+			// Kill any existing scale animations before starting new one
+			gsap.killTweensOf(btnRef.current, 'scale')
 			gsap.to(btnRef.current, { scale: 1.05, duration: 0.2, ease: 'power1.out' })
 		}
 	}, [])
 
 	const handleMouseLeave = useCallback(() => {
 		if (btnRef.current) {
+			// Kill any existing scale animations before starting new one
+			gsap.killTweensOf(btnRef.current, 'scale')
 			gsap.to(btnRef.current, { scale: 1, duration: 0.2, ease: 'power1.out' })
 		}
 	}, [])
