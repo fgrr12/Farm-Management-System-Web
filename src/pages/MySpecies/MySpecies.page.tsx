@@ -189,40 +189,44 @@ const MySpecies = () => {
 	}, [setPageTitle, t])
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 overflow-y-auto">
+		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto">
 			<div className="max-w-7xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
 				{/* Hero Header */}
-				<div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-6 sm:mb-8">
-					<div className="bg-gradient-to-r from-blue-600 to-green-600 px-4 sm:px-6 py-6 sm:py-8">
+				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-gray-900/25 overflow-hidden mb-6 sm:mb-8">
+					<div className="bg-gradient-to-r from-blue-600 to-green-600 dark:from-blue-700 dark:to-green-700 px-4 sm:px-6 py-6 sm:py-8">
 						<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
 							<div className="flex items-center gap-3 sm:gap-4">
-								<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+								<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 dark:bg-white/30 rounded-full flex items-center justify-center flex-shrink-0">
 									<i className="i-material-symbols-category bg-white! w-6! h-6! sm:w-8 sm:h-8" />
 								</div>
 								<div className="min-w-0">
 									<h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
 										{t('title')}
 									</h1>
-									<p className="text-blue-100 text-sm sm:text-base mt-1">{t('subtitle')}</p>
+									<p className="text-blue-100 dark:text-blue-200 text-sm sm:text-base mt-1">
+										{t('subtitle')}
+									</p>
 								</div>
 							</div>
 
 							{/* Stats Cards */}
 							<div className="flex gap-2 sm:gap-4">
-								<div className="bg-white/10 backdrop-blur-sm rounded-lg px-3 py-2 text-center">
+								<div className="bg-white/10 dark:bg-white/20 backdrop-blur-sm rounded-lg px-3 py-2 text-center">
 									<div className="text-lg sm:text-xl font-bold text-white">{species.length}</div>
-									<div className="text-xs text-blue-100">{t('totalSpecies')}</div>
+									<div className="text-xs text-blue-100 dark:text-blue-200">
+										{t('totalSpecies')}
+									</div>
 								</div>
-								<div className="bg-white/10 backdrop-blur-sm rounded-lg px-3 py-2 text-center">
+								<div className="bg-white/10 dark:bg-white/20 backdrop-blur-sm rounded-lg px-3 py-2 text-center">
 									<div className="text-lg sm:text-xl font-bold text-white">{breeds.length}</div>
-									<div className="text-xs text-blue-100">{t('totalBreeds')}</div>
+									<div className="text-xs text-blue-100 dark:text-blue-200">{t('totalBreeds')}</div>
 								</div>
 							</div>
 						</div>
 					</div>
 
 					{/* Actions Bar */}
-					<div className="p-4 sm:p-6 bg-gray-50 border-t border-gray-200">
+					<div className="p-4 sm:p-6 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700">
 						<div className="flex items-center justify-between gap-4">
 							<div className="flex-1 max-w-md">
 								<Search placeholder={t('search')} />
@@ -244,7 +248,7 @@ const MySpecies = () => {
 
 				{/* Species Grid */}
 				{species.length > 0 ? (
-					<div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+					<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-gray-900/25 overflow-hidden">
 						{/* Species Cards Grid */}
 						<div className="p-4 sm:p-6">
 							<div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
@@ -267,15 +271,17 @@ const MySpecies = () => {
 					</div>
 				) : (
 					/* Empty State */
-					<div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+					<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-gray-900/25 overflow-hidden">
 						<div className="px-4 sm:px-6 py-12 sm:py-16 text-center">
 							<div className="flex flex-col items-center justify-center gap-4 sm:gap-6">
-								<div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-full flex items-center justify-center">
-									<i className="i-material-symbols-category w-8! h-8! sm:w-10 sm:h-10 bg-gray-400!" />
+								<div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
+									<i className="i-material-symbols-category w-8! h-8! sm:w-10 sm:h-10 bg-gray-400! dark:bg-gray-500!" />
 								</div>
 								<div className="space-y-2">
-									<h3 className="text-xl sm:text-2xl font-bold text-gray-900">{t('noSpecies')}</h3>
-									<p className="text-sm sm:text-base text-gray-600 max-w-md mx-auto">
+									<h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">
+										{t('noSpecies')}
+									</h3>
+									<p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 max-w-md mx-auto">
 										{t('noSpeciesSubtitle')}
 									</p>
 								</div>

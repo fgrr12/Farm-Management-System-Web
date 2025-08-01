@@ -87,69 +87,172 @@ export const VoiceRecorder = () => {
 	}, [audioBlob, recording])
 
 	return (
-		<div className="flex flex-row items-end justify-end gap-4 absolute bottom-4 right-4 w-full">
-			{open && (
-				<div className="chat chat-end w-full mb-3">
-					<div className="chat-bubble w-full bg-gray-200 rounded-2xl p-4">
-						<div className="flex flex-col sm:flex-row gap-4 w-full items-center">
-							<button
-								type="button"
-								className="btn"
-								onClick={recording ? stopRecording : startRecording}
-								aria-label={recording ? 'Stop recording' : 'Start recording'}
-							>
-								<i
-									className={`w-6! h-6! ${recording ? 'i-material-symbols-stop-circle-outline-rounded' : 'i-material-symbols-play-circle-outline-rounded'}`}
-								/>
-							</button>
-
-							<div className="flex flex-col gap-2 items-center flex-1 max-w-60">
-								<div className="w-full h-1 bg-gray-400 rounded-full">
-									<div
-										className={`w-full h-1 rounded-full animate-pulse ${
-											recording ? 'bg-blue-500' : 'bg-gray-400'
-										}`}
-									/>
+		<div className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-4 max-w-sm w-full pointer-events-none">
+			<div className="pointer-events-auto">
+				{open && (
+					<div className="w-full mb-3 animate-in slide-in-from-bottom-2 fade-in duration-200 pointer-events-auto">
+						<div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 shadow-xl dark:shadow-2xl backdrop-blur-sm max-h-[calc(100vh-120px)] overflow-y-auto">
+							{/* Header */}
+							<div className="flex items-center justify-between mb-4">
+								<div className="flex items-center gap-2">
+									<div className="w-3 h-3 rounded-full bg-blue-500 dark:bg-blue-400 animate-pulse" />
+									<h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+										Voice Recorder
+									</h3>
 								</div>
-								<div className="text-xs text-gray-500">
-									{recording
-										? `Recording... ${recordingTime}s`
-										: `Recording duration: ${recordingTime}s`}
+								<div className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full">
+									{recording ? 'Recording...' : 'Ready'}
 								</div>
 							</div>
 
-							<button
-								type="button"
-								className="btn"
-								onClick={sendAudio}
-								disabled={!audioBlob || recording}
-								aria-label="Send audio for transcription"
-							>
-								Send
-							</button>
-						</div>
+							{/* Main Controls */}
+							<div className="flex flex-col sm:flex-row gap-4 w-full items-center">
+								<button
+									type="button"
+									className={`btn btn-circle btn-lg transition-all duration-200 ${
+										recording
+											? 'bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 border-red-500 dark:border-red-600 text-white shadow-lg shadow-red-500/25'
+											: 'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 border-blue-500 dark:border-blue-600 text-white shadow-lg shadow-blue-500/25'
+									}`}
+									onClick={recording ? stopRecording : startRecording}
+									aria-label={recording ? 'Stop recording' : 'Start recording'}
+								>
+									<i
+										className={`w-7 h-7 transition-transform duration-200 ${
+											recording
+												? 'i-material-symbols-stop-circle-outline-rounded scale-110'
+												: 'i-material-symbols-play-circle-outline-rounded hover:scale-110'
+										}`}
+									/>
+								</button>
 
-						<p className="mt-4 text-sm text-gray-700">
-							<strong>Transcription:</strong> {transcript}
-						</p>
-						<div key={audioUrl} className="mt-4 max-w-100">
-							<p className="text-sm text-gray-700 font-semibold mb-1">Play recorded audio:</p>
-							<audio controls className="w-full">
-								<source src={audioUrl} type="audio/webm" />
-								<track kind="captions" />
-								Your browser does not support audio.
-							</audio>
+								{/* Recording Status */}
+								<div className="flex flex-col gap-3 items-center flex-1 max-w-60">
+									{/* Progress Bar */}
+									<div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+										<div
+											className={`h-full rounded-full transition-all duration-300 ${
+												recording
+													? 'bg-gradient-to-r from-blue-500 to-purple-500 dark:from-blue-400 dark:to-purple-400 animate-pulse'
+													: 'bg-gray-300 dark:bg-gray-600'
+											}`}
+											style={{
+												width: recording ? '100%' : `${Math.min((recordingTime / 60) * 100, 100)}%`,
+											}}
+										/>
+									</div>
+
+									{/* Time Display */}
+									<div
+										className={`text-sm font-mono transition-colors duration-200 ${
+											recording
+												? 'text-blue-600 dark:text-blue-400 font-semibold'
+												: 'text-gray-500 dark:text-gray-400'
+										}`}
+									>
+										{recording ? (
+											<span className="flex items-center gap-2">
+												<div className="w-2 h-2 bg-red-500 rounded-full animate-ping" />
+												{Math.floor(recordingTime / 60)}:
+												{(recordingTime % 60).toString().padStart(2, '0')}
+											</span>
+										) : (
+											<span>
+												Duration: {Math.floor(recordingTime / 60)}:
+												{(recordingTime % 60).toString().padStart(2, '0')}
+											</span>
+										)}
+									</div>
+								</div>
+
+								{/* Send Button */}
+								<button
+									type="button"
+									className={`btn btn-outline transition-all duration-200 ${
+										!audioBlob || recording
+											? 'btn-disabled opacity-50 cursor-not-allowed'
+											: 'btn-success hover:btn-success hover:scale-105 dark:border-green-500 dark:text-green-400 dark:hover:bg-green-500 dark:hover:text-white shadow-lg'
+									}`}
+									onClick={sendAudio}
+									disabled={!audioBlob || recording}
+									aria-label="Send audio for transcription"
+								>
+									<i className="i-material-symbols-send w-5 h-5" />
+									Send
+								</button>
+							</div>
+
+							{/* Transcription Section */}
+							{transcript && (
+								<div className="mt-6 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl border border-gray-200 dark:border-gray-600 transition-all duration-200">
+									<div className="flex items-center gap-2 mb-2">
+										<i className="i-material-symbols-transcribe w-4 h-4 text-blue-500 dark:text-blue-400" />
+										<span className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+											Transcription
+										</span>
+									</div>
+									<p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+										{transcript}
+									</p>
+								</div>
+							)}
+
+							{/* Audio Player Section */}
+							{audioUrl && (
+								<div className="mt-6 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl border border-gray-200 dark:border-gray-600 transition-all duration-200">
+									<div className="flex items-center gap-2 mb-3">
+										<i className="i-material-symbols-volume-up w-4 h-4 text-green-500 dark:text-green-400" />
+										<span className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+											Recorded Audio
+										</span>
+									</div>
+									<audio
+										controls
+										className="w-full h-10 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600"
+										key={audioUrl}
+									>
+										<source src={audioUrl} type="audio/webm" />
+										<track kind="captions" />
+										Your browser does not support audio playback.
+									</audio>
+								</div>
+							)}
+
+							{/* Help Text */}
+							<div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+								<p className="text-xs text-blue-700 dark:text-blue-300 text-center">
+									💡 Click the record button to start, then send your audio for transcription
+								</p>
+							</div>
 						</div>
 					</div>
-				</div>
-			)}
+				)}
 
-			<ActionButton
-				className="btn bg-info border-none shadow-none rounded-4xl p-2"
-				icon={open ? 'i-lineicons-xmark' : 'i-lineicons-microphone-1'}
-				onClick={() => setOpen(!open)}
-				aria-label={open ? 'Close voice recorder' : 'Open voice recorder'}
-			/>
+				{/* Floating Action Button */}
+				<div className="relative">
+					<ActionButton
+						className={`btn btn-circle btn-lg border-none shadow-lg transition-all duration-300 ${
+							open
+								? 'bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 text-white rotate-45 shadow-red-500/25'
+								: 'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white hover:scale-110 shadow-blue-500/25'
+						}`}
+						icon={open ? 'i-lineicons-xmark' : 'i-lineicons-microphone-1'}
+						onClick={() => setOpen(!open)}
+						aria-label={open ? 'Close voice recorder' : 'Open voice recorder'}
+					/>
+
+					{/* Notification Badge */}
+					{recording && (
+						<div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full animate-ping" />
+					)}
+
+					{audioBlob && !open && (
+						<div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full">
+							<div className="w-4 h-4 bg-green-500 rounded-full animate-pulse" />
+						</div>
+					)}
+				</div>
+			</div>
 		</div>
 	)
 }

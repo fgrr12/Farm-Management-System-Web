@@ -110,51 +110,55 @@ const Tasks = () => {
 	}, [setPageTitle, t])
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 overflow-y-auto">
+		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto">
 			<div className="max-w-7xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
 				<a
 					href="#kanban-board"
-					className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
+					className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 dark:bg-blue-500 text-white p-2 rounded z-50"
 				>
 					{t('accessibility.skipToTasks')}
 				</a>
 
 				{/* Hero Header */}
-				<div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-6 sm:mb-8">
-					<div className="bg-gradient-to-r from-blue-600 to-green-600 px-4 sm:px-6 py-6 sm:py-8">
+				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden mb-6 sm:mb-8">
+					<div className="bg-gradient-to-r from-blue-600 to-green-600 dark:from-blue-700 dark:to-green-700 px-4 sm:px-6 py-6 sm:py-8">
 						<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
 							<div className="flex items-center gap-3 sm:gap-4">
-								<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+								<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 dark:bg-white/30 rounded-full flex items-center justify-center flex-shrink-0">
 									<i className="i-material-symbols-task bg-white! w-6! h-6! sm:w-8 sm:h-8" />
 								</div>
 								<div className="min-w-0">
 									<h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
 										{t('title')}
 									</h1>
-									<p className="text-blue-100 text-sm sm:text-base mt-1">{t('subtitle')}</p>
+									<p className="text-blue-100 dark:text-blue-200 text-sm sm:text-base mt-1">
+										{t('subtitle')}
+									</p>
 								</div>
 							</div>
 
 							{/* Stats Cards */}
 							<div className="flex gap-2 sm:gap-4">
-								<div className="bg-white/10 backdrop-blur-sm rounded-lg px-3 py-2 text-center">
+								<div className="bg-white/10 dark:bg-white/20 backdrop-blur-sm rounded-lg px-3 py-2 text-center">
 									<div className="text-lg sm:text-xl font-bold text-white">
 										{taskColumns.todo.length + taskColumns['in-progress'].length}
 									</div>
-									<div className="text-xs text-blue-100">{t('activeTasks')}</div>
+									<div className="text-xs text-blue-100 dark:text-blue-200">{t('activeTasks')}</div>
 								</div>
-								<div className="bg-white/10 backdrop-blur-sm rounded-lg px-3 py-2 text-center">
+								<div className="bg-white/10 dark:bg-white/20 backdrop-blur-sm rounded-lg px-3 py-2 text-center">
 									<div className="text-lg sm:text-xl font-bold text-white">
 										{taskColumns.done.length}
 									</div>
-									<div className="text-xs text-blue-100">{t('completedTasks')}</div>
+									<div className="text-xs text-blue-100 dark:text-blue-200">
+										{t('completedTasks')}
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 
 					{/* Actions Bar */}
-					<div className="p-4 sm:p-6 bg-gray-50 border-t border-gray-200">
+					<div className="p-4 sm:p-6 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600">
 						<div className="flex items-center justify-between gap-4">
 							<div className="flex-1 max-w-md">
 								<TaskFilters
@@ -168,7 +172,7 @@ const Tasks = () => {
 								<Button
 									onClick={handleAddTask}
 									aria-describedby="add-task-description"
-									className="btn btn-primary h-12 text-base sm:text-lg px-6 sm:px-8"
+									className="btn btn-primary h-12 text-base sm:text-lg px-6 sm:px-8 dark:bg-blue-600 dark:hover:bg-blue-700"
 								>
 									<i className="i-material-symbols-add-circle-outline w-5! h-5! mr-2" />
 									{t('addTask')}
@@ -182,7 +186,7 @@ const Tasks = () => {
 				</div>
 
 				{/* Kanban Board */}
-				<div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden">
 					<main id="kanban-board" className="p-4 sm:p-6">
 						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 min-h-[600px]">
 							{COLUMN_CONFIG.map((column) => (

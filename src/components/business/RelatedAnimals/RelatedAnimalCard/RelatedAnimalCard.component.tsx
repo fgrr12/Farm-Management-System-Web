@@ -22,8 +22,10 @@ export const RelatedAnimalCard: FC<CardProps> = ({ animal, ...props }) => {
 	}, [dragging, animal])
 	return (
 		<div
-			className={`bg-white rounded-lg border border-gray-200 p-4 cursor-grab transition-all duration-200 hover:shadow-md ${
-				dragging ? 'shadow-lg scale-105 bg-blue-50 border-blue-300' : 'hover:border-gray-300'
+			className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600 p-4 cursor-grab transition-all duration-200 hover:shadow-md dark:hover:shadow-lg ${
+				dragging
+					? 'shadow-lg scale-105 bg-blue-50 dark:bg-blue-900/20 border-blue-300 dark:border-blue-500'
+					: 'hover:border-gray-300 dark:hover:border-gray-500'
 			}`}
 			ref={ref}
 			role="button"
@@ -34,7 +36,7 @@ export const RelatedAnimalCard: FC<CardProps> = ({ animal, ...props }) => {
 			<div className="flex items-center gap-4">
 				{/* Animal Avatar */}
 				<div className="relative flex-shrink-0">
-					<div className="w-18 h-18 rounded-full bg-gray-100 overflow-hidden border-2 border-gray-200">
+					<div className="w-18 h-18 rounded-full bg-gray-100 dark:bg-gray-700 overflow-hidden border-2 border-gray-200 dark:border-gray-600">
 						<img
 							className="w-full h-full object-cover pointer-events-none"
 							src={animal.picture || '/assets/default-imgs/cow.svg'}
@@ -42,11 +44,11 @@ export const RelatedAnimalCard: FC<CardProps> = ({ animal, ...props }) => {
 						/>
 					</div>
 					{/* Gender indicator */}
-					<div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-white border border-gray-200 flex items-center justify-center">
+					<div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 flex items-center justify-center">
 						{animal.gender.toLowerCase() === 'male' ? (
-							<i className="i-material-symbols-male bg-blue-500! w-6! h-6!" />
+							<i className="i-material-symbols-male bg-blue-500! dark:bg-blue-400! w-6! h-6!" />
 						) : (
-							<i className="i-material-symbols-female bg-pink-500! w-6! h-6!" />
+							<i className="i-material-symbols-female bg-pink-500! dark:bg-pink-400! w-6! h-6!" />
 						)}
 					</div>
 				</div>
@@ -54,17 +56,19 @@ export const RelatedAnimalCard: FC<CardProps> = ({ animal, ...props }) => {
 				{/* Animal Info */}
 				<div className="flex-1 min-w-0">
 					<div className="flex items-center gap-2 mb-2">
-						<span className="font-bold text-gray-900 text-xl">#{animal.animalId}</span>
+						<span className="font-bold text-gray-900 dark:text-gray-100 text-xl">
+							#{animal.animalId}
+						</span>
 						{dragging && (
-							<i className="i-material-symbols-drag-indicator w-5! h-5! text-gray-400" />
+							<i className="i-material-symbols-drag-indicator w-5! h-5! text-gray-400 dark:text-gray-500" />
 						)}
 					</div>
-					<p className="text-gray-600 font-medium">{animal.breed}</p>
+					<p className="text-gray-600 dark:text-gray-300 font-medium">{animal.breed}</p>
 				</div>
 
 				{/* Drag Handle */}
 				<div className="flex-shrink-0 opacity-40 hover:opacity-60 transition-opacity">
-					<i className="i-material-symbols-drag-handle w-5! h-5! text-gray-400" />
+					<i className="i-material-symbols-drag-handle w-5! h-5! text-gray-400 dark:text-gray-500" />
 				</div>
 			</div>
 		</div>

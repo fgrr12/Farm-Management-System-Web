@@ -31,7 +31,8 @@ import { PWAUpdatePrompt } from '@/components/pwa/PWAUpdatePrompt.component'
 
 import { useTheme } from '@/hooks/system/useTheme'
 
-// import { VoiceRecorder } from './components/layout/VoiceRecorder/VoiceRecorder'
+import { VoiceRecorder } from './components/layout/VoiceRecorder/VoiceRecorder'
+import { isDevelopment } from './config/environment'
 import { usePreloadRoutes } from './hooks/ui/usePreloadRoutes'
 
 gsap.registerPlugin(SplitText, useGSAP)
@@ -311,7 +312,7 @@ export const App = () => {
 						onCancel={modalData.onCancel}
 					/>
 					<Loading open={appLoading || authLoading} />
-					{/* {user && <VoiceRecorder />} */}
+					{user && isDevelopment && <VoiceRecorder />}
 					<ToastManager />
 					<OfflineIndicator />
 					<PWAUpdatePrompt />

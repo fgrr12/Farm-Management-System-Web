@@ -71,33 +71,35 @@ export const ExternalRelationForm: FC<ExternalRelationFormProps> = ({ currentAni
 
 	return (
 		<dialog className="modal">
-			<div className="modal-box max-w-md">
+			<div className="modal-box max-w-md bg-white dark:bg-gray-800 border dark:border-gray-600">
 				{/* Header */}
 				<div className="flex items-center justify-between mb-6">
 					<div className="flex items-center gap-3">
-						<div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-							<i className="i-material-symbols-add-link w-5! h-5! text-blue-600" />
+						<div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+							<i className="i-material-symbols-add-link w-5! h-5! text-blue-600 dark:text-blue-400" />
 						</div>
-						<h3 className="text-xl font-semibold text-gray-900">{t('title')}</h3>
+						<h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">{t('title')}</h3>
 					</div>
 					<button
 						type="button"
-						className="btn btn-sm btn-ghost btn-circle"
+						className="btn btn-sm btn-ghost btn-circle hover:bg-gray-100 dark:hover:bg-gray-700"
 						onClick={handleClose}
 						aria-label="Close"
 					>
-						<i className="i-material-symbols-close w-5! h-5!" />
+						<i className="i-material-symbols-close w-5! h-5! text-gray-600 dark:text-gray-400" />
 					</button>
 				</div>
 
 				{/* Relation Type Selector */}
-				<div className="bg-gray-50 rounded-lg p-4 mb-6">
-					<p className="text-sm text-gray-600 mb-3">{t('relationTypeLabel')}</p>
+				<div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-6">
+					<p className="text-sm text-gray-600 dark:text-gray-300 mb-3">{t('relationTypeLabel')}</p>
 					<div className="grid grid-cols-2 gap-2">
 						<button
 							type="button"
 							className={`btn btn-sm ${
-								relation.relation === 'Child' ? 'btn-primary' : 'btn-outline btn-primary'
+								relation.relation === 'Child'
+									? 'btn-primary'
+									: 'btn-outline btn-primary dark:border-blue-500 dark:text-blue-400 dark:hover:bg-blue-500 dark:hover:text-white'
 							} flex items-center gap-2`}
 							onClick={() => setRelation({ ...relation, relation: 'Child' })}
 						>
@@ -107,7 +109,9 @@ export const ExternalRelationForm: FC<ExternalRelationFormProps> = ({ currentAni
 						<button
 							type="button"
 							className={`btn btn-sm ${
-								relation.relation === 'Parent' ? 'btn-primary' : 'btn-outline btn-primary'
+								relation.relation === 'Parent'
+									? 'btn-primary'
+									: 'btn-outline btn-primary dark:border-blue-500 dark:text-blue-400 dark:hover:bg-blue-500 dark:hover:text-white'
 							} flex items-center gap-2`}
 							onClick={() => setRelation({ ...relation, relation: 'Parent' })}
 						>
@@ -152,12 +156,14 @@ export const ExternalRelationForm: FC<ExternalRelationFormProps> = ({ currentAni
 
 					{/* Relation Preview */}
 					{relation.animalId && (
-						<div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+						<div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
 							<div className="flex items-center gap-2 mb-2">
-								<i className="i-material-symbols-info w-4! h-4! text-blue-600" />
-								<span className="text-sm font-medium text-blue-800">{t('relationPreview')}</span>
+								<i className="i-material-symbols-info w-4! h-4! text-blue-600 dark:text-blue-400" />
+								<span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+									{t('relationPreview')}
+								</span>
 							</div>
-							<p className="text-sm text-blue-700">
+							<p className="text-sm text-blue-700 dark:text-blue-300">
 								{t('newRelationPhrase', {
 									currentAnimal: currentAnimal.animalId,
 									animalId: relation.animalId,
@@ -180,7 +186,7 @@ export const ExternalRelationForm: FC<ExternalRelationFormProps> = ({ currentAni
 						</Button>
 						<button
 							type="button"
-							className="btn btn-outline btn-error flex items-center gap-2"
+							className="btn btn-outline btn-error dark:border-red-500 dark:text-red-400 dark:hover:bg-red-500 dark:hover:text-white flex items-center gap-2"
 							onClick={handleClose}
 						>
 							<i className="i-material-symbols-cancel w-4! h-4!" />
@@ -189,7 +195,7 @@ export const ExternalRelationForm: FC<ExternalRelationFormProps> = ({ currentAni
 					</div>
 				</form>
 			</div>
-			<form method="dialog" className="modal-backdrop">
+			<form method="dialog" className="modal-backdrop bg-black/30 dark:bg-black/50">
 				<button type="button" onClick={handleClose} />
 			</form>
 		</dialog>

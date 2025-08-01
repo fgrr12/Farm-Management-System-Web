@@ -76,17 +76,17 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 		const genderConfig = useMemo(() => {
 			return gender.toLowerCase() === 'male'
 				? {
-					icon: 'i-tdesign-gender-male',
-					color: 'bg-blue-500!',
-					bgColor: 'bg-blue-100',
-					textColor: 'text-blue-800',
-				}
+						icon: 'i-tdesign-gender-male',
+						color: 'bg-blue-500!',
+						bgColor: 'bg-blue-100',
+						textColor: 'text-blue-800',
+					}
 				: {
-					icon: 'i-tdesign-gender-female',
-					color: 'bg-pink-500!',
-					bgColor: 'bg-pink-100',
-					textColor: 'text-pink-800',
-				}
+						icon: 'i-tdesign-gender-female',
+						color: 'bg-pink-500!',
+						bgColor: 'bg-pink-100',
+						textColor: 'text-pink-800',
+					}
 		}, [gender])
 
 		useGSAP(() => {

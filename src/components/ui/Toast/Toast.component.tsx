@@ -22,31 +22,31 @@ export const Toast = memo(
 			const configs = {
 				success: {
 					icon: 'i-material-symbols-check-circle',
-					bgColor: 'bg-green-50',
-					borderColor: 'border-green-200',
-					textColor: 'text-green-800',
-					iconColor: 'bg-green-500!',
+					bgColor: 'bg-green-50 dark:bg-green-900/20',
+					borderColor: 'border-green-200 dark:border-green-700',
+					textColor: 'text-green-800 dark:text-green-200',
+					iconColor: 'bg-green-500! dark:bg-green-400!',
 				},
 				error: {
 					icon: 'i-material-symbols-error',
-					bgColor: 'bg-red-50',
-					borderColor: 'border-red-200',
-					textColor: 'text-red-800',
-					iconColor: 'bg-red-500!',
+					bgColor: 'bg-red-50 dark:bg-red-900/20',
+					borderColor: 'border-red-200 dark:border-red-700',
+					textColor: 'text-red-800 dark:text-red-200',
+					iconColor: 'bg-red-500! dark:bg-red-400!',
 				},
 				warning: {
 					icon: 'i-material-symbols-warning',
-					bgColor: 'bg-yellow-50',
-					borderColor: 'border-yellow-200',
-					textColor: 'text-yellow-800',
-					iconColor: 'bg-yellow-500!',
+					bgColor: 'bg-yellow-50 dark:bg-yellow-900/20',
+					borderColor: 'border-yellow-200 dark:border-yellow-700',
+					textColor: 'text-yellow-800 dark:text-yellow-200',
+					iconColor: 'bg-yellow-500! dark:bg-yellow-400!',
 				},
 				info: {
 					icon: 'i-material-symbols-info',
-					bgColor: 'bg-blue-50',
-					borderColor: 'border-blue-200',
-					textColor: 'text-blue-800',
-					iconColor: 'bg-blue-500!',
+					bgColor: 'bg-blue-50 dark:bg-blue-900/20',
+					borderColor: 'border-blue-200 dark:border-blue-700',
+					textColor: 'text-blue-800 dark:text-blue-200',
+					iconColor: 'bg-blue-500! dark:bg-blue-400!',
 				},
 			}
 			return configs[type]
@@ -160,10 +160,10 @@ export const Toast = memo(
 			<div
 				ref={toastRef}
 				className={`
-				relative w-full max-w-sm
-				${toastConfig.bgColor} ${toastConfig.borderColor} ${toastConfig.textColor}
-				border rounded-xl shadow-2xl backdrop-blur-sm
-			`}
+					relative w-full max-w-sm
+					${toastConfig.bgColor} ${toastConfig.borderColor} ${toastConfig.textColor}
+					border rounded-xl shadow-2xl dark:shadow-3xl backdrop-blur-sm
+				`}
 				role="alert"
 				aria-live="polite"
 				style={{
@@ -173,10 +173,10 @@ export const Toast = memo(
 			>
 				{/* Progress Bar */}
 				{duration > 0 && (
-					<div className="absolute top-0 left-0 right-0 h-1 bg-black/10 rounded-t-xl overflow-hidden">
+					<div className="absolute top-0 left-0 right-0 h-1 bg-black/10 dark:bg-white/10 rounded-t-xl overflow-hidden">
 						<div
 							ref={progressRef}
-							className={`h-full ${toastConfig.iconColor.replace('!', '')} transition-all`}
+							className={`h-full ${toastConfig.iconColor.replace('!', '').replace(' dark:bg-', ' dark:bg-')} transition-all`}
 						/>
 					</div>
 				)}
@@ -199,10 +199,10 @@ export const Toast = memo(
 									type="button"
 									onClick={handleActionClick}
 									className={`
-									mt-2 text-xs font-semibold underline hover:no-underline
-									${toastConfig.textColor} opacity-80 hover:opacity-100
-									transition-opacity duration-200
-								`}
+										mt-2 text-xs font-semibold underline hover:no-underline
+										${toastConfig.textColor} opacity-80 hover:opacity-100
+										transition-opacity duration-200
+									`}
 								>
 									{action.label}
 								</button>
@@ -215,10 +215,10 @@ export const Toast = memo(
 								type="button"
 								onClick={handleClose}
 								className={`
-								flex-shrink-0 p-1 rounded-lg hover:bg-black/10 
-								transition-colors duration-200 focus:outline-none 
-								focus:ring-2 focus:ring-black/20
-							`}
+									flex-shrink-0 p-1 rounded-lg hover:bg-black/10 dark:hover:bg-white/10
+									transition-colors duration-200 focus:outline-none 
+									focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20
+								`}
 								aria-label="Close notification"
 							>
 								<i className={`i-material-symbols-close w-4! h-4! ${toastConfig.iconColor}`} />

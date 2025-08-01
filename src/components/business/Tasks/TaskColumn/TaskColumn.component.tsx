@@ -44,18 +44,24 @@ export const TaskColumn: FC<TaskColumnProps> = memo(
 			<div
 				ref={ref}
 				className={`
-				flex flex-col h-full min-h-[600px] rounded-lg shadow-sm border-2 transition-all duration-200 relative
-				${isDraggedOver ? `border-${color} bg-${bgColor}` : 'border-gray-200 bg-white'}
-			`}
+		flex flex-col h-full min-h-[600px] rounded-lg shadow-sm border-2 transition-all duration-200 relative
+		${
+			isDraggedOver
+				? `border-${color} bg-${bgColor} dark:border-${color} dark:bg-${bgColor}`
+				: 'border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800'
+		}
+	`}
 				role="region"
 				aria-labelledby={`column-${status}-heading`}
 			>
 				{/* Column Header */}
-				<div className={`p-4 border-b border-gray-200 bg-${bgColor}`}>
+				<div
+					className={`p-4 border-b border-gray-200 dark:border-gray-600 bg-${bgColor} dark:bg-gray-700`}
+				>
 					<div className="flex items-center justify-between mb-3">
 						<h2
 							id={`column-${status}-heading`}
-							className={`text-lg font-semibold text-${color} flex items-center gap-2`}
+							className={`text-lg font-semibold text-${color} dark:text-${color} flex items-center gap-2`}
 						>
 							<div className={`w-3 h-3 rounded-full bg-${color}`} />
 							{title}
@@ -68,11 +74,11 @@ export const TaskColumn: FC<TaskColumnProps> = memo(
 					{/* Search */}
 					<div className="relative">
 						<div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-							<div className="w-4 h-4 i-material-symbols-search text-gray-400" />
+							<div className="w-4 h-4 i-material-symbols-search text-gray-400 dark:text-gray-500" />
 						</div>
 						<input
 							type="search"
-							className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+							className="w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
 							placeholder={t('searchInColumn')}
 							value={search}
 							onChange={(e) => handleSearchChange(e.target.value)}
@@ -89,14 +95,14 @@ export const TaskColumn: FC<TaskColumnProps> = memo(
 						))}
 
 						{filteredTasks.length === 0 && !search && (
-							<div className="flex flex-col items-center justify-center py-8 text-gray-400">
+							<div className="flex flex-col items-center justify-center py-8 text-gray-400 dark:text-gray-500">
 								<div className="w-12 h-12 i-material-symbols-task-alt mb-3" />
 								<p className="text-sm text-center">{t('noTasksInColumn')}</p>
 							</div>
 						)}
 
 						{filteredTasks.length === 0 && search && (
-							<div className="flex flex-col items-center justify-center py-8 text-gray-400">
+							<div className="flex flex-col items-center justify-center py-8 text-gray-400 dark:text-gray-500">
 								<div className="w-12 h-12 i-material-symbols-search-off mb-3" />
 								<p className="text-sm text-center">{t('noTasksFound')}</p>
 							</div>
@@ -107,7 +113,7 @@ export const TaskColumn: FC<TaskColumnProps> = memo(
 					{isDraggedOver && (
 						<div className="absolute inset-0 pointer-events-none">
 							<div
-								className={`w-full h-full border-2 border-dashed border-${color} bg-${bgColor} bg-opacity-15 rounded-md flex items-center justify-center`}
+								className={`w-full h-full border-2 border-dashed border-${color} bg-${bgColor} dark:bg-${bgColor} bg-opacity-15 dark:bg-opacity-20 rounded-md flex items-center justify-center`}
 							>
 								<div
 									className={`bg-${color} text-white text-sm font-medium px-3 py-2 rounded-md shadow-lg`}

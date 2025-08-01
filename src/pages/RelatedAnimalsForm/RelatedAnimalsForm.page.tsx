@@ -255,27 +255,29 @@ const RelatedAnimalsForm = () => {
 	}, [setPageTitle, t])
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 overflow-y-auto">
+		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto">
 			<div className="max-w-7xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
 				<a
 					href="#main-content"
-					className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
+					className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 dark:bg-blue-500 text-white p-2 rounded z-50"
 				>
 					{t('accessibility.skipToMainContent')}
 				</a>
 
 				{/* Hero Header */}
-				<div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-6 sm:mb-8">
-					<div className="bg-gradient-to-r from-blue-600 to-green-600 px-4 sm:px-6 py-6 sm:py-8">
+				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden mb-6 sm:mb-8">
+					<div className="bg-gradient-to-r from-blue-600 to-green-600 dark:from-blue-700 dark:to-green-700 px-4 sm:px-6 py-6 sm:py-8">
 						<div className="flex items-center gap-3 sm:gap-4">
-							<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+							<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 dark:bg-white/30 rounded-full flex items-center justify-center flex-shrink-0">
 								<i className="i-material-symbols-family-restroom bg-white! w-6! h-6! sm:w-8 sm:h-8" />
 							</div>
 							<div className="min-w-0">
 								<h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
 									{t('title')}
 								</h1>
-								<p className="text-blue-100 text-sm sm:text-base mt-1">{t('subtitle')}</p>
+								<p className="text-blue-100 dark:text-blue-200 text-sm sm:text-base mt-1">
+									{t('subtitle')}
+								</p>
 							</div>
 						</div>
 					</div>
@@ -288,12 +290,15 @@ const RelatedAnimalsForm = () => {
 				>
 					{currentAnimal && (
 						<section
-							className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 flex flex-col gap-4"
+							className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-xl p-4 sm:p-6 flex flex-col gap-4"
 							aria-labelledby="selected-animal-heading"
 						>
 							<div className="flex items-center gap-2 mb-4">
-								<i className="i-material-symbols-pets bg-blue-600! w-5! h-5!" />
-								<h2 id="selected-animal-heading" className="text-lg font-semibold text-gray-900">
+								<i className="i-material-symbols-pets bg-blue-600! dark:bg-blue-500! w-5! h-5!" />
+								<h2
+									id="selected-animal-heading"
+									className="text-lg font-semibold text-gray-900 dark:text-gray-100"
+								>
 									{t('selectedAnimal')}
 								</h2>
 							</div>
@@ -303,7 +308,7 @@ const RelatedAnimalsForm = () => {
 							<Button
 								onClick={() => document?.querySelector('dialog')?.showModal()}
 								aria-describedby="external-relation-description"
-								className="btn btn-outline btn-primary flex items-center gap-2"
+								className="btn btn-outline btn-primary flex items-center gap-2 dark:border-blue-500 dark:hover:bg-blue-500 dark:hover:text-white"
 							>
 								<i className="i-material-symbols-add-link w-4! h-4!" />
 								{t('addExternalRelation')}
@@ -319,7 +324,7 @@ const RelatedAnimalsForm = () => {
 						animals={animalsLists.animals}
 						location={0}
 						icon="i-material-symbols-pets"
-						iconColor="bg-green-600!"
+						iconColor="bg-green-600! dark:bg-green-500!"
 						aria-label={t('accessibility.availableAnimalsContainer')}
 					/>
 
@@ -328,7 +333,7 @@ const RelatedAnimalsForm = () => {
 						animals={animalsLists.parents}
 						location={1}
 						icon="i-material-symbols-family-restroom"
-						iconColor="bg-purple-600!"
+						iconColor="bg-purple-600! dark:bg-purple-500!"
 						aria-label={t('accessibility.parentsContainer')}
 					/>
 
@@ -337,7 +342,7 @@ const RelatedAnimalsForm = () => {
 						animals={animalsLists.children}
 						location={2}
 						icon="i-material-symbols-child-care"
-						iconColor="bg-orange-600!"
+						iconColor="bg-orange-600! dark:bg-orange-500!"
 						aria-label={t('accessibility.childrenContainer')}
 					/>
 

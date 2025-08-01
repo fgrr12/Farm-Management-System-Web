@@ -11,44 +11,56 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task, draggable: isDraggable 
 	const ref = useRef<HTMLDivElement>(null)
 	const [dragging, setDragging] = useState(false)
 
-	const getPriorityColor = useCallback((priority: TaskPriority) => {
-		switch (priority) {
-			case 'low':
-				return 'bg-green-500'
-			case 'medium':
-				return 'bg-yellow-500'
-			case 'high':
-				return 'bg-red-500'
-			default:
-				return 'bg-gray-500'
-		}
-	}, [])
-
 	const getPriorityIcon = useCallback((priority: TaskPriority) => {
 		switch (priority) {
 			case 'low':
-				return 'i-material-symbols-keyboard-arrow-down bg-green-600!'
+				return 'i-material-symbols-keyboard-arrow-down bg-green-600! dark:bg-green-400!'
 			case 'medium':
-				return 'i-material-symbols-remove bg-yellow-600!'
+				return 'i-material-symbols-remove bg-yellow-600! dark:bg-yellow-400!'
 			case 'high':
-				return 'i-material-symbols-keyboard-arrow-up bg-red-600!'
+				return 'i-material-symbols-keyboard-arrow-up bg-red-600! dark:bg-red-400!'
 			default:
-				return 'i-material-symbols-remove bg-gray-600!'
+				return 'i-material-symbols-remove bg-gray-600! dark:bg-gray-400!'
 		}
 	}, [])
 
 	const getStatusIcon = useCallback((status: TaskStatus) => {
 		switch (status) {
 			case 'todo':
-				return 'i-material-symbols-radio-button-unchecked bg-gray-500!'
+				return 'i-material-symbols-radio-button-unchecked bg-gray-500! dark:bg-gray-400!'
 			case 'in-progress':
-				return 'i-material-symbols-hourglass-empty bg-blue-500!'
+				return 'i-material-symbols-hourglass-empty bg-blue-500! dark:bg-blue-400!'
 			case 'done':
-				return 'i-material-symbols-check-circle bg-green-500!'
+				return 'i-material-symbols-check-circle bg-green-500! dark:bg-green-400!'
 			case 'archived':
-				return 'i-material-symbols-archive bg-gray-400!'
+				return 'i-material-symbols-archive bg-gray-400! dark:bg-gray-300!'
 			default:
-				return 'i-material-symbols-radio-button-unchecked bg-gray-500!'
+				return 'i-material-symbols-radio-button-unchecked bg-gray-500! dark:bg-gray-400!'
+		}
+	}, [])
+
+	const getPriorityGradient = useCallback((priority: TaskPriority) => {
+		switch (priority) {
+			case 'high':
+				return {
+					light: 'linear-gradient(90deg, #ef4444, #dc2626)',
+					dark: 'linear-gradient(90deg, #f87171, #ef4444)',
+				}
+			case 'medium':
+				return {
+					light: 'linear-gradient(90deg, #eab308, #ca8a04)',
+					dark: 'linear-gradient(90deg, #fbbf24, #eab308)',
+				}
+			case 'low':
+				return {
+					light: 'linear-gradient(90deg, #22c55e, #16a34a)',
+					dark: 'linear-gradient(90deg, #4ade80, #22c55e)',
+				}
+			default:
+				return {
+					light: 'linear-gradient(90deg, #6b7280, #4b5563)',
+					dark: 'linear-gradient(90deg, #9ca3af, #6b7280)',
+				}
 		}
 	}, [])
 
@@ -113,10 +125,10 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task, draggable: isDraggable 
 		<div
 			ref={ref}
 			className={`
-				card bg-white w-full shadow-sm border border-gray-200 rounded-xl overflow-hidden
-				transition-all duration-200 hover:shadow-xl hover:border-gray-300
+				card bg-white dark:bg-gray-800 w-full shadow-sm border border-gray-200 dark:border-gray-600 rounded-xl overflow-hidden
+				transition-all duration-200 hover:shadow-xl dark:hover:shadow-2xl hover:border-gray-300 dark:hover:border-gray-500
 				${isDraggable ? 'cursor-grab' : ''}
-				${dragging ? 'opacity-90 shadow-2xl z-10 ring-2 ring-blue-300' : ''}
+				${dragging ? 'opacity-90 shadow-2xl z-10 ring-2 ring-blue-300 dark:ring-blue-400' : ''}
 			`}
 			role="article"
 			aria-labelledby={`task-${task.uuid}-title`}
@@ -133,13 +145,15 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task, draggable: isDraggable 
 				<div className="flex items-center justify-between mb-2">
 					<div className="flex items-center gap-2">
 						<div className={`w-4 h-4 ${getStatusIcon(task.status)}`} />
-						<span className="text-xs text-gray-500 uppercase tracking-wide">
+						<span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">
 							{t(`status.${task.status}`)}
 						</span>
 					</div>
 					<div className="flex items-center gap-1">
 						<div className={`w-4 h-4 ${getPriorityIcon(task.priority)}`} />
-						<span className="text-xs text-gray-500">{t(`priority.${task.priority}`)}</span>
+						<span className="text-xs text-gray-500 dark:text-gray-400">
+							{t(`priority.${task.priority}`)}
+						</span>
 					</div>
 				</div>
 
@@ -147,27 +161,27 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task, draggable: isDraggable 
 				<div className="flex-1">
 					<h3
 						id={`task-${task.uuid}-title`}
-						className="font-semibold text-gray-900 mb-2 line-clamp-2"
+						className="font-semibold text-gray-900 dark:text-gray-100 mb-2 line-clamp-2"
 					>
 						{task.title}
 					</h3>
-					<p id={`task-${task.uuid}-description`} className="text-sm text-gray-600 line-clamp-3">
+					<p
+						id={`task-${task.uuid}-description`}
+						className="text-sm text-gray-600 dark:text-gray-300 line-clamp-3"
+					>
 						{task.description}
 					</p>
 				</div>
 
 				{/* Priority indicator bar with gradient */}
 				<div className="mt-3">
-					<div className="h-1 w-full bg-gray-200 rounded-full overflow-hidden">
+					<div className="h-1 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
 						<div
-							className={`h-full rounded-full transition-all duration-300 ${getPriorityColor(task.priority)}`}
+							className={'h-full rounded-full transition-all duration-300'}
 							style={{
-								background:
-									task.priority === 'high'
-										? 'linear-gradient(90deg, #ef4444, #dc2626)'
-										: task.priority === 'medium'
-											? 'linear-gradient(90deg, #eab308, #ca8a04)'
-											: 'linear-gradient(90deg, #22c55e, #16a34a)',
+								background: window.matchMedia('(prefers-color-scheme: dark)').matches
+									? getPriorityGradient(task.priority).dark
+									: getPriorityGradient(task.priority).light,
 							}}
 						/>
 					</div>
@@ -175,7 +189,7 @@ export const TaskCard: FC<TaskCardProps> = memo(({ task, draggable: isDraggable 
 
 				{/* Timestamps */}
 				{(task.createdAt || task.updatedAt) && (
-					<div className="mt-2 text-xs text-gray-400">
+					<div className="mt-2 text-xs text-gray-400 dark:text-gray-500">
 						{task.updatedAt && (
 							<span>
 								{t('updatedAt')}: {new Date(task.updatedAt).toLocaleDateString()}
