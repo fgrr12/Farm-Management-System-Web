@@ -14,3 +14,5 @@ type HealthRecordType =
 	| 'Deworming'
 	| 'Birth'
 	| 'Drying'
+
+type HealthStatus = 'healthy' | 'sick' | 'treatment' | 'unknown' | 'critical'

@@ -487,6 +487,46 @@ const AnimalForm = () => {
 										</fieldset>
 									</div>
 
+									{/* Health Status Card - Only for editing existing animals */}
+									{params.animalUuid && (
+										<div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4 sm:p-6 border border-gray-200 dark:border-gray-600 transition-all duration-300 hover:shadow-md dark:hover:shadow-lg dark:hover:shadow-black/20">
+											<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+												<i className="i-material-symbols-health-and-safety w-5! h-5! bg-blue-600! dark:bg-blue-500!" />
+												{t('healthStatus')}
+											</h3>
+											<Controller
+												name="healthStatus"
+												control={control}
+												render={({ field }) => (
+													<Select
+														{...field}
+														legend={t('currentHealthStatus')}
+														defaultLabel={t('placeholders.selectHealthStatus')}
+														items={[
+															{ value: 'healthy', name: t('healthStatusOptions.healthy') },
+															{ value: 'sick', name: t('healthStatusOptions.sick') },
+															{ value: 'treatment', name: t('healthStatusOptions.treatment') },
+															{ value: 'critical', name: t('healthStatusOptions.critical') },
+															{ value: 'unknown', name: t('healthStatusOptions.unknown') },
+														]}
+														error={
+															errors.healthStatus
+																? getErrorMessage(errors.healthStatus.message || '')
+																: undefined
+														}
+														aria-describedby="health-status-help"
+													/>
+												)}
+											/>
+											<div id="health-status-help" className="sr-only">
+												{t('accessibility.healthStatusHelp')}
+											</div>
+											<p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+												{t('healthStatusNote')}
+											</p>
+										</div>
+									)}
+
 									{/* Origin Card */}
 									<div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4 sm:p-6 border border-gray-200 dark:border-gray-600 transition-all duration-300 hover:shadow-md dark:hover:shadow-lg dark:hover:shadow-black/20">
 										<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">

@@ -64,7 +64,7 @@ const formatRelativeTime = (date: string | Date | undefined): string => {
 const getDashboardStats = async (farmUuid: string): Promise<DashboardStats> => {
 	try {
 		const [animals, tasks] = await Promise.all([
-			AnimalsService.getAnimals(farmUuid),
+			AnimalsService.getAnimalsWithHealthStatus(farmUuid),
 			TasksService.getTasks({
 				farmUuid,
 				search: '',
@@ -79,7 +79,10 @@ const getDashboardStats = async (farmUuid: string): Promise<DashboardStats> => {
 		const pendingTasks = tasks.filter(
 			(task) => task.status === 'todo' || task.status === 'in-progress'
 		).length
-		const healthyAnimals = animals.filter((animal) => animal.status).length
+		// Count animals that are healthy and still in the farm (not sold or dead)
+		const healthyAnimals = animals.filter(
+			(animal) => animal.healthStatus === 'healthy' && !animal.soldDate && !animal.deathDate
+		).length
 
 		const currentMonth = dayjs().month()
 		const currentYear = dayjs().year()
@@ -135,7 +138,7 @@ const getDashboardStats = async (farmUuid: string): Promise<DashboardStats> => {
 
 const getDashboardStatsDetailed = async (farmUuid: string): Promise<DashboardStats> => {
 	try {
-		const animals = await AnimalsService.getAnimals(farmUuid)
+		const animals = await AnimalsService.getAnimalsWithHealthStatus(farmUuid)
 		const currentMonth = dayjs().month()
 		const currentYear = dayjs().year()
 		const previousMonth = dayjs().subtract(1, 'month')
@@ -185,9 +188,14 @@ const getDashboardStatsDetailed = async (farmUuid: string): Promise<DashboardSta
 					)
 				: undefined
 
+		// Count healthy animals that are still in the farm
+		const healthyAnimals = animals.filter(
+			(animal) => animal.healthStatus === 'healthy' && !animal.soldDate && !animal.deathDate
+		).length
+
 		return {
 			totalAnimals: animals.length,
-			healthyAnimals: 0,
+			healthyAnimals,
 			pendingTasks: 0,
 			monthlyProduction,
 			animalsChange: undefined,
@@ -278,128 +286,38 @@ const getAnimalDistribution = async (farmUuid: string): Promise<AnimalDistributi
 	}
 }
 
-const checkForHealthIssue = (record: HealthRecord): boolean => {
-	const reason = record.reason?.toLowerCase() || ''
-	const notes = record.notes?.toLowerCase() || ''
-
-	const healthIssueKeywords = [
-		'problema',
-		'enfermo',
-		'enfermedad',
-		'dolor',
-		'infección',
-		'lesión',
-		'herida',
-		'cojera',
-		'fiebre',
-		'diarrea',
-		'tos',
-		'respiratorio',
-		'corazón',
-		'cardíaco',
-		'hígado',
-		'riñón',
-		'digestivo',
-		'mastitis',
-		'problem',
-		'sick',
-		'disease',
-		'pain',
-		'infection',
-		'injury',
-		'wound',
-		'lameness',
-		'fever',
-		'diarrhea',
-		'cough',
-		'respiratory',
-		'heart',
-		'cardiac',
-		'liver',
-		'kidney',
-		'digestive',
-		'illness',
-	]
-
-	const hasKeywords = healthIssueKeywords.some(
-		(keyword) => reason.includes(keyword) || notes.includes(keyword)
-	)
-
-	const hasMedication = Boolean(record.medication && record.medication.trim())
-
-	const hasAbnormalTemp = Boolean(
-		record.temperature && (record.temperature < 37.5 || record.temperature > 39.5)
-	)
-
-	return hasKeywords || hasMedication || hasAbnormalTemp
-}
-
 const getHealthOverview = async (farmUuid: string): Promise<HealthOverview> => {
 	try {
 		const animals = await AnimalsService.getAnimals(farmUuid)
-		const limits = getOptimalLimits(animals.length)
-		const animalsToProcess = limits.animals ? animals.slice(0, limits.animals) : animals
+
+		// Filter out sold or dead animals
+		const activeAnimals = animals.filter((animal) => !animal.soldDate && !animal.deathDate)
 
 		let healthy = 0
 		let sick = 0
 		let inTreatment = 0
 		let checkupDue = 0
 
-		for (let i = 0; i < animalsToProcess.length; i += limits.batchSize) {
-			const batch = animalsToProcess.slice(i, i + limits.batchSize)
-
-			const batchPromises = batch.map(async (animal) => {
-				if (!animal.status) {
-					return { sick: 1, healthy: 0, inTreatment: 0, checkupDue: 0 }
-				}
-
-				const healthRecords = await HealthRecordsService.getHealthRecords(
-					animal.uuid,
-					limits.healthRecords
-				)
-
-				if (healthRecords.length === 0) {
-					return { sick: 0, healthy: 0, inTreatment: 0, checkupDue: 1 }
-				}
-
-				const recentRecord = healthRecords[0]
-				const recordDate = dayjs(recentRecord.date)
-				const daysSinceRecord = dayjs().diff(recordDate, 'days')
-				const hasHealthIssue = checkForHealthIssue(recentRecord)
-
-				if (recentRecord.type === 'Medication' || recentRecord.type === 'Surgery') {
-					return daysSinceRecord <= 30
-						? { sick: 0, healthy: 0, inTreatment: 1, checkupDue: 0 }
-						: { sick: 0, healthy: 1, inTreatment: 0, checkupDue: 0 }
-				}
-
-				if (recentRecord.type === 'Checkup') {
-					if (hasHealthIssue) {
-						return recentRecord.medication
-							? { sick: 0, healthy: 0, inTreatment: 1, checkupDue: 0 }
-							: { sick: 1, healthy: 0, inTreatment: 0, checkupDue: 0 }
-					}
-					return daysSinceRecord > 180
-						? { sick: 0, healthy: 0, inTreatment: 0, checkupDue: 1 }
-						: { sick: 0, healthy: 1, inTreatment: 0, checkupDue: 0 }
-				}
-
-				if (daysSinceRecord > 180) {
-					return { sick: 0, healthy: 0, inTreatment: 0, checkupDue: 1 }
-				}
-
-				return { sick: 0, healthy: 1, inTreatment: 0, checkupDue: 0 }
-			})
-
-			const batchResults = await Promise.all(batchPromises)
-
-			batchResults.forEach((result) => {
-				healthy += result.healthy
-				sick += result.sick
-				inTreatment += result.inTreatment
-				checkupDue += result.checkupDue
-			})
-		}
+		activeAnimals.forEach((animal) => {
+			// Use the healthStatus field directly from the animal
+			switch (animal.healthStatus) {
+				case 'healthy':
+					healthy++
+					break
+				case 'sick':
+					sick++
+					break
+				case 'treatment':
+					inTreatment++
+					break
+				case 'critical':
+					sick++ // Critical animals are counted as sick
+					break
+				default:
+					checkupDue++ // Animals with unknown status or any other status need checkup
+					break
+			}
+		})
 
 		return {
 			healthy,
@@ -616,7 +534,9 @@ const getDashboardQuickStats = async (farmUuid: string): Promise<Partial<Dashboa
 
 		return {
 			totalAnimals: animals.length,
-			healthyAnimals: animals.filter((animal) => animal.status).length,
+			healthyAnimals: animals.filter(
+				(animal) => animal.healthStatus === 'healthy' && !animal.soldDate && !animal.deathDate
+			).length,
 			pendingTasks: tasks.filter((task) => task.status === 'todo' || task.status === 'in-progress')
 				.length,
 			monthlyProduction: 0,

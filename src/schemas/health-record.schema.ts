@@ -36,6 +36,7 @@ export const healthRecordSchema = z.object({
 		.string()
 		.min(1, 'healthRecord.validation.notesRequired')
 		.max(500, 'healthRecord.validation.notesTooLong'),
+	manualHealthStatus: z.enum(['healthy', 'sick', 'treatment', 'critical', 'unknown']).optional(),
 	uuid: z.string().optional(),
 	animalUuid: z.string().optional(),
 	createdBy: z.string().optional(),

@@ -12,7 +12,7 @@ import type { AnimalCardProps, CardProps } from './AnimalCard.types'
 export const AnimalCard: FC<AnimalCardProps> = memo(
 	({
 		animal,
-		healthStatus = 'unknown',
+		healthStatus,
 		lastHealthCheck,
 		productionStatus,
 		age,
@@ -25,6 +25,9 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 		const navigate = useNavigate()
 		const cardRef = useRef<HTMLDivElement>(null)
 		const { uuid, animalId, breedName, gender, picture } = animal
+
+		// Use health status from animal model, fallback to prop, then unknown
+		const currentHealthStatus = animal.healthStatus || healthStatus || 'unknown'
 
 		const cardClasses = useMemo(() => {
 			const baseClasses =
@@ -40,38 +43,66 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 		}, [variant, className])
 
 		const healthConfig = useMemo(() => {
+			// Check if animal is sold or dead first
+			if (animal.soldDate) {
+				return {
+					color: 'from-blue-400 to-blue-500',
+					icon: 'i-material-symbols-sell',
+					text: 'Sold',
+					bgColor: 'bg-blue-100 dark:bg-blue-900/30',
+					textColor: 'text-blue-800 dark:text-blue-200',
+				}
+			}
+
+			if (animal.deathDate) {
+				return {
+					color: 'from-gray-600 to-gray-700',
+					icon: 'i-material-symbols-deceased',
+					text: 'Deceased',
+					bgColor: 'bg-gray-200 dark:bg-gray-800',
+					textColor: 'text-gray-800 dark:text-gray-300',
+				}
+			}
+
 			const configs = {
 				healthy: {
 					color: 'from-green-500 to-emerald-600',
 					icon: 'i-material-symbols-health-and-safety',
 					text: 'Healthy',
-					bgColor: 'bg-green-100',
-					textColor: 'text-green-800',
+					bgColor: 'bg-green-100 dark:bg-green-900/30',
+					textColor: 'text-green-800 dark:text-green-200',
 				},
 				sick: {
-					color: 'from-red-500 to-red-600',
+					color: 'from-orange-600 to-red-500',
 					icon: 'i-material-symbols-sick',
 					text: 'Sick',
-					bgColor: 'bg-red-100',
-					textColor: 'text-red-800',
+					bgColor: 'bg-orange-200 dark:bg-orange-900/30',
+					textColor: 'text-orange-900 dark:text-orange-200',
 				},
 				treatment: {
-					color: 'from-yellow-500 to-orange-500',
+					color: 'from-yellow-500 to-amber-500',
 					icon: 'i-material-symbols-medication',
 					text: 'Treatment',
-					bgColor: 'bg-yellow-100',
-					textColor: 'text-yellow-800',
+					bgColor: 'bg-yellow-100 dark:bg-yellow-900/30',
+					textColor: 'text-yellow-800 dark:text-yellow-200',
+				},
+				critical: {
+					color: 'from-red-700 to-rose-800',
+					icon: 'i-material-symbols-emergency',
+					text: 'Critical',
+					bgColor: 'bg-red-300 dark:bg-red-900/50',
+					textColor: 'text-red-900 dark:text-red-100',
 				},
 				unknown: {
 					color: 'from-gray-400 to-gray-500',
 					icon: 'i-material-symbols-help',
-					text: 'Unknown',
-					bgColor: 'bg-gray-100',
-					textColor: 'text-gray-600',
+					text: 'Check Needed',
+					bgColor: 'bg-gray-100 dark:bg-gray-700',
+					textColor: 'text-gray-600 dark:text-gray-400',
 				},
 			}
-			return configs[healthStatus]
-		}, [healthStatus])
+			return configs[currentHealthStatus]
+		}, [currentHealthStatus, animal.soldDate, animal.deathDate])
 
 		const genderConfig = useMemo(() => {
 			return gender.toLowerCase() === 'male'

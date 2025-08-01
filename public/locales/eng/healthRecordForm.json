@@ -40,7 +40,8 @@
 		"reviewedBy": "E.g: Dr. Smith, Veterinarian Johnson, Farm Manager...",
 		"selectType": "What type of health event is this?",
 		"temperature": "Record body temperature if measured...",
-		"weight": "Enter current weight measurement..."
+		"weight": "Enter current weight measurement...",
+		"autoCalculate": "Auto-calculate from record"
 	},
 	"reason": "Reason",
 	"reviewedBy": "Reviewed By",
@@ -64,5 +65,15 @@
 		"typeRequired": "Type is required",
 		"uuidRequired": "Health record UUID is required"
 	},
-	"weight": "Weight"
+	"weight": "Weight",
+	"healthStatusOverride": "Health Status Override",
+	"manualHealthStatus": "Manual Health Status",
+	"healthStatusHelp": "Leave empty to automatically calculate based on this health record, or select a specific status to override the calculation.",
+	"healthStatus": {
+		"healthy": "Healthy",
+		"sick": "Sick",
+		"treatment": "Under Treatment",
+		"critical": "Critical",
+		"unknown": "Unknown"
+	}
 }

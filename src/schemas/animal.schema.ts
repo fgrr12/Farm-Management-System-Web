@@ -47,6 +47,7 @@ export const animalSchema = z.object({
 		.optional()
 		.or(z.literal('')),
 
+	healthStatus: z.enum(['healthy', 'sick', 'treatment', 'critical', 'unknown']).optional(),
 	uuid: z.string().optional(),
 	farmUuid: z.string().optional(),
 	picture: z.string().optional().or(z.literal('')),

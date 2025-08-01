@@ -429,6 +429,7 @@ const ANIMAL_INITIAL_STATE: Animal = {
 	picture: '',
 	status: true,
 	origin: '',
+	healthStatus: 'unknown',
 	relatedAnimals: {
 		parents: [],
 		children: [],

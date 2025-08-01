@@ -20,7 +20,8 @@
 		"soldDateHelp": "Selecciona cuándo se vendió este animal (opcional)",
 		"speciesHelp": "Selecciona la especie de este animal",
 		"uploadPhoto": "Subir foto del animal",
-		"weightHelp": "Ingresa el peso de este animal en {{unit}}"
+		"weightHelp": "Ingresa el peso de este animal en {{unit}}",
+		"healthStatusHelp": "Selecciona el estado de salud actual de este animal"
 	},
 	"addAnimal": "Añadir Animal",
 	"addButton": "Añadir Animal",
@@ -51,7 +52,8 @@
 		"genderHint": "Sexo biológico del animal",
 		"origin": "Ej: Comprado en Feria Ganadera, Nacido en la granja, Intercambio con vecino...",
 		"speciesHint": "Tipo de animal (bovino, porcino, ovino, etc.)",
-		"weight": "Ingresa el peso en kilogramos o libras..."
+		"weight": "Ingresa el peso en kilogramos o libras...",
+		"selectHealthStatus": "Selecciona el estado de salud actual"
 	},
 	"purchaseDate": "Fecha de compra",
 	"selectBreed": "¿Qué raza es?",
@@ -82,5 +84,15 @@
 		"weightPositive": "El peso debe ser un número positivo",
 		"weightTooHigh": "El peso no puede exceder 10,000"
 	},
-	"weight": "Peso"
+	"weight": "Peso",
+	"healthStatus": "Estado de Salud",
+	"currentHealthStatus": "Estado de Salud Actual",
+	"healthStatusNote": "Esto anulará el estado de salud calculado automáticamente basado en los registros de salud.",
+	"healthStatusOptions": {
+		"healthy": "Saludable",
+		"sick": "Enfermo",
+		"treatment": "En Tratamiento",
+		"critical": "Crítico",
+		"unknown": "Desconocido"
+	}
 }
