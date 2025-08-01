@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next'
 
 import { useFarmStore } from '@/store/useFarmStore'
 
+import { Button } from '@/components/ui/Button'
+
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 const BillingCard = () => {
@@ -362,14 +364,13 @@ const BillingCard = () => {
 
 						{/* Download Button */}
 						<div className="flex justify-center">
-							<button
-								type="button"
+							<Button
 								onClick={handleDownloadCards}
 								className="btn btn-primary flex items-center gap-2 px-6 py-3"
 							>
 								<i className="i-material-symbols-download w-5! h-5!" />
 								{t('downloadCards')}
-							</button>
+							</Button>
 						</div>
 					</div>
 				</div>
