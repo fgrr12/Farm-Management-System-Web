@@ -21,5 +21,5 @@ export default defineConfig({
 			},
 		},
 	},
-	images: ['public/vite.svg'],
+	images: ['public/logo.png'],
 })
