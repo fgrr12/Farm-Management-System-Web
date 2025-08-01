@@ -10,14 +10,16 @@ export default defineConfig({
 			sizes: [512],
 			padding: 0,
 			resizeOptions: {
-				background: '#054F41',
+				background: 'transparent',
+				fit: 'cover',
 			},
 		},
 		apple: {
 			sizes: [180],
 			padding: 0,
 			resizeOptions: {
-				background: '#054F41',
+				background: 'transparent',
+				fit: 'cover',
 			},
 		},
 	},
