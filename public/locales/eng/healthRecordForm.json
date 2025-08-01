@@ -26,11 +26,22 @@
 		"surgery": "Surgery",
 		"vaccination": "Vaccination"
 	},
+	"healthStatus": {
+		"critical": "Critical",
+		"healthy": "Healthy",
+		"sick": "Sick",
+		"treatment": "Under Treatment",
+		"unknown": "Unknown"
+	},
+	"healthStatusHelp": "Leave empty to automatically calculate based on this health record, or select a specific status to override the calculation.",
+	"healthStatusOverride": "Health Status Override",
+	"manualHealthStatus": "Manual Health Status",
 	"medication": "Medication",
 	"medicationDetails": "Medication Details",
 	"notes": "Notes",
 	"physicalMeasurements": "Physical Measurements",
 	"placeholders": {
+		"autoCalculate": "Auto-calculate from record",
 		"dosage": "E.g: 10ml, 2 tablets, 5mg/kg, 1 syringe...",
 		"duration": "E.g: 5 days, 1 week, Until symptoms resolve, Single dose...",
 		"frequency": "E.g: Once daily, Every 12 hours, Twice a day, As needed...",
@@ -40,8 +51,7 @@
 		"reviewedBy": "E.g: Dr. Smith, Veterinarian Johnson, Farm Manager...",
 		"selectType": "What type of health event is this?",
 		"temperature": "Record body temperature if measured...",
-		"weight": "Enter current weight measurement...",
-		"autoCalculate": "Auto-calculate from record"
+		"weight": "Enter current weight measurement..."
 	},
 	"reason": "Reason",
 	"reviewedBy": "Reviewed By",
@@ -65,15 +75,5 @@
 		"typeRequired": "Type is required",
 		"uuidRequired": "Health record UUID is required"
 	},
-	"weight": "Weight",
-	"healthStatusOverride": "Health Status Override",
-	"manualHealthStatus": "Manual Health Status",
-	"healthStatusHelp": "Leave empty to automatically calculate based on this health record, or select a specific status to override the calculation.",
-	"healthStatus": {
-		"healthy": "Healthy",
-		"sick": "Sick",
-		"treatment": "Under Treatment",
-		"critical": "Critical",
-		"unknown": "Unknown"
-	}
+	"weight": "Weight"
 }

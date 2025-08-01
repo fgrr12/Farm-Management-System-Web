@@ -31,11 +31,13 @@
 		"female": "Femenino",
 		"male": "Masculino"
 	},
+	"inFarm": "En Granja",
 	"noAnimals": "No hay animales",
 	"noAnimalsSubtitle": "Agrega un animal a tu granja para comenzar",
 	"noFiltersApplied": "Sin filtros aplicados",
 	"results": "resultados",
 	"search": "Buscar",
+	"showing": "Mostrando",
 	"species": "Especies",
 	"status": {
 		"dead": "Muerto",

@@ -54,7 +54,7 @@ describe('DashboardService', () => {
 			const mockAnimals = [
 				{ uuid: '1', status: true, healthStatus: 'healthy' },
 				{ uuid: '2', status: true, healthStatus: 'healthy' },
-				{ uuid: '3', status: false, healthStatus: 'sick' },
+				{ uuid: '3', status: false, healthStatus: 'sick', deathDate: '2024-01-01' }, // Dead animal
 			]
 
 			const mockTasks = [
@@ -72,7 +72,7 @@ describe('DashboardService', () => {
 			const result = await DashboardService.getDashboardQuickStats('farm-uuid')
 
 			expect(result).toEqual({
-				totalAnimals: 3,
+				totalAnimals: 2, // Excludes dead animals
 				healthyAnimals: 2, // Only animals with healthStatus: 'healthy'
 				pendingTasks: 2, // todo + in-progress
 				monthlyProduction: 0,
@@ -88,6 +88,31 @@ describe('DashboardService', () => {
 			expect(result).toEqual({
 				totalAnimals: 0,
 				healthyAnimals: 0,
+				pendingTasks: 0,
+				monthlyProduction: 0,
+			})
+		})
+
+		it('should exclude dead animals from total count', async () => {
+			const mockAnimals = [
+				{ uuid: '1', status: true, healthStatus: 'healthy' },
+				{ uuid: '2', status: true, healthStatus: 'sick', deathDate: '2024-01-01' },
+				{ uuid: '3', status: true, healthStatus: 'healthy', soldDate: '2024-01-01' }, // Sold but alive
+			]
+
+			const mockTasks: any[] = []
+
+			const { AnimalsService } = await import('@/services/animals')
+			const { TasksService } = await import('@/services/tasks')
+
+			vi.mocked(AnimalsService.getAnimals).mockResolvedValue(mockAnimals as any)
+			vi.mocked(TasksService.getTasks).mockResolvedValue(mockTasks)
+
+			const result = await DashboardService.getDashboardQuickStats('farm-uuid')
+
+			expect(result).toEqual({
+				totalAnimals: 2, // Excludes dead animal (uuid: '2')
+				healthyAnimals: 1, // Only healthy animals that are not sold or dead
 				pendingTasks: 0,
 				monthlyProduction: 0,
 			})

@@ -26,11 +26,22 @@
 		"surgery": "Cirugía",
 		"vaccination": "Vacunación"
 	},
+	"healthStatus": {
+		"critical": "Crítico",
+		"healthy": "Saludable",
+		"sick": "Enfermo",
+		"treatment": "En Tratamiento",
+		"unknown": "Desconocido"
+	},
+	"healthStatusHelp": "Deja vacío para calcular automáticamente basado en este registro de salud, o selecciona un estado específico para anular el cálculo.",
+	"healthStatusOverride": "Anular Estado de Salud",
+	"manualHealthStatus": "Estado de Salud Manual",
 	"medication": "Medicamento",
 	"medicationDetails": "Detalles de Medicación",
 	"notes": "Notas",
 	"physicalMeasurements": "Medidas Físicas",
 	"placeholders": {
+		"autoCalculate": "Auto-calcular del registro",
 		"dosage": "Ej: 10ml, 2 tabletas, 5mg/kg, 1 jeringa...",
 		"duration": "Ej: 5 días, 1 semana, Hasta que se resuelvan síntomas, Dosis única...",
 		"frequency": "Ej: Una vez al día, Cada 12 horas, Dos veces al día, Según necesidad...",
@@ -40,8 +51,7 @@
 		"reviewedBy": "Ej: Dr. García, Veterinario López, Encargado de granja...",
 		"selectType": "¿Qué tipo de evento de salud es este?",
 		"temperature": "Registra la temperatura corporal si se midió...",
-		"weight": "Ingresa la medida de peso actual...",
-		"autoCalculate": "Auto-calcular del registro"
+		"weight": "Ingresa la medida de peso actual..."
 	},
 	"reason": "Razón",
 	"reviewedBy": "Revisado Por",
@@ -65,15 +75,5 @@
 		"typeRequired": "El tipo es requerido",
 		"uuidRequired": "El UUID del registro de salud es requerido"
 	},
-	"weight": "Peso",
-	"healthStatusOverride": "Anular Estado de Salud",
-	"manualHealthStatus": "Estado de Salud Manual",
-	"healthStatusHelp": "Deja vacío para calcular automáticamente basado en este registro de salud, o selecciona un estado específico para anular el cálculo.",
-	"healthStatus": {
-		"healthy": "Saludable",
-		"sick": "Enfermo",
-		"treatment": "En Tratamiento",
-		"critical": "Crítico",
-		"unknown": "Desconocido"
-	}
+	"weight": "Peso"
 }

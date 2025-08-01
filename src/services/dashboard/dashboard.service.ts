@@ -75,7 +75,9 @@ const getDashboardStats = async (farmUuid: string): Promise<DashboardStats> => {
 		])
 
 		const limits = getOptimalLimits(animals.length)
-		const totalAnimals = animals.length
+		// Count only live animals (exclude dead animals)
+		const liveAnimals = animals.filter((animal) => !animal.deathDate)
+		const totalAnimals = liveAnimals.length
 		const pendingTasks = tasks.filter(
 			(task) => task.status === 'todo' || task.status === 'in-progress'
 		).length
@@ -193,8 +195,11 @@ const getDashboardStatsDetailed = async (farmUuid: string): Promise<DashboardSta
 			(animal) => animal.healthStatus === 'healthy' && !animal.soldDate && !animal.deathDate
 		).length
 
+		// Count only live animals (exclude dead animals)
+		const liveAnimals = animals.filter((animal) => !animal.deathDate)
+
 		return {
-			totalAnimals: animals.length,
+			totalAnimals: liveAnimals.length,
 			healthyAnimals,
 			pendingTasks: 0,
 			monthlyProduction,
@@ -532,8 +537,11 @@ const getDashboardQuickStats = async (farmUuid: string): Promise<Partial<Dashboa
 			}),
 		])
 
+		// Filter out dead animals for total count
+		const liveAnimals = animals.filter((animal) => !animal.deathDate)
+
 		return {
-			totalAnimals: animals.length,
+			totalAnimals: liveAnimals.length,
 			healthyAnimals: animals.filter(
 				(animal) => animal.healthStatus === 'healthy' && !animal.soldDate && !animal.deathDate
 			).length,

@@ -31,11 +31,13 @@
 		"female": "Female",
 		"male": "Male"
 	},
+	"inFarm": "In Farm",
 	"noAnimals": "No animals",
 	"noAnimalsSubtitle": "Add an animal to your farm to get started",
 	"noFiltersApplied": "No filters applied",
 	"results": "results",
 	"search": "Search",
+	"showing": "Showing",
 	"species": "Species",
 	"status": {
 		"dead": "Dead",

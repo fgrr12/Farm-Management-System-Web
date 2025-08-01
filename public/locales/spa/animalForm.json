@@ -13,6 +13,7 @@
 		"editAnimalForm": "Formulario para editar animal",
 		"editSubmitHelp": "Guardar cambios en este animal",
 		"genderHelp": "Selecciona el género de este animal",
+		"healthStatusHelp": "Selecciona el estado de salud actual de este animal",
 		"originHelp": "Describe el origen o fuente de este animal (opcional)",
 		"photoHelp": "Haz clic o arrastra para subir una foto del animal",
 		"purchaseDateHelp": "Selecciona cuándo se compró este animal (opcional)",
@@ -20,8 +21,7 @@
 		"soldDateHelp": "Selecciona cuándo se vendió este animal (opcional)",
 		"speciesHelp": "Selecciona la especie de este animal",
 		"uploadPhoto": "Subir foto del animal",
-		"weightHelp": "Ingresa el peso de este animal en {{unit}}",
-		"healthStatusHelp": "Selecciona el estado de salud actual de este animal"
+		"weightHelp": "Ingresa el peso de este animal en {{unit}}"
 	},
 	"addAnimal": "Añadir Animal",
 	"addButton": "Añadir Animal",
@@ -33,6 +33,7 @@
 	"birthDate": "Fecha de nacimiento",
 	"breed": "Raza",
 	"color": "Color",
+	"currentHealthStatus": "Estado de Salud Actual",
 	"dateInformation": "Información de Fechas",
 	"deathDate": "Fecha de fallecimiento",
 	"editAnimal": "Editar Animal",
@@ -43,6 +44,15 @@
 		"female": "Hembra",
 		"male": "Macho"
 	},
+	"healthStatus": "Estado de Salud",
+	"healthStatusNote": "Esto anulará el estado de salud calculado automáticamente basado en los registros de salud.",
+	"healthStatusOptions": {
+		"critical": "Crítico",
+		"healthy": "Saludable",
+		"sick": "Enfermo",
+		"treatment": "En Tratamiento",
+		"unknown": "Desconocido"
+	},
 	"origin": "Origen",
 	"photoHint": "Sube una foto clara de tu animal (opcional)",
 	"placeholders": {
@@ -51,9 +61,9 @@
 		"color": "Ej: Negro con manchas blancas, Marrón claro, Pinto...",
 		"genderHint": "Sexo biológico del animal",
 		"origin": "Ej: Comprado en Feria Ganadera, Nacido en la granja, Intercambio con vecino...",
+		"selectHealthStatus": "Selecciona el estado de salud actual",
 		"speciesHint": "Tipo de animal (bovino, porcino, ovino, etc.)",
-		"weight": "Ingresa el peso en kilogramos o libras...",
-		"selectHealthStatus": "Selecciona el estado de salud actual"
+		"weight": "Ingresa el peso en kilogramos o libras..."
 	},
 	"purchaseDate": "Fecha de compra",
 	"selectBreed": "¿Qué raza es?",
@@ -84,15 +94,5 @@
 		"weightPositive": "El peso debe ser un número positivo",
 		"weightTooHigh": "El peso no puede exceder 10,000"
 	},
-	"weight": "Peso",
-	"healthStatus": "Estado de Salud",
-	"currentHealthStatus": "Estado de Salud Actual",
-	"healthStatusNote": "Esto anulará el estado de salud calculado automáticamente basado en los registros de salud.",
-	"healthStatusOptions": {
-		"healthy": "Saludable",
-		"sick": "Enfermo",
-		"treatment": "En Tratamiento",
-		"critical": "Crítico",
-		"unknown": "Desconocido"
-	}
+	"weight": "Peso"
 }

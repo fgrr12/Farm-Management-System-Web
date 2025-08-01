@@ -59,6 +59,11 @@ const Animals = () => {
 		})
 	}, [animals, filters])
 
+	// Calculate total animals in farm (excluding dead animals)
+	const totalAnimalsInFarm = useMemo(() => {
+		return animals.filter((animal) => !animal.deathDate).length
+	}, [animals])
+
 	const handleFiltersChange = useCallback((newFilters: AnimalsFilters) => {
 		setFilters(newFilters)
 	}, [])
@@ -154,16 +159,22 @@ const Animals = () => {
 							</div>
 
 							{/* Stats Cards */}
-							<div className="flex gap-2 sm:gap-4">
-								<div className="bg-white/10 dark:bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 text-center border border-white/20 dark:border-white/25">
+							<div className="flex gap-2 sm:gap-3">
+								<div className="bg-white/10 dark:bg-white/15 backdrop-blur-sm rounded-lg px-2 sm:px-3 py-2 text-center border border-white/20 dark:border-white/25">
 									<div className="text-lg sm:text-xl font-bold text-white">
 										{filteredAnimals.length}
 									</div>
 									<div className="text-xs text-blue-100 dark:text-blue-200">
-										{filteredAnimals.length !== animals.length ? t('filtered') : t('total')}
+										{filteredAnimals.length !== animals.length ? t('filtered') : t('showing')}
 									</div>
 								</div>
-								<div className="bg-white/10 dark:bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 text-center border border-white/20 dark:border-white/25">
+								<div className="bg-white/10 dark:bg-white/15 backdrop-blur-sm rounded-lg px-2 sm:px-3 py-2 text-center border border-white/20 dark:border-white/25">
+									<div className="text-lg sm:text-xl font-bold text-white">
+										{totalAnimalsInFarm}
+									</div>
+									<div className="text-xs text-blue-100 dark:text-blue-200">{t('inFarm')}</div>
+								</div>
+								<div className="bg-white/10 dark:bg-white/15 backdrop-blur-sm rounded-lg px-2 sm:px-3 py-2 text-center border border-white/20 dark:border-white/25">
 									<div className="text-lg sm:text-xl font-bold text-white">{animals.length}</div>
 									<div className="text-xs text-blue-100 dark:text-blue-200">{t('allAnimals')}</div>
 								</div>
