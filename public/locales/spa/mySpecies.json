@@ -7,11 +7,12 @@
 	"addMoreSpecies": "Añade más especies",
 	"breed": "Raza",
 	"breeds": "Razas",
+	"days": "días",
 	"deleteButton": "Eliminar",
 	"editButton": "Guardar",
 	"editModeActive": "Modo de edición activo",
 	"editing": "Editando",
-	"gestationPeriod": "Periodo de gestación",
+	"gestation": "Gestación",
 	"modal": {
 		"deleteBreed": {
 			"message": "Esta acción se guardara hasta que presiones el botón de guardar.",
@@ -48,7 +49,6 @@
 	"totalBreeds": "Razas",
 	"totalSpecies": "Especies",
 	"unsavedChanges": "Tienes cambios sin guardar",
-	"days": "días",
 	"validation": {
 		"gestationPeriodInvalid": "El período de gestación debe ser un número",
 		"gestationPeriodMax": "El período de gestación debe ser 1000 o menor",

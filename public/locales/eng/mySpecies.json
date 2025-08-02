@@ -7,11 +7,12 @@
 	"addMoreSpecies": "Add more species",
 	"breed": "Breed",
 	"breeds": "Breeds",
+	"days": "days",
 	"deleteButton": "Delete",
 	"editButton": "Save",
 	"editModeActive": "Edit mode active",
 	"editing": "Editing",
-	"gestationPeriod": "Gestation Period",
+	"gestation": "Gestation",
 	"modal": {
 		"deleteBreed": {
 			"message": "This action cannot be undone.",
@@ -48,7 +49,6 @@
 	"totalBreeds": "Breeds",
 	"totalSpecies": "Species",
 	"unsavedChanges": "You have unsaved changes",
-	"days": "days",
 	"validation": {
 		"gestationPeriodInvalid": "Gestation period must be a number",
 		"gestationPeriodMax": "Gestation period must be 1000 or less",
