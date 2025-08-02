@@ -10,8 +10,10 @@
 	"allPriorities": "Todas las Prioridades",
 	"allSpecies": "Todas las Especies",
 	"clearFilters": "Limpiar Todo",
+	"close": "Cerrar",
 	"completedTasks": "Completadas",
 	"createdAt": "Creada",
+	"description": "Descripción",
 	"done": "Listo",
 	"dropTaskHere": "Suelta la tarea aquí",
 	"filterByPriority": "Prioridad",
@@ -29,6 +31,7 @@
 		"low": "Baja",
 		"medium": "Media"
 	},
+	"priorityLabel": "Prioridad",
 	"search": "Buscar",
 	"searchInColumn": "Buscar en esta columna...",
 	"status": {
@@ -37,7 +40,11 @@
 		"in-progress": "En Progreso",
 		"todo": "Por Hacer"
 	},
+	"statusLabel": "Estado",
 	"subtitle": "Organiza y rastrea las tareas de tu granja",
+	"taskDetails": "Detalles de la Tarea",
+	"taskTitle": "Título",
+	"timestamps": "Fechas",
 	"title": "Tareas",
 	"toast": {
 		"errorGettingTasks": "Error al obtener las tareas",

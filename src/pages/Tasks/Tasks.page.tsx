@@ -12,6 +12,7 @@ import { TasksService } from '@/services/tasks'
 
 import { TaskColumn } from '@/components/business/Tasks/TaskColumn'
 import { TaskFilters } from '@/components/business/Tasks/TaskFilters'
+import { TaskModal } from '@/components/business/Tasks/TaskModal'
 import { Button } from '@/components/ui/Button'
 
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
@@ -27,6 +28,8 @@ const Tasks = () => {
 
 	const [taskColumns, setTaskColumns] = useState<TaskColumns>(INITIAL_TASK_COLUMNS)
 	const [filters, setFilters] = useState<TaskFiltersType>(INITIAL_FILTERS)
+	const [selectedTask, setSelectedTask] = useState<Task | null>(null)
+	const [isModalOpen, setIsModalOpen] = useState(false)
 
 	const handleAddTask = useCallback(() => {
 		navigate(AppRoutes.ADD_TASK)
@@ -34,6 +37,16 @@ const Tasks = () => {
 
 	const handleFiltersChange = useCallback((newFilters: TaskFiltersType) => {
 		setFilters(newFilters)
+	}, [])
+
+	const handleTaskClick = useCallback((task: Task) => {
+		setSelectedTask(task)
+		setIsModalOpen(true)
+	}, [])
+
+	const handleCloseModal = useCallback(() => {
+		setIsModalOpen(false)
+		setSelectedTask(null)
 	}, [])
 
 	const getTasks = useCallback(async () => {
@@ -197,12 +210,16 @@ const Tasks = () => {
 									tasks={taskColumns[column.id]}
 									color={column.color}
 									bgColor={column.bgColor}
+									onTaskClick={handleTaskClick}
 								/>
 							))}
 						</div>
 					</main>
 				</div>
 			</div>
+
+			{/* Task Modal */}
+			<TaskModal task={selectedTask} isOpen={isModalOpen} onClose={handleCloseModal} />
 		</div>
 	)
 }
