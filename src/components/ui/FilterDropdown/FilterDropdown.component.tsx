@@ -57,19 +57,31 @@ export const FilterDropdown = <T extends Record<string, any>>(props: FilterDropd
 			const spaceBelow = window.innerHeight - rect.bottom
 			const isMobile = window.innerWidth < 640
 
-			const showAbove = spaceAbove > dropdownHeight || spaceBelow < dropdownHeight
-			const dropdownWidth = isMobile ? Math.min(320, window.innerWidth - 16) : 320
-			let leftPosition = rect.right - dropdownWidth
-
 			if (isMobile) {
-				leftPosition = Math.max(8, Math.min(leftPosition, window.innerWidth - dropdownWidth - 8))
-			}
+				// En mobile, usar posicionamiento más simple y centrado
+				const dropdownWidth = Math.min(320, window.innerWidth - 32) // 16px margin on each side
+				const leftPosition = Math.max(16, (window.innerWidth - dropdownWidth) / 2)
 
-			setDropdownPosition({
-				top: showAbove ? rect.top - dropdownHeight - 8 : rect.bottom + 8,
-				left: leftPosition,
-				width: dropdownWidth,
-			})
+				// En mobile, siempre mostrar debajo del botón si hay espacio, sino arriba
+				const showAbove = spaceBelow < 300 && spaceAbove > 300
+
+				setDropdownPosition({
+					top: showAbove ? rect.top - dropdownHeight - 8 : rect.bottom + 8,
+					left: leftPosition,
+					width: dropdownWidth,
+				})
+			} else {
+				// Desktop: posicionamiento original
+				const showAbove = spaceAbove > dropdownHeight || spaceBelow < dropdownHeight
+				const dropdownWidth = 320
+				let leftPosition = rect.right - dropdownWidth
+
+				setDropdownPosition({
+					top: showAbove ? rect.top - dropdownHeight - 8 : rect.bottom + 8,
+					left: leftPosition,
+					width: dropdownWidth,
+				})
+			}
 		}
 	}, [])
 
@@ -93,9 +105,37 @@ export const FilterDropdown = <T extends Record<string, any>>(props: FilterDropd
 
 	useEffect(() => {
 		if (isOpen) {
+			const isMobile = window.innerWidth < 640
+
 			document.addEventListener('mousedown', handleClickOutside)
 			window.addEventListener('resize', calculateDropdownPosition)
-			window.addEventListener('scroll', calculateDropdownPosition)
+			window.addEventListener('scroll', calculateDropdownPosition, { passive: true })
+
+			// En mobile, también escuchar orientationchange y visualViewport
+			if (isMobile) {
+				window.addEventListener('orientationchange', calculateDropdownPosition)
+
+				// Recalcular posición cuando cambie el viewport (teclado virtual)
+				if (window.visualViewport) {
+					window.visualViewport.addEventListener('resize', calculateDropdownPosition)
+				}
+
+				// Recalcular posición periódicamente en mobile para evitar problemas
+				const intervalId = setInterval(calculateDropdownPosition, 100)
+
+				return () => {
+					document.removeEventListener('mousedown', handleClickOutside)
+					window.removeEventListener('resize', calculateDropdownPosition)
+					window.removeEventListener('scroll', calculateDropdownPosition)
+					window.removeEventListener('orientationchange', calculateDropdownPosition)
+
+					if (window.visualViewport) {
+						window.visualViewport.removeEventListener('resize', calculateDropdownPosition)
+					}
+
+					clearInterval(intervalId)
+				}
+			}
 
 			return () => {
 				document.removeEventListener('mousedown', handleClickOutside)
