@@ -4,6 +4,8 @@ import gsap from 'gsap'
 import { type FC, memo, useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useIsMobile } from '@/hooks/ui/useIsMobile'
+
 import type { TaskCardProps } from './TaskCard.types'
 
 export const TaskCard: FC<TaskCardProps> = memo(
@@ -11,6 +13,9 @@ export const TaskCard: FC<TaskCardProps> = memo(
 		const { t } = useTranslation(['tasks'])
 		const ref = useRef<HTMLDivElement>(null)
 		const [dragging, setDragging] = useState(false)
+		const [touchStartTime, setTouchStartTime] = useState(0)
+		const [touchStartPos, setTouchStartPos] = useState({ x: 0, y: 0 })
+		const isMobile = useIsMobile()
 
 		const getPriorityIcon = useCallback((priority: TaskPriority) => {
 			switch (priority) {
@@ -120,6 +125,14 @@ export const TaskCard: FC<TaskCardProps> = memo(
 					currentStatus: task.status,
 					type: 'task',
 				}),
+				// Add mobile-specific configurations
+				canDrag: () => {
+					// On mobile, require a longer press to start dragging
+					if (isMobile) {
+						return Date.now() - touchStartTime > 300
+					}
+					return true
+				},
 				onDragStart: () => {
 					setDragging(true)
 					if (el) {
@@ -148,13 +161,59 @@ export const TaskCard: FC<TaskCardProps> = memo(
 					gsap.killTweensOf(el)
 				}
 			}
-		}, [isDraggable, task.uuid, task.status])
+		}, [isDraggable, task.uuid, task.status, isMobile, touchStartTime])
 
 		const handleCardClick = useCallback(() => {
 			if (onTaskClick && !dragging) {
 				onTaskClick(task)
 			}
 		}, [onTaskClick, task, dragging])
+
+		// Touch handlers for better mobile experience
+		const handleTouchStart = useCallback(
+			(e: React.TouchEvent) => {
+				if (!isMobile || !isDraggable) return
+
+				const touch = e.touches[0]
+				setTouchStartTime(Date.now())
+				setTouchStartPos({ x: touch.clientX, y: touch.clientY })
+			},
+			[isMobile, isDraggable]
+		)
+
+		const handleTouchMove = useCallback(
+			(e: React.TouchEvent) => {
+				if (!isMobile || !isDraggable) return
+
+				const touch = e.touches[0]
+				const deltaX = Math.abs(touch.clientX - touchStartPos.x)
+				const deltaY = Math.abs(touch.clientY - touchStartPos.y)
+				const timeDiff = Date.now() - touchStartTime
+
+				// If user has moved significantly or held for long enough, prevent click
+				if ((deltaX > 10 || deltaY > 10) && timeDiff > 150) {
+					e.preventDefault()
+				}
+			},
+			[isMobile, isDraggable, touchStartPos, touchStartTime]
+		)
+
+		const handleTouchEnd = useCallback(
+			(e: React.TouchEvent) => {
+				if (!isMobile || !isDraggable) return
+
+				const timeDiff = Date.now() - touchStartTime
+				const touch = e.changedTouches[0]
+				const deltaX = Math.abs(touch.clientX - touchStartPos.x)
+				const deltaY = Math.abs(touch.clientY - touchStartPos.y)
+
+				// If it was a quick tap with minimal movement, treat as click
+				if (timeDiff < 200 && deltaX < 10 && deltaY < 10) {
+					handleCardClick()
+				}
+			},
+			[isMobile, isDraggable, touchStartTime, touchStartPos, handleCardClick]
+		)
 
 		return (
 			<div
@@ -164,13 +223,17 @@ export const TaskCard: FC<TaskCardProps> = memo(
 				transition-all duration-200 hover:shadow-xl dark:hover:shadow-2xl hover:border-gray-300 dark:hover:border-gray-500
 				${isDraggable ? 'cursor-grab' : onTaskClick ? 'cursor-pointer' : ''}
 				${dragging ? 'opacity-90 shadow-2xl z-10 ring-2 ring-blue-300 dark:ring-blue-400' : ''}
+				${isMobile ? 'touch-manipulation select-none' : ''}
 			`}
 				role="article"
 				aria-labelledby={`task-${task.uuid}-title`}
 				aria-describedby={`task-${task.uuid}-description`}
 				onMouseEnter={handleMouseEnter}
 				onMouseLeave={handleMouseLeave}
-				onClick={handleCardClick}
+				onClick={!isMobile ? handleCardClick : undefined}
+				onTouchStart={handleTouchStart}
+				onTouchMove={handleTouchMove}
+				onTouchEnd={handleTouchEnd}
 				style={{
 					transform: 'translateZ(0)', // Force hardware acceleration
 					willChange: 'transform, opacity', // Optimize for animations
