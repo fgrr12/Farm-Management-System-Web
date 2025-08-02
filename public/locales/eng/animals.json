@@ -16,6 +16,14 @@
 	"allGenders": "All Genders",
 	"allSpecies": "All Species",
 	"allStatuses": "All Statuses",
+	"animalCard": {
+		"addHealthRecord": "Add Health Record",
+		"addProductionRecord": "Add Production Record",
+		"addRelatedAnimal": "Add Related Animal",
+		"age": "Age",
+		"lastCheck": "Last check",
+		"weight": "Weight"
+	},
 	"clearFilters": "Clear All",
 	"done": "Done",
 	"filterByGender": "Filter by gender",
@@ -30,6 +38,15 @@
 	"gender": {
 		"female": "Female",
 		"male": "Male"
+	},
+	"healthStatus": {
+		"checkNeeded": "Check Needed",
+		"critical": "Critical",
+		"deceased": "Deceased",
+		"healthy": "Healthy",
+		"sick": "Sick",
+		"sold": "Sold",
+		"treatment": "Treatment"
 	},
 	"inFarm": "In Farm",
 	"noAnimals": "No animals",

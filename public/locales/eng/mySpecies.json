@@ -1,10 +1,16 @@
 {
+	"actions": "Actions",
+	"addBreed": "Add Breed",
 	"addButton": "Add",
+	"addFirstBreed": "Add your first breed",
 	"addFirstSpecies": "Add First Species",
 	"addMoreSpecies": "Add more species",
 	"breed": "Breed",
+	"breeds": "Breeds",
 	"deleteButton": "Delete",
 	"editButton": "Save",
+	"editModeActive": "Edit mode active",
+	"editing": "Editing",
 	"gestationPeriod": "Gestation Period",
 	"modal": {
 		"deleteBreed": {
@@ -16,6 +22,7 @@
 			"title": "Do you want to delete this species?"
 		}
 	},
+	"noBreedsYet": "No breeds yet",
 	"noSpecies": "No Species",
 	"noSpeciesSubtitle": "Add your first species to start organizing your farm animals",
 	"removeButton": "Remove",
@@ -40,11 +47,14 @@
 	},
 	"totalBreeds": "Breeds",
 	"totalSpecies": "Species",
+	"unsavedChanges": "You have unsaved changes",
+	"days": "days",
 	"validation": {
 		"gestationPeriodInvalid": "Gestation period must be a number",
 		"gestationPeriodMax": "Gestation period must be 1000 or less",
 		"gestationPeriodMin": "Gestation period must be 0 or greater",
 		"nameRequired": "Name is required",
 		"nameTooLong": "Name must be 50 characters or less"
-	}
+	},
+	"viewing": "Viewing"
 }

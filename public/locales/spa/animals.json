@@ -16,6 +16,14 @@
 	"allGenders": "Todos los Géneros",
 	"allSpecies": "Todas las Especies",
 	"allStatuses": "Todos los Estados",
+	"animalCard": {
+		"addHealthRecord": "Añadir Registro de Salud",
+		"addProductionRecord": "Añadir Registro de Producción",
+		"addRelatedAnimal": "Añadir Animal Relacionado",
+		"age": "Edad",
+		"lastCheck": "Última revisión",
+		"weight": "Peso"
+	},
 	"clearFilters": "Limpiar Todo",
 	"done": "Listo",
 	"filterByGender": "Filtrar por género",
@@ -30,6 +38,15 @@
 	"gender": {
 		"female": "Femenino",
 		"male": "Masculino"
+	},
+	"healthStatus": {
+		"checkNeeded": "Revisión Necesaria",
+		"critical": "Crítico",
+		"deceased": "Fallecido",
+		"healthy": "Saludable",
+		"sick": "Enfermo",
+		"sold": "Vendido",
+		"treatment": "Tratamiento"
 	},
 	"inFarm": "En Granja",
 	"noAnimals": "No hay animales",

@@ -148,7 +148,7 @@ export const HealthOverview = memo(() => {
 	return (
 		<div
 			ref={containerRef}
-			className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg dark:hover:shadow-2xl transition-all duration-300"
+			className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-6 hover:shadow-lg dark:hover:shadow-xl transition-all duration-300"
 			role="region"
 			aria-label="Health Overview"
 			onMouseEnter={handleMouseEnter}
@@ -158,60 +158,66 @@ export const HealthOverview = memo(() => {
 				willChange: 'transform',
 			}}
 		>
-			<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">
-				{t('health.title')}
-			</h3>
+			{/* Subtle background pattern */}
+			<div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-gray-50/30 dark:to-gray-700/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-			<div className="space-y-3">
-				{healthItems.map((item, index) => {
-					const refCallback = setItemRef(index)
-					return (
-						<div
-							key={index}
-							ref={refCallback}
-							className={`p-4 rounded-lg ${item.bgColor} ${item.hoverBg} transition-all duration-200 cursor-pointer group`}
-						>
-							<div className="flex items-center justify-between">
-								<div className="flex items-center gap-3">
-									<div className="relative">
-										<div
-											className={`w-3 h-3 rounded-full ${item.color} group-hover:scale-110 transition-transform`}
+			{/* Content container */}
+			<div className="relative z-10">
+				<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">
+					{t('health.title')}
+				</h3>
+
+				<div className="space-y-3">
+					{healthItems.map((item, index) => {
+						const refCallback = setItemRef(index)
+						return (
+							<div
+								key={index}
+								ref={refCallback}
+								className={`p-4 rounded-lg ${item.bgColor} ${item.hoverBg} transition-all duration-200 cursor-pointer group`}
+							>
+								<div className="flex items-center justify-between">
+									<div className="flex items-center gap-3">
+										<div className="relative">
+											<div
+												className={`w-3 h-3 rounded-full ${item.color} group-hover:scale-110 transition-transform`}
+											/>
+											<div
+												className={`absolute inset-0 w-3 h-3 rounded-full ${item.color} opacity-30 group-hover:scale-150 transition-transform`}
+											/>
+										</div>
+										<i
+											className={`${item.icon} w-4! h-4! ${item.iconColor} group-hover:scale-110 transition-transform`}
 										/>
-										<div
-											className={`absolute inset-0 w-3 h-3 rounded-full ${item.color} opacity-30 group-hover:scale-150 transition-transform`}
-										/>
+										<span
+											className={`font-medium ${item.textColor} group-hover:font-semibold transition-all`}
+										>
+											{item.label}
+										</span>
 									</div>
-									<i
-										className={`${item.icon} w-4! h-4! ${item.iconColor} group-hover:scale-110 transition-transform`}
-									/>
 									<span
-										className={`font-medium ${item.textColor} group-hover:font-semibold transition-all`}
+										className={`text-xl font-bold ${item.textColor} tabular-nums group-hover:scale-105 transition-transform`}
 									>
-										{item.label}
+										{loading || loadingSecondary ? '...' : displayCounts[index]}
 									</span>
 								</div>
-								<span
-									className={`text-xl font-bold ${item.textColor} tabular-nums group-hover:scale-105 transition-transform`}
-								>
-									{loading || loadingSecondary ? '...' : displayCounts[index]}
-								</span>
 							</div>
-						</div>
-					)
-				})}
-			</div>
+						)
+					})}
+				</div>
 
-			<div className="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700">
-				<div className="flex items-center justify-between">
-					<span className="text-sm text-gray-600 dark:text-gray-400 font-medium">
-						{t('health.totalAnimals')}
-					</span>
-					<span
-						ref={totalRef}
-						className="text-lg font-semibold text-gray-900 dark:text-gray-100 tabular-nums"
-					>
-						{loading || loadingSecondary ? '...' : displayTotal}
-					</span>
+				<div className="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700">
+					<div className="flex items-center justify-between">
+						<span className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+							{t('health.totalAnimals')}
+						</span>
+						<span
+							ref={totalRef}
+							className="text-lg font-semibold text-gray-900 dark:text-gray-100 tabular-nums"
+						>
+							{loading || loadingSecondary ? '...' : displayTotal}
+						</span>
+					</div>
 				</div>
 			</div>
 		</div>

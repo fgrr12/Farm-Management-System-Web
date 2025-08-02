@@ -1,10 +1,16 @@
 {
+	"actions": "Acciones",
+	"addBreed": "Añadir Raza",
 	"addButton": "Añadir",
+	"addFirstBreed": "Añade tu primera raza",
 	"addFirstSpecies": "Añadir Primera Especie",
 	"addMoreSpecies": "Añade más especies",
 	"breed": "Raza",
+	"breeds": "Razas",
 	"deleteButton": "Eliminar",
 	"editButton": "Guardar",
+	"editModeActive": "Modo de edición activo",
+	"editing": "Editando",
 	"gestationPeriod": "Periodo de gestación",
 	"modal": {
 		"deleteBreed": {
@@ -16,6 +22,7 @@
 			"title": "¿Quieres eliminar esta especie?"
 		}
 	},
+	"noBreedsYet": "Aún no hay razas",
 	"noSpecies": "Sin Especies",
 	"noSpeciesSubtitle": "Añade tu primera especie para comenzar a organizar los animales de tu granja",
 	"removeButton": "Eliminar",
@@ -40,11 +47,14 @@
 	},
 	"totalBreeds": "Razas",
 	"totalSpecies": "Especies",
+	"unsavedChanges": "Tienes cambios sin guardar",
+	"days": "días",
 	"validation": {
 		"gestationPeriodInvalid": "El período de gestación debe ser un número",
 		"gestationPeriodMax": "El período de gestación debe ser 1000 o menor",
 		"gestationPeriodMin": "El período de gestación debe ser 0 o mayor",
 		"nameRequired": "El nombre es requerido",
 		"nameTooLong": "El nombre debe tener 50 caracteres o menos"
-	}
+	},
+	"viewing": "Viendo"
 }

@@ -1,6 +1,7 @@
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import { type MouseEvent, memo, useCallback, useMemo, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
@@ -22,6 +23,7 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 		className,
 		...rest
 	}) => {
+		const { t } = useTranslation(['animals'])
 		const navigate = useNavigate()
 		const cardRef = useRef<HTMLDivElement>(null)
 		const { uuid, animalId, breedName, gender, picture } = animal
@@ -46,7 +48,7 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 				return {
 					color: 'from-blue-400 to-blue-500',
 					icon: 'i-material-symbols-sell',
-					text: 'Sold',
+					text: t('healthStatus.sold'),
 					bgColor: 'bg-blue-100 dark:bg-blue-900/30',
 					textColor: 'text-blue-800 dark:text-blue-200',
 				}
@@ -56,7 +58,7 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 				return {
 					color: 'from-gray-600 to-gray-700',
 					icon: 'i-material-symbols-deceased',
-					text: 'Deceased',
+					text: t('healthStatus.deceased'),
 					bgColor: 'bg-gray-200 dark:bg-gray-800',
 					textColor: 'text-gray-800 dark:text-gray-300',
 				}
@@ -66,41 +68,41 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 				healthy: {
 					color: 'from-green-500 to-emerald-600',
 					icon: 'i-material-symbols-health-and-safety',
-					text: 'Healthy',
+					text: t('healthStatus.healthy'),
 					bgColor: 'bg-green-100 dark:bg-green-900/30',
 					textColor: 'text-green-800 dark:text-green-200',
 				},
 				sick: {
 					color: 'from-orange-600 to-red-500',
 					icon: 'i-material-symbols-sick',
-					text: 'Sick',
+					text: t('healthStatus.sick'),
 					bgColor: 'bg-orange-200 dark:bg-orange-900/30',
 					textColor: 'text-orange-900 dark:text-orange-200',
 				},
 				treatment: {
 					color: 'from-yellow-500 to-amber-500',
 					icon: 'i-material-symbols-medication',
-					text: 'Treatment',
+					text: t('healthStatus.treatment'),
 					bgColor: 'bg-yellow-100 dark:bg-yellow-900/30',
 					textColor: 'text-yellow-800 dark:text-yellow-200',
 				},
 				critical: {
 					color: 'from-red-700 to-rose-800',
 					icon: 'i-material-symbols-emergency',
-					text: 'Critical',
+					text: t('healthStatus.critical'),
 					bgColor: 'bg-red-300 dark:bg-red-900/50',
 					textColor: 'text-red-900 dark:text-red-100',
 				},
 				unknown: {
 					color: 'from-gray-400 to-gray-500',
 					icon: 'i-material-symbols-help',
-					text: 'Check Needed',
+					text: t('healthStatus.checkNeeded'),
 					bgColor: 'bg-gray-100 dark:bg-gray-700',
 					textColor: 'text-gray-600 dark:text-gray-400',
 				},
 			}
 			return configs[currentHealthStatus]
-		}, [currentHealthStatus, animal.soldDate, animal.deathDate])
+		}, [currentHealthStatus, animal.soldDate, animal.deathDate, t])
 
 		const genderConfig = useMemo(() => {
 			return gender.toLowerCase() === 'male'
@@ -259,13 +261,17 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 					<div className="grid grid-cols-2 gap-2 mb-4 text-sm">
 						{age && (
 							<div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-2 text-center border border-gray-100 dark:border-gray-700">
-								<div className="text-gray-500 dark:text-gray-400 text-xs">Age</div>
+								<div className="text-gray-500 dark:text-gray-400 text-xs">
+									{t('animalCard.age')}
+								</div>
 								<div className="font-semibold text-gray-900 dark:text-gray-100">{age}y</div>
 							</div>
 						)}
 						{weight && (
 							<div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-2 text-center border border-gray-100 dark:border-gray-700">
-								<div className="text-gray-500 dark:text-gray-400 text-xs">Weight</div>
+								<div className="text-gray-500 dark:text-gray-400 text-xs">
+									{t('animalCard.weight')}
+								</div>
 								<div className="font-semibold text-gray-900 dark:text-gray-100">{weight}kg</div>
 							</div>
 						)}
@@ -282,17 +288,17 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 				{/* Action Buttons */}
 				<div className="flex justify-center items-center gap-1">
 					<ActionButton
-						title="Add Health Record"
+						title={t('animalCard.addHealthRecord')}
 						icon="i-material-symbols-light-health-metrics-rounded"
 						onClick={navigateToAddHealthRecord}
 					/>
 					<ActionButton
-						title="Add Production Record"
+						title={t('animalCard.addProductionRecord')}
 						icon="i-icon-park-outline-milk"
 						onClick={navigateToAddProductionRecord}
 					/>
 					<ActionButton
-						title="Add Related Animal"
+						title={t('animalCard.addRelatedAnimal')}
 						icon="i-tabler-circles-relation"
 						onClick={navigateToAddRelatedAnimal}
 					/>
@@ -301,7 +307,7 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 				{/* Last Health Check (if available) */}
 				{lastHealthCheck && variant !== 'compact' && (
 					<div className="absolute bottom-2 left-4 text-xs text-gray-500 dark:text-gray-400">
-						Last check: {lastHealthCheck}
+						{t('animalCard.lastCheck')}: {lastHealthCheck}
 					</div>
 				)}
 			</div>
