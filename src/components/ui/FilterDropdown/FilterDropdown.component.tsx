@@ -154,46 +154,51 @@ export const FilterDropdown = <T extends Record<string, any>>(props: FilterDropd
 					onClick={toggleDropdown}
 					className={`
 						flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200
-						${hasActiveFilters
-							? className?.includes('emerald-theme')
-								? 'border-emerald-500 dark:border-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300'
-								: 'border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
-							: 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-500'
+						${
+							hasActiveFilters
+								? className?.includes('emerald-theme')
+									? 'border-emerald-500 dark:border-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300'
+									: 'border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
+								: 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-500'
 						}
-						focus:outline-none focus:ring-2 ${className?.includes('emerald-theme')
-							? 'focus:ring-emerald-500 dark:focus:ring-emerald-400'
-							: 'focus:ring-blue-500 dark:focus:ring-blue-400'
+						focus:outline-none focus:ring-2 ${
+							className?.includes('emerald-theme')
+								? 'focus:ring-emerald-500 dark:focus:ring-emerald-400'
+								: 'focus:ring-blue-500 dark:focus:ring-blue-400'
 						} focus:border-transparent
 					`}
 					aria-expanded={isOpen}
 					aria-haspopup="true"
 				>
 					<div
-						className={`w-5! h-5! i-material-symbols-filter-list ${hasActiveFilters
-							? className?.includes('emerald-theme')
-								? 'bg-emerald-600! dark:bg-emerald-400!'
-								: 'bg-blue-600! dark:bg-blue-400!'
-							: 'bg-gray-500! dark:bg-gray-400!'
-							}`}
+						className={`w-5! h-5! i-material-symbols-filter-list ${
+							hasActiveFilters
+								? className?.includes('emerald-theme')
+									? 'bg-emerald-600! dark:bg-emerald-400!'
+									: 'bg-blue-600! dark:bg-blue-400!'
+								: 'bg-gray-500! dark:bg-gray-400!'
+						}`}
 					/>
 					<span className="font-medium">{hasActiveFilters ? activeButtonLabel : buttonLabel}</span>
 					{hasActiveFilters && (
 						<span
-							className={`ml-1 px-2 py-0.5 text-xs text-white dark:text-gray-100 rounded-full ${className?.includes('emerald-theme')
-								? 'bg-emerald-600 dark:bg-emerald-500'
-								: 'bg-blue-600 dark:bg-blue-500'
-								}`}
+							className={`ml-1 px-2 py-0.5 text-xs text-white dark:text-gray-100 rounded-full ${
+								className?.includes('emerald-theme')
+									? 'bg-emerald-600 dark:bg-emerald-500'
+									: 'bg-blue-600 dark:bg-blue-500'
+							}`}
 						>
 							{activeFiltersCount}
 						</span>
 					)}
 					<div
-						className={`w-4! h-4! i-material-symbols-keyboard-arrow-down transition-transform duration-200 ${isOpen ? 'rotate-180' : ''} ${hasActiveFilters
-							? className?.includes('emerald-theme')
-								? 'bg-emerald-600! dark:bg-emerald-400!'
-								: 'bg-blue-600! dark:bg-blue-400!'
-							: 'bg-gray-500! dark:bg-gray-400!'
-							}`}
+						className={`w-4! h-4! i-material-symbols-keyboard-arrow-down transition-transform duration-200 ${isOpen ? 'rotate-180' : ''} ${
+							hasActiveFilters
+								? className?.includes('emerald-theme')
+									? 'bg-emerald-600! dark:bg-emerald-400!'
+									: 'bg-blue-600! dark:bg-blue-400!'
+								: 'bg-gray-500! dark:bg-gray-400!'
+						}`}
 					/>
 				</button>
 			</div>
@@ -217,10 +222,11 @@ export const FilterDropdown = <T extends Record<string, any>>(props: FilterDropd
 								<button
 									type="button"
 									onClick={clearFilters}
-									className={`text-sm font-medium transition-colors ${className?.includes('emerald-theme')
-										? 'text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300'
-										: 'text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300'
-										}`}
+									className={`text-sm font-medium transition-colors ${
+										className?.includes('emerald-theme')
+											? 'text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300'
+											: 'text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300'
+									}`}
 								>
 									{clearButtonLabel}
 								</button>
