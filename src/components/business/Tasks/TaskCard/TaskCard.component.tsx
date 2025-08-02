@@ -70,49 +70,41 @@ export const TaskCard: FC<TaskCardProps> = memo(
 			}
 		}, [])
 
-		// GSAP animations
+		// GSAP animations - simplified to avoid blur issues
 		useGSAP(() => {
 			if (ref.current) {
-				const animation = gsap.fromTo(
-					ref.current,
-					{ y: 20, opacity: 0, scale: 0.95 },
-					{ y: 0, opacity: 1, scale: 1, duration: 0.5, ease: 'power2.out' }
-				)
-
-				return () => {
-					// Kill the animation if component unmounts
-					if (animation) {
-						animation.kill()
-					}
-					// Kill any remaining tweens on this element
-					gsap.killTweensOf(ref.current)
-				}
+				// Set initial state without animation to avoid blur
+				gsap.set(ref.current, {
+					y: 0,
+					opacity: 1,
+					scale: 1,
+					clearProps: 'transform', // Clear any transform issues
+				})
 			}
 		}, [])
 
 		const handleMouseEnter = useCallback(() => {
-			if (ref.current && !dragging) {
-				// Kill any existing hover animations before starting new one
+			if (ref.current && !dragging && !isMobile) {
+				// Only animate on desktop to avoid conflicts
 				gsap.killTweensOf(ref.current, 'y')
 				gsap.to(ref.current, {
-					y: -4,
-					duration: 0.2,
+					y: -2, // Reduced movement to avoid blur
+					duration: 0.15,
 					ease: 'power1.out',
 				})
 			}
-		}, [dragging])
+		}, [dragging, isMobile])
 
 		const handleMouseLeave = useCallback(() => {
-			if (ref.current && !dragging) {
-				// Kill any existing hover animations before starting new one
+			if (ref.current && !dragging && !isMobile) {
 				gsap.killTweensOf(ref.current, 'y')
 				gsap.to(ref.current, {
 					y: 0,
-					duration: 0.2,
+					duration: 0.15,
 					ease: 'power1.out',
 				})
 			}
-		}, [dragging])
+		}, [dragging, isMobile])
 
 		useEffect(() => {
 			const el = ref.current
@@ -128,25 +120,31 @@ export const TaskCard: FC<TaskCardProps> = memo(
 				// Add mobile-specific configurations
 				canDrag: () => {
 					// On mobile, require a longer press to start dragging
-					if (isMobile) {
+					if (isMobile && touchStartTime > 0) {
 						return Date.now() - touchStartTime > 300
 					}
-					return true
+					return !isMobile // Only allow immediate drag on desktop
 				},
 				onDragStart: () => {
 					setDragging(true)
 					if (el) {
-						// Kill any existing drag animations before starting new one
-						gsap.killTweensOf(el, 'scale,rotation')
-						gsap.to(el, { scale: 1.03, rotation: 3, duration: 0.2, ease: 'power1.out' })
+						// Simplified drag animation to avoid blur
+						gsap.killTweensOf(el)
+						gsap.set(el, { scale: 1.02, rotation: 1 })
 					}
 				},
 				onDrop: () => {
 					setDragging(false)
 					if (el) {
-						// Kill any existing drag animations before starting new one
-						gsap.killTweensOf(el, 'scale,rotation')
-						gsap.to(el, { scale: 1, rotation: 0, duration: 0.3, ease: 'power2.out' })
+						// Reset to normal state
+						gsap.killTweensOf(el)
+						gsap.to(el, {
+							scale: 1,
+							rotation: 0,
+							duration: 0.2,
+							ease: 'power2.out',
+							clearProps: 'transform', // Clear transform after animation
+						})
 					}
 				},
 			})
@@ -156,9 +154,10 @@ export const TaskCard: FC<TaskCardProps> = memo(
 				if (cleanup) {
 					cleanup()
 				}
-				// Kill any remaining GSAP animations on this element
+				// Kill any remaining GSAP animations and clear transforms
 				if (el) {
 					gsap.killTweensOf(el)
+					gsap.set(el, { clearProps: 'all' })
 				}
 			}
 		}, [isDraggable, task.uuid, task.status, isMobile, touchStartTime])
@@ -215,6 +214,16 @@ export const TaskCard: FC<TaskCardProps> = memo(
 			[isMobile, isDraggable, touchStartTime, touchStartPos, handleCardClick]
 		)
 
+		// Cleanup effect to prevent blur issues
+		useEffect(() => {
+			return () => {
+				if (ref.current) {
+					gsap.killTweensOf(ref.current)
+					gsap.set(ref.current, { clearProps: 'all' })
+				}
+			}
+		}, [])
+
 		return (
 			<div
 				ref={ref}
@@ -234,10 +243,11 @@ export const TaskCard: FC<TaskCardProps> = memo(
 				onTouchStart={handleTouchStart}
 				onTouchMove={handleTouchMove}
 				onTouchEnd={handleTouchEnd}
-				style={{
-					transform: 'translateZ(0)', // Force hardware acceleration
-					willChange: 'transform, opacity', // Optimize for animations
-				}}
+				style={
+					{
+						// Remove problematic styles that can cause blur
+					}
+				}
 			>
 				<div className="card-body p-4">
 					{/* Header with status and priority */}
