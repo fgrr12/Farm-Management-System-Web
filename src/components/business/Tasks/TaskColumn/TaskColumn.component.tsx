@@ -6,7 +6,7 @@ import { TaskCard } from '../TaskCard'
 import type { TaskColumnProps } from './TaskColumn.types'
 
 export const TaskColumn: FC<TaskColumnProps> = memo(
-	({ status, title, tasks, color, bgColor, onSearch }) => {
+	({ status, title, tasks, color, bgColor, onSearch, onTaskClick }) => {
 		const { t } = useTranslation(['tasks'])
 		const ref = useRef<HTMLDivElement>(null)
 		const [isDraggedOver, setIsDraggedOver] = useState(false)
@@ -91,7 +91,7 @@ export const TaskColumn: FC<TaskColumnProps> = memo(
 				<div className="flex-1 p-4 overflow-y-auto relative">
 					<div className="space-y-3">
 						{filteredTasks.map((task) => (
-							<TaskCard key={task.uuid} task={task} draggable={true} />
+							<TaskCard key={task.uuid} task={task} draggable={true} onTaskClick={onTaskClick} />
 						))}
 
 						{filteredTasks.length === 0 && !search && (

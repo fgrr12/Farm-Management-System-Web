@@ -153,11 +153,17 @@ export const StatCard = memo<StatCardProps>(
 		return (
 			<div
 				ref={cardRef}
-				className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg dark:hover:shadow-xl dark:hover:shadow-gray-900/25 transition-all duration-300 cursor-pointer"
+				className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-6 hover:shadow-lg dark:hover:shadow-xl transition-all duration-300 cursor-pointer"
 				role="button"
 				tabIndex={0}
 				onMouseEnter={handleMouseEnter}
 				onMouseLeave={handleMouseLeave}
+				onKeyDown={(e) => {
+					if (e.key === 'Enter' || e.key === ' ') {
+						e.preventDefault()
+						handleMouseEnter()
+					}
+				}}
 				style={{
 					transform: 'translateZ(0)',
 					willChange: 'transform',
@@ -168,7 +174,7 @@ export const StatCard = memo<StatCardProps>(
 						<p className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">{title}</p>
 						<p
 							ref={valueRef}
-							className="text-3xl font-bold text-gray-900 dark:text-white tabular-nums"
+							className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tabular-nums"
 						>
 							{loading ? '...' : displayValue}
 						</p>
@@ -203,6 +209,10 @@ export const StatCard = memo<StatCardProps>(
 					</div>
 					<div className={`p-3 rounded-lg ${colors.bg} transition-all duration-300`}>
 						<i ref={iconRef} className={`w-6! h-6! ${icon} ${colors.icon}`} />
+						{/* Pulse effect on hover */}
+						<div
+							className={`absolute inset-0 rounded-xl ${colors.bg} opacity-0 group-hover:opacity-50 group-hover:scale-150 transition-all duration-500`}
+						/>
 					</div>
 				</div>
 			</div>

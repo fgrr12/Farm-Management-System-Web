@@ -5,4 +5,5 @@ export interface TaskColumnProps {
 	color: string
 	bgColor: string
 	onSearch?: (search: string) => void
+	onTaskClick?: (task: Task) => void
 }

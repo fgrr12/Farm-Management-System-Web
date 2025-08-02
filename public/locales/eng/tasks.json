@@ -10,8 +10,10 @@
 	"allPriorities": "All Priorities",
 	"allSpecies": "All Species",
 	"clearFilters": "Clear All",
+	"close": "Close",
 	"completedTasks": "Completed",
 	"createdAt": "Created",
+	"description": "Description",
 	"done": "Done",
 	"dropTaskHere": "Drop task here",
 	"filterByPriority": "Priority",
@@ -29,6 +31,7 @@
 		"low": "Low",
 		"medium": "Medium"
 	},
+	"priorityLabel": "Priority",
 	"search": "Search",
 	"searchInColumn": "Search in this column...",
 	"status": {
@@ -37,7 +40,11 @@
 		"in-progress": "In Progress",
 		"todo": "To Do"
 	},
+	"statusLabel": "Status",
 	"subtitle": "Organize and track your farm tasks",
+	"taskDetails": "Task Details",
+	"taskTitle": "Title",
+	"timestamps": "Timestamps",
 	"title": "Tasks",
 	"toast": {
 		"errorGettingTasks": "Error getting tasks",
