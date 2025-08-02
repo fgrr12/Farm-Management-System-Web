@@ -111,8 +111,23 @@ export const Navbar = memo(() => {
 		[navigate, closeDrawer]
 	)
 
+	const goToFromDropdown = useCallback(
+		(path: string) => () => {
+			navigate(path)
+			// Close dropdown by removing focus
+			if (document.activeElement instanceof HTMLElement) {
+				document.activeElement.blur()
+			}
+		},
+		[navigate]
+	)
+
 	const handleLogout = useCallback(async () => {
 		if (!user) return
+		// Close dropdown first
+		if (document.activeElement instanceof HTMLElement) {
+			document.activeElement.blur()
+		}
 		await UserService.logout()
 		setUser(null)
 		setFarm(null)
@@ -205,40 +220,50 @@ export const Navbar = memo(() => {
 					<div className="navbar-end">
 						<div className="flex items-center gap-2">
 							{/* User Avatar */}
-							<div className="dropdown dropdown-end">
-								<div
+							<div className="dropdown dropdown-end relative">
+								<button
+									type="button"
 									tabIndex={0}
-									role="button"
-									className="btn btn-ghost btn-circle avatar hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 hover:scale-110"
+									className="btn btn-ghost btn-circle avatar hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 hover:scale-110 touch-manipulation focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+									aria-label="User menu"
+									aria-haspopup="true"
+									aria-expanded="false"
 								>
 									<div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center transition-all duration-200 hover:shadow-lg">
 										<span className="text-white text-sm font-semibold leading-none h-full flex items-center justify-center transition-transform duration-200 hover:scale-110">
 											{user?.name?.charAt(0)?.toUpperCase() || 'U'}
 										</span>
 									</div>
-								</div>
-								<ul className="menu dropdown-content bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 z-[10] mt-3 w-52 p-2">
+								</button>
+								<ul
+									className="menu dropdown-content bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 z-[50] mt-3 w-52 p-2 absolute right-0 top-full"
+									aria-label="User menu options"
+								>
 									<li className="menu-title text-xs text-gray-500 dark:text-gray-400 px-3 py-1">
 										<span>
 											{user?.name} {user?.lastName}
 										</span>
 									</li>
 									<div className="divider my-1" />
-									<li>
+									<li role="none">
 										<button
 											type="button"
-											onClick={goTo(AppRoutes.MY_ACCOUNT)}
-											className="flex items-center gap-3 px-3 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors text-gray-700 dark:text-gray-300"
+											role="menuitem"
+											onClick={goToFromDropdown(AppRoutes.MY_ACCOUNT)}
+											className="flex items-center gap-3 px-3 py-3 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors text-gray-700 dark:text-gray-300 w-full text-left touch-manipulation min-h-[44px] focus:outline-none focus:bg-blue-50 dark:focus:bg-blue-900/20"
+											tabIndex={-1}
 										>
 											<i className="i-material-symbols-account-circle w-4! h-4! bg-blue-600! dark:bg-blue-400!" />
 											<span className="text-sm">{t('sidebar.myAccount')}</span>
 										</button>
 									</li>
-									<li>
+									<li role="none">
 										<button
 											type="button"
+											role="menuitem"
 											onClick={handleLogout}
-											className="flex items-center gap-3 px-3 py-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors text-red-600 dark:text-red-400"
+											className="flex items-center gap-3 px-3 py-3 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors text-red-600 dark:text-red-400 w-full text-left touch-manipulation min-h-[44px] focus:outline-none focus:bg-red-50 dark:focus:bg-red-900/20"
+											tabIndex={-1}
 										>
 											<i className="i-material-symbols-logout w-4! h-4! bg-red-600! dark:bg-red-400!" />
 											<span className="text-sm">{t('sidebar.logout')}</span>
