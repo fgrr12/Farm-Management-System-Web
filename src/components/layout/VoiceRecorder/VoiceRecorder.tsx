@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { ActionButton } from '@/components/ui/ActionButton'
 
 export const VoiceRecorder = () => {
+	const { t } = useTranslation(['voiceRecorder'])
 	const mediaRecorderRef = useRef<MediaRecorder | null>(null)
 	const streamRef = useRef<MediaStream | null>(null)
 	const [open, setOpen] = useState(false)
@@ -63,10 +65,10 @@ export const VoiceRecorder = () => {
 			})
 
 			const data = await res.json()
-			setTranscript(data.texto || data.error || 'Error al transcribir')
+			setTranscript(data.texto || data.error || t('transcriptionError'))
 		} catch (err) {
 			console.error('Error sending audio:', err)
-			setTranscript('Error sending audio')
+			setTranscript(t('sendError'))
 		}
 	}
 
@@ -97,11 +99,11 @@ export const VoiceRecorder = () => {
 								<div className="flex items-center gap-2">
 									<div className="w-3 h-3 rounded-full bg-blue-500 dark:bg-blue-400 animate-pulse" />
 									<h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200">
-										Voice Recorder
+										{t('title')}
 									</h3>
 								</div>
 								<div className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full">
-									{recording ? 'Recording...' : 'Ready'}
+									{recording ? t('recording') : t('ready')}
 								</div>
 							</div>
 
@@ -115,7 +117,7 @@ export const VoiceRecorder = () => {
 											: 'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 border-blue-500 dark:border-blue-600 text-white shadow-lg shadow-blue-500/25'
 									}`}
 									onClick={recording ? stopRecording : startRecording}
-									aria-label={recording ? 'Stop recording' : 'Start recording'}
+									aria-label={recording ? t('stopRecording') : t('startRecording')}
 								>
 									<i
 										className={`w-7 h-7 transition-transform duration-200 ${
@@ -158,7 +160,7 @@ export const VoiceRecorder = () => {
 											</span>
 										) : (
 											<span>
-												Duration: {Math.floor(recordingTime / 60)}:
+												{t('duration')}: {Math.floor(recordingTime / 60)}:
 												{(recordingTime % 60).toString().padStart(2, '0')}
 											</span>
 										)}
@@ -175,10 +177,10 @@ export const VoiceRecorder = () => {
 									}`}
 									onClick={sendAudio}
 									disabled={!audioBlob || recording}
-									aria-label="Send audio for transcription"
+									aria-label={t('sendAudio')}
 								>
 									<i className="i-material-symbols-send w-5 h-5" />
-									Send
+									{t('send')}
 								</button>
 							</div>
 
@@ -188,7 +190,7 @@ export const VoiceRecorder = () => {
 									<div className="flex items-center gap-2 mb-2">
 										<i className="i-material-symbols-transcribe w-4 h-4 text-blue-500 dark:text-blue-400" />
 										<span className="text-sm font-semibold text-gray-800 dark:text-gray-200">
-											Transcription
+											{t('transcript')}
 										</span>
 									</div>
 									<p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
@@ -203,7 +205,7 @@ export const VoiceRecorder = () => {
 									<div className="flex items-center gap-2 mb-3">
 										<i className="i-material-symbols-volume-up w-4 h-4 text-green-500 dark:text-green-400" />
 										<span className="text-sm font-semibold text-gray-800 dark:text-gray-200">
-											Recorded Audio
+											{t('recordedAudio')}
 										</span>
 									</div>
 									<audio
@@ -213,7 +215,7 @@ export const VoiceRecorder = () => {
 									>
 										<source src={audioUrl} type="audio/webm" />
 										<track kind="captions" />
-										Your browser does not support audio playback.
+										{t('audioNotSupported')}
 									</audio>
 								</div>
 							)}
@@ -221,7 +223,7 @@ export const VoiceRecorder = () => {
 							{/* Help Text */}
 							<div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
 								<p className="text-xs text-blue-700 dark:text-blue-300 text-center">
-									💡 Click the record button to start, then send your audio for transcription
+									💡 {t('helpText')}
 								</p>
 							</div>
 						</div>
@@ -238,7 +240,7 @@ export const VoiceRecorder = () => {
 						}`}
 						icon={open ? 'i-lineicons-xmark' : 'i-lineicons-microphone-1'}
 						onClick={() => setOpen(!open)}
-						aria-label={open ? 'Close voice recorder' : 'Open voice recorder'}
+						aria-label={open ? t('close') : t('open')}
 					/>
 
 					{/* Notification Badge */}

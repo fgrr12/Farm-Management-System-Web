@@ -1,0 +1,19 @@
+{
+	"title": "Voice Recorder",
+	"recording": "Recording...",
+	"ready": "Ready",
+	"startRecording": "Start recording",
+	"stopRecording": "Stop recording",
+	"sendAudio": "Send audio for transcription",
+	"audioNotSupported": "Your browser does not support audio playback.",
+	"open": "Open voice recorder",
+	"close": "Close voice recorder",
+	"transcriptionError": "Error transcribing audio",
+	"sendError": "Error sending audio",
+	"transcript": "Transcription",
+	"noTranscript": "No transcript available",
+	"send": "Send",
+	"recordedAudio": "Recorded Audio",
+	"duration": "Duration",
+	"helpText": "Click the record button to start, then send your audio for transcription"
+}

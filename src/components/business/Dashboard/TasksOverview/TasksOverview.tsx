@@ -64,7 +64,7 @@ export const TasksOverview = memo(() => {
 					</h3>
 					<div className="flex items-center gap-2 px-3 py-1 bg-orange-100 dark:bg-orange-900/30 rounded-full text-xs font-medium text-orange-700 dark:text-orange-400">
 						<i className="i-material-symbols-schedule w-3! h-3!" />
-						Active Tasks
+						{t('tasks.activeTasks')}
 					</div>
 				</div>
 

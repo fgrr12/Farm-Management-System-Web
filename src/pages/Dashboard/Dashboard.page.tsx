@@ -41,7 +41,7 @@ const Dashboard = () => {
 								<div className="bg-white/10 dark:bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 text-center border border-white/20 dark:border-white/25">
 									<div className="flex items-center gap-2">
 										<div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-										<span className="text-sm font-medium text-white">Live Data</span>
+										<span className="text-sm font-medium text-white">{t('liveData')}</span>
 									</div>
 								</div>
 							</div>
@@ -50,7 +50,7 @@ const Dashboard = () => {
 
 					{/* Stats Cards Section */}
 					<div className="p-4 sm:p-6 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-200 dark:border-gray-600">
-						<section aria-label="Farm Statistics">
+						<section aria-label={t('farmStatistics')}>
 							<DashboardStats />
 						</section>
 					</div>

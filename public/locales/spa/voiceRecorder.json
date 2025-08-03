@@ -1,0 +1,19 @@
+{
+	"title": "Grabadora de Voz",
+	"recording": "Grabando...",
+	"ready": "Listo",
+	"startRecording": "Iniciar grabación",
+	"stopRecording": "Detener grabación",
+	"sendAudio": "Enviar audio para transcripción",
+	"audioNotSupported": "Tu navegador no soporta reproducción de audio.",
+	"open": "Abrir grabadora de voz",
+	"close": "Cerrar grabadora de voz",
+	"transcriptionError": "Error al transcribir audio",
+	"sendError": "Error enviando audio",
+	"transcript": "Transcripción",
+	"noTranscript": "No hay transcripción disponible",
+	"send": "Enviar",
+	"recordedAudio": "Audio Grabado",
+	"duration": "Duración",
+	"helpText": "Haz clic en el botón de grabar para comenzar, luego envía tu audio para transcripción"
+}

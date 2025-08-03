@@ -1,4 +1,5 @@
 import { memo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { AnimalDistribution } from '@/components/business/Dashboard/AnimalDistribution'
 import { HealthOverview } from '@/components/business/Dashboard/HealthOverview'
@@ -11,6 +12,7 @@ import { type DashboardWidget, useDashboardConfig } from '@/hooks/dashboard/useD
 import type { DashboardGridProps } from './DashboardGrid.types'
 
 export const DashboardGrid = memo<DashboardGridProps>(() => {
+	const { t } = useTranslation(['dashboard'])
 	const { widgets, layout } = useDashboardConfig()
 
 	const renderWidget = (widget: DashboardWidget) => {
@@ -60,7 +62,9 @@ export const DashboardGrid = memo<DashboardGridProps>(() => {
 				return (
 					<div key={widget} className={className}>
 						<div className="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
-							<h3 className="text-lg font-semibold">Financials (Coming Soon)</h3>
+							<h3 className="text-lg font-semibold">
+								{t('widgets.financials')} ({t('comingSoon')})
+							</h3>
 						</div>
 					</div>
 				)
@@ -69,7 +73,9 @@ export const DashboardGrid = memo<DashboardGridProps>(() => {
 				return (
 					<div key={widget} className={className}>
 						<div className="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
-							<h3 className="text-lg font-semibold">Employee Metrics (Coming Soon)</h3>
+							<h3 className="text-lg font-semibold">
+								{t('widgets.employeeMetrics')} ({t('comingSoon')})
+							</h3>
 						</div>
 					</div>
 				)
@@ -78,7 +84,9 @@ export const DashboardGrid = memo<DashboardGridProps>(() => {
 				return (
 					<div key={widget} className={className}>
 						<div className="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
-							<h3 className="text-lg font-semibold">Reports (Coming Soon)</h3>
+							<h3 className="text-lg font-semibold">
+								{t('widgets.reports')} ({t('comingSoon')})
+							</h3>
 						</div>
 					</div>
 				)
@@ -87,7 +95,9 @@ export const DashboardGrid = memo<DashboardGridProps>(() => {
 				return (
 					<div key={widget} className={className}>
 						<div className="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
-							<h3 className="text-lg font-semibold">My Tasks (Coming Soon)</h3>
+							<h3 className="text-lg font-semibold">
+								{t('widgets.myTasks')} ({t('comingSoon')})
+							</h3>
 						</div>
 					</div>
 				)
@@ -96,7 +106,9 @@ export const DashboardGrid = memo<DashboardGridProps>(() => {
 				return (
 					<div key={widget} className={className}>
 						<div className="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
-							<h3 className="text-lg font-semibold">My Animals (Coming Soon)</h3>
+							<h3 className="text-lg font-semibold">
+								{t('widgets.myAnimals')} ({t('comingSoon')})
+							</h3>
 						</div>
 					</div>
 				)
@@ -112,7 +124,7 @@ export const DashboardGrid = memo<DashboardGridProps>(() => {
 
 	return (
 		<section
-			aria-label="Dashboard Charts and Overview"
+			aria-label={t('dashboardChartsOverview')}
 			className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6"
 		>
 			{gridWidgets.map(renderWidget)}
