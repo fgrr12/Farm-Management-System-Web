@@ -9,7 +9,7 @@ export const farmSchema = z.object({
 	liquidUnit: z.enum(['L', 'Gal'], {
 		message: 'farm.validation.liquidUnitRequired',
 	}),
-	weightUnit: z.enum(['Kg', 'Lb'], {
+	weightUnit: z.enum(['Kg', 'P'], {
 		message: 'farm.validation.weightUnitRequired',
 	}),
 	temperatureUnit: z.enum(['°C', '°F'], {

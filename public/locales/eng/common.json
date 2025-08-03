@@ -1,4 +1,33 @@
 {
+	"admin": {
+		"adminMode": "Admin Mode",
+		"availableFarms": "Available Farms",
+		"createFarm": "Create Farm",
+		"createFarmInfo": "Farm Configuration",
+		"createFarmInfoDetails": "You can configure billing and other settings later from the farm management panel.",
+		"createNewFarm": "Create New Farm",
+		"creatingFarm": "Creating farm...",
+		"farmAddress": "Farm Address",
+		"farmAddressPlaceholder": "Enter farm address",
+		"farmName": "Farm Name",
+		"farmNamePlaceholder": "Enter farm name",
+		"farmSelector": "Farm Management",
+		"liquidUnit": "Liquid Unit",
+		"loadingFarms": "Loading farms...",
+		"noFarmsAvailable": "No farms available",
+		"noLocation": "No location",
+		"selectFarm": "Select a farm",
+		"temperatureUnit": "Temperature Unit",
+		"units": {
+			"celsius": "Celsius",
+			"fahrenheit": "Fahrenheit",
+			"gallons": "Gallons",
+			"kg": "Kilograms",
+			"lbs": "Pounds",
+			"liters": "Liters"
+		},
+		"weightUnit": "Weight Unit"
+	},
 	"header": {
 		"back": "Back",
 		"return": "Return"

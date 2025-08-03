@@ -23,7 +23,7 @@ export const FarmSection: FC<FarmSectionProps> = ({
 
 	const weightUnit = [
 		{ value: 'Kg', name: t('myFarm.weightUnitList.Kg') },
-		{ value: 'Lb', name: t('myFarm.weightUnitList.Lb') },
+		{ value: 'P', name: t('myFarm.weightUnitList.Lb') },
 	]
 
 	const temperatureUnit = [

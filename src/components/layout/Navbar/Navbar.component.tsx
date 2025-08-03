@@ -13,6 +13,7 @@ import { useUserStore } from '@/store/useUserStore'
 
 import { UserService } from '@/services/user'
 
+import { FarmSelector } from '@/components/business/Admin/FarmSelector'
 import { BackButton } from '@/components/ui/Button'
 
 import { useTheme } from '@/hooks/system/useTheme'
@@ -480,6 +481,9 @@ export const Navbar = memo(() => {
 								)}
 							</div>
 						)}
+
+						{/* Farm Selector for Admin */}
+						<FarmSelector />
 
 						{/* Settings Section */}
 						<div className="mt-6 space-y-2">

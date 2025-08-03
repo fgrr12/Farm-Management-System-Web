@@ -104,7 +104,9 @@ export const App = () => {
 			const user = await UserService.getUser(authUser.uid)
 			setUser(user)
 
-			await useFarmStore.getState().loadFarmData(user.farmUuid, user.role)
+			if (user.role !== 'admin') {
+				await useFarmStore.getState().loadFarmData(user.farmUuid, user.role)
+			}
 
 			setAuthLoading(false)
 		})

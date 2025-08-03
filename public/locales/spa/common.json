@@ -1,4 +1,33 @@
 {
+	"admin": {
+		"adminMode": "Modo Administrador",
+		"availableFarms": "Granjas Disponibles",
+		"createFarm": "Crear Granja",
+		"createFarmInfo": "Configuración de Granja",
+		"createFarmInfoDetails": "Puedes configurar la facturación y otras opciones más tarde desde el panel de gestión de la granja.",
+		"createNewFarm": "Crear Nueva Granja",
+		"creatingFarm": "Creando granja...",
+		"farmAddress": "Dirección de la Granja",
+		"farmAddressPlaceholder": "Ingresa la dirección de la granja",
+		"farmName": "Nombre de la Granja",
+		"farmNamePlaceholder": "Ingresa el nombre de la granja",
+		"farmSelector": "Gestión de Granjas",
+		"liquidUnit": "Unidad de Líquidos",
+		"loadingFarms": "Cargando granjas...",
+		"noFarmsAvailable": "No hay granjas disponibles",
+		"noLocation": "Sin ubicación",
+		"selectFarm": "Seleccionar una granja",
+		"temperatureUnit": "Unidad de Temperatura",
+		"units": {
+			"celsius": "Celsius",
+			"fahrenheit": "Fahrenheit",
+			"gallons": "Galones",
+			"kg": "Kilogramos",
+			"lbs": "Libras",
+			"liters": "Litros"
+		},
+		"weightUnit": "Unidad de Peso"
+	},
 	"header": {
 		"back": "Atrás",
 		"return": "Volver"
