@@ -1,12 +1,8 @@
 import { memo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { AnimalDistribution } from '@/components/business/Dashboard/AnimalDistribution'
+import { DashboardGrid } from '@/components/business/Dashboard/DashboardGrid'
 import { DashboardStats } from '@/components/business/Dashboard/DashboardStats'
-import { HealthOverview } from '@/components/business/Dashboard/HealthOverview'
-import { ProductionChart } from '@/components/business/Dashboard/ProductionChart'
-import { RecentActivities } from '@/components/business/Dashboard/RecentActivities'
-import { TasksOverview } from '@/components/business/Dashboard/TasksOverview'
 
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
@@ -60,38 +56,10 @@ const Dashboard = () => {
 					</div>
 				</div>
 
-				{/* Main Content Grid - Same style as Animals page */}
+				{/* Main Content Grid - Role-based widgets */}
 				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden border border-gray-100 dark:border-gray-700">
 					<div className="p-4 sm:p-6">
-						<section
-							aria-label="Dashboard Charts and Overview"
-							className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6"
-						>
-							{/* Production Chart */}
-							<div className="xl:col-span-2 order-1">
-								<ProductionChart />
-							</div>
-
-							{/* Animal Distribution */}
-							<div className="xl:col-span-1 order-2 xl:order-3">
-								<AnimalDistribution />
-							</div>
-
-							{/* Health Overview */}
-							<div className="lg:col-span-1 order-3 xl:order-2">
-								<HealthOverview />
-							</div>
-
-							{/* Tasks Overview */}
-							<div className="lg:col-span-1 order-4">
-								<TasksOverview />
-							</div>
-
-							{/* Recent Activities */}
-							<div className="lg:col-span-2 xl:col-span-1 order-5">
-								<RecentActivities />
-							</div>
-						</section>
+						<DashboardGrid />
 					</div>
 				</div>
 			</div>

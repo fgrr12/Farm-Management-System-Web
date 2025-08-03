@@ -22,7 +22,6 @@ export const FarmSelector = memo(() => {
 			const farms = await FarmsService.getAllFarms()
 			setAvailableFarms(farms)
 
-			// Si no hay granja seleccionada y hay granjas disponibles, seleccionar la primera
 			if (!farm && farms.length > 0) {
 				setFarm(farms[0])
 			}
@@ -51,7 +50,7 @@ export const FarmSelector = memo(() => {
 	const handleFarmCreated = useCallback(
 		(newFarm: Farm) => {
 			setAvailableFarms((prev) => [...prev, newFarm])
-			setFarm(newFarm) // Seleccionar automáticamente la nueva granja
+			setFarm(newFarm)
 		},
 		[setFarm]
 	)
@@ -60,7 +59,6 @@ export const FarmSelector = memo(() => {
 		loadFarms()
 	}, [loadFarms])
 
-	// Solo mostrar si es admin
 	if (user?.role !== 'admin') return null
 
 	return (
@@ -85,7 +83,7 @@ export const FarmSelector = memo(() => {
 					>
 						<div className="flex items-center gap-3">
 							<div className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-								<i className="i-material-symbols-business w-5! h-5! bg-blue-600! dark:bg-blue-400!" />
+								<i className="i-material-symbols-agriculture w-5! h-5! bg-blue-600! dark:bg-blue-400!" />
 							</div>
 							<div className="min-w-0 flex-1">
 								<div className="font-medium text-gray-900 dark:text-gray-100 truncate">
@@ -168,7 +166,6 @@ export const FarmSelector = memo(() => {
 				</div>
 			)}
 
-			{/* Indicador de modo admin */}
 			{farm && (
 				<div className="px-4 py-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-700">
 					<div className="flex items-center gap-2">
@@ -180,7 +177,6 @@ export const FarmSelector = memo(() => {
 				</div>
 			)}
 
-			{/* Create Farm Modal */}
 			<CreateFarmModal
 				isOpen={isCreateModalOpen}
 				onClose={handleCloseCreateModal}
