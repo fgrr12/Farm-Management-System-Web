@@ -14,6 +14,7 @@ import { useUserStore } from '@/store/useUserStore'
 import { UserService } from '@/services/user'
 
 import { FarmSelector } from '@/components/business/Admin/FarmSelector'
+import { NotificationDropdown } from '@/components/business/Notifications/NotificationDropdown'
 import { BackButton } from '@/components/ui/Button'
 
 import { useTheme } from '@/hooks/system/useTheme'
@@ -274,16 +275,7 @@ export const Navbar = memo(() => {
 							</div>
 
 							{/* Notifications */}
-							<button
-								type="button"
-								className="btn btn-ghost btn-circle hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 hover:scale-110 active:scale-95"
-								aria-label="Notifications"
-							>
-								<div className="indicator">
-									<i className="i-material-symbols-notifications-outline-sharp w-5! h-5! bg-gray-600! dark:bg-gray-300! transition-transform duration-200 hover:rotate-12" />
-									<span className="badge badge-xs bg-gradient-to-r from-red-500 to-pink-500 border-none indicator-item animate-pulse hover:animate-bounce" />
-								</div>
-							</button>
+							<NotificationDropdown />
 						</div>
 					</div>
 				</div>

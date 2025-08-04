@@ -1,0 +1,16 @@
+{
+	"title": "Notifications",
+	"unread": "unread",
+	"markAllRead": "Mark all as read",
+	"markAsRead": "Mark as read",
+	"dismiss": "Dismiss",
+	"noNotifications": "No notifications",
+	"categories": {
+		"all": "All",
+		"medication": "Medication",
+		"health": "Health",
+		"task": "Tasks",
+		"general": "General"
+	},
+	"noNotificationsInCategory": "No notifications in this category"
+}
