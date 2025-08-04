@@ -44,7 +44,7 @@ export function subscribeToNotifications(
 	const q = query(
 		collection(firestore, COLLECTION),
 		where('farmUuid', '==', farmUuid),
-		where('read', '==', false),
+		where('dismissed', '==', false),
 		orderBy('createdAt', 'desc'),
 		limit(50)
 	)
@@ -235,7 +235,7 @@ export async function getNotificationStats(farmUuid: string): Promise<{
 		const q = query(
 			collection(firestore, COLLECTION),
 			where('farmUuid', '==', farmUuid),
-			where('read', '==', false)
+			where('dismissed', '==', false)
 		)
 
 		const snapshot = await getDocs(q)
