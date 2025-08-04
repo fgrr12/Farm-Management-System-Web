@@ -11,4 +11,5 @@ interface NotificationData {
 	animalUuid?: string
 	eventUuid?: string
 	actionUrl?: string
+	priority?: 'low' | 'medium' | 'high' | 'critical'
 }
