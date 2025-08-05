@@ -27,6 +27,9 @@ export enum AppRoutes {
 	TASKS = '/tasks',
 	ADD_TASK = '/tasks/add-task',
 
+	// Calendar
+	CALENDAR = '/calendar',
+
 	// Billing Card
 	BILLING_CARD = '/billing-card',
 

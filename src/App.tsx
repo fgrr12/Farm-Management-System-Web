@@ -75,6 +75,7 @@ const Tasks = lazy(() =>
 	})
 )
 const Dashboard = lazy(() => import('@/pages/Dashboard/Dashboard.page'))
+const Calendar = lazy(() => import('@/pages/Calendar/Calendar.page'))
 
 export const App = () => {
 	const { user, setUser } = useUserStore()
@@ -292,6 +293,16 @@ export const App = () => {
 									</PrivateRoute>
 								}
 							/>
+
+							<Route
+								path={AppRoutes.CALENDAR}
+								element={
+									<PrivateRoute>
+										<Calendar />
+									</PrivateRoute>
+								}
+							/>
+
 							{user?.role === 'owner' ||
 								(user?.role === 'admin' && (
 									<Route

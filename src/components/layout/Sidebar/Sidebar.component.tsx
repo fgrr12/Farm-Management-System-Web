@@ -108,7 +108,18 @@ export const Sidebar = memo(() => {
 
 				<button
 					type="button"
-					className={getButtonClasses(AppRoutes.MY_SPECIES, 'from-purple-500', 'to-purple-600')}
+					className={getButtonClasses(AppRoutes.CALENDAR, 'from-purple-500', 'to-purple-600')}
+					onClick={handleGoTo(AppRoutes.CALENDAR)}
+					aria-label="Calendar"
+				>
+					<i
+						className={`i-material-symbols-calendar-month ${getIconClasses(AppRoutes.CALENDAR)}`}
+					/>
+				</button>
+
+				<button
+					type="button"
+					className={getButtonClasses(AppRoutes.MY_SPECIES, 'from-indigo-500', 'to-indigo-600')}
 					onClick={handleGoTo(AppRoutes.MY_SPECIES)}
 					aria-label="My Species"
 				>

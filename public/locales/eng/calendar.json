@@ -1,0 +1,44 @@
+{
+	"title": "Calendar",
+	"today": "Today",
+	"createEvent": "Create Event",
+	"editEvent": "Edit Event",
+	"confirmDelete": "Are you sure you want to delete this event?",
+	"error": {
+		"loadingEvents": "Error loading calendar events"
+	},
+	"categories": {
+		"all": "All",
+		"medication": "Medication",
+		"health": "Health",
+		"task": "Tasks",
+		"breeding": "Breeding",
+		"feeding": "Feeding"
+	},
+	"priority": {
+		"low": "Low",
+		"medium": "Medium",
+		"high": "High"
+	},
+	"filters": {
+		"categories": "Categories"
+	},
+	"form": {
+		"title": "Title",
+		"titlePlaceholder": "Enter event title",
+		"description": "Description",
+		"descriptionPlaceholder": "Enter event description",
+		"category": "Category",
+		"priority": "Priority",
+		"date": "Date",
+		"time": "Time",
+		"optional": "optional",
+		"animalId": "Animal ID",
+		"animalIdPlaceholder": "Enter animal ID",
+		"completed": "Completed"
+	},
+	"cancel": "Cancel",
+	"create": "Create",
+	"update": "Update",
+	"saving": "Saving..."
+}
