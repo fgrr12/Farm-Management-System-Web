@@ -4,7 +4,9 @@
 	"createEvent": "Create Event",
 	"editEvent": "Edit Event",
 	"confirmDelete": "Are you sure you want to delete this event?",
+	"loading": "Loading calendar...",
 	"error": {
+		"title": "Calendar Error",
 		"loadingEvents": "Error loading calendar events"
 	},
 	"categories": {
@@ -16,9 +18,10 @@
 		"feeding": "Feeding"
 	},
 	"priority": {
-		"low": "Low",
+		"critical": "Critical",
+		"high": "High",
 		"medium": "Medium",
-		"high": "High"
+		"low": "Low"
 	},
 	"filters": {
 		"categories": "Categories"
@@ -35,10 +38,47 @@
 		"optional": "optional",
 		"animalId": "Animal ID",
 		"animalIdPlaceholder": "Enter animal ID",
-		"completed": "Completed"
+		"location": "Location",
+		"locationPlaceholder": "Enter event location",
+		"notes": "Notes",
+		"notesPlaceholder": "Enter additional notes",
+		"tags": "Tags",
+		"tagsPlaceholder": "Press Enter to add",
+		"tagsHint": "Press Enter to add a tag",
+		"completed": "Completed",
+		"errors": {
+			"titleRequired": "Title is required",
+			"titleTooShort": "Title must be at least 3 characters",
+			"dateRequired": "Date is required",
+			"invalidTime": "Invalid time"
+		}
 	},
 	"cancel": "Cancel",
 	"create": "Create",
 	"update": "Update",
-	"saving": "Saving..."
+	"saving": "Saving...",
+	"view": {
+		"month": "Month",
+		"week": "Week",
+		"day": "Day"
+	},
+	"tabs": {
+		"basic": "Basic",
+		"details": "Details",
+		"reminder": "Reminder"
+	},
+	"reminder": {
+		"enable": "Enable reminder",
+		"time": "Reminder time",
+		"frequency": "Frequency",
+		"5min": "5 minutes before",
+		"15min": "15 minutes before",
+		"30min": "30 minutes before",
+		"1hour": "1 hour before",
+		"1day": "1 day before",
+		"once": "Once",
+		"daily": "Daily",
+		"weekly": "Weekly",
+		"monthly": "Monthly"
+	}
 }

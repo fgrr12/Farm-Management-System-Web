@@ -4,7 +4,9 @@
 	"createEvent": "Crear Evento",
 	"editEvent": "Editar Evento",
 	"confirmDelete": "¿Estás seguro de que quieres eliminar este evento?",
+	"loading": "Cargando calendario...",
 	"error": {
+		"title": "Error en el calendario",
 		"loadingEvents": "Error cargando eventos del calendario"
 	},
 	"categories": {
@@ -16,9 +18,10 @@
 		"feeding": "Alimentación"
 	},
 	"priority": {
-		"low": "Baja",
+		"critical": "Crítica",
+		"high": "Alta",
 		"medium": "Media",
-		"high": "Alta"
+		"low": "Baja"
 	},
 	"filters": {
 		"categories": "Categorías"
@@ -35,10 +38,47 @@
 		"optional": "opcional",
 		"animalId": "ID del Animal",
 		"animalIdPlaceholder": "Ingresa el ID del animal",
-		"completed": "Completado"
+		"location": "Ubicación",
+		"locationPlaceholder": "Ingresa la ubicación del evento",
+		"notes": "Notas",
+		"notesPlaceholder": "Ingresa notas adicionales",
+		"tags": "Etiquetas",
+		"tagsPlaceholder": "Presiona Enter para agregar",
+		"tagsHint": "Presiona Enter para agregar una etiqueta",
+		"completed": "Completado",
+		"errors": {
+			"titleRequired": "El título es requerido",
+			"titleTooShort": "El título debe tener al menos 3 caracteres",
+			"dateRequired": "La fecha es requerida",
+			"invalidTime": "La hora no es válida"
+		}
 	},
 	"cancel": "Cancelar",
 	"create": "Crear",
 	"update": "Actualizar",
-	"saving": "Guardando..."
+	"saving": "Guardando...",
+	"view": {
+		"month": "Mes",
+		"week": "Semana",
+		"day": "Día"
+	},
+	"tabs": {
+		"basic": "Básico",
+		"details": "Detalles",
+		"reminder": "Recordatorio"
+	},
+	"reminder": {
+		"enable": "Habilitar recordatorio",
+		"time": "Tiempo de recordatorio",
+		"frequency": "Frecuencia",
+		"5min": "5 minutos antes",
+		"15min": "15 minutos antes",
+		"30min": "30 minutos antes",
+		"1hour": "1 hora antes",
+		"1day": "1 día antes",
+		"once": "Una vez",
+		"daily": "Diario",
+		"weekly": "Semanal",
+		"monthly": "Mensual"
+	}
 }

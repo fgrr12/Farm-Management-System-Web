@@ -100,8 +100,8 @@ export const CalendarEvent = memo<CalendarEventProps>(({ event, onClick, compact
 							</div>
 						)}
 
-						{event.animalUuid && (
-							<span className="bg-white/50 px-2 py-1 rounded">{event.animalUuid}</span>
+						{event.animalId && (
+							<span className="bg-white/50 px-2 py-1 rounded">{event.animalId}</span>
 						)}
 					</div>
 				</div>

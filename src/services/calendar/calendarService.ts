@@ -15,7 +15,7 @@ import {
 
 import { firestore } from '@/config/firebaseConfig'
 
-const COLLECTION = 'calendar_events'
+const COLLECTION = 'calendarEvents'
 
 /**
  * Crear un nuevo evento de calendario
@@ -63,7 +63,7 @@ export function subscribeToCalendarEvents(
 					priority: data.priority,
 					status: data.status,
 					farmUuid: data.farmUuid,
-					animalUuid: data.animalUuid,
+					animalId: data.animalUuid,
 					relatedUuid: data.relatedId,
 					createdBy: data.createdBy,
 					createdAt: data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
@@ -162,7 +162,7 @@ export async function getEventsForDateRange(
 				priority: data.priority,
 				status: data.status,
 				farmUuid: data.farmUuid,
-				animalUuid: data.animalUuid,
+				animalId: data.animalUuid,
 				relatedUuid: data.relatedId,
 				createdBy: data.createdBy,
 				createdAt: data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
@@ -210,6 +210,100 @@ export async function cleanupOldEvents(farmUuid: string): Promise<number> {
 	}
 }
 
+/**
+ * Obtener estadísticas de eventos para una granja
+ */
+export async function getCalendarStats(farmUuid: string): Promise<{
+	total: number
+	pending: number
+	completed: number
+	overdue: number
+	byType: Record<string, number>
+	byPriority: Record<string, number>
+}> {
+	try {
+		const q = query(collection(firestore, COLLECTION), where('farmUuid', '==', farmUuid))
+		const snapshot = await getDocs(q)
+
+		const stats = {
+			total: 0,
+			pending: 0,
+			completed: 0,
+			overdue: 0,
+			byType: {} as Record<string, number>,
+			byPriority: {} as Record<string, number>,
+		}
+
+		const today = dayjs().format('YYYY-MM-DD')
+
+		snapshot.forEach((doc) => {
+			const data = doc.data()
+			stats.total++
+
+			// Contar por estado
+			if (data.status === 'pending') {
+				stats.pending++
+				if (data.date < today) {
+					stats.overdue++
+				}
+			} else if (data.status === 'completed') {
+				stats.completed++
+			}
+
+			// Contar por tipo
+			const type = data.type || 'general'
+			stats.byType[type] = (stats.byType[type] || 0) + 1
+
+			// Contar por prioridad
+			const priority = data.priority || 'medium'
+			stats.byPriority[priority] = (stats.byPriority[priority] || 0) + 1
+		})
+
+		return stats
+	} catch (error) {
+		console.error('Error getting calendar stats:', error)
+		return {
+			total: 0,
+			pending: 0,
+			completed: 0,
+			overdue: 0,
+			byType: {},
+			byPriority: {},
+		}
+	}
+}
+
+/**
+ * Crear múltiples eventos (para medicaciones recurrentes)
+ */
+export async function createRecurringEvents(
+	baseEvent: Omit<CalendarEvent, 'uuid' | 'createdAt' | 'updatedAt'>,
+	dates: string[]
+): Promise<string[]> {
+	try {
+		const batch = writeBatch(firestore)
+		const eventIds: string[] = []
+
+		dates.forEach((date) => {
+			const docRef = doc(collection(firestore, COLLECTION))
+			eventIds.push(docRef.id)
+
+			batch.set(docRef, {
+				...baseEvent,
+				date,
+				createdAt: serverTimestamp(),
+				updatedAt: serverTimestamp(),
+			})
+		})
+
+		await batch.commit()
+		return eventIds
+	} catch (error) {
+		console.error('Error creating recurring events:', error)
+		throw new Error('Failed to create recurring events')
+	}
+}
+
 // Objeto para mantener compatibilidad
 export const CalendarService = {
 	createCalendarEvent,
@@ -219,4 +313,6 @@ export const CalendarService = {
 	completeCalendarEvent,
 	getEventsForDateRange,
 	cleanupOldEvents,
+	getCalendarStats,
+	createRecurringEvents,
 }

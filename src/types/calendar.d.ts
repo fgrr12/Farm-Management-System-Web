@@ -8,8 +8,13 @@ interface CalendarEvent {
 	priority: 'low' | 'medium' | 'high' | 'critical'
 	status: 'pending' | 'completed' | 'cancelled'
 	farmUuid: string
-	animalUuid?: string
+	animalId?: string
 	relatedUuid?: string // ID del registro relacionado (tarea, medicación, etc.)
+	location?: string
+	reminder?: boolean
+	reminderMinutes?: number
+	notes?: string
+	tags?: string[]
 	createdBy: string
 	createdAt: string
 	updatedAt?: string

@@ -22,7 +22,7 @@ export async function createMedicationEvent(
 		priority: 'high',
 		status: 'pending',
 		farmUuid,
-		animalUuid,
+		animalId: animalUuid,
 		createdBy,
 	}
 
@@ -48,7 +48,7 @@ export async function createVaccinationEvent(
 		priority: 'high',
 		status: 'pending',
 		farmUuid,
-		animalUuid,
+		animalId: animalUuid,
 		createdBy,
 	}
 
@@ -103,7 +103,7 @@ export async function createAppointmentEvent(
 		priority: 'medium',
 		status: 'pending',
 		farmUuid,
-		animalUuid,
+		animalId: animalUuid,
 		createdBy,
 	}
 
@@ -196,7 +196,7 @@ export async function createEventFromNotification(
 					priority: notification.priority === 'critical' ? 'critical' : 'high',
 					status: 'pending',
 					farmUuid: notification.farmUuid,
-					animalUuid: notification.animalUuid,
+					animalId: notification.animalUuid,
 					createdBy,
 				}
 				break
@@ -211,7 +211,7 @@ export async function createEventFromNotification(
 					priority: notification.priority || 'medium',
 					status: 'pending',
 					farmUuid: notification.farmUuid,
-					animalUuid: notification.animalUuid,
+					animalId: notification.animalUuid,
 					createdBy,
 				}
 				break
