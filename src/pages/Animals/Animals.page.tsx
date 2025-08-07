@@ -76,7 +76,7 @@ const Animals = () => {
 		await withLoadingAndError(async () => {
 			if (!farm?.uuid) return []
 
-			const dbAnimals = await AnimalsService.getAnimalsWithHealthStatus(farm.uuid)
+			const dbAnimals = await AnimalsService.getAnimals(farm.uuid)
 
 			const enrichedAnimals: AnimalCardProps[] = dbAnimals.map((animal) => {
 				const speciesName = species.find((sp) => sp.uuid === animal.speciesUuid)?.name || ''
@@ -87,7 +87,6 @@ const Animals = () => {
 					speciesName,
 					breedName,
 					healthStatus: animal.healthStatus,
-					lastHealthCheck: animal.lastHealthCheck,
 				}
 			})
 

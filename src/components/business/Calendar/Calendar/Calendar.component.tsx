@@ -43,7 +43,6 @@ export const Calendar = memo(() => {
 				}
 				return days
 			}
-			case 'month':
 			default: {
 				const startOfMonth = currentDate.startOf('month')
 				const endOfMonth = currentDate.endOf('month')

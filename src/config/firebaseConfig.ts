@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
+import { getFunctions } from 'firebase/functions'
 import { getStorage } from 'firebase/storage'
 
 import {
@@ -28,7 +29,8 @@ const auth = getAuth(app)
 const signUpAuth = getAuth(signUpApp)
 const firestore = getFirestore(app)
 const storage = getStorage(app)
+const functions = getFunctions(app)
 
 auth.settings.appVerificationDisabledForTesting = true
 
-export { auth, firestore, signUpAuth, storage }
+export { auth, firestore, functions, signUpAuth, storage }

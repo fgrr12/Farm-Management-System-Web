@@ -64,7 +64,7 @@ const formatRelativeTime = (date: string | Date | undefined): string => {
 const getDashboardStats = async (farmUuid: string): Promise<DashboardStats> => {
 	try {
 		const [animals, tasks] = await Promise.all([
-			AnimalsService.getAnimalsWithHealthStatus(farmUuid),
+			AnimalsService.getAnimals(farmUuid),
 			TasksService.getTasks({
 				farmUuid,
 				search: '',
@@ -138,7 +138,7 @@ const getDashboardStats = async (farmUuid: string): Promise<DashboardStats> => {
 
 const getDashboardStatsDetailed = async (farmUuid: string): Promise<DashboardStats> => {
 	try {
-		const animals = await AnimalsService.getAnimalsWithHealthStatus(farmUuid)
+		const animals = await AnimalsService.getAnimals(farmUuid)
 		const currentMonth = dayjs().month()
 		const currentYear = dayjs().year()
 		const previousMonth = dayjs().subtract(1, 'month')
