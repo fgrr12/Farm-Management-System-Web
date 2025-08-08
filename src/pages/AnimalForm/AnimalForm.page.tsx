@@ -96,14 +96,14 @@ const AnimalForm = () => {
 
 	const onSubmit = useCallback(
 		async (data: AnimalFormData) => {
-			if (!user) return
+			if (!user || !farm) return
 
 			await withLoadingAndError(async () => {
 				const animalUuid = params.animalUuid as string
 
 				const animalData = transformToApiFormat(data)
 				animalData.uuid = animalUuid ?? crypto.randomUUID()
-				animalData.farmUuid = user.farmUuid
+				animalData.farmUuid = farm.uuid
 
 				if (animalData.birthDate) {
 					animalData.birthDate = formatDate(animalData.birthDate)
@@ -132,6 +132,7 @@ const AnimalForm = () => {
 		},
 		[
 			user,
+			farm,
 			params.animalUuid,
 			transformToApiFormat,
 			withLoadingAndError,

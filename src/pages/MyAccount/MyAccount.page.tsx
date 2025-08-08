@@ -74,11 +74,11 @@ const MyAccount = () => {
 				const billingCardData = billingCardForm.transformToApiFormat(data)
 
 				if (data.uuid) {
-					await BillingCardsService.updateBillingCard(billingCardData)
+					await BillingCardsService.updateBillingCard(billingCardData, currentUser!.uuid)
 					showToast(t('myBillingCard.toast.edited'), 'success')
 				} else {
 					const updatedFarm = { ...currentFarm!, billingCardUuid: billingCardData.uuid }
-					await BillingCardsService.setBillingCard(billingCardData)
+					await BillingCardsService.setBillingCard(billingCardData, currentUser!.uuid)
 					await FarmsService.updateFarm(updatedFarm)
 					showToast(t('myBillingCard.toast.added'), 'success')
 				}
@@ -86,7 +86,15 @@ const MyAccount = () => {
 				setEdit((prev) => ({ ...prev, billingCard: false }))
 			}, t('myBillingCard.toast.errorEditing'))
 		},
-		[currentFarm, billingCardForm, updateBillingCard, withLoadingAndError, showToast, t]
+		[
+			currentFarm,
+			billingCardForm,
+			currentUser,
+			updateBillingCard,
+			withLoadingAndError,
+			showToast,
+			t,
+		]
 	)
 
 	// biome-ignore lint: ignore form

@@ -73,7 +73,7 @@ const Animal = () => {
 			message: t('modal.removeAnimal.message'),
 			onAccept: async () => {
 				await withLoadingAndError(async () => {
-					await AnimalsService.deleteAnimal(animal.uuid, false)
+					await AnimalsService.updateAnimalStatus(animal.uuid, user!.uuid)
 					setModalData(defaultModalData)
 					showToast(t('toast.deleted'), 'success')
 					navigate(AppRoutes.ANIMALS)
@@ -84,7 +84,16 @@ const Animal = () => {
 				showToast(t('toast.notDeleted'), 'info')
 			},
 		})
-	}, [animal.uuid, t, setModalData, defaultModalData, withLoadingAndError, showToast, navigate])
+	}, [
+		animal.uuid,
+		user,
+		t,
+		setModalData,
+		defaultModalData,
+		withLoadingAndError,
+		showToast,
+		navigate,
+	])
 
 	const handleRemoveRelation = useCallback(
 		(uuid: string) => {

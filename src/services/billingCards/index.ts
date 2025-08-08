@@ -1,23 +1,21 @@
-import { doc, getDoc, setDoc } from 'firebase/firestore'
+import { callableFireFunction } from '@/utils/callableFireFunction'
 
-import { firestore } from '@/config/firebaseConfig'
-
-const collectionName = 'billingCards'
+const FUNCTIONS = {
+	getBillingCardByUuid: 'getBillingCardByUuid',
+	setBillingCard: 'setBillingCard',
+	updateBillingCard: 'updateBillingCard',
+} as const
 
 const getBillingCardByUuid = async (uuid: string) => {
-	const document = doc(firestore, collectionName, uuid)
-	const billingCard = await getDoc(document)
-	return billingCard.data() as BillingCard
+	return callableFireFunction<BillingCard>(FUNCTIONS.getBillingCardByUuid, { uuid })
 }
 
-const setBillingCard = async (billingCardData: BillingCard) => {
-	const document = doc(firestore, collectionName, billingCardData.uuid)
-	await setDoc(document, { ...billingCardData }, { merge: true })
+const setBillingCard = async (billingCard: BillingCard, createdBy: string) => {
+	return callableFireFunction(FUNCTIONS.setBillingCard, { billingCard, createdBy })
 }
 
-const updateBillingCard = async (billingCardData: BillingCard) => {
-	const document = doc(firestore, collectionName, billingCardData.uuid)
-	await setDoc(document, { ...billingCardData }, { merge: true })
+const updateBillingCard = async (billingCard: BillingCard, updatedBy: string) => {
+	return callableFireFunction(FUNCTIONS.updateBillingCard, { billingCard, updatedBy })
 }
 
 export const BillingCardsService = {

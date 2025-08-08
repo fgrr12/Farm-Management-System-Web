@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
+import { useUserStore } from '@/store/useUserStore'
 
 import { BreedsService } from '@/services/breeds'
 import { SpeciesService } from '@/services/species'
@@ -17,6 +18,7 @@ import type { MySpeciesI } from './MySpecies.types'
 
 const MySpecies = () => {
 	const { t } = useTranslation(['mySpecies'])
+	const { user } = useUserStore()
 	const {
 		breeds: dbBreeds,
 		farm,
@@ -90,7 +92,7 @@ const MySpecies = () => {
 				message: t('modal.deleteSpecies.message'),
 				onAccept: async () => {
 					await withLoadingAndError(async () => {
-						await BreedsService.deleteBreedsBySpecie(specieUuid)
+						await BreedsService.deleteBreedsBySpeciesUuid(specieUuid)
 						await SpeciesService.deleteSpecies(specieUuid)
 						const sps = species.filter((specie) => specie.uuid !== specieUuid)
 						setSpecies(sps)
@@ -151,7 +153,7 @@ const MySpecies = () => {
 
 				// Update breeds for this species
 				for (const breed of breedData) {
-					await BreedsService.upsertBreed(breed)
+					await BreedsService.updateBreed(breed, user!.uuid)
 				}
 
 				// Update local state
@@ -171,7 +173,7 @@ const MySpecies = () => {
 				showToast(t('toast.edited'), 'success')
 			}, t('toast.errorEditing'))
 		},
-		[species, breeds, withLoadingAndError, setDbSpecies, setDbBreeds, showToast, t]
+		[user, species, breeds, withLoadingAndError, setDbSpecies, setDbBreeds, showToast, t]
 	)
 
 	useEffect(() => {
