@@ -1,42 +1,89 @@
 import { callableFireFunction } from '@/utils/callableFireFunction'
 
-const FUNCTIONS = {
-	getAnimalsByFarm: 'getAnimalsByFarm',
-	getAnimalByUuid: 'getAnimalByUuid',
-	getAnimalsBySpeciesUuid: 'getAnimalsBySpeciesUuid',
-	setAnimal: 'setAnimal',
-	updateAnimal: 'updateAnimal',
-	updateAnimalStatus: 'updateAnimalStatus',
-} as const
-
 // Gets
 
 const getAnimals = async (farmUuid: string): Promise<Animal[]> => {
-	return await callableFireFunction(FUNCTIONS.getAnimalsByFarm, { farmUuid })
+	const response = await callableFireFunction<{ success: boolean; data: Animal[]; count: number }>(
+		'animals',
+		{
+			operation: 'getAnimalsByFarm',
+			farmUuid,
+		}
+	)
+	return response.data
 }
 
 const getAnimal = async (animalUuid: string): Promise<Animal> => {
-	return await callableFireFunction(FUNCTIONS.getAnimalByUuid, { animalUuid })
+	const response = await callableFireFunction<{ success: boolean; data: Animal }>('animals', {
+		operation: 'getAnimalByUuid',
+		animalUuid,
+	})
+	return response.data
 }
 
 const getAnimalsBySpecies = async (speciesUuid: string, farmUuid: string): Promise<Animal[]> => {
-	return await callableFireFunction(FUNCTIONS.getAnimalsBySpeciesUuid, { speciesUuid, farmUuid })
+	const response = await callableFireFunction<{ success: boolean; data: Animal[]; count: number }>(
+		'animals',
+		{
+			operation: 'getAnimalsBySpeciesUuid',
+			speciesUuid,
+			farmUuid,
+		}
+	)
+	return response.data
 }
 
 // Sets
 
-const setAnimal = async (animal: Animal, createdBy: string, farmUuid: string): Promise<String> => {
-	return await callableFireFunction(FUNCTIONS.setAnimal, { animal, createdBy, farmUuid })
+const setAnimal = async (animal: Animal, createdBy: string, farmUuid: string): Promise<string> => {
+	const response = await callableFireFunction<{
+		success: boolean
+		data: { uuid: string; isNew: boolean }
+	}>('animals', {
+		operation: 'upsertAnimal',
+		animal: { ...animal, uuid: undefined }, // Remove uuid for new animals
+		userUuid: createdBy,
+		farmUuid,
+	})
+	return response.data.uuid
 }
 
 // Update
 
 const updateAnimal = async (animal: Animal, updatedBy: string) => {
-	return await callableFireFunction(FUNCTIONS.updateAnimal, { animal, updatedBy })
+	const response = await callableFireFunction<{
+		success: boolean
+		data: { uuid: string; isNew: boolean }
+	}>('animals', {
+		operation: 'upsertAnimal',
+		animal,
+		userUuid: updatedBy,
+		farmUuid: animal.farmUuid,
+	})
+	return response.data
 }
 
 const updateAnimalStatus = async (animalUuid: string, updatedBy: string) => {
-	return await callableFireFunction(FUNCTIONS.updateAnimalStatus, { animalUuid, updatedBy })
+	const response = await callableFireFunction<{ success: boolean }>('animals', {
+		operation: 'updateAnimalStatus',
+		animalUuid,
+		updatedBy,
+	})
+	return response
+}
+
+const updateAnimalHealthStatus = async (
+	animalUuid: string,
+	healthStatus: HealthStatus,
+	updatedBy: string
+) => {
+	const response = await callableFireFunction<{ success: boolean }>('animals', {
+		operation: 'updateAnimalHealthStatus',
+		animalUuid,
+		healthStatus,
+		userUuid: updatedBy,
+	})
+	return response
 }
 
 export const AnimalsService = {
@@ -46,4 +93,5 @@ export const AnimalsService = {
 	setAnimal,
 	updateAnimal,
 	updateAnimalStatus,
+	updateAnimalHealthStatus,
 }

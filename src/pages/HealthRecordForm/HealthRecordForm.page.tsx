@@ -70,32 +70,29 @@ const HealthRecordForm = () => {
 			await withLoadingAndError(async () => {
 				const healthRecordData = transformToApiFormat(data)
 				const healthRecordUuid = params.healthRecordUuid
-				healthRecordData.uuid = healthRecordUuid ?? crypto.randomUUID()
 
 				let newHealthRecord: HealthRecord
 
 				if (healthRecordUuid) {
-					await HealthRecordsService.updateHealthRecord(healthRecordData, user.uuid)
+					await HealthRecordsService.updateHealthRecord(healthRecordData, user.uuid, farm!.uuid)
 					newHealthRecord = healthRecordData
 					showToast(t('toast.edited'), 'success')
 				} else {
-					await HealthRecordsService.setHealthRecord(healthRecordData, user.uuid)
+					await HealthRecordsService.setHealthRecord(healthRecordData, user.uuid, farm!.uuid)
 					newHealthRecord = healthRecordData
 					showToast(t('toast.added'), 'success')
 				}
 
-				// Update animal health status automatically
 				try {
 					const newHealthStatus = await updateAnimalHealthStatus(
 						healthRecordData.animalUuid,
 						newHealthRecord,
-						data.manualHealthStatus // If user set it manually
+						data.manualHealthStatus
 					)
 
 					showToast(`${t('toast.added')} - Animal status: ${newHealthStatus}`, 'success')
 				} catch (error) {
 					console.error('Failed to update animal health status:', error)
-					// Don't fail the whole operation if health status update fails
 				}
 
 				navigate(AppRoutes.ANIMAL.replace(':animalUuid', healthRecordData.animalUuid))
@@ -103,6 +100,7 @@ const HealthRecordForm = () => {
 		},
 		[
 			user,
+			farm,
 			params.healthRecordUuid,
 			transformToApiFormat,
 			withLoadingAndError,

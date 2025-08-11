@@ -1,43 +1,77 @@
-import { deleteDoc, doc } from 'firebase/firestore'
-
-import { firestore } from '@/config/firebaseConfig'
-
 import { callableFireFunction } from '@/utils/callableFireFunction'
 
-const FUNCTIONS = {
-	getAllBreeds: 'getAllBreeds',
-	setBreed: 'setBreed',
-	updateBreed: 'updateBreed',
-	deleteBreedsBySpeciesUuid: 'deleteBreedsBySpeciesUuid',
-} as const
-
-const getAllBreeds = async (farmUuid: string) => {
-	return await callableFireFunction(FUNCTIONS.getAllBreeds, { farmUuid })
+const getAllBreeds = async (farmUuid: string): Promise<Breed[]> => {
+	const response = await callableFireFunction<{ success: boolean; data: Breed[]; count: number }>(
+		'breeds',
+		{
+			operation: 'getAllBreeds',
+			farmUuid,
+		}
+	)
+	return response.data
 }
 
-const createBreed = async (breed: Breed) => {
-	return await callableFireFunction(FUNCTIONS.setBreed, { breed })
-}
-const updateBreed = async (breed: Breed, updatedBy: string) => {
-	return await callableFireFunction(FUNCTIONS.updateBreed, { breed, updatedBy })
-}
-const deleteBreedsBySpeciesUuid = async (speciesUuid: string) => {
-	return await callableFireFunction(FUNCTIONS.deleteBreedsBySpeciesUuid, {
-		speciesUuid,
+const getBreed = async (breedUuid: string): Promise<Breed> => {
+	const response = await callableFireFunction<{ success: boolean; data: Breed }>('breeds', {
+		operation: 'getBreedByUuid',
+		breedUuid,
 	})
+	return response.data
 }
 
-const collectionName = 'breeds'
+const createBreed = async (
+	breed: Breed,
+	userUuid: string,
+	farmUuid: string
+): Promise<{ uuid: string; isNew: boolean }> => {
+	const response = await callableFireFunction<{
+		success: boolean
+		data: { uuid: string; isNew: boolean }
+	}>('breeds', {
+		operation: 'upsertBreed',
+		breed: { ...breed, uuid: undefined }, // Remove uuid for new breeds
+		userUuid,
+		farmUuid,
+	})
+	return response.data
+}
 
-const deleteBreed = async (uuid: string) => {
-	const document = doc(firestore, collectionName, uuid)
-	await deleteDoc(document)
+const updateBreed = async (breed: Breed, userUuid: string, farmUuid: string) => {
+	const response = await callableFireFunction<{
+		success: boolean
+		data: { uuid: string; isNew: boolean }
+	}>('breeds', {
+		operation: 'upsertBreed',
+		breed,
+		userUuid,
+		farmUuid,
+	})
+	return response.data
+}
+
+const deleteBreed = async (breedUuid: string, updatedBy: string) => {
+	const response = await callableFireFunction<{ success: boolean }>('breeds', {
+		operation: 'deleteBreedByUuid',
+		breedUuid,
+		updatedBy,
+	})
+	return response
+}
+
+const deleteBreedsBySpeciesUuid = async (speciesUuid: string, updatedBy: string) => {
+	const response = await callableFireFunction<{ success: boolean }>('breeds', {
+		operation: 'deleteBreedsBySpeciesUuid',
+		speciesUuid,
+		updatedBy,
+	})
+	return response
 }
 
 export const BreedsService = {
 	getAllBreeds,
+	getBreed,
 	createBreed,
 	updateBreed,
-	deleteBreedsBySpeciesUuid,
 	deleteBreed,
+	deleteBreedsBySpeciesUuid,
 }

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { useFarmStore } from '@/store/useFarmStore'
 
-import { NotificationService } from '@/services/notifications/notificationService'
+import { NotificationsService } from '@/services/notifications'
 
 export const useNotifications = () => {
 	const { farm } = useFarmStore()
@@ -19,7 +19,7 @@ export const useNotifications = () => {
 		setLoading(true)
 		setError(null)
 
-		const unsubscribe = NotificationService.subscribeToNotifications(
+		const unsubscribe = NotificationsService.subscribeToNotifications(
 			farm.uuid,
 			(newNotifications) => {
 				setNotifications(newNotifications)
@@ -33,12 +33,35 @@ export const useNotifications = () => {
 		}
 	}, [farm?.uuid])
 
-	const markAsRead = useCallback(async (notificationId: string) => {
+	const markAsRead = useCallback(async (notificationUuid: string) => {
 		try {
-			await NotificationService.markAsRead(notificationId)
+			await NotificationsService.markNotificationAsRead(notificationUuid)
+			// Update local state immediately for better UX
+			setNotifications((prev) =>
+				prev.map((notification) =>
+					notification.uuid === notificationUuid ? { ...notification, read: true } : notification
+				)
+			)
 		} catch (err) {
 			console.error('Error marking notification as read:', err)
 			setError('Error al marcar como leída')
+		}
+	}, [])
+
+	const markAsDismissed = useCallback(async (notificationUuid: string) => {
+		try {
+			await NotificationsService.markNotificationAsDismissed(notificationUuid)
+			// Update local state immediately for better UX
+			setNotifications((prev) =>
+				prev.map((notification) =>
+					notification.uuid === notificationUuid
+						? { ...notification, dismissed: true }
+						: notification
+				)
+			)
+		} catch (err) {
+			console.error('Error dismissing notification:', err)
+			setError('Error al descartar notificación')
 		}
 	}, [])
 
@@ -46,21 +69,22 @@ export const useNotifications = () => {
 		if (!farm?.uuid) return
 
 		try {
-			await NotificationService.markAllAsRead(farm.uuid)
+			// Get the user UUID from auth context if available, or handle differently
+			// For now, we'll mark each notification individually
+			const unreadNotifications = notifications.filter((n) => !n.read)
+			await Promise.all(
+				unreadNotifications.map((notification) =>
+					NotificationsService.markNotificationAsRead(notification.uuid)
+				)
+			)
+
+			// Update local state
+			setNotifications((prev) => prev.map((notification) => ({ ...notification, read: true })))
 		} catch (err) {
 			console.error('Error marking all notifications as read:', err)
 			setError('Error al marcar todas como leídas')
 		}
-	}, [farm?.uuid])
-
-	const dismissNotification = useCallback(async (notificationId: string) => {
-		try {
-			await NotificationService.dismissNotification(notificationId)
-		} catch (err) {
-			console.error('Error dismissing notification:', err)
-			setError('Error al descartar notificación')
-		}
-	}, [])
+	}, [farm?.uuid, notifications])
 
 	const getNotificationsByCategory = useCallback(
 		(category?: string) => {
@@ -102,95 +126,137 @@ export const useNotifications = () => {
 
 	// Refrescar notificaciones manualmente
 	const refresh = useCallback(async () => {
-		// No necesario con Firebase real-time, pero mantenemos la interfaz
-		console.log('Notifications refresh requested - using real-time updates')
-	}, [])
+		if (!farm?.uuid) return
+
+		try {
+			setLoading(true)
+			const freshNotifications = await NotificationsService.getNotifications({
+				farmUuid: farm.uuid,
+				limit: 50,
+			})
+			setNotifications(freshNotifications)
+			setError(null)
+		} catch (err) {
+			console.error('Error refreshing notifications:', err)
+			setError('Error al actualizar notificaciones')
+		} finally {
+			setLoading(false)
+		}
+	}, [farm?.uuid])
 
 	const unreadCount = notifications.filter((n) => !n.read && !n.dismissed).length
 	const totalCount = notifications.filter((n) => !n.dismissed).length
+
+	const createNotification = useCallback(
+		async (notificationData: {
+			title: string
+			message: string
+			category: string
+			priority?: string
+			targetUserUuids?: string[]
+			metadata?: Record<string, any>
+		}) => {
+			if (!farm?.uuid) return
+
+			try {
+				return await NotificationsService.createNotification({
+					...notificationData,
+					farmUuid: farm.uuid,
+				})
+			} catch (err) {
+				console.error('Error creating notification:', err)
+				setError('Error al crear notificación')
+			}
+		},
+		[farm?.uuid]
+	)
 
 	const createMedicationNotification = useCallback(
 		async (animalUuid: string, medication: string, dosage: string, dueTime: Date) => {
 			if (!farm?.uuid) return
 
 			try {
-				return await NotificationService.createMedicationNotification(
-					farm.uuid,
-					animalUuid,
-					medication,
-					dosage,
-					dueTime
-				)
+				return await createNotification({
+					title: 'Medicación pendiente',
+					message: `${medication} - ${dosage} para animal ${animalUuid}`,
+					category: 'medication',
+					priority: 'high',
+					metadata: {
+						animalUuid,
+						medication,
+						dosage,
+						dueTime: dueTime.toISOString(),
+					},
+				})
 			} catch (err) {
 				console.error('Error creating medication notification:', err)
 				setError('Error al crear notificación de medicación')
 			}
 		},
-		[farm?.uuid]
+		[farm?.uuid, createNotification]
 	)
 
 	const createHealthNotification = useCallback(
-		async (
-			animalUuid: string,
-			title: string,
-			message: string,
-			type: NotificationData['type'] = 'info'
-		) => {
+		async (animalUuid: string, title: string, message: string, priority = 'medium') => {
 			if (!farm?.uuid) return
 
 			try {
-				return await NotificationService.createHealthNotification(
-					farm.uuid,
-					animalUuid,
+				return await createNotification({
 					title,
 					message,
-					type
-				)
+					category: 'health',
+					priority,
+					metadata: {
+						animalUuid,
+					},
+				})
 			} catch (err) {
 				console.error('Error creating health notification:', err)
 				setError('Error al crear notificación de salud')
 			}
 		},
-		[farm?.uuid]
+		[farm?.uuid, createNotification]
 	)
 
 	const createTaskNotification = useCallback(
-		async (
-			title: string,
-			message: string,
-			type: NotificationData['type'] = 'info',
-			actionUrl?: string
-		) => {
+		async (title: string, message: string, priority = 'medium', actionUrl?: string) => {
 			if (!farm?.uuid) return
 
 			try {
-				return await NotificationService.createTaskNotification(
-					farm.uuid,
+				return await createNotification({
 					title,
 					message,
-					type,
-					actionUrl
-				)
+					category: 'task',
+					priority,
+					metadata: {
+						actionUrl,
+					},
+				})
 			} catch (err) {
 				console.error('Error creating task notification:', err)
 				setError('Error al crear notificación de tarea')
 			}
 		},
-		[farm?.uuid]
+		[farm?.uuid, createNotification]
 	)
 
 	const createGeneralNotification = useCallback(
-		async (title: string, message: string, type: NotificationData['type'] = 'info') => {
+		async (title: string, message: string, priority = 'medium') => {
 			if (!farm?.uuid) return
 
 			try {
-				return await NotificationService.createGeneralNotification(farm.uuid, title, message, type)
+				return await createNotification({
+					title,
+					message,
+					category: 'general',
+					priority,
+				})
 			} catch (err) {
 				console.error('Error creating general notification:', err)
 				setError('Error al crear notificación general')
 			}
 		},
-		[farm?.uuid]
+		[farm?.uuid, createNotification]
 	)
 
 	return {
@@ -202,12 +268,13 @@ export const useNotifications = () => {
 		totalCount,
 
 		markAsRead,
+		markAsDismissed,
 		markAllAsRead,
-		dismissNotification,
 		getNotificationsByCategory,
 		getNotificationsByPriority,
 		refresh,
 
+		createNotification,
 		createMedicationNotification,
 		createHealthNotification,
 		createTaskNotification,

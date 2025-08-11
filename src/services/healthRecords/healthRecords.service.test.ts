@@ -204,7 +204,7 @@ describe('HealthRecordsService', () => {
 			const { setDoc } = await import('firebase/firestore')
 			vi.mocked(setDoc).mockResolvedValue(undefined)
 
-			await HealthRecordsService.updateHealthRecordsStatus('1', false)
+			await HealthRecordsService.updateHealthRecordsStatus('1', 'user123')
 
 			expect(setDoc).toHaveBeenCalled()
 		})

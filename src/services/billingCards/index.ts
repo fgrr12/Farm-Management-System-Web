@@ -1,21 +1,44 @@
 import { callableFireFunction } from '@/utils/callableFireFunction'
 
-const FUNCTIONS = {
-	getBillingCardByUuid: 'getBillingCardByUuid',
-	setBillingCard: 'setBillingCard',
-	updateBillingCard: 'updateBillingCard',
-} as const
-
-const getBillingCardByUuid = async (uuid: string) => {
-	return callableFireFunction<BillingCard>(FUNCTIONS.getBillingCardByUuid, { uuid })
+const getBillingCardByUuid = async (billingCardUuid: string): Promise<BillingCard> => {
+	const response = await callableFireFunction<{ success: boolean; data: BillingCard }>(
+		'billingCards',
+		{
+			operation: 'getBillingCardByUuid',
+			billingCardUuid,
+		}
+	)
+	return response.data
 }
 
-const setBillingCard = async (billingCard: BillingCard, createdBy: string) => {
-	return callableFireFunction(FUNCTIONS.setBillingCard, { billingCard, createdBy })
+const setBillingCard = async (
+	billingCard: BillingCard,
+	userUuid: string,
+	farmUuid: string
+): Promise<{ uuid: string; isNew: boolean }> => {
+	const response = await callableFireFunction<{
+		success: boolean
+		data: { uuid: string; isNew: boolean }
+	}>('billingCards', {
+		operation: 'upsertBillingCard',
+		billingCard: { ...billingCard, uuid: undefined }, // Remove uuid for new billing cards
+		userUuid,
+		farmUuid,
+	})
+	return response.data
 }
 
-const updateBillingCard = async (billingCard: BillingCard, updatedBy: string) => {
-	return callableFireFunction(FUNCTIONS.updateBillingCard, { billingCard, updatedBy })
+const updateBillingCard = async (billingCard: BillingCard, userUuid: string, farmUuid: string) => {
+	const response = await callableFireFunction<{
+		success: boolean
+		data: { uuid: string; isNew: boolean }
+	}>('billingCards', {
+		operation: 'upsertBillingCard',
+		billingCard,
+		userUuid,
+		farmUuid,
+	})
+	return response.data
 }
 
 export const BillingCardsService = {

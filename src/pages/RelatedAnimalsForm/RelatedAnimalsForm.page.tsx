@@ -24,7 +24,7 @@ import type {
 
 const RelatedAnimalsForm = () => {
 	const { user } = useUserStore()
-	const { breeds } = useFarmStore()
+	const { farm, breeds } = useFarmStore()
 	const params = useParams()
 	const { t } = useTranslation(['relatedAnimals'])
 	const { setPageTitle, withLoadingAndError } = usePagePerformance()
@@ -47,10 +47,10 @@ const RelatedAnimalsForm = () => {
 			)
 
 			if (exist) {
-				await RelatedAnimalsService.deleteRelatedAnimal(exist.uuid)
+				await RelatedAnimalsService.deleteRelatedAnimal(exist.uuid, user!.uuid)
 			}
 		},
-		[relatedAnimals]
+		[user, relatedAnimals]
 	)
 
 	const buildRelation = useCallback(
@@ -76,14 +76,14 @@ const RelatedAnimalsForm = () => {
 
 			await RelatedAnimalsService.setRelatedAnimal(
 				{
-					uuid: crypto.randomUUID(),
 					child: buildRelation(child, true),
 					parent: buildRelation(parent, false),
 				},
-				user.uuid
+				user.uuid,
+				farm!.uuid
 			)
 		},
-		[user, buildRelation]
+		[farm, user, buildRelation]
 	)
 
 	const getSourceAnimal = useCallback(

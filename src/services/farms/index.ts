@@ -1,35 +1,57 @@
-import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore'
+import { callableFireFunction } from '@/utils/callableFireFunction'
 
-import { firestore } from '@/config/firebaseConfig'
-
-const collectionName = 'farms'
-
-const getFarm = async (uuid: string): Promise<Farm> => {
-	const document = doc(firestore, collectionName, uuid)
-	const farm = await getDoc(document)
-	return farm.data() as Farm
+const getFarm = async (farmUuid: string): Promise<Farm> => {
+	const response = await callableFireFunction<{ success: boolean; data: Farm }>('farms', {
+		operation: 'getFarmByUuid',
+		farmUuid,
+	})
+	return response.data
 }
 
-const updateFarm = async (farm: Farm) => {
-	const document = doc(firestore, collectionName, farm.uuid)
-	await setDoc(document, farm, { merge: true })
+const updateFarm = async (farm: Farm, userUuid: string) => {
+	const response = await callableFireFunction<{
+		success: boolean
+		data: { uuid: string; isNew: boolean }
+	}>('farms', {
+		operation: 'upsertFarm',
+		farm,
+		userUuid,
+	})
+	return response.data
 }
 
 const getAllFarms = async (): Promise<Farm[]> => {
-	const collectionRef = collection(firestore, collectionName)
-	const snapshot = await getDocs(collectionRef)
-	return snapshot.docs.map((doc) => doc.data() as Farm)
+	const response = await callableFireFunction<{ success: boolean; data: Farm[]; count: number }>(
+		'farms',
+		{
+			operation: 'getAllFarms',
+		}
+	)
+	return response.data
 }
 
-const createFarm = async (farmData: Omit<Farm, 'uuid'>): Promise<Farm> => {
-	const uuid = crypto.randomUUID()
-	const newFarm: Farm = {
-		...farmData,
-		uuid,
-	}
-	const document = doc(firestore, collectionName, uuid)
-	await setDoc(document, newFarm)
-	return newFarm
+const createFarm = async (
+	farmData: Omit<Farm, 'uuid'>,
+	userUuid: string
+): Promise<{ uuid: string; isNew: boolean }> => {
+	const response = await callableFireFunction<{
+		success: boolean
+		data: { uuid: string; isNew: boolean }
+	}>('farms', {
+		operation: 'upsertFarm',
+		farm: { ...farmData, uuid: undefined }, // Remove uuid for new farms
+		userUuid,
+	})
+	return response.data
+}
+
+const updateFarmStatus = async (farmUuid: string, updatedBy: string) => {
+	const response = await callableFireFunction<{ success: boolean }>('farms', {
+		operation: 'updateFarmStatus',
+		farmUuid,
+		updatedBy,
+	})
+	return response
 }
 
 export const FarmsService = {
@@ -37,4 +59,5 @@ export const FarmsService = {
 	updateFarm,
 	getAllFarms,
 	createFarm,
+	updateFarmStatus,
 }

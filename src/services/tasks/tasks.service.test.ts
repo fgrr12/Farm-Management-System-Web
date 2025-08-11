@@ -2,18 +2,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { TasksService } from './index'
 
-vi.mock('@/config/firebaseConfig', () => ({
-	firestore: {},
+// Mock callableFireFunction
+vi.mock('@/utils/callableFireFunction', () => ({
+	callableFireFunction: vi.fn(),
 }))
 
-vi.mock('firebase/firestore', () => ({
-	collection: vi.fn(),
-	doc: vi.fn(),
-	getDocs: vi.fn(),
-	query: vi.fn(),
-	where: vi.fn(),
-	setDoc: vi.fn(),
-}))
+import { callableFireFunction } from '@/utils/callableFireFunction'
 
 describe('TasksService', () => {
 	beforeEach(() => {
@@ -205,12 +199,18 @@ describe('TasksService', () => {
 
 	describe('updateTaskStatus', () => {
 		it('should update task status', async () => {
-			const { setDoc } = await import('firebase/firestore')
-			vi.mocked(setDoc).mockResolvedValue(undefined)
+			// Mock getTasks to return a task
+			vi.mocked(callableFireFunction)
+				.mockResolvedValueOnce({
+					data: [{ uuid: 'task-1', title: 'Test Task', status: 'todo', farmUuid: 'farm-1' }],
+				})
+				.mockResolvedValueOnce({
+					data: { uuid: 'task-1', isNew: false },
+				})
 
-			await TasksService.updateTaskStatus('task-1', 'done')
+			await TasksService.updateTaskStatus('task-1', 'done', 'user-1', 'farm-1')
 
-			expect(setDoc).toHaveBeenCalled()
+			expect(callableFireFunction).toHaveBeenCalledTimes(2)
 		})
 	})
 })

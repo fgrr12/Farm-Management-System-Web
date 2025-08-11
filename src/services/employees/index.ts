@@ -1,50 +1,58 @@
-import dayjs from 'dayjs'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore'
-
-import { firestore, signUpAuth } from '@/config/firebaseConfig'
-
-const collectionName = 'users'
+import { callableFireFunction } from '@/utils/callableFireFunction'
 
 const getEmployees = async (farmUuid: string): Promise<User[]> => {
-	let response = []
-
-	const employeesDocs = await getDocs(
-		query(
-			collection(firestore, collectionName),
-			where('role', 'in', ['employee', 'owner']),
-			where('farmUuid', '==', farmUuid),
-			where('status', '==', true)
-		)
+	const response = await callableFireFunction<{ success: boolean; data: User[]; count: number }>(
+		'users',
+		{
+			operation: 'getEmployees',
+			farmUuid,
+		}
 	)
-	response = employeesDocs.docs.map((doc) => doc.data()) as User[]
+	return response.data
+}
+
+const getEmployee = async (employeeUuid: string): Promise<User> => {
+	const response = await callableFireFunction<{ success: boolean; data: User }>('users', {
+		operation: 'getEmployeeByUuid',
+		employeeUuid,
+	})
+	return response.data
+}
+
+const setEmployee = async (
+	employee: User,
+	userUuid: string
+): Promise<{ uuid: string; isNew: boolean }> => {
+	const response = await callableFireFunction<{
+		success: boolean
+		data: { uuid: string; isNew: boolean }
+	}>('users', {
+		operation: 'upsertEmployee',
+		employee: { ...employee, uuid: undefined }, // Remove uuid for new employees
+		userUuid,
+	})
+	return response.data
+}
+
+const updateEmployee = async (employee: User, userUuid: string) => {
+	const response = await callableFireFunction<{
+		success: boolean
+		data: { uuid: string; isNew: boolean }
+	}>('users', {
+		operation: 'upsertEmployee',
+		employee,
+		userUuid,
+	})
+	return response.data
+}
+
+const deleteEmployee = async (employeeUuid: string, userUuid: string) => {
+	const response = await callableFireFunction<{ success: boolean }>('users', {
+		operation: 'updateEmployeeStatus',
+		employeeUuid,
+		userUuid,
+	})
 	return response
-}
-
-const getEmployee = async (uuid: string): Promise<User> => {
-	const document = doc(firestore, collectionName, uuid)
-	const employee = await getDoc(document)
-	return employee.data() as User
-}
-
-const setEmployee = async (data: User): Promise<void> => {
-	const temporal_psw = 'Pass123!'
-	const response = await createUserWithEmailAndPassword(signUpAuth, data.email, temporal_psw)
-	const { user } = response
-
-	const createdAt = dayjs().toISOString()
-	const document = doc(firestore, collectionName, user.uid)
-	await setDoc(document, { ...data, createdAt, uuid: user.uid })
-}
-
-const updateEmployee = async (data: User): Promise<void> => {
-	const document = doc(firestore, collectionName, data.uuid)
-	await setDoc(document, data, { merge: true })
-}
-
-const deleteEmployee = async (uuid: string): Promise<void> => {
-	const document = doc(firestore, collectionName, uuid)
-	await setDoc(document, { status: false }, { merge: true })
 }
 
 export const EmployeesService = {

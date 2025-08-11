@@ -147,12 +147,12 @@ describe('ProductionRecordsService', () => {
 		})
 	})
 
-	describe('updateProductionRecordsStatus', () => {
+	describe('updateProductionRecordStatus', () => {
 		it('should update production record status', async () => {
 			const { setDoc } = await import('firebase/firestore')
 			vi.mocked(setDoc).mockResolvedValue(undefined)
 
-			await ProductionRecordsService.updateProductionRecordsStatus('1', false)
+			await ProductionRecordsService.updateProductionRecordStatus('1', 'user123')
 
 			expect(setDoc).toHaveBeenCalled()
 		})

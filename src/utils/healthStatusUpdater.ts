@@ -6,11 +6,14 @@ import { AnimalsService } from '@/services/animals'
 export const updateAnimalHealthStatus = async (
 	animalUuid: string,
 	newHealthRecord?: HealthRecord,
-	manualStatus?: HealthStatus
+	manualStatus?: HealthStatus,
+	updatedBy?: string
 ): Promise<HealthStatus> => {
 	if (manualStatus) {
 		// If set manually, use that value
-		await AnimalsService.updateAnimalFields(animalUuid, { healthStatus: manualStatus })
+		if (updatedBy) {
+			await AnimalsService.updateAnimalHealthStatus(animalUuid, manualStatus, updatedBy)
+		}
 		return manualStatus
 	}
 
@@ -21,8 +24,10 @@ export const updateAnimalHealthStatus = async (
 	// Calculate new status based on records and animal status
 	const newStatus = calculateHealthStatusFromRecords(healthRecords, newHealthRecord, animal)
 
-	// Update in database
-	await AnimalsService.updateAnimalFields(animalUuid, { healthStatus: newStatus })
+	// Update in database if updatedBy is provided
+	if (updatedBy) {
+		await AnimalsService.updateAnimalHealthStatus(animalUuid, newStatus, updatedBy)
+	}
 
 	return newStatus
 }

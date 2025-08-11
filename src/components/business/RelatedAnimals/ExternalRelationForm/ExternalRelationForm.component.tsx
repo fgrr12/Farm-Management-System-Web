@@ -1,6 +1,7 @@
 import { type ChangeEvent, type FormEventHandler, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
 import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
@@ -19,6 +20,7 @@ export const ExternalRelationForm: FC<ExternalRelationFormProps> = ({ currentAni
 	const { t } = useTranslation(['externalRelationForm'])
 	const [relation, setRelation] = useState<ExternalRelation>(INITIAL_RELATION)
 	const { user } = useUserStore()
+	const { farm } = useFarmStore()
 
 	const handleClose = () => {
 		setRelation(INITIAL_RELATION)
@@ -61,11 +63,11 @@ export const ExternalRelationForm: FC<ExternalRelationFormProps> = ({ currentAni
 	) => {
 		await RelatedAnimalsService.setRelatedAnimal(
 			{
-				uuid: crypto.randomUUID(),
 				child: buildRelation(child, true),
 				parent: buildRelation(parent, false),
 			},
-			user!.uuid
+			user!.uuid,
+			farm!.uuid
 		)
 	}
 

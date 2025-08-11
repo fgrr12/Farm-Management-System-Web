@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { AppRoutes } from '@/config/constants/routes'
 
 import { useAppStore } from '@/store/useAppStore'
+import { useUserStore } from '@/store/useUserStore'
 
 import { EmployeesService } from '@/services/employees'
 
@@ -13,6 +14,7 @@ import type { EmployeesTableProps } from './EmployeesTable.types'
 
 export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmployee }) => {
 	const { defaultModalData, setModalData, setLoading, setToastData } = useAppStore()
+	const { user: currentUser } = useUserStore()
 	const navigate = useNavigate()
 	const { t } = useTranslation(['employeesData'])
 
@@ -29,7 +31,7 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 			onAccept: async () => {
 				try {
 					setLoading(true)
-					await EmployeesService.deleteEmployee(user.uuid)
+					await EmployeesService.deleteEmployee(user.uuid, currentUser!.uuid)
 					removeEmployee(user.uuid)
 					setModalData(defaultModalData)
 					setLoading(false)

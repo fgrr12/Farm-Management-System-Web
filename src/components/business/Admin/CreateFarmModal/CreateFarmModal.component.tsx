@@ -1,6 +1,8 @@
 import { memo, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useUserStore } from '@/store/useUserStore'
+
 import { FarmsService } from '@/services/farms'
 
 import { Modal } from '@/components/layout/Modal'
@@ -11,6 +13,7 @@ import type { CreateFarmModalProps } from './CreateFarmModal.types'
 
 export const CreateFarmModal = memo<CreateFarmModalProps>(({ isOpen, onClose, onFarmCreated }) => {
 	const { t } = useTranslation(['common'])
+	const { user } = useUserStore()
 	const [loading, setLoading] = useState(false)
 	const [formData, setFormData] = useState({
 		name: '',
@@ -37,12 +40,10 @@ export const CreateFarmModal = memo<CreateFarmModalProps>(({ isOpen, onClose, on
 
 		setLoading(true)
 		try {
-			const newFarm = await FarmsService.createFarm({
-				...formData,
-				billingCardUuid: formData.billingCardUuid || '', // Puede estar vacío inicialmente
-			})
+			formData.billingCardUuid = formData.billingCardUuid || ''
+			const newFarm = await FarmsService.createFarm(formData, user!.uuid)
 
-			onFarmCreated(newFarm)
+			onFarmCreated({ ...newFarm, ...formData })
 			onClose()
 
 			// Reset form
@@ -60,7 +61,7 @@ export const CreateFarmModal = memo<CreateFarmModalProps>(({ isOpen, onClose, on
 		} finally {
 			setLoading(false)
 		}
-	}, [formData, onFarmCreated, onClose])
+	}, [formData, user, onFarmCreated, onClose])
 
 	const handleCancel = useCallback(() => {
 		onClose()

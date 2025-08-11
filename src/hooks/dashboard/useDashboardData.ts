@@ -46,7 +46,7 @@ export const useDashboardData = () => {
 
 		try {
 			setLoading(true)
-			const quickStats = await DashboardService.getDashboardQuickStats(farm.uuid)
+			const quickStats = await DashboardService.getDashboardStats(farm.uuid)
 
 			setStats((prevStats) => ({
 				...prevStats,

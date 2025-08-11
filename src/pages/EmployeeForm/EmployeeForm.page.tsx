@@ -57,14 +57,14 @@ const EmployeeForm = () => {
 				employeeData.uuid = employeeData.uuid || crypto.randomUUID()
 
 				if (params.employeeUuid) {
-					await EmployeesService.updateEmployee(employeeData)
+					await EmployeesService.updateEmployee(employeeData, user.uuid)
 					showToast(t('toast.edited'), 'success')
 					navigate(AppRoutes.EMPLOYEES)
 					return
 				}
 
 				employeeData.createdBy = user.uuid
-				await EmployeesService.setEmployee(employeeData)
+				await EmployeesService.setEmployee(employeeData, user.uuid)
 				showToast(t('toast.added'), 'success')
 				navigate(AppRoutes.EMPLOYEES)
 			}, t('toast.errorAddingEmployee'))

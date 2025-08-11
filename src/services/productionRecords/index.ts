@@ -1,11 +1,4 @@
-import dayjs from 'dayjs'
-import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore'
-
-import { firestore } from '@/config/firebaseConfig'
-
-import { formatDate } from '@/utils/formatDate'
-
-const collectionName = 'productionRecords'
+import { callableFireFunction } from '@/utils/callableFireFunction'
 
 // Gets
 
@@ -13,72 +6,110 @@ const getProductionRecords = async (
 	animalUuid: string,
 	limit?: number
 ): Promise<ProductionRecord[]> => {
-	const productionRecords = await getDocs(
-		query(
-			collection(firestore, collectionName),
-			where('animalUuid', '==', animalUuid),
-			where('status', '==', true)
-		)
-	)
-	let response = productionRecords.docs.map((doc) => ({
-		...doc.data(),
-		uuid: doc.id,
-	})) as ProductionRecord[]
-
-	// Sort by date descending
-	response = response.sort((a, b) => dayjs(b.date).diff(dayjs(a.date)))
-
-	// Apply limit if specified (for performance optimization)
-	if (limit && limit > 0) {
-		response = response.slice(0, limit)
-	}
-
-	return response as ProductionRecord[]
+	const response = await callableFireFunction<{
+		success: boolean
+		data: ProductionRecord[]
+		count: number
+	}>('production', {
+		operation: 'getProductionRecords',
+		animalUuid,
+		limit,
+	})
+	return response.data
 }
 
-const getProductionRecord = async (uuid: string): Promise<ProductionRecord> => {
-	const document = doc(firestore, collectionName, uuid)
-	const productionRecord = await getDoc(document)
+const getProductionRecord = async (productionRecordUuid: string): Promise<ProductionRecord> => {
+	const response = await callableFireFunction<{ success: boolean; data: ProductionRecord }>(
+		'production',
+		{
+			operation: 'getProductionRecordByUuid',
+			productionRecordUuid,
+		}
+	)
+	return response.data
+}
 
-	return productionRecord.data() as ProductionRecord
+const getProductionRecordsByDateRange = async (
+	animalUuid: string,
+	startDate: string,
+	endDate: string
+): Promise<ProductionRecord[]> => {
+	const response = await callableFireFunction<{
+		success: boolean
+		data: ProductionRecord[]
+		count: number
+	}>('production', {
+		operation: 'getProductionRecordsByDateRange',
+		animalUuid,
+		startDate,
+		endDate,
+	})
+	return response.data
+}
+
+const getProductionSummary = async (animalUuid: string, startDate: string, endDate: string) => {
+	const response = await callableFireFunction<{ success: boolean; data: any }>('production', {
+		operation: 'getProductionSummary',
+		animalUuid,
+		startDate,
+		endDate,
+	})
+	return response.data
 }
 
 // Sets
 
-const setProductionRecord = async (productionRecordData: ProductionRecord, createdBy: string) => {
-	productionRecordData.date = formatDate(productionRecordData.date)
-	const createdAt = dayjs().toISOString()
-
-	const document = doc(firestore, collectionName, productionRecordData.uuid)
-	await setDoc(document, { ...productionRecordData, createdAt, createdBy }, { merge: true })
+const setProductionRecord = async (
+	productionRecord: ProductionRecord,
+	userUuid: string,
+	farmUuid?: string
+): Promise<{ uuid: string; isNew: boolean }> => {
+	const response = await callableFireFunction<{
+		success: boolean
+		data: { uuid: string; isNew: boolean }
+	}>('production', {
+		operation: 'upsertProductionRecord',
+		productionRecord: { ...productionRecord, uuid: undefined }, // Remove uuid for new production records
+		userUuid,
+		farmUuid: farmUuid || '',
+	})
+	return response.data
 }
 
 // Update
 
 const updateProductionRecord = async (
-	productionRecordData: ProductionRecord,
-	updatedBy: string | null
+	productionRecord: ProductionRecord,
+	userUuid: string,
+	farmUuid?: string
 ) => {
-	productionRecordData.date = formatDate(productionRecordData.date)
-	const updateAt = dayjs().toISOString()
-
-	const document = doc(firestore, collectionName, productionRecordData.uuid)
-	await setDoc(document, { ...productionRecordData, updateAt, updatedBy }, { merge: true })
+	const response = await callableFireFunction<{
+		success: boolean
+		data: { uuid: string; isNew: boolean }
+	}>('production', {
+		operation: 'upsertProductionRecord',
+		productionRecord,
+		userUuid,
+		farmUuid: farmUuid || '',
+	})
+	return response.data
 }
 
-// Delete
-
-const updateProductionRecordsStatus = async (uuid: string, status: boolean) => {
-	const document = doc(firestore, collectionName, uuid)
-	const updateAt = dayjs().toISOString()
-
-	await setDoc(document, { status, updateAt }, { merge: true })
+const updateProductionRecordStatus = async (productionRecordUuid: string, userUuid: string) => {
+	const response = await callableFireFunction<{ success: boolean }>('production', {
+		operation: 'updateProductionRecordStatus',
+		productionRecordUuid,
+		userUuid,
+	})
+	return response
 }
 
 export const ProductionRecordsService = {
 	getProductionRecords,
 	getProductionRecord,
+	getProductionRecordsByDateRange,
+	getProductionSummary,
 	setProductionRecord,
 	updateProductionRecord,
-	updateProductionRecordsStatus,
+	updateProductionRecordStatus,
 }

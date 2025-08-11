@@ -23,7 +23,7 @@ export const NotificationDropdown = memo(() => {
 		unreadCount,
 		markAsRead,
 		markAllAsRead,
-		dismissNotification,
+		markAsDismissed,
 		getNotificationsByCategory,
 	} = useNotifications()
 
@@ -115,7 +115,7 @@ export const NotificationDropdown = memo(() => {
 
 	const handleDismiss = async (e: React.MouseEvent, notificationId: string) => {
 		e.stopPropagation()
-		await dismissNotification(notificationId)
+		await markAsDismissed(notificationId)
 	}
 
 	const categories = [

@@ -4,9 +4,11 @@ import {
 	signInWithEmailAndPassword,
 	signInWithPopup,
 } from 'firebase/auth'
-import { doc, getDoc, setDoc } from 'firebase/firestore'
+import { doc, getDoc } from 'firebase/firestore'
 
 import { auth, firestore } from '@/config/firebaseConfig'
+
+import { callableFireFunction } from '@/utils/callableFireFunction'
 
 const collectionName = 'users'
 
@@ -27,15 +29,46 @@ const loginWithGoogle = async () => {
 	}
 }
 
-const getUser = async (uuid: string): Promise<User> => {
-	const userDocument = doc(firestore, collectionName, uuid)
-	const userDoc = await getDoc(userDocument)
-	return userDoc.data() as User
+const getUser = async (userUuid: string): Promise<User> => {
+	const response = await callableFireFunction<{ success: boolean; data: User }>('auth', {
+		operation: 'getUserProfile',
+		userUuid,
+	})
+	return response.data
 }
 
-const updateUser = async (user: User) => {
-	const userDocument = doc(firestore, collectionName, user.uuid)
-	await setDoc(userDocument, user, { merge: true })
+const getUserSettings = async (userUuid: string) => {
+	const response = await callableFireFunction<{ success: boolean; data: any }>('auth', {
+		operation: 'getUserSettings',
+		userUuid,
+	})
+	return response.data
+}
+
+const updateUser = async (user: User, userUuid: string) => {
+	const response = await callableFireFunction<{ success: boolean; data: User }>('auth', {
+		operation: 'updateUserProfile',
+		userProfile: user,
+		userUuid,
+	})
+	return response.data
+}
+
+const trackUserLogin = async (userUuid: string) => {
+	const response = await callableFireFunction<{ success: boolean }>('auth', {
+		operation: 'trackUserLogin',
+		userUuid,
+	})
+	return response
+}
+
+const trackUserActivity = async (userUuid: string, activity: string) => {
+	const response = await callableFireFunction<{ success: boolean }>('auth', {
+		operation: 'trackUserActivity',
+		userUuid,
+		activity,
+	})
+	return response
 }
 
 const logout = async () => {
@@ -46,6 +79,9 @@ export const UserService = {
 	loginWithEmailAndPassword,
 	loginWithGoogle,
 	getUser,
+	getUserSettings,
 	updateUser,
+	trackUserLogin,
+	trackUserActivity,
 	logout,
 }

@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { AppRoutes } from '@/config/constants/routes'
 
 import { useAppStore } from '@/store/useAppStore'
+import { useUserStore } from '@/store/useUserStore'
 
 import { ProductionRecordsService } from '@/services/productionRecords'
 
@@ -19,6 +20,7 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 	removeProductionRecord,
 }) => {
 	const { defaultModalData, setModalData, setLoading, setToastData } = useAppStore()
+	const { user } = useUserStore()
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation(['animalProductionRecords'])
@@ -46,7 +48,7 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 			onAccept: async () => {
 				try {
 					setLoading(true)
-					await ProductionRecordsService.updateProductionRecordsStatus(uuid, false)
+					await ProductionRecordsService.updateProductionRecordStatus(uuid, user!.uuid)
 					removeProductionRecord(uuid)
 					setModalData(defaultModalData)
 					setLoading(false)

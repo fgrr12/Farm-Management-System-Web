@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
-import { CalendarService } from '@/services/calendar/calendarService'
+import { CalendarService } from '@/services/calendar'
 
 export const useCalendar = () => {
 	const { farm } = useFarmStore()
@@ -15,26 +15,45 @@ export const useCalendar = () => {
 	const [selectedDate, setSelectedDate] = useState<string>(dayjs().format('YYYY-MM-DD'))
 	const [currentMonth, setCurrentMonth] = useState<dayjs.Dayjs>(dayjs())
 
-	// Suscribirse a eventos en tiempo real
+	// Cargar eventos para el mes actual
 	useEffect(() => {
 		if (!farm?.uuid) {
 			setEvents([])
 			return
 		}
 
-		setLoading(true)
-		setError(null)
-
-		const unsubscribe = CalendarService.subscribeToCalendarEvents(farm.uuid, (newEvents) => {
-			setEvents(newEvents)
-			setLoading(false)
+		const loadEvents = async () => {
+			setLoading(true)
 			setError(null)
-		})
+
+			try {
+				// Get events for the current month
+				const startOfMonth = currentMonth.startOf('month').format('YYYY-MM-DD')
+				const endOfMonth = currentMonth.endOf('month').format('YYYY-MM-DD')
+
+				const newEvents = await CalendarService.getCalendarEvents(
+					farm.uuid,
+					startOfMonth,
+					endOfMonth
+				)
+				setEvents(newEvents)
+			} catch (err) {
+				console.error('Error loading calendar events:', err)
+				setError('Error al cargar eventos')
+			} finally {
+				setLoading(false)
+			}
+		}
+
+		loadEvents()
+
+		// Reload events every 30 seconds to keep data fresh
+		const interval = setInterval(loadEvents, 30000)
 
 		return () => {
-			unsubscribe()
+			clearInterval(interval)
 		}
-	}, [farm?.uuid])
+	}, [farm?.uuid, currentMonth])
 
 	// Obtener eventos para una fecha específica
 	const getEventsForDate = useCallback(
@@ -85,11 +104,13 @@ export const useCalendar = () => {
 			if (!farm?.uuid || !user?.uuid) return
 
 			try {
-				return await CalendarService.createCalendarEvent({
-					...eventData,
-					farmUuid: farm.uuid,
-					createdBy: user.uuid,
-				})
+				return await CalendarService.createCalendarEvent(
+					{
+						...eventData,
+					},
+					user.uuid,
+					farm.uuid
+				)
 			} catch (err) {
 				console.error('Error creating calendar event:', err)
 				setError('Error al crear evento')
@@ -99,34 +120,47 @@ export const useCalendar = () => {
 	)
 
 	// Actualizar evento
-	const updateEvent = useCallback(async (eventId: string, updates: Partial<CalendarEvent>) => {
-		try {
-			await CalendarService.updateCalendarEvent(eventId, updates)
-		} catch (err) {
-			console.error('Error updating calendar event:', err)
-			setError('Error al actualizar evento')
-		}
-	}, [])
+	const updateEvent = useCallback(
+		async (eventId: string, updates: Partial<CalendarEvent>) => {
+			try {
+				await CalendarService.updateCalendarEvent({ eventId, ...updates }, user!.uuid, farm!.uuid)
+			} catch (err) {
+				console.error('Error updating calendar event:', err)
+				setError('Error al actualizar evento')
+			}
+		},
+		[farm, user]
+	)
 
 	// Eliminar evento
-	const deleteEvent = useCallback(async (eventId: string) => {
-		try {
-			await CalendarService.deleteCalendarEvent(eventId)
-		} catch (err) {
-			console.error('Error deleting calendar event:', err)
-			setError('Error al eliminar evento')
-		}
-	}, [])
+	const deleteEvent = useCallback(
+		async (eventId: string) => {
+			try {
+				await CalendarService.deleteCalendarEvent(eventId, user!.uuid)
+			} catch (err) {
+				console.error('Error deleting calendar event:', err)
+				setError('Error al eliminar evento')
+			}
+		},
+		[user]
+	)
 
 	// Completar evento
-	const completeEvent = useCallback(async (eventId: string) => {
-		try {
-			await CalendarService.completeCalendarEvent(eventId)
-		} catch (err) {
-			console.error('Error completing calendar event:', err)
-			setError('Error al completar evento')
-		}
-	}, [])
+	const completeEvent = useCallback(
+		async (eventId: string) => {
+			try {
+				await CalendarService.updateCalendarEvent(
+					{ eventId, status: 'completed' },
+					user!.uuid,
+					farm!.uuid
+				)
+			} catch (err) {
+				console.error('Error completing calendar event:', err)
+				setError('Error al completar evento')
+			}
+		},
+		[farm, user]
+	)
 
 	// Navegar entre meses
 	const goToNextMonth = useCallback(() => {

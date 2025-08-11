@@ -1,141 +1,103 @@
-import dayjs from 'dayjs'
-import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore'
-
-import { firestore } from '@/config/firebaseConfig'
-
-import { formatDate } from '@/utils/formatDate'
-
-import { AnimalsService } from '../animals'
-import { BreedsService } from '../breeds'
-
-const collectionName = 'healthRecords'
+import { callableFireFunction } from '@/utils/callableFireFunction'
 
 // Gets
 
 const getHealthRecords = async (animalUuid: string, limit?: number): Promise<HealthRecord[]> => {
-	const healthRecords = await getDocs(
-		query(
-			collection(firestore, collectionName),
-			where('animalUuid', '==', animalUuid),
-			where('status', '==', true)
-		)
-	)
-	let response = healthRecords.docs
-		.map((doc) => ({ ...doc.data() }))
-		.sort((a, b) => {
-			return dayjs(b.date).diff(dayjs(a.date))
-		})
-
-	// Apply limit if specified (for performance optimization)
-	if (limit && limit > 0) {
-		response = response.slice(0, limit)
-	}
-
-	return response as HealthRecord[]
+	const response = await callableFireFunction<{
+		success: boolean
+		data: HealthRecord[]
+		count: number
+	}>('health', {
+		operation: 'getHealthRecords',
+		animalUuid,
+		limit,
+	})
+	return response.data
 }
 
-const getHealthRecord = async (uuid: string): Promise<HealthRecord> => {
-	const document = doc(firestore, collectionName, uuid)
-	const healthRecord = await getDoc(document)
-
-	return healthRecord.data() as HealthRecord
+const getHealthRecord = async (healthRecordUuid: string): Promise<HealthRecord> => {
+	const response = await callableFireFunction<{ success: boolean; data: HealthRecord }>('health', {
+		operation: 'getHealthRecordByUuid',
+		healthRecordUuid,
+	})
+	return response.data
 }
 
 // Sets
 
-const setHealthRecord = async (healthRecordData: HealthRecord, createdBy: string) => {
-	healthRecordData.date = formatDate(healthRecordData.date)
-	const createdAt = dayjs().toISOString()
-
-	const document = doc(firestore, collectionName, healthRecordData.uuid)
-	await setDoc(document, { ...healthRecordData, createdAt, createdBy }, { merge: true })
-
-	if (healthRecordData.type === 'Pregnancy') {
-		const dbAnimal = await AnimalsService.getAnimal(healthRecordData.animalUuid)
-		const dbBreed = await BreedsService.getBreed(dbAnimal.breedUuid)
-
-		let date = dayjs(healthRecordData.date).add(dbBreed.gestationPeriod, 'days')
-		setHealthRecordGiveBirth(healthRecordData.animalUuid, createdBy, date.toString())
-		setHealthRecordDrying(healthRecordData.animalUuid, createdBy, date.add(7, 'month').toString())
-	}
-
-	if (healthRecordData.type === 'Birth') {
-		const date = dayjs().add(7, 'month').toString()
-		setHealthRecordDrying(healthRecordData.animalUuid, createdBy, date.toString())
-	}
+const setHealthRecord = async (
+	healthRecord: HealthRecord,
+	userUuid: string,
+	farmUuid?: string
+): Promise<{ uuid: string; isNew: boolean }> => {
+	const response = await callableFireFunction<{
+		success: boolean
+		data: { uuid: string; isNew: boolean }
+	}>('health', {
+		operation: 'upsertHealthRecord',
+		healthRecord: { ...healthRecord, uuid: undefined }, // Remove uuid for new health records
+		userUuid,
+		farmUuid: farmUuid || '',
+	})
+	return response.data
 }
 
-const setHealthRecordGiveBirth = async (animalUuid: string, createdBy: string, date: string) => {
-	const healthRecordData: HealthRecord = {
-		reason: 'Posible fecha de nacimiento',
-		type: 'Birth',
-		date,
-		reviewedBy: '',
-		createdBy,
-		weight: 0,
-		temperature: 0,
-		medication: '',
-		dosage: '',
-		frequency: '',
-		duration: '',
-		notes: '',
+const setHealthRecordGiveBirth = async (animalUuid: string, userUuid: string, farmUuid: string) => {
+	const response = await callableFireFunction<{ success: boolean }>('health', {
+		operation: 'setHealthRecordGiveBirth',
 		animalUuid,
-		uuid: crypto.randomUUID(),
-		status: true,
-	}
-	const createdAt = dayjs().toISOString()
-
-	const document = doc(firestore, collectionName, healthRecordData.uuid)
-	await setDoc(document, { ...healthRecordData, createdAt }, { merge: true })
+		userUuid,
+		farmUuid,
+	})
+	return response
 }
 
-const setHealthRecordDrying = async (animalUuid: string, createdBy: string, date: string) => {
-	const healthRecordData: HealthRecord = {
-		reason: 'Posible fecha de secado',
-		type: 'Drying',
-		date,
-		reviewedBy: '',
-		createdBy,
-		weight: 0,
-		temperature: 0,
-		medication: '',
-		dosage: '',
-		frequency: '',
-		duration: '',
-		notes: '',
+const setHealthRecordDrying = async (animalUuid: string, userUuid: string, farmUuid: string) => {
+	const response = await callableFireFunction<{ success: boolean }>('health', {
+		operation: 'setHealthRecordDrying',
 		animalUuid,
-		uuid: crypto.randomUUID(),
-		status: true,
-	}
-	const createdAt = dayjs().toISOString()
-
-	const document = doc(firestore, collectionName, healthRecordData.uuid)
-	await setDoc(document, { ...healthRecordData, createdAt }, { merge: true })
+		userUuid,
+		farmUuid,
+	})
+	return response
 }
 
 // Update
 
-const updateHealthRecord = async (healthRecordData: HealthRecord, editedBy: string | null) => {
-	healthRecordData.date = formatDate(healthRecordData.date)
-	const updateAt = dayjs().toISOString()
-
-	const document = doc(firestore, collectionName, healthRecordData.uuid)
-	await setDoc(document, { ...healthRecordData, updateAt, editedBy }, { merge: true })
+const updateHealthRecord = async (
+	healthRecord: HealthRecord,
+	userUuid: string,
+	farmUuid?: string
+) => {
+	const response = await callableFireFunction<{
+		success: boolean
+		data: { uuid: string; isNew: boolean }
+	}>('health', {
+		operation: 'upsertHealthRecord',
+		healthRecord,
+		userUuid,
+		farmUuid: farmUuid || '',
+	})
+	return response.data
 }
 
 // Delete
 
-const updateHealthRecordsStatus = async (uuid: string, status: boolean) => {
-	const document = doc(firestore, collectionName, uuid)
-	const updateAt = dayjs().toISOString()
-
-	await setDoc(document, { status, updateAt }, { merge: true })
+const updateHealthRecordsStatus = async (healthRecordUuid: string, userUuid: string) => {
+	const response = await callableFireFunction<{ success: boolean }>('health', {
+		operation: 'updateHealthRecordStatus',
+		healthRecordUuid,
+		userUuid,
+	})
+	return response
 }
 
 export const HealthRecordsService = {
 	getHealthRecords,
 	getHealthRecord,
 	setHealthRecord,
+	setHealthRecordGiveBirth,
+	setHealthRecordDrying,
 	updateHealthRecord,
 	updateHealthRecordsStatus,
 }

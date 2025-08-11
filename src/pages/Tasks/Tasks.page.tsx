@@ -80,7 +80,7 @@ const Tasks = () => {
 			if (fromStatus === toStatus) return
 
 			await withLoadingAndError(async () => {
-				await TasksService.updateTaskStatus(taskId, toStatus)
+				await TasksService.updateTaskStatus(taskId, toStatus, user!.uuid, farm!.uuid)
 				await getTasks()
 
 				showToast(
@@ -91,7 +91,7 @@ const Tasks = () => {
 				)
 			}, t('toast.errorUpdatingTaskStatus'))
 		},
-		[getTasks, showToast, t, withLoadingAndError]
+		[farm, user, getTasks, showToast, t, withLoadingAndError]
 	)
 
 	// Drag and drop monitor

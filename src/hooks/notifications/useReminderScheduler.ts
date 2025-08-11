@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 
 import { useFarmStore } from '@/store/useFarmStore'
 
-import { runAllReminders } from '@/services/notifications/reminderService'
+import { runAllReminders } from '@/services/notifications/reminderService.js'
 
 export function useReminderScheduler() {
 	const { farm } = useFarmStore()
@@ -11,13 +11,13 @@ export function useReminderScheduler() {
 	useEffect(() => {
 		if (!farm?.uuid) return
 
-		runAllReminders(farm.uuid).catch((error) => {
+		runAllReminders(farm.uuid).catch((error: unknown) => {
 			console.error('Failed to run initial reminders:', error)
 		})
 
 		intervalRef.current = setInterval(
 			() => {
-				runAllReminders(farm.uuid).catch((error) => {
+				runAllReminders(farm.uuid).catch((error: unknown) => {
 					console.error('Failed to run scheduled reminders:', error)
 				})
 			},
