@@ -48,8 +48,10 @@
 		"typcn",
 		"unocss",
 		"Uuids",
+		"Vitest",
 		"xmark",
-		"yoyo"
+		"yoyo",
+		"Zustand"
 	],
 	"i18n-ally.localesPaths": "public/locales",
 	"i18n-ally.enabledParsers": ["json"],
