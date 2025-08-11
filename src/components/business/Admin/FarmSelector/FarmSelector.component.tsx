@@ -34,7 +34,9 @@ export const FarmSelector = memo(() => {
 
 	const handleFarmChange = useCallback(
 		async (selectedFarm: Farm) => {
-			await useFarmStore.getState().loadFarmData(selectedFarm.uuid, user!.role)
+			if (user?.role === 'admin') {
+				await useFarmStore.getState().loadFarmData(selectedFarm.uuid, user!.role)
+			}
 		},
 		[user]
 	)
