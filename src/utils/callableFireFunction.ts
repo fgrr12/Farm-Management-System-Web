@@ -6,7 +6,16 @@ export const callableFireFunction = async <TResponse, TRequest = unknown>(
 	functionName: string,
 	payload: TRequest
 ): Promise<TResponse> => {
-	const callableFunction = httpsCallable<TRequest, { data: TResponse }>(functions, functionName)
-	const result = await callableFunction(payload)
-	return result.data.data
+	try {
+		const callableFunction = httpsCallable<TRequest, TResponse>(functions, functionName)
+		const result = await callableFunction(payload)
+		return result.data
+	} catch (error) {
+		console.error(`Error calling Firebase function '${functionName}':`, {
+			error,
+			payload,
+			functionName,
+		})
+		throw error
+	}
 }
