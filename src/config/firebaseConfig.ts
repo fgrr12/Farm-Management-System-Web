@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 import { getFunctions } from 'firebase/functions'
+import { getMessaging } from 'firebase/messaging'
 import { getStorage } from 'firebase/storage'
 
 import {
@@ -31,6 +32,16 @@ const firestore = getFirestore(app)
 const storage = getStorage(app)
 const functions = getFunctions(app)
 
+// Initialize messaging only in browsers that support it
+let messaging: ReturnType<typeof getMessaging> | null = null
+try {
+	if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+		messaging = getMessaging(app)
+	}
+} catch (error) {
+	console.warn('Firebase Messaging not supported in this environment:', error)
+}
+
 auth.settings.appVerificationDisabledForTesting = true
 
-export { auth, firestore, functions, signUpAuth, storage }
+export { auth, firestore, functions, messaging, signUpAuth, storage }

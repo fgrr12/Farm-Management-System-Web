@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
 
+import { NotificationSettings } from '@/components/notifications/NotificationSettings'
+
 import { useNotifications } from '@/hooks/notifications/useNotifications'
 
 dayjs.extend(relativeTime)
@@ -15,6 +17,7 @@ export const NotificationDropdown = memo(() => {
 	const navigate = useNavigate()
 	const [isOpen, setIsOpen] = useState(false)
 	const [selectedCategory, setSelectedCategory] = useState<string>('all')
+	const [showSettings, setShowSettings] = useState(false)
 	const dropdownRef = useRef<HTMLDivElement>(null)
 
 	const {
@@ -162,9 +165,20 @@ export const NotificationDropdown = memo(() => {
 					{/* Header */}
 					<div className="p-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
 						<div className="flex items-center justify-between mb-3">
-							<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-								{t('title')}
-							</h3>
+							<div className="flex items-center gap-2">
+								<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+									{t('title')}
+								</h3>
+								{/* Settings Button */}
+								<button
+									type="button"
+									onClick={() => setShowSettings(true)}
+									className="p-1.5 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md transition-colors"
+									title={t('settings')}
+								>
+									<i className="i-material-symbols-settings w-4! h-4!" />
+								</button>
+							</div>
 							{unreadCount > 0 && (
 								<button
 									type="button"
@@ -400,6 +414,37 @@ export const NotificationDropdown = memo(() => {
 								))}
 							</div>
 						)}
+					</div>
+				</div>
+			)}
+
+			{/* Settings Modal */}
+			{showSettings && (
+				<div className="fixed inset-0 z-[9999] flex items-center justify-center">
+					<button
+						type="button"
+						className="absolute inset-0 bg-black/20 backdrop-blur-sm cursor-default"
+						onClick={() => setShowSettings(false)}
+						aria-label="Close settings"
+					/>
+					<div className="relative bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-md mx-4">
+						<div className="p-4 border-b border-gray-200 dark:border-gray-700">
+							<div className="flex items-center justify-between">
+								<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+									{t('notificationSettings')}
+								</h3>
+								<button
+									type="button"
+									onClick={() => setShowSettings(false)}
+									className="p-1.5 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md transition-colors"
+								>
+									<i className="i-material-symbols-close w-4! h-4!" />
+								</button>
+							</div>
+						</div>
+						<div className="p-4">
+							<NotificationSettings />
+						</div>
 					</div>
 				</div>
 			)}

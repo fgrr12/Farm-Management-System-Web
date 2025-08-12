@@ -26,6 +26,8 @@ import { OfflineIndicator } from '@/components/layout/OfflineIndicator'
 import { SEO } from '@/components/layout/SEO'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { ToastManager } from '@/components/layout/ToastManager'
+import { FCMTokenManager } from '@/components/notifications/FCMTokenManager'
+import { NotificationToast } from '@/components/notifications/NotificationToast'
 import { PWAInstallPrompt } from '@/components/pwa/PWAInstallPrompt.component'
 import { PWAUpdatePrompt } from '@/components/pwa/PWAUpdatePrompt.component'
 
@@ -330,6 +332,8 @@ export const App = () => {
 					<OfflineIndicator />
 					<PWAUpdatePrompt />
 					<PWAInstallPrompt />
+					<FCMTokenManager />
+					<NotificationToast />
 				</main>
 			</div>
 		</div>

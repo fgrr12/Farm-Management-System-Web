@@ -1,5 +1,61 @@
 import { callableFireFunction } from '@/utils/callableFireFunction'
 
+// Type mapping from backend notification types to frontend display types
+const mapNotificationTypeToDisplayType = (
+	backendType: string
+): 'info' | 'success' | 'warning' | 'error' => {
+	switch (backendType) {
+		case 'health_alert':
+		case 'system_alert':
+			return 'error'
+		case 'medication_reminder':
+		case 'calendar_reminder':
+			return 'warning'
+		case 'task_update':
+			return 'info'
+		case 'production_summary':
+			return 'success'
+		default:
+			return 'info'
+	}
+}
+
+// Type mapping from backend notification types to frontend categories
+const mapNotificationTypeToCategory = (
+	backendType: string
+): 'general' | 'medication' | 'health' | 'task' => {
+	switch (backendType) {
+		case 'health_alert':
+			return 'health'
+		case 'medication_reminder':
+			return 'medication'
+		case 'task_update':
+			return 'task'
+		case 'calendar_reminder':
+		case 'production_summary':
+		case 'system_alert':
+		default:
+			return 'general'
+	}
+}
+
+// Transform backend notification to frontend format
+const transformNotification = (backendNotification: any): NotificationData => {
+	return {
+		uuid: backendNotification.uuid,
+		title: backendNotification.title,
+		message: backendNotification.message,
+		type: mapNotificationTypeToDisplayType(backendNotification.type),
+		category: mapNotificationTypeToCategory(backendNotification.type),
+		read: backendNotification.status?.read || false,
+		dismissed: backendNotification.status?.dismissed || false,
+		createdAt: backendNotification.createdAt,
+		farmUuid: backendNotification.farmUuid,
+		animalUuid: backendNotification.relatedId, // Assuming relatedId is animalUuid when relatedType is 'animal'
+		priority: backendNotification.priority || 'medium',
+	}
+}
+
 export interface GetNotificationsParams {
 	farmUuid?: string
 	limit?: number
@@ -29,7 +85,7 @@ const getNotifications = async (
 	try {
 		const response = await callableFireFunction<{
 			success: boolean
-			data: NotificationData[]
+			data: any[]
 			count: number
 		}>('notifications', {
 			operation: 'getUserNotifications',
@@ -40,7 +96,8 @@ const getNotifications = async (
 		})
 
 		if (response.success && response.data) {
-			return response.data
+			// Transform backend notifications to frontend format
+			return response.data.map(transformNotification)
 		}
 
 		return []
@@ -117,10 +174,18 @@ const createNotification = async (notificationData: {
 	farmUuid: string
 	title: string
 	message: string
-	category: string
-	priority?: string
-	targetUserUuids?: string[]
-	metadata?: Record<string, any>
+	type:
+		| 'health_alert'
+		| 'medication_reminder'
+		| 'calendar_reminder'
+		| 'task_update'
+		| 'production_summary'
+		| 'system_alert'
+	priority?: 'low' | 'medium' | 'high' | 'critical'
+	relatedType?: 'animal' | 'task' | 'calendar_event' | 'production'
+	relatedId?: string
+	scheduledFor?: string
+	data?: Record<string, any>
 }): Promise<string> => {
 	try {
 		const response = await callableFireFunction<{ success: boolean; data: string }>(
@@ -148,9 +213,22 @@ const registerDeviceToken = async (tokenData: {
 	userAgent?: string
 }): Promise<void> => {
 	try {
+		// Map deviceType to platform expected by backend
+		let platform: 'ios' | 'android' | 'web' = 'web'
+
+		if (tokenData.deviceType === 'mobile') {
+			// Detect mobile platform from userAgent
+			if (tokenData.userAgent?.includes('iPhone') || tokenData.userAgent?.includes('iPad')) {
+				platform = 'ios'
+			} else if (tokenData.userAgent?.includes('Android')) {
+				platform = 'android'
+			}
+		}
+
 		await callableFireFunction('notifications', {
 			operation: 'registerDeviceToken',
-			...tokenData,
+			token: tokenData.token,
+			platform,
 		})
 	} catch (error) {
 		console.error('Error registering device token:', error)

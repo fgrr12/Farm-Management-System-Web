@@ -5,6 +5,9 @@
 	"markAsRead": "Mark as read",
 	"dismiss": "Dismiss",
 	"noNotifications": "No notifications",
+	"enableNotifications": "Enable",
+	"settings": "Settings",
+	"notificationSettings": "Notification Settings",
 	"categories": {
 		"all": "All",
 		"medication": "Medication",

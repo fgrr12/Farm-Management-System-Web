@@ -5,6 +5,9 @@
 	"markAsRead": "Marcar como leída",
 	"dismiss": "Descartar",
 	"noNotifications": "No hay notificaciones",
+	"enableNotifications": "Activar",
+	"settings": "Configuración",
+	"notificationSettings": "Configuración de Notificaciones",
 	"categories": {
 		"all": "Todas",
 		"medication": "Medicación",

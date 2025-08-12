@@ -64,8 +64,10 @@ export default defineConfig({
 			},
 			workbox: {
 				globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
-				skipWaiting: true,
-				clientsClaim: true,
+				skipWaiting: false, // No skipWaiting automático para evitar refrescos
+				clientsClaim: false, // No claim automático para evitar conflictos
+				// Ignorar el service worker de FCM
+				globIgnores: ['**/firebase-messaging-sw.js'],
 			},
 			devOptions: {
 				enabled: true,

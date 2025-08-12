@@ -37,7 +37,6 @@ export function useReminderScheduler() {
 
 		try {
 			await runAllReminders(farm.uuid)
-			console.log('Manual reminders executed successfully')
 		} catch (error) {
 			console.error('Failed to run manual reminders:', error)
 		}
