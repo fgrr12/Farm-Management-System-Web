@@ -18,7 +18,6 @@ import { CalendarFilters } from '../CalendarFilters'
 
 export const Calendar = memo(() => {
 	const { t } = useTranslation(['calendar'])
-	const [currentDate, setCurrentDate] = useState(dayjs())
 	const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(null)
 	const [showEventModal, setShowEventModal] = useState(false)
 	const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null)
@@ -28,7 +27,21 @@ export const Calendar = memo(() => {
 	const [isAnimating, setIsAnimating] = useState(false)
 	const calendarRef = useRef<HTMLDivElement>(null)
 
-	const { events, loading, error, createEvent, updateEvent, deleteEvent } = useCalendar()
+	const { 
+		events, 
+		loading, 
+		error, 
+		createEvent, 
+		updateEvent, 
+		deleteEvent,
+		currentMonth,
+		goToNextMonth,
+		goToPreviousMonth,
+		goToToday: hookGoToToday
+	} = useCalendar()
+
+	// Use currentMonth from hook instead of local state
+	const currentDate = currentMonth
 
 	// Generar días según el modo de vista
 	const viewDays = useMemo(() => {
@@ -95,22 +108,31 @@ export const Calendar = memo(() => {
 			setIsAnimating(true)
 			setTimeout(() => {
 				if (viewMode === 'month') {
-					setCurrentDate((prev) =>
-						direction === 'prev' ? prev.subtract(1, 'month') : prev.add(1, 'month')
-					)
+					if (direction === 'prev') {
+						goToPreviousMonth()
+					} else {
+						goToNextMonth()
+					}
 				} else if (viewMode === 'week') {
-					setCurrentDate((prev) =>
-						direction === 'prev' ? prev.subtract(1, 'week') : prev.add(1, 'week')
-					)
+					// For week/day modes, we can keep using currentMonth for now
+					// since the hook is focused on month-based loading
+					if (direction === 'prev') {
+						goToPreviousMonth()
+					} else {
+						goToNextMonth()
+					}
 				} else if (viewMode === 'day') {
-					setCurrentDate((prev) =>
-						direction === 'prev' ? prev.subtract(1, 'day') : prev.add(1, 'day')
-					)
+					// For day mode, we can also use month navigation
+					if (direction === 'prev') {
+						goToPreviousMonth()
+					} else {
+						goToNextMonth()
+					}
 				}
 				setIsAnimating(false)
 			}, 150)
 		},
-		[viewMode]
+		[viewMode, goToNextMonth, goToPreviousMonth]
 	)
 
 	const goToToday = useCallback(() => {
@@ -125,12 +147,12 @@ export const Calendar = memo(() => {
 		if (shouldUpdate) {
 			setIsAnimating(true)
 			setTimeout(() => {
-				setCurrentDate(today)
+				hookGoToToday()
 				setSelectedDate(today)
 				setIsAnimating(false)
 			}, 150)
 		}
-	}, [currentDate, viewMode])
+	}, [currentDate, viewMode, hookGoToToday])
 
 	// Manejo de eventos mejorado
 	const handleDayClick = useCallback((day: dayjs.Dayjs) => {
@@ -251,7 +273,7 @@ export const Calendar = memo(() => {
 					(e: CalendarEvent) => e.priority === 'high' || e.type === 'medication'
 				)
 				const hasImportant = dayEvents.some(
-					(e: CalendarEvent) => e.priority === 'medium' || e.type === 'vaccination'
+					(e: CalendarEvent) => e.priority === 'medium' || e.type === 'checkup'
 				)
 
 				if (hasUrgent) {

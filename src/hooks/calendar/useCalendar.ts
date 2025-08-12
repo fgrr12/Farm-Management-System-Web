@@ -36,6 +36,7 @@ export const useCalendar = () => {
 					startOfMonth,
 					endOfMonth
 				)
+
 				setEvents(newEvents)
 			} catch (err) {
 				console.error('Error loading calendar events:', err)
@@ -46,13 +47,6 @@ export const useCalendar = () => {
 		}
 
 		loadEvents()
-
-		// Reload events every 30 seconds to keep data fresh
-		const interval = setInterval(loadEvents, 30000)
-
-		return () => {
-			clearInterval(interval)
-		}
 	}, [farm?.uuid, currentMonth])
 
 	// Obtener eventos para una fecha específica
@@ -104,62 +98,100 @@ export const useCalendar = () => {
 			if (!farm?.uuid || !user?.uuid) return
 
 			try {
-				return await CalendarService.createCalendarEvent(
-					{
-						...eventData,
-					},
-					user.uuid,
-					farm.uuid
+				const result = await CalendarService.createCalendarEvent(eventData, user.uuid, farm.uuid)
+
+				// Reload events after creating
+				const startOfMonth = currentMonth.startOf('month').format('YYYY-MM-DD')
+				const endOfMonth = currentMonth.endOf('month').format('YYYY-MM-DD')
+				const newEvents = await CalendarService.getCalendarEvents(
+					farm.uuid,
+					startOfMonth,
+					endOfMonth
 				)
+				setEvents(newEvents)
+
+				return result
 			} catch (err) {
 				console.error('Error creating calendar event:', err)
 				setError('Error al crear evento')
 			}
 		},
-		[farm?.uuid, user?.uuid]
+		[farm?.uuid, user?.uuid, currentMonth]
 	)
 
 	// Actualizar evento
 	const updateEvent = useCallback(
-		async (eventId: string, updates: Partial<CalendarEvent>) => {
+		async (eventUuid: string, updates: Partial<CalendarEvent>) => {
+			if (!user?.uuid) return
+
 			try {
-				await CalendarService.updateCalendarEvent({ eventId, ...updates }, user!.uuid, farm!.uuid)
+				await CalendarService.updateCalendarEvent({ uuid: eventUuid, ...updates }, user.uuid)
+
+				// Reload events after updating
+				const startOfMonth = currentMonth.startOf('month').format('YYYY-MM-DD')
+				const endOfMonth = currentMonth.endOf('month').format('YYYY-MM-DD')
+				const newEvents = await CalendarService.getCalendarEvents(
+					farm!.uuid,
+					startOfMonth,
+					endOfMonth
+				)
+				setEvents(newEvents)
 			} catch (err) {
 				console.error('Error updating calendar event:', err)
 				setError('Error al actualizar evento')
 			}
 		},
-		[farm, user]
+		[user?.uuid, currentMonth, farm]
 	)
 
 	// Eliminar evento
 	const deleteEvent = useCallback(
-		async (eventId: string) => {
+		async (eventUuid: string) => {
+			if (!user?.uuid) return
+
 			try {
-				await CalendarService.deleteCalendarEvent(eventId, user!.uuid)
+				await CalendarService.deleteCalendarEvent(eventUuid, user.uuid)
+
+				// Reload events after deleting
+				const startOfMonth = currentMonth.startOf('month').format('YYYY-MM-DD')
+				const endOfMonth = currentMonth.endOf('month').format('YYYY-MM-DD')
+				const newEvents = await CalendarService.getCalendarEvents(
+					farm!.uuid,
+					startOfMonth,
+					endOfMonth
+				)
+				setEvents(newEvents)
 			} catch (err) {
 				console.error('Error deleting calendar event:', err)
 				setError('Error al eliminar evento')
 			}
 		},
-		[user]
+		[user?.uuid, currentMonth, farm]
 	)
 
 	// Completar evento
 	const completeEvent = useCallback(
-		async (eventId: string) => {
+		async (eventUuid: string) => {
+			if (!user?.uuid) return
+
 			try {
-				await CalendarService.updateCalendarEvent(
-					{ eventId, status: 'completed' },
-					user!.uuid,
-					farm!.uuid
+				await CalendarService.updateCalendarEventStatus(eventUuid, 'completed', user.uuid)
+
+				// Reload events after completing
+				const startOfMonth = currentMonth.startOf('month').format('YYYY-MM-DD')
+				const endOfMonth = currentMonth.endOf('month').format('YYYY-MM-DD')
+				const newEvents = await CalendarService.getCalendarEvents(
+					farm!.uuid,
+					startOfMonth,
+					endOfMonth
 				)
+				setEvents(newEvents)
 			} catch (err) {
 				console.error('Error completing calendar event:', err)
 				setError('Error al completar evento')
 			}
 		},
-		[farm, user]
+		[user?.uuid, currentMonth, farm]
 	)
 
 	// Navegar entre meses
