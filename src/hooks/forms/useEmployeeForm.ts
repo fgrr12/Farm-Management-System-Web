@@ -55,7 +55,7 @@ export const useEmployeeForm = (initialData?: Partial<User>) => {
 			phone: data.phone,
 			role: data.role,
 			status: data.status ?? true,
-			photoUrl: data.photoUrl || '',
+			photoUrl: data.photoUrl || 'https://i.sstatic.net/l60Hf.png',
 			language: data.language || 'spa',
 			createdBy: data.createdBy || '',
 		}
