@@ -3,11 +3,56 @@
 	"today": "Today",
 	"createEvent": "Create Event",
 	"editEvent": "Edit Event",
+	"newEvent": "New Event",
+	"updateEvent": "Update Event",
+	"deleteEvent": "Delete Event",
 	"confirmDelete": "Are you sure you want to delete this event?",
+	"confirmYes": "Yes",
+	"confirmNo": "No",
+	"deleting": "Deleting...",
 	"loading": "Loading calendar...",
+	"saving": "Saving...",
+	"cancel": "Cancel",
+	"create": "Create",
+	"update": "Update",
+	"date": "Date",
+	"time": "Time",
+	"description": "Description",
+	"type": "Type",
 	"error": {
 		"title": "Calendar Error",
 		"loadingEvents": "Error loading calendar events"
+	},
+	"types": {
+		"birth": "Birth",
+		"drying": "Drying",
+		"medication": "Medication",
+		"checkup": "Checkup",
+		"task": "Task",
+		"custom": "Custom"
+	},
+	"priority": {
+		"critical": "Critical",
+		"high": "High",
+		"medium": "Medium",
+		"low": "Low"
+	},
+	"status": {
+		"pending": "Pending",
+		"completed": "Completed",
+		"cancelled": "Cancelled",
+		"overdue": "Overdue"
+	},
+	"relatedType": {
+		"none": "None",
+		"animal": "Animal",
+		"task": "Task",
+		"healthRecord": "Health Record"
+	},
+	"placeholders": {
+		"title": "Enter event title",
+		"description": "Enter event description",
+		"relatedId": "Enter related ID"
 	},
 	"categories": {
 		"all": "All",
@@ -16,12 +61,6 @@
 		"task": "Tasks",
 		"breeding": "Breeding",
 		"feeding": "Feeding"
-	},
-	"priority": {
-		"critical": "Critical",
-		"high": "High",
-		"medium": "Medium",
-		"low": "Low"
 	},
 	"filters": {
 		"categories": "Categories"
@@ -36,16 +75,6 @@
 		"date": "Date",
 		"time": "Time",
 		"optional": "optional",
-		"animalId": "Animal ID",
-		"animalIdPlaceholder": "Enter animal ID",
-		"location": "Location",
-		"locationPlaceholder": "Enter event location",
-		"notes": "Notes",
-		"notesPlaceholder": "Enter additional notes",
-		"tags": "Tags",
-		"tagsPlaceholder": "Press Enter to add",
-		"tagsHint": "Press Enter to add a tag",
-		"completed": "Completed",
 		"errors": {
 			"titleRequired": "Title is required",
 			"titleTooShort": "Title must be at least 3 characters",
@@ -53,10 +82,6 @@
 			"invalidTime": "Invalid time"
 		}
 	},
-	"cancel": "Cancel",
-	"create": "Create",
-	"update": "Update",
-	"saving": "Saving...",
 	"view": {
 		"month": "Month",
 		"week": "Week",

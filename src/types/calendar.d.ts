@@ -6,7 +6,7 @@ interface CalendarEvent {
 	date: string // YYYY-MM-DD format
 	time?: string // HH:MM format
 	type: 'birth' | 'drying' | 'medication' | 'checkup' | 'task' | 'custom'
-	priority: 'low' | 'medium' | 'high'
+	priority: 'low' | 'medium' | 'high' | 'critical'
 	status: 'pending' | 'completed' | 'cancelled' | 'overdue'
 	relatedType?: 'animal' | 'task' | 'health_record'
 	relatedId?: string
