@@ -27,17 +27,17 @@ export const Calendar = memo(() => {
 	const [isAnimating, setIsAnimating] = useState(false)
 	const calendarRef = useRef<HTMLDivElement>(null)
 
-	const { 
-		events, 
-		loading, 
-		error, 
-		createEvent, 
-		updateEvent, 
+	const {
+		events,
+		loading,
+		error,
+		createEvent,
+		updateEvent,
 		deleteEvent,
 		currentMonth,
 		goToNextMonth,
 		goToPreviousMonth,
-		goToToday: hookGoToToday
+		goToToday: hookGoToToday,
 	} = useCalendar()
 
 	// Use currentMonth from hook instead of local state

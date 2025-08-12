@@ -339,9 +339,10 @@ export const CalendarEventModal = memo<CalendarEventModalProps>(
 									onClick={() => setActiveTab(tab.id as any)}
 									className={`
 										flex-1 flex items-center justify-center space-x-2 px-4 py-2.5 rounded-lg transition-all duration-200
-										${activeTab === tab.id
-											? 'bg-blue-600 text-white shadow-sm'
-											: 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+										${
+											activeTab === tab.id
+												? 'bg-blue-600 text-white shadow-sm'
+												: 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
 										}
 									`}
 								>
@@ -395,9 +396,10 @@ export const CalendarEventModal = memo<CalendarEventModalProps>(
 														onClick={() => handleInputChange('category', option.value)}
 														className={`
 															flex items-center space-x-3 p-3 rounded-lg border-2 transition-all duration-200
-															${formData.category === option.value
-																? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-																: 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
+															${
+																formData.category === option.value
+																	? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+																	: 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
 															}
 														`}
 													>
@@ -422,9 +424,10 @@ export const CalendarEventModal = memo<CalendarEventModalProps>(
 														onClick={() => handleInputChange('priority', option.value)}
 														className={`
 															flex items-center space-x-3 w-full p-3 rounded-lg border-2 transition-all duration-200
-															${formData.priority === option.value
-																? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-																: 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
+															${
+																formData.priority === option.value
+																	? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+																	: 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
 															}
 														`}
 													>
@@ -465,9 +468,10 @@ export const CalendarEventModal = memo<CalendarEventModalProps>(
 												className={`
 													w-full px-4 py-3 border-2 rounded-lg transition-all duration-200
 													focus:ring-2 focus:ring-blue-500 focus:border-transparent
-													${formErrors.time
-														? 'border-red-300 bg-red-50 dark:bg-red-900/20'
-														: 'border-gray-200 dark:border-gray-600'
+													${
+														formErrors.time
+															? 'border-red-300 bg-red-50 dark:bg-red-900/20'
+															: 'border-gray-200 dark:border-gray-600'
 													}
 													dark:bg-gray-800 dark:text-white
 												`}
@@ -601,9 +605,10 @@ export const CalendarEventModal = memo<CalendarEventModalProps>(
 															onClick={() => handleInputChange('reminderMinutes', option.value)}
 															className={`
 																flex items-center justify-center p-3 rounded-lg border-2 transition-all duration-200
-																${formData.reminderMinutes === option.value
-																	? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-																	: 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
+																${
+																	formData.reminderMinutes === option.value
+																		? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+																		: 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
 																}
 															`}
 														>
@@ -628,9 +633,10 @@ export const CalendarEventModal = memo<CalendarEventModalProps>(
 															onClick={() => handleInputChange('reminderFrequency', option.value)}
 															className={`
 																flex items-center justify-center p-3 rounded-lg border-2 transition-all duration-200
-																${formData.reminderFrequency === option.value
-																	? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-																	: 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
+																${
+																	formData.reminderFrequency === option.value
+																		? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+																		: 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
 																}
 															`}
 														>
