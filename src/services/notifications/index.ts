@@ -5,8 +5,15 @@ export interface GetNotificationsParams {
 	limit?: number
 	offset?: number
 	unreadOnly?: boolean
-	priority?: string
-	category?: string
+	type?:
+		| 'health_alert'
+		| 'medication_reminder'
+		| 'calendar_reminder'
+		| 'task_update'
+		| 'production_summary'
+		| 'system_alert'
+		| undefined
+	priority?: 'low' | 'medium' | 'high' | undefined
 }
 
 export type NotificationSubscriptionCallback = (notifications: NotificationData[]) => void
@@ -27,6 +34,9 @@ const getNotifications = async (
 		}>('notifications', {
 			operation: 'getUserNotifications',
 			...params,
+			offset: params.offset || 0,
+			type: params.type || undefined,
+			priority: params.priority || undefined,
 		})
 
 		if (response.success && response.data) {
