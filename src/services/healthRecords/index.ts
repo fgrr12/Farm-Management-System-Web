@@ -10,7 +10,7 @@ const getHealthRecords = async (animalUuid: string, limit?: number): Promise<Hea
 	}>('health', {
 		operation: 'getHealthRecords',
 		animalUuid,
-		limit,
+		limit: limit || 50,
 	})
 	return response.data
 }

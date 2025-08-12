@@ -133,6 +133,7 @@ const Animal = () => {
 		if (activeTab === 'healthRecords') return
 		setActiveTab('healthRecords')
 		const dbHealthRecords = await HealthRecordsService.getHealthRecords(animal.uuid)
+
 		if (dbHealthRecords[0]?.weight! > 0) {
 			animal.weight = dbHealthRecords[0]?.weight ?? animal.weight
 		}
@@ -170,10 +171,10 @@ const Animal = () => {
 
 	const getInitialData = useCallback(async () => {
 		await withLoadingAndError(async () => {
-			const animalId = params.animalUuid as string
+			const animalUuid = params.animalUuid as string
 
-			const dbAnimal = await AnimalsService.getAnimal(animalId!)
-			const dbHealthRecords = await HealthRecordsService.getHealthRecords(animalId!)
+			const dbAnimal = await AnimalsService.getAnimal(animalUuid!)
+			const dbHealthRecords = await HealthRecordsService.getHealthRecords(animalUuid!)
 
 			if (!farm) {
 				const farmData = await FarmsService.getFarm(dbAnimal!.farmUuid)

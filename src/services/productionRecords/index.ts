@@ -13,7 +13,7 @@ const getProductionRecords = async (
 	}>('production', {
 		operation: 'getProductionRecords',
 		animalUuid,
-		limit,
+		limit: limit || 50,
 	})
 	return response.data
 }
