@@ -1,6 +1,27 @@
 // Firebase Messaging Service Worker - No conflicting with PWA SW
 console.log('[FCM-SW] Starting Firebase Messaging Service Worker...')
 
+// Variable para almacenar la configuración
+let firebaseConfig = null
+
+// Escuchar mensajes de configuración del main thread
+self.addEventListener('message', (event) => {
+	if (event.data && event.data.type === 'FIREBASE_CONFIG') {
+		firebaseConfig = event.data.config
+		console.log('[FCM-SW] Firebase config received from main thread')
+		
+		// Reinicializar Firebase con la nueva configuración
+		if (typeof firebase !== 'undefined' && firebaseConfig) {
+			try {
+				firebase.initializeApp(firebaseConfig)
+				console.log('[FCM-SW] Firebase reinitialized with secure config')
+			} catch (error) {
+				console.warn('[FCM-SW] Firebase already initialized or error:', error)
+			}
+		}
+	}
+})
+
 try {
 	// Import Firebase scripts - usando versión más estable
 	importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js')
@@ -9,9 +30,10 @@ try {
 	importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js')
 	console.log('[FCM-SW] Firebase messaging script loaded')
 
-	// Firebase configuration
-	const firebaseConfig = {
-		apiKey: 'AIzaSyBHWTS16xpW7BpK4hkxexuAssG-MRowOaw',
+	// Firebase configuration - Se obtiene dinámicamente del servidor
+	// No hardcodear las claves de API aquí por seguridad
+	const defaultFirebaseConfig = {
+		apiKey: 'PLACEHOLDER_API_KEY',
 		authDomain: 'cattle-ea97b.firebaseapp.com',
 		projectId: 'cattle-ea97b',
 		storageBucket: 'cattle-ea97b.appspot.com',
@@ -20,8 +42,8 @@ try {
 	}
 
 	// Initialize Firebase
-	firebase.initializeApp(firebaseConfig)
-	console.log('[FCM-SW] Firebase initialized successfully')
+	firebase.initializeApp(defaultFirebaseConfig)
+	console.log('[FCM-SW] Firebase initialized with default config')
 
 	// Get messaging instance
 	const messaging = firebase.messaging()

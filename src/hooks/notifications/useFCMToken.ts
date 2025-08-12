@@ -89,13 +89,32 @@ export const useFCMToken = () => {
 
 				if (!fcmSWExists) {
 					try {
-						await navigator.serviceWorker.register('/firebase-messaging-sw.js', {
-							scope: '/firebase-messaging-sw/',
-							updateViaCache: 'none',
-						})
+						// Inyectar configuración de Firebase de manera segura
+						const registration = await navigator.serviceWorker.register(
+							'/firebase-messaging-sw.js',
+							{
+								scope: '/firebase-messaging-sw/',
+								updateViaCache: 'none',
+							}
+						)
 
 						// Esperar a que esté listo antes de continuar
 						await navigator.serviceWorker.ready
+
+						// Configurar las credenciales de Firebase de manera segura
+						if (registration.active) {
+							registration.active.postMessage({
+								type: 'FIREBASE_CONFIG',
+								config: {
+									apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+									authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+									projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+									storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+									messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+									appId: import.meta.env.VITE_FIREBASE_APP_ID,
+								},
+							})
+						}
 					} catch (swError) {
 						console.warn('Failed to register FCM service worker:', swError)
 						// Continuar sin service worker para notificaciones foreground
