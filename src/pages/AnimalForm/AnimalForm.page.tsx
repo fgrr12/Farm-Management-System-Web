@@ -123,7 +123,7 @@ const AnimalForm = () => {
 					showToast(t('toast.edited'), 'success')
 					navigate(AppRoutes.ANIMAL.replace(':animalUuid', animalUuid))
 				} else {
-					await AnimalsService.setAnimal(animalData, user.uuid, user.farmUuid)
+					await AnimalsService.setAnimal(animalData, user.uuid, farm.uuid)
 					showToast(t('toast.added'), 'success')
 					reset()
 					setPictureUrl('')

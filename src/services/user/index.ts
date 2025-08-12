@@ -45,10 +45,10 @@ const getUserSettings = async (userUuid: string) => {
 	return response.data
 }
 
-const updateUser = async (user: User, userUuid: string) => {
+const updateUser = async (userData: User, userUuid: string) => {
 	const response = await callableFireFunction<{ success: boolean; data: User }>('auth', {
 		operation: 'updateUserProfile',
-		userProfile: user,
+		userData,
 		userUuid,
 	})
 	return response.data
