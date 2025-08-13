@@ -60,6 +60,8 @@
 		"health": "Health",
 		"task": "Tasks",
 		"breeding": "Breeding",
+		"drying": "Drying",
+		"custom": "Custom",
 		"feeding": "Feeding"
 	},
 	"filters": {

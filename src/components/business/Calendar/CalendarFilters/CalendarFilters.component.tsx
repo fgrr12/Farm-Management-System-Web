@@ -13,10 +13,12 @@ export const CalendarFilters = memo<CalendarFiltersProps>(
 		const categories = [
 			{ id: 'all', label: t('categories.all'), color: 'bg-gray-100 text-gray-800' },
 			{ id: 'medication', label: t('categories.medication'), color: 'bg-red-100 text-red-800' },
-			{ id: 'vaccination', label: t('categories.health'), color: 'bg-yellow-100 text-yellow-800' },
+			{ id: 'checkup', label: t('categories.health'), color: 'bg-yellow-100 text-yellow-800' },
 			{ id: 'task', label: t('categories.task'), color: 'bg-blue-100 text-blue-800' },
-			{ id: 'appointment', label: t('categories.breeding'), color: 'bg-pink-100 text-pink-800' },
-			{ id: 'general', label: t('categories.feeding'), color: 'bg-green-100 text-green-800' },
+			{ id: 'birth', label: t('categories.breeding'), color: 'bg-pink-100 text-pink-800' },
+			{ id: 'drying', label: t('categories.drying'), color: 'bg-purple-100 text-purple-800' },
+			{ id: 'custom', label: t('categories.custom'), color: 'bg-indigo-100 text-indigo-800' },
+			// { id: 'general', label: t('categories.feeding'), color: 'bg-green-100 text-green-800' },
 		]
 
 		const handleCategoryToggle = (categoryId: string) => {

@@ -66,6 +66,8 @@
 		"health": "Salud",
 		"task": "Tareas",
 		"breeding": "Reproducción",
+		"drying": "Secado",
+		"custom": "Personalizado",
 		"feeding": "Alimentación"
 	},
 	"filters": {
