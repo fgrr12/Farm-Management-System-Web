@@ -82,7 +82,8 @@
 		"mySpecies": "Mis Especies",
 		"settings": "Configuración",
 		"tasks": "Tareas",
-		"theme": "Tema"
+		"theme": "Tema",
+		"voice": "Comandos de Voz"
 	},
 	"theme": {
 		"clickToChange": "Haz clic para cambiar tema",

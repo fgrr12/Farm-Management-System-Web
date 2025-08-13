@@ -31,9 +31,6 @@ const mapNotificationTypeToCategory = (
 			return 'medication'
 		case 'task_update':
 			return 'task'
-		case 'calendar_reminder':
-		case 'production_summary':
-		case 'system_alert':
 		default:
 			return 'general'
 	}

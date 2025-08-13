@@ -125,6 +125,15 @@ export const Sidebar = memo(() => {
 				>
 					<i className={`i-solar-dna-bold-duotone ${getIconClasses(AppRoutes.MY_SPECIES)}`} />
 				</button>
+
+				<button
+					type="button"
+					className={getButtonClasses(AppRoutes.VOICE, 'from-pink-500', 'to-pink-600')}
+					onClick={handleGoTo(AppRoutes.VOICE)}
+					aria-label="Voice Commands"
+				>
+					<i className={`i-heroicons-microphone ${getIconClasses(AppRoutes.VOICE)}`} />
+				</button>
 			</div>
 
 			{/* Admin Section */}

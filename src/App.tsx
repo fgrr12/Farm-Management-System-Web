@@ -33,8 +33,6 @@ import { PWAUpdatePrompt } from '@/components/pwa/PWAUpdatePrompt.component'
 
 import { useTheme } from '@/hooks/system/useTheme'
 
-import { VoiceRecorder } from './components/layout/VoiceRecorder/VoiceRecorder'
-import { isDevelopment } from './config/environment'
 import { usePreloadRoutes } from './hooks/ui/usePreloadRoutes'
 
 gsap.registerPlugin(SplitText, useGSAP)
@@ -78,6 +76,7 @@ const Tasks = lazy(() =>
 )
 const Dashboard = lazy(() => import('@/pages/Dashboard/Dashboard.page'))
 const Calendar = lazy(() => import('@/pages/Calendar/Calendar.page'))
+const Voice = lazy(() => import('@/pages/Voice/Voice.page'))
 
 export const App = () => {
 	const { user, setUser } = useUserStore()
@@ -316,6 +315,15 @@ export const App = () => {
 										}
 									/>
 								))}
+
+							<Route
+								path={AppRoutes.VOICE}
+								element={
+									<PrivateRoute>
+										<Voice />
+									</PrivateRoute>
+								}
+							/>
 						</Routes>
 					</Suspense>
 
@@ -327,7 +335,6 @@ export const App = () => {
 						onCancel={modalData.onCancel}
 					/>
 					<Loading open={appLoading || authLoading} />
-					{user && isDevelopment && <VoiceRecorder />}
 					<ToastManager />
 					<OfflineIndicator />
 					<PWAUpdatePrompt />

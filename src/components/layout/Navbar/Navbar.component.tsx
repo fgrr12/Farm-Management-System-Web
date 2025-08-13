@@ -58,6 +58,9 @@ export const Navbar = memo(() => {
 		if (location.pathname.includes(AppRoutes.CALENDAR)) {
 			return 'i-material-symbols-calendar-month'
 		}
+		if (location.pathname.includes(AppRoutes.VOICE)) {
+			return 'i-heroicons-microphone'
+		}
 		// Default icon
 		return 'i-healthicons-animal-cow'
 	}, [location.pathname])
@@ -87,6 +90,9 @@ export const Navbar = memo(() => {
 		if (location.pathname.includes(AppRoutes.CALENDAR)) {
 			return 'from-purple-500 to-purple-600'
 		}
+		if (location.pathname.includes(AppRoutes.VOICE)) {
+			return 'from-pink-500 to-pink-600'
+		}
 		// Default color
 		return 'from-blue-500 to-purple-600'
 	}, [location.pathname])
@@ -100,7 +106,8 @@ export const Navbar = memo(() => {
 			location.pathname === AppRoutes.MY_SPECIES ||
 			location.pathname === AppRoutes.BILLING_CARD ||
 			location.pathname === AppRoutes.DASHBOARD ||
-			location.pathname === AppRoutes.CALENDAR,
+			location.pathname === AppRoutes.CALENDAR ||
+			location.pathname === AppRoutes.VOICE,
 		[location.pathname]
 	)
 
@@ -438,6 +445,29 @@ export const Navbar = memo(() => {
 									/>
 								</div>
 								<span className="font-medium">{t('sidebar.mySpecies')}</span>
+							</button>
+
+							<button
+								type="button"
+								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
+									location.pathname.includes(AppRoutes.VOICE)
+										? 'bg-gradient-to-r from-pink-500 to-pink-600 text-white shadow-lg'
+										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+								}`}
+								onClick={goTo(AppRoutes.VOICE)}
+							>
+								<div
+									className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+										location.pathname.includes(AppRoutes.VOICE) ? 'bg-white/20' : 'bg-pink-100'
+									}`}
+								>
+									<i
+										className={`i-heroicons-microphone w-5! h-5! ${
+											location.pathname.includes(AppRoutes.VOICE) ? 'bg-white!' : 'bg-pink-600!'
+										}`}
+									/>
+								</div>
+								<span className="font-medium">{t('sidebar.voice')}</span>
 							</button>
 						</div>
 
