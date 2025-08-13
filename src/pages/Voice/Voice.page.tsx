@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFarmStore } from '@/store/useFarmStore'
@@ -16,6 +16,12 @@ export function VoicePage() {
 	const { t } = useTranslation(['voice'])
 	const { setPageTitle } = usePagePerformance()
 
+	// State para mostrar resultados al usuario
+	const [lastTranscription, setLastTranscription] = useState<string | null>(null)
+	const [lastProcessingResponse, setLastProcessingResponse] = useState<VoiceProcessingResponse | null>(null)
+	const [lastExecutionResults, setLastExecutionResults] = useState<ExecutionResult[]>([])
+	const [showResults, setShowResults] = useState(false)
+
 	// Set page title on mount
 	useEffect(() => {
 		setPageTitle(t('title'))
@@ -23,14 +29,27 @@ export function VoicePage() {
 
 	const handleTranscriptionComplete = useCallback((transcription: string) => {
 		console.log('Transcription completed:', transcription)
+		setLastTranscription(transcription)
+		setShowResults(true)
 	}, [])
 
 	const handleProcessingComplete = useCallback((response: VoiceProcessingResponse) => {
 		console.log('Processing completed:', response)
+		setLastProcessingResponse(response)
+		setShowResults(true)
 	}, [])
 
 	const handleExecutionComplete = useCallback((results: ExecutionResult[]) => {
 		console.log('Execution completed:', results)
+		setLastExecutionResults(results)
+		setShowResults(true)
+	}, [])
+
+	const clearResults = useCallback(() => {
+		setLastTranscription(null)
+		setLastProcessingResponse(null)
+		setLastExecutionResults([])
+		setShowResults(false)
 	}, [])
 
 	if (!user || !farm) {
@@ -89,6 +108,175 @@ export function VoicePage() {
 						/>
 					</div>
 				</div>
+
+				{/* Results Section */}
+				{showResults && (
+					<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl dark:shadow-black/30 overflow-hidden mb-6 sm:mb-8 border border-gray-100 dark:border-gray-700 transition-all duration-300">
+						<div className="bg-gradient-to-r from-emerald-600 to-cyan-600 dark:from-emerald-700 dark:to-cyan-700 px-4 sm:px-6 py-4">
+							<div className="flex items-center justify-between">
+								<h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
+									<i className="i-heroicons-document-text bg-white! w-6! h-6!" />
+									{t('results.title')}
+								</h2>
+								<button
+									type="button"
+									onClick={clearResults}
+									className="btn btn-sm bg-white/20 hover:bg-white/30 border-white/30 text-white"
+								>
+									<i className="i-heroicons-x-mark w-4! h-4!" />
+									{t('actions.clearResults')}
+								</button>
+							</div>
+						</div>
+						
+						<div className="p-4 sm:p-6 lg:p-8 space-y-6">
+							{/* Transcription Result */}
+							{lastTranscription && (
+								<div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-4 sm:p-6 border border-blue-200 dark:border-blue-700">
+									<h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3 flex items-center gap-2">
+										<i className="i-heroicons-microphone bg-blue-600! w-5! h-5!" />
+										{t('results.transcription')}
+									</h3>
+									<div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-blue-200 dark:border-blue-600">
+										<p className="text-base text-gray-700 dark:text-gray-300 italic">
+											"{lastTranscription}"
+										</p>
+									</div>
+								</div>
+							)}
+
+							{/* AI Processing Result */}
+							{lastProcessingResponse && (
+								<div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl p-4 sm:p-6 border border-purple-200 dark:border-purple-700">
+									<h3 className="text-lg font-semibold text-purple-900 dark:text-purple-100 mb-3 flex items-center gap-2">
+										<i className="i-heroicons-cpu-chip bg-purple-600! w-5! h-5!" />
+										{t('results.aiProcessing')}
+									</h3>
+									
+									<div className="space-y-4">
+										<div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-purple-200 dark:border-purple-600">
+											<div className="flex items-center gap-2 mb-2">
+												<span className="font-semibold text-gray-700 dark:text-gray-300">{t('results.status')}:</span>
+												<span className={`badge ${lastProcessingResponse.success ? 'badge-success' : 'badge-error'}`}>
+													{lastProcessingResponse.success ? t('results.success') : t('results.error')}
+												</span>
+											</div>
+											
+											{lastProcessingResponse.transcription && (
+												<div className="mb-2">
+													<span className="font-semibold text-gray-700 dark:text-gray-300">{t('results.transcription')}:</span>
+													<div className="mt-1 text-sm text-gray-600 dark:text-gray-400 italic">
+														"{lastProcessingResponse.transcription}"
+													</div>
+												</div>
+											)}
+
+											{lastProcessingResponse.data && (
+												<div className="mb-2">
+													<span className="font-semibold text-gray-700 dark:text-gray-300">{t('results.operations')}:</span>
+													<div className="mt-2 space-y-1">
+														{lastProcessingResponse.data.animals && lastProcessingResponse.data.animals.length > 0 && (
+															<span className="badge badge-primary mr-1">Animals: {lastProcessingResponse.data.animals.length}</span>
+														)}
+														{lastProcessingResponse.data.health && lastProcessingResponse.data.health.length > 0 && (
+															<span className="badge badge-secondary mr-1">Health: {lastProcessingResponse.data.health.length}</span>
+														)}
+														{lastProcessingResponse.data.production && lastProcessingResponse.data.production.length > 0 && (
+															<span className="badge badge-accent mr-1">Production: {lastProcessingResponse.data.production.length}</span>
+														)}
+														{lastProcessingResponse.data.tasks && lastProcessingResponse.data.tasks.length > 0 && (
+															<span className="badge badge-info mr-1">Tasks: {lastProcessingResponse.data.tasks.length}</span>
+														)}
+														{lastProcessingResponse.data.relations && lastProcessingResponse.data.relations.length > 0 && (
+															<span className="badge badge-warning mr-1">Relations: {lastProcessingResponse.data.relations.length}</span>
+														)}
+														{lastProcessingResponse.data.calendar && lastProcessingResponse.data.calendar.length > 0 && (
+															<span className="badge badge-neutral mr-1">Calendar: {lastProcessingResponse.data.calendar.length}</span>
+														)}
+													</div>
+												</div>
+											)}
+
+											{lastProcessingResponse.errors && lastProcessingResponse.errors.length > 0 && (
+												<div className="mb-2">
+													<span className="font-semibold text-error">{t('results.errors')}:</span>
+													<ul className="mt-1 list-disc list-inside text-sm text-error">
+														{lastProcessingResponse.errors.map((error, index) => (
+															<li key={index}>{error}</li>
+														))}
+													</ul>
+												</div>
+											)}
+
+											{lastProcessingResponse.warnings && lastProcessingResponse.warnings.length > 0 && (
+												<div className="mb-2">
+													<span className="font-semibold text-warning">{t('results.warnings')}:</span>
+													<ul className="mt-1 list-disc list-inside text-sm text-warning">
+														{lastProcessingResponse.warnings.map((warning, index) => (
+															<li key={index}>{warning}</li>
+														))}
+													</ul>
+												</div>
+											)}
+
+											{lastProcessingResponse.tokensUsed && (
+												<div className="text-xs text-gray-500 dark:text-gray-400">
+													Tokens used: {lastProcessingResponse.tokensUsed} | Processing time: {lastProcessingResponse.processingTime}ms
+												</div>
+											)}
+										</div>
+									</div>
+								</div>
+							)}
+
+							{/* Execution Results */}
+							{lastExecutionResults.length > 0 && (
+								<div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-4 sm:p-6 border border-green-200 dark:border-green-700">
+									<h3 className="text-lg font-semibold text-green-900 dark:text-green-100 mb-3 flex items-center gap-2">
+										<i className="i-heroicons-play bg-green-600! w-5! h-5!" />
+										{t('results.execution')} ({lastExecutionResults.length})
+									</h3>
+									
+									<div className="space-y-3">
+										{lastExecutionResults.map((result, index) => (
+											<div key={index} className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-green-200 dark:border-green-600">
+												<div className="flex items-center justify-between mb-3">
+													<div className="flex items-center gap-2">
+														<span className="font-medium text-gray-700 dark:text-gray-300">
+															{result.type}
+														</span>
+														{result.operation && (
+															<span className="badge badge-outline text-xs">
+																{result.operation}
+															</span>
+														)}
+													</div>
+													<span className={`badge ${result.success ? 'badge-success' : 'badge-error'}`}>
+														{result.success ? t('results.success') : t('results.error')}
+													</span>
+												</div>
+												
+												{result.id && (
+													<div className="mb-2 text-sm">
+														<span className="font-semibold text-gray-600 dark:text-gray-400">ID:</span>
+														<span className="ml-2 text-gray-700 dark:text-gray-300 font-mono">{result.id}</span>
+													</div>
+												)}
+												
+												{result.error && (
+													<div className="text-sm">
+														<span className="font-semibold text-error">{t('results.errorMessage')}:</span>
+														<span className="ml-2 text-gray-600 dark:text-gray-400">{result.error}</span>
+													</div>
+												)}
+											</div>
+										))}
+									</div>
+								</div>
+							)}
+						</div>
+					</div>
+				)}
 
 				{/* Instructions Section */}
 				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl dark:shadow-black/30 overflow-hidden mb-6 sm:mb-8 border border-gray-100 dark:border-gray-700 transition-all duration-300">

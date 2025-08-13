@@ -47,5 +47,26 @@
 	},
 	"accessibility": {
 		"skipToRecording": "Skip to voice recording"
+	},
+	"results": {
+		"title": "Results",
+		"transcription": "Voice Transcription",
+		"aiProcessing": "AI Processing",
+		"execution": "Execution Results",
+		"status": "Status",
+		"success": "Success",
+		"error": "Error",
+		"errors": "Errors",
+		"warnings": "Warnings",
+		"operations": "Operations",
+		"errorMessage": "Error Message",
+		"viewData": "View Data"
+	},
+	"actions": {
+		"clearResults": "Clear Results"
+	},
+	"errors": {
+		"userRequired": "User authentication required",
+		"farmRequired": "Farm selection required"
 	}
 }
