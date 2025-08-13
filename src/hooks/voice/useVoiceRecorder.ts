@@ -137,7 +137,7 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 					farmUuid: config.farmUuid,
 					userUuid: config.userUuid,
 					audioFormat: 'webm',
-					maxDuration: config.maxRecordingTime,
+					maxDuration: config.maxRecordingTime || 60, // Default to 60 seconds
 				}
 
 				// Process voice command
@@ -172,20 +172,23 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 			clearError()
 			reset()
 
-			// Request microphone access
+			// Request microphone access with optimized settings for compression
 			const stream = await navigator.mediaDevices.getUserMedia({
 				audio: {
 					echoCancellation: true,
 					noiseSuppression: true,
-					sampleRate: 16000,
+					autoGainControl: true,
+					sampleRate: 16000, // Reduced from default 44.1kHz
+					channelCount: 1, // Mono instead of stereo
 				},
 			})
 
 			streamRef.current = stream
 
-			// Create MediaRecorder
+			// Create MediaRecorder with aggressive compression settings
 			const mediaRecorder = new MediaRecorder(stream, {
 				mimeType: 'audio/webm;codecs=opus',
+				audioBitsPerSecond: 16000, // 16kbps instead of default 128kbps = 87.5% reduction
 			})
 
 			mediaRecorderRef.current = mediaRecorder
@@ -222,8 +225,9 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 			recordingTimerRef.current = setInterval(() => {
 				setRecordingTime((prev) => {
 					const newTime = prev + 1
+					const maxTime = config.maxRecordingTime || 60 // Default to 60 seconds
 					// Auto-stop if max time reached
-					if (config.maxRecordingTime && newTime >= config.maxRecordingTime) {
+					if (newTime >= maxTime) {
 						// Stop recording when max time reached
 						if (mediaRecorderRef.current?.state === 'recording') {
 							mediaRecorderRef.current.stop()

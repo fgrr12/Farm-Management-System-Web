@@ -102,7 +102,7 @@ export function VoicePage() {
 						<VoiceRecorder
 							className="w-full"
 							autoExecute={false}
-							maxRecordingTime={120}
+							maxRecordingTime={60}
 							onTranscriptionComplete={handleTranscriptionComplete}
 							onProcessingComplete={handleProcessingComplete}
 							onExecutionComplete={handleExecutionComplete}
