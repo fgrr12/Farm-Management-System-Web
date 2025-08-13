@@ -18,7 +18,8 @@ export function VoicePage() {
 
 	// State para mostrar resultados al usuario
 	const [lastTranscription, setLastTranscription] = useState<string | null>(null)
-	const [lastProcessingResponse, setLastProcessingResponse] = useState<VoiceProcessingResponse | null>(null)
+	const [lastProcessingResponse, setLastProcessingResponse] =
+		useState<VoiceProcessingResponse | null>(null)
 	const [lastExecutionResults, setLastExecutionResults] = useState<ExecutionResult[]>([])
 	const [showResults, setShowResults] = useState(false)
 
@@ -128,7 +129,7 @@ export function VoicePage() {
 								</button>
 							</div>
 						</div>
-						
+
 						<div className="p-4 sm:p-6 lg:p-8 space-y-6">
 							{/* Transcription Result */}
 							{lastTranscription && (
@@ -152,19 +153,27 @@ export function VoicePage() {
 										<i className="i-heroicons-cpu-chip bg-purple-600! w-5! h-5!" />
 										{t('results.aiProcessing')}
 									</h3>
-									
+
 									<div className="space-y-4">
 										<div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-purple-200 dark:border-purple-600">
 											<div className="flex items-center gap-2 mb-2">
-												<span className="font-semibold text-gray-700 dark:text-gray-300">{t('results.status')}:</span>
-												<span className={`badge ${lastProcessingResponse.success ? 'badge-success' : 'badge-error'}`}>
-													{lastProcessingResponse.success ? t('results.success') : t('results.error')}
+												<span className="font-semibold text-gray-700 dark:text-gray-300">
+													{t('results.status')}:
+												</span>
+												<span
+													className={`badge ${lastProcessingResponse.success ? 'badge-success' : 'badge-error'}`}
+												>
+													{lastProcessingResponse.success
+														? t('results.success')
+														: t('results.error')}
 												</span>
 											</div>
-											
+
 											{lastProcessingResponse.transcription && (
 												<div className="mb-2">
-													<span className="font-semibold text-gray-700 dark:text-gray-300">{t('results.transcription')}:</span>
+													<span className="font-semibold text-gray-700 dark:text-gray-300">
+														{t('results.transcription')}:
+													</span>
 													<div className="mt-1 text-sm text-gray-600 dark:text-gray-400 italic">
 														"{lastProcessingResponse.transcription}"
 													</div>
@@ -173,55 +182,80 @@ export function VoicePage() {
 
 											{lastProcessingResponse.data && (
 												<div className="mb-2">
-													<span className="font-semibold text-gray-700 dark:text-gray-300">{t('results.operations')}:</span>
+													<span className="font-semibold text-gray-700 dark:text-gray-300">
+														{t('results.operations')}:
+													</span>
 													<div className="mt-2 space-y-1">
-														{lastProcessingResponse.data.animals && lastProcessingResponse.data.animals.length > 0 && (
-															<span className="badge badge-primary mr-1">Animals: {lastProcessingResponse.data.animals.length}</span>
-														)}
-														{lastProcessingResponse.data.health && lastProcessingResponse.data.health.length > 0 && (
-															<span className="badge badge-secondary mr-1">Health: {lastProcessingResponse.data.health.length}</span>
-														)}
-														{lastProcessingResponse.data.production && lastProcessingResponse.data.production.length > 0 && (
-															<span className="badge badge-accent mr-1">Production: {lastProcessingResponse.data.production.length}</span>
-														)}
-														{lastProcessingResponse.data.tasks && lastProcessingResponse.data.tasks.length > 0 && (
-															<span className="badge badge-info mr-1">Tasks: {lastProcessingResponse.data.tasks.length}</span>
-														)}
-														{lastProcessingResponse.data.relations && lastProcessingResponse.data.relations.length > 0 && (
-															<span className="badge badge-warning mr-1">Relations: {lastProcessingResponse.data.relations.length}</span>
-														)}
-														{lastProcessingResponse.data.calendar && lastProcessingResponse.data.calendar.length > 0 && (
-															<span className="badge badge-neutral mr-1">Calendar: {lastProcessingResponse.data.calendar.length}</span>
-														)}
+														{lastProcessingResponse.data.animals &&
+															lastProcessingResponse.data.animals.length > 0 && (
+																<span className="badge badge-primary mr-1">
+																	Animals: {lastProcessingResponse.data.animals.length}
+																</span>
+															)}
+														{lastProcessingResponse.data.health &&
+															lastProcessingResponse.data.health.length > 0 && (
+																<span className="badge badge-secondary mr-1">
+																	Health: {lastProcessingResponse.data.health.length}
+																</span>
+															)}
+														{lastProcessingResponse.data.production &&
+															lastProcessingResponse.data.production.length > 0 && (
+																<span className="badge badge-accent mr-1">
+																	Production: {lastProcessingResponse.data.production.length}
+																</span>
+															)}
+														{lastProcessingResponse.data.tasks &&
+															lastProcessingResponse.data.tasks.length > 0 && (
+																<span className="badge badge-info mr-1">
+																	Tasks: {lastProcessingResponse.data.tasks.length}
+																</span>
+															)}
+														{lastProcessingResponse.data.relations &&
+															lastProcessingResponse.data.relations.length > 0 && (
+																<span className="badge badge-warning mr-1">
+																	Relations: {lastProcessingResponse.data.relations.length}
+																</span>
+															)}
+														{lastProcessingResponse.data.calendar &&
+															lastProcessingResponse.data.calendar.length > 0 && (
+																<span className="badge badge-neutral mr-1">
+																	Calendar: {lastProcessingResponse.data.calendar.length}
+																</span>
+															)}
 													</div>
 												</div>
 											)}
 
-											{lastProcessingResponse.errors && lastProcessingResponse.errors.length > 0 && (
-												<div className="mb-2">
-													<span className="font-semibold text-error">{t('results.errors')}:</span>
-													<ul className="mt-1 list-disc list-inside text-sm text-error">
-														{lastProcessingResponse.errors.map((error, index) => (
-															<li key={index}>{error}</li>
-														))}
-													</ul>
-												</div>
-											)}
+											{lastProcessingResponse.errors &&
+												lastProcessingResponse.errors.length > 0 && (
+													<div className="mb-2">
+														<span className="font-semibold text-error">{t('results.errors')}:</span>
+														<ul className="mt-1 list-disc list-inside text-sm text-error">
+															{lastProcessingResponse.errors.map((error, index) => (
+																<li key={index}>{error}</li>
+															))}
+														</ul>
+													</div>
+												)}
 
-											{lastProcessingResponse.warnings && lastProcessingResponse.warnings.length > 0 && (
-												<div className="mb-2">
-													<span className="font-semibold text-warning">{t('results.warnings')}:</span>
-													<ul className="mt-1 list-disc list-inside text-sm text-warning">
-														{lastProcessingResponse.warnings.map((warning, index) => (
-															<li key={index}>{warning}</li>
-														))}
-													</ul>
-												</div>
-											)}
+											{lastProcessingResponse.warnings &&
+												lastProcessingResponse.warnings.length > 0 && (
+													<div className="mb-2">
+														<span className="font-semibold text-warning">
+															{t('results.warnings')}:
+														</span>
+														<ul className="mt-1 list-disc list-inside text-sm text-warning">
+															{lastProcessingResponse.warnings.map((warning, index) => (
+																<li key={index}>{warning}</li>
+															))}
+														</ul>
+													</div>
+												)}
 
 											{lastProcessingResponse.tokensUsed && (
 												<div className="text-xs text-gray-500 dark:text-gray-400">
-													Tokens used: {lastProcessingResponse.tokensUsed} | Processing time: {lastProcessingResponse.processingTime}ms
+													Tokens used: {lastProcessingResponse.tokensUsed} | Processing time:{' '}
+													{lastProcessingResponse.processingTime}ms
 												</div>
 											)}
 										</div>
@@ -236,10 +270,13 @@ export function VoicePage() {
 										<i className="i-heroicons-play bg-green-600! w-5! h-5!" />
 										{t('results.execution')} ({lastExecutionResults.length})
 									</h3>
-									
+
 									<div className="space-y-3">
 										{lastExecutionResults.map((result, index) => (
-											<div key={index} className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-green-200 dark:border-green-600">
+											<div
+												key={index}
+												className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-green-200 dark:border-green-600"
+											>
 												<div className="flex items-center justify-between mb-3">
 													<div className="flex items-center gap-2">
 														<span className="font-medium text-gray-700 dark:text-gray-300">
@@ -251,22 +288,32 @@ export function VoicePage() {
 															</span>
 														)}
 													</div>
-													<span className={`badge ${result.success ? 'badge-success' : 'badge-error'}`}>
+													<span
+														className={`badge ${result.success ? 'badge-success' : 'badge-error'}`}
+													>
 														{result.success ? t('results.success') : t('results.error')}
 													</span>
 												</div>
-												
+
 												{result.id && (
 													<div className="mb-2 text-sm">
-														<span className="font-semibold text-gray-600 dark:text-gray-400">ID:</span>
-														<span className="ml-2 text-gray-700 dark:text-gray-300 font-mono">{result.id}</span>
+														<span className="font-semibold text-gray-600 dark:text-gray-400">
+															ID:
+														</span>
+														<span className="ml-2 text-gray-700 dark:text-gray-300 font-mono">
+															{result.id}
+														</span>
 													</div>
 												)}
-												
+
 												{result.error && (
 													<div className="text-sm">
-														<span className="font-semibold text-error">{t('results.errorMessage')}:</span>
-														<span className="ml-2 text-gray-600 dark:text-gray-400">{result.error}</span>
+														<span className="font-semibold text-error">
+															{t('results.errorMessage')}:
+														</span>
+														<span className="ml-2 text-gray-600 dark:text-gray-400">
+															{result.error}
+														</span>
 													</div>
 												)}
 											</div>
