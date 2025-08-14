@@ -63,13 +63,11 @@ const Tasks = () => {
 				farmUuid,
 			})
 
-			// Group tasks by status
+			// Group tasks by status (only show active columns)
 			const groupedTasks: TaskColumns = {
 				todo: tasks.filter((task) => task.status === 'todo'),
 				'in-progress': tasks.filter((task) => task.status === 'in-progress'),
 				done: tasks.filter((task) => task.status === 'done'),
-				archived: tasks.filter((task) => task.status === 'archived'),
-				overdue: tasks.filter((task) => task.status === 'overdue'),
 			}
 
 			setTaskColumns(groupedTasks)
@@ -151,7 +149,6 @@ const Tasks = () => {
 								</div>
 							</div>
 
-							{/* Stats Cards */}
 							<div className="flex gap-2 sm:gap-4">
 								<div className="bg-white/10 dark:bg-white/20 backdrop-blur-sm rounded-lg px-3 py-2 text-center">
 									<div className="text-lg sm:text-xl font-bold text-white">
@@ -202,7 +199,7 @@ const Tasks = () => {
 				{/* Kanban Board */}
 				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden">
 					<main id="kanban-board" className="p-4 sm:p-6">
-						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 min-h-[600px]">
+						<div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 min-h-[600px]">
 							{COLUMN_CONFIG.map((column) => (
 								<TaskColumn
 									key={column.id}
@@ -229,8 +226,6 @@ const INITIAL_TASK_COLUMNS: TaskColumns = {
 	todo: [],
 	'in-progress': [],
 	done: [],
-	archived: [],
-	overdue: [],
 }
 
 const INITIAL_FILTERS: TaskFiltersType = {
@@ -256,18 +251,6 @@ const COLUMN_CONFIG: TaskColumnInfo[] = [
 		title: 'Done',
 		color: 'green-500',
 		bgColor: 'green-50',
-	},
-	{
-		id: 'archived',
-		title: 'Archived',
-		color: 'purple-500',
-		bgColor: 'purple-50',
-	},
-	{
-		id: 'overdue',
-		title: 'Overdue',
-		color: 'red-500',
-		bgColor: 'red-50',
 	},
 ]
 

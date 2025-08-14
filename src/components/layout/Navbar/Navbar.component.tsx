@@ -245,11 +245,19 @@ export const Navbar = memo(() => {
 									aria-haspopup="true"
 									aria-expanded="false"
 								>
-									<div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center transition-all duration-200 hover:shadow-lg">
-										<span className="text-white text-sm font-semibold leading-none h-full flex items-center justify-center transition-transform duration-200 hover:scale-110">
-											{user?.name?.charAt(0)?.toUpperCase() || 'U'}
-										</span>
-									</div>
+									{user?.photoUrl ? (
+										<img
+											src={user.photoUrl}
+											alt={`${user.name} ${user.lastName}`}
+											className="w-8 h-8 rounded-full object-cover transition-all duration-200 hover:shadow-lg"
+										/>
+									) : (
+										<div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center transition-all duration-200 hover:shadow-lg">
+											<span className="text-white text-sm font-semibold leading-none h-full flex items-center justify-center transition-transform duration-200 hover:scale-110">
+												{user?.name?.charAt(0)?.toUpperCase() || 'U'}
+											</span>
+										</div>
+									)}
 								</button>
 								<ul
 									className="menu dropdown-content bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 z-[50] mt-3 w-52 p-2 absolute right-0 top-full"

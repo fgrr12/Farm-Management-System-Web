@@ -7,12 +7,10 @@ export interface TaskColumns {
 	todo: Task[]
 	'in-progress': Task[]
 	done: Task[]
-	archived: Task[]
-	overdue: Task[]
 }
 
 export interface TaskColumnInfo {
-	id: TaskStatus
+	id: 'todo' | 'in-progress' | 'done'
 	title: string
 	color: string
 	bgColor: string

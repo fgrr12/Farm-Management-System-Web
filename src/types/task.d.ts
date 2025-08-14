@@ -14,4 +14,4 @@ interface Task {
 }
 
 type TaskStatus = 'todo' | 'in-progress' | 'done' | 'archived' | 'overdue'
-type TaskPriority = 'low' | 'medium' | 'high'
+type TaskPriority = 'low' | 'medium' | 'high' | 'critical'

@@ -2,6 +2,7 @@
 	"accessibility": {
 		"addTaskForm": "Formulario para añadir nueva tarea",
 		"descriptionHelp": "Proporciona instrucciones detalladas para esta tarea",
+		"dueDateHelp": "Elige cuándo debe completarse esta tarea",
 		"priorityHelp": "Selecciona el nivel de urgencia para esta tarea",
 		"skipToForm": "Saltar al formulario de tarea",
 		"speciesHelp": "Selecciona a qué especie de animal se aplica esta tarea",
@@ -13,18 +14,21 @@
 	"description": "Descripción",
 	"name": "Nombre",
 	"placeholders": {
+		"dueDateHint": "Selecciona cuándo debe completarse esta tarea",
 		"priorityHint": "Considera urgencia médica, impacto en producción, y recursos disponibles",
 		"speciesHint": "Selecciona la especie principal afectada por esta tarea",
 		"taskDescription": "Detalla los pasos: 1) Preparar materiales, 2) Realizar procedimiento, 3) Documentar resultados...",
 		"taskName": "Ej: Vacunar ganado, Limpiar bebederos, Revisar cercas..."
 	},
 	"priorities": {
+		"critical": "Crítica - Acción inmediata requerida",
 		"default": "¿Qué tan urgente es esta tarea?",
 		"high": "Alta - Requiere atención inmediata",
 		"low": "Baja - Puede esperar varios días",
 		"medium": "Media - Completar en 1-2 días"
 	},
 	"priority": "Prioridad",
+	"selectDueDate": "¿Cuándo vence esta tarea?",
 	"selectPriority": "¿Qué tan urgente es esta tarea?",
 	"selectSpecies": "¿Para qué tipo de animal es esta tarea?",
 	"species": "Especie",

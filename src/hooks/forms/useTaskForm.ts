@@ -11,6 +11,8 @@ const DEFAULT_VALUES: Partial<TaskFormData> = {
 	priority: undefined,
 	speciesUuid: '',
 	status: 'todo',
+	dueDate: '',
+	assignedTo: '',
 }
 
 export const useTaskForm = (initialData?: Partial<Task>) => {
@@ -27,6 +29,8 @@ export const useTaskForm = (initialData?: Partial<Task>) => {
 			speciesUuid: initialData.speciesUuid || '',
 			status: (initialData.status === 'overdue' ? 'todo' : initialData.status) || 'todo',
 			farmUuid: initialData.farmUuid || '',
+			dueDate: initialData.dueDate || '',
+			assignedTo: initialData.assignedTo || '',
 		}
 	}, [initialData])
 
@@ -46,6 +50,8 @@ export const useTaskForm = (initialData?: Partial<Task>) => {
 			priority: data.priority,
 			speciesUuid: data.speciesUuid,
 			status: data.status || 'todo',
+			dueDate: data.dueDate || undefined,
+			assignedTo: data.assignedTo || undefined,
 		}
 	}, [])
 

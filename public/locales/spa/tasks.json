@@ -1,10 +1,14 @@
 {
 	"accessibility": {
 		"addTaskDescription": "Navegar al formulario para crear una nueva tarea",
+		"assigneeHelp": "Selecciona la persona responsable de esta tarea",
+		"dueDateHelp": "Elige cuándo debe completarse esta tarea",
 		"filtersSection": "Filtrar y buscar tareas",
 		"searchTasks": "Buscar tareas por título o descripción",
 		"skipToTasks": "Saltar a la lista de tareas"
 	},
+	"assignedTo": "Asignado a",
+	"dueDate": "Fecha límite",
 	"activeTasks": "Activas",
 	"addTask": "Añadir tarea",
 	"allPriorities": "Todas las Prioridades",
@@ -27,6 +31,7 @@
 	"noTasksFound": "No se encontraron tareas para tu búsqueda",
 	"noTasksInColumn": "No hay tareas en esta columna",
 	"priority": {
+		"critical": "Crítica",
 		"high": "Alta",
 		"low": "Baja",
 		"medium": "Media"
@@ -46,10 +51,12 @@
 	"taskTitle": "Título",
 	"timestamps": "Fechas",
 	"title": "Tareas",
+	"unassigned": "Sin asignar",
+	"updatedAt": "Actualizada",
+	"loadingUser": "Cargando usuario...",
 	"toast": {
 		"errorGettingTasks": "Error al obtener las tareas",
 		"errorUpdatingTaskStatus": "Error al actualizar el estado de la tarea",
 		"taskMoved": "Tarea movida a {{status}}"
-	},
-	"updatedAt": "Actualizada"
+	}
 }

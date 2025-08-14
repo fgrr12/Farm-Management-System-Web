@@ -11,12 +11,14 @@ export const taskSchema = z.object({
 		.min(1, 'task.validation.descriptionRequired')
 		.max(500, 'task.validation.descriptionTooLong'),
 
-	priority: z.enum(['low', 'medium', 'high'], {
+	priority: z.enum(['low', 'medium', 'high', 'critical'], {
 		message: 'task.validation.priorityRequired',
 	}),
 
 	speciesUuid: z.string().min(1, 'task.validation.speciesRequired'),
 
+	dueDate: z.string().optional(),
+	assignedTo: z.string().optional(),
 	uuid: z.string().optional(),
 	farmUuid: z.string().optional(),
 	status: z.enum(['todo', 'in-progress', 'done', 'archived', 'overdue']).optional(),

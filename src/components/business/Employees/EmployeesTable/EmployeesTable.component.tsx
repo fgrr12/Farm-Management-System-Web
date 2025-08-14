@@ -110,10 +110,18 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 								{/* Employee Info */}
 								<td className="px-6 py-4 whitespace-nowrap">
 									<div className="flex items-center">
-										<div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-green-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-											{employee.name.charAt(0)}
-											{employee.lastName.charAt(0)}
-										</div>
+										{employee.photoUrl ? (
+											<img
+												src={employee.photoUrl}
+												alt={`${employee.name} ${employee.lastName}`}
+												className="w-10 h-10 rounded-full object-cover"
+											/>
+										) : (
+											<div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-green-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+												{employee.name.charAt(0)}
+												{employee.lastName.charAt(0)}
+											</div>
+										)}
 										<div className="ml-4">
 											<div className="text-sm font-medium text-gray-900 dark:text-gray-100">
 												{employee.name} {employee.lastName}
@@ -201,10 +209,18 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 						{/* Employee Header */}
 						<div className="flex items-center justify-between mb-3">
 							<div className="flex items-center">
-								<div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-green-500 rounded-full flex items-center justify-center text-white font-semibold">
-									{employee.name.charAt(0)}
-									{employee.lastName.charAt(0)}
-								</div>
+								{employee.photoUrl ? (
+									<img
+										src={employee.photoUrl}
+										alt={`${employee.name} ${employee.lastName}`}
+										className="w-12 h-12 rounded-full object-cover"
+									/>
+								) : (
+									<div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-green-500 rounded-full flex items-center justify-center text-white font-semibold">
+										{employee.name.charAt(0)}
+										{employee.lastName.charAt(0)}
+									</div>
+								)}
 								<div className="ml-3">
 									<h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">
 										{employee.name} {employee.lastName}

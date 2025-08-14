@@ -1,10 +1,14 @@
 {
 	"accessibility": {
 		"addTaskDescription": "Navigate to form to create a new task",
+		"assigneeHelp": "Select the person responsible for this task",
+		"dueDateHelp": "Choose when this task should be completed",
 		"filtersSection": "Filter and search tasks",
 		"searchTasks": "Search tasks by title or description",
 		"skipToTasks": "Skip to tasks list"
 	},
+	"assignedTo": "Assigned to",
+	"dueDate": "Due Date",
 	"activeTasks": "Active",
 	"addTask": "Add Task",
 	"allPriorities": "All Priorities",
@@ -27,6 +31,7 @@
 	"noTasksFound": "No tasks found for your search",
 	"noTasksInColumn": "No tasks in this column",
 	"priority": {
+		"critical": "Critical",
 		"high": "High",
 		"low": "Low",
 		"medium": "Medium"
@@ -46,10 +51,12 @@
 	"taskTitle": "Title",
 	"timestamps": "Timestamps",
 	"title": "Tasks",
+	"unassigned": "Unassigned",
+	"updatedAt": "Updated",
+	"loadingUser": "Loading user...",
 	"toast": {
 		"errorGettingTasks": "Error getting tasks",
 		"errorUpdatingTaskStatus": "Error updating task status",
 		"taskMoved": "Task moved to {{status}}"
-	},
-	"updatedAt": "Updated"
+	}
 }
