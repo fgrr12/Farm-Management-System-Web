@@ -42,26 +42,6 @@ const setHealthRecord = async (
 	return response.data
 }
 
-const setHealthRecordGiveBirth = async (animalUuid: string, userUuid: string, farmUuid: string) => {
-	const response = await callableFireFunction<{ success: boolean }>('health', {
-		operation: 'setHealthRecordGiveBirth',
-		animalUuid,
-		userUuid,
-		farmUuid,
-	})
-	return response
-}
-
-const setHealthRecordDrying = async (animalUuid: string, userUuid: string, farmUuid: string) => {
-	const response = await callableFireFunction<{ success: boolean }>('health', {
-		operation: 'setHealthRecordDrying',
-		animalUuid,
-		userUuid,
-		farmUuid,
-	})
-	return response
-}
-
 // Update
 
 const updateHealthRecord = async (
@@ -96,8 +76,6 @@ export const HealthRecordsService = {
 	getHealthRecords,
 	getHealthRecord,
 	setHealthRecord,
-	setHealthRecordGiveBirth,
-	setHealthRecordDrying,
 	updateHealthRecord,
 	updateHealthRecordsStatus,
 }

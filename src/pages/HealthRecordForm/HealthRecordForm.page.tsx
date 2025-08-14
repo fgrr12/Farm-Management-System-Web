@@ -9,8 +9,6 @@ import { AppRoutes } from '@/config/constants/routes'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
-import { updateAnimalHealthStatus } from '@/utils/healthStatusUpdater'
-
 import { HealthRecordsService } from '@/services/healthRecords'
 
 import { DatePicker } from '@/components/layout/DatePicker'
@@ -71,30 +69,15 @@ const HealthRecordForm = () => {
 				const healthRecordData = transformToApiFormat(data)
 				const healthRecordUuid = params.healthRecordUuid
 
-				let newHealthRecord: HealthRecord
-
 				if (healthRecordUuid) {
 					await HealthRecordsService.updateHealthRecord(healthRecordData, user.uuid, farm!.uuid)
-					newHealthRecord = healthRecordData
 					showToast(t('toast.edited'), 'success')
 				} else {
 					await HealthRecordsService.setHealthRecord(healthRecordData, user.uuid, farm!.uuid)
-					newHealthRecord = healthRecordData
 					showToast(t('toast.added'), 'success')
 				}
 
-				try {
-					const newHealthStatus = await updateAnimalHealthStatus(
-						healthRecordData.animalUuid,
-						newHealthRecord,
-						data.manualHealthStatus
-					)
-
-					showToast(`${t('toast.added')} - Animal status: ${newHealthStatus}`, 'success')
-				} catch (error) {
-					console.error('Failed to update animal health status:', error)
-				}
-
+				// Health status is now updated automatically by AI on the backend
 				navigate(AppRoutes.ANIMAL.replace(':animalUuid', healthRecordData.animalUuid))
 			}, t('toast.errorAddingHealthRecord'))
 		},
@@ -317,40 +300,6 @@ const HealthRecordForm = () => {
 										}
 									/>
 								</div>
-							</div>
-
-							{/* Health Status Override Card */}
-							<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
-								<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-									<i className="i-material-symbols-health-and-safety bg-blue-600! w-5! h-5!" />
-									{t('healthStatusOverride')}
-								</h3>
-								<Controller
-									name="manualHealthStatus"
-									control={control}
-									render={({ field }) => (
-										<Select
-											{...field}
-											legend={t('manualHealthStatus')}
-											defaultLabel={t('placeholders.autoCalculate')}
-											items={[
-												{ value: 'healthy', name: t('healthStatus.healthy') },
-												{ value: 'sick', name: t('healthStatus.sick') },
-												{ value: 'treatment', name: t('healthStatus.treatment') },
-												{ value: 'critical', name: t('healthStatus.critical') },
-												{ value: 'unknown', name: t('healthStatus.unknown') },
-											]}
-											error={
-												errors.manualHealthStatus
-													? getErrorMessage(errors.manualHealthStatus.message || '')
-													: undefined
-											}
-										/>
-									)}
-								/>
-								<p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-									{t('healthStatusHelp')}
-								</p>
 							</div>
 
 							{/* Notes Card */}
