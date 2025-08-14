@@ -25,7 +25,7 @@ export const useTaskForm = (initialData?: Partial<Task>) => {
 			description: initialData.description || '',
 			priority: initialData.priority || undefined,
 			speciesUuid: initialData.speciesUuid || '',
-			status: initialData.status || 'todo',
+			status: (initialData.status === 'overdue' ? 'todo' : initialData.status) || 'todo',
 			farmUuid: initialData.farmUuid || '',
 		}
 	}, [initialData])

@@ -17,8 +17,8 @@ export const useProductionData = (year?: number) => {
 
 		try {
 			setLoading(true)
-			const data = await DashboardService.getProductionData(farm.uuid, year)
-			setProductionData(data)
+			const phase3Data = await DashboardService.loadDashboardPhase3(farm.uuid, year)
+			setProductionData(phase3Data.productionData)
 		} catch (error) {
 			console.error('Error fetching production data:', error)
 			setProductionData([])

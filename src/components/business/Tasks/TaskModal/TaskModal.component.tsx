@@ -75,6 +75,8 @@ export const TaskModal: FC<TaskModalProps> = memo(({ task, isOpen, onClose }) =>
 				return 'bg-green-500! dark:bg-green-400!'
 			case 'archived':
 				return 'bg-gray-400! dark:bg-gray-300!'
+			case 'overdue':
+				return 'bg-red-500! dark:bg-red-400!'
 			default:
 				return 'bg-gray-500! dark:bg-gray-400!'
 		}
@@ -97,6 +99,10 @@ export const TaskModal: FC<TaskModalProps> = memo(({ task, isOpen, onClose }) =>
 			},
 			archived: {
 				headerBg: 'bg-gradient-to-r from-gray-500 to-gray-600 dark:from-gray-400 dark:to-gray-500',
+				icon: 'i-material-symbols-task-alt',
+			},
+			overdue: {
+				headerBg: 'bg-gradient-to-r from-red-600 to-red-700 dark:from-red-500 dark:to-red-600',
 				icon: 'i-material-symbols-task-alt',
 			},
 		}

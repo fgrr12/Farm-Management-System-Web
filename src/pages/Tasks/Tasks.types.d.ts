@@ -8,6 +8,7 @@ export interface TaskColumns {
 	'in-progress': Task[]
 	done: Task[]
 	archived: Task[]
+	overdue: Task[]
 }
 
 export interface TaskColumnInfo {

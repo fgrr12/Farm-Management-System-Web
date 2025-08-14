@@ -69,6 +69,7 @@ const Tasks = () => {
 				'in-progress': tasks.filter((task) => task.status === 'in-progress'),
 				done: tasks.filter((task) => task.status === 'done'),
 				archived: tasks.filter((task) => task.status === 'archived'),
+				overdue: tasks.filter((task) => task.status === 'overdue'),
 			}
 
 			setTaskColumns(groupedTasks)
@@ -229,6 +230,7 @@ const INITIAL_TASK_COLUMNS: TaskColumns = {
 	'in-progress': [],
 	done: [],
 	archived: [],
+	overdue: [],
 }
 
 const INITIAL_FILTERS: TaskFiltersType = {
@@ -260,6 +262,12 @@ const COLUMN_CONFIG: TaskColumnInfo[] = [
 		title: 'Archived',
 		color: 'purple-500',
 		bgColor: 'purple-50',
+	},
+	{
+		id: 'overdue',
+		title: 'Overdue',
+		color: 'red-500',
+		bgColor: 'red-50',
 	},
 ]
 

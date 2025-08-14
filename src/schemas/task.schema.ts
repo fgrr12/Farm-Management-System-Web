@@ -19,7 +19,7 @@ export const taskSchema = z.object({
 
 	uuid: z.string().optional(),
 	farmUuid: z.string().optional(),
-	status: z.enum(['todo', 'in-progress', 'done', 'archived']).optional(),
+	status: z.enum(['todo', 'in-progress', 'done', 'archived', 'overdue']).optional(),
 })
 
 export type TaskFormData = z.infer<typeof taskSchema>
