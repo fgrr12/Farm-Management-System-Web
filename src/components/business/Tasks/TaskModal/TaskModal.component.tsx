@@ -49,7 +49,7 @@ export const TaskModal: FC<TaskModalProps> = memo(({ task, isOpen, onClose }) =>
 			case 'high':
 				return 'bg-red-600! dark:bg-red-400!'
 			case 'critical':
-				return 'bg-red-800! dark:bg-red-600!'
+				return 'bg-red-700! dark:bg-red-500!'
 			default:
 				return 'bg-gray-600! dark:bg-gray-400!'
 		}
@@ -64,7 +64,7 @@ export const TaskModal: FC<TaskModalProps> = memo(({ task, isOpen, onClose }) =>
 			case 'high':
 				return 'text-red-600 dark:text-red-400'
 			case 'critical':
-				return 'text-red-800 dark:text-red-600 font-bold'
+				return 'text-red-700 dark:text-red-400 font-bold animate-pulse'
 			default:
 				return 'text-gray-700 dark:text-gray-300'
 		}
