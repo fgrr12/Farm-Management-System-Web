@@ -86,6 +86,16 @@ const updateAnimalHealthStatus = async (
 	return response
 }
 
+// Bulk Operations
+
+const loadAnimalWithDetails = async (animalUuid: string): Promise<Animal> => {
+	const response = await callableFireFunction<{ success: boolean; data: Animal }>('animals', {
+		operation: 'loadAnimalWithDetails',
+		animalUuid,
+	})
+	return response.data
+}
+
 export const AnimalsService = {
 	getAnimals,
 	getAnimal,
@@ -94,4 +104,5 @@ export const AnimalsService = {
 	updateAnimal,
 	updateAnimalStatus,
 	updateAnimalHealthStatus,
+	loadAnimalWithDetails,
 }

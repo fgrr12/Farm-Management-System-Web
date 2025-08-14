@@ -54,10 +54,50 @@ const updateFarmStatus = async (farmUuid: string, updatedBy: string) => {
 	return response
 }
 
+const loadFarmBulkData = async (farmUuid: string, role?: string) => {
+	const response = await callableFireFunction<{
+		success: boolean
+		data: {
+			farm: Farm
+			species: Species[]
+			breeds: Breed[]
+			billingCard: BillingCard | null
+		}
+	}>('farms', {
+		operation: 'loadFarmBulkData',
+		farmUuid,
+		...(role && { role }), // Only include role if provided
+	})
+	return response.data
+}
+
+/**
+ * Load farm bulk data for public access (no authentication required)
+ * Used for sharing animal sales links
+ */
+const loadFarmBulkDataPublic = async (farmUuid: string) => {
+	const response = await callableFireFunction<{
+		success: boolean
+		data: {
+			farm: Farm
+			species: Species[]
+			breeds: Breed[]
+			billingCard: BillingCard | null
+		}
+	}>('farms', {
+		operation: 'loadFarmBulkData',
+		farmUuid,
+		// No role provided - will default to 'public' on server
+	})
+	return response.data
+}
+
 export const FarmsService = {
 	getFarm,
 	updateFarm,
 	getAllFarms,
 	createFarm,
 	updateFarmStatus,
+	loadFarmBulkData,
+	loadFarmBulkDataPublic,
 }

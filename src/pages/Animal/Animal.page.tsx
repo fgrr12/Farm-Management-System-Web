@@ -12,9 +12,6 @@ import { useUserStore } from '@/store/useUserStore'
 import { AnimalsService } from '@/services/animals'
 import { EmployeesService } from '@/services/employees'
 import { FarmsService } from '@/services/farms'
-import { HealthRecordsService } from '@/services/healthRecords'
-import { ProductionRecordsService } from '@/services/productionRecords'
-import { RelatedAnimalsService } from '@/services/relatedAnimals'
 
 import { HealthRecordsTable } from '@/components/business/Animal/HealthRecordsTable'
 import { ProductionRecordsTable } from '@/components/business/Animal/ProductionRecordsTable'
@@ -132,52 +129,26 @@ const Animal = () => {
 	const getHealthRecords = useCallback(async () => {
 		if (activeTab === 'healthRecords') return
 		setActiveTab('healthRecords')
-		const dbHealthRecords = await HealthRecordsService.getHealthRecords(animal.uuid)
-
-		if (dbHealthRecords[0]?.weight! > 0) {
-			animal.weight = dbHealthRecords[0]?.weight ?? animal.weight
-		}
-		setAnimal((prev) => ({ ...prev, healthRecords: dbHealthRecords, weight: animal.weight }))
-	}, [activeTab, animal])
+	}, [activeTab])
 
 	const getProductionRecords = useCallback(async () => {
 		if (activeTab === 'productionRecords') return
 		setActiveTab('productionRecords')
-		const dbProductionRecords = await ProductionRecordsService.getProductionRecords(animal.uuid)
-		setAnimal((prev) => ({ ...prev, productionRecords: dbProductionRecords }))
-	}, [activeTab, animal.uuid])
+	}, [activeTab])
 
 	const getRelatedAnimals = useCallback(async () => {
 		if (activeTab === 'relatedAnimals') return
 		setActiveTab('relatedAnimals')
-		const dbRelatedAnimals = await RelatedAnimalsService.getRelatedAnimals(animal.uuid)
-		if (dbRelatedAnimals.length !== 0) {
-			setAnimal(
-				(prev) =>
-					({
-						...prev,
-						relatedAnimals: {
-							parents: dbRelatedAnimals.filter(
-								(related) => related.parent.animalUuid !== animal.uuid
-							),
-							children: dbRelatedAnimals.filter(
-								(related) => related.child.animalUuid !== animal.uuid
-							),
-						},
-					}) as Animal
-			)
-		}
-	}, [activeTab, animal.uuid])
+	}, [activeTab])
 
 	const getInitialData = useCallback(async () => {
 		await withLoadingAndError(async () => {
 			const animalUuid = params.animalUuid as string
 
-			const dbAnimal = await AnimalsService.getAnimal(animalUuid!)
-			const dbHealthRecords = await HealthRecordsService.getHealthRecords(animalUuid!)
+			const dbAnimal = await AnimalsService.loadAnimalWithDetails(animalUuid!)
 
 			if (!farm) {
-				const farmData = await FarmsService.getFarm(dbAnimal!.farmUuid)
+				const farmData = await FarmsService.getFarm(dbAnimal.farmUuid)
 				setFarm(farmData)
 			}
 
@@ -186,11 +157,15 @@ const Animal = () => {
 			}
 
 			setPageTitle(`Animal ${dbAnimal.animalId}`)
+
+			// Calculate weight from health records or use animal weight
 			const weight =
-				dbHealthRecords.length > 0 && dbHealthRecords[0]!.weight! > 0
-					? dbHealthRecords[0]!.weight
+				dbAnimal.healthRecords &&
+				dbAnimal.healthRecords.length > 0 &&
+				dbAnimal.healthRecords[0]!.weight! > 0
+					? dbAnimal.healthRecords[0]!.weight
 					: dbAnimal.weight
-			dbAnimal.healthRecords = dbHealthRecords
+
 			setAnimal({ ...dbAnimal, weight: weight! })
 
 			return dbAnimal
@@ -200,7 +175,6 @@ const Animal = () => {
 	// biome-ignore lint: UseEffect is only called by farm and params.animalUuid
 	useEffect(() => {
 		setPageTitle('Animal')
-		setActiveTab('healthRecords')
 		getInitialData()
 	}, [params.animalUuid, farm, getInitialData, setPageTitle])
 
