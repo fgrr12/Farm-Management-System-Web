@@ -11,7 +11,7 @@ export interface VoiceProcessingRequest {
 
 export interface AnimalOperation {
 	operation: 'create' | 'update'
-	animalId?: string
+	animalUuid?: string // Changed from animalId to animalUuid
 	data: {
 		animalId?: string
 		name?: string
@@ -27,7 +27,7 @@ export interface AnimalOperation {
 
 export interface HealthRecordOperation {
 	operation: 'create'
-	animalId: string
+	animalUuid: string // Changed from animalId to animalUuid
 	data: {
 		symptoms?: string[]
 		treatment?: string
@@ -43,7 +43,7 @@ export interface HealthRecordOperation {
 
 export interface ProductionRecordOperation {
 	operation: 'create'
-	animalId: string
+	animalUuid: string // Changed from animalId to animalUuid
 	data: {
 		productionType: 'milk' | 'eggs' | 'breeding' | 'meat' | 'other'
 		quantity: number
@@ -63,7 +63,7 @@ export interface TaskOperation {
 		priority?: 'low' | 'medium' | 'high' | 'urgent'
 		dueDate?: string
 		assignedTo?: string
-		relatedAnimalId?: string
+		relatedAnimalUuid?: string // Changed from relatedAnimalId
 		estimatedDuration?: number
 	}
 }
@@ -71,8 +71,8 @@ export interface TaskOperation {
 export interface RelationOperation {
 	operation: 'create'
 	data: {
-		parentAnimalId: string
-		childAnimalId: string
+		parentAnimalUuid: string // Changed from parentAnimalId
+		childAnimalUuid: string // Changed from childAnimalId
 		relationType: 'parent' | 'sibling' | 'offspring'
 		notes?: string
 	}
@@ -87,7 +87,7 @@ export interface CalendarEventOperation {
 		startDate: string
 		endDate?: string
 		isAllDay?: boolean
-		relatedAnimalId?: string
+		relatedAnimalUuid?: string // Changed from relatedAnimalId
 		location?: string
 		reminders?: number[]
 	}
@@ -130,6 +130,37 @@ const processVoiceCommand = async (
 		data: VoiceProcessingResponse
 	}>('voice', {
 		operation: 'processVoiceCommand',
+		...request,
+	})
+
+	return response.data
+}
+
+/**
+ * Process voice command and execute operations automatically in backend
+ */
+const processAndExecuteVoiceCommand = async (
+	request: VoiceProcessingRequest
+): Promise<{
+	extraction: VoiceProcessingResponse
+	execution: {
+		success: boolean
+		errors: string[]
+		successCount: number
+	}
+}> => {
+	const response = await callableFireFunction<{
+		success: boolean
+		data: {
+			extraction: VoiceProcessingResponse
+			execution: {
+				success: boolean
+				errors: string[]
+				successCount: number
+			}
+		}
+	}>('voice', {
+		operation: 'processAndExecute',
 		...request,
 	})
 
@@ -200,9 +231,9 @@ const executeOperations = async (
 							id: uuid,
 							operation: 'create',
 						})
-					} else if (op.operation === 'update' && op.animalId) {
+					} else if (op.operation === 'update' && op.animalUuid) {
 						// Get existing animal first
-						const existingAnimal = await AnimalsService.getAnimal(op.animalId)
+						const existingAnimal = await AnimalsService.getAnimal(op.animalUuid)
 						// Fix gender capitalization
 						const updatedAnimal = {
 							...existingAnimal,
@@ -219,7 +250,7 @@ const executeOperations = async (
 						executionResults.push({
 							type: 'animal',
 							success: true,
-							id: op.animalId,
+							id: op.animalUuid,
 							operation: 'update',
 						})
 					}
@@ -240,7 +271,7 @@ const executeOperations = async (
 				try {
 					const healthRecord = {
 						uuid: '', // Will be auto-generated
-						animalUuid: op.animalId,
+						animalUuid: op.animalUuid,
 						reason: op.data.symptoms?.join(', ') || 'Voice recorded health event',
 						notes: op.data.notes || '',
 						type: 'Medication' as const,
@@ -282,7 +313,7 @@ const executeOperations = async (
 				try {
 					const productionRecord = {
 						uuid: '', // Will be auto-generated
-						animalUuid: op.animalId,
+						animalUuid: op.animalUuid,
 						date: op.data.date || new Date().toISOString(),
 						quantity: op.data.quantity,
 						notes: `${op.data.productionType}: ${op.data.quantity} ${op.data.unit || 'units'}${op.data.notes ? ` - ${op.data.notes}` : ''}`,
@@ -324,7 +355,7 @@ const executeOperations = async (
 						status: 'todo' as const,
 						dueDate: op.data.dueDate || new Date().toISOString(),
 						assignedTo: op.data.assignedTo || userUuid,
-						relatedAnimalUuid: op.data.relatedAnimalId,
+						relatedAnimalUuid: op.data.relatedAnimalUuid,
 						estimatedDuration: op.data.estimatedDuration,
 						farmUuid,
 						createdBy: userUuid,
@@ -355,14 +386,14 @@ const executeOperations = async (
 				try {
 					const relation = {
 						parent: {
-							animalUuid: op.data.parentAnimalId,
-							animalId: op.data.parentAnimalId,
+							animalUuid: op.data.parentAnimalUuid,
+							animalId: op.data.parentAnimalUuid,
 							breed: '',
 							relation: 'Father' as const,
 						},
 						child: {
-							animalUuid: op.data.childAnimalId,
-							animalId: op.data.childAnimalId,
+							animalUuid: op.data.childAnimalUuid,
+							animalId: op.data.childAnimalUuid,
 							breed: '',
 							relation: 'Son' as const,
 						},
@@ -398,8 +429,8 @@ const executeOperations = async (
 						type: 'custom' as const,
 						priority: 'medium' as const,
 						status: 'pending' as const,
-						relatedType: op.data.relatedAnimalId ? ('animal' as const) : undefined,
-						relatedId: op.data.relatedAnimalId,
+						relatedType: op.data.relatedAnimalUuid ? ('animal' as const) : undefined,
+						relatedId: op.data.relatedAnimalUuid,
 						isAutoGenerated: false,
 					}
 
@@ -438,6 +469,7 @@ const executeOperations = async (
 
 export const VoiceService = {
 	processVoiceCommand,
+	processAndExecuteVoiceCommand,
 	transcribeOnly,
 	executeOperations,
 }

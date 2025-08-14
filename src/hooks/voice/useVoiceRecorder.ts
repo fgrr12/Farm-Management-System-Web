@@ -65,6 +65,7 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 	const audioChunksRef = useRef<Blob[]>([])
 	const recordingTimerRef = useRef<NodeJS.Timeout | null>(null)
 	const streamRef = useRef<MediaStream | null>(null)
+	const isCancelledRef = useRef(false) // Track if recording was cancelled
 
 	const clearError = useCallback(() => {
 		setError(null)
@@ -140,21 +141,56 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 					maxDuration: config.maxRecordingTime || 60, // Default to 60 seconds
 				}
 
-				// Process voice command
-				const response = await VoiceService.processVoiceCommand(request)
+				if (config.autoExecute) {
+					// Use the new processAndExecute that handles everything in backend
+					const response = await VoiceService.processAndExecuteVoiceCommand(request)
 
-				setTranscription(response.transcription || null)
-				setProcessingResponse(response)
+					setTranscription(response.extraction.transcription || null)
+					setProcessingResponse(response.extraction)
 
-				// Trigger callbacks
-				if (response.transcription) {
-					config.onTranscriptionComplete?.(response.transcription)
-				}
-				config.onProcessingComplete?.(response)
+					// Convert execution result to ExecutionResult format for frontend compatibility
+					const executionResults: ExecutionResult[] = []
+					if (response.execution.success) {
+						// Add success entries based on successCount
+						for (let i = 0; i < response.execution.successCount; i++) {
+							executionResults.push({
+								type: 'animal', // Generic type since we don't have detailed info
+								success: true,
+								operation: 'create',
+							})
+						}
+					}
 
-				// Auto-execute if configured
-				if (config.autoExecute && response.success && response.data) {
-					await executeOperations(response)
+					// Add error entries
+					response.execution.errors.forEach((error) => {
+						executionResults.push({
+							type: 'animal', // Generic type
+							success: false,
+							error: error,
+							operation: 'unknown',
+						})
+					})
+
+					setExecutionResults(executionResults)
+
+					// Trigger callbacks
+					if (response.extraction.transcription) {
+						config.onTranscriptionComplete?.(response.extraction.transcription)
+					}
+					config.onProcessingComplete?.(response.extraction)
+					config.onExecutionComplete?.(executionResults)
+				} else {
+					// Use the original flow for manual execution
+					const response = await VoiceService.processVoiceCommand(request)
+
+					setTranscription(response.transcription || null)
+					setProcessingResponse(response)
+
+					// Trigger callbacks
+					if (response.transcription) {
+						config.onTranscriptionComplete?.(response.transcription)
+					}
+					config.onProcessingComplete?.(response)
 				}
 			} catch (err) {
 				const errorMessage = err instanceof Error ? err.message : 'Failed to process audio'
@@ -164,13 +200,14 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 				setIsProcessing(false)
 			}
 		},
-		[config, clearError, executeOperations]
+		[config, clearError]
 	)
 
 	const startRecording = useCallback(async () => {
 		try {
 			clearError()
 			reset()
+			isCancelledRef.current = false // Reset cancellation flag
 
 			// Request microphone access with optimized settings for compression
 			const stream = await navigator.mediaDevices.getUserMedia({
@@ -212,8 +249,10 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 					streamRef.current = null
 				}
 
-				// Process the audio
-				await processAudio(blob)
+				// Only process the audio if not cancelled
+				if (!isCancelledRef.current) {
+					await processAudio(blob)
+				}
 			}
 
 			// Start recording
@@ -262,6 +301,9 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 
 	const cancelRecording = useCallback(() => {
 		if (!isRecording) return
+
+		// Set cancellation flag to prevent processing
+		isCancelledRef.current = true
 
 		// Clear timer
 		if (recordingTimerRef.current) {

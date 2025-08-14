@@ -20,6 +20,23 @@
 	"processingTime": "Tiempo de procesamiento",
 	"tokensUsed": "Tokens utilizados",
 	"executionResults": "Resultados de Ejecución",
+	"mode": {
+		"automatic": "Modo automático",
+		"manual": "Modo manual"
+	},
+	"steps": {
+		"record": "Grabar",
+		"process": "Procesar",
+		"execute": "Ejecutar",
+		"complete": "Completar"
+	},
+	"status": {
+		"processingVoiceCommand": "Procesando tu comando de voz...",
+		"executingOperations": "Ejecutando operaciones de granja...",
+		"aiAnalyzing": "La IA está analizando tu voz y extrayendo operaciones",
+		"performingActions": "Realizando las acciones solicitadas en los datos de tu granja",
+		"operationsDetected": "Operaciones detectadas"
+	},
 	"operations": {
 		"animals": "Animales",
 		"health": "Registros de Salud",

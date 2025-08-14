@@ -1,6 +1,13 @@
 {
 	"title": "Comandos de Voz",
 	"subtitle": "Gestiona tu granja usando comandos de lenguaje natural",
+	"settings": {
+		"executionMode": "Modo de Ejecución",
+		"manual": "Manual",
+		"automatic": "Automático",
+		"manualDescription": "Revisar y aprobar operaciones antes de la ejecución",
+		"automaticDescription": "Las operaciones se ejecutan automáticamente después del procesamiento de voz"
+	},
 	"exampleCommands": "Comandos de Ejemplo",
 	"howItWorks": "Cómo Funciona",
 	"animalManagement": "Gestión de Animales",
@@ -47,26 +54,5 @@
 	},
 	"accessibility": {
 		"skipToRecording": "Saltar a la grabación de voz"
-	},
-	"results": {
-		"title": "Resultados",
-		"transcription": "Transcripción de Voz",
-		"aiProcessing": "Procesamiento de IA",
-		"execution": "Resultados de Ejecución",
-		"status": "Estado",
-		"success": "Éxito",
-		"error": "Error",
-		"errors": "Errores",
-		"warnings": "Advertencias",
-		"operations": "Operaciones",
-		"errorMessage": "Mensaje de Error",
-		"viewData": "Ver Datos"
-	},
-	"actions": {
-		"clearResults": "Limpiar Resultados"
-	},
-	"errors": {
-		"userRequired": "Se requiere autenticación de usuario",
-		"farmRequired": "Se requiere selección de granja"
 	}
 }
