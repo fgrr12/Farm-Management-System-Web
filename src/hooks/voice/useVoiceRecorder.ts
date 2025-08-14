@@ -145,39 +145,55 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 					// Use the new processAndExecute that handles everything in backend
 					const response = await VoiceService.processAndExecuteVoiceCommand(request)
 
-					setTranscription(response.extraction.transcription || null)
-					setProcessingResponse(response.extraction)
+					// Validate response structure
+					if (!response || !response.data) {
+						throw new Error('Invalid response from voice processing service')
+					}
+
+					// The response.data contains the extraction result (which includes transcription, success, data, etc.)
+					const extractionResult = response.data
+
+					// Set transcription and processing response from extraction result
+					setTranscription(extractionResult.transcription || null)
+					setProcessingResponse(extractionResult)
+
+					// Trigger transcription callback
+					if (extractionResult.transcription) {
+						config.onTranscriptionComplete?.(extractionResult.transcription)
+					}
+					config.onProcessingComplete?.(extractionResult)
 
 					// Convert execution result to ExecutionResult format for frontend compatibility
 					const executionResults: ExecutionResult[] = []
-					if (response.execution.success) {
+					if (extractionResult.execution) {
 						// Add success entries based on successCount
-						for (let i = 0; i < response.execution.successCount; i++) {
+						for (let i = 0; i < extractionResult.execution.successCount; i++) {
 							executionResults.push({
 								type: 'animal', // Generic type since we don't have detailed info
 								success: true,
 								operation: 'create',
 							})
 						}
-					}
 
-					// Add error entries
-					response.execution.errors.forEach((error) => {
-						executionResults.push({
-							type: 'animal', // Generic type
-							success: false,
-							error: error,
-							operation: 'unknown',
-						})
-					})
+						// Add error entries if they exist
+						if (
+							extractionResult.execution.errors &&
+							Array.isArray(extractionResult.execution.errors)
+						) {
+							extractionResult.execution.errors.forEach((error: string) => {
+								executionResults.push({
+									type: 'animal', // Generic type
+									success: false,
+									error: error,
+									operation: 'unknown',
+								})
+							})
+						}
+					}
 
 					setExecutionResults(executionResults)
 
-					// Trigger callbacks
-					if (response.extraction.transcription) {
-						config.onTranscriptionComplete?.(response.extraction.transcription)
-					}
-					config.onProcessingComplete?.(response.extraction)
+					// Trigger execution callback
 					config.onExecutionComplete?.(executionResults)
 				} else {
 					// Use the original flow for manual execution

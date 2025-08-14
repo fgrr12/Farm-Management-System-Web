@@ -142,17 +142,18 @@ const processVoiceCommand = async (
 const processAndExecuteVoiceCommand = async (
 	request: VoiceProcessingRequest
 ): Promise<{
-	extraction: VoiceProcessingResponse
-	execution: {
-		success: boolean
-		errors: string[]
-		successCount: number
+	success: boolean
+	data: VoiceProcessingResponse & {
+		execution: {
+			success: boolean
+			errors: string[]
+			successCount: number
+		}
 	}
 }> => {
 	const response = await callableFireFunction<{
 		success: boolean
-		data: {
-			extraction: VoiceProcessingResponse
+		data: VoiceProcessingResponse & {
 			execution: {
 				success: boolean
 				errors: string[]
@@ -164,7 +165,7 @@ const processAndExecuteVoiceCommand = async (
 		...request,
 	})
 
-	return response.data
+	return response
 }
 
 /**
