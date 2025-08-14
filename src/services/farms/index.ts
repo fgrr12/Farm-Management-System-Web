@@ -1,13 +1,5 @@
 import { callableFireFunction } from '@/utils/callableFireFunction'
 
-const getFarm = async (farmUuid: string): Promise<Farm> => {
-	const response = await callableFireFunction<{ success: boolean; data: Farm }>('farms', {
-		operation: 'getFarmByUuid',
-		farmUuid,
-	})
-	return response.data
-}
-
 const updateFarm = async (farm: Farm, userUuid: string) => {
 	const response = await callableFireFunction<{
 		success: boolean
@@ -93,7 +85,6 @@ const loadFarmBulkDataPublic = async (farmUuid: string) => {
 }
 
 export const FarmsService = {
-	getFarm,
 	updateFarm,
 	getAllFarms,
 	createFarm,

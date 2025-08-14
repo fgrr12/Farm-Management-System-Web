@@ -1,24 +1,5 @@
 import { callableFireFunction } from '@/utils/callableFireFunction'
 
-const getAllBreeds = async (farmUuid: string): Promise<Breed[]> => {
-	const response = await callableFireFunction<{ success: boolean; data: Breed[]; count: number }>(
-		'breeds',
-		{
-			operation: 'getAllBreeds',
-			farmUuid,
-		}
-	)
-	return response.data
-}
-
-const getBreed = async (breedUuid: string): Promise<Breed> => {
-	const response = await callableFireFunction<{ success: boolean; data: Breed }>('breeds', {
-		operation: 'getBreedByUuid',
-		breedUuid,
-	})
-	return response.data
-}
-
 const createBreed = async (
 	breed: Breed,
 	userUuid: string,
@@ -68,8 +49,6 @@ const deleteBreedsBySpeciesUuid = async (speciesUuid: string, updatedBy: string)
 }
 
 export const BreedsService = {
-	getAllBreeds,
-	getBreed,
 	createBreed,
 	updateBreed,
 	deleteBreed,
