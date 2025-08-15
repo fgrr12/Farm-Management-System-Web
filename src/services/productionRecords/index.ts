@@ -29,34 +29,6 @@ const getProductionRecord = async (productionRecordUuid: string): Promise<Produc
 	return response.data
 }
 
-const getProductionRecordsByDateRange = async (
-	animalUuid: string,
-	startDate: string,
-	endDate: string
-): Promise<ProductionRecord[]> => {
-	const response = await callableFireFunction<{
-		success: boolean
-		data: ProductionRecord[]
-		count: number
-	}>('production', {
-		operation: 'getProductionRecordsByDateRange',
-		animalUuid,
-		startDate,
-		endDate,
-	})
-	return response.data
-}
-
-const getProductionSummary = async (animalUuid: string, startDate: string, endDate: string) => {
-	const response = await callableFireFunction<{ success: boolean; data: any }>('production', {
-		operation: 'getProductionSummary',
-		animalUuid,
-		startDate,
-		endDate,
-	})
-	return response.data
-}
-
 // Sets
 
 const setProductionRecord = async (
@@ -107,8 +79,6 @@ const updateProductionRecordStatus = async (productionRecordUuid: string, userUu
 export const ProductionRecordsService = {
 	getProductionRecords,
 	getProductionRecord,
-	getProductionRecordsByDateRange,
-	getProductionSummary,
 	setProductionRecord,
 	updateProductionRecord,
 	updateProductionRecordStatus,

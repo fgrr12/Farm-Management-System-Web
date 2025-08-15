@@ -174,7 +174,7 @@ const RelatedAnimalsForm = () => {
 					async (data) => {
 						const animals = await AnimalsService.getAnimalsBySpecies(
 							selectedAnimal.speciesUuid,
-							user!.farmUuid
+							farm!.uuid
 						)
 						const animalsData = animals
 							.filter(
