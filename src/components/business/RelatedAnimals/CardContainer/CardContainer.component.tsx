@@ -76,7 +76,7 @@ export const CardContainer: FC<ContainerProps> = ({
 					<div className="h-full overflow-y-auto space-y-3">
 						{filteredAnimals.length > 0 ? (
 							filteredAnimals.map((animal) => (
-								<RelatedAnimalCard key={animal.animalId} animal={animal} draggable />
+								<RelatedAnimalCard key={animal.uuid} animal={animal} draggable />
 							))
 						) : (
 							<div className="flex flex-col items-center justify-center py-8 text-gray-500 dark:text-gray-400">
