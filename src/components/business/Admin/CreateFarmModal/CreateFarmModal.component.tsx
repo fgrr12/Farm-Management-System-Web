@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useUserStore } from '@/store/useUserStore'
@@ -6,7 +6,8 @@ import { useUserStore } from '@/store/useUserStore'
 import { FarmsService } from '@/services/farms'
 
 import { Modal } from '@/components/layout/Modal'
-import { Select } from '@/components/ui/Select'
+import type { CustomSelectOption } from '@/components/ui/CustomSelect'
+import { CustomSelect } from '@/components/ui/CustomSelect'
 import { TextField } from '@/components/ui/TextField'
 
 import type { CreateFarmModalProps } from './CreateFarmModal.types'
@@ -30,10 +31,41 @@ export const CreateFarmModal = memo<CreateFarmModalProps>(({ isOpen, onClose, on
 		setFormData((prev) => ({ ...prev, [name]: value }))
 	}, [])
 
-	const handleSelectChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-		const { name, value } = e.target
-		setFormData((prev) => ({ ...prev, [name]: value }))
+	const handleLiquidUnitChange = useCallback((value: string | number | null) => {
+		setFormData((prev) => ({ ...prev, liquidUnit: value as LiquidUnit }))
 	}, [])
+
+	const handleWeightUnitChange = useCallback((value: string | number | null) => {
+		setFormData((prev) => ({ ...prev, weightUnit: value as WeightUnit }))
+	}, [])
+
+	const handleTemperatureUnitChange = useCallback((value: string | number | null) => {
+		setFormData((prev) => ({ ...prev, temperatureUnit: value as TemperatureUnit }))
+	}, [])
+
+	const liquidUnitOptions: CustomSelectOption[] = useMemo(
+		() => [
+			{ value: 'L', label: t('admin.units.liters') },
+			{ value: 'Gal', label: t('admin.units.gallons') },
+		],
+		[t]
+	)
+
+	const weightUnitOptions: CustomSelectOption[] = useMemo(
+		() => [
+			{ value: 'Kg', label: t('admin.units.kg') },
+			{ value: 'P', label: t('admin.units.lbs') },
+		],
+		[t]
+	)
+
+	const temperatureUnitOptions: CustomSelectOption[] = useMemo(
+		() => [
+			{ value: '°C', label: t('admin.units.celsius') },
+			{ value: '°F', label: t('admin.units.fahrenheit') },
+		],
+		[t]
+	)
 
 	const handleSubmit = useCallback(async () => {
 		if (!formData.name.trim()) return
@@ -121,44 +153,32 @@ export const CreateFarmModal = memo<CreateFarmModalProps>(({ isOpen, onClose, on
 				{/* Units Configuration */}
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 					<div>
-						<Select
-							name="liquidUnit"
-							legend={t('admin.liquidUnit')}
+						<CustomSelect
+							label={t('admin.liquidUnit')}
 							value={formData.liquidUnit}
-							onChange={handleSelectChange}
+							onChange={handleLiquidUnitChange}
 							disabled={loading}
-							items={[
-								{ value: 'L', name: t('admin.units.liters') },
-								{ value: 'Gal', name: t('admin.units.gallons') },
-							]}
+							options={liquidUnitOptions}
 						/>
 					</div>
 
 					<div>
-						<Select
-							name="weightUnit"
-							legend={t('admin.weightUnit')}
+						<CustomSelect
+							label={t('admin.weightUnit')}
 							value={formData.weightUnit}
-							onChange={handleSelectChange}
+							onChange={handleWeightUnitChange}
 							disabled={loading}
-							items={[
-								{ value: 'Kg', name: t('admin.units.kg') },
-								{ value: 'P', name: t('admin.units.lbs') },
-							]}
+							options={weightUnitOptions}
 						/>
 					</div>
 
 					<div>
-						<Select
-							name="temperatureUnit"
-							legend={t('admin.temperatureUnit')}
+						<CustomSelect
+							label={t('admin.temperatureUnit')}
 							value={formData.temperatureUnit}
-							onChange={handleSelectChange}
+							onChange={handleTemperatureUnitChange}
 							disabled={loading}
-							items={[
-								{ value: '°C', name: t('admin.units.celsius') },
-								{ value: '°F', name: t('admin.units.fahrenheit') },
-							]}
+							options={temperatureUnitOptions}
 						/>
 					</div>
 				</div>

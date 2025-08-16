@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { memo, useCallback, useEffect } from 'react'
+import { memo, useCallback, useEffect, useMemo } from 'react'
 import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -13,7 +13,8 @@ import { TasksService } from '@/services/tasks'
 
 import { DatePicker } from '@/components/layout/DatePicker'
 import { Button } from '@/components/ui/Button'
-import { Select } from '@/components/ui/Select'
+import type { CustomSelectOption } from '@/components/ui/CustomSelect'
+import { CustomSelect } from '@/components/ui/CustomSelect'
 import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
@@ -38,6 +39,21 @@ const TaskForm = () => {
 		transformToApiFormat,
 		getErrorMessage,
 	} = form
+
+	const priorityOptions: CustomSelectOption[] = useMemo(
+		() => [
+			{ value: 'low', label: t('priorities.low') },
+			{ value: 'medium', label: t('priorities.medium') },
+			{ value: 'high', label: t('priorities.high') },
+			{ value: 'critical', label: t('priorities.critical') },
+		],
+		[t]
+	)
+
+	const speciesOptions: CustomSelectOption[] = useMemo(
+		() => species.map((s) => ({ value: s.uuid, label: s.name })),
+		[species]
+	)
 
 	const onSubmit = useCallback(
 		async (data: TaskFormData) => {
@@ -152,23 +168,18 @@ const TaskForm = () => {
 										name="priority"
 										control={control}
 										render={({ field }) => (
-											<Select
-												{...field}
-												legend={t('selectPriority')}
-												defaultLabel={t('placeholders.priorityHint')}
-												items={[
-													{ value: 'low', name: t('priorities.low') },
-													{ value: 'medium', name: t('priorities.medium') },
-													{ value: 'high', name: t('priorities.high') },
-													{ value: 'critical', name: t('priorities.critical') },
-												]}
+											<CustomSelect
+												label={t('selectPriority')}
+												placeholder={t('placeholders.priorityHint')}
+												value={field.value}
+												onChange={field.onChange}
+												options={priorityOptions}
 												required
 												error={
 													errors.priority
 														? getErrorMessage(errors.priority.message || '')
 														: undefined
 												}
-												aria-describedby="priority-help"
 											/>
 										)}
 									/>
@@ -180,20 +191,18 @@ const TaskForm = () => {
 										name="speciesUuid"
 										control={control}
 										render={({ field }) => (
-											<Select
-												{...field}
-												legend={t('selectSpecies')}
-												defaultLabel={t('placeholders.speciesHint')}
-												optionValue="uuid"
-												optionLabel="name"
-												items={species}
+											<CustomSelect
+												label={t('selectSpecies')}
+												placeholder={t('placeholders.speciesHint')}
+												value={field.value}
+												onChange={field.onChange}
+												options={speciesOptions}
 												required
 												error={
 													errors.speciesUuid
 														? getErrorMessage(errors.speciesUuid.message || '')
 														: undefined
 												}
-												aria-describedby="species-help"
 											/>
 										)}
 									/>

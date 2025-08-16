@@ -1,9 +1,10 @@
-import { type ChangeEvent, type FC, memo, useCallback } from 'react'
+import { type ChangeEvent, type FC, memo, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import type { CustomSelectOption } from '@/components/ui/CustomSelect'
+import { CustomSelect } from '@/components/ui/CustomSelect'
 import { FilterDropdown } from '@/components/ui/FilterDropdown'
 import { Search } from '@/components/ui/Search'
-import { Select } from '@/components/ui/Select'
 
 import type { AnimalFiltersProps } from './AnimalFilters.types'
 
@@ -11,10 +12,23 @@ export const AnimalFilters: FC<AnimalFiltersProps> = memo(
 	({ filters, onFiltersChange, species }) => {
 		const { t } = useTranslation(['animals'])
 
-		const handleSelectChange = useCallback(
-			(event: ChangeEvent<HTMLSelectElement>) => {
-				const { name, value } = event.target
-				onFiltersChange({ ...filters, [name]: value })
+		const handleSpeciesChange = useCallback(
+			(value: string | number | null) => {
+				onFiltersChange({ ...filters, speciesUuid: value ? String(value) : '' })
+			},
+			[filters, onFiltersChange]
+		)
+
+		const handleGenderChange = useCallback(
+			(value: string | number | null) => {
+				onFiltersChange({ ...filters, gender: value ? String(value) : '' })
+			},
+			[filters, onFiltersChange]
+		)
+
+		const handleStatusChange = useCallback(
+			(value: string | number | null) => {
+				onFiltersChange({ ...filters, status: value ? String(value) : '' })
 			},
 			[filters, onFiltersChange]
 		)
@@ -25,6 +39,28 @@ export const AnimalFilters: FC<AnimalFiltersProps> = memo(
 				onFiltersChange({ ...filters, search: value })
 			},
 			[filters, onFiltersChange]
+		)
+
+		const speciesOptions: CustomSelectOption[] = useMemo(
+			() => species.map((s) => ({ value: s.uuid, label: s.name })),
+			[species]
+		)
+
+		const genderOptions: CustomSelectOption[] = useMemo(
+			() => [
+				{ value: 'female', label: t('gender.female') },
+				{ value: 'male', label: t('gender.male') },
+			],
+			[t]
+		)
+
+		const statusOptions: CustomSelectOption[] = useMemo(
+			() => [
+				{ value: 'inFarm', label: t('status.inFarm') },
+				{ value: 'dead', label: t('status.dead') },
+				{ value: 'sold', label: t('status.sold') },
+			],
+			[t]
 		)
 
 		return (
@@ -50,49 +86,37 @@ export const AnimalFilters: FC<AnimalFiltersProps> = memo(
 
 				{/* Species Filter */}
 				<div>
-					<Select
-						name="speciesUuid"
-						legend={t('filterBySpecies')}
-						defaultLabel={t('allSpecies')}
-						optionValue="uuid"
-						optionLabel="name"
+					<CustomSelect
+						label={t('filterBySpecies')}
+						placeholder={t('allSpecies')}
 						value={filters.speciesUuid}
-						items={species}
-						onChange={handleSelectChange}
-						aria-label={t('filterBySpecies')}
+						options={speciesOptions}
+						onChange={handleSpeciesChange}
+						clearable
 					/>
 				</div>
 
 				{/* Gender Filter */}
 				<div>
-					<Select
-						name="gender"
-						legend={t('filterByGender')}
-						defaultLabel={t('allGenders')}
+					<CustomSelect
+						label={t('filterByGender')}
+						placeholder={t('allGenders')}
 						value={filters.gender}
-						items={[
-							{ value: 'female', name: t('gender.female') },
-							{ value: 'male', name: t('gender.male') },
-						]}
-						onChange={handleSelectChange}
-						aria-label={t('filterByGender')}
+						options={genderOptions}
+						onChange={handleGenderChange}
+						clearable
 					/>
 				</div>
 
 				{/* Status Filter */}
 				<div>
-					<Select
-						name="status"
-						legend={t('filterByStatus')}
-						defaultLabel={t('allStatuses')}
+					<CustomSelect
+						label={t('filterByStatus')}
+						placeholder={t('allStatuses')}
 						value={filters.status}
-						items={[
-							{ value: 'inFarm', name: t('status.inFarm') },
-							{ value: 'dead', name: t('status.dead') },
-							{ value: 'sold', name: t('status.sold') },
-						]}
-						onChange={handleSelectChange}
-						aria-label={t('filterByStatus')}
+						options={statusOptions}
+						onChange={handleStatusChange}
+						clearable
 					/>
 				</div>
 			</FilterDropdown>

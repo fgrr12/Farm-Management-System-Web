@@ -18,7 +18,7 @@ import { RelatedAnimalsService } from '@/services/relatedAnimals'
 import type { RelatedAnimalInformation } from '@/pages/RelatedAnimalsForm/RelatedAnimalsForm.types'
 
 import { Button } from '@/components/ui/Button'
-import { Select } from '@/components/ui/Select'
+import { CustomSelect } from '@/components/ui/CustomSelect'
 import { TextField } from '@/components/ui/TextField'
 
 import type {
@@ -46,9 +46,13 @@ export const ExternalRelationForm = forwardRef<ExternalRelationFormRef, External
 			dialogRef.current?.close()
 		}
 
-		const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
+		const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 			const { name, value } = e.target
 			setRelation({ ...relation, [name]: capitalizeFirstLetter(value) })
+		}
+
+		const handleSelectChange = (name: string) => (value: string | number | null) => {
+			setRelation({ ...relation, [name]: value || '' })
 		}
 
 		const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
@@ -157,17 +161,18 @@ export const ExternalRelationForm = forwardRef<ExternalRelationFormRef, External
 								placeholder={t('animalIdPlaceholder')}
 								required
 							/>
-							<Select
-								legend={t('gender')}
-								name="gender"
-								items={[
-									{ value: 'Female', name: t('female') },
-									{ value: 'Male', name: t('male') },
+							<CustomSelect
+								label={t('gender')}
+								options={[
+									{ value: 'Female', label: t('female') },
+									{ value: 'Male', label: t('male') },
 								]}
 								value={relation.gender}
-								onChange={handleChange}
-								defaultLabel={t('selectGender')}
+								onChange={handleSelectChange('gender')}
+								placeholder={t('selectGender')}
 								required
+								clearable
+								searchable={false}
 							/>
 							<TextField
 								label={t('breed')}
@@ -211,7 +216,7 @@ export const ExternalRelationForm = forwardRef<ExternalRelationFormRef, External
 							</Button>
 							<button
 								type="button"
-								className="btn btn-outline btn-error dark:border-red-500 dark:text-red-400 dark:hover:bg-red-500 dark:hover:text-white flex items-center gap-2"
+								className="btn btn-outline btn-error dark:border-red-500 dark:text-red-400 dark:hover:bg-red-500 dark:hover:text-white flex items-center gap-2 h-full"
 								onClick={handleClose}
 							>
 								<i className="i-material-symbols-cancel w-4! h-4!" />

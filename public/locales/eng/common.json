@@ -91,5 +91,11 @@
 		"dark": "Dark",
 		"light": "Light",
 		"system": "System"
+	},
+	"customSelect": {
+		"clear": "Clear",
+		"searchPlaceholder": "Search...",
+		"noOptions": "No options available",
+		"selectOption": "Select an option"
 	}
 }

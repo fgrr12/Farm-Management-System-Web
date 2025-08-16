@@ -91,5 +91,11 @@
 		"dark": "Oscuro",
 		"light": "Claro",
 		"system": "Sistema"
+	},
+	"customSelect": {
+		"clear": "Limpiar",
+		"searchPlaceholder": "Buscar...",
+		"noOptions": "No hay opciones disponibles",
+		"selectOption": "Selecciona una opción"
 	}
 }

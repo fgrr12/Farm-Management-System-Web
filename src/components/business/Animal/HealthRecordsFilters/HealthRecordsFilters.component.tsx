@@ -1,10 +1,11 @@
 import dayjs from 'dayjs'
-import { type ChangeEvent, type FC, memo, useCallback } from 'react'
+import { type FC, memo, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { DatePicker } from '@/components/layout/DatePicker'
+import type { CustomSelectOption } from '@/components/ui/CustomSelect'
+import { CustomSelect } from '@/components/ui/CustomSelect'
 import { FilterDropdown } from '@/components/ui/FilterDropdown'
-import { Select } from '@/components/ui/Select'
 
 import type { HealthRecordsFiltersProps } from './HealthRecordsFilters.types'
 
@@ -12,10 +13,16 @@ export const HealthRecordsFilters: FC<HealthRecordsFiltersProps> = memo(
 	({ filters, onFiltersChange, employees, userRole }) => {
 		const { t } = useTranslation(['animalHealthRecords'])
 
-		const handleSelectChange = useCallback(
-			(event: ChangeEvent<HTMLSelectElement>) => {
-				const { name, value } = event.target
-				onFiltersChange({ ...filters, [name]: value })
+		const handleTypeChange = useCallback(
+			(value: string | number | null) => {
+				onFiltersChange({ ...filters, type: value as any })
+			},
+			[filters, onFiltersChange]
+		)
+
+		const handleCreatedByChange = useCallback(
+			(value: string | number | null) => {
+				onFiltersChange({ ...filters, createdBy: value ? String(value) : '' })
 			},
 			[filters, onFiltersChange]
 		)
@@ -25,6 +32,31 @@ export const HealthRecordsFilters: FC<HealthRecordsFiltersProps> = memo(
 				onFiltersChange({ ...filters, [name]: date })
 			},
 			[filters, onFiltersChange]
+		)
+
+		const typeOptions: CustomSelectOption[] = useMemo(
+			() => [
+				{ value: 'Checkup', label: t('healthRecordType.checkup') },
+				{ value: 'Vaccination', label: t('healthRecordType.vaccination') },
+				{ value: 'Medication', label: t('healthRecordType.medication') },
+				{ value: 'Surgery', label: t('healthRecordType.surgery') },
+				{ value: 'Pregnancy', label: t('healthRecordType.pregnancy') },
+				{ value: 'Deworming', label: t('healthRecordType.deworming') },
+				{ value: 'Birth', label: t('healthRecordType.birth') },
+				{ value: 'Drying', label: t('healthRecordType.drying') },
+			],
+			[t]
+		)
+
+		const createdByOptions: CustomSelectOption[] = useMemo(
+			() => [
+				{ value: 'Me', label: t('createdBy.me') },
+				...employees.map((employee) => ({
+					value: employee.uuid,
+					label: employee.name,
+				})),
+			],
+			[employees, t]
 		)
 
 		return (
@@ -61,43 +93,26 @@ export const HealthRecordsFilters: FC<HealthRecordsFiltersProps> = memo(
 
 				{/* Type Filter */}
 				<div>
-					<Select
-						name="type"
-						legend={t('filter.type')}
-						defaultLabel={t('filter.allTypes')}
+					<CustomSelect
+						label={t('filter.type')}
+						placeholder={t('filter.allTypes')}
 						value={filters.type}
-						items={[
-							{ value: 'Checkup', name: t('healthRecordType.checkup') },
-							{ value: 'Vaccination', name: t('healthRecordType.vaccination') },
-							{ value: 'Medication', name: t('healthRecordType.medication') },
-							{ value: 'Surgery', name: t('healthRecordType.surgery') },
-							{ value: 'Pregnancy', name: t('healthRecordType.pregnancy') },
-							{ value: 'Deworming', name: t('healthRecordType.deworming') },
-							{ value: 'Birth', name: t('healthRecordType.birth') },
-							{ value: 'Drying', name: t('healthRecordType.drying') },
-						]}
-						onChange={handleSelectChange}
-						aria-label={t('filter.type')}
+						options={typeOptions}
+						onChange={handleTypeChange}
+						clearable
 					/>
 				</div>
 
 				{/* Created By Filter - Only for admin/owner */}
 				{(userRole === 'admin' || userRole === 'owner') && (
 					<div>
-						<Select
-							name="createdBy"
-							legend={t('filter.createdBy')}
-							defaultLabel={t('filter.allEmployees')}
+						<CustomSelect
+							label={t('filter.createdBy')}
+							placeholder={t('filter.allEmployees')}
 							value={filters.createdBy}
-							items={[
-								{ value: 'Me', name: t('createdBy.me') },
-								...employees.map((employee) => ({
-									value: employee.uuid,
-									name: employee.name,
-								})),
-							]}
-							onChange={handleSelectChange}
-							aria-label={t('filter.createdBy')}
+							options={createdByOptions}
+							onChange={handleCreatedByChange}
+							clearable
 						/>
 					</div>
 				)}

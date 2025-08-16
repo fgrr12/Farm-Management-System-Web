@@ -13,7 +13,8 @@ import { HealthRecordsService } from '@/services/healthRecords'
 
 import { DatePicker } from '@/components/layout/DatePicker'
 import { Button } from '@/components/ui/Button'
-import { Select } from '@/components/ui/Select'
+import type { CustomSelectOption } from '@/components/ui/CustomSelect'
+import { CustomSelect } from '@/components/ui/CustomSelect'
 import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
@@ -21,11 +22,6 @@ import { useHealthRecordForm } from '@/hooks/forms/useHealthRecordForm'
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 import type { HealthRecordFormData } from '@/schemas'
-
-interface HealthRecordFormType {
-	value: string
-	name: string
-}
 
 const HealthRecordForm = () => {
 	const { user } = useUserStore()
@@ -47,16 +43,16 @@ const HealthRecordForm = () => {
 		resetWithData,
 	} = form
 
-	const healthRecordTypes: HealthRecordFormType[] = useMemo(
+	const healthRecordTypes: CustomSelectOption[] = useMemo(
 		() => [
-			{ value: 'Checkup', name: t('healthRecordType.checkup') },
-			{ value: 'Vaccination', name: t('healthRecordType.vaccination') },
-			{ value: 'Medication', name: t('healthRecordType.medication') },
-			{ value: 'Surgery', name: t('healthRecordType.surgery') },
-			{ value: 'Pregnancy', name: t('healthRecordType.pregnancy') },
-			{ value: 'Deworming', name: t('healthRecordType.deworming') },
-			{ value: 'Birth', name: t('healthRecordType.birth') },
-			{ value: 'Drying', name: t('healthRecordType.drying') },
+			{ value: 'Checkup', label: t('healthRecordType.checkup') },
+			{ value: 'Vaccination', label: t('healthRecordType.vaccination') },
+			{ value: 'Medication', label: t('healthRecordType.medication') },
+			{ value: 'Surgery', label: t('healthRecordType.surgery') },
+			{ value: 'Pregnancy', label: t('healthRecordType.pregnancy') },
+			{ value: 'Deworming', label: t('healthRecordType.deworming') },
+			{ value: 'Birth', label: t('healthRecordType.birth') },
+			{ value: 'Drying', label: t('healthRecordType.drying') },
 		],
 		[t]
 	)
@@ -182,11 +178,12 @@ const HealthRecordForm = () => {
 										name="type"
 										control={control}
 										render={({ field }) => (
-											<Select
-												{...field}
-												legend={t('selectType')}
-												defaultLabel={t('placeholders.selectType')}
-												items={healthRecordTypes}
+											<CustomSelect
+												label={t('selectType')}
+												placeholder={t('placeholders.selectType')}
+												value={field.value}
+												onChange={field.onChange}
+												options={healthRecordTypes}
 												required
 												error={errors.type ? getErrorMessage(errors.type.message || '') : undefined}
 											/>
