@@ -261,6 +261,7 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 
 				// Stop all tracks
 				if (streamRef.current) {
+					// biome-ignore lint: kill-stream
 					streamRef.current.getTracks().forEach((track) => track.stop())
 					streamRef.current = null
 				}
@@ -336,6 +337,7 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 
 		// Stop all tracks
 		if (streamRef.current) {
+			// biome-ignore lint: kill-stream
 			streamRef.current.getTracks().forEach((track) => track.stop())
 			streamRef.current = null
 		}

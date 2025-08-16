@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.1.4/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
 	"javascript": {
 		"formatter": {
 			"quoteStyle": "single",
@@ -61,7 +61,8 @@
 			},
 			"correctness": {
 				"noUndeclaredVariables": "off",
-				"useValidTypeof": "off"
+				"useValidTypeof": "off",
+				"useUniqueElementIds": "off"
 			},
 			"performance": {
 				"noDelete": "warn"
