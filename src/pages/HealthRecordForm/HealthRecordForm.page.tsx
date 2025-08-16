@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { memo, useCallback, useEffect, useMemo } from 'react'
+import { memo, useCallback, useEffect, useId, useMemo } from 'react'
 import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -24,6 +24,7 @@ import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 import type { HealthRecordFormData } from '@/schemas'
 
 const HealthRecordForm = () => {
+	const baseId = useId()
 	const { user } = useUserStore()
 	const { farm } = useFarmStore()
 	const navigate = useNavigate()
@@ -145,14 +146,14 @@ const HealthRecordForm = () => {
 				{/* Form Container */}
 				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden border border-gray-100 dark:border-gray-700">
 					<form
-						id="health-record-form"
+						id={`${baseId}-health-record-form`}
 						className="p-4 sm:p-6 lg:p-8"
 						onSubmit={handleSubmit(onSubmit)}
 						autoComplete="off"
-						aria-labelledby="form-heading"
+						aria-labelledby={`${baseId}-form-heading`}
 						noValidate
 					>
-						<h2 id="form-heading" className="sr-only">
+						<h2 id={`${baseId}-form-heading`} className="sr-only">
 							{params.healthRecordUuid
 								? t('accessibility.editHealthRecordForm')
 								: t('accessibility.addHealthRecordForm')}

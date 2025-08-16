@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { memo, useCallback, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useId, useState } from 'react'
 import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
@@ -29,6 +29,7 @@ interface CalendarEventModalProps {
 
 export const CalendarEventModal = memo<CalendarEventModalProps>(
 	({ isOpen, onClose, event, selectedDate, onSave, onDelete }) => {
+		const baseId = useId()
 		const { t } = useTranslation(['calendar'])
 		const [deleteLoading, setDeleteLoading] = useState(false)
 		const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
@@ -360,7 +361,7 @@ export const CalendarEventModal = memo<CalendarEventModalProps>(
 										</div>
 										<div className="space-y-1">
 											<label
-												htmlFor="event-time"
+												htmlFor={`${baseId}-event-time`}
 												className="block text-sm font-medium text-gray-700 dark:text-gray-300"
 											>
 												{t('form.time')}{' '}
@@ -368,7 +369,7 @@ export const CalendarEventModal = memo<CalendarEventModalProps>(
 											</label>
 											<input
 												{...register('time')}
-												id="event-time"
+												id={`${baseId}-event-time`}
 												type="time"
 												className={`
 													w-full px-4 py-3 border-2 rounded-lg transition-all duration-200

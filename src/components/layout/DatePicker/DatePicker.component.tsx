@@ -10,7 +10,7 @@ import {
 	useInteractions,
 } from '@floating-ui/react'
 import dayjs from 'dayjs'
-import { type ChangeEvent, type FC, type MouseEvent, useState } from 'react'
+import { type ChangeEvent, type FC, type MouseEvent, useId, useState } from 'react'
 import { DayPicker, type DropdownProps } from 'react-day-picker'
 import { enUS, es } from 'react-day-picker/locale'
 
@@ -45,6 +45,7 @@ function CustomSelectDropdown(props: DropdownProps) {
 }
 
 export const DatePicker: FC<DatePickerProps> = ({ legend, label, date, onDateChange, error }) => {
+	const baseId = useId()
 	const { user } = useUserStore()
 	const [open, setOpen] = useState(false)
 
@@ -95,7 +96,7 @@ export const DatePicker: FC<DatePickerProps> = ({ legend, label, date, onDateCha
 					}
 					aria-invalid={!!error}
 					aria-expanded={open}
-					aria-describedby={error ? 'datepicker-error' : undefined}
+					aria-describedby={error ? `${baseId}-datepicker-error` : undefined}
 					{...getReferenceProps()}
 				>
 					<span className="text-gray-900 dark:text-gray-100">
@@ -126,7 +127,7 @@ export const DatePicker: FC<DatePickerProps> = ({ legend, label, date, onDateCha
 
 				{error && (
 					<div
-						id="datepicker-error"
+						id={`${baseId}-datepicker-error`}
 						className="absolute top-full left-0 mt-2 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg shadow-lg dark:shadow-gray-900/20 z-30 max-w-xs opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200 ease-in-out"
 						role="tooltip"
 						aria-live="polite"

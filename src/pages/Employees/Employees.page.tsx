@@ -1,4 +1,4 @@
-import { type ChangeEvent, memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { type ChangeEvent, memo, useCallback, useEffect, useId, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -15,6 +15,7 @@ import { Search } from '@/components/ui/Search'
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 const Employees = () => {
+	const baseId = useId()
 	const { farm } = useFarmStore()
 	const navigate = useNavigate()
 	const { t } = useTranslation(['employees'])
@@ -121,8 +122,8 @@ const Employees = () => {
 
 				{/* Search and Actions */}
 				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-xl dark:shadow-gray-900/25 p-4 sm:p-6 mb-6">
-					<section aria-labelledby="search-heading" role="search">
-						<h2 id="search-heading" className="sr-only">
+					<section aria-labelledby={`${baseId}-search-heading`} role="search">
+						<h2 id={`${baseId}-search-heading`} className="sr-only">
 							{t('accessibility.searchSection')}
 						</h2>
 						<div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
@@ -132,9 +133,9 @@ const Employees = () => {
 									value={search}
 									onChange={handleDebounceSearch}
 									aria-label={t('accessibility.searchEmployees')}
-									aria-describedby="search-help"
+									aria-describedby={`${baseId}-search-help`}
 								/>
-								<div id="search-help" className="sr-only">
+								<div id={`${baseId}-search-help`} className="sr-only">
 									{t('accessibility.searchHelp')}
 								</div>
 							</div>
@@ -142,12 +143,12 @@ const Employees = () => {
 							<Button
 								className="btn btn-primary h-12 px-6 flex items-center gap-2 whitespace-nowrap w-full sm:w-auto"
 								onClick={handleAddEmployee}
-								aria-describedby="add-employee-description"
+								aria-describedby={`${baseId}-add-employee-description`}
 							>
 								<i className="i-material-symbols-person-add w-5! h-5!" />
 								{t('addEmployee')}
 							</Button>
-							<div id="add-employee-description" className="sr-only">
+							<div id={`${baseId}-add-employee-description`} className="sr-only">
 								{t('accessibility.addEmployeeDescription')}
 							</div>
 						</div>
@@ -156,12 +157,12 @@ const Employees = () => {
 
 				{/* Employees Table */}
 				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-xl dark:shadow-gray-900/25 overflow-hidden">
-					<section aria-labelledby="employees-heading" aria-live="polite">
-						<h2 id="employees-heading" className="sr-only">
+					<section aria-labelledby={`${baseId}-employees-heading`} aria-live="polite">
+						<h2 id={`${baseId}-employees-heading`} className="sr-only">
 							{t('accessibility.employeesList')} ({filteredEmployees.length}{' '}
 							{t('accessibility.results')})
 						</h2>
-						<div id="employees-table">
+						<div id={`${baseId}-employees-table`}>
 							<EmployeesTable
 								employees={filteredEmployees}
 								removeEmployee={handleRemoveEmployee}

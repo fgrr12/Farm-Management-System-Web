@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useEffect, useId, useMemo, useState } from 'react'
 import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -28,6 +28,7 @@ import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 import type { AnimalFormData } from '@/schemas'
 
 const AnimalForm = () => {
+	const baseId = useId()
 	const { user } = useUserStore()
 	const { farm, species, breeds } = useFarmStore()
 	const navigate = useNavigate()
@@ -189,7 +190,8 @@ const AnimalForm = () => {
 		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto transition-colors duration-300">
 			<div className="max-w-4xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
 				<a
-					href="#animal-form"
+					href={`#${baseId}-animal-form`}
+					id={`${baseId}-skip-link`}
 					className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white p-2 rounded z-50 transition-colors duration-200"
 				>
 					{t('accessibility.skipToForm')}
@@ -217,14 +219,14 @@ const AnimalForm = () => {
 				{/* Form Container */}
 				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl dark:shadow-black/30 overflow-hidden border border-gray-100 dark:border-gray-700 transition-all duration-300">
 					<form
-						id="animal-form"
+						id={`${baseId}-animal-form`}
 						className="p-4 sm:p-6 lg:p-8"
 						onSubmit={handleSubmit(onSubmit)}
 						autoComplete="off"
-						aria-labelledby="form-heading"
+						aria-labelledby={`${baseId}-form-heading`}
 						noValidate
 					>
-						<h2 id="form-heading" className="sr-only">
+						<h2 id={`${baseId}-form-heading`} className="sr-only">
 							{params.animalUuid
 								? t('accessibility.editAnimalForm')
 								: t('accessibility.addAnimalForm')}
@@ -246,9 +248,9 @@ const AnimalForm = () => {
 											pictureUrl={pictureUrl}
 											onFile={handleFile}
 											aria-label={t('accessibility.uploadPhoto')}
-											aria-describedby="photo-help"
+											aria-describedby={`${baseId}-photo-help`}
 										/>
-										<div id="photo-help" className="sr-only">
+										<div id={`${baseId}-photo-help`} className="sr-only">
 											{t('accessibility.photoHelp')}
 										</div>
 									</fieldset>
@@ -281,10 +283,10 @@ const AnimalForm = () => {
 															? getErrorMessage(errors.animalId.message || '')
 															: undefined
 													}
-													aria-describedby="animal-id-help"
+													aria-describedby={`${baseId}-animal-id-help`}
 													autoComplete="off"
 												/>
-												<div id="animal-id-help" className="sr-only">
+												<div id={`${baseId}-animal-id-help`} className="sr-only">
 													{t('accessibility.animalIdHelp')}
 												</div>
 
@@ -307,7 +309,7 @@ const AnimalForm = () => {
 														/>
 													)}
 												/>
-												<div id="species-help" className="sr-only">
+												<div id={`${baseId}-species-help`} className="sr-only">
 													{t('accessibility.speciesHelp')}
 												</div>
 
@@ -331,7 +333,7 @@ const AnimalForm = () => {
 														/>
 													)}
 												/>
-												<div id="breed-help" className="sr-only">
+												<div id={`${baseId}-breed-help`} className="sr-only">
 													{t('accessibility.breedHelp')}
 												</div>
 
@@ -354,7 +356,7 @@ const AnimalForm = () => {
 														/>
 													)}
 												/>
-												<div id="gender-help" className="sr-only">
+												<div id={`${baseId}-gender-help`} className="sr-only">
 													{t('accessibility.genderHelp')}
 												</div>
 
@@ -366,10 +368,10 @@ const AnimalForm = () => {
 													error={
 														errors.color ? getErrorMessage(errors.color.message || '') : undefined
 													}
-													aria-describedby="color-help"
+													aria-describedby={`${baseId}-color-help`}
 													autoComplete="off"
 												/>
-												<div id="color-help" className="sr-only">
+												<div id={`${baseId}-color-help`} className="sr-only">
 													{t('accessibility.colorHelp')}
 												</div>
 
@@ -382,11 +384,11 @@ const AnimalForm = () => {
 													error={
 														errors.weight ? getErrorMessage(errors.weight.message || '') : undefined
 													}
-													aria-describedby="weight-help"
+													aria-describedby={`${baseId}-weight-help`}
 													min="0"
 													step="0.1"
 												/>
-												<div id="weight-help" className="sr-only">
+												<div id={`${baseId}-weight-help`} className="sr-only">
 													{t('accessibility.weightHelp', { unit: farm?.weightUnit })}
 												</div>
 											</div>
@@ -422,7 +424,7 @@ const AnimalForm = () => {
 														/>
 													)}
 												/>
-												<div id="birth-date-help" className="sr-only">
+												<div id={`${baseId}-birth-date-help`} className="sr-only">
 													{t('accessibility.birthDateHelp')}
 												</div>
 
@@ -446,7 +448,7 @@ const AnimalForm = () => {
 														/>
 													)}
 												/>
-												<div id="purchase-date-help" className="sr-only">
+												<div id={`${baseId}-purchase-date-help`} className="sr-only">
 													{t('accessibility.purchaseDateHelp')}
 												</div>
 
@@ -472,7 +474,7 @@ const AnimalForm = () => {
 																/>
 															)}
 														/>
-														<div id="sold-date-help" className="sr-only">
+														<div id={`${baseId}-sold-date-help`} className="sr-only">
 															{t('accessibility.soldDateHelp')}
 														</div>
 													</>
@@ -500,7 +502,7 @@ const AnimalForm = () => {
 																/>
 															)}
 														/>
-														<div id="death-date-help" className="sr-only">
+														<div id={`${baseId}-death-date-help`} className="sr-only">
 															{t('accessibility.deathDateHelp')}
 														</div>
 													</>
@@ -534,7 +536,7 @@ const AnimalForm = () => {
 													/>
 												)}
 											/>
-											<div id="health-status-help" className="sr-only">
+											<div id={`${baseId}-health-status-help`} className="sr-only">
 												{t('accessibility.healthStatusHelp')}
 											</div>
 											<p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
@@ -558,7 +560,7 @@ const AnimalForm = () => {
 											}
 											aria-describedby="origin-help"
 										/>
-										<div id="origin-help" className="sr-only">
+										<div id={`${baseId}-origin-help`} className="sr-only">
 											{t('accessibility.originHelp')}
 										</div>
 									</div>
@@ -588,7 +590,7 @@ const AnimalForm = () => {
 									</>
 								)}
 							</Button>
-							<div id="submit-help" className="sr-only">
+							<div id={`${baseId}-submit-help`} className="sr-only">
 								{params.animalUuid
 									? t('accessibility.editSubmitHelp')
 									: t('accessibility.addSubmitHelp')}

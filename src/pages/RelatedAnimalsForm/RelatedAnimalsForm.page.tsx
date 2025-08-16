@@ -1,5 +1,5 @@
 import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
-import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useId, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
@@ -24,6 +24,7 @@ import type {
 } from './RelatedAnimalsForm.types'
 
 const RelatedAnimalsForm = () => {
+	const baseId = useId()
 	const { user } = useUserStore()
 	const { farm, breeds } = useFarmStore()
 	const params = useParams()
@@ -257,10 +258,14 @@ const RelatedAnimalsForm = () => {
 	}, [setPageTitle, t])
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto">
+		<div
+			className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto"
+			id={`${baseId}-related-animals-section`}
+		>
 			<div className="max-w-7xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
 				<a
-					href="#main-content"
+					href={`#${baseId}-main-content`}
+					id={`${baseId}-skip-link`}
 					className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 dark:bg-blue-500 text-white p-2 rounded z-50"
 				>
 					{t('accessibility.skipToMainContent')}
@@ -288,7 +293,7 @@ const RelatedAnimalsForm = () => {
 				{/* Main Content */}
 				<div
 					className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
-					id="main-content"
+					id={`${baseId}-main-content`}
 				>
 					{currentAnimal && (
 						<section
@@ -298,7 +303,7 @@ const RelatedAnimalsForm = () => {
 							<div className="flex items-center gap-2 mb-4">
 								<i className="i-material-symbols-pets bg-blue-600! dark:bg-blue-500! w-5! h-5!" />
 								<h2
-									id="selected-animal-heading"
+									id={`${baseId}-selected-animal-heading`}
 									className="text-lg font-semibold text-gray-900 dark:text-gray-100"
 								>
 									{t('selectedAnimal')}
@@ -309,13 +314,13 @@ const RelatedAnimalsForm = () => {
 							</div>
 							<Button
 								onClick={() => externalFormRef.current?.openModal()}
-								aria-describedby="external-relation-description"
+								aria-describedby={`${baseId}-external-relation-description`}
 								className="btn btn-outline btn-primary flex items-center gap-2 dark:border-blue-500 dark:hover:bg-blue-500 dark:hover:text-white"
 							>
 								<i className="i-material-symbols-add-link w-4! h-4!" />
 								{t('addExternalRelation')}
 							</Button>
-							<div id="external-relation-description" className="sr-only">
+							<div id={`${baseId}-external-relation-description`} className="sr-only">
 								{t('accessibility.addExternalRelationDescription')}
 							</div>
 						</section>

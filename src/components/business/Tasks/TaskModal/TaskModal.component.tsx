@@ -1,6 +1,6 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import { type FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { type FC, memo, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFarmStore } from '@/store/useFarmStore'
@@ -12,6 +12,7 @@ import { TasksService } from '@/services/tasks'
 import type { TaskModalProps } from './TaskModal.types'
 
 export const TaskModal: FC<TaskModalProps> = memo(({ task, isOpen, onClose }) => {
+	const baseId = useId()
 	const { t } = useTranslation(['tasks'])
 	const modalRef = useRef<HTMLDialogElement>(null)
 	const backdropRef = useRef<HTMLDivElement>(null)
@@ -310,7 +311,7 @@ export const TaskModal: FC<TaskModalProps> = memo(({ task, isOpen, onClose }) =>
 						<div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
 							<i className={`${variantConfig.icon} w-5! h-5! bg-white!`} />
 						</div>
-						<h3 className="text-lg font-bold" id="modal-title">
+						<h3 className="text-lg font-bold" id={`${baseId}-modal-title`}>
 							{t('taskDetails')}
 						</h3>
 					</div>

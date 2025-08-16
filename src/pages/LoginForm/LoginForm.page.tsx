@@ -1,4 +1,12 @@
-import { type ChangeEvent, type FormEvent, memo, useCallback, useEffect, useState } from 'react'
+import {
+	type ChangeEvent,
+	type FormEvent,
+	memo,
+	useCallback,
+	useEffect,
+	useId,
+	useState,
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -17,6 +25,7 @@ import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 import type { LoginCredentials } from './LoginForm.types'
 
 const LoginForm = () => {
+	const baseId = useId()
 	const { user } = useUserStore()
 	const { setLoading } = useAppStore()
 	const navigate = useNavigate()
@@ -60,7 +69,8 @@ const LoginForm = () => {
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
 			<a
-				href="#login-form"
+				href={`#${baseId}-login-form`}
+				id={`${baseId}-skip-link`}
 				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
 			>
 				{t('accessibility.skipToLogin')}
@@ -74,24 +84,27 @@ const LoginForm = () => {
 
 			<section
 				className="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-2xl rounded-3xl border border-white/20 dark:border-gray-700/20 p-8 w-full max-w-md"
-				aria-labelledby="login-heading"
+				aria-labelledby={`${baseId}-login-heading`}
 			>
 				{/* Logo/Brand Section */}
 				<header className="text-center mb-8">
 					<div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
 						<i className="i-healthicons-animal-cow w-8! h-8! bg-white!" aria-hidden="true" />
 					</div>
-					<h1 id="login-heading" className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+					<h1
+						id={`${baseId}-login-heading`}
+						className="text-3xl font-bold text-gray-900 dark:text-white mb-2"
+					>
 						{t('title')}
 					</h1>
 					<p className="text-gray-600 dark:text-gray-300 text-sm">{t('subtitle')}</p>
 				</header>
 
 				<form
-					id="login-form"
+					id={`${baseId}-login-form`}
 					className="space-y-6"
 					onSubmit={handleSubmit}
-					aria-labelledby="login-heading"
+					aria-labelledby={`${baseId}-login-heading`}
 					noValidate
 				>
 					<div className="space-y-4">
@@ -102,11 +115,11 @@ const LoginForm = () => {
 							label={t('email')}
 							onChange={handleTextChange}
 							required
-							aria-describedby="email-help"
+							aria-describedby={`${baseId}-email-help`}
 							autoComplete="email"
 							leftIcon="i-material-symbols-mail-outline"
 						/>
-						<div id="email-help" className="sr-only">
+						<div id={`${baseId}-email-help`} className="sr-only">
 							{t('accessibility.emailHelp')}
 						</div>
 
@@ -116,10 +129,10 @@ const LoginForm = () => {
 							label={t('password')}
 							onChange={handleTextChange}
 							required
-							aria-describedby="password-help"
+							aria-describedby={`${baseId}-password-help`}
 							autoComplete="current-password"
 						/>
-						<div id="password-help" className="sr-only">
+						<div id={`${baseId}-password-help`} className="sr-only">
 							{t('accessibility.passwordHelp')}
 						</div>
 					</div>
@@ -153,7 +166,7 @@ const LoginForm = () => {
 							{t('login')}
 						</span>
 					</Button>
-					<div id="login-button-help" className="sr-only">
+					<div id={`${baseId}-login-button-help`} className="sr-only">
 						{t('accessibility.loginButtonHelp')}
 					</div>
 				</form>
@@ -182,7 +195,7 @@ const LoginForm = () => {
 						{t('google')}
 					</span>
 				</button>
-				<div id="google-login-help" className="sr-only">
+				<div id={`${baseId}-google-login-help`} className="sr-only">
 					{t('accessibility.googleLoginHelp')}
 				</div>
 			</section>

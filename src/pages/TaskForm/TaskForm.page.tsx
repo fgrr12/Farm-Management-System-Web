@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { memo, useCallback, useEffect, useMemo } from 'react'
+import { memo, useCallback, useEffect, useId, useMemo } from 'react'
 import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -24,6 +24,7 @@ import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 import type { TaskFormData } from '@/schemas'
 
 const TaskForm = () => {
+	const baseId = useId()
 	const { user } = useUserStore()
 	const { farm, species } = useFarmStore()
 	const navigate = useNavigate()
@@ -80,8 +81,9 @@ const TaskForm = () => {
 		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto">
 			<div className="max-w-3xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
 				<a
-					href="#task-form"
+					href={`#${baseId}-task-form`}
 					className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
+					id={`${baseId}-skip-link`}
 				>
 					{t('accessibility.skipToForm')}
 				</a>
@@ -106,14 +108,14 @@ const TaskForm = () => {
 				{/* Form Container */}
 				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden border border-gray-100 dark:border-gray-700">
 					<form
-						id="task-form"
+						id={`${baseId}-task-form`}
 						className="p-4 sm:p-6 lg:p-8"
 						onSubmit={handleSubmit(onSubmit)}
 						autoComplete="off"
-						aria-labelledby="form-heading"
+						aria-labelledby={`${baseId}-form-heading`}
 						noValidate
 					>
-						<h2 id="form-heading" className="sr-only">
+						<h2 id={`${baseId}-form-heading`} className="sr-only">
 							{t('accessibility.addTaskForm')}
 						</h2>
 
@@ -132,10 +134,10 @@ const TaskForm = () => {
 										label={t('name')}
 										required
 										error={errors.title ? getErrorMessage(errors.title.message || '') : undefined}
-										aria-describedby="title-help"
+										aria-describedby={`${baseId}-title-help`}
 										autoComplete="off"
 									/>
-									<div id="title-help" className="sr-only">
+									<div id={`${baseId}-title-help`} className="sr-only">
 										{t('accessibility.titleHelp')}
 									</div>
 
@@ -149,9 +151,9 @@ const TaskForm = () => {
 												? getErrorMessage(errors.description.message || '')
 												: undefined
 										}
-										aria-describedby="description-help"
+										aria-describedby={`${baseId}-description-help`}
 									/>
-									<div id="description-help" className="sr-only">
+									<div id={`${baseId}-description-help`} className="sr-only">
 										{t('accessibility.descriptionHelp')}
 									</div>
 								</div>
@@ -180,10 +182,11 @@ const TaskForm = () => {
 														? getErrorMessage(errors.priority.message || '')
 														: undefined
 												}
+												aria-describedby={`${baseId}-priority-help`}
 											/>
 										)}
 									/>
-									<div id="priority-help" className="sr-only">
+									<div id={`${baseId}-priority-help`} className="sr-only">
 										{t('accessibility.priorityHelp')}
 									</div>
 
@@ -203,10 +206,11 @@ const TaskForm = () => {
 														? getErrorMessage(errors.speciesUuid.message || '')
 														: undefined
 												}
+												aria-describedby={`${baseId}-species-help`}
 											/>
 										)}
 									/>
-									<div id="species-help" className="sr-only">
+									<div id={`${baseId}-species-help`} className="sr-only">
 										{t('accessibility.speciesHelp')}
 									</div>
 								</div>
@@ -227,10 +231,11 @@ const TaskForm = () => {
 												error={
 													errors.dueDate ? getErrorMessage(errors.dueDate.message || '') : undefined
 												}
+												aria-describedby={`${baseId}-due-date-help`}
 											/>
 										)}
 									/>
-									<div id="due-date-help" className="sr-only">
+									<div id={`${baseId}-due-date-help`} className="sr-only">
 										{t('accessibility.dueDateHelp')}
 									</div>
 								</div>
@@ -242,7 +247,7 @@ const TaskForm = () => {
 							<Button
 								type="submit"
 								disabled={isSubmitting}
-								aria-describedby="submit-help"
+								aria-describedby={`${baseId}-submit-help`}
 								className="btn btn-primary h-12 w-full text-lg disabled:loading flex items-center justify-center gap-2"
 							>
 								{isSubmitting ? (
@@ -257,7 +262,7 @@ const TaskForm = () => {
 									</>
 								)}
 							</Button>
-							<div id="submit-help" className="sr-only">
+							<div id={`${baseId}-submit-help`} className="sr-only">
 								{t('accessibility.submitHelp')}
 							</div>
 						</div>

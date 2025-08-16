@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { memo, useCallback, useEffect } from 'react'
+import { memo, useCallback, useEffect, useId } from 'react'
 import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -22,6 +22,7 @@ import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 import type { ProductionRecordFormData } from '@/schemas'
 
 const ProductionRecordForm = () => {
+	const baseId = useId()
 	const { user } = useUserStore()
 	const { farm } = useFarmStore()
 	const navigate = useNavigate()
@@ -112,8 +113,9 @@ const ProductionRecordForm = () => {
 		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto">
 			<div className="max-w-3xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
 				<a
-					href="#production-record-form"
+					href={`#${baseId}-production-record-form`}
 					className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
+					id={`${baseId}-skip-link`}
 				>
 					{t('accessibility.skipToForm')}
 				</a>
@@ -142,14 +144,14 @@ const ProductionRecordForm = () => {
 				{/* Form Container */}
 				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden border border-gray-100 dark:border-gray-700">
 					<form
-						id="production-record-form"
+						id={`${baseId}-production-record-form`}
 						className="p-4 sm:p-6 lg:p-8"
 						onSubmit={handleSubmit(onSubmit)}
 						autoComplete="off"
-						aria-labelledby="form-heading"
+						aria-labelledby={`${baseId}-form-heading`}
 						noValidate
 					>
-						<h2 id="form-heading" className="sr-only">
+						<h2 id={`${baseId}-form-heading`} className="sr-only">
 							{params.productionRecordUuid
 								? t('accessibility.editProductionRecordForm')
 								: t('accessibility.addProductionRecordForm')}
@@ -175,9 +177,9 @@ const ProductionRecordForm = () => {
 										}
 										min="0"
 										step="0.1"
-										aria-describedby="quantity-help"
+										aria-describedby={`${baseId}-quantity-help`}
 									/>
-									<div id="quantity-help" className="sr-only">
+									<div id={`${baseId}-quantity-help`} className="sr-only">
 										{t('accessibility.quantityHelp')}
 									</div>
 
@@ -193,11 +195,11 @@ const ProductionRecordForm = () => {
 													field.onChange(dayjs(date).format('YYYY-MM-DD'))
 												}}
 												error={errors.date ? getErrorMessage(errors.date.message || '') : undefined}
-												aria-describedby="date-help"
+												aria-describedby={`${baseId}-date-help`}
 											/>
 										)}
 									/>
-									<div id="date-help" className="sr-only">
+									<div id={`${baseId}-date-help`} className="sr-only">
 										{t('accessibility.dateHelp')}
 									</div>
 								</div>
@@ -215,9 +217,9 @@ const ProductionRecordForm = () => {
 									label={t('notes')}
 									required
 									error={errors.notes ? getErrorMessage(errors.notes.message || '') : undefined}
-									aria-describedby="notes-help"
+									aria-describedby={`${baseId}-notes-help`}
 								/>
-								<div id="notes-help" className="sr-only">
+								<div id={`${baseId}-notes-help`} className="sr-only">
 									{t('accessibility.notesHelp')}
 								</div>
 							</div>
@@ -228,7 +230,7 @@ const ProductionRecordForm = () => {
 							<Button
 								type="submit"
 								disabled={isSubmitting}
-								aria-describedby="submit-help"
+								aria-describedby={`${baseId}-submit-help`}
 								className="btn btn-primary h-12 w-full text-lg disabled:loading flex items-center justify-center gap-2"
 							>
 								{isSubmitting ? (
@@ -243,7 +245,7 @@ const ProductionRecordForm = () => {
 									</>
 								)}
 							</Button>
-							<div id="submit-help" className="sr-only">
+							<div id={`${baseId}-submit-help`} className="sr-only">
 								{t('accessibility.submitHelp')}
 							</div>
 						</div>

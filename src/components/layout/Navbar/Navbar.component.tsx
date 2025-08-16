@@ -1,7 +1,7 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { SplitText } from 'gsap/SplitText'
-import { memo, useCallback, useMemo, useRef } from 'react'
+import { memo, useCallback, useId, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -21,6 +21,7 @@ import { useTheme } from '@/hooks/system/useTheme'
 import { useBackRoute } from '@/hooks/ui/useBackRoute'
 
 export const Navbar = memo(() => {
+	const baseId = useId()
 	const drawerRef = useRef<HTMLInputElement>(null)
 	const titleRef = useRef<HTMLHeadingElement>(null)
 	const drawerTitleRef = useRef<HTMLHeadingElement>(null)
@@ -197,13 +198,13 @@ export const Navbar = memo(() => {
 	}, [farm])
 	return (
 		<div className="drawer">
-			<input id="my-drawer" type="checkbox" className="drawer-toggle" ref={drawerRef} />
+			<input id={`${baseId}-drawer`} type="checkbox" className="drawer-toggle" ref={drawerRef} />
 			<div className="drawer-content">
 				<div className="navbar bg-gradient-to-r from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 shadow-lg border-b border-gray-100 dark:border-gray-700">
 					<div className="navbar-start">
 						<div className="flex items-center gap-2">
 							<label
-								htmlFor="my-drawer"
+								htmlFor={`${baseId}-drawer`}
 								className="btn btn-ghost btn-circle hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 hover:scale-110 active:scale-95"
 								aria-label="Open menu"
 							>

@@ -1,7 +1,7 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import type { FC } from 'react'
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/Button'
@@ -29,6 +29,7 @@ export const Modal: FC<ModalProps> = memo(
 		...rest
 	}) => {
 		const { t } = useTranslation('common')
+		const baseId = useId()
 		const { modalRef, backdropRef, contentRef, touchHandlers } = useModal(open)
 
 		const modalClasses = useMemo(() => {
@@ -116,7 +117,7 @@ export const Modal: FC<ModalProps> = memo(
 								<div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
 									<i className={`${variantConfig.icon} w-5! h-5! ${variantConfig.iconColor}`} />
 								</div>
-								<h3 className="text-lg font-bold" id="modal-title">
+								<h3 className="text-lg font-bold" id={`${baseId}-modal-title`}>
 									{title}
 								</h3>
 							</div>
@@ -141,7 +142,7 @@ export const Modal: FC<ModalProps> = memo(
 						{message && (
 							<p
 								className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4"
-								id="modal-description"
+								id={`${baseId}-modal-description`}
 							>
 								{message}
 							</p>

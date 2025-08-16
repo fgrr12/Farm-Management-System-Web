@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useMemo } from 'react'
+import { memo, useCallback, useEffect, useId, useMemo } from 'react'
 import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -21,6 +21,7 @@ import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 import type { EmployeeFormData } from '@/schemas'
 
 const EmployeeForm = () => {
+	const baseId = useId()
 	const { user } = useUserStore()
 	const { farm } = useFarmStore()
 	const navigate = useNavigate()
@@ -106,8 +107,9 @@ const EmployeeForm = () => {
 		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto">
 			<div className="max-w-3xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
 				<a
-					href="#employee-form"
+					href={`#${baseId}-employee-form`}
 					className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
+					id={`${baseId}-skip-link`}
 				>
 					{t('accessibility.skipToForm')}
 				</a>
@@ -134,14 +136,14 @@ const EmployeeForm = () => {
 				{/* Form Container */}
 				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden border border-gray-100 dark:border-gray-700">
 					<form
-						id="employee-form"
+						id={`${baseId}-employee-form`}
 						className="p-4 sm:p-6 lg:p-8"
 						onSubmit={handleSubmit(onSubmit)}
 						autoComplete="off"
-						aria-labelledby="form-heading"
+						aria-labelledby={`${baseId}-form-heading`}
 						noValidate
 					>
-						<h2 id="form-heading" className="sr-only">
+						<h2 id={`${baseId}-form-heading`} className="sr-only">
 							{params.employeeUuid
 								? t('accessibility.editEmployeeForm')
 								: t('accessibility.addEmployeeForm')}
@@ -162,10 +164,10 @@ const EmployeeForm = () => {
 										label={t('name')}
 										required
 										error={errors.name ? getErrorMessage(errors.name.message || '') : undefined}
-										aria-describedby="name-help"
+										aria-describedby={`${baseId}-name-help`}
 										autoComplete="given-name"
 									/>
-									<div id="name-help" className="sr-only">
+									<div id={`${baseId}-name-help`} className="sr-only">
 										{t('accessibility.nameHelp')}
 									</div>
 
@@ -178,10 +180,10 @@ const EmployeeForm = () => {
 										error={
 											errors.lastName ? getErrorMessage(errors.lastName.message || '') : undefined
 										}
-										aria-describedby="lastName-help"
+										aria-describedby={`${baseId}-lastName-help`}
 										autoComplete="family-name"
 									/>
-									<div id="lastName-help" className="sr-only">
+									<div id={`${baseId}-lastName-help`} className="sr-only">
 										{t('accessibility.lastNameHelp')}
 									</div>
 								</div>
@@ -201,10 +203,10 @@ const EmployeeForm = () => {
 										label={t('email')}
 										required
 										error={errors.email ? getErrorMessage(errors.email.message || '') : undefined}
-										aria-describedby="email-help"
+										aria-describedby={`${baseId}-email-help`}
 										autoComplete="email"
 									/>
-									<div id="email-help" className="sr-only">
+									<div id={`${baseId}-email-help`} className="sr-only">
 										{t('accessibility.emailHelp')}
 									</div>
 
@@ -215,10 +217,10 @@ const EmployeeForm = () => {
 										label={t('phone')}
 										required
 										error={errors.phone ? getErrorMessage(errors.phone.message || '') : undefined}
-										aria-describedby="phone-help"
+										aria-describedby={`${baseId}-phone-help`}
 										autoComplete="tel"
 									/>
-									<div id="phone-help" className="sr-only">
+									<div id={`${baseId}-phone-help`} className="sr-only">
 										{t('accessibility.phoneHelp')}
 									</div>
 								</div>
@@ -242,10 +244,11 @@ const EmployeeForm = () => {
 											options={roleOptions}
 											required
 											error={errors.role ? getErrorMessage(errors.role.message || '') : undefined}
+											aria-describedby={`${baseId}-role-help`}
 										/>
 									)}
 								/>
-								<div id="role-help" className="sr-only">
+								<div id={`${baseId}-role-help`} className="sr-only">
 									{t('accessibility.roleHelp')}
 								</div>
 							</div>
@@ -256,7 +259,7 @@ const EmployeeForm = () => {
 							<Button
 								type="submit"
 								disabled={isSubmitting}
-								aria-describedby="submit-help"
+								aria-describedby={`${baseId}-submit-help`}
 								className="btn btn-primary h-12 w-full text-lg disabled:loading flex items-center justify-center gap-2"
 							>
 								{isSubmitting ? (
@@ -271,7 +274,7 @@ const EmployeeForm = () => {
 									</>
 								)}
 							</Button>
-							<div id="submit-help" className="sr-only">
+							<div id={`${baseId}-submit-help`} className="sr-only">
 								{params.employeeUuid
 									? t('accessibility.editSubmitHelp')
 									: t('accessibility.addSubmitHelp')}
