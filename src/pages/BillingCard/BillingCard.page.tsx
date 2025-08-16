@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useId } from 'react'
+import { memo, useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFarmStore } from '@/store/useFarmStore'
@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/Button'
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 const BillingCard = () => {
-	const baseId = useId()
 	const { billingCard } = useFarmStore()
 	const { t } = useTranslation('billingCard')
 	const { setPageTitle } = usePagePerformance()
@@ -212,7 +211,7 @@ const BillingCard = () => {
 						<div className="relative">
 							{/* Modern Billing Card Design */}
 							<div
-								id={`${baseId}-business-card`}
+								id="business-card"
 								className="w-[400px] h-[260px] bg-gradient-to-br from-white to-gray-50 border-2 border-gray-700 rounded-xl pt-4 px-6 pb-4 shadow-2xl transform hover:scale-105 transition-all duration-300 relative overflow-hidden"
 								style={{ fontFamily: 'Inter, Arial, sans-serif' }}
 							>

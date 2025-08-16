@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFarmStore } from '@/store/useFarmStore'
@@ -9,7 +9,6 @@ import { VoiceRecorder } from '@/components/business/Voice/VoiceRecorder'
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 export function VoicePage() {
-	const baseId = useId()
 	const { user } = useUserStore()
 	const { farm } = useFarmStore()
 	const { t } = useTranslation(['voice'])
@@ -64,7 +63,7 @@ export function VoicePage() {
 
 				{/* Voice Recorder Section */}
 				<div
-					id={`${baseId}-voice-section`}
+					id="voice-section"
 					className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl dark:shadow-black/30 overflow-hidden mb-6 sm:mb-8 border border-gray-100 dark:border-gray-700 transition-all duration-300"
 				>
 					<div className="bg-gradient-to-r from-emerald-600 to-cyan-600 dark:from-emerald-700 dark:to-cyan-700 px-4 sm:px-6 py-4">

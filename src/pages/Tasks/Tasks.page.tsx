@@ -1,5 +1,5 @@
 import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
-import { memo, useCallback, useEffect, useId, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -20,7 +20,6 @@ import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 import type { TaskColumnInfo, TaskColumns, TaskFilters as TaskFiltersType } from './Tasks.types'
 
 const Tasks = () => {
-	const baseId = useId()
 	const { user } = useUserStore()
 	const { farm, species } = useFarmStore()
 	const navigate = useNavigate()
@@ -189,7 +188,7 @@ const Tasks = () => {
 									<i className="i-material-symbols-add-circle-outline w-5! h-5! mr-2" />
 									{t('addTask')}
 								</Button>
-								<div id={`${baseId}-add-task-description`} className="sr-only">
+								<div id="add-task-description" className="sr-only">
 									{t('accessibility.addTaskDescription')}
 								</div>
 							</div>
@@ -199,7 +198,7 @@ const Tasks = () => {
 
 				{/* Kanban Board */}
 				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden">
-					<main id={`${baseId}-kanban-board`} className="p-4 sm:p-6">
+					<main id="kanban-board" className="p-4 sm:p-6">
 						<div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 min-h-[600px]">
 							{COLUMN_CONFIG.map((column) => (
 								<TaskColumn

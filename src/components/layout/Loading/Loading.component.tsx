@@ -110,7 +110,6 @@ export const Loading: FC<LoadingProps> = memo(
 			})
 
 			return () => {
-				// biome-ignore lint:stream-stop
 				tweens.forEach((t) => t.kill())
 			}
 		}, [open, variant])

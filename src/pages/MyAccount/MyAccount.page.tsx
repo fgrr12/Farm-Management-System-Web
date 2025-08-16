@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useId, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFarmStore } from '@/store/useFarmStore'
@@ -18,7 +18,6 @@ import { useUserForm } from '@/hooks/forms/useUserForm'
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 const MyAccount = () => {
-	const baseId = useId()
 	const { user: currentUser, setUser: updateUser } = useUserStore()
 	const {
 		billingCard: currentBillingCard,
@@ -135,8 +134,7 @@ const MyAccount = () => {
 		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto">
 			<div className="max-w-4xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
 				<a
-					href={`#${baseId}-profile-section`}
-					id={`${baseId}-skip-link`}
+					href="#profile-section"
 					className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
 				>
 					{t('accessibility.skipToProfile')}
@@ -162,7 +160,7 @@ const MyAccount = () => {
 				{/* Sections */}
 				<div className="space-y-6">
 					{/* Profile Section */}
-					<section id={`${baseId}-profile-section`}>
+					<section id="profile-section">
 						<ProfileSection
 							userForm={userForm}
 							isEditing={edit.user}
@@ -173,7 +171,7 @@ const MyAccount = () => {
 
 					{/* Farm Section - Only for admin/owner */}
 					{(currentUser?.role === 'admin' || currentUser?.role === 'owner') && (
-						<section id={`${baseId}-farm-section`}>
+						<section>
 							<FarmSection
 								farmForm={farmForm}
 								isEditing={edit.farm}
@@ -185,7 +183,7 @@ const MyAccount = () => {
 
 					{/* Billing Section - Only for admin/owner */}
 					{(currentUser?.role === 'admin' || currentUser?.role === 'owner') && (
-						<section id={`${baseId}-billing-section`}>
+						<section>
 							<BillingSection
 								billingCardForm={billingCardForm}
 								isEditing={edit.billingCard}

@@ -1,6 +1,6 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import { memo, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -20,7 +20,6 @@ import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 import type { AnimalCardProps, AnimalsFilters } from './Animals.types'
 
 const Animals = () => {
-	const baseId = useId()
 	const { user } = useUserStore()
 	const { farm, species, breeds } = useFarmStore()
 	const navigation = useNavigate()
@@ -184,8 +183,8 @@ const Animals = () => {
 
 					{/* Filters and Actions Bar */}
 					<div className="p-4 sm:p-6 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-200 dark:border-gray-600">
-						<section aria-labelledby={`${baseId}-filters-heading`} role="search">
-							<h2 id={`${baseId}-filters-heading`} className="sr-only">
+						<section aria-labelledby="filters-heading" role="search">
+							<h2 id="filters-heading" className="sr-only">
 								{t('accessibility.filtersSection')}
 							</h2>
 
@@ -203,12 +202,12 @@ const Animals = () => {
 										type="button"
 										className="btn btn-primary h-12 text-base sm:text-lg px-6 sm:px-8 w-full sm:w-auto"
 										onClick={navigateToAddAnimal}
-										aria-describedby={`${baseId}-add-animal-description`}
+										aria-describedby="add-animal-description"
 									>
 										<i className="i-material-symbols-add-circle-outline w-6! h-6! mr-2" />
 										{t('addAnimal')}
 									</Button>
-									<div id={`${baseId}-add-animal-description`} className="sr-only">
+									<div id="add-animal-description" className="sr-only">
 										{t('accessibility.addAnimalDescription')}
 									</div>
 								</div>
@@ -218,12 +217,8 @@ const Animals = () => {
 				</div>
 
 				{/* Animals Grid Section */}
-				<section
-					aria-labelledby={`${baseId}-animals-heading`}
-					aria-live="polite"
-					aria-atomic="false"
-				>
-					<h2 id={`${baseId}-animals-heading`} className="sr-only">
+				<section aria-labelledby="animals-heading" aria-live="polite" aria-atomic="false">
+					<h2 id="animals-heading" className="sr-only">
 						{t('accessibility.animalsListHeading')} ({filteredAnimals.length}{' '}
 						{t('accessibility.results')})
 					</h2>
@@ -235,7 +230,7 @@ const Animals = () => {
 								<div
 									ref={containerRef}
 									className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6"
-									id={`${baseId}-animals-grid`}
+									id="animals-grid"
 									role="list"
 									aria-label={t('accessibility.animalsGrid', { count: filteredAnimals.length })}
 								>
