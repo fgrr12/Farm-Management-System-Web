@@ -4,6 +4,10 @@ export interface ExternalRelationFormProps {
 	currentAnimal: RelatedAnimalInformation
 }
 
+export interface ExternalRelationFormRef {
+	openModal: () => void
+}
+
 export interface ExternalRelation {
 	animalId: string
 	breed: string

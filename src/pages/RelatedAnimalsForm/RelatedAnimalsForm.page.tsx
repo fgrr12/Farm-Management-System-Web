@@ -1,5 +1,5 @@
 import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
-import { memo, useCallback, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
@@ -10,6 +10,7 @@ import { AnimalsService } from '@/services/animals'
 import { RelatedAnimalsService } from '@/services/relatedAnimals'
 
 import { CardContainer } from '@/components/business/RelatedAnimals/CardContainer'
+import type { ExternalRelationFormRef } from '@/components/business/RelatedAnimals/ExternalRelationForm'
 import { ExternalRelationForm } from '@/components/business/RelatedAnimals/ExternalRelationForm'
 import { RelatedAnimalCard } from '@/components/business/RelatedAnimals/RelatedAnimalCard'
 import { Button } from '@/components/ui/Button'
@@ -28,6 +29,7 @@ const RelatedAnimalsForm = () => {
 	const params = useParams()
 	const { t } = useTranslation(['relatedAnimals'])
 	const { setPageTitle, withLoadingAndError } = usePagePerformance()
+	const externalFormRef = useRef<ExternalRelationFormRef>(null)
 
 	const [animalsLists, setAnimalsLists] = useState<RelatedAnimalsLists>(INITIAL_ANIMALS_LISTS)
 	const [relatedAnimals, setRelatedAnimals] = useState<Relation[]>([])
@@ -306,7 +308,7 @@ const RelatedAnimalsForm = () => {
 								<RelatedAnimalCard animal={currentAnimal} />
 							</div>
 							<Button
-								onClick={() => document?.querySelector('dialog')?.showModal()}
+								onClick={() => externalFormRef.current?.openModal()}
 								aria-describedby="external-relation-description"
 								className="btn btn-outline btn-primary flex items-center gap-2 dark:border-blue-500 dark:hover:bg-blue-500 dark:hover:text-white"
 							>
@@ -348,6 +350,7 @@ const RelatedAnimalsForm = () => {
 
 					{currentAnimal && (
 						<ExternalRelationForm
+							ref={externalFormRef}
 							currentAnimal={currentAnimal}
 							aria-label={t('accessibility.externalRelationForm')}
 						/>
