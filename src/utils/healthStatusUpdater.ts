@@ -6,11 +6,14 @@ import { AnimalsService } from '@/services/animals'
 export const updateAnimalHealthStatus = async (
 	animalUuid: string,
 	newHealthRecord?: HealthRecord,
-	manualStatus?: HealthStatus
+	manualStatus?: HealthStatus,
+	updatedBy?: string
 ): Promise<HealthStatus> => {
 	if (manualStatus) {
 		// If set manually, use that value
-		await AnimalsService.updateAnimalFields(animalUuid, { healthStatus: manualStatus })
+		if (updatedBy) {
+			await AnimalsService.updateAnimalHealthStatus(animalUuid, manualStatus, updatedBy)
+		}
 		return manualStatus
 	}
 
@@ -21,8 +24,10 @@ export const updateAnimalHealthStatus = async (
 	// Calculate new status based on records and animal status
 	const newStatus = calculateHealthStatusFromRecords(healthRecords, newHealthRecord, animal)
 
-	// Update in database
-	await AnimalsService.updateAnimalFields(animalUuid, { healthStatus: newStatus })
+	// Update in database if updatedBy is provided
+	if (updatedBy) {
+		await AnimalsService.updateAnimalHealthStatus(animalUuid, newStatus, updatedBy)
+	}
 
 	return newStatus
 }
@@ -209,66 +214,4 @@ const determineHealthStatusFromRecord = (
 
 	// Default to healthy if recent record with no issues
 	return 'healthy'
-}
-
-/**
- * Gets the last health check date from health records
- */
-export const getLastHealthCheckDate = (healthRecords?: HealthRecord[]): string | undefined => {
-	if (!healthRecords?.length) return undefined
-
-	const checkups = healthRecords
-		.filter((record) => record.type === 'Checkup' && record.status)
-		.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-
-	return checkups[0]?.date
-}
-
-/**
- * Checks if animal has active health issues
- */
-export const hasActiveHealthIssues = (healthRecords?: HealthRecord[]): boolean => {
-	if (!healthRecords?.length) return false
-
-	const recentRecords = healthRecords
-		.filter((record) => record.status)
-		.filter((record) => {
-			const daysSince = Math.floor(
-				(Date.now() - new Date(record.date).getTime()) / (1000 * 60 * 60 * 24)
-			)
-			return daysSince <= 30 // Last 30 days
-		})
-
-	return recentRecords.some(
-		(record) =>
-			record.medication ||
-			record.type === 'Surgery' ||
-			record.type === 'Medication' ||
-			(record.temperature && (record.temperature > 39.5 || record.temperature < 37.5))
-	)
-}
-
-/**
- * Migration function for existing animals without health status
- */
-export const migrateExistingAnimalsHealthStatus = async (): Promise<void> => {
-	try {
-		const animals = await AnimalsService.getAllAnimals()
-
-		for (const animal of animals) {
-			if (!animal.healthStatus || animal.healthStatus === 'unknown') {
-				const calculatedStatus = calculateHealthStatusFromRecords(
-					animal.healthRecords || [],
-					undefined,
-					animal
-				)
-				await AnimalsService.updateAnimalFields(animal.uuid, {
-					healthStatus: calculatedStatus,
-				})
-			}
-		}
-	} catch (error) {
-		console.error('Failed to migrate existing animals health status:', error)
-		throw error
-	}
 }

@@ -26,13 +26,13 @@ import { OfflineIndicator } from '@/components/layout/OfflineIndicator'
 import { SEO } from '@/components/layout/SEO'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { ToastManager } from '@/components/layout/ToastManager'
+import { FCMTokenManager } from '@/components/notifications/FCMTokenManager'
+import { NotificationToast } from '@/components/notifications/NotificationToast'
 import { PWAInstallPrompt } from '@/components/pwa/PWAInstallPrompt.component'
 import { PWAUpdatePrompt } from '@/components/pwa/PWAUpdatePrompt.component'
 
 import { useTheme } from '@/hooks/system/useTheme'
 
-import { VoiceRecorder } from './components/layout/VoiceRecorder/VoiceRecorder'
-import { isDevelopment } from './config/environment'
 import { usePreloadRoutes } from './hooks/ui/usePreloadRoutes'
 
 gsap.registerPlugin(SplitText, useGSAP)
@@ -75,6 +75,8 @@ const Tasks = lazy(() =>
 	})
 )
 const Dashboard = lazy(() => import('@/pages/Dashboard/Dashboard.page'))
+const Calendar = lazy(() => import('@/pages/Calendar/Calendar.page'))
+const Voice = lazy(() => import('@/pages/Voice/Voice.page'))
 
 export const App = () => {
 	const { user, setUser } = useUserStore()
@@ -104,7 +106,9 @@ export const App = () => {
 			const user = await UserService.getUser(authUser.uid)
 			setUser(user)
 
-			await useFarmStore.getState().loadFarmData(user.farmUuid, user.role)
+			if (user.role !== 'admin') {
+				await useFarmStore.getState().loadFarmData(user.farmUuid, user.role)
+			}
 
 			setAuthLoading(false)
 		})
@@ -290,6 +294,16 @@ export const App = () => {
 									</PrivateRoute>
 								}
 							/>
+
+							<Route
+								path={AppRoutes.CALENDAR}
+								element={
+									<PrivateRoute>
+										<Calendar />
+									</PrivateRoute>
+								}
+							/>
+
 							{user?.role === 'owner' ||
 								(user?.role === 'admin' && (
 									<Route
@@ -301,6 +315,15 @@ export const App = () => {
 										}
 									/>
 								))}
+
+							<Route
+								path={AppRoutes.VOICE}
+								element={
+									<PrivateRoute>
+										<Voice />
+									</PrivateRoute>
+								}
+							/>
 						</Routes>
 					</Suspense>
 
@@ -312,11 +335,12 @@ export const App = () => {
 						onCancel={modalData.onCancel}
 					/>
 					<Loading open={appLoading || authLoading} />
-					{user && isDevelopment && <VoiceRecorder />}
 					<ToastManager />
 					<OfflineIndicator />
 					<PWAUpdatePrompt />
 					<PWAInstallPrompt />
+					<FCMTokenManager />
+					<NotificationToast />
 				</main>
 			</div>
 		</div>

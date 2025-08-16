@@ -8,4 +8,5 @@ export interface FarmStore {
 	setSpecies: (species: Species[]) => void
 	setBreeds: (breeds: Breed[]) => void
 	loadFarmData: (farmUuid: string, role: string) => Promise<void>
+	loadFarmDataPublic: (farmUuid: string) => Promise<void>
 }

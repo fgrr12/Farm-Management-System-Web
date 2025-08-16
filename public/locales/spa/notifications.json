@@ -1,0 +1,19 @@
+{
+	"title": "Notificaciones",
+	"unread": "sin leer",
+	"markAllRead": "Marcar todas como leídas",
+	"markAsRead": "Marcar como leída",
+	"dismiss": "Descartar",
+	"noNotifications": "No hay notificaciones",
+	"enableNotifications": "Activar",
+	"settings": "Configuración",
+	"notificationSettings": "Configuración de Notificaciones",
+	"categories": {
+		"all": "Todas",
+		"medication": "Medicación",
+		"health": "Salud",
+		"task": "Tareas",
+		"general": "General"
+	},
+	"noNotificationsInCategory": "No hay notificaciones en esta categoría"
+}

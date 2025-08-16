@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
 
-import { useUserStore } from '@/store/useUserStore'
+import { useFarmStore } from '@/store/useFarmStore'
 
 import { EmployeesService } from '@/services/employees'
 
@@ -15,7 +15,7 @@ import { Search } from '@/components/ui/Search'
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 const Employees = () => {
-	const { user } = useUserStore()
+	const { farm } = useFarmStore()
 	const navigate = useNavigate()
 	const { t } = useTranslation(['employees'])
 	const { setPageTitle, withLoadingAndError } = usePagePerformance()
@@ -50,18 +50,16 @@ const Employees = () => {
 
 	const initialData = useCallback(async () => {
 		await withLoadingAndError(async () => {
-			if (!user?.farmUuid) return []
-
-			const data = await EmployeesService.getEmployees(user.farmUuid)
+			const data = await EmployeesService.getEmployees(farm!.uuid)
 			setEmployees(data)
 			return data
 		}, t('toast.errorGettingEmployees'))
-	}, [user?.farmUuid, withLoadingAndError, t])
+	}, [farm, withLoadingAndError, t])
 
 	useEffect(() => {
-		if (!user) return
+		if (!farm) return
 		initialData()
-	}, [user, initialData])
+	}, [farm, initialData])
 
 	useEffect(() => {
 		setPageTitle(t('title'))

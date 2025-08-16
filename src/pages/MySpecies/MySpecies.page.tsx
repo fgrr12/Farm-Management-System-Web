@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
+import { useUserStore } from '@/store/useUserStore'
 
 import { BreedsService } from '@/services/breeds'
 import { SpeciesService } from '@/services/species'
@@ -17,6 +18,7 @@ import type { MySpeciesI } from './MySpecies.types'
 
 const MySpecies = () => {
 	const { t } = useTranslation(['mySpecies'])
+	const { user } = useUserStore()
 	const {
 		breeds: dbBreeds,
 		farm,
@@ -90,8 +92,8 @@ const MySpecies = () => {
 				message: t('modal.deleteSpecies.message'),
 				onAccept: async () => {
 					await withLoadingAndError(async () => {
-						await BreedsService.deleteBreedsBySpecie(specieUuid)
-						await SpeciesService.deleteSpecies(specieUuid)
+						await BreedsService.deleteBreedsBySpeciesUuid(specieUuid, user!.uuid)
+						await SpeciesService.deleteSpecies(specieUuid, user!.uuid)
 						const sps = species.filter((specie) => specie.uuid !== specieUuid)
 						setSpecies(sps)
 						setDbSpecies(sps)
@@ -107,6 +109,7 @@ const MySpecies = () => {
 			})
 		},
 		[
+			user,
 			species,
 			breeds,
 			setModalData,
@@ -127,7 +130,7 @@ const MySpecies = () => {
 				message: t('modal.deleteBreed.message'),
 				onAccept: async () => {
 					await withLoadingAndError(async () => {
-						await BreedsService.deleteBreed(breedUuid)
+						await BreedsService.deleteBreed(breedUuid, user!.uuid)
 						setBreeds((prev) => prev.filter((breed) => breed.uuid !== breedUuid))
 						setDbBreeds(breeds)
 						setModalData(defaultModalData)
@@ -140,18 +143,18 @@ const MySpecies = () => {
 				},
 			})
 		},
-		[breeds, setModalData, defaultModalData, withLoadingAndError, showToast, t, setDbBreeds]
+		[user, breeds, setModalData, defaultModalData, withLoadingAndError, showToast, t, setDbBreeds]
 	)
 
 	const handleSpeciesSubmit = useCallback(
 		async (speciesData: Species, breedData: Breed[]) => {
 			await withLoadingAndError(async () => {
 				// Update species
-				await SpeciesService.upsertSpecies(speciesData)
+				await SpeciesService.upsertSpecies(speciesData, user!.uuid, farm!.uuid)
 
 				// Update breeds for this species
 				for (const breed of breedData) {
-					await BreedsService.upsertBreed(breed)
+					await BreedsService.updateBreed(breed, user!.uuid, farm!.uuid)
 				}
 
 				// Update local state
@@ -171,7 +174,7 @@ const MySpecies = () => {
 				showToast(t('toast.edited'), 'success')
 			}, t('toast.errorEditing'))
 		},
-		[species, breeds, withLoadingAndError, setDbSpecies, setDbBreeds, showToast, t]
+		[farm, user, species, breeds, withLoadingAndError, setDbSpecies, setDbBreeds, showToast, t]
 	)
 
 	useEffect(() => {

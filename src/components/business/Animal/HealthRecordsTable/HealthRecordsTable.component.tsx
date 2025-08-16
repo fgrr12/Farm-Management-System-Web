@@ -110,7 +110,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 			onAccept: async () => {
 				try {
 					setLoading(true)
-					await HealthRecordsService.updateHealthRecordsStatus(uuid, false)
+					await HealthRecordsService.updateHealthRecordsStatus(uuid, user!.uuid)
 					removeHealthRecord(uuid)
 					setModalData(defaultModalData)
 					setLoading(false)

@@ -7,6 +7,7 @@ export const {
 	VITE_APP_ID,
 	VITE_MEASUREMENT_ID,
 	VITE_FIREBASE_CONFIG,
+	VITE_FIREBASE_VAPID_KEY,
 } = import.meta.env
 
 export const isDevelopment =

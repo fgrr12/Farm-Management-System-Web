@@ -2,6 +2,7 @@
 	"accessibility": {
 		"addTaskForm": "Add new task form",
 		"descriptionHelp": "Provide detailed instructions for this task",
+		"dueDateHelp": "Choose when this task should be completed",
 		"priorityHelp": "Select the urgency level for this task",
 		"skipToForm": "Skip to task form",
 		"speciesHelp": "Select which animal species this task applies to",
@@ -13,18 +14,21 @@
 	"description": "Description",
 	"name": "Name",
 	"placeholders": {
+		"dueDateHint": "Select when this task should be completed",
 		"priorityHint": "Consider medical urgency, production impact, and available resources",
 		"speciesHint": "Select the primary species affected by this task",
 		"taskDescription": "Detail the steps: 1) Prepare materials, 2) Perform procedure, 3) Document results...",
 		"taskName": "E.g: Vaccinate cattle, Clean water troughs, Check fences..."
 	},
 	"priorities": {
+		"critical": "Critical - Immediate action required",
 		"default": "How urgent is this task?",
 		"high": "High - Requires immediate attention",
 		"low": "Low - Can wait several days",
 		"medium": "Medium - Complete within 1-2 days"
 	},
 	"priority": "Priority",
+	"selectDueDate": "When is this task due?",
 	"selectPriority": "How urgent is this task?",
 	"selectSpecies": "Which animal type is this task for?",
 	"species": "Species",

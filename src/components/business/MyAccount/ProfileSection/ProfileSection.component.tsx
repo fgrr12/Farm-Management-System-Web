@@ -1,9 +1,11 @@
+import { type FC, useMemo } from 'react'
 import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { ActionButton } from '@/components/ui/ActionButton'
 import { Button } from '@/components/ui/Button'
-import { Select } from '@/components/ui/Select'
+import type { CustomSelectOption } from '@/components/ui/CustomSelect'
+import { CustomSelect } from '@/components/ui/CustomSelect'
 import { TextField } from '@/components/ui/TextField'
 
 import type { ProfileSectionProps } from './ProfileSection.types'
@@ -16,10 +18,13 @@ export const ProfileSection: FC<ProfileSectionProps> = ({
 }) => {
 	const { t } = useTranslation(['myAccount'])
 
-	const languages = [
-		{ value: 'spa', name: t('myProfile.languageList.spa') },
-		{ value: 'eng', name: t('myProfile.languageList.eng') },
-	]
+	const languages: CustomSelectOption[] = useMemo(
+		() => [
+			{ value: 'spa', label: t('myProfile.languageList.spa') },
+			{ value: 'eng', label: t('myProfile.languageList.eng') },
+		],
+		[t]
+	)
 
 	return (
 		<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-xl dark:shadow-gray-900/25 overflow-hidden">
@@ -125,11 +130,12 @@ export const ProfileSection: FC<ProfileSectionProps> = ({
 								name="language"
 								control={userForm.control}
 								render={({ field }) => (
-									<Select
-										{...field}
-										legend={t('myProfile.selectLanguage')}
-										defaultLabel={t('placeholders.language')}
-										items={languages}
+									<CustomSelect
+										label={t('myProfile.selectLanguage')}
+										placeholder={t('placeholders.language')}
+										value={field.value}
+										onChange={field.onChange}
+										options={languages}
 										disabled={!isEditing}
 										required
 										error={userForm.formState.errors.language?.message}

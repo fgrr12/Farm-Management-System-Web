@@ -17,7 +17,8 @@ import { AnimalsService } from '@/services/animals'
 import { DatePicker } from '@/components/layout/DatePicker'
 import { Dropzone } from '@/components/layout/Dropzone'
 import { Button } from '@/components/ui/Button'
-import { Select } from '@/components/ui/Select'
+import type { CustomSelectOption } from '@/components/ui/CustomSelect'
+import { CustomSelect } from '@/components/ui/CustomSelect'
 import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
@@ -56,6 +57,35 @@ const AnimalForm = () => {
 	const filteredBreeds = useMemo(() => {
 		return breeds.filter((breed) => breed.speciesUuid === watchedSpeciesUuid)
 	}, [breeds, watchedSpeciesUuid])
+
+	const speciesOptions: CustomSelectOption[] = useMemo(
+		() => species.map((s) => ({ value: s.uuid, label: s.name })),
+		[species]
+	)
+
+	const breedOptions: CustomSelectOption[] = useMemo(
+		() => filteredBreeds.map((b) => ({ value: b.uuid, label: b.name })),
+		[filteredBreeds]
+	)
+
+	const genderOptions: CustomSelectOption[] = useMemo(
+		() => [
+			{ value: 'Male', label: t('genderList.male') },
+			{ value: 'Female', label: t('genderList.female') },
+		],
+		[t]
+	)
+
+	const healthStatusOptions: CustomSelectOption[] = useMemo(
+		() => [
+			{ value: 'healthy', label: t('healthStatusOptions.healthy') },
+			{ value: 'sick', label: t('healthStatusOptions.sick') },
+			{ value: 'treatment', label: t('healthStatusOptions.treatment') },
+			{ value: 'critical', label: t('healthStatusOptions.critical') },
+			{ value: 'unknown', label: t('healthStatusOptions.unknown') },
+		],
+		[t]
+	)
 
 	useEffect(() => {
 		if (watchedSpeciesUuid) {
@@ -96,14 +126,14 @@ const AnimalForm = () => {
 
 	const onSubmit = useCallback(
 		async (data: AnimalFormData) => {
-			if (!user) return
+			if (!user || !farm) return
 
 			await withLoadingAndError(async () => {
 				const animalUuid = params.animalUuid as string
 
 				const animalData = transformToApiFormat(data)
 				animalData.uuid = animalUuid ?? crypto.randomUUID()
-				animalData.farmUuid = user.farmUuid
+				animalData.farmUuid = farm.uuid
 
 				if (animalData.birthDate) {
 					animalData.birthDate = formatDate(animalData.birthDate)
@@ -123,7 +153,7 @@ const AnimalForm = () => {
 					showToast(t('toast.edited'), 'success')
 					navigate(AppRoutes.ANIMAL.replace(':animalUuid', animalUuid))
 				} else {
-					await AnimalsService.setAnimal(animalData, user.uuid, user.farmUuid)
+					await AnimalsService.setAnimal(animalData, user.uuid, farm.uuid)
 					showToast(t('toast.added'), 'success')
 					reset()
 					setPictureUrl('')
@@ -132,6 +162,7 @@ const AnimalForm = () => {
 		},
 		[
 			user,
+			farm,
 			params.animalUuid,
 			transformToApiFormat,
 			withLoadingAndError,
@@ -261,20 +292,18 @@ const AnimalForm = () => {
 													name="speciesUuid"
 													control={control}
 													render={({ field }) => (
-														<Select
-															{...field}
-															legend={t('selectSpecies')}
-															defaultLabel={t('placeholders.speciesHint')}
-															optionValue="uuid"
-															optionLabel="name"
-															items={species}
+														<CustomSelect
+															label={t('selectSpecies')}
+															placeholder={t('placeholders.speciesHint')}
+															value={field.value}
+															onChange={field.onChange}
+															options={speciesOptions}
 															required
 															error={
 																errors.speciesUuid
 																	? getErrorMessage(errors.speciesUuid.message || '')
 																	: undefined
 															}
-															aria-describedby="species-help"
 														/>
 													)}
 												/>
@@ -286,21 +315,19 @@ const AnimalForm = () => {
 													name="breedUuid"
 													control={control}
 													render={({ field }) => (
-														<Select
-															{...field}
-															legend={t('selectBreed')}
-															defaultLabel={t('placeholders.breedHint')}
-															optionValue="uuid"
-															optionLabel="name"
-															items={filteredBreeds}
-															disabled={!filteredBreeds.length}
+														<CustomSelect
+															label={t('selectBreed')}
+															placeholder={t('placeholders.breedHint')}
+															value={field.value}
+															onChange={field.onChange}
+															options={breedOptions}
+															disabled={!breedOptions.length}
 															required
 															error={
 																errors.breedUuid
 																	? getErrorMessage(errors.breedUuid.message || '')
 																	: undefined
 															}
-															aria-describedby="breed-help"
 														/>
 													)}
 												/>
@@ -312,23 +339,18 @@ const AnimalForm = () => {
 													name="gender"
 													control={control}
 													render={({ field }) => (
-														<Select
-															{...field}
-															legend={t('selectGender')}
-															defaultLabel={t('placeholders.genderHint')}
-															optionValue="value"
-															optionLabel="name"
-															items={[
-																{ value: 'Male', name: t('genderList.male') },
-																{ value: 'Female', name: t('genderList.female') },
-															]}
+														<CustomSelect
+															label={t('selectGender')}
+															placeholder={t('placeholders.genderHint')}
+															value={field.value}
+															onChange={field.onChange}
+															options={genderOptions}
 															required
 															error={
 																errors.gender
 																	? getErrorMessage(errors.gender.message || '')
 																	: undefined
 															}
-															aria-describedby="gender-help"
 														/>
 													)}
 												/>
@@ -498,23 +520,17 @@ const AnimalForm = () => {
 												name="healthStatus"
 												control={control}
 												render={({ field }) => (
-													<Select
-														{...field}
-														legend={t('currentHealthStatus')}
-														defaultLabel={t('placeholders.selectHealthStatus')}
-														items={[
-															{ value: 'healthy', name: t('healthStatusOptions.healthy') },
-															{ value: 'sick', name: t('healthStatusOptions.sick') },
-															{ value: 'treatment', name: t('healthStatusOptions.treatment') },
-															{ value: 'critical', name: t('healthStatusOptions.critical') },
-															{ value: 'unknown', name: t('healthStatusOptions.unknown') },
-														]}
+													<CustomSelect
+														label={t('currentHealthStatus')}
+														placeholder={t('placeholders.selectHealthStatus')}
+														value={field.value}
+														onChange={field.onChange}
+														options={healthStatusOptions}
 														error={
 															errors.healthStatus
 																? getErrorMessage(errors.healthStatus.message || '')
 																: undefined
 														}
-														aria-describedby="health-status-help"
 													/>
 												)}
 											/>

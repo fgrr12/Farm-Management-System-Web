@@ -1,9 +1,11 @@
+import { type FC, useMemo } from 'react'
 import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { ActionButton } from '@/components/ui/ActionButton'
 import { Button } from '@/components/ui/Button'
-import { Select } from '@/components/ui/Select'
+import type { CustomSelectOption } from '@/components/ui/CustomSelect'
+import { CustomSelect } from '@/components/ui/CustomSelect'
 import { TextField } from '@/components/ui/TextField'
 
 import type { FarmSectionProps } from './FarmSection.types'
@@ -16,20 +18,29 @@ export const FarmSection: FC<FarmSectionProps> = ({
 }) => {
 	const { t } = useTranslation(['myAccount'])
 
-	const liquidUnit = [
-		{ value: 'L', name: t('myFarm.liquidUnitList.L') },
-		{ value: 'Gal', name: t('myFarm.liquidUnitList.Gal') },
-	]
+	const liquidUnit: CustomSelectOption[] = useMemo(
+		() => [
+			{ value: 'L', label: t('myFarm.liquidUnitList.L') },
+			{ value: 'Gal', label: t('myFarm.liquidUnitList.Gal') },
+		],
+		[t]
+	)
 
-	const weightUnit = [
-		{ value: 'Kg', name: t('myFarm.weightUnitList.Kg') },
-		{ value: 'Lb', name: t('myFarm.weightUnitList.Lb') },
-	]
+	const weightUnit: CustomSelectOption[] = useMemo(
+		() => [
+			{ value: 'Kg', label: t('myFarm.weightUnitList.Kg') },
+			{ value: 'P', label: t('myFarm.weightUnitList.Lb') },
+		],
+		[t]
+	)
 
-	const temperatureUnit = [
-		{ value: '°C', name: t('myFarm.temperatureUnitList.°C') },
-		{ value: '°F', name: t('myFarm.temperatureUnitList.°F') },
-	]
+	const temperatureUnit: CustomSelectOption[] = useMemo(
+		() => [
+			{ value: '°C', label: t('myFarm.temperatureUnitList.°C') },
+			{ value: '°F', label: t('myFarm.temperatureUnitList.°F') },
+		],
+		[t]
+	)
 
 	return (
 		<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-xl dark:shadow-gray-900/25 overflow-hidden">
@@ -103,11 +114,12 @@ export const FarmSection: FC<FarmSectionProps> = ({
 								name="liquidUnit"
 								control={farmForm.control}
 								render={({ field }) => (
-									<Select
-										{...field}
-										legend={t('myFarm.liquidUnit')}
-										defaultLabel={t('placeholders.liquidUnit')}
-										items={liquidUnit}
+									<CustomSelect
+										label={t('myFarm.liquidUnit')}
+										placeholder={t('placeholders.liquidUnit')}
+										value={field.value}
+										onChange={field.onChange}
+										options={liquidUnit}
 										disabled={!isEditing}
 										required
 										error={farmForm.formState.errors.liquidUnit?.message}
@@ -118,11 +130,12 @@ export const FarmSection: FC<FarmSectionProps> = ({
 								name="weightUnit"
 								control={farmForm.control}
 								render={({ field }) => (
-									<Select
-										{...field}
-										legend={t('myFarm.weightUnit')}
-										defaultLabel={t('placeholders.weightUnit')}
-										items={weightUnit}
+									<CustomSelect
+										label={t('myFarm.weightUnit')}
+										placeholder={t('placeholders.weightUnit')}
+										value={field.value}
+										onChange={field.onChange}
+										options={weightUnit}
 										disabled={!isEditing}
 										required
 										error={farmForm.formState.errors.weightUnit?.message}
@@ -133,11 +146,12 @@ export const FarmSection: FC<FarmSectionProps> = ({
 								name="temperatureUnit"
 								control={farmForm.control}
 								render={({ field }) => (
-									<Select
-										{...field}
-										legend={t('myFarm.temperatureUnit')}
-										defaultLabel={t('placeholders.temperatureUnit')}
-										items={temperatureUnit}
+									<CustomSelect
+										label={t('myFarm.temperatureUnit')}
+										placeholder={t('placeholders.temperatureUnit')}
+										value={field.value}
+										onChange={field.onChange}
+										options={temperatureUnit}
 										disabled={!isEditing}
 										required
 										error={farmForm.formState.errors.temperatureUnit?.message}

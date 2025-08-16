@@ -17,11 +17,14 @@
 	},
 	"cSpell.words": [
 		"atlaskit",
+		"celsius",
 		"committeando",
 		"daisyui",
 		"Desparasitación",
 		"deworming",
 		"elif",
+		"fahrenheit",
+		"financials",
 		"firebasestorage",
 		"firestore",
 		"Firestore",
@@ -45,8 +48,10 @@
 		"typcn",
 		"unocss",
 		"Uuids",
+		"Vitest",
 		"xmark",
-		"yoyo"
+		"yoyo",
+		"Zustand"
 	],
 	"i18n-ally.localesPaths": "public/locales",
 	"i18n-ally.enabledParsers": ["json"],
@@ -56,5 +61,6 @@
 	"i18n-ally.sortKeys": true,
 	"i18n-ally.namespace": true,
 	"i18n-ally.annotations": false,
-	"i18n-ally.displayLanguage": "eng"
+	"i18n-ally.displayLanguage": "eng",
+	"typescript.autoClosingTags": false
 }

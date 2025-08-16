@@ -45,13 +45,13 @@ const MyAccount = () => {
 		async (data: any) => {
 			await withLoadingAndError(async () => {
 				const userData = userForm.transformToApiFormat(data)
-				await UserService.updateUser(userData)
+				await UserService.updateUser(userData, currentUser!.uuid)
 				updateUser(userData)
 				setEdit((prev) => ({ ...prev, user: false }))
 				showToast(t('myProfile.toast.edited'), 'success')
 			}, t('myProfile.toast.errorEditing'))
 		},
-		[userForm, updateUser, withLoadingAndError, showToast, t]
+		[currentUser, userForm, updateUser, withLoadingAndError, showToast, t]
 	)
 
 	const handleSubmitFarm = useCallback(
@@ -59,13 +59,13 @@ const MyAccount = () => {
 			await withLoadingAndError(async () => {
 				const farmData = farmForm.transformToApiFormat(data)
 
-				await FarmsService.updateFarm(farmData)
+				await FarmsService.updateFarm(farmData, currentUser!.uuid)
 				updateFarm(farmData)
 				setEdit((prev) => ({ ...prev, farm: false }))
 				showToast(t('myFarm.toast.edited'), 'success')
 			}, t('myFarm.toast.errorEditing'))
 		},
-		[farmForm, updateFarm, withLoadingAndError, showToast, t]
+		[currentUser, farmForm, updateFarm, withLoadingAndError, showToast, t]
 	)
 
 	const handleSubmitBillingCard = useCallback(
@@ -74,19 +74,35 @@ const MyAccount = () => {
 				const billingCardData = billingCardForm.transformToApiFormat(data)
 
 				if (data.uuid) {
-					await BillingCardsService.updateBillingCard(billingCardData)
+					await BillingCardsService.updateBillingCard(
+						billingCardData,
+						currentUser!.uuid,
+						currentFarm!.uuid
+					)
 					showToast(t('myBillingCard.toast.edited'), 'success')
 				} else {
 					const updatedFarm = { ...currentFarm!, billingCardUuid: billingCardData.uuid }
-					await BillingCardsService.setBillingCard(billingCardData)
-					await FarmsService.updateFarm(updatedFarm)
+					await BillingCardsService.setBillingCard(
+						billingCardData,
+						currentUser!.uuid,
+						currentFarm!.uuid
+					)
+					await FarmsService.updateFarm(updatedFarm, currentUser!.uuid)
 					showToast(t('myBillingCard.toast.added'), 'success')
 				}
 				updateBillingCard(billingCardData)
 				setEdit((prev) => ({ ...prev, billingCard: false }))
 			}, t('myBillingCard.toast.errorEditing'))
 		},
-		[currentFarm, billingCardForm, updateBillingCard, withLoadingAndError, showToast, t]
+		[
+			currentFarm,
+			billingCardForm,
+			currentUser,
+			updateBillingCard,
+			withLoadingAndError,
+			showToast,
+			t,
+		]
 	)
 
 	// biome-ignore lint: ignore form

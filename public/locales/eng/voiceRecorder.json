@@ -1,0 +1,48 @@
+{
+	"title": "Voice Assistant",
+	"startRecording": "Start Recording",
+	"stopRecording": "Stop Recording",
+	"cancel": "Cancel",
+	"execute": "Execute Operations",
+	"executing": "Executing...",
+	"processing": "Processing...",
+	"processingAudio": "Processing voice command...",
+	"executingOperations": "Executing farm operations...",
+	"reset": "Reset",
+	"recordedAudio": "Recorded Audio",
+	"audioNotSupported": "Your browser does not support audio playback.",
+	"transcription": "Voice Transcription",
+	"aiAnalysis": "AI Analysis Results",
+	"analysisSuccessful": "Voice command processed successfully",
+	"analysisWarning": "Voice command processed with warnings",
+	"warnings": "Warnings",
+	"errors": "Errors",
+	"processingTime": "Processing time",
+	"tokensUsed": "Tokens used",
+	"executionResults": "Execution Results",
+	"mode": {
+		"automatic": "Automatic mode",
+		"manual": "Manual mode"
+	},
+	"steps": {
+		"record": "Record",
+		"process": "Process",
+		"execute": "Execute",
+		"complete": "Complete"
+	},
+	"status": {
+		"processingVoiceCommand": "Processing your voice command...",
+		"executingOperations": "Executing farm operations...",
+		"aiAnalyzing": "AI is analyzing your speech and extracting operations",
+		"performingActions": "Performing the requested actions on your farm data",
+		"operationsDetected": "Operations detected"
+	},
+	"operations": {
+		"animals": "Animals",
+		"health": "Health Records",
+		"production": "Production Records",
+		"tasks": "Tasks",
+		"relations": "Animal Relations",
+		"calendar": "Calendar Events"
+	}
+}

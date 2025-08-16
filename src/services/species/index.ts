@@ -1,27 +1,28 @@
-import { collection, deleteDoc, doc, getDocs, query, setDoc, where } from 'firebase/firestore'
+import { callableFireFunction } from '@/utils/callableFireFunction'
 
-import { firestore } from '@/config/firebaseConfig'
-
-const collectionName = 'species'
-
-const getAllSpecies = async (farmUuid: string) => {
-	const queryBase = query(collection(firestore, collectionName), where('farmUuid', '==', farmUuid))
-	const speciesDocs = await getDocs(queryBase)
-	return speciesDocs.docs.map((doc) => doc.data()) as Species[]
+const upsertSpecies = async (speciesData: Species, userUuid?: string, farmUuid?: string) => {
+	const response = await callableFireFunction<{
+		success: boolean
+		data: { uuid: string; isNew: boolean }
+	}>('species', {
+		operation: 'upsertSpecies',
+		species: speciesData,
+		userUuid: userUuid || '',
+		farmUuid: farmUuid || speciesData.farmUuid || '',
+	})
+	return response.data
 }
 
-const upsertSpecies = async (speciesData: Species) => {
-	const document = doc(firestore, collectionName, speciesData.uuid)
-	await setDoc(document, { ...speciesData }, { merge: true })
-}
-
-const deleteSpecies = async (uuid: string) => {
-	const document = doc(firestore, collectionName, uuid)
-	await deleteDoc(document)
+const deleteSpecies = async (speciesUuid: string, userUuid?: string) => {
+	const response = await callableFireFunction<{ success: boolean }>('species', {
+		operation: 'deleteSpeciesByUuid',
+		speciesUuid,
+		userUuid: userUuid || '',
+	})
+	return response
 }
 
 export const SpeciesService = {
-	getAllSpecies,
 	upsertSpecies,
 	deleteSpecies,
 }

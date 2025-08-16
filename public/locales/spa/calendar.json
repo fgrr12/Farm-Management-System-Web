@@ -1,0 +1,127 @@
+{
+	"title": "Calendario",
+	"today": "Hoy",
+	"createEvent": "Crear Evento",
+	"editEvent": "Editar Evento",
+	"newEvent": "Nuevo Evento",
+	"updateEvent": "Actualizar Evento",
+	"deleteEvent": "Eliminar Evento",
+	"confirmDelete": "¿Estás seguro de que quieres eliminar este evento?",
+	"confirmYes": "Sí",
+	"confirmNo": "No",
+	"deleting": "Eliminando...",
+	"loading": "Cargando calendario...",
+	"saving": "Guardando...",
+	"cancel": "Cancelar",
+	"create": "Crear",
+	"update": "Actualizar",
+	"date": "Fecha",
+	"time": "Hora",
+	"description": "Descripción",
+	"type": "Tipo",
+	"error": {
+		"title": "Error en el calendario",
+		"loadingEvents": "Error cargando eventos del calendario"
+	},
+	"types": {
+		"birth": "Nacimiento",
+		"drying": "Secado",
+		"medication": "Medicación",
+		"checkup": "Chequeo",
+		"task": "Tarea",
+		"custom": "Personalizado"
+	},
+	"priority": {
+		"critical": "Crítica",
+		"high": "Alta",
+		"medium": "Media",
+		"low": "Baja"
+	},
+	"status": {
+		"pending": "Pendiente",
+		"completed": "Completado",
+		"cancelled": "Cancelado",
+		"overdue": "Vencido"
+	},
+	"relatedType": {
+		"none": "Ninguno",
+		"animal": "Animal",
+		"task": "Tarea",
+		"healthRecord": "Registro de Salud"
+	},
+	"placeholders": {
+		"title": "Ingresa el título del evento",
+		"description": "Ingresa la descripción del evento",
+		"relatedId": "Ingresa el ID relacionado"
+	},
+	"errors": {
+		"titleRequired": "El título es requerido",
+		"titleTooShort": "El título debe tener al menos 3 caracteres",
+		"dateRequired": "La fecha es requerida",
+		"invalidTime": "La hora no es válida"
+	},
+	"categories": {
+		"all": "Todos",
+		"medication": "Medicación",
+		"health": "Salud",
+		"task": "Tareas",
+		"breeding": "Reproducción",
+		"drying": "Secado",
+		"custom": "Personalizado",
+		"feeding": "Alimentación"
+	},
+	"filters": {
+		"categories": "Categorías"
+	},
+	"form": {
+		"title": "Título",
+		"titlePlaceholder": "Ingresa el título del evento",
+		"description": "Descripción",
+		"descriptionPlaceholder": "Ingresa la descripción del evento",
+		"category": "Categoría",
+		"priority": "Prioridad",
+		"date": "Fecha",
+		"time": "Hora",
+		"optional": "opcional",
+		"animalId": "ID del Animal",
+		"animalIdPlaceholder": "Ingresa el ID del animal",
+		"location": "Ubicación",
+		"locationPlaceholder": "Ingresa la ubicación del evento",
+		"notes": "Notas",
+		"notesPlaceholder": "Ingresa notas adicionales",
+		"tags": "Etiquetas",
+		"tagsPlaceholder": "Presiona Enter para agregar",
+		"tagsHint": "Presiona Enter para agregar una etiqueta",
+		"completed": "Completado",
+		"errors": {
+			"titleRequired": "El título es requerido",
+			"titleTooShort": "El título debe tener al menos 3 caracteres",
+			"dateRequired": "La fecha es requerida",
+			"invalidTime": "La hora no es válida"
+		}
+	},
+	"view": {
+		"month": "Mes",
+		"week": "Semana",
+		"day": "Día"
+	},
+	"tabs": {
+		"basic": "Básico",
+		"details": "Detalles",
+		"reminder": "Recordatorio"
+	},
+	"reminder": {
+		"enable": "Habilitar recordatorio",
+		"time": "Tiempo de recordatorio",
+		"frequency": "Frecuencia",
+		"5min": "5 minutos antes",
+		"15min": "15 minutos antes",
+		"30min": "30 minutos antes",
+		"1hour": "1 hora antes",
+		"1day": "1 día antes",
+		"once": "Una vez",
+		"daily": "Diario",
+		"weekly": "Semanal",
+		"monthly": "Mensual"
+	}
+}

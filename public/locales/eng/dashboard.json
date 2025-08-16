@@ -28,7 +28,8 @@
 		"inProgress": "In Progress",
 		"completed": "Completed",
 		"tasks": "tasks",
-		"completionRate": "Completion Rate"
+		"completionRate": "Completion Rate",
+		"activeTasks": "Active Tasks"
 	},
 	"activities": {
 		"title": "Recent Activities",
@@ -69,5 +70,17 @@
 			"monthsAgo": "{{count}} months ago",
 			"yearsAgo": "{{count}} years ago"
 		}
+	},
+	"liveData": "Live Data",
+	"farmStatistics": "Farm Statistics",
+	"dashboardChartsOverview": "Dashboard Charts and Overview",
+	"species": "Species",
+	"comingSoon": "Coming Soon",
+	"widgets": {
+		"financials": "Financials",
+		"employeeMetrics": "Employee Metrics",
+		"reports": "Reports",
+		"myTasks": "My Tasks",
+		"myAnimals": "My Animals"
 	}
 }

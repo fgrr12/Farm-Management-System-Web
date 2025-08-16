@@ -9,13 +9,12 @@ import { AppRoutes } from '@/config/constants/routes'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
-import { updateAnimalHealthStatus } from '@/utils/healthStatusUpdater'
-
 import { HealthRecordsService } from '@/services/healthRecords'
 
 import { DatePicker } from '@/components/layout/DatePicker'
 import { Button } from '@/components/ui/Button'
-import { Select } from '@/components/ui/Select'
+import type { CustomSelectOption } from '@/components/ui/CustomSelect'
+import { CustomSelect } from '@/components/ui/CustomSelect'
 import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
@@ -23,11 +22,6 @@ import { useHealthRecordForm } from '@/hooks/forms/useHealthRecordForm'
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 import type { HealthRecordFormData } from '@/schemas'
-
-interface HealthRecordFormType {
-	value: string
-	name: string
-}
 
 const HealthRecordForm = () => {
 	const { user } = useUserStore()
@@ -49,16 +43,16 @@ const HealthRecordForm = () => {
 		resetWithData,
 	} = form
 
-	const healthRecordTypes: HealthRecordFormType[] = useMemo(
+	const healthRecordTypes: CustomSelectOption[] = useMemo(
 		() => [
-			{ value: 'Checkup', name: t('healthRecordType.checkup') },
-			{ value: 'Vaccination', name: t('healthRecordType.vaccination') },
-			{ value: 'Medication', name: t('healthRecordType.medication') },
-			{ value: 'Surgery', name: t('healthRecordType.surgery') },
-			{ value: 'Pregnancy', name: t('healthRecordType.pregnancy') },
-			{ value: 'Deworming', name: t('healthRecordType.deworming') },
-			{ value: 'Birth', name: t('healthRecordType.birth') },
-			{ value: 'Drying', name: t('healthRecordType.drying') },
+			{ value: 'Checkup', label: t('healthRecordType.checkup') },
+			{ value: 'Vaccination', label: t('healthRecordType.vaccination') },
+			{ value: 'Medication', label: t('healthRecordType.medication') },
+			{ value: 'Surgery', label: t('healthRecordType.surgery') },
+			{ value: 'Pregnancy', label: t('healthRecordType.pregnancy') },
+			{ value: 'Deworming', label: t('healthRecordType.deworming') },
+			{ value: 'Birth', label: t('healthRecordType.birth') },
+			{ value: 'Drying', label: t('healthRecordType.drying') },
 		],
 		[t]
 	)
@@ -70,39 +64,22 @@ const HealthRecordForm = () => {
 			await withLoadingAndError(async () => {
 				const healthRecordData = transformToApiFormat(data)
 				const healthRecordUuid = params.healthRecordUuid
-				healthRecordData.uuid = healthRecordUuid ?? crypto.randomUUID()
-
-				let newHealthRecord: HealthRecord
 
 				if (healthRecordUuid) {
-					await HealthRecordsService.updateHealthRecord(healthRecordData, user.uuid)
-					newHealthRecord = healthRecordData
+					await HealthRecordsService.updateHealthRecord(healthRecordData, user.uuid, farm!.uuid)
 					showToast(t('toast.edited'), 'success')
 				} else {
-					await HealthRecordsService.setHealthRecord(healthRecordData, user.uuid)
-					newHealthRecord = healthRecordData
+					await HealthRecordsService.setHealthRecord(healthRecordData, user.uuid, farm!.uuid)
 					showToast(t('toast.added'), 'success')
 				}
 
-				// Update animal health status automatically
-				try {
-					const newHealthStatus = await updateAnimalHealthStatus(
-						healthRecordData.animalUuid,
-						newHealthRecord,
-						data.manualHealthStatus // If user set it manually
-					)
-
-					showToast(`${t('toast.added')} - Animal status: ${newHealthStatus}`, 'success')
-				} catch (error) {
-					console.error('Failed to update animal health status:', error)
-					// Don't fail the whole operation if health status update fails
-				}
-
+				// Health status is now updated automatically by AI on the backend
 				navigate(AppRoutes.ANIMAL.replace(':animalUuid', healthRecordData.animalUuid))
 			}, t('toast.errorAddingHealthRecord'))
 		},
 		[
 			user,
+			farm,
 			params.healthRecordUuid,
 			transformToApiFormat,
 			withLoadingAndError,
@@ -201,11 +178,12 @@ const HealthRecordForm = () => {
 										name="type"
 										control={control}
 										render={({ field }) => (
-											<Select
-												{...field}
-												legend={t('selectType')}
-												defaultLabel={t('placeholders.selectType')}
-												items={healthRecordTypes}
+											<CustomSelect
+												label={t('selectType')}
+												placeholder={t('placeholders.selectType')}
+												value={field.value}
+												onChange={field.onChange}
+												options={healthRecordTypes}
 												required
 												error={errors.type ? getErrorMessage(errors.type.message || '') : undefined}
 											/>
@@ -319,40 +297,6 @@ const HealthRecordForm = () => {
 										}
 									/>
 								</div>
-							</div>
-
-							{/* Health Status Override Card */}
-							<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
-								<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-									<i className="i-material-symbols-health-and-safety bg-blue-600! w-5! h-5!" />
-									{t('healthStatusOverride')}
-								</h3>
-								<Controller
-									name="manualHealthStatus"
-									control={control}
-									render={({ field }) => (
-										<Select
-											{...field}
-											legend={t('manualHealthStatus')}
-											defaultLabel={t('placeholders.autoCalculate')}
-											items={[
-												{ value: 'healthy', name: t('healthStatus.healthy') },
-												{ value: 'sick', name: t('healthStatus.sick') },
-												{ value: 'treatment', name: t('healthStatus.treatment') },
-												{ value: 'critical', name: t('healthStatus.critical') },
-												{ value: 'unknown', name: t('healthStatus.unknown') },
-											]}
-											error={
-												errors.manualHealthStatus
-													? getErrorMessage(errors.manualHealthStatus.message || '')
-													: undefined
-											}
-										/>
-									)}
-								/>
-								<p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-									{t('healthStatusHelp')}
-								</p>
 							</div>
 
 							{/* Notes Card */}

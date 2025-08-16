@@ -1,56 +1,56 @@
-import {
-	collection,
-	deleteDoc,
-	doc,
-	getDoc,
-	getDocs,
-	query,
-	setDoc,
-	where,
-} from 'firebase/firestore'
+import { callableFireFunction } from '@/utils/callableFireFunction'
 
-import { firestore } from '@/config/firebaseConfig'
-
-const collectionName = 'breeds'
-
-const getAllBreeds = async (farmUuid: string) => {
-	const queryBase = query(collection(firestore, collectionName), where('farmUuid', '==', farmUuid))
-	const breedsDocs = await getDocs(queryBase)
-	return breedsDocs.docs.map((doc) => doc.data()) as Breed[]
+const createBreed = async (
+	breed: Breed,
+	userUuid: string,
+	farmUuid: string
+): Promise<{ uuid: string; isNew: boolean }> => {
+	const response = await callableFireFunction<{
+		success: boolean
+		data: { uuid: string; isNew: boolean }
+	}>('breeds', {
+		operation: 'upsertBreed',
+		breed: { ...breed, uuid: undefined }, // Remove uuid for new breeds
+		userUuid,
+		farmUuid,
+	})
+	return response.data
 }
 
-const getBreed = async (uuid: string) => {
-	const document = doc(firestore, collectionName, uuid)
-	const breed = await getDoc(document)
-
-	return breed.data() as Breed
+const updateBreed = async (breed: Breed, userUuid: string, farmUuid: string) => {
+	const response = await callableFireFunction<{
+		success: boolean
+		data: { uuid: string; isNew: boolean }
+	}>('breeds', {
+		operation: 'upsertBreed',
+		breed,
+		userUuid,
+		farmUuid,
+	})
+	return response.data
 }
 
-const upsertBreed = async (breedData: Breed) => {
-	const document = doc(firestore, collectionName, breedData.uuid)
-	await setDoc(document, { ...breedData }, { merge: true })
+const deleteBreed = async (breedUuid: string, updatedBy: string) => {
+	const response = await callableFireFunction<{ success: boolean }>('breeds', {
+		operation: 'deleteBreedByUuid',
+		breedUuid,
+		updatedBy,
+	})
+	return response
 }
 
-const deleteBreed = async (uuid: string) => {
-	const document = doc(firestore, collectionName, uuid)
-	await deleteDoc(document)
-}
-
-const deleteBreedsBySpecie = async (specieUuid: string) => {
-	const queryBase = query(
-		collection(firestore, collectionName),
-		where('speciesUuid', '==', specieUuid)
-	)
-	const breedsDocs = await getDocs(queryBase)
-	for (const breed of breedsDocs.docs) {
-		await deleteDoc(breed.ref)
-	}
+const deleteBreedsBySpeciesUuid = async (speciesUuid: string, updatedBy: string) => {
+	const response = await callableFireFunction<{ success: boolean }>('breeds', {
+		operation: 'deleteBreedsBySpeciesUuid',
+		speciesUuid,
+		updatedBy,
+	})
+	return response
 }
 
 export const BreedsService = {
-	getAllBreeds,
-	getBreed,
-	upsertBreed,
+	createBreed,
+	updateBreed,
 	deleteBreed,
-	deleteBreedsBySpecie,
+	deleteBreedsBySpeciesUuid,
 }

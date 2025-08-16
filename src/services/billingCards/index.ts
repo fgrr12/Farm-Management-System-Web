@@ -1,23 +1,44 @@
-import { doc, getDoc, setDoc } from 'firebase/firestore'
+import { callableFireFunction } from '@/utils/callableFireFunction'
 
-import { firestore } from '@/config/firebaseConfig'
-
-const collectionName = 'billingCards'
-
-const getBillingCardByUuid = async (uuid: string) => {
-	const document = doc(firestore, collectionName, uuid)
-	const billingCard = await getDoc(document)
-	return billingCard.data() as BillingCard
+const getBillingCardByUuid = async (billingCardUuid: string): Promise<BillingCard> => {
+	const response = await callableFireFunction<{ success: boolean; data: BillingCard }>(
+		'billingCards',
+		{
+			operation: 'getBillingCardByUuid',
+			billingCardUuid,
+		}
+	)
+	return response.data
 }
 
-const setBillingCard = async (billingCardData: BillingCard) => {
-	const document = doc(firestore, collectionName, billingCardData.uuid)
-	await setDoc(document, { ...billingCardData }, { merge: true })
+const setBillingCard = async (
+	billingCard: BillingCard,
+	userUuid: string,
+	farmUuid: string
+): Promise<{ uuid: string; isNew: boolean }> => {
+	const response = await callableFireFunction<{
+		success: boolean
+		data: { uuid: string; isNew: boolean }
+	}>('billingCards', {
+		operation: 'upsertBillingCard',
+		billingCard: { ...billingCard, uuid: undefined }, // Remove uuid for new billing cards
+		userUuid,
+		farmUuid,
+	})
+	return response.data
 }
 
-const updateBillingCard = async (billingCardData: BillingCard) => {
-	const document = doc(firestore, collectionName, billingCardData.uuid)
-	await setDoc(document, { ...billingCardData }, { merge: true })
+const updateBillingCard = async (billingCard: BillingCard, userUuid: string, farmUuid: string) => {
+	const response = await callableFireFunction<{
+		success: boolean
+		data: { uuid: string; isNew: boolean }
+	}>('billingCards', {
+		operation: 'upsertBillingCard',
+		billingCard,
+		userUuid,
+		farmUuid,
+	})
+	return response.data
 }
 
 export const BillingCardsService = {

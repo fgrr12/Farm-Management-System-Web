@@ -51,17 +51,26 @@ const ProductionRecordForm = () => {
 				productionRecordData.uuid = productionRecordUuid ?? crypto.randomUUID()
 
 				if (productionRecordUuid) {
-					await ProductionRecordsService.updateProductionRecord(productionRecordData, user.uuid)
+					await ProductionRecordsService.updateProductionRecord(
+						productionRecordData,
+						user.uuid,
+						farm!.uuid
+					)
 					showToast(t('toast.edited'), 'success')
 					navigate(AppRoutes.ANIMAL.replace(':animalUuid', productionRecordData.animalUuid))
 				} else {
-					await ProductionRecordsService.setProductionRecord(productionRecordData, user.uuid)
+					await ProductionRecordsService.setProductionRecord(
+						productionRecordData,
+						user.uuid,
+						farm!.uuid
+					)
 					showToast(t('toast.added'), 'success')
 					navigate(AppRoutes.ANIMAL.replace(':animalUuid', productionRecordData.animalUuid))
 				}
 			}, t('toast.errorAddingProductionRecord'))
 		},
 		[
+			farm,
 			user,
 			params.productionRecordUuid,
 			transformToApiFormat,

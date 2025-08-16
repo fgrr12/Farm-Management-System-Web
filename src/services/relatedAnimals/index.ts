@@ -1,32 +1,39 @@
-import dayjs from 'dayjs'
-import {
-	collection,
-	deleteDoc,
-	doc,
-	getDocs,
-	onSnapshot,
-	query,
-	setDoc,
-	where,
-} from 'firebase/firestore'
+import { collection, onSnapshot, query, where } from 'firebase/firestore'
 
 import { firestore } from '@/config/firebaseConfig'
+
+import { callableFireFunction } from '@/utils/callableFireFunction'
 
 const collectionName = 'relatedAnimals'
 
 // Gets
 
 const getRelatedAnimals = async (animalUuid: string): Promise<Relation[]> => {
-	const parentsDocs = await getDocs(
-		query(collection(firestore, collectionName), where('child.animalUuid', '==', animalUuid))
-	)
-	const childrenDocs = await getDocs(
-		query(collection(firestore, collectionName), where('parent.animalUuid', '==', animalUuid))
-	)
-	const parentsResponse = parentsDocs.docs.map((doc) => ({ ...doc.data(), uuid: doc.id }))
-	const childrenResponse = childrenDocs.docs.map((doc) => ({ ...doc.data(), uuid: doc.id }))
+	const response = await callableFireFunction<{
+		success: boolean
+		data: Relation[]
+		count: number
+	}>('relations', {
+		operation: 'getRelatedAnimals',
+		animalUuid,
+	})
+	return response.data
+}
 
-	return [...parentsResponse, ...childrenResponse] as Relation[]
+const getOrganizedRelatedAnimals = async (animalUuid: string) => {
+	const response = await callableFireFunction<{ success: boolean; data: any }>('relations', {
+		operation: 'getOrganizedRelatedAnimals',
+		animalUuid,
+	})
+	return response.data
+}
+
+const getRelationByUuid = async (relationUuid: string): Promise<Relation> => {
+	const response = await callableFireFunction<{ success: boolean; data: Relation }>('relations', {
+		operation: 'getRelationByUuid',
+		relationUuid,
+	})
+	return response.data
 }
 
 const getRealTimeRelatedAnimals = (
@@ -72,24 +79,53 @@ const getRealTimeRelatedAnimals = (
 
 // Sets
 
-const setRelatedAnimal = async (relatedAnimalData: Relation, createdBy: string) => {
-	const { uuid, parent, child } = relatedAnimalData
-	const createdAt = dayjs().format()
+const setRelatedAnimal = async (
+	relation: Omit<Relation, 'uuid'>,
+	userUuid: string,
+	farmUuid: string
+): Promise<{ uuid: string; isNew: boolean }> => {
+	const response = await callableFireFunction<{
+		success: boolean
+		data: { uuid: string; isNew: boolean }
+	}>('relations', {
+		operation: 'upsertRelation',
+		relation: { ...relation }, // Remove uuid for new relations
+		userUuid,
+		farmUuid,
+	})
+	return response.data
+}
 
-	const relatedAnimalDocument = doc(firestore, collectionName, uuid)
-	await setDoc(relatedAnimalDocument, { uuid, parent, child, createdAt, createdBy })
+const updateRelatedAnimal = async (relation: Relation, userUuid: string, farmUuid: string) => {
+	const response = await callableFireFunction<{
+		success: boolean
+		data: { uuid: string; isNew: boolean }
+	}>('relations', {
+		operation: 'upsertRelation',
+		relation,
+		userUuid,
+		farmUuid,
+	})
+	return response.data
 }
 
 // Delete
 
-const deleteRelatedAnimal = async (uuid: string) => {
-	const relatedAnimalDocument = doc(firestore, collectionName, uuid)
-	await deleteDoc(relatedAnimalDocument)
+const deleteRelatedAnimal = async (relationUuid: string, userUuid: string) => {
+	const response = await callableFireFunction<{ success: boolean }>('relations', {
+		operation: 'deleteRelation',
+		relationUuid,
+		userUuid,
+	})
+	return response
 }
 
 export const RelatedAnimalsService = {
 	getRelatedAnimals,
+	getOrganizedRelatedAnimals,
+	getRelationByUuid,
 	getRealTimeRelatedAnimals,
 	setRelatedAnimal,
+	updateRelatedAnimal,
 	deleteRelatedAnimal,
 }

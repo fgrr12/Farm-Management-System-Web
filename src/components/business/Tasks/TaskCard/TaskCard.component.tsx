@@ -25,6 +25,8 @@ export const TaskCard: FC<TaskCardProps> = memo(
 					return 'i-material-symbols-remove bg-yellow-600! dark:bg-yellow-400!'
 				case 'high':
 					return 'i-material-symbols-keyboard-arrow-up bg-red-600! dark:bg-red-400!'
+				case 'critical':
+					return 'i-material-symbols-warning bg-red-700! dark:bg-red-500!'
 				default:
 					return 'i-material-symbols-remove bg-gray-600! dark:bg-gray-400!'
 			}
@@ -47,6 +49,11 @@ export const TaskCard: FC<TaskCardProps> = memo(
 
 		const getPriorityGradient = useCallback((priority: TaskPriority) => {
 			switch (priority) {
+				case 'critical':
+					return {
+						light: 'linear-gradient(90deg, #dc2626, #991b1b, #7f1d1d)',
+						dark: 'linear-gradient(90deg, #ef4444, #dc2626, #b91c1c)',
+					}
 				case 'high':
 					return {
 						light: 'linear-gradient(90deg, #ef4444, #dc2626)',
@@ -67,6 +74,21 @@ export const TaskCard: FC<TaskCardProps> = memo(
 						light: 'linear-gradient(90deg, #6b7280, #4b5563)',
 						dark: 'linear-gradient(90deg, #9ca3af, #6b7280)',
 					}
+			}
+		}, [])
+
+		const getPriorityBorderStyle = useCallback((priority: TaskPriority) => {
+			switch (priority) {
+				case 'critical':
+					return 'border-2 border-red-500 dark:border-red-400 hover:border-red-600 dark:hover:border-red-300 shadow-red-100 dark:shadow-red-900/20'
+				case 'high':
+					return 'border-2 border-red-400 dark:border-red-300 hover:border-red-500 dark:hover:border-red-200 shadow-red-50 dark:shadow-red-900/10'
+				case 'medium':
+					return 'border-2 border-yellow-400 dark:border-yellow-300 hover:border-yellow-500 dark:hover:border-yellow-200 shadow-yellow-50 dark:shadow-yellow-900/10'
+				case 'low':
+					return 'border-2 border-green-400 dark:border-green-300 hover:border-green-500 dark:hover:border-green-200 shadow-green-50 dark:shadow-green-900/10'
+				default:
+					return 'border border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
 			}
 		}, [])
 
@@ -228,11 +250,12 @@ export const TaskCard: FC<TaskCardProps> = memo(
 			<div
 				ref={ref}
 				className={`
-				card bg-white dark:bg-gray-800 w-full shadow-sm border border-gray-200 dark:border-gray-600 rounded-xl overflow-hidden
-				transition-all duration-200 hover:shadow-xl dark:hover:shadow-2xl hover:border-gray-300 dark:hover:border-gray-500
+				card bg-white dark:bg-gray-800 w-full shadow-sm rounded-xl overflow-hidden
+				transition-all duration-200 hover:shadow-xl dark:hover:shadow-2xl
 				${isDraggable ? 'cursor-grab' : onTaskClick ? 'cursor-pointer' : ''}
 				${dragging ? 'opacity-90 shadow-2xl z-10 ring-2 ring-blue-300 dark:ring-blue-400' : ''}
 				${isMobile ? 'touch-manipulation select-none' : ''}
+				${getPriorityBorderStyle(task.priority)}
 			`}
 				role="article"
 				aria-labelledby={`task-${task.uuid}-title`}

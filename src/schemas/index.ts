@@ -1,6 +1,7 @@
 export * from './animal.schema'
 export * from './billing-card.schema'
 export * from './breed.schema'
+export * from './calendar-event.schema'
 export * from './employee.schema'
 export * from './farm.schema'
 export * from './health-record.schema'

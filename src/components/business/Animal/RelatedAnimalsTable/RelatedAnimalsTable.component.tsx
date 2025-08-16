@@ -5,6 +5,7 @@ import { AppRoutes } from '@/config/constants/routes'
 
 import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
+import { useUserStore } from '@/store/useUserStore'
 
 import { RelatedAnimalsService } from '@/services/relatedAnimals'
 
@@ -20,6 +21,7 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 	removeRelation,
 }) => {
 	const { defaultModalData, setModalData, setLoading, setToastData } = useAppStore()
+	const { user } = useUserStore()
 	const { breeds } = useFarmStore()
 	const params = useParams()
 	const navigate = useNavigate()
@@ -46,7 +48,7 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 			onAccept: async () => {
 				try {
 					setLoading(true)
-					await RelatedAnimalsService.deleteRelatedAnimal(animalUuid)
+					await RelatedAnimalsService.deleteRelatedAnimal(animalUuid, user!.uuid)
 					animals = animals.filter((animal) => animal.uuid !== animalUuid)
 					removeRelation(animalUuid)
 					setModalData(defaultModalData)

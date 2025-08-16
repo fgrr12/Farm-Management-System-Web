@@ -1,0 +1,58 @@
+{
+	"title": "Comandos de Voz",
+	"subtitle": "Gestiona tu granja usando comandos de lenguaje natural",
+	"settings": {
+		"executionMode": "Modo de Ejecución",
+		"manual": "Manual",
+		"automatic": "Automático",
+		"manualDescription": "Revisar y aprobar operaciones antes de la ejecución",
+		"automaticDescription": "Las operaciones se ejecutan automáticamente después del procesamiento de voz"
+	},
+	"exampleCommands": "Comandos de Ejemplo",
+	"howItWorks": "Cómo Funciona",
+	"animalManagement": "Gestión de Animales",
+	"healthRecords": "Registros de Salud",
+	"productionRecords": "Registros de Producción",
+	"taskManagement": "Gestión de Tareas",
+	"examples": {
+		"animals": [
+			"Registrar una nueva vaca Holstein llamada Bessie, número de etiqueta 1234",
+			"Mostrarme todos los animales que necesitan vacunación este mes",
+			"Actualizar el peso del animal 5678 a 450 kilogramos",
+			"Encontrar todas las vacas preñadas que darán a luz el próximo mes"
+		],
+		"health": [
+			"Registrar vacunación para el animal 1234 con vacuna BVDV",
+			"Agregar control de salud para la vaca Bessie - temperatura 38.5 grados",
+			"Programar desparasitación para todo el ganado la próxima semana",
+			"Marcar el animal 5678 como enfermo con infección respiratoria"
+		],
+		"production": [
+			"Registrar 25 litros de leche de la vaca 1234 hoy",
+			"Agregar producción de huevos - 150 huevos del gallinero A",
+			"Actualizar la producción diaria de leche para todo el rebaño",
+			"Registrar aumento de peso de 2kg para el animal 5678"
+		],
+		"tasks": [
+			"Crear tarea para limpiar el establo mañana a las 8 AM",
+			"Programar alimentación para todos los animales a las 6 PM diariamente",
+			"Agregar recordatorio para revisar vacas preñadas el próximo viernes",
+			"Marcar la tarea de almacenamiento de alimento como completada"
+		]
+	},
+	"instructions": {
+		"record": "Habla naturalmente sobre lo que quieres hacer",
+		"process": "La IA analiza y entiende tu comando",
+		"execute": "Las acciones se realizan automáticamente",
+		"review": "Revisa los resultados y confirma la finalización"
+	},
+	"steps": {
+		"record": "Grabar",
+		"process": "Procesar",
+		"execute": "Ejecutar",
+		"review": "Revisar"
+	},
+	"accessibility": {
+		"skipToRecording": "Saltar a la grabación de voz"
+	}
+}

@@ -28,7 +28,8 @@
 		"inProgress": "En Progreso",
 		"completed": "Completadas",
 		"tasks": "tareas",
-		"completionRate": "Tasa de Finalización"
+		"completionRate": "Tasa de Finalización",
+		"activeTasks": "Tareas Activas"
 	},
 	"activities": {
 		"title": "Actividades Recientes",
@@ -69,5 +70,17 @@
 			"monthsAgo": "hace {{count}} meses",
 			"yearsAgo": "hace {{count}} años"
 		}
+	},
+	"liveData": "Datos en Vivo",
+	"farmStatistics": "Estadísticas de la Granja",
+	"dashboardChartsOverview": "Gráficos y Resumen del Panel",
+	"species": "Especies",
+	"comingSoon": "Próximamente",
+	"widgets": {
+		"financials": "Finanzas",
+		"employeeMetrics": "Métricas de Empleados",
+		"reports": "Reportes",
+		"myTasks": "Mis Tareas",
+		"myAnimals": "Mis Animales"
 	}
 }

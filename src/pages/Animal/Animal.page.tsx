@@ -11,10 +11,6 @@ import { useUserStore } from '@/store/useUserStore'
 
 import { AnimalsService } from '@/services/animals'
 import { EmployeesService } from '@/services/employees'
-import { FarmsService } from '@/services/farms'
-import { HealthRecordsService } from '@/services/healthRecords'
-import { ProductionRecordsService } from '@/services/productionRecords'
-import { RelatedAnimalsService } from '@/services/relatedAnimals'
 
 import { HealthRecordsTable } from '@/components/business/Animal/HealthRecordsTable'
 import { ProductionRecordsTable } from '@/components/business/Animal/ProductionRecordsTable'
@@ -42,7 +38,7 @@ const GenderIcon = memo(({ gender }: { gender: string }) =>
 
 const Animal = () => {
 	const { user } = useUserStore()
-	const { farm, species, breeds, setFarm } = useFarmStore()
+	const { farm, species, breeds } = useFarmStore()
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation(['animal'])
@@ -73,7 +69,7 @@ const Animal = () => {
 			message: t('modal.removeAnimal.message'),
 			onAccept: async () => {
 				await withLoadingAndError(async () => {
-					await AnimalsService.deleteAnimal(animal.uuid, false)
+					await AnimalsService.updateAnimalStatus(animal.uuid, user!.uuid)
 					setModalData(defaultModalData)
 					showToast(t('toast.deleted'), 'success')
 					navigate(AppRoutes.ANIMALS)
@@ -84,7 +80,16 @@ const Animal = () => {
 				showToast(t('toast.notDeleted'), 'info')
 			},
 		})
-	}, [animal.uuid, t, setModalData, defaultModalData, withLoadingAndError, showToast, navigate])
+	}, [
+		animal.uuid,
+		user,
+		t,
+		setModalData,
+		defaultModalData,
+		withLoadingAndError,
+		showToast,
+		navigate,
+	])
 
 	const handleRemoveRelation = useCallback(
 		(uuid: string) => {
@@ -123,52 +128,26 @@ const Animal = () => {
 	const getHealthRecords = useCallback(async () => {
 		if (activeTab === 'healthRecords') return
 		setActiveTab('healthRecords')
-		const dbHealthRecords = await HealthRecordsService.getHealthRecords(animal.uuid)
-		if (dbHealthRecords[0]?.weight! > 0) {
-			animal.weight = dbHealthRecords[0]?.weight ?? animal.weight
-		}
-		setAnimal((prev) => ({ ...prev, healthRecords: dbHealthRecords, weight: animal.weight }))
-	}, [activeTab, animal])
+	}, [activeTab])
 
 	const getProductionRecords = useCallback(async () => {
 		if (activeTab === 'productionRecords') return
 		setActiveTab('productionRecords')
-		const dbProductionRecords = await ProductionRecordsService.getProductionRecords(animal.uuid)
-		setAnimal((prev) => ({ ...prev, productionRecords: dbProductionRecords }))
-	}, [activeTab, animal.uuid])
+	}, [activeTab])
 
 	const getRelatedAnimals = useCallback(async () => {
 		if (activeTab === 'relatedAnimals') return
 		setActiveTab('relatedAnimals')
-		const dbRelatedAnimals = await RelatedAnimalsService.getRelatedAnimals(animal.uuid)
-		if (dbRelatedAnimals.length !== 0) {
-			setAnimal(
-				(prev) =>
-					({
-						...prev,
-						relatedAnimals: {
-							parents: dbRelatedAnimals.filter(
-								(related) => related.parent.animalUuid !== animal.uuid
-							),
-							children: dbRelatedAnimals.filter(
-								(related) => related.child.animalUuid !== animal.uuid
-							),
-						},
-					}) as Animal
-			)
-		}
-	}, [activeTab, animal.uuid])
+	}, [activeTab])
 
 	const getInitialData = useCallback(async () => {
 		await withLoadingAndError(async () => {
-			const animalId = params.animalUuid as string
+			const animalUuid = params.animalUuid as string
 
-			const dbAnimal = await AnimalsService.getAnimal(animalId!)
-			const dbHealthRecords = await HealthRecordsService.getHealthRecords(animalId!)
+			const dbAnimal = await AnimalsService.loadAnimalWithDetails(animalUuid!)
 
 			if (!farm) {
-				const farmData = await FarmsService.getFarm(dbAnimal!.farmUuid)
-				setFarm(farmData)
+				await useFarmStore.getState().loadFarmDataPublic(dbAnimal.farmUuid)
 			}
 
 			if (user && farm) {
@@ -176,27 +155,40 @@ const Animal = () => {
 			}
 
 			setPageTitle(`Animal ${dbAnimal.animalId}`)
-			const weight =
-				dbHealthRecords.length > 0 && dbHealthRecords[0]!.weight! > 0
-					? dbHealthRecords[0]!.weight
-					: dbAnimal.weight
-			dbAnimal.healthRecords = dbHealthRecords
-			setAnimal({ ...dbAnimal, weight: weight! })
+			setAnimal(dbAnimal)
 
 			return dbAnimal
 		}, t('toast.errorGettingAnimal'))
-	}, [params.animalUuid, farm, user, setFarm, setPageTitle, withLoadingAndError, t])
+	}, [params.animalUuid, farm, user, setPageTitle, withLoadingAndError, t])
 
 	// biome-ignore lint: UseEffect is only called by farm and params.animalUuid
 	useEffect(() => {
 		setPageTitle('Animal')
-		setActiveTab('healthRecords')
 		getInitialData()
 	}, [params.animalUuid, farm, getInitialData, setPageTitle])
 
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
 			<div className="max-w-7xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
+				{/* Public Access Banner */}
+				{!user && (
+					<div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
+						<div className="flex items-center gap-3">
+							<i className="i-material-symbols-info bg-blue-600! dark:bg-blue-400! w-5! h-5!" />
+							<div>
+								<p className="text-blue-800 dark:text-blue-200 font-medium text-sm">
+									{t('publicAccess.title', 'Public View')}
+								</p>
+								<p className="text-blue-600 dark:text-blue-300 text-xs">
+									{t(
+										'publicAccess.message',
+										'You are viewing this animal in read-only mode. Sign in to access full features.'
+									)}
+								</p>
+							</div>
+						</div>
+					</div>
+				)}
 				{/* Hero Section */}
 				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden mb-8 border border-gray-200 dark:border-gray-700">
 					<div className="bg-gradient-to-r from-blue-600 to-green-600 dark:from-blue-700 dark:to-green-700 px-4 sm:px-6 py-4">

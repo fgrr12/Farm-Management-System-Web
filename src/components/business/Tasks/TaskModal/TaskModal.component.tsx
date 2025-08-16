@@ -1,7 +1,13 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import { type FC, memo, useCallback, useEffect, useMemo, useRef } from 'react'
+import { type FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { useFarmStore } from '@/store/useFarmStore'
+import { useUserStore } from '@/store/useUserStore'
+
+import { EmployeesService } from '@/services/employees'
+import { TasksService } from '@/services/tasks'
 
 import type { TaskModalProps } from './TaskModal.types'
 
@@ -10,6 +16,14 @@ export const TaskModal: FC<TaskModalProps> = memo(({ task, isOpen, onClose }) =>
 	const modalRef = useRef<HTMLDialogElement>(null)
 	const backdropRef = useRef<HTMLDivElement>(null)
 	const contentRef = useRef<HTMLDivElement>(null)
+	const [assignedUser, setAssignedUser] = useState<User | null>(null)
+	const [availableEmployees, setAvailableEmployees] = useState<User[]>([])
+	const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+	const dropdownRef = useRef<HTMLDivElement>(null)
+
+	// Get stores
+	const { farm } = useFarmStore()
+	const { user } = useUserStore()
 
 	const getPriorityIcon = useCallback((priority: TaskPriority) => {
 		switch (priority) {
@@ -19,6 +33,8 @@ export const TaskModal: FC<TaskModalProps> = memo(({ task, isOpen, onClose }) =>
 				return 'i-material-symbols-remove'
 			case 'high':
 				return 'i-material-symbols-keyboard-arrow-up'
+			case 'critical':
+				return 'i-material-symbols-warning'
 			default:
 				return 'i-material-symbols-remove'
 		}
@@ -32,6 +48,8 @@ export const TaskModal: FC<TaskModalProps> = memo(({ task, isOpen, onClose }) =>
 				return 'bg-yellow-600! dark:bg-yellow-400!'
 			case 'high':
 				return 'bg-red-600! dark:bg-red-400!'
+			case 'critical':
+				return 'bg-red-700! dark:bg-red-500!'
 			default:
 				return 'bg-gray-600! dark:bg-gray-400!'
 		}
@@ -45,6 +63,8 @@ export const TaskModal: FC<TaskModalProps> = memo(({ task, isOpen, onClose }) =>
 				return 'text-yellow-600 dark:text-yellow-400'
 			case 'high':
 				return 'text-red-600 dark:text-red-400'
+			case 'critical':
+				return 'text-red-700 dark:text-red-400 font-bold animate-pulse'
 			default:
 				return 'text-gray-700 dark:text-gray-300'
 		}
@@ -75,6 +95,8 @@ export const TaskModal: FC<TaskModalProps> = memo(({ task, isOpen, onClose }) =>
 				return 'bg-green-500! dark:bg-green-400!'
 			case 'archived':
 				return 'bg-gray-400! dark:bg-gray-300!'
+			case 'overdue':
+				return 'bg-red-500! dark:bg-red-400!'
 			default:
 				return 'bg-gray-500! dark:bg-gray-400!'
 		}
@@ -97,6 +119,10 @@ export const TaskModal: FC<TaskModalProps> = memo(({ task, isOpen, onClose }) =>
 			},
 			archived: {
 				headerBg: 'bg-gradient-to-r from-gray-500 to-gray-600 dark:from-gray-400 dark:to-gray-500',
+				icon: 'i-material-symbols-task-alt',
+			},
+			overdue: {
+				headerBg: 'bg-gradient-to-r from-red-600 to-red-700 dark:from-red-500 dark:to-red-600',
 				icon: 'i-material-symbols-task-alt',
 			},
 		}
@@ -187,6 +213,78 @@ export const TaskModal: FC<TaskModalProps> = memo(({ task, isOpen, onClose }) =>
 			document.body.style.overflow = 'unset'
 		}
 	}, [isOpen])
+
+	// Fetch assigned user details
+	useEffect(() => {
+		if (task?.assignedTo) {
+			EmployeesService.getEmployee(task.assignedTo)
+				.then(setAssignedUser)
+				.catch(() => setAssignedUser(null))
+		} else {
+			setAssignedUser(null)
+		}
+	}, [task?.assignedTo])
+
+	// Load available employees for assignment
+	useEffect(() => {
+		if (farm?.uuid) {
+			EmployeesService.getEmployees(farm.uuid)
+				.then(setAvailableEmployees)
+				.catch(() => setAvailableEmployees([]))
+		}
+	}, [farm?.uuid])
+
+	// Handle user assignment change
+	const handleAssignmentChange = useCallback(
+		async (employeeUuid: string) => {
+			if (!task || !user?.uuid || !farm?.uuid) return
+
+			try {
+				const updatedTask = { ...task, assignedTo: employeeUuid || undefined }
+				await TasksService.updateTask(updatedTask, user.uuid, farm.uuid)
+				// Update local state
+				if (employeeUuid) {
+					const employee = availableEmployees.find((emp) => emp.uuid === employeeUuid)
+					setAssignedUser(employee || null)
+				} else {
+					setAssignedUser(null)
+				}
+				// Close dropdown
+				setIsDropdownOpen(false)
+			} catch (error) {
+				console.error('Error updating task assignment:', error)
+			}
+		},
+		[task, user?.uuid, farm?.uuid, availableEmployees]
+	)
+
+	// Handle dropdown toggle
+	const handleDropdownToggle = useCallback(() => {
+		setIsDropdownOpen((prev) => !prev)
+	}, [])
+
+	// Handle click outside dropdown
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+				setIsDropdownOpen(false)
+			}
+		}
+
+		if (isDropdownOpen) {
+			document.addEventListener('mousedown', handleClickOutside)
+		}
+
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside)
+		}
+	}, [isDropdownOpen])
+
+	// Function to get user initials for avatar
+	const getUserInitials = useCallback((user: User) => {
+		const names = [user.name, user.lastName].filter(Boolean)
+		return names.map((name) => name.charAt(0).toUpperCase()).join('')
+	}, [])
 
 	if (!task) return null
 
@@ -283,6 +381,125 @@ export const TaskModal: FC<TaskModalProps> = memo(({ task, isOpen, onClose }) =>
 							<p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
 								{task.description}
 							</p>
+						</div>
+					</div>
+
+					{/* Assignment and Due Date */}
+					<div className="mb-6">
+						<h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
+							{t('taskDetails', 'Task Details')}
+						</h4>
+						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+							{/* User Assignment Selector */}
+							<div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 border border-gray-200 dark:border-gray-600">
+								<span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide block mb-2">
+									{t('assignedTo', 'Assigned To')}
+								</span>
+
+								{/* Custom Dropdown */}
+								<div className="relative" ref={dropdownRef}>
+									{/* Dropdown Trigger */}
+									<button
+										type="button"
+										onClick={handleDropdownToggle}
+										className="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+									>
+										<div className="flex items-center justify-between">
+											<div className="flex items-center gap-3">
+												{assignedUser ? (
+													<>
+														{assignedUser.photoUrl ? (
+															<img
+																src={assignedUser.photoUrl}
+																alt={`${assignedUser.name} ${assignedUser.lastName}`}
+																className="w-8 h-8 rounded-full object-cover"
+															/>
+														) : (
+															<div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-green-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+																{getUserInitials(assignedUser)}
+															</div>
+														)}
+														<div className="text-sm font-medium text-gray-900 dark:text-gray-100">
+															{assignedUser.name} {assignedUser.lastName}
+														</div>
+													</>
+												) : (
+													<>
+														<div className="w-8 h-8 bg-gray-400 text-white rounded-full flex items-center justify-center">
+															<i className="i-material-symbols-person w-4! h-4!" />
+														</div>
+														<div className="text-sm text-gray-500 dark:text-gray-400">
+															{t('unassigned', 'Unassigned')}
+														</div>
+													</>
+												)}
+											</div>
+											<i
+												className={`i-material-symbols-expand-more w-5! h-5! text-gray-400 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
+											/>
+										</div>
+									</button>
+
+									{/* Dropdown Options */}
+									{isDropdownOpen && (
+										<div className="absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg max-h-60 overflow-y-auto">
+											{/* Unassigned Option */}
+											<button
+												type="button"
+												onClick={() => handleAssignmentChange('')}
+												className="w-full px-3 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 transition-colors"
+											>
+												<div className="flex items-center gap-3">
+													<div className="w-8 h-8 bg-gray-400 text-white rounded-full flex items-center justify-center">
+														<i className="i-material-symbols-person w-4! h-4!" />
+													</div>
+													<div className="text-sm text-gray-500 dark:text-gray-400">
+														{t('unassigned', 'Unassigned')}
+													</div>
+												</div>
+											</button>
+
+											{/* Employee Options */}
+											{availableEmployees.map((employee) => (
+												<button
+													key={employee.uuid}
+													type="button"
+													onClick={() => handleAssignmentChange(employee.uuid)}
+													className="w-full px-3 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 transition-colors"
+												>
+													<div className="flex items-center gap-3">
+														{employee.photoUrl ? (
+															<img
+																src={employee.photoUrl}
+																alt={`${employee.name} ${employee.lastName}`}
+																className="w-8 h-8 rounded-full object-cover"
+															/>
+														) : (
+															<div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-green-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+																{getUserInitials(employee)}
+															</div>
+														)}
+														<div className="text-sm font-medium text-gray-900 dark:text-gray-100">
+															{employee.name} {employee.lastName}
+														</div>
+													</div>
+												</button>
+											))}
+										</div>
+									)}
+								</div>
+							</div>
+
+							{task.dueDate && (
+								<div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 border border-gray-200 dark:border-gray-600">
+									<span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide block mb-1">
+										{t('dueDate', 'Due Date')}
+									</span>
+									<span className="text-sm text-gray-700 dark:text-gray-300">
+										{new Date(task.dueDate).toLocaleDateString()}
+									</span>
+								</div>
+							)}
 						</div>
 					</div>
 

@@ -1,11 +1,6 @@
-import dayjs from 'dayjs'
-import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore'
-
-import { firestore } from '@/config/firebaseConfig'
+import { callableFireFunction } from '@/utils/callableFireFunction'
 
 import type { GetTasksParams } from './types'
-
-const collectionName = 'tasks'
 
 const getTasks = async ({
 	farmUuid,
@@ -13,56 +8,104 @@ const getTasks = async ({
 	status,
 	priority,
 	speciesUuid,
+	assignedTo,
+	dueFilter,
+	uuid,
 }: GetTasksParams): Promise<Task[]> => {
-	try {
-		let response = []
-		let queryBase = query(collection(firestore, collectionName), where('farmUuid', '==', farmUuid))
-
-		if (status !== '') queryBase = query(queryBase, where('status', '==', status))
-		if (priority !== '') queryBase = query(queryBase, where('priority', '==', priority))
-		if (speciesUuid !== '') queryBase = query(queryBase, where('speciesUuid', '==', speciesUuid))
-
-		const tasksDocs = await getDocs(queryBase)
-		response = tasksDocs.docs.map((doc) => doc.data()) as Task[]
-
-		if (search) {
-			response = response.filter((task) => task.title.toLowerCase().includes(search.toLowerCase()))
+	const response = await callableFireFunction<{ success: boolean; data: Task[]; count: number }>(
+		'tasks',
+		{
+			operation: 'getTasks',
+			farmUuid,
+			search: search || '',
+			status: status || '',
+			priority: priority || '',
+			speciesUuid: speciesUuid || '',
+			assignedTo: assignedTo || '',
+			dueFilter,
+			uuid,
 		}
+	)
+	return response.data
+}
 
-		response = response.sort((a, b) => {
-			// First sort by priority (high > medium > low)
-			const priorityOrder = ['high', 'medium', 'low']
-			const priorityDiff = priorityOrder.indexOf(a.priority) - priorityOrder.indexOf(b.priority)
+const getTaskStatistics = async (farmUuid: string) => {
+	const response = await callableFireFunction<{ success: boolean; data: any }>('tasks', {
+		operation: 'getTaskStatistics',
+		farmUuid,
+	})
+	return response.data
+}
 
-			if (priorityDiff !== 0) {
-				return priorityDiff
-			}
+const setTask = async (
+	task: Task,
+	userUuid: string,
+	farmUuid: string
+): Promise<{ uuid: string; isNew: boolean }> => {
+	const response = await callableFireFunction<{
+		success: boolean
+		data: { uuid: string; isNew: boolean }
+	}>('tasks', {
+		operation: 'upsertTask',
+		task: { ...task, uuid: undefined }, // Remove uuid for new tasks
+		userUuid,
+		farmUuid,
+	})
+	return response.data
+}
 
-			// Then sort by creation date (newest first)
-			return dayjs(b.createdAt || b.updatedAt).diff(dayjs(a.createdAt || a.updatedAt))
-		})
+const updateTask = async (task: Task, userUuid: string, farmUuid: string) => {
+	const response = await callableFireFunction<{
+		success: boolean
+		data: { uuid: string; isNew: boolean }
+	}>('tasks', {
+		operation: 'upsertTask',
+		task,
+		userUuid,
+		farmUuid,
+	})
+	return response.data
+}
 
-		return response
-	} catch (error) {
-		console.error('Error in getTasks:', error)
-		return []
+const deleteTask = async (taskUuid: string, userUuid: string) => {
+	const response = await callableFireFunction<{ success: boolean }>('tasks', {
+		operation: 'deleteTask',
+		taskUuid,
+		updatedBy: userUuid,
+	})
+	return response
+}
+
+// Utility function to update task status using updateTask
+const updateTaskStatus = async (
+	taskUuid: string,
+	status: string,
+	userUuid: string,
+	farmUuid: string
+) => {
+	// We need to get the task first, then update it
+	const tasks = await getTasks({
+		farmUuid,
+		search: '',
+		status: '',
+		priority: '',
+		speciesUuid: '',
+		uuid: taskUuid,
+	})
+	const task = tasks.find((t) => t.uuid === taskUuid)
+
+	if (!task) {
+		throw new Error('Task not found')
 	}
-}
 
-const setTask = async (task: Task, createdBy: string, farmUuid: string): Promise<void> => {
-	const document = doc(firestore, collectionName, task.uuid)
-	const createdAt = dayjs().toISOString()
-	await setDoc(document, { ...task, createdAt, createdBy, farmUuid }, { merge: true })
-}
-
-const updateTaskStatus = async (taskUuid: string, status: string): Promise<void> => {
-	const document = doc(firestore, collectionName, taskUuid)
-	const updatedAt = dayjs().toISOString()
-	await setDoc(document, { status, updatedAt }, { merge: true })
+	return updateTask({ ...task, status } as Task, userUuid, farmUuid)
 }
 
 export const TasksService = {
 	getTasks,
+	getTaskStatistics,
 	setTask,
+	updateTask,
+	deleteTask,
 	updateTaskStatus,
 }

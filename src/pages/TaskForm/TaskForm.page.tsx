@@ -1,4 +1,5 @@
-import { memo, useCallback, useEffect } from 'react'
+import dayjs from 'dayjs'
+import { memo, useCallback, useEffect, useMemo } from 'react'
 import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -10,8 +11,10 @@ import { useUserStore } from '@/store/useUserStore'
 
 import { TasksService } from '@/services/tasks'
 
+import { DatePicker } from '@/components/layout/DatePicker'
 import { Button } from '@/components/ui/Button'
-import { Select } from '@/components/ui/Select'
+import type { CustomSelectOption } from '@/components/ui/CustomSelect'
+import { CustomSelect } from '@/components/ui/CustomSelect'
 import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
@@ -37,6 +40,21 @@ const TaskForm = () => {
 		getErrorMessage,
 	} = form
 
+	const priorityOptions: CustomSelectOption[] = useMemo(
+		() => [
+			{ value: 'low', label: t('priorities.low') },
+			{ value: 'medium', label: t('priorities.medium') },
+			{ value: 'high', label: t('priorities.high') },
+			{ value: 'critical', label: t('priorities.critical') },
+		],
+		[t]
+	)
+
+	const speciesOptions: CustomSelectOption[] = useMemo(
+		() => species.map((s) => ({ value: s.uuid, label: s.name })),
+		[species]
+	)
+
 	const onSubmit = useCallback(
 		async (data: TaskFormData) => {
 			if (!user || !farm) return
@@ -57,10 +75,6 @@ const TaskForm = () => {
 	useEffect(() => {
 		setPageTitle(t('title'))
 	}, [setPageTitle, t])
-
-	useEffect(() => {
-		if (!farm) return
-	}, [farm])
 
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto">
@@ -154,22 +168,18 @@ const TaskForm = () => {
 										name="priority"
 										control={control}
 										render={({ field }) => (
-											<Select
-												{...field}
-												legend={t('selectPriority')}
-												defaultLabel={t('placeholders.priorityHint')}
-												items={[
-													{ value: 'low', name: t('priorities.low') },
-													{ value: 'medium', name: t('priorities.medium') },
-													{ value: 'high', name: t('priorities.high') },
-												]}
+											<CustomSelect
+												label={t('selectPriority')}
+												placeholder={t('placeholders.priorityHint')}
+												value={field.value}
+												onChange={field.onChange}
+												options={priorityOptions}
 												required
 												error={
 													errors.priority
 														? getErrorMessage(errors.priority.message || '')
 														: undefined
 												}
-												aria-describedby="priority-help"
 											/>
 										)}
 									/>
@@ -181,25 +191,47 @@ const TaskForm = () => {
 										name="speciesUuid"
 										control={control}
 										render={({ field }) => (
-											<Select
-												{...field}
-												legend={t('selectSpecies')}
-												defaultLabel={t('placeholders.speciesHint')}
-												optionValue="uuid"
-												optionLabel="name"
-												items={species}
+											<CustomSelect
+												label={t('selectSpecies')}
+												placeholder={t('placeholders.speciesHint')}
+												value={field.value}
+												onChange={field.onChange}
+												options={speciesOptions}
 												required
 												error={
 													errors.speciesUuid
 														? getErrorMessage(errors.speciesUuid.message || '')
 														: undefined
 												}
-												aria-describedby="species-help"
 											/>
 										)}
 									/>
 									<div id="species-help" className="sr-only">
 										{t('accessibility.speciesHelp')}
+									</div>
+								</div>
+
+								{/* Due Date */}
+								<div>
+									<Controller
+										name="dueDate"
+										control={control}
+										render={({ field }) => (
+											<DatePicker
+												legend={t('selectDueDate')}
+												label={t('placeholders.dueDateHint')}
+												date={field.value ? dayjs(field.value) : null}
+												onDateChange={(date) => {
+													field.onChange(date ? date.toISOString() : '')
+												}}
+												error={
+													errors.dueDate ? getErrorMessage(errors.dueDate.message || '') : undefined
+												}
+											/>
+										)}
+									/>
+									<div id="due-date-help" className="sr-only">
+										{t('accessibility.dueDateHelp')}
 									</div>
 								</div>
 							</div>

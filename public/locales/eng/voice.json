@@ -1,0 +1,58 @@
+{
+	"title": "Voice Commands",
+	"subtitle": "Manage your farm using natural language commands",
+	"settings": {
+		"executionMode": "Execution Mode",
+		"manual": "Manual",
+		"automatic": "Automatic",
+		"manualDescription": "Review and approve operations before execution",
+		"automaticDescription": "Operations are executed automatically after voice processing"
+	},
+	"exampleCommands": "Example Commands",
+	"howItWorks": "How It Works",
+	"animalManagement": "Animal Management",
+	"healthRecords": "Health Records",
+	"productionRecords": "Production Records",
+	"taskManagement": "Task Management",
+	"examples": {
+		"animals": [
+			"Register a new Holstein cow named Bessie, tag number 1234",
+			"Show me all animals that need vaccination this month",
+			"Update animal 5678 weight to 450 kilograms",
+			"Find all pregnant cows due next month"
+		],
+		"health": [
+			"Record vaccination for animal 1234 with vaccine BVDV",
+			"Add health check for cow Bessie - temperature 38.5 degrees",
+			"Schedule deworming for all cattle next week",
+			"Mark animal 5678 as sick with respiratory infection"
+		],
+		"production": [
+			"Record 25 liters of milk from cow 1234 today",
+			"Add egg production - 150 eggs from coop A",
+			"Update daily milk yield for the entire herd",
+			"Register weight gain of 2kg for animal 5678"
+		],
+		"tasks": [
+			"Create task to clean barn tomorrow at 8 AM",
+			"Schedule feeding for all animals at 6 PM daily",
+			"Add reminder to check pregnant cows next Friday",
+			"Mark feed storage task as completed"
+		]
+	},
+	"instructions": {
+		"record": "Speak naturally about what you want to do",
+		"process": "AI analyzes and understands your command",
+		"execute": "Actions are performed automatically",
+		"review": "Check results and confirm completion"
+	},
+	"steps": {
+		"record": "Record",
+		"process": "Process",
+		"execute": "Execute",
+		"review": "Review"
+	},
+	"accessibility": {
+		"skipToRecording": "Skip to voice recording"
+	}
+}

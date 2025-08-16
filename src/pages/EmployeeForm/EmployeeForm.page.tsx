@@ -1,16 +1,18 @@
-import { memo, useCallback, useEffect } from 'react'
+import { memo, useCallback, useEffect, useMemo } from 'react'
 import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
 
+import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
 import { EmployeesService } from '@/services/employees'
 
 import { Button } from '@/components/ui/Button'
-import { Select } from '@/components/ui/Select'
+import type { CustomSelectOption } from '@/components/ui/CustomSelect'
+import { CustomSelect } from '@/components/ui/CustomSelect'
 import { TextField } from '@/components/ui/TextField'
 
 import { useEmployeeForm } from '@/hooks/forms/useEmployeeForm'
@@ -20,6 +22,7 @@ import type { EmployeeFormData } from '@/schemas'
 
 const EmployeeForm = () => {
 	const { user } = useUserStore()
+	const { farm } = useFarmStore()
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation(['employeeForm'])
@@ -35,6 +38,14 @@ const EmployeeForm = () => {
 		getErrorMessage,
 		resetWithData,
 	} = form
+
+	const roleOptions: CustomSelectOption[] = useMemo(
+		() => [
+			{ value: 'employee', label: t('employee') },
+			{ value: 'owner', label: t('owner') },
+		],
+		[t]
+	)
 
 	const getEmployee = useCallback(async () => {
 		await withLoadingAndError(async () => {
@@ -53,23 +64,31 @@ const EmployeeForm = () => {
 
 			await withLoadingAndError(async () => {
 				const employeeData = transformToApiFormat(data)
-				employeeData.farmUuid = user.farmUuid!
-				employeeData.uuid = employeeData.uuid || crypto.randomUUID()
+				employeeData.farmUuid = farm!.uuid
 
 				if (params.employeeUuid) {
-					await EmployeesService.updateEmployee(employeeData)
+					await EmployeesService.updateEmployee(employeeData, user.uuid)
 					showToast(t('toast.edited'), 'success')
 					navigate(AppRoutes.EMPLOYEES)
 					return
 				}
 
 				employeeData.createdBy = user.uuid
-				await EmployeesService.setEmployee(employeeData)
+				await EmployeesService.setEmployee(employeeData, user.uuid)
 				showToast(t('toast.added'), 'success')
 				navigate(AppRoutes.EMPLOYEES)
 			}, t('toast.errorAddingEmployee'))
 		},
-		[user, params.employeeUuid, transformToApiFormat, withLoadingAndError, showToast, t, navigate]
+		[
+			farm,
+			user,
+			params.employeeUuid,
+			transformToApiFormat,
+			withLoadingAndError,
+			showToast,
+			t,
+			navigate,
+		]
 	)
 
 	useEffect(() => {
@@ -215,17 +234,14 @@ const EmployeeForm = () => {
 									name="role"
 									control={control}
 									render={({ field }) => (
-										<Select
-											{...field}
-											legend={t('selectRole')}
-											defaultLabel={t('placeholders.role')}
-											items={[
-												{ value: 'employee', name: t('employee') },
-												{ value: 'owner', name: t('owner') },
-											]}
+										<CustomSelect
+											label={t('selectRole')}
+											placeholder={t('placeholders.role')}
+											value={field.value}
+											onChange={field.onChange}
+											options={roleOptions}
 											required
 											error={errors.role ? getErrorMessage(errors.role.message || '') : undefined}
-											aria-describedby="role-help"
 										/>
 									)}
 								/>

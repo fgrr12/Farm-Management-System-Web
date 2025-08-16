@@ -52,7 +52,7 @@ export const AnimalDistribution = memo(() => {
 					</h3>
 					<div className="flex items-center gap-2 px-3 py-1 bg-purple-100 dark:bg-purple-900/30 rounded-full text-xs font-medium text-purple-700 dark:text-purple-400">
 						<i className="i-material-symbols-pets w-3! h-3!" />
-						Species
+						{t('species')}
 					</div>
 				</div>
 

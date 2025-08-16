@@ -13,6 +13,8 @@ import { useUserStore } from '@/store/useUserStore'
 
 import { UserService } from '@/services/user'
 
+import { FarmSelector } from '@/components/business/Admin/FarmSelector'
+import { NotificationDropdown } from '@/components/business/Notifications/NotificationDropdown'
 import { BackButton } from '@/components/ui/Button'
 
 import { useTheme } from '@/hooks/system/useTheme'
@@ -53,6 +55,12 @@ export const Navbar = memo(() => {
 		if (location.pathname.includes(AppRoutes.DASHBOARD)) {
 			return 'i-material-symbols-dashboard'
 		}
+		if (location.pathname.includes(AppRoutes.CALENDAR)) {
+			return 'i-material-symbols-calendar-month'
+		}
+		if (location.pathname.includes(AppRoutes.VOICE)) {
+			return 'i-heroicons-microphone'
+		}
 		// Default icon
 		return 'i-healthicons-animal-cow'
 	}, [location.pathname])
@@ -65,7 +73,7 @@ export const Navbar = memo(() => {
 			return 'from-green-500 to-green-600'
 		}
 		if (location.pathname.includes(AppRoutes.MY_SPECIES)) {
-			return 'from-purple-500 to-purple-600'
+			return 'from-indigo-500 to-indigo-600'
 		}
 		if (location.pathname.includes(AppRoutes.EMPLOYEES)) {
 			return 'from-orange-500 to-orange-600'
@@ -79,6 +87,12 @@ export const Navbar = memo(() => {
 		if (location.pathname.includes(AppRoutes.DASHBOARD)) {
 			return 'from-cyan-500 to-cyan-600'
 		}
+		if (location.pathname.includes(AppRoutes.CALENDAR)) {
+			return 'from-purple-500 to-purple-600'
+		}
+		if (location.pathname.includes(AppRoutes.VOICE)) {
+			return 'from-pink-500 to-pink-600'
+		}
 		// Default color
 		return 'from-blue-500 to-purple-600'
 	}, [location.pathname])
@@ -91,7 +105,9 @@ export const Navbar = memo(() => {
 			location.pathname === AppRoutes.MY_ACCOUNT ||
 			location.pathname === AppRoutes.MY_SPECIES ||
 			location.pathname === AppRoutes.BILLING_CARD ||
-			location.pathname === AppRoutes.DASHBOARD,
+			location.pathname === AppRoutes.DASHBOARD ||
+			location.pathname === AppRoutes.CALENDAR ||
+			location.pathname === AppRoutes.VOICE,
 		[location.pathname]
 	)
 
@@ -229,11 +245,19 @@ export const Navbar = memo(() => {
 									aria-haspopup="true"
 									aria-expanded="false"
 								>
-									<div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center transition-all duration-200 hover:shadow-lg">
-										<span className="text-white text-sm font-semibold leading-none h-full flex items-center justify-center transition-transform duration-200 hover:scale-110">
-											{user?.name?.charAt(0)?.toUpperCase() || 'U'}
-										</span>
-									</div>
+									{user?.photoUrl ? (
+										<img
+											src={user.photoUrl}
+											alt={`${user.name} ${user.lastName}`}
+											className="w-8 h-8 rounded-full object-cover transition-all duration-200 hover:shadow-lg"
+										/>
+									) : (
+										<div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center transition-all duration-200 hover:shadow-lg">
+											<span className="text-white text-sm font-semibold leading-none h-full flex items-center justify-center transition-transform duration-200 hover:scale-110">
+												{user?.name?.charAt(0)?.toUpperCase() || 'U'}
+											</span>
+										</div>
+									)}
 								</button>
 								<ul
 									className="menu dropdown-content bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 z-[50] mt-3 w-52 p-2 absolute right-0 top-full"
@@ -273,16 +297,7 @@ export const Navbar = memo(() => {
 							</div>
 
 							{/* Notifications */}
-							<button
-								type="button"
-								className="btn btn-ghost btn-circle hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 hover:scale-110 active:scale-95"
-								aria-label="Notifications"
-							>
-								<div className="indicator">
-									<i className="i-material-symbols-notifications-outline-sharp w-5! h-5! bg-gray-600! dark:bg-gray-300! transition-transform duration-200 hover:rotate-12" />
-									<span className="badge badge-xs bg-gradient-to-r from-red-500 to-pink-500 border-none indicator-item animate-pulse hover:animate-bounce" />
-								</div>
-							</button>
+							<NotificationDropdown />
 						</div>
 					</div>
 				</div>
@@ -391,8 +406,33 @@ export const Navbar = memo(() => {
 							<button
 								type="button"
 								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
-									location.pathname.includes(AppRoutes.MY_SPECIES)
+									location.pathname.includes(AppRoutes.CALENDAR)
 										? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg'
+										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+								}`}
+								onClick={goTo(AppRoutes.CALENDAR)}
+							>
+								<div
+									className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+										location.pathname.includes(AppRoutes.CALENDAR) ? 'bg-white/20' : 'bg-purple-100'
+									}`}
+								>
+									<i
+										className={`i-material-symbols-calendar-month w-5! h-5! ${
+											location.pathname.includes(AppRoutes.CALENDAR)
+												? 'bg-white!'
+												: 'bg-purple-600!'
+										}`}
+									/>
+								</div>
+								<span className="font-medium">{t('sidebar.calendar')}</span>
+							</button>
+
+							<button
+								type="button"
+								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
+									location.pathname.includes(AppRoutes.MY_SPECIES)
+										? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-lg'
 										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
 								}`}
 								onClick={goTo(AppRoutes.MY_SPECIES)}
@@ -401,18 +441,41 @@ export const Navbar = memo(() => {
 									className={`w-8 h-8 rounded-lg flex items-center justify-center ${
 										location.pathname.includes(AppRoutes.MY_SPECIES)
 											? 'bg-white/20'
-											: 'bg-purple-100'
+											: 'bg-indigo-100'
 									}`}
 								>
 									<i
 										className={`i-solar-dna-bold-duotone w-5! h-5! ${
 											location.pathname.includes(AppRoutes.MY_SPECIES)
 												? 'bg-white!'
-												: 'bg-purple-600!'
+												: 'bg-indigo-600!'
 										}`}
 									/>
 								</div>
 								<span className="font-medium">{t('sidebar.mySpecies')}</span>
+							</button>
+
+							<button
+								type="button"
+								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
+									location.pathname.includes(AppRoutes.VOICE)
+										? 'bg-gradient-to-r from-pink-500 to-pink-600 text-white shadow-lg'
+										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+								}`}
+								onClick={goTo(AppRoutes.VOICE)}
+							>
+								<div
+									className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+										location.pathname.includes(AppRoutes.VOICE) ? 'bg-white/20' : 'bg-pink-100'
+									}`}
+								>
+									<i
+										className={`i-heroicons-microphone w-5! h-5! ${
+											location.pathname.includes(AppRoutes.VOICE) ? 'bg-white!' : 'bg-pink-600!'
+										}`}
+									/>
+								</div>
+								<span className="font-medium">{t('sidebar.voice')}</span>
 							</button>
 						</div>
 
@@ -480,6 +543,9 @@ export const Navbar = memo(() => {
 								)}
 							</div>
 						)}
+
+						{/* Farm Selector for Admin */}
+						<FarmSelector />
 
 						{/* Settings Section */}
 						<div className="mt-6 space-y-2">

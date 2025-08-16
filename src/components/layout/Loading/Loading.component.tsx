@@ -110,6 +110,7 @@ export const Loading: FC<LoadingProps> = memo(
 			})
 
 			return () => {
+				// biome-ignore lint: kill-tweens
 				tweens.forEach((t) => t.kill())
 			}
 		}, [open, variant])
