@@ -27,7 +27,7 @@ export const useFarmForm = (initialData?: Partial<Farm>) => {
 			liquidUnit: (initialData.liquidUnit as 'L' | 'Gal') || 'L',
 			weightUnit: (initialData.weightUnit as 'Kg' | 'P') || 'Kg',
 			temperatureUnit: (initialData.temperatureUnit as '°C' | '°F') || '°C',
-			billingCardUuid: initialData.billingCardUuid || '',
+			taxDetailsUuid: initialData.taxDetailsUuid || '',
 			status: initialData.status ?? true,
 		}
 	}, [initialData])
@@ -47,7 +47,7 @@ export const useFarmForm = (initialData?: Partial<Farm>) => {
 			liquidUnit: data.liquidUnit,
 			weightUnit: data.weightUnit,
 			temperatureUnit: data.temperatureUnit,
-			billingCardUuid: data.billingCardUuid || '',
+			taxDetailsUuid: data.taxDetailsUuid || '',
 			status: data.status ?? true,
 		}
 	}, [])
@@ -76,7 +76,7 @@ export const useFarmForm = (initialData?: Partial<Farm>) => {
 				liquidUnit: (data.liquidUnit as 'L' | 'Gal') || 'L',
 				weightUnit: (data.weightUnit as 'Kg' | 'P') || 'Kg',
 				temperatureUnit: (data.temperatureUnit as '°C' | '°F') || '°C',
-				billingCardUuid: data.billingCardUuid || '',
+				taxDetailsUuid: data.taxDetailsUuid || '',
 				status: data.status ?? true,
 			}
 

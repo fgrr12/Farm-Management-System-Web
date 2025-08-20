@@ -50,11 +50,11 @@ export const FarmSelector = memo(() => {
 	}, [])
 
 	const handleFarmCreated = useCallback(
-		(newFarm: Farm) => {
+		async (newFarm: Farm) => {
 			setAvailableFarms((prev) => [...prev, newFarm])
-			setFarm(newFarm)
+			await useFarmStore.getState().loadFarmData(newFarm.uuid, user!.role)
 		},
-		[setFarm]
+		[user]
 	)
 
 	useEffect(() => {

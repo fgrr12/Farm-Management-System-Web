@@ -1,0 +1,17 @@
+{
+	"title": "Datos Fiscales",
+	"subtitle": "Visualiza tu información fiscal y detalles de la tarjeta",
+	"taxCardTitle": "DATOS FISCALES PARA",
+	"electronicInvoicing": "FACTURACIÓN ELECTRÓNICA",
+	"id": "Cédula",
+	"name": "Nombre",
+	"phone": "Teléfono",
+	"email": "Correo",
+	"address": "Dirección",
+	"activityCode": "Código de Actividad",
+	"economicActivity": "ACTIVIDAD ECONÓMICA",
+	"fiscalInformation": "Información Fiscal",
+	"noTaxDetails": "No se Encontraron Datos Fiscales",
+	"noTaxDetailsMessage": "Aún no tienes datos fiscales configurados. Por favor configura tu información fiscal en la configuración de tu cuenta.",
+	"downloadCards": "Descargar Tarjetas Fiscales"
+}

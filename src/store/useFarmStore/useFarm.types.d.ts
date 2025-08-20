@@ -1,10 +1,10 @@
 export interface FarmStore {
 	farm: Farm | null
-	billingCard: BillingCard | null
+	taxDetails: TaxDetails | null
 	species: Species[]
 	breeds: Breed[]
 	setFarm: (farm: Farm | null) => void
-	setBillingCard: (card: BillingCard | null) => void
+	setTaxDetails: (taxDetails: TaxDetails | null) => void
 	setSpecies: (species: Species[]) => void
 	setBreeds: (breeds: Breed[]) => void
 	loadFarmData: (farmUuid: string, role: string) => Promise<void>

@@ -19,7 +19,7 @@ export const CreateFarmModal = memo<CreateFarmModalProps>(({ isOpen, onClose, on
 	const [formData, setFormData] = useState({
 		name: '',
 		address: '',
-		billingCardUuid: '',
+		taxDetailsUuid: '',
 		liquidUnit: 'L' as LiquidUnit,
 		weightUnit: 'Kg' as WeightUnit,
 		temperatureUnit: '°C' as TemperatureUnit,
@@ -72,7 +72,7 @@ export const CreateFarmModal = memo<CreateFarmModalProps>(({ isOpen, onClose, on
 
 		setLoading(true)
 		try {
-			formData.billingCardUuid = formData.billingCardUuid || ''
+			formData.taxDetailsUuid = formData.taxDetailsUuid || ''
 			const newFarm = await FarmsService.createFarm(formData, user!.uuid)
 
 			onFarmCreated({ ...newFarm, ...formData })
@@ -82,7 +82,7 @@ export const CreateFarmModal = memo<CreateFarmModalProps>(({ isOpen, onClose, on
 			setFormData({
 				name: '',
 				address: '',
-				billingCardUuid: '',
+				taxDetailsUuid: '',
 				liquidUnit: 'L' as LiquidUnit,
 				weightUnit: 'Kg' as WeightUnit,
 				temperatureUnit: '°C' as TemperatureUnit,
@@ -101,7 +101,7 @@ export const CreateFarmModal = memo<CreateFarmModalProps>(({ isOpen, onClose, on
 		setFormData({
 			name: '',
 			address: '',
-			billingCardUuid: '',
+			taxDetailsUuid: '',
 			liquidUnit: 'L' as LiquidUnit,
 			weightUnit: 'Kg' as WeightUnit,
 			temperatureUnit: '°C' as TemperatureUnit,

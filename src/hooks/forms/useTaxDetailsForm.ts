@@ -3,22 +3,26 @@ import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { type BillingCardFormData, billingCardSchema } from '@/schemas'
+import { type TaxDetailsFormData, taxDetailsSchema } from '@/schemas/tax-details.schema'
 
-const DEFAULT_VALUES: Partial<BillingCardFormData> = {
+const DEFAULT_VALUES: TaxDetailsFormData = {
+	uuid: '',
 	id: '',
 	name: '',
 	email: '',
 	phone: '',
 	address: '',
+	activityCode: '',
 	status: false,
 }
 
-export const useBillingCardForm = (initialData?: Partial<BillingCard>) => {
-	const { t } = useTranslation(['myAccount'])
+export const useTaxDetailsForm = (initialData?: Partial<TaxDetails>) => {
+	const { t } = useTranslation('taxDetails')
 
-	const getDefaultValues = useCallback((): Partial<BillingCardFormData> => {
-		if (!initialData) return DEFAULT_VALUES
+	const getDefaultValues = useCallback((): TaxDetailsFormData => {
+		if (!initialData) {
+			return DEFAULT_VALUES
+		}
 
 		return {
 			uuid: initialData.uuid || '',
@@ -27,18 +31,19 @@ export const useBillingCardForm = (initialData?: Partial<BillingCard>) => {
 			email: initialData.email || '',
 			phone: initialData.phone || '',
 			address: initialData.address || '',
+			activityCode: initialData.activityCode || '',
 			status: initialData.status ?? false,
 		}
 	}, [initialData])
 
-	const form = useForm<BillingCardFormData>({
-		resolver: zodResolver(billingCardSchema),
+	const form = useForm<TaxDetailsFormData>({
+		resolver: zodResolver(taxDetailsSchema),
 		defaultValues: getDefaultValues(),
 		mode: 'onChange',
 		reValidateMode: 'onChange',
 	})
 
-	const transformToApiFormat = useCallback((data: BillingCardFormData): BillingCard => {
+	const transformToApiFormat = useCallback((data: TaxDetailsFormData): TaxDetails => {
 		return {
 			uuid: data.uuid || crypto.randomUUID(),
 			id: data.id,
@@ -46,14 +51,15 @@ export const useBillingCardForm = (initialData?: Partial<BillingCard>) => {
 			email: data.email,
 			phone: data.phone,
 			address: data.address,
+			activityCode: data.activityCode,
 			status: data.status ?? false,
 		}
 	}, [])
 
 	const getErrorMessage = useCallback(
 		(error: string): string => {
-			if (error.startsWith('billingCard.validation.')) {
-				return t(error.replace('billingCard.', ''))
+			if (error.startsWith('taxDetails.validation.')) {
+				return t(error.replace('taxDetails.', ''))
 			}
 			return error
 		},
@@ -61,19 +67,20 @@ export const useBillingCardForm = (initialData?: Partial<BillingCard>) => {
 	)
 
 	const resetWithData = useCallback(
-		(data?: Partial<BillingCard>) => {
+		(data?: Partial<TaxDetails>) => {
 			if (!data) {
 				form.reset(DEFAULT_VALUES)
 				return
 			}
 
-			const formattedData: Partial<BillingCardFormData> = {
+			const formattedData: Partial<TaxDetailsFormData> = {
 				uuid: data.uuid || '',
 				id: data.id || '',
 				name: data.name || '',
 				email: data.email || '',
 				phone: data.phone || '',
 				address: data.address || '',
+				activityCode: data.activityCode || '',
 				status: data.status ?? false,
 			}
 

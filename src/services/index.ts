@@ -1,6 +1,5 @@
 // Export all services for easy importing
 export { AnimalsService } from './animals'
-export { BillingCardsService } from './billingCards'
 export { BreedsService } from './breeds'
 export { CalendarService } from './calendar'
 export { DashboardService } from './dashboard'
@@ -12,4 +11,5 @@ export { ProductionRecordsService } from './productionRecords'
 export { RelatedAnimalsService } from './relatedAnimals'
 export { SpeciesService } from './species'
 export { TasksService } from './tasks'
+export { TaxDetailsService } from './taxDetails'
 export { UserService } from './user'

@@ -59,9 +59,6 @@ export const mockServices = {
 		setFarm: vi.fn(),
 		updateFarm: vi.fn(),
 	},
-	BillingCardsService: {
-		getBillingCardByUuid: vi.fn(),
-	},
 	SpeciesService: {
 		getAllSpecies: vi.fn(),
 	},

@@ -25,7 +25,7 @@ export const Navbar = memo(() => {
 	const titleRef = useRef<HTMLHeadingElement>(null)
 	const drawerTitleRef = useRef<HTMLHeadingElement>(null)
 	const { user, setUser } = useUserStore()
-	const { farm, billingCard, setFarm } = useFarmStore()
+	const { farm, taxDetails, setFarm } = useFarmStore()
 	const { t } = useTranslation('common')
 	const navigate = useNavigate()
 	const location = useLocation()
@@ -46,7 +46,7 @@ export const Navbar = memo(() => {
 		if (location.pathname.includes(AppRoutes.EMPLOYEES)) {
 			return 'i-clarity-employee-group-solid'
 		}
-		if (location.pathname.includes(AppRoutes.BILLING_CARD)) {
+		if (location.pathname.includes(AppRoutes.TAX_DETAILS)) {
 			return 'i-typcn-business-card'
 		}
 		if (location.pathname.includes(AppRoutes.MY_ACCOUNT)) {
@@ -78,7 +78,7 @@ export const Navbar = memo(() => {
 		if (location.pathname.includes(AppRoutes.EMPLOYEES)) {
 			return 'from-orange-500 to-orange-600'
 		}
-		if (location.pathname.includes(AppRoutes.BILLING_CARD)) {
+		if (location.pathname.includes(AppRoutes.TAX_DETAILS)) {
 			return 'from-indigo-500 to-indigo-600'
 		}
 		if (location.pathname.includes(AppRoutes.MY_ACCOUNT)) {
@@ -104,7 +104,7 @@ export const Navbar = memo(() => {
 			location.pathname === AppRoutes.TASKS ||
 			location.pathname === AppRoutes.MY_ACCOUNT ||
 			location.pathname === AppRoutes.MY_SPECIES ||
-			location.pathname === AppRoutes.BILLING_CARD ||
+			location.pathname === AppRoutes.TAX_DETAILS ||
 			location.pathname === AppRoutes.DASHBOARD ||
 			location.pathname === AppRoutes.CALENDAR ||
 			location.pathname === AppRoutes.VOICE,
@@ -336,22 +336,19 @@ export const Navbar = memo(() => {
 
 							<button
 								type="button"
-								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
-									location.pathname.includes(AppRoutes.DASHBOARD)
+								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${location.pathname.includes(AppRoutes.DASHBOARD)
 										? 'bg-gradient-to-r from-cyan-500 to-cyan-600 text-white shadow-lg'
 										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
-								}`}
+									}`}
 								onClick={goTo(AppRoutes.DASHBOARD)}
 							>
 								<div
-									className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-										location.pathname.includes(AppRoutes.DASHBOARD) ? 'bg-white/20' : 'bg-cyan-100'
-									}`}
+									className={`w-8 h-8 rounded-lg flex items-center justify-center ${location.pathname.includes(AppRoutes.DASHBOARD) ? 'bg-white/20' : 'bg-cyan-100'
+										}`}
 								>
 									<i
-										className={`i-material-symbols-dashboard w-5! h-5! ${
-											location.pathname.includes(AppRoutes.DASHBOARD) ? 'bg-white!' : 'bg-cyan-600!'
-										}`}
+										className={`i-material-symbols-dashboard w-5! h-5! ${location.pathname.includes(AppRoutes.DASHBOARD) ? 'bg-white!' : 'bg-cyan-600!'
+											}`}
 									/>
 								</div>
 								<span className="font-medium">{t('sidebar.dashboard')}</span>
@@ -359,22 +356,19 @@ export const Navbar = memo(() => {
 
 							<button
 								type="button"
-								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
-									location.pathname.includes(AppRoutes.ANIMALS)
+								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${location.pathname.includes(AppRoutes.ANIMALS)
 										? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg'
 										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
-								}`}
+									}`}
 								onClick={goTo(AppRoutes.ANIMALS)}
 							>
 								<div
-									className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-										location.pathname.includes(AppRoutes.ANIMALS) ? 'bg-white/20' : 'bg-blue-100'
-									}`}
+									className={`w-8 h-8 rounded-lg flex items-center justify-center ${location.pathname.includes(AppRoutes.ANIMALS) ? 'bg-white/20' : 'bg-blue-100'
+										}`}
 								>
 									<i
-										className={`i-healthicons-animal-cow w-5! h-5! ${
-											location.pathname.includes(AppRoutes.ANIMALS) ? 'bg-white!' : 'bg-blue-600!'
-										}`}
+										className={`i-healthicons-animal-cow w-5! h-5! ${location.pathname.includes(AppRoutes.ANIMALS) ? 'bg-white!' : 'bg-blue-600!'
+											}`}
 									/>
 								</div>
 								<span className="font-medium">{t('sidebar.animals')}</span>
@@ -382,22 +376,19 @@ export const Navbar = memo(() => {
 
 							<button
 								type="button"
-								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
-									location.pathname.includes(AppRoutes.TASKS)
+								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${location.pathname.includes(AppRoutes.TASKS)
 										? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg'
 										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
-								}`}
+									}`}
 								onClick={goTo(AppRoutes.TASKS)}
 							>
 								<div
-									className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-										location.pathname.includes(AppRoutes.TASKS) ? 'bg-white/20' : 'bg-green-100'
-									}`}
+									className={`w-8 h-8 rounded-lg flex items-center justify-center ${location.pathname.includes(AppRoutes.TASKS) ? 'bg-white/20' : 'bg-green-100'
+										}`}
 								>
 									<i
-										className={`i-fluent-tasks-app-24-filled w-5! h-5! ${
-											location.pathname.includes(AppRoutes.TASKS) ? 'bg-white!' : 'bg-green-600!'
-										}`}
+										className={`i-fluent-tasks-app-24-filled w-5! h-5! ${location.pathname.includes(AppRoutes.TASKS) ? 'bg-white!' : 'bg-green-600!'
+											}`}
 									/>
 								</div>
 								<span className="font-medium">{t('sidebar.tasks')}</span>
@@ -405,24 +396,21 @@ export const Navbar = memo(() => {
 
 							<button
 								type="button"
-								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
-									location.pathname.includes(AppRoutes.CALENDAR)
+								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${location.pathname.includes(AppRoutes.CALENDAR)
 										? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg'
 										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
-								}`}
+									}`}
 								onClick={goTo(AppRoutes.CALENDAR)}
 							>
 								<div
-									className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-										location.pathname.includes(AppRoutes.CALENDAR) ? 'bg-white/20' : 'bg-purple-100'
-									}`}
+									className={`w-8 h-8 rounded-lg flex items-center justify-center ${location.pathname.includes(AppRoutes.CALENDAR) ? 'bg-white/20' : 'bg-purple-100'
+										}`}
 								>
 									<i
-										className={`i-material-symbols-calendar-month w-5! h-5! ${
-											location.pathname.includes(AppRoutes.CALENDAR)
+										className={`i-material-symbols-calendar-month w-5! h-5! ${location.pathname.includes(AppRoutes.CALENDAR)
 												? 'bg-white!'
 												: 'bg-purple-600!'
-										}`}
+											}`}
 									/>
 								</div>
 								<span className="font-medium">{t('sidebar.calendar')}</span>
@@ -430,26 +418,23 @@ export const Navbar = memo(() => {
 
 							<button
 								type="button"
-								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
-									location.pathname.includes(AppRoutes.MY_SPECIES)
+								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${location.pathname.includes(AppRoutes.MY_SPECIES)
 										? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-lg'
 										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
-								}`}
+									}`}
 								onClick={goTo(AppRoutes.MY_SPECIES)}
 							>
 								<div
-									className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-										location.pathname.includes(AppRoutes.MY_SPECIES)
+									className={`w-8 h-8 rounded-lg flex items-center justify-center ${location.pathname.includes(AppRoutes.MY_SPECIES)
 											? 'bg-white/20'
 											: 'bg-indigo-100'
-									}`}
+										}`}
 								>
 									<i
-										className={`i-solar-dna-bold-duotone w-5! h-5! ${
-											location.pathname.includes(AppRoutes.MY_SPECIES)
+										className={`i-solar-dna-bold-duotone w-5! h-5! ${location.pathname.includes(AppRoutes.MY_SPECIES)
 												? 'bg-white!'
 												: 'bg-indigo-600!'
-										}`}
+											}`}
 									/>
 								</div>
 								<span className="font-medium">{t('sidebar.mySpecies')}</span>
@@ -457,22 +442,19 @@ export const Navbar = memo(() => {
 
 							<button
 								type="button"
-								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
-									location.pathname.includes(AppRoutes.VOICE)
+								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${location.pathname.includes(AppRoutes.VOICE)
 										? 'bg-gradient-to-r from-pink-500 to-pink-600 text-white shadow-lg'
 										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
-								}`}
+									}`}
 								onClick={goTo(AppRoutes.VOICE)}
 							>
 								<div
-									className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-										location.pathname.includes(AppRoutes.VOICE) ? 'bg-white/20' : 'bg-pink-100'
-									}`}
+									className={`w-8 h-8 rounded-lg flex items-center justify-center ${location.pathname.includes(AppRoutes.VOICE) ? 'bg-white/20' : 'bg-pink-100'
+										}`}
 								>
 									<i
-										className={`i-heroicons-microphone w-5! h-5! ${
-											location.pathname.includes(AppRoutes.VOICE) ? 'bg-white!' : 'bg-pink-600!'
-										}`}
+										className={`i-heroicons-microphone w-5! h-5! ${location.pathname.includes(AppRoutes.VOICE) ? 'bg-white!' : 'bg-pink-600!'
+											}`}
 									/>
 								</div>
 								<span className="font-medium">{t('sidebar.voice')}</span>
@@ -488,54 +470,48 @@ export const Navbar = memo(() => {
 
 								<button
 									type="button"
-									className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
-										location.pathname.includes(AppRoutes.EMPLOYEES)
+									className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${location.pathname.includes(AppRoutes.EMPLOYEES)
 											? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg'
 											: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
-									}`}
+										}`}
 									onClick={goTo(AppRoutes.EMPLOYEES)}
 								>
 									<div
-										className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-											location.pathname.includes(AppRoutes.EMPLOYEES)
+										className={`w-8 h-8 rounded-lg flex items-center justify-center ${location.pathname.includes(AppRoutes.EMPLOYEES)
 												? 'bg-white/20'
 												: 'bg-orange-100'
-										}`}
+											}`}
 									>
 										<i
-											className={`i-clarity-employee-group-solid w-5! h-5! ${
-												location.pathname.includes(AppRoutes.EMPLOYEES)
+											className={`i-clarity-employee-group-solid w-5! h-5! ${location.pathname.includes(AppRoutes.EMPLOYEES)
 													? 'bg-white!'
 													: 'bg-orange-600!'
-											}`}
+												}`}
 										/>
 									</div>
 									<span className="font-medium">{t('sidebar.employees')}</span>
 								</button>
 
-								{billingCard !== null && billingCard.status && (
+								{taxDetails && taxDetails.status && (
 									<button
 										type="button"
-										className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
-											location.pathname.includes(AppRoutes.BILLING_CARD)
+										className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${location.pathname.includes(AppRoutes.TAX_DETAILS)
 												? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-lg'
 												: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
-										}`}
-										onClick={goTo(AppRoutes.BILLING_CARD)}
+											}`}
+										onClick={goTo(AppRoutes.TAX_DETAILS)}
 									>
 										<div
-											className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-												location.pathname.includes(AppRoutes.BILLING_CARD)
+											className={`w-8 h-8 rounded-lg flex items-center justify-center ${location.pathname.includes(AppRoutes.TAX_DETAILS)
 													? 'bg-white/20'
 													: 'bg-indigo-100'
-											}`}
+												}`}
 										>
 											<i
-												className={`i-typcn-business-card w-5! h-5! ${
-													location.pathname.includes(AppRoutes.BILLING_CARD)
+												className={`i-typcn-business-card w-5! h-5! ${location.pathname.includes(AppRoutes.TAX_DETAILS)
 														? 'bg-white!'
 														: 'bg-indigo-600!'
-												}`}
+													}`}
 											/>
 										</div>
 										<span className="font-medium">{t('sidebar.businessCard')}</span>
