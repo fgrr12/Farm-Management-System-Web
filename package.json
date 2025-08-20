@@ -5,6 +5,8 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite --mode local-develop",
+		"dev:develop": "vite --mode develop",
+		"dev:production": "vite --mode production",
 		"prod": "vite --mode production",
 		"build:production": "tsc && vite build --mode production",
 		"build:develop": "tsc && vite build --mode develop",
