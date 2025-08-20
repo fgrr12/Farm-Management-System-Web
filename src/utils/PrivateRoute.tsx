@@ -5,11 +5,17 @@ import { AppRoutes } from '@/config/constants/routes'
 
 import { useUserStore } from '@/store/useUserStore'
 
-export const PrivateRoute = ({ children }: { children: ReactNode }) => {
+export const PrivateRoute = ({
+	children,
+	requiredRoles,
+}: {
+	children: ReactNode
+	requiredRoles?: string[]
+}) => {
 	const location = useLocation()
 	const { user } = useUserStore()
 
-	if (!user) {
+	if (!user || (requiredRoles && !requiredRoles.includes(user.role))) {
 		return <Navigate to={AppRoutes.LOGIN} state={{ from: location }} replace />
 	}
 

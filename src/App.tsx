@@ -227,39 +227,30 @@ export const App = () => {
 									</PrivateRoute>
 								}
 							/>
-							{user?.role === 'owner' ||
-								(user?.role === 'admin' && (
-									<Route
-										path={AppRoutes.EMPLOYEES}
-										element={
-											<PrivateRoute>
-												<Employees />
-											</PrivateRoute>
-										}
-									/>
-								))}
-							{user?.role === 'owner' ||
-								(user?.role === 'admin' && (
-									<Route
-										path={AppRoutes.ADD_EMPLOYEE}
-										element={
-											<PrivateRoute>
-												<EmployeeForm />
-											</PrivateRoute>
-										}
-									/>
-								))}
-							{user?.role === 'owner' ||
-								(user?.role === 'admin' && (
-									<Route
-										path={AppRoutes.EDIT_EMPLOYEE}
-										element={
-											<PrivateRoute>
-												<EmployeeForm />
-											</PrivateRoute>
-										}
-									/>
-								))}
+							<Route
+								path={AppRoutes.EMPLOYEES}
+								element={
+									<PrivateRoute requiredRoles={['owner', 'admin']}>
+										<Employees />
+									</PrivateRoute>
+								}
+							/>
+							<Route
+								path={AppRoutes.ADD_EMPLOYEE}
+								element={
+									<PrivateRoute requiredRoles={['owner', 'admin']}>
+										<EmployeeForm />
+									</PrivateRoute>
+								}
+							/>
+							<Route
+								path={AppRoutes.EDIT_EMPLOYEE}
+								element={
+									<PrivateRoute requiredRoles={['owner', 'admin']}>
+										<EmployeeForm />
+									</PrivateRoute>
+								}
+							/>
 
 							<Route
 								path={AppRoutes.MY_ACCOUNT}
@@ -304,17 +295,14 @@ export const App = () => {
 								}
 							/>
 
-							{user?.role === 'owner' ||
-								(user?.role === 'admin' && (
-									<Route
-										path={AppRoutes.TAX_DETAILS}
-										element={
-											<PrivateRoute>
-												<TaxDetails />
-											</PrivateRoute>
-										}
-									/>
-								))}
+							<Route
+								path={AppRoutes.TAX_DETAILS}
+								element={
+									<PrivateRoute requiredRoles={['owner', 'admin']}>
+										<TaxDetails />
+									</PrivateRoute>
+								}
+							/>
 
 							<Route
 								path={AppRoutes.VOICE}
