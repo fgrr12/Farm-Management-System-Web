@@ -28,6 +28,12 @@
 		},
 		"weightUnit": "Weight Unit"
 	},
+	"customSelect": {
+		"clear": "Clear",
+		"noOptions": "No options available",
+		"searchPlaceholder": "Search...",
+		"selectOption": "Select an option"
+	},
 	"header": {
 		"back": "Back",
 		"return": "Return"
@@ -91,11 +97,5 @@
 		"dark": "Dark",
 		"light": "Light",
 		"system": "System"
-	},
-	"customSelect": {
-		"clear": "Clear",
-		"searchPlaceholder": "Search...",
-		"noOptions": "No options available",
-		"selectOption": "Select an option"
 	}
 }

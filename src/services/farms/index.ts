@@ -53,7 +53,7 @@ const loadFarmBulkData = async (farmUuid: string, role?: string) => {
 			farm: Farm
 			species: Species[]
 			breeds: Breed[]
-			billingCard: BillingCard | null
+			taxDetails: TaxDetails | null
 		}
 	}>('farms', {
 		operation: 'loadFarmBulkData',
@@ -74,7 +74,7 @@ const loadFarmBulkDataPublic = async (farmUuid: string) => {
 			farm: Farm
 			species: Species[]
 			breeds: Breed[]
-			billingCard: BillingCard | null
+			taxDetails: TaxDetails | null
 		}
 	}>('farms', {
 		operation: 'loadFarmBulkData',

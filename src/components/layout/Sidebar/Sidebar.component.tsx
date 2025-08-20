@@ -13,7 +13,7 @@ import { useTheme } from '@/hooks/system/useTheme'
 
 export const Sidebar = memo(() => {
 	const { user } = useUserStore()
-	const { billingCard } = useFarmStore()
+	const { taxDetails } = useFarmStore()
 	const { loading } = useAppStore()
 	const navigate = useNavigate()
 	const location = useLocation()
@@ -52,9 +52,9 @@ export const Sidebar = memo(() => {
 		[user?.role]
 	)
 
-	const showBillingCard = useMemo(
-		() => showAdminRoutes && billingCard !== null && billingCard.status,
-		[showAdminRoutes, billingCard]
+	const showTaxDetails = useMemo(
+		() => showAdminRoutes && taxDetails !== null && taxDetails.status,
+		[showAdminRoutes, taxDetails]
 	)
 
 	useGSAP(() => {
@@ -152,18 +152,18 @@ export const Sidebar = memo(() => {
 							/>
 						</button>
 
-						{showBillingCard && (
+						{showTaxDetails && (
 							<button
 								type="button"
 								className={getButtonClasses(
-									AppRoutes.BILLING_CARD,
+									AppRoutes.TAX_DETAILS,
 									'from-indigo-500',
 									'to-indigo-600'
 								)}
-								onClick={handleGoTo(AppRoutes.BILLING_CARD)}
-								aria-label="Billing Card"
+								onClick={handleGoTo(AppRoutes.TAX_DETAILS)}
+								aria-label="Tax Details"
 							>
-								<i className={`i-typcn-business-card ${getIconClasses(AppRoutes.BILLING_CARD)}`} />
+								<i className={`i-typcn-business-card ${getIconClasses(AppRoutes.TAX_DETAILS)}`} />
 							</button>
 						)}
 					</div>

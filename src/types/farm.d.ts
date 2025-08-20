@@ -1,6 +1,6 @@
 interface Farm {
 	uuid: string
-	billingCardUuid: string
+	taxDetailsUuid: string
 	name: string
 	address: string
 	liquidUnit: LiquidUnit

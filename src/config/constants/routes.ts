@@ -30,8 +30,8 @@ export enum AppRoutes {
 	// Calendar
 	CALENDAR = '/calendar',
 
-	// Billing Card
-	BILLING_CARD = '/billing-card',
+	// Tax Details
+	TAX_DETAILS = '/tax-details',
 
 	// Dashboard
 	DASHBOARD = '/dashboard',

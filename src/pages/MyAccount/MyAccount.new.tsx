@@ -48,8 +48,8 @@ const MyAccount = () => {
 				await UserService.updateUser(userData, currentUser!.uuid)
 				updateUser(userData)
 				setEdit((prev) => ({ ...prev, user: false }))
-				showToast(t('myProfile.toast.edited'), 'success')
-			}, t('myProfile.toast.errorEditing'))
+				showToast(t('myUser.toast.edited'), 'success')
+			}, t('myUser.toast.errorEditing'))
 		},
 		[currentUser, userForm, updateUser, withLoadingAndError, showToast, t]
 	)
@@ -58,7 +58,6 @@ const MyAccount = () => {
 		async (data: any) => {
 			await withLoadingAndError(async () => {
 				const farmData = farmForm.transformToApiFormat(data)
-
 				await FarmsService.updateFarm(farmData, currentUser!.uuid)
 				updateFarm(farmData)
 				setEdit((prev) => ({ ...prev, farm: false }))
@@ -97,26 +96,24 @@ const MyAccount = () => {
 		[currentFarm, taxDetailsForm, currentUser, updateTaxDetails, withLoadingAndError, showToast, t]
 	)
 
-	// biome-ignore lint: ignore form
+	// Initialize forms with current data
 	useEffect(() => {
 		if (currentUser) {
 			userForm.resetWithData(currentUser)
 		}
-	}, [currentUser])
+	}, [currentUser, userForm])
 
-	// biome-ignore lint: ignore form
 	useEffect(() => {
 		if (currentFarm) {
 			farmForm.resetWithData(currentFarm)
 		}
-	}, [currentFarm])
+	}, [currentFarm, farmForm])
 
-	// biome-ignore lint: ignore form
 	useEffect(() => {
 		if (currentTaxDetails) {
 			taxDetailsForm.resetWithData(currentTaxDetails)
 		}
-	}, [currentTaxDetails])
+	}, [currentTaxDetails, taxDetailsForm])
 
 	useEffect(() => {
 		setPageTitle(t('title'))
@@ -124,67 +121,30 @@ const MyAccount = () => {
 
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto">
-			<div className="max-w-4xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
-				<a
-					href="#profile-section"
-					className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
-				>
-					{t('accessibility.skipToProfile')}
-				</a>
+			<div className="max-w-4xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8 space-y-6 sm:space-y-8">
+				{/* Profile Section */}
+				<ProfileSection
+					userForm={userForm}
+					isEditing={edit.user}
+					onSubmit={handleSubmitUser}
+					onToggleEdit={handleEdit('user')}
+				/>
 
-				{/* Hero Header */}
-				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl dark:shadow-gray-900/50 overflow-hidden mb-6 sm:mb-8">
-					<div className="bg-gradient-to-r from-blue-600 to-green-600 px-4 sm:px-6 py-6 sm:py-8">
-						<div className="flex items-center gap-3 sm:gap-4">
-							<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
-								<i className="i-material-symbols-account-circle bg-white! w-6! h-6! sm:w-8 sm:h-8" />
-							</div>
-							<div className="min-w-0">
-								<h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
-									{t('title')}
-								</h1>
-								<p className="text-blue-100 text-sm sm:text-base mt-1">{t('subtitle')}</p>
-							</div>
-						</div>
-					</div>
-				</div>
+				{/* Farm Section */}
+				<FarmSection
+					farmForm={farmForm}
+					isEditing={edit.farm}
+					onSubmit={handleSubmitFarm}
+					onToggleEdit={handleEdit('farm')}
+				/>
 
-				{/* Sections */}
-				<div className="space-y-6">
-					{/* Profile Section */}
-					<section id="profile-section">
-						<ProfileSection
-							userForm={userForm}
-							isEditing={edit.user}
-							onToggleEdit={handleEdit('user')}
-							onSubmit={handleSubmitUser}
-						/>
-					</section>
-
-					{/* Farm Section - Only for admin/owner */}
-					{(currentUser?.role === 'admin' || currentUser?.role === 'owner') && (
-						<section>
-							<FarmSection
-								farmForm={farmForm}
-								isEditing={edit.farm}
-								onToggleEdit={handleEdit('farm')}
-								onSubmit={handleSubmitFarm}
-							/>
-						</section>
-					)}
-
-					{/* Billing Section - Only for admin/owner */}
-					{(currentUser?.role === 'admin' || currentUser?.role === 'owner') && (
-						<section>
-							<TaxDetailsSection
-								taxDetailsForm={taxDetailsForm}
-								isEditing={edit.taxDetails}
-								onToggleEdit={handleEdit('taxDetails')}
-								onSubmit={handleSubmitTaxDetails}
-							/>
-						</section>
-					)}
-				</div>
+				{/* Tax Details Section */}
+				<TaxDetailsSection
+					taxDetailsForm={taxDetailsForm}
+					isEditing={edit.taxDetails}
+					onSubmit={handleSubmitTaxDetails}
+					onToggleEdit={handleEdit('taxDetails')}
+				/>
 			</div>
 		</div>
 	)

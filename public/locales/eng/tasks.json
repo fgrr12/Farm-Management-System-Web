@@ -7,12 +7,11 @@
 		"searchTasks": "Search tasks by title or description",
 		"skipToTasks": "Skip to tasks list"
 	},
-	"assignedTo": "Assigned to",
-	"dueDate": "Due Date",
 	"activeTasks": "Active",
 	"addTask": "Add Task",
 	"allPriorities": "All Priorities",
 	"allSpecies": "All Species",
+	"assignedTo": "Assigned to",
 	"clearFilters": "Clear All",
 	"close": "Close",
 	"completedTasks": "Completed",
@@ -20,6 +19,7 @@
 	"description": "Description",
 	"done": "Done",
 	"dropTaskHere": "Drop task here",
+	"dueDate": "Due Date",
 	"filterByPriority": "Priority",
 	"filterBySpecies": "Species",
 	"filters": "Filters",
@@ -27,6 +27,7 @@
 	"filtersApplied": "{{count}} filter applied",
 	"filtersApplied_other": "{{count}} filters applied",
 	"filtersButton": "Open filters menu",
+	"loadingUser": "Loading user...",
 	"noFiltersApplied": "No filters applied",
 	"noTasksFound": "No tasks found for your search",
 	"noTasksInColumn": "No tasks in this column",
@@ -51,12 +52,11 @@
 	"taskTitle": "Title",
 	"timestamps": "Timestamps",
 	"title": "Tasks",
-	"unassigned": "Unassigned",
-	"updatedAt": "Updated",
-	"loadingUser": "Loading user...",
 	"toast": {
 		"errorGettingTasks": "Error getting tasks",
 		"errorUpdatingTaskStatus": "Error updating task status",
 		"taskMoved": "Task moved to {{status}}"
-	}
+	},
+	"unassigned": "Unassigned",
+	"updatedAt": "Updated"
 }

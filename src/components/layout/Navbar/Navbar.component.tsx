@@ -25,7 +25,7 @@ export const Navbar = memo(() => {
 	const titleRef = useRef<HTMLHeadingElement>(null)
 	const drawerTitleRef = useRef<HTMLHeadingElement>(null)
 	const { user, setUser } = useUserStore()
-	const { farm, billingCard, setFarm } = useFarmStore()
+	const { farm, taxDetails, setFarm } = useFarmStore()
 	const { t } = useTranslation('common')
 	const navigate = useNavigate()
 	const location = useLocation()
@@ -46,7 +46,7 @@ export const Navbar = memo(() => {
 		if (location.pathname.includes(AppRoutes.EMPLOYEES)) {
 			return 'i-clarity-employee-group-solid'
 		}
-		if (location.pathname.includes(AppRoutes.BILLING_CARD)) {
+		if (location.pathname.includes(AppRoutes.TAX_DETAILS)) {
 			return 'i-typcn-business-card'
 		}
 		if (location.pathname.includes(AppRoutes.MY_ACCOUNT)) {
@@ -78,7 +78,7 @@ export const Navbar = memo(() => {
 		if (location.pathname.includes(AppRoutes.EMPLOYEES)) {
 			return 'from-orange-500 to-orange-600'
 		}
-		if (location.pathname.includes(AppRoutes.BILLING_CARD)) {
+		if (location.pathname.includes(AppRoutes.TAX_DETAILS)) {
 			return 'from-indigo-500 to-indigo-600'
 		}
 		if (location.pathname.includes(AppRoutes.MY_ACCOUNT)) {
@@ -104,7 +104,7 @@ export const Navbar = memo(() => {
 			location.pathname === AppRoutes.TASKS ||
 			location.pathname === AppRoutes.MY_ACCOUNT ||
 			location.pathname === AppRoutes.MY_SPECIES ||
-			location.pathname === AppRoutes.BILLING_CARD ||
+			location.pathname === AppRoutes.TAX_DETAILS ||
 			location.pathname === AppRoutes.DASHBOARD ||
 			location.pathname === AppRoutes.CALENDAR ||
 			location.pathname === AppRoutes.VOICE,
@@ -513,26 +513,26 @@ export const Navbar = memo(() => {
 									<span className="font-medium">{t('sidebar.employees')}</span>
 								</button>
 
-								{billingCard !== null && billingCard.status && (
+								{taxDetails !== null && taxDetails.status && (
 									<button
 										type="button"
 										className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
-											location.pathname.includes(AppRoutes.BILLING_CARD)
+											location.pathname.includes(AppRoutes.TAX_DETAILS)
 												? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-lg'
 												: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
 										}`}
-										onClick={goTo(AppRoutes.BILLING_CARD)}
+										onClick={goTo(AppRoutes.TAX_DETAILS)}
 									>
 										<div
 											className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-												location.pathname.includes(AppRoutes.BILLING_CARD)
+												location.pathname.includes(AppRoutes.TAX_DETAILS)
 													? 'bg-white/20'
 													: 'bg-indigo-100'
 											}`}
 										>
 											<i
 												className={`i-typcn-business-card w-5! h-5! ${
-													location.pathname.includes(AppRoutes.BILLING_CARD)
+													location.pathname.includes(AppRoutes.TAX_DETAILS)
 														? 'bg-white!'
 														: 'bg-indigo-600!'
 												}`}

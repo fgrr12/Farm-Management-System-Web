@@ -16,7 +16,7 @@ export const farmSchema = z.object({
 		message: 'farm.validation.temperatureUnitRequired',
 	}),
 	uuid: z.string().optional(),
-	billingCardUuid: z.string().optional(),
+	taxDetailsUuid: z.string().optional(),
 	status: z.boolean().optional(),
 })
 

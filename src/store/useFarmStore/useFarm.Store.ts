@@ -9,11 +9,11 @@ export const useFarmStore = create<FarmStore>()(
 	persist<FarmStore>(
 		(set) => ({
 			farm: null,
-			billingCard: null,
+			taxDetails: null,
 			species: [],
 			breeds: [],
 			setFarm: (farm) => set({ farm }),
-			setBillingCard: (card) => set({ billingCard: card }),
+			setTaxDetails: (taxDetails) => set({ taxDetails }),
 			setSpecies: (species) => set({ species }),
 			setBreeds: (breeds) => set({ breeds }),
 			async loadFarmData(farmUuid: string, role: string) {
@@ -22,7 +22,7 @@ export const useFarmStore = create<FarmStore>()(
 
 				set({
 					farm: bulkData.farm,
-					billingCard: bulkData.billingCard,
+					taxDetails: bulkData.taxDetails,
 					species: bulkData.species,
 					breeds: bulkData.breeds,
 				})
@@ -33,7 +33,7 @@ export const useFarmStore = create<FarmStore>()(
 
 				set({
 					farm: bulkData.farm,
-					billingCard: null, // Never include billing card for public access
+					taxDetails: null, // Never include tax details for public access
 					species: bulkData.species,
 					breeds: bulkData.breeds,
 				})

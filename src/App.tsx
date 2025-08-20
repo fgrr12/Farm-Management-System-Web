@@ -52,7 +52,7 @@ const Animal = lazy(() =>
 )
 
 const AnimalForm = lazy(() => import('@/pages/AnimalForm/AnimalForm.page'))
-const BillingCard = lazy(() => import('@/pages/BillingCard/BillingCard.page'))
+const TaxDetails = lazy(() => import('@/pages/TaxDetails/TaxDetails.page'))
 const EmployeeForm = lazy(() => import('@/pages/EmployeeForm/EmployeeForm.page'))
 const Employees = lazy(() =>
 	import('@/pages/Employees/Employees.page').then((module) => {
@@ -307,10 +307,10 @@ export const App = () => {
 							{user?.role === 'owner' ||
 								(user?.role === 'admin' && (
 									<Route
-										path={AppRoutes.BILLING_CARD}
+										path={AppRoutes.TAX_DETAILS}
 										element={
 											<PrivateRoute>
-												<BillingCard />
+												<TaxDetails />
 											</PrivateRoute>
 										}
 									/>

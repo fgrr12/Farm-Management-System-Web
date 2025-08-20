@@ -7,12 +7,11 @@
 		"searchTasks": "Buscar tareas por título o descripción",
 		"skipToTasks": "Saltar a la lista de tareas"
 	},
-	"assignedTo": "Asignado a",
-	"dueDate": "Fecha límite",
 	"activeTasks": "Activas",
 	"addTask": "Añadir tarea",
 	"allPriorities": "Todas las Prioridades",
 	"allSpecies": "Todas las Especies",
+	"assignedTo": "Asignado a",
 	"clearFilters": "Limpiar Todo",
 	"close": "Cerrar",
 	"completedTasks": "Completadas",
@@ -20,6 +19,7 @@
 	"description": "Descripción",
 	"done": "Listo",
 	"dropTaskHere": "Suelta la tarea aquí",
+	"dueDate": "Fecha límite",
 	"filterByPriority": "Prioridad",
 	"filterBySpecies": "Especie",
 	"filters": "Filtros",
@@ -27,6 +27,7 @@
 	"filtersApplied": "{{count}} filtro aplicado",
 	"filtersApplied_other": "{{count}} filtros aplicados",
 	"filtersButton": "Abrir menú de filtros",
+	"loadingUser": "Cargando usuario...",
 	"noFiltersApplied": "Sin filtros aplicados",
 	"noTasksFound": "No se encontraron tareas para tu búsqueda",
 	"noTasksInColumn": "No hay tareas en esta columna",
@@ -51,12 +52,11 @@
 	"taskTitle": "Título",
 	"timestamps": "Fechas",
 	"title": "Tareas",
-	"unassigned": "Sin asignar",
-	"updatedAt": "Actualizada",
-	"loadingUser": "Cargando usuario...",
 	"toast": {
 		"errorGettingTasks": "Error al obtener las tareas",
 		"errorUpdatingTaskStatus": "Error al actualizar el estado de la tarea",
 		"taskMoved": "Tarea movida a {{status}}"
-	}
+	},
+	"unassigned": "Sin asignar",
+	"updatedAt": "Actualizada"
 }

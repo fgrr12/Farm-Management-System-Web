@@ -28,6 +28,12 @@
 		},
 		"weightUnit": "Unidad de Peso"
 	},
+	"customSelect": {
+		"clear": "Limpiar",
+		"noOptions": "No hay opciones disponibles",
+		"searchPlaceholder": "Buscar...",
+		"selectOption": "Selecciona una opción"
+	},
 	"header": {
 		"back": "Atrás",
 		"return": "Volver"
@@ -91,11 +97,5 @@
 		"dark": "Oscuro",
 		"light": "Claro",
 		"system": "Sistema"
-	},
-	"customSelect": {
-		"clear": "Limpiar",
-		"searchPlaceholder": "Buscar...",
-		"noOptions": "No hay opciones disponibles",
-		"selectOption": "Selecciona una opción"
 	}
 }
