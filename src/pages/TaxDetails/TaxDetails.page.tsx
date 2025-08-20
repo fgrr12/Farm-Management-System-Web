@@ -342,7 +342,7 @@ const TaxDetails = () => {
 							{/* Credit Card Size Tax Card Design */}
 							<div
 								id="business-card"
-								className="w-[340px] h-[215px] bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 rounded-xl p-5 shadow-2xl transform hover:scale-105 transition-all duration-300 relative overflow-hidden text-white"
+								className="w-[370px] h-[215px] bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 rounded-xl p-5 shadow-2xl transform hover:scale-105 transition-all duration-300 relative overflow-hidden text-white"
 								style={{ fontFamily: 'Inter, Arial, sans-serif' }}
 							>
 								{/* Background Effects */}
@@ -424,7 +424,7 @@ const TaxDetails = () => {
 									</div>
 
 									{/* Right Side - Activity Code */}
-									<div className="flex flex-col items-center justify-center ml-4 max-w-[80px]">
+									<div className="flex flex-col items-center justify-center ml-4 max-w-[70px]">
 										<div className="text-center">
 											<div className="text-xs text-slate-300 uppercase tracking-wide font-medium leading-tight mb-1">
 												{t('activityCode')}
@@ -441,6 +441,36 @@ const TaxDetails = () => {
 
 					{/* Card Information */}
 					<div className="space-y-6">
+						{/* Tax Details */}
+						<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-2xl p-4 sm:p-6 border border-gray-100 dark:border-gray-700">
+							<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+								<i className="i-material-symbols-info w-5! h-5! text-blue-600" />
+								{t('fiscalInformation')}
+							</h3>
+							<div className="space-y-3">
+								<div className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+									<div className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t('name')}</div>
+									<div className="text-sm font-mono font-medium text-gray-900 dark:text-gray-100">
+										{taxDetails.name}
+									</div>
+								</div>
+								<div className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+									<div className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t('id')}</div>
+									<div className="text-sm font-mono font-medium text-gray-900 dark:text-gray-100">
+										{taxDetails.id}
+									</div>
+								</div>
+								<div className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+									<div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+										{t('activityCode')}
+									</div>
+									<div className="text-sm font-medium text-gray-900 dark:text-gray-100">
+										{taxDetails.activityCode}
+									</div>
+								</div>
+							</div>
+						</div>
+
 						{/* Contact Information */}
 						<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-2xl p-4 sm:p-6 border border-gray-100 dark:border-gray-700">
 							<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
@@ -485,34 +515,10 @@ const TaxDetails = () => {
 								<i className="i-material-symbols-home w-5! h-5! text-gray-600 dark:text-gray-400 mt-0.5" />
 								<div>
 									<div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-										Dirección Fiscal
+										{t('fiscalDirection')}
 									</div>
 									<div className="text-sm font-medium text-gray-900 dark:text-gray-100">
 										{taxDetails.address}
-									</div>
-								</div>
-							</div>
-						</div>
-
-						{/* Tax Details */}
-						<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-2xl p-4 sm:p-6 border border-gray-100 dark:border-gray-700">
-							<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-								<i className="i-material-symbols-info w-5! h-5! text-blue-600" />
-								{t('fiscalInformation')}
-							</h3>
-							<div className="space-y-3">
-								<div className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
-									<div className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t('id')}</div>
-									<div className="text-sm font-mono font-medium text-gray-900 dark:text-gray-100">
-										{taxDetails.id}
-									</div>
-								</div>
-								<div className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
-									<div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-										{t('activityCode')}
-									</div>
-									<div className="text-sm font-medium text-gray-900 dark:text-gray-100">
-										{taxDetails.activityCode}
 									</div>
 								</div>
 							</div>
