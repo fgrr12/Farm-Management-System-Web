@@ -1,6 +1,7 @@
 {
 	"title": "Tax Details",
 	"subtitle": "View your tax information and card details",
+	"contactInformation": "Contact Information",
 	"taxCardTitle": "TAX DETAILS FOR",
 	"electronicInvoicing": "ELECTRONIC INVOICING",
 	"id": "ID",
@@ -9,7 +10,7 @@
 	"email": "Email",
 	"address": "Address",
 	"activityCode": "Activity Code",
-	"economicActivity": "ECONOMIC ACTIVITY",
+	"fiscalDirection": "Fiscal Direction",
 	"fiscalInformation": "Tax Information",
 	"noTaxDetails": "No Tax Details Found",
 	"noTaxDetailsMessage": "You don't have tax details set up yet. Please configure your tax information in your account settings.",
