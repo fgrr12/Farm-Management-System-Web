@@ -24,9 +24,9 @@ const TaxDetails = () => {
 				<style>
 					* { margin: 0; padding: 0; box-sizing: border-box; }
 					body { 
-						font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+						font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
 						background: #f8fafc;
-						padding: 16px;
+						padding: 10mm;
 					}
 					.page {
 						width: 210mm;
@@ -38,125 +38,191 @@ const TaxDetails = () => {
 						margin: 0 auto;
 						background: white;
 						padding: 12mm;
-						border-radius: 8px;
-						box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 					}
 					.card {
 						width: 85.60mm;
-						height: 53.98mm;
-						border-radius: 8px;
-						padding: 4mm;
-						background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%);
+						height: 42mm;
+						background: linear-gradient(135deg, #1e293b 0%, #475569 50%, #64748b 100%);
+						border-radius: 12px;
+						padding: 5mm;
 						position: relative;
-						box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 						overflow: hidden;
+						color: white;
 						display: flex;
 						flex-direction: column;
-						color: white;
+						box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 					}
+					
+					/* Background Effects */
 					.card::before {
 						content: '';
 						position: absolute;
 						top: 0;
 						right: 0;
-						width: 15mm;
-						height: 15mm;
-						background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
+						width: 24mm;
+						height: 24mm;
+						background: #3b82f6;
 						border-radius: 50%;
-						transform: translate(30%, -30%);
+						filter: blur(20px);
+						transform: translate(12mm, -12mm);
+						opacity: 0.3;
 					}
+					
+					.card::after {
+						content: '';
+						position: absolute;
+						bottom: 0;
+						left: 0;
+						width: 20mm;
+						height: 20mm;
+						background: #8b5cf6;
+						border-radius: 50%;
+						filter: blur(20px);
+						transform: translate(-10mm, 10mm);
+						opacity: 0.3;
+					}
+
+					/* Header */
 					.card-header {
+						position: relative;
+						z-index: 10;
 						display: flex;
 						justify-content: space-between;
 						align-items: flex-start;
-						margin-bottom: 2mm;
+						margin-bottom: 4mm;
 					}
+					
 					.card-title {
-						font-size: 6px;
+						flex: 1;
+						font-size: 8pt;
 						font-weight: 700;
 						color: #e2e8f0;
 						text-transform: uppercase;
 						letter-spacing: 0.5px;
-						line-height: 1.2;
-						flex: 1;
+						line-height: 1.1;
+						max-width: 70%;
 					}
+					
+					.card-title-highlight {
+						color: #60a5fa;
+					}
+					
 					.farm-logo {
-						width: 6mm;
-						height: 6mm;
-						background: rgba(255, 255, 255, 0.15);
+						width: 10mm;
+						height: 10mm;
+						background: rgba(255, 255, 255, 0.1);
 						border-radius: 50%;
 						display: flex;
 						align-items: center;
 						justify-content: center;
+						border: 1px solid rgba(255, 255, 255, 0.2);
 						backdrop-filter: blur(10px);
-						border: 1px solid rgba(255, 255, 255, 0.1);
-						margin-left: 2mm;
+						margin-left: 4mm;
+						overflow: hidden;
 					}
+					
+					.farm-logo img {
+						width: 7mm;
+						height: 7mm;
+						object-fit: cover;
+						border-radius: 50%;
+					}
+
+					/* Main Content */
 					.card-content {
+						position: relative;
+						z-index: 10;
 						flex: 1;
 						display: flex;
 					}
+					
 					.card-main-info {
 						flex: 1;
 						display: flex;
 						flex-direction: column;
 						gap: 1mm;
 					}
+					
+					.info-row {
+						display: grid;
+						grid-template-columns: auto 1fr;
+						gap: 2mm;
+						align-items: center;
+					}
+					
+					.info-label {
+						font-size: 6pt;
+						font-weight: 600;
+						color: #cbd5e1;
+						text-transform: uppercase;
+						letter-spacing: 0.3px;
+						min-width: 12mm;
+					}
+					
+					.info-value {
+						font-size: 6pt;
+						font-weight: 600;
+						color: white;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+					}
+
+					/* Activity Code */
 					.card-activity {
 						display: flex;
 						flex-direction: column;
 						align-items: center;
 						justify-content: center;
-						margin-left: 2mm;
-						min-width: 15mm;
+						margin-left: 4mm;
+						max-width: 20mm;
 					}
-					.info-row {
-						display: grid;
-						grid-template-columns: 12mm 1fr;
-						gap: 1mm;
-						font-size: 5px;
-						line-height: 1.2;
-					}
-					.info-label {
-						font-weight: 600;
-						color: #cbd5e1;
-						text-transform: uppercase;
-						letter-spacing: 0.3px;
-					}
-					.info-value {
-						font-weight: 500;
-						color: #f8fafc;
-						word-break: break-word;
-					}
+					
 					.activity-label {
-						font-size: 4px;
+						font-size: 6pt;
 						font-weight: 600;
 						color: #cbd5e1;
 						text-transform: uppercase;
 						letter-spacing: 0.3px;
 						text-align: center;
-						line-height: 1.1;
 						margin-bottom: 1mm;
 					}
+					
 					.activity-code {
-						font-size: 6px;
+						padding: 1mm 2mm;
+						background: rgba(59, 130, 246, 0.3);
+						border: 1px solid rgba(59, 130, 246, 0.5);
+						border-radius: 4px;
+						font-size: 6pt;
 						font-weight: 700;
-						color: #3b82f6;
-						background: rgba(59, 130, 246, 0.15);
-						padding: 0.5mm 1mm;
-						border-radius: 2px;
-						border: 1px solid rgba(59, 130, 246, 0.3);
+						color: #60a5fa;
 						text-align: center;
 					}
+
 					@media print {
 						body { 
-							background: white;
-							padding: 0; 
+							background: white !important;
+							padding: 0 !important; 
+							margin: 0 !important;
+							-webkit-print-color-adjust: exact !important;
+							print-color-adjust: exact !important;
 						}
 						.page { 
-							margin: 0;
-							box-shadow: none;
-							border-radius: 0;
+							margin: 0 !important;
+							padding: 8mm !important;
+							width: 100% !important;
+							height: 100% !important;
+						}
+						.card {
+							background: linear-gradient(135deg, #1e293b 0%, #475569 50%, #64748b 100%) !important;
+							-webkit-print-color-adjust: exact !important;
+							print-color-adjust: exact !important;
+							color: white !important;
+							page-break-inside: avoid !important;
+						}
+						.card::before, .card::after {
+							-webkit-print-color-adjust: exact !important;
+							print-color-adjust: exact !important;
 						}
 					}
 				</style>
@@ -169,37 +235,40 @@ const TaxDetails = () => {
 							() => `
 						<div class="card">
 							<div class="card-header">
-								<h3 class="card-title">${t('taxCardTitle')}<br>${t('electronicInvoicing')}</h3>
+								<h3 class="card-title">
+									${t('taxCardTitle')}<br>
+									<span class="card-title-highlight">${t('electronicInvoicing')}</span>
+								</h3>
 								<div class="farm-logo">
-									🐔
+									<img src="/assets/billing/hen.jpeg" alt="Farm" onerror="this.style.display='none'; this.parentNode.innerHTML='�';" />
 								</div>
 							</div>
 							<div class="card-content">
 								<div class="card-main-info">
 									<div class="info-row">
-										<span class="info-label">${t('id').toUpperCase()}</span>
-										<span class="info-value">${taxDetails?.id || 'N/A'}</span>
-									</div>
-									<div class="info-row">
-										<span class="info-label">${t('name').toUpperCase()}</span>
+										<span class="info-label">${t('name')}</span>
 										<span class="info-value">${taxDetails?.name || 'N/A'}</span>
 									</div>
 									<div class="info-row">
-										<span class="info-label">${t('phone').toUpperCase()}</span>
+										<span class="info-label">${t('id')}</span>
+										<span class="info-value">${taxDetails?.id || 'N/A'}</span>
+									</div>
+									<div class="info-row">
+										<span class="info-label">${t('phone')}</span>
 										<span class="info-value">${taxDetails?.phone || 'N/A'}</span>
 									</div>
 									<div class="info-row">
-										<span class="info-label">${t('email').toUpperCase()}</span>
+										<span class="info-label">${t('email')}</span>
 										<span class="info-value">${taxDetails?.email || 'N/A'}</span>
 									</div>
 									<div class="info-row">
-										<span class="info-label">${t('address').toUpperCase()}</span>
+										<span class="info-label">${t('address')}</span>
 										<span class="info-value">${taxDetails?.address || 'N/A'}</span>
 									</div>
 								</div>
 								<div class="card-activity">
 									<div class="activity-label">
-										${t('economicActivity')}
+										${t('activityCode')}
 									</div>
 									<div class="activity-code">${taxDetails?.activityCode || 'N/A'}</div>
 								</div>
@@ -355,7 +424,7 @@ const TaxDetails = () => {
 									</div>
 
 									{/* Right Side - Activity Code */}
-									<div className="flex flex-col items-center justify-center ml-4 min-w-[80px]">
+									<div className="flex flex-col items-center justify-center ml-4 max-w-[80px]">
 										<div className="text-center">
 											<div className="text-xs text-slate-300 uppercase tracking-wide font-medium leading-tight mb-1">
 												{t('activityCode')}
