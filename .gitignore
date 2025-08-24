@@ -171,3 +171,6 @@ release/
 .cache/
 .temp/
 .tmp/
+
+#AI Docs
+AI-Docs/
