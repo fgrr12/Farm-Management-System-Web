@@ -23,6 +23,7 @@ export const CreateFarmModal = memo<CreateFarmModalProps>(({ isOpen, onClose, on
 		liquidUnit: 'L' as LiquidUnit,
 		weightUnit: 'Kg' as WeightUnit,
 		temperatureUnit: '°C' as TemperatureUnit,
+		language: 'eng' as FarmLanguage,
 		status: true,
 	})
 
@@ -41,6 +42,10 @@ export const CreateFarmModal = memo<CreateFarmModalProps>(({ isOpen, onClose, on
 
 	const handleTemperatureUnitChange = useCallback((value: string | number | null) => {
 		setFormData((prev) => ({ ...prev, temperatureUnit: value as TemperatureUnit }))
+	}, [])
+
+	const handleLanguageChange = useCallback((value: string | number | null) => {
+		setFormData((prev) => ({ ...prev, language: value as FarmLanguage }))
 	}, [])
 
 	const liquidUnitOptions: CustomSelectOption[] = useMemo(
@@ -67,6 +72,14 @@ export const CreateFarmModal = memo<CreateFarmModalProps>(({ isOpen, onClose, on
 		[t]
 	)
 
+	const languageOptions: CustomSelectOption[] = useMemo(
+		() => [
+			{ value: 'eng', label: t('admin.language.english') },
+			{ value: 'spa', label: t('admin.language.spanish') },
+		],
+		[t]
+	)
+
 	const handleSubmit = useCallback(async () => {
 		if (!formData.name.trim()) return
 
@@ -86,6 +99,7 @@ export const CreateFarmModal = memo<CreateFarmModalProps>(({ isOpen, onClose, on
 				liquidUnit: 'L' as LiquidUnit,
 				weightUnit: 'Kg' as WeightUnit,
 				temperatureUnit: '°C' as TemperatureUnit,
+				language: 'eng' as FarmLanguage,
 				status: true,
 			})
 		} catch (error) {
@@ -105,6 +119,7 @@ export const CreateFarmModal = memo<CreateFarmModalProps>(({ isOpen, onClose, on
 			liquidUnit: 'L' as LiquidUnit,
 			weightUnit: 'Kg' as WeightUnit,
 			temperatureUnit: '°C' as TemperatureUnit,
+			language: 'eng' as FarmLanguage,
 			status: true,
 		})
 	}, [onClose])
@@ -181,6 +196,18 @@ export const CreateFarmModal = memo<CreateFarmModalProps>(({ isOpen, onClose, on
 							options={temperatureUnitOptions}
 						/>
 					</div>
+				</div>
+
+				{/* Language Configuration */}
+				<div>
+					<CustomSelect
+						label={t('admin.language.farmLanguage')}
+						value={formData.language}
+						onChange={handleLanguageChange}
+						disabled={loading}
+						options={languageOptions}
+						helperText={t('admin.language.farmLanguageHelper')}
+					/>
 				</div>
 
 				{/* Info message */}

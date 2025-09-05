@@ -11,6 +11,7 @@ const DEFAULT_VALUES: Partial<FarmFormData> = {
 	liquidUnit: 'L',
 	weightUnit: 'Kg',
 	temperatureUnit: '°C',
+	language: 'eng',
 	status: true,
 }
 
@@ -27,6 +28,7 @@ export const useFarmForm = (initialData?: Partial<Farm>) => {
 			liquidUnit: (initialData.liquidUnit as 'L' | 'Gal') || 'L',
 			weightUnit: (initialData.weightUnit as 'Kg' | 'P') || 'Kg',
 			temperatureUnit: (initialData.temperatureUnit as '°C' | '°F') || '°C',
+			language: (initialData.language as 'eng' | 'spa') || 'eng',
 			taxDetailsUuid: initialData.taxDetailsUuid || '',
 			status: initialData.status ?? true,
 		}
@@ -47,6 +49,7 @@ export const useFarmForm = (initialData?: Partial<Farm>) => {
 			liquidUnit: data.liquidUnit,
 			weightUnit: data.weightUnit,
 			temperatureUnit: data.temperatureUnit,
+			language: data.language,
 			taxDetailsUuid: data.taxDetailsUuid || '',
 			status: data.status ?? true,
 		}
@@ -76,6 +79,7 @@ export const useFarmForm = (initialData?: Partial<Farm>) => {
 				liquidUnit: (data.liquidUnit as 'L' | 'Gal') || 'L',
 				weightUnit: (data.weightUnit as 'Kg' | 'P') || 'Kg',
 				temperatureUnit: (data.temperatureUnit as '°C' | '°F') || '°C',
+				language: (data.language as 'eng' | 'spa') || 'eng',
 				taxDetailsUuid: data.taxDetailsUuid || '',
 				status: data.status ?? true,
 			}
