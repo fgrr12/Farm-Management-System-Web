@@ -59,9 +59,9 @@ const mapLanguageCode = (language: string): 'spa' | 'eng' => {
 		case 'spa':
 		case 'spanish':
 			return 'spa'
-		case 'en':
-		case 'eng':
-		case 'english':
+		// case 'en':
+		// case 'eng':
+		// case 'english':
 		default:
 			return 'eng' // Default fallback to English
 	}
