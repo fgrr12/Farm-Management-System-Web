@@ -15,6 +15,9 @@ export const farmSchema = z.object({
 	temperatureUnit: z.enum(['°C', '°F'], {
 		message: 'farm.validation.temperatureUnitRequired',
 	}),
+	language: z.enum(['eng', 'spa'], {
+		message: 'farm.validation.languageRequired',
+	}),
 	uuid: z.string().optional(),
 	taxDetailsUuid: z.string().optional(),
 	status: z.boolean().optional(),

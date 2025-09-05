@@ -26,7 +26,13 @@
 			"lbs": "Libras",
 			"liters": "Litros"
 		},
-		"weightUnit": "Unidad de Peso"
+		"weightUnit": "Unidad de Peso",
+		"language": {
+			"farmLanguage": "Idioma de la Granja",
+			"farmLanguageHelper": "Idioma predeterminado para operaciones y reportes de la granja",
+			"english": "Inglés",
+			"spanish": "Español"
+		}
 	},
 	"customSelect": {
 		"clear": "Limpiar",

@@ -96,9 +96,46 @@ export type AnimalFormData = z.infer<typeof animalSchemaWithRefinements>
 
 export const createAnimalSchema = animalSchemaWithRefinements.omit({ uuid: true })
 
-export const updateAnimalSchema = animalSchemaWithRefinements.extend({
-	uuid: z.string().min(1, 'animal.validation.uuidRequired'),
-})
+export const updateAnimalSchema = animalSchema
+	.extend({
+		uuid: z.string().min(1, 'animal.validation.uuidRequired'),
+	})
+	.refine(
+		(data) => {
+			if (data.deathDate && data.birthDate) {
+				return new Date(data.deathDate) >= new Date(data.birthDate)
+			}
+			return true
+		},
+		{
+			message: 'animal.validation.deathAfterBirth',
+			path: ['deathDate'],
+		}
+	)
+	.refine(
+		(data) => {
+			if (data.soldDate && data.birthDate) {
+				return new Date(data.soldDate) >= new Date(data.birthDate)
+			}
+			return true
+		},
+		{
+			message: 'animal.validation.soldAfterBirth',
+			path: ['soldDate'],
+		}
+	)
+	.refine(
+		(data) => {
+			if (data.purchaseDate && data.birthDate) {
+				return new Date(data.purchaseDate) >= new Date(data.birthDate)
+			}
+			return true
+		},
+		{
+			message: 'animal.validation.purchaseAfterBirth',
+			path: ['purchaseDate'],
+		}
+	)
 
 export type CreateAnimalData = z.infer<typeof createAnimalSchema>
 export type UpdateAnimalData = z.infer<typeof updateAnimalSchema>

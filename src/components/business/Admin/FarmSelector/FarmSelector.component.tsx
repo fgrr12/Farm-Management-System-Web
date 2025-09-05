@@ -77,7 +77,7 @@ export const FarmSelector = memo(() => {
 					</span>
 				</div>
 			) : (
-				<div className="dropdown dropdown-top dropdown-end w-full">
+				<div className="dropdown dropdown-top dropdown-end w-full touch-manipulation">
 					<button
 						type="button"
 						tabIndex={0}
@@ -104,11 +104,11 @@ export const FarmSelector = memo(() => {
 					<ul className="dropdown-content menu bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 z-[10] mb-2 w-full max-w-xs p-2 max-h-64 overflow-y-auto">
 						{availableFarms.length > 0 ? (
 							<>
-								<li className="menu-title text-xs text-gray-500 dark:text-gray-400 px-3 py-1">
+								<li className="menu-title text-xs text-gray-500 dark:text-gray-400 px-3 py-1 touch-manipulation">
 									<span>{t('admin.availableFarms')}</span>
 								</li>
 								{availableFarms.map((farmOption) => (
-									<li key={farmOption.uuid}>
+									<li key={farmOption.uuid} className="touch-manipulation">
 										<button
 											type="button"
 											onClick={() => handleFarmChange(farmOption)}
@@ -132,7 +132,7 @@ export const FarmSelector = memo(() => {
 									</li>
 								))}
 								<div className="divider my-1" />
-								<li>
+								<li className="touch-manipulation">
 									<button
 										type="button"
 										onClick={handleCreateFarm}
@@ -152,7 +152,7 @@ export const FarmSelector = memo(() => {
 									</div>
 								</li>
 								<div className="divider my-1" />
-								<li>
+								<li className="touch-manipulation">
 									<button
 										type="button"
 										onClick={handleCreateFarm}

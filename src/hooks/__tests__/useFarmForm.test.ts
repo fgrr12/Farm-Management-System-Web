@@ -13,6 +13,7 @@ describe('useFarmForm', () => {
 			liquidUnit: 'L',
 			weightUnit: 'Kg',
 			temperatureUnit: '°C',
+			language: 'eng',
 			status: true,
 		})
 	})
@@ -25,6 +26,7 @@ describe('useFarmForm', () => {
 			liquidUnit: 'Gal',
 			weightUnit: 'P',
 			temperatureUnit: '°F',
+			language: 'spa',
 			taxDetailsUuid: 'billing-uuid',
 			status: false,
 		}
@@ -38,6 +40,7 @@ describe('useFarmForm', () => {
 			liquidUnit: 'Gal',
 			weightUnit: 'P',
 			temperatureUnit: '°F',
+			language: 'spa',
 			taxDetailsUuid: 'billing-uuid',
 			status: false,
 		})
@@ -53,6 +56,7 @@ describe('useFarmForm', () => {
 			liquidUnit: 'L' as const,
 			weightUnit: 'Kg' as const,
 			temperatureUnit: '°C' as const,
+			language: 'eng' as const,
 			taxDetailsUuid: '',
 			status: true,
 		}
@@ -66,6 +70,7 @@ describe('useFarmForm', () => {
 			liquidUnit: 'L',
 			weightUnit: 'Kg',
 			temperatureUnit: '°C',
+			language: 'eng',
 			taxDetailsUuid: '',
 			status: true,
 		})
@@ -81,6 +86,7 @@ describe('useFarmForm', () => {
 			liquidUnit: 'Gal',
 			weightUnit: 'P',
 			temperatureUnit: '°F',
+			language: 'spa',
 			taxDetailsUuid: 'new-billing-uuid',
 			status: false,
 		}
@@ -94,6 +100,7 @@ describe('useFarmForm', () => {
 			liquidUnit: 'Gal',
 			weightUnit: 'P',
 			temperatureUnit: '°F',
+			language: 'spa',
 			taxDetailsUuid: 'new-billing-uuid',
 			status: false,
 		})

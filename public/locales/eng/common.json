@@ -26,7 +26,13 @@
 			"lbs": "Pounds",
 			"liters": "Liters"
 		},
-		"weightUnit": "Weight Unit"
+		"weightUnit": "Weight Unit",
+		"language": {
+			"farmLanguage": "Farm Language",
+			"farmLanguageHelper": "Default language for farm operations and reports",
+			"english": "English",
+			"spanish": "Spanish"
+		}
 	},
 	"customSelect": {
 		"clear": "Clear",
