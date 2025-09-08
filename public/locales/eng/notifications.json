@@ -13,7 +13,9 @@
 		"medication": "Medication",
 		"health": "Health",
 		"task": "Tasks",
+		"production": "Production",
 		"general": "General"
 	},
-	"noNotificationsInCategory": "No notifications in this category"
+	"noNotificationsInCategory": "No notifications in this category",
+	"notificationsWillAppearHere": "Notifications will appear here"
 }

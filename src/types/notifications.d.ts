@@ -3,7 +3,7 @@ interface NotificationData {
 	title: string
 	message: string
 	type: 'info' | 'success' | 'warning' | 'error'
-	category: 'general' | 'medication' | 'health' | 'task'
+	category: 'general' | 'medication' | 'health' | 'task' | 'production'
 	read: boolean
 	dismissed: boolean
 	createdAt: string
