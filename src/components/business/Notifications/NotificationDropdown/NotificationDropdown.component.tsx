@@ -33,9 +33,6 @@ export const NotificationDropdown = memo(() => {
 	// Filtrar notificaciones por categoría seleccionada
 	const filteredNotifications = getNotificationsByCategory(selectedCategory)
 
-	// Mostrar hasta 8 notificaciones en el dropdown
-	const displayNotifications = filteredNotifications.slice(0, 8)
-
 	// Cerrar dropdown al hacer click fuera
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -56,13 +53,13 @@ export const NotificationDropdown = memo(() => {
 	const getNotificationIcon = (type: NotificationData['type']) => {
 		switch (type) {
 			case 'success':
-				return 'i-material-symbols-check-circle text-green-600 dark:text-green-400'
+				return 'i-material-symbols-check-circle bg-green-600! dark:bg-green-400!'
 			case 'warning':
-				return 'i-material-symbols-warning text-yellow-600 dark:text-yellow-400'
+				return 'i-material-symbols-warning bg-yellow-600! dark:bg-yellow-400!'
 			case 'error':
-				return 'i-material-symbols-error text-red-600 dark:text-red-400'
+				return 'i-material-symbols-error bg-red-600! dark:bg-red-400!'
 			default:
-				return 'i-material-symbols-info text-blue-600 dark:text-blue-400'
+				return 'i-material-symbols-info bg-blue-600! dark:bg-blue-400!'
 		}
 	}
 
@@ -161,7 +158,7 @@ export const NotificationDropdown = memo(() => {
 
 			{/* Dropdown Content */}
 			{isOpen && (
-				<div className="absolute right-0 top-full mt-2 w-96 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 max-h-[80vh] flex flex-col">
+				<div className="absolute right-0 top-full mt-2 w-[420px] bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 max-h-[85vh] flex flex-col">
 					{/* Header */}
 					<div className="p-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
 						<div className="flex items-center justify-between mb-3">
@@ -248,7 +245,7 @@ export const NotificationDropdown = memo(() => {
 									))}
 								</div>
 							</div>
-						) : displayNotifications.length === 0 ? (
+						) : filteredNotifications.length === 0 ? (
 							<div className="p-8 text-center">
 								<div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
 									<i className="i-material-symbols-notifications-off w-8! h-8! text-gray-400" />
@@ -259,18 +256,18 @@ export const NotificationDropdown = memo(() => {
 										: t('noNotificationsInCategory')}
 								</h4>
 								<p className="text-xs text-gray-500 dark:text-gray-400">
-									Las notificaciones aparecerán aquí
+									{t('notificationsWillAppearHere')}
 								</p>
 							</div>
 						) : (
-							<div className="p-2 space-y-3">
-								{displayNotifications.map((notification) => (
+							<div className="p-3 space-y-4">
+								{filteredNotifications.map((notification) => (
 									<div
 										key={notification.uuid}
 										role="button"
 										tabIndex={0}
 										className={`
-											group relative p-4 rounded-lg border-l-4 transition-all duration-200 cursor-pointer shadow-sm
+											group relative p-5 rounded-lg border-l-4 transition-all duration-200 cursor-pointer shadow-sm
 											hover:shadow-lg hover:scale-[1.01] active:scale-[0.99]
 											${getNotificationBackground(notification.type, notification.read)}
 											${!notification.read ? 'shadow-md ring-1 ring-black/5 dark:ring-white/10' : 'shadow-sm'}
@@ -306,9 +303,9 @@ export const NotificationDropdown = memo(() => {
 
 											{/* Content */}
 											<div className="flex-1 min-w-0">
-												<div className="flex items-start justify-between gap-2 mb-2">
+												<div className="flex items-start justify-between gap-2 mb-3">
 													<h4
-														className={`text-sm font-semibold line-clamp-1 ${
+														className={`text-sm font-semibold ${
 															notification.type === 'success'
 																? 'text-green-800 dark:text-green-200'
 																: notification.type === 'warning'
@@ -336,7 +333,7 @@ export const NotificationDropdown = memo(() => {
 												</div>
 
 												<p
-													className={`text-xs line-clamp-2 leading-relaxed ${
+													className={`text-sm leading-relaxed ${
 														notification.type === 'success'
 															? 'text-green-700 dark:text-green-300'
 															: notification.type === 'warning'

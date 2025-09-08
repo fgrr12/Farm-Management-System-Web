@@ -15,5 +15,6 @@
 		"task": "Tareas",
 		"general": "General"
 	},
-	"noNotificationsInCategory": "No hay notificaciones en esta categoría"
+	"noNotificationsInCategory": "No hay notificaciones en esta categoría",
+	"notificationsWillAppearHere": "Las notificaciones aparecerán aquí"
 }
