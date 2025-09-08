@@ -7,6 +7,9 @@ import { NotificationsService } from '@/services/notifications'
 
 const VAPID_KEY = import.meta.env.VITE_FIREBASE_VAPID_KEY || ''
 
+// Track if Firebase config has been sent to avoid duplicates
+let configSentToSW = false
+
 export const useFCMToken = () => {
 	const [token, setToken] = useState<string | null>(null)
 	const [loading, setLoading] = useState(false)
@@ -77,48 +80,65 @@ export const useFCMToken = () => {
 			setLoading(true)
 			setError(null)
 
-			// Verificar si ya hay un service worker registrado para FCM
+			// Use the main PWA service worker for FCM
 			if ('serviceWorker' in navigator) {
-				const registrations = await navigator.serviceWorker.getRegistrations()
-				const fcmSWExists = registrations.some(
-					(reg) =>
-						reg.scope.includes('firebase-cloud-messaging-push-scope') ||
-						reg.scope.includes('firebase-messaging-sw') ||
-						reg.active?.scriptURL.includes('firebase-messaging-sw.js')
-				)
+				try {
+					// Get the main service worker registration
+					await navigator.serviceWorker.ready
+					const registration = await navigator.serviceWorker.getRegistration()
 
-				if (!fcmSWExists) {
-					try {
-						// Inyectar configuración de Firebase de manera segura
-						const registration = await navigator.serviceWorker.register(
-							'/firebase-messaging-sw.js',
-							{
-								scope: '/firebase-messaging-sw/',
-								updateViaCache: 'none',
-							}
-						)
-
-						// Esperar a que esté listo antes de continuar
-						await navigator.serviceWorker.ready
-
-						// Configurar las credenciales de Firebase de manera segura
-						if (registration.active) {
-							registration.active.postMessage({
-								type: 'FIREBASE_CONFIG',
-								config: {
-									apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-									authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-									projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-									storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-									messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-									appId: import.meta.env.VITE_FIREBASE_APP_ID,
-								},
-							})
-						}
-					} catch (swError) {
-						console.warn('Failed to register FCM service worker:', swError)
-						// Continuar sin service worker para notificaciones foreground
+					if (!registration) {
+						throw new Error('No service worker registration found')
 					}
+
+					console.log('[FCM] Using main PWA service worker for messaging')
+
+					// Send Firebase configuration to service worker
+					const firebaseConfig = {
+						apiKey: import.meta.env.VITE_API_KEY,
+						authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+						projectId: import.meta.env.VITE_PROJECT_ID,
+						storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+						messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+						appId: import.meta.env.VITE_APP_ID,
+					}
+
+					// Validate configuration
+					console.log('[FCM] Firebase config values check:', {
+						hasApiKey: !!firebaseConfig.apiKey,
+						hasProjectId: !!firebaseConfig.projectId,
+						hasMessagingSenderId: !!firebaseConfig.messagingSenderId,
+						projectId: firebaseConfig.projectId,
+					})
+
+					if (
+						!firebaseConfig.projectId ||
+						!firebaseConfig.apiKey ||
+						!firebaseConfig.messagingSenderId
+					) {
+						console.error('[FCM] Missing Firebase configuration:', {
+							projectId: firebaseConfig.projectId,
+							apiKey: firebaseConfig.apiKey ? '[PRESENT]' : '[MISSING]',
+							messagingSenderId: firebaseConfig.messagingSenderId,
+						})
+						throw new Error('Missing Firebase configuration values')
+					}
+
+					// Send configuration to active service worker (only once)
+					if (registration.active && !configSentToSW) {
+						registration.active.postMessage({
+							type: 'FIREBASE_CONFIG',
+							config: firebaseConfig,
+						})
+						configSentToSW = true
+						console.log('[FCM] Firebase config sent to main service worker')
+					}
+
+					// Wait a bit for the service worker to process the configuration
+					await new Promise((resolve) => setTimeout(resolve, 1000))
+				} catch (swError) {
+					console.warn('Failed to register FCM service worker:', swError)
+					// Continuar sin service worker para notificaciones foreground
 				}
 			}
 

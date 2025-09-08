@@ -1,3 +1,7 @@
+import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore'
+
+import { auth, firestore } from '@/config/firebaseConfig'
+
 import { callableFireFunction } from '@/utils/callableFireFunction'
 
 // Type mapping from backend notification types to frontend display types
@@ -40,14 +44,16 @@ const mapNotificationTypeToCategory = (
 
 // Transform backend notification to frontend format
 const transformNotification = (backendNotification: any): NotificationData => {
+	const userUuid = auth.currentUser?.uid || ''
+
 	return {
 		uuid: backendNotification.uuid,
 		title: backendNotification.title,
 		message: backendNotification.message,
 		type: mapNotificationTypeToDisplayType(backendNotification.type),
 		category: mapNotificationTypeToCategory(backendNotification.type),
-		read: backendNotification.status?.read || false,
-		dismissed: backendNotification.status?.dismissed || false,
+		read: backendNotification.readBy?.includes(userUuid) || false,
+		dismissed: backendNotification.dismissedBy?.includes(userUuid) || false,
 		createdAt: backendNotification.createdAt,
 		farmUuid: backendNotification.farmUuid,
 		animalUuid: backendNotification.relatedId, // Assuming relatedId is animalUuid when relatedType is 'animal'
@@ -55,64 +61,7 @@ const transformNotification = (backendNotification: any): NotificationData => {
 	}
 }
 
-export interface GetNotificationsParams {
-	farmUuid?: string
-	limit?: number
-	offset?: number
-	unreadOnly?: boolean
-	type?:
-		| 'health_alert'
-		| 'medication_reminder'
-		| 'calendar_reminder'
-		| 'task_update'
-		| 'production_summary'
-		| 'system_alert'
-		| undefined
-	priority?: 'low' | 'medium' | 'high' | undefined
-}
-
 export type NotificationSubscriptionCallback = (notifications: NotificationData[]) => void
-
-// Subscription management
-let subscriptionInterval: NodeJS.Timeout | null = null
-let subscriptionCallback: NotificationSubscriptionCallback | null = null
-let lastFarmUuid: string | null = null
-
-const getNotifications = async (
-	params: GetNotificationsParams = {}
-): Promise<NotificationData[]> => {
-	try {
-		const response = await callableFireFunction<{
-			success: boolean
-			data: any[]
-			count: number
-		}>('notifications', {
-			operation: 'getUserNotifications',
-			...params,
-			offset: params.offset || 0,
-			type: params.type || undefined,
-			priority: params.priority || undefined,
-		})
-
-		if (response.success && response.data) {
-			// Transform backend notifications to frontend format
-			return response.data.map(transformNotification)
-		}
-
-		return []
-	} catch (error) {
-		console.error('Error getting notifications:', error)
-		throw error
-	}
-}
-
-const getNotificationByUuid = async (notificationUuid: string) => {
-	const response = await callableFireFunction<{ success: boolean; data: any }>('notifications', {
-		operation: 'getNotificationByUuid',
-		notificationUuid,
-	})
-	return response.data
-}
 
 const markNotificationAsRead = async (notificationUuid: string) => {
 	const response = await callableFireFunction<{ success: boolean }>('notifications', {
@@ -128,82 +77,6 @@ const markNotificationAsDismissed = async (notificationUuid: string) => {
 		notificationUuid,
 	})
 	return response
-}
-
-const markAllNotificationsAsRead = async (userUuid: string, farmUuid: string) => {
-	const response = await callableFireFunction<{ success: boolean }>('notifications', {
-		operation: 'markAllNotificationsAsRead',
-		userUuid,
-		farmUuid,
-	})
-	return response
-}
-
-const deleteNotification = async (notificationUuid: string, userUuid: string) => {
-	const response = await callableFireFunction<{ success: boolean }>('notifications', {
-		operation: 'deleteNotification',
-		notificationUuid,
-		userUuid,
-	})
-	return response
-}
-
-const getUnreadNotificationsCount = async (farmUuid: string): Promise<number> => {
-	try {
-		const response = await callableFireFunction<{ success: boolean; data: number }>(
-			'notifications',
-			{
-				operation: 'getUnreadNotificationCount',
-				farmUuid,
-			}
-		)
-
-		if (response.success && typeof response.data === 'number') {
-			return response.data
-		}
-
-		return 0
-	} catch (error) {
-		console.error('Error getting unread count:', error)
-		throw error
-	}
-}
-
-const createNotification = async (notificationData: {
-	farmUuid: string
-	title: string
-	message: string
-	type:
-		| 'health_alert'
-		| 'medication_reminder'
-		| 'calendar_reminder'
-		| 'task_update'
-		| 'production_summary'
-		| 'system_alert'
-	priority?: 'low' | 'medium' | 'high' | 'critical'
-	relatedType?: 'animal' | 'task' | 'calendar_event' | 'production'
-	relatedId?: string
-	scheduledFor?: string
-	data?: Record<string, any>
-}): Promise<string> => {
-	try {
-		const response = await callableFireFunction<{ success: boolean; data: string }>(
-			'notifications',
-			{
-				operation: 'createNotification',
-				...notificationData,
-			}
-		)
-
-		if (response.success && response.data) {
-			return response.data
-		}
-
-		throw new Error('Failed to create notification')
-	} catch (error) {
-		console.error('Error creating notification:', error)
-		throw error
-	}
 }
 
 const registerDeviceToken = async (tokenData: {
@@ -247,169 +120,100 @@ const removeDeviceToken = async (token: string): Promise<void> => {
 	}
 }
 
-const sendHealthAlert = async (animalUuid: string, healthStatus: string, farmUuid: string) => {
-	const response = await callableFireFunction<{ success: boolean }>('notifications', {
-		operation: 'sendHealthAlert',
-		animalUuid,
-		healthStatus,
-		farmUuid,
-	})
-	return response
-}
-
-const sendRecoveryNotification = async (animalUuid: string, farmUuid: string) => {
-	const response = await callableFireFunction<{ success: boolean }>('notifications', {
-		operation: 'sendRecoveryNotification',
-		animalUuid,
-		farmUuid,
-	})
-	return response
-}
-
-const sendTaskReminder = async (taskUuid: string, farmUuid: string) => {
-	const response = await callableFireFunction<{ success: boolean }>('notifications', {
-		operation: 'sendTaskReminder',
-		taskUuid,
-		farmUuid,
-	})
-	return response
-}
-
-const sendVaccineReminder = async (animalUuid: string, vaccineType: string, farmUuid: string) => {
-	const response = await callableFireFunction<{ success: boolean }>('notifications', {
-		operation: 'sendVaccineReminder',
-		animalUuid,
-		vaccineType,
-		farmUuid,
-	})
-	return response
-}
-
-// Subscription functionality for real-time notifications
-const subscribeToNotifications = (
+// Real-time subscription using Firestore onSnapshot
+const subscribeToNotificationsRealTime = async (
 	farmUuid: string,
-	callback: NotificationSubscriptionCallback,
-	intervalMs = 30000 // 30 seconds by default
-): (() => void) => {
-	// Clear any existing subscription
-	unsubscribeFromNotifications()
+	callback: NotificationSubscriptionCallback
+): Promise<() => void> => {
+	if (!auth.currentUser) {
+		console.warn('User not authenticated for real-time notifications')
+		return () => {}
+	}
 
-	lastFarmUuid = farmUuid
-	subscriptionCallback = callback
+	const userUuid = auth.currentUser.uid
 
-	const fetchNotifications = async () => {
-		try {
-			if (lastFarmUuid && subscriptionCallback) {
-				const notifications = await getNotifications({
-					farmUuid: lastFarmUuid,
-					limit: 50,
-					unreadOnly: false,
-				})
-				subscriptionCallback(notifications)
-			}
-		} catch (error) {
-			console.error('Error fetching notifications in subscription:', error)
+	const notificationsQuery = query(
+		collection(firestore, 'notifications'),
+		where('farmUuid', '==', farmUuid),
+		orderBy('createdAt', 'desc')
+	)
+
+	const unsubscribe = onSnapshot(
+		notificationsQuery,
+		(snapshot) => {
+			const notifications: NotificationData[] = []
+
+			snapshot.forEach((doc) => {
+				const data = doc.data()
+
+				if (!data.dismissedBy?.includes(userUuid)) {
+					const notification = transformNotification({
+						uuid: doc.id,
+						...data,
+					})
+					notifications.push(notification)
+				}
+			})
+
+			callback(notifications)
+		},
+		(error) => {
+			console.error('Error in real-time notifications subscription:', error)
 		}
-	}
+	)
 
-	// Initial fetch
-	fetchNotifications()
-
-	// Set up interval for polling
-	subscriptionInterval = setInterval(fetchNotifications, intervalMs)
-
-	// Return unsubscribe function
-	return unsubscribeFromNotifications
+	return unsubscribe
 }
 
-const unsubscribeFromNotifications = (): void => {
-	if (subscriptionInterval) {
-		clearInterval(subscriptionInterval)
-		subscriptionInterval = null
-	}
-	subscriptionCallback = null
-	lastFarmUuid = null
-}
-
-// Enhanced polling with exponential backoff for errors
-const subscribeToNotificationsWithBackoff = (
+// Real-time subscription for unread count
+const subscribeToUnreadCount = async (
 	farmUuid: string,
-	callback: NotificationSubscriptionCallback,
-	options: {
-		intervalMs?: number
-		maxRetries?: number
-		backoffMultiplier?: number
-	} = {}
-): (() => void) => {
-	const { intervalMs = 30000, maxRetries = 3, backoffMultiplier = 2 } = options
-
-	// Clear any existing subscription
-	unsubscribeFromNotifications()
-
-	lastFarmUuid = farmUuid
-	subscriptionCallback = callback
-
-	let retryCount = 0
-	let currentInterval = intervalMs
-
-	const fetchNotifications = async () => {
-		try {
-			if (lastFarmUuid && subscriptionCallback) {
-				const notifications = await getNotifications({
-					farmUuid: lastFarmUuid,
-					limit: 50,
-					unreadOnly: false,
-				})
-				subscriptionCallback(notifications)
-
-				// Reset retry count on success
-				retryCount = 0
-				currentInterval = intervalMs
-			}
-		} catch (error) {
-			console.error('Error fetching notifications in subscription:', error)
-
-			retryCount++
-			if (retryCount <= maxRetries) {
-				// Exponential backoff
-				currentInterval = intervalMs * backoffMultiplier ** retryCount
-				console.warn(`Retrying in ${currentInterval}ms (attempt ${retryCount}/${maxRetries})`)
-			} else {
-				console.error('Max retries reached, stopping subscription')
-				unsubscribeFromNotifications()
-				return
-			}
-		}
-
-		// Schedule next fetch only if subscription is still active
-		if (subscriptionInterval) {
-			subscriptionInterval = setTimeout(fetchNotifications, currentInterval)
-		}
+	callback: (count: number) => void
+): Promise<() => void> => {
+	if (!auth.currentUser) {
+		console.warn('User not authenticated for unread count subscription')
+		return () => {}
 	}
 
-	// Initial fetch
-	fetchNotifications()
+	const userUuid = auth.currentUser.uid
 
-	// Return unsubscribe function
-	return unsubscribeFromNotifications
+	const notificationsQuery = query(
+		collection(firestore, 'notifications'),
+		where('farmUuid', '==', farmUuid)
+	)
+
+	const unsubscribe = onSnapshot(
+		notificationsQuery,
+		(snapshot) => {
+			let unreadCount = 0
+
+			snapshot.forEach((doc) => {
+				const data = doc.data()
+
+				// Contar solo las que no están leídas ni dismissed por este usuario
+				const isRead = data.readBy?.includes(userUuid) || false
+				const isDismissed = data.dismissedBy?.includes(userUuid) || false
+
+				if (!isRead && !isDismissed) {
+					unreadCount++
+				}
+			})
+
+			callback(unreadCount)
+		},
+		(error) => {
+			console.error('Error in unread count subscription:', error)
+		}
+	)
+
+	return unsubscribe
 }
 
 export const NotificationsService = {
-	getNotifications,
-	getNotificationByUuid,
 	markNotificationAsRead,
 	markNotificationAsDismissed,
-	markAllNotificationsAsRead,
-	deleteNotification,
-	getUnreadNotificationsCount,
-	createNotification,
 	registerDeviceToken,
 	removeDeviceToken,
-	sendHealthAlert,
-	sendRecoveryNotification,
-	sendTaskReminder,
-	sendVaccineReminder,
-	subscribeToNotifications,
-	unsubscribeFromNotifications,
-	subscribeToNotificationsWithBackoff,
+	subscribeToNotificationsRealTime,
+	subscribeToUnreadCount,
 }

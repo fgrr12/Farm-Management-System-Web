@@ -1,0 +1,14 @@
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"lib": ["webworker", "es2020"],
+		"types": ["vite/client"],
+		"noEmit": true,
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": false,
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true
+	},
+	"include": ["src/sw.ts", "src/sw.d.ts"],
+	"exclude": ["node_modules", "dist", "dev-dist"]
+}
