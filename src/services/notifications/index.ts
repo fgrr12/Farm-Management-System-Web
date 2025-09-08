@@ -23,7 +23,7 @@ const mapNotificationTypeToDisplayType = (
 // Type mapping from backend notification types to frontend categories
 const mapNotificationTypeToCategory = (
 	backendType: string
-): 'general' | 'medication' | 'health' | 'task' => {
+): 'general' | 'medication' | 'health' | 'task' | 'production' => {
 	switch (backendType) {
 		case 'health_alert':
 			return 'health'
@@ -31,6 +31,8 @@ const mapNotificationTypeToCategory = (
 			return 'medication'
 		case 'task_update':
 			return 'task'
+		case 'production_summary':
+			return 'production'
 		default:
 			return 'general'
 	}

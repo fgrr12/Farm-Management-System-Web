@@ -13,6 +13,7 @@
 		"medication": "Medicación",
 		"health": "Salud",
 		"task": "Tareas",
+		"production": "Producción",
 		"general": "General"
 	},
 	"noNotificationsInCategory": "No hay notificaciones en esta categoría",

@@ -87,6 +87,8 @@ export const NotificationDropdown = memo(() => {
 				return 'i-material-symbols-health-and-safety text-green-600'
 			case 'task':
 				return 'i-material-symbols-task text-purple-600'
+			case 'production':
+				return 'i-material-symbols-analytics text-orange-600'
 			default:
 				return 'i-material-symbols-notifications text-gray-600'
 		}
@@ -134,6 +136,11 @@ export const NotificationDropdown = memo(() => {
 			key: 'task',
 			label: t('categories.task'),
 			count: notifications.filter((n) => n.category === 'task').length,
+		},
+		{
+			key: 'production',
+			label: t('categories.production'),
+			count: notifications.filter((n) => n.category === 'production').length,
 		},
 	]
 
