@@ -25,6 +25,42 @@ export const useFCMToken = () => {
 
 	const { user } = useUserStore()
 
+	// Token persistence keys
+	const TOKEN_STORAGE_KEY = 'fcm_token'
+	const TOKEN_TIMESTAMP_KEY = 'fcm_token_timestamp'
+	const TOKEN_VALIDITY_HOURS = 24 // Token válido por 24 horas
+
+	// Load token from localStorage on initialization
+	useEffect(() => {
+		const loadStoredToken = () => {
+			try {
+				const storedToken = localStorage.getItem(TOKEN_STORAGE_KEY)
+				const storedTimestamp = localStorage.getItem(TOKEN_TIMESTAMP_KEY)
+				
+				if (storedToken && storedTimestamp) {
+					const tokenAge = Date.now() - parseInt(storedTimestamp)
+					const maxAge = TOKEN_VALIDITY_HOURS * 60 * 60 * 1000 // 24 horas en ms
+					
+					if (tokenAge < maxAge) {
+						// Token aún válido
+						setToken(storedToken)
+						console.log('[FCM] Token loaded from localStorage')
+						return
+					} else {
+						// Token expirado, limpiar
+						localStorage.removeItem(TOKEN_STORAGE_KEY)
+						localStorage.removeItem(TOKEN_TIMESTAMP_KEY)
+						console.log('[FCM] Stored token expired, cleared')
+					}
+				}
+			} catch (err) {
+				console.warn('[FCM] Error loading stored token:', err)
+			}
+		}
+		
+		loadStoredToken()
+	}, [])
+
 	// Check if FCM is supported
 	useEffect(() => {
 		const checkSupport = async () => {
@@ -148,7 +184,11 @@ export const useFCMToken = () => {
 			})
 
 			if (currentToken) {
+				// Guardar token en localStorage
+				localStorage.setItem(TOKEN_STORAGE_KEY, currentToken)
+				localStorage.setItem(TOKEN_TIMESTAMP_KEY, Date.now().toString())
 				setToken(currentToken)
+				console.log('[FCM] New token obtained and stored')
 				return currentToken
 			}
 			console.warn('No registration token available.')
@@ -219,6 +259,10 @@ export const useFCMToken = () => {
 			setError(null)
 
 			await NotificationsService.removeDeviceToken(token)
+			
+			// Limpiar token del localStorage
+			localStorage.removeItem(TOKEN_STORAGE_KEY)
+			localStorage.removeItem(TOKEN_TIMESTAMP_KEY)
 			setToken(null)
 
 			return true
@@ -231,12 +275,13 @@ export const useFCMToken = () => {
 		}
 	}, [token])
 
-	// Initialize FCM token on mount and when permission changes
+	// Initialize FCM token only if not already stored and permission is granted
 	useEffect(() => {
-		if (permission === 'granted' && isFCMSupported) {
+		if (permission === 'granted' && isFCMSupported && !token) {
+			console.log('[FCM] No stored token found, generating new one')
 			getFCMToken()
 		}
-	}, [permission, isFCMSupported, getFCMToken])
+	}, [permission, isFCMSupported, getFCMToken, token])
 
 	// Auto-register token when obtained and user is logged in
 	useEffect(() => {
@@ -245,12 +290,22 @@ export const useFCMToken = () => {
 		}
 	}, [token, user, permission, registerDeviceToken])
 
-	// Reset registration state when user changes
+	// Reset registration state when user changes (logout/login)
 	useEffect(() => {
 		if (user?.uuid !== currentUserRef.current) {
+			// User changed (logout/login)
 			registeredTokenRef.current = null
-			currentUserRef.current = null
 			setIsTokenRegistered(false)
+			
+			if (!user) {
+				// User logged out - clear stored token
+				localStorage.removeItem(TOKEN_STORAGE_KEY)
+				localStorage.removeItem(TOKEN_TIMESTAMP_KEY)
+				setToken(null)
+				console.log('[FCM] User logged out, token cleared')
+			}
+			
+			currentUserRef.current = user?.uuid || null
 		}
 	}, [user?.uuid])
 
