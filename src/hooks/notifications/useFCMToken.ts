@@ -36,28 +36,27 @@ export const useFCMToken = () => {
 			try {
 				const storedToken = localStorage.getItem(TOKEN_STORAGE_KEY)
 				const storedTimestamp = localStorage.getItem(TOKEN_TIMESTAMP_KEY)
-				
+
 				if (storedToken && storedTimestamp) {
-					const tokenAge = Date.now() - parseInt(storedTimestamp)
+					const tokenAge = Date.now() - Number.parseInt(storedTimestamp, 10)
 					const maxAge = TOKEN_VALIDITY_HOURS * 60 * 60 * 1000 // 24 horas en ms
-					
+
 					if (tokenAge < maxAge) {
 						// Token aún válido
 						setToken(storedToken)
 						console.log('[FCM] Token loaded from localStorage')
 						return
-					} else {
-						// Token expirado, limpiar
-						localStorage.removeItem(TOKEN_STORAGE_KEY)
-						localStorage.removeItem(TOKEN_TIMESTAMP_KEY)
-						console.log('[FCM] Stored token expired, cleared')
 					}
+					// Token expirado, limpiar
+					localStorage.removeItem(TOKEN_STORAGE_KEY)
+					localStorage.removeItem(TOKEN_TIMESTAMP_KEY)
+					console.log('[FCM] Stored token expired, cleared')
 				}
 			} catch (err) {
 				console.warn('[FCM] Error loading stored token:', err)
 			}
 		}
-		
+
 		loadStoredToken()
 	}, [])
 
@@ -259,7 +258,7 @@ export const useFCMToken = () => {
 			setError(null)
 
 			await NotificationsService.removeDeviceToken(token)
-			
+
 			// Limpiar token del localStorage
 			localStorage.removeItem(TOKEN_STORAGE_KEY)
 			localStorage.removeItem(TOKEN_TIMESTAMP_KEY)
@@ -296,7 +295,7 @@ export const useFCMToken = () => {
 			// User changed (logout/login)
 			registeredTokenRef.current = null
 			setIsTokenRegistered(false)
-			
+
 			if (!user) {
 				// User logged out - clear stored token
 				localStorage.removeItem(TOKEN_STORAGE_KEY)
@@ -304,12 +303,10 @@ export const useFCMToken = () => {
 				setToken(null)
 				console.log('[FCM] User logged out, token cleared')
 			}
-			
+
 			currentUserRef.current = user?.uuid || null
 		}
-	}, [user?.uuid])
-
-	// Setup foreground message listener - handled by NotificationToast component
+	}, [user]) // Setup foreground message listener - handled by NotificationToast component
 	// useEffect(() => {
 	// 	if (!isFCMSupported || permission !== 'granted') {
 	// 		return
