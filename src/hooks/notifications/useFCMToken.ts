@@ -22,6 +22,7 @@ export const useFCMToken = () => {
 	const registrationInProgress = useRef(false)
 	const registeredTokenRef = useRef<string | null>(null)
 	const currentUserRef = useRef<string | null>(null)
+	const tokenGenerationAttempted = useRef(false)
 
 	const { user } = useUserStore()
 
@@ -30,7 +31,7 @@ export const useFCMToken = () => {
 	const TOKEN_TIMESTAMP_KEY = 'fcm_token_timestamp'
 	const TOKEN_VALIDITY_HOURS = 24 // Token válido por 24 horas
 
-	// Load token from localStorage on initialization
+	// Load token from localStorage on initialization (once only)
 	useEffect(() => {
 		const loadStoredToken = () => {
 			try {
@@ -44,13 +45,11 @@ export const useFCMToken = () => {
 					if (tokenAge < maxAge) {
 						// Token aún válido
 						setToken(storedToken)
-						console.log('[FCM] Token loaded from localStorage')
 						return
 					}
 					// Token expirado, limpiar
 					localStorage.removeItem(TOKEN_STORAGE_KEY)
 					localStorage.removeItem(TOKEN_TIMESTAMP_KEY)
-					console.log('[FCM] Stored token expired, cleared')
 				}
 			} catch (err) {
 				console.warn('[FCM] Error loading stored token:', err)
@@ -58,9 +57,7 @@ export const useFCMToken = () => {
 		}
 
 		loadStoredToken()
-	}, [])
-
-	// Check if FCM is supported
+	}, []) // Empty dependency array - only run once on mount	// Check if FCM is supported
 	useEffect(() => {
 		const checkSupport = async () => {
 			try {
@@ -111,6 +108,11 @@ export const useFCMToken = () => {
 			return null
 		}
 
+		// If we already have a valid token, return it instead of generating a new one
+		if (token) {
+			return token
+		}
+
 		try {
 			setLoading(true)
 			setError(null)
@@ -126,8 +128,6 @@ export const useFCMToken = () => {
 						throw new Error('No service worker registration found')
 					}
 
-					console.log('[FCM] Using main PWA service worker for messaging')
-
 					// Send Firebase configuration to service worker
 					const firebaseConfig = {
 						apiKey: import.meta.env.VITE_API_KEY,
@@ -139,23 +139,11 @@ export const useFCMToken = () => {
 					}
 
 					// Validate configuration
-					console.log('[FCM] Firebase config values check:', {
-						hasApiKey: !!firebaseConfig.apiKey,
-						hasProjectId: !!firebaseConfig.projectId,
-						hasMessagingSenderId: !!firebaseConfig.messagingSenderId,
-						projectId: firebaseConfig.projectId,
-					})
-
 					if (
 						!firebaseConfig.projectId ||
 						!firebaseConfig.apiKey ||
 						!firebaseConfig.messagingSenderId
 					) {
-						console.error('[FCM] Missing Firebase configuration:', {
-							projectId: firebaseConfig.projectId,
-							apiKey: firebaseConfig.apiKey ? '[PRESENT]' : '[MISSING]',
-							messagingSenderId: firebaseConfig.messagingSenderId,
-						})
 						throw new Error('Missing Firebase configuration values')
 					}
 
@@ -166,7 +154,6 @@ export const useFCMToken = () => {
 							config: firebaseConfig,
 						})
 						configSentToSW = true
-						console.log('[FCM] Firebase config sent to main service worker')
 					}
 
 					// Wait a bit for the service worker to process the configuration
@@ -187,7 +174,6 @@ export const useFCMToken = () => {
 				localStorage.setItem(TOKEN_STORAGE_KEY, currentToken)
 				localStorage.setItem(TOKEN_TIMESTAMP_KEY, Date.now().toString())
 				setToken(currentToken)
-				console.log('[FCM] New token obtained and stored')
 				return currentToken
 			}
 			console.warn('No registration token available.')
@@ -200,7 +186,7 @@ export const useFCMToken = () => {
 		} finally {
 			setLoading(false)
 		}
-	}, [isFCMSupported, permission])
+	}, [isFCMSupported, permission, token])
 
 	// Register device token with backend
 	const registerDeviceToken = useCallback(async (): Promise<boolean> => {
@@ -274,20 +260,23 @@ export const useFCMToken = () => {
 		}
 	}, [token])
 
-	// Initialize FCM token only if not already stored and permission is granted
+	// biome-ignore lint: use only once
 	useEffect(() => {
-		if (permission === 'granted' && isFCMSupported && !token) {
-			console.log('[FCM] No stored token found, generating new one')
+		if (permission === 'granted' && isFCMSupported && !token && !tokenGenerationAttempted.current) {
+			tokenGenerationAttempted.current = true
 			getFCMToken()
 		}
-	}, [permission, isFCMSupported, getFCMToken, token])
+	}, [permission, isFCMSupported, token])
 
-	// Auto-register token when obtained and user is logged in
+	// Auto-register token when obtained and user is logged in (only once)
 	useEffect(() => {
-		if (token && user && permission === 'granted') {
-			registerDeviceToken()
+		if (token && user && permission === 'granted' && !isTokenRegistered) {
+			// Only register if we haven't registered this token for this user yet
+			if (registeredTokenRef.current !== token || currentUserRef.current !== user.uuid) {
+				registerDeviceToken()
+			}
 		}
-	}, [token, user, permission, registerDeviceToken])
+	}, [token, user, permission, isTokenRegistered, registerDeviceToken])
 
 	// Reset registration state when user changes (logout/login)
 	useEffect(() => {
@@ -297,11 +286,14 @@ export const useFCMToken = () => {
 			setIsTokenRegistered(false)
 
 			if (!user) {
-				// User logged out - clear stored token
+				// User logged out - clear stored token and reset generation flag
 				localStorage.removeItem(TOKEN_STORAGE_KEY)
 				localStorage.removeItem(TOKEN_TIMESTAMP_KEY)
 				setToken(null)
-				console.log('[FCM] User logged out, token cleared')
+				tokenGenerationAttempted.current = false // Reset generation flag
+			} else {
+				// User logged in - allow token generation for new user
+				tokenGenerationAttempted.current = false
 			}
 
 			currentUserRef.current = user?.uuid || null
