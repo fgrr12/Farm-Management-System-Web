@@ -150,7 +150,7 @@ const TaxDetails = () => {
 					}
 					
 					.info-label {
-						font-size: 9pt;
+						font-size: 8pt;
 						font-weight: 600;
 						color: #cbd5e1;
 						text-transform: uppercase;
@@ -193,7 +193,7 @@ const TaxDetails = () => {
 						border-radius: 4px;
 						font-size: 9pt;
 						font-weight: 700;
-						color: #60a5fa;
+						// color: #60a5fa;
 						text-align: center;
 					}
 
