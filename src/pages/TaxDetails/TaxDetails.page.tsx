@@ -228,9 +228,9 @@ const TaxDetails = () => {
 			<body>
 				<div class="page">
 					${Array(10)
-				.fill(0)
-				.map(
-					() => `
+						.fill(0)
+						.map(
+							() => `
 						<div class="card">
 							<div class="card-header">
 								<h3 class="card-title">
@@ -273,8 +273,8 @@ const TaxDetails = () => {
 							</div>
 						</div>
 					`
-				)
-				.join('')}
+						)
+						.join('')}
 				</div>
 			</body>
 			</html>
