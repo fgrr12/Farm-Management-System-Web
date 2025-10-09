@@ -33,8 +33,8 @@ const TaxDetails = () => {
 						min-height: 297mm;
 						display: grid;
 						grid-template-columns: repeat(2, 1fr);
-						grid-template-rows: repeat(4, 1fr);
-						gap: 8mm;
+						grid-template-rows: repeat(5, 1fr);
+						gap: 2mm;
 						margin: 0 auto;
 						background: white;
 						padding: 12mm;
@@ -89,12 +89,11 @@ const TaxDetails = () => {
 						display: flex;
 						justify-content: space-between;
 						align-items: flex-start;
-						margin-bottom: 4mm;
 					}
 					
 					.card-title {
 						flex: 1;
-						font-size: 8pt;
+						font-size: 10pt;
 						font-weight: 700;
 						color: #e2e8f0;
 						text-transform: uppercase;
@@ -151,7 +150,7 @@ const TaxDetails = () => {
 					}
 					
 					.info-label {
-						font-size: 6pt;
+						font-size: 9pt;
 						font-weight: 600;
 						color: #cbd5e1;
 						text-transform: uppercase;
@@ -160,7 +159,7 @@ const TaxDetails = () => {
 					}
 					
 					.info-value {
-						font-size: 6pt;
+						font-size: 9pt;
 						font-weight: 600;
 						color: white;
 						overflow: hidden;
@@ -174,12 +173,11 @@ const TaxDetails = () => {
 						flex-direction: column;
 						align-items: center;
 						justify-content: center;
-						margin-left: 4mm;
 						max-width: 20mm;
 					}
 					
 					.activity-label {
-						font-size: 6pt;
+						font-size: 8pt;
 						font-weight: 600;
 						color: #cbd5e1;
 						text-transform: uppercase;
@@ -193,7 +191,7 @@ const TaxDetails = () => {
 						background: rgba(59, 130, 246, 0.3);
 						border: 1px solid rgba(59, 130, 246, 0.5);
 						border-radius: 4px;
-						font-size: 6pt;
+						font-size: 9pt;
 						font-weight: 700;
 						color: #60a5fa;
 						text-align: center;
@@ -229,10 +227,10 @@ const TaxDetails = () => {
 			</head>
 			<body>
 				<div class="page">
-					${Array(8)
-						.fill(0)
-						.map(
-							() => `
+					${Array(10)
+				.fill(0)
+				.map(
+					() => `
 						<div class="card">
 							<div class="card-header">
 								<h3 class="card-title">
@@ -275,8 +273,8 @@ const TaxDetails = () => {
 							</div>
 						</div>
 					`
-						)
-						.join('')}
+				)
+				.join('')}
 				</div>
 			</body>
 			</html>
