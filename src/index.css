@@ -1,8 +1,5 @@
 @import "tailwindcss";
-/* biome-ignore lint: plugin*/
 @plugin "daisyui";
-
-/* biome-ignore lint: dark-mode-variants */
 @variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /* Dark mode transitions */

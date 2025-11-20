@@ -59,7 +59,7 @@ const RelatedAnimalsForm = () => {
 		(info: RelatedAnimalInformation, isChild: boolean): RelatedAnimal => ({
 			animalUuid: info.uuid,
 			animalId: info.animalId,
-			breed: breeds.find((breed) => breed.name === info.breed)?.uuid!,
+			breed: breeds.find((breed) => breed.name === info.breed)?.uuid ?? '',
 			relation:
 				info.gender.toLowerCase() === GenderEnum.FEMALE
 					? isChild
