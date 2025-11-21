@@ -42,7 +42,7 @@
 		"zustand": "5.0.8"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.3.6",
+		"@biomejs/biome": "2.3.7",
 		"@tailwindcss/vite": "^4.1.17",
 		"@testing-library/jest-dom": "^6.9.1",
 		"@testing-library/react": "^16.3.0",
@@ -60,7 +60,7 @@
 		"unocss": "^66.5.9",
 		"vite": "^7.2.4",
 		"vite-plugin-pwa": "^1.1.0",
-		"vitest": "^4.0.12",
+		"vitest": "^4.0.13",
 		"workbox-core": "^7.4.0",
 		"workbox-precaching": "^7.4.0",
 		"workbox-routing": "^7.4.0",
