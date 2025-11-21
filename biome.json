@@ -15,11 +15,7 @@
 					"level": "on",
 					"options": {
 						"groups": [
-							[
-								":PACKAGE:",
-								":NODE:",
-								":PACKAGE_WITH_PROTOCOL:"
-							],
+							[":PACKAGE:", ":NODE:", ":PACKAGE_WITH_PROTOCOL:"],
 							":BLANK_LINE:",
 							"@/config/**",
 							":BLANK_LINE:",
@@ -35,10 +31,7 @@
 							":BLANK_LINE:",
 							"@/hooks/**",
 							":BLANK_LINE:",
-							[
-								"@/**/*.types*",
-								"@/types/**"
-							],
+							["@/**/*.types*", "@/types/**"],
 							":BLANK_LINE:"
 						]
 					}
