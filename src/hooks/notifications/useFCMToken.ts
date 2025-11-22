@@ -159,11 +159,12 @@ export const useFCMToken = () => {
 					// Wait a bit for the service worker to process the configuration
 					await new Promise((resolve) => setTimeout(resolve, 1000))
 				} catch (swError) {
-					console.warn('Failed to register FCM service worker:', swError)
-					// Continuar sin service worker para notificaciones foreground
+					console.warn('Failed to configure service worker:', swError)
+					// Continuar - Firebase usará firebase-messaging-sw.js por defecto
 				}
 			}
 
+			// Get FCM token - Firebase usará firebase-messaging-sw.js automáticamente
 			const messaging = getMessaging()
 			const currentToken = await getToken(messaging, {
 				vapidKey: VAPID_KEY,

@@ -1,5 +1,5 @@
-// Development Service Worker - Simple version without ES modules
-console.log('[DEV-SW] Development Service Worker starting...')
+// Firebase Cloud Messaging Service Worker
+// This file is automatically loaded by Firebase when using getToken()
 
 // Firebase configuration storage
 let firebaseConfig = null
@@ -9,21 +9,21 @@ let isFirebaseInitialized = false
 try {
 	importScripts('https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js')
 	importScripts('https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js')
-	console.log('[DEV-SW] Firebase scripts loaded')
+	console.log('[FCM-SW] Firebase scripts loaded')
 } catch (error) {
-	console.error('[DEV-SW] Error loading Firebase scripts:', error)
+	console.error('[FCM-SW] Error loading Firebase scripts:', error)
 }
 
 // Initialize Firebase
 function initializeFirebase(config) {
 	if (isFirebaseInitialized || !config) {
-		console.log('[DEV-SW] Firebase already initialized or no config')
+		console.log('[FCM-SW] Firebase already initialized or no config')
 		return
 	}
 
 	try {
 		if (typeof firebase === 'undefined') {
-			console.error('[DEV-SW] Firebase not available')
+			console.error('[FCM-SW] Firebase not available')
 			return
 		}
 
@@ -31,7 +31,7 @@ function initializeFirebase(config) {
 		const messaging = firebase.messaging()
 		
 		messaging.onBackgroundMessage((payload) => {
-			console.log('[DEV-SW] Background message received:', payload)
+			console.log('[FCM-SW] Background message received:', payload)
 			
 			const notificationTitle = payload.notification?.title || 'Nueva notificación'
 			const notificationOptions = {
@@ -45,17 +45,17 @@ function initializeFirebase(config) {
 		})
 		
 		isFirebaseInitialized = true
-		console.log('[DEV-SW] Firebase initialized successfully')
+		console.log('[FCM-SW] Firebase initialized successfully')
 		
 	} catch (error) {
-		console.error('[DEV-SW] Error initializing Firebase:', error)
+		console.error('[FCM-SW] Error initializing Firebase:', error)
 	}
 }
 
 // Listen for messages from main thread
 self.addEventListener('message', (event) => {
 	if (event.data && event.data.type === 'FIREBASE_CONFIG') {
-		console.log('[DEV-SW] Received Firebase configuration')
+		console.log('[FCM-SW] Received Firebase configuration')
 		firebaseConfig = event.data.config
 		initializeFirebase(firebaseConfig)
 	}
@@ -63,7 +63,7 @@ self.addEventListener('message', (event) => {
 
 // Handle push events
 self.addEventListener('push', (event) => {
-	console.log('[DEV-SW] Push event received')
+	console.log('[FCM-SW] Push event received')
 	
 	if (!event.data) {
 		return
@@ -83,13 +83,13 @@ self.addEventListener('push', (event) => {
 			self.registration.showNotification(notificationTitle, notificationOptions)
 		)
 	} catch (error) {
-		console.error('[DEV-SW] Error handling push:', error)
+		console.error('[FCM-SW] Error handling push:', error)
 	}
 })
 
 // Handle notification clicks
 self.addEventListener('notificationclick', (event) => {
-	console.log('[DEV-SW] Notification clicked')
+	console.log('[FCM-SW] Notification clicked')
 	event.notification.close()
 
 	if (event.action === 'dismiss') {
@@ -113,23 +113,23 @@ self.addEventListener('notificationclick', (event) => {
 
 // Handle push subscription change
 self.addEventListener('pushsubscriptionchange', (event) => {
-	console.log('[DEV-SW] Push subscription changed')
+	console.log('[FCM-SW] Push subscription changed')
 })
 
 // Handle notification close
 self.addEventListener('notificationclose', (event) => {
-	console.log('[DEV-SW] Notification closed')
+	console.log('[FCM-SW] Notification closed')
 })
 
 // Service Worker lifecycle
 self.addEventListener('install', (event) => {
-	console.log('[DEV-SW] Service Worker installing')
+	console.log('[FCM-SW] Service Worker installing')
 	self.skipWaiting()
 })
 
 self.addEventListener('activate', (event) => {
-	console.log('[DEV-SW] Service Worker activating')
+	console.log('[FCM-SW] Service Worker activating')
 	event.waitUntil(clients.claim())
 })
 
-console.log('[DEV-SW] Service Worker setup complete')
+console.log('[FCM-SW] Firebase Messaging Service Worker ready')
