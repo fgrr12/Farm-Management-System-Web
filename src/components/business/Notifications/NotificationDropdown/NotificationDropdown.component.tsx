@@ -167,7 +167,7 @@ export const NotificationDropdown = memo(() => {
 			{isOpen && (
 				<div className="absolute right-0 top-full mt-2 w-[420px] bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 max-h-[85vh] flex flex-col">
 					{/* Header */}
-					<div className="p-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
+					<div className="p-4 border-b border-gray-200 dark:border-gray-700 shrink-0">
 						<div className="flex items-center justify-between mb-3">
 							<div className="flex items-center gap-2">
 								<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
@@ -209,7 +209,7 @@ export const NotificationDropdown = memo(() => {
 										type="button"
 										onClick={() => setSelectedCategory(category.key)}
 										className={`
-											flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 whitespace-nowrap flex-shrink-0
+											flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 whitespace-nowrap shrink-0
 											${
 												selectedCategory === category.key
 													? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-100 shadow-sm'
@@ -238,7 +238,7 @@ export const NotificationDropdown = memo(() => {
 							</div>
 
 							{/* Subtle scroll indicator */}
-							<div className="absolute right-0 top-0 bottom-0 w-3 bg-gradient-to-l from-gray-100 dark:from-gray-700 to-transparent pointer-events-none opacity-60" />
+							<div className="absolute right-0 top-0 bottom-0 w-3 bg-linear-to-l from-gray-100 dark:from-gray-700 to-transparent pointer-events-none opacity-60" />
 						</div>
 					</div>
 
@@ -294,7 +294,7 @@ export const NotificationDropdown = memo(() => {
 									>
 										<div className="flex items-start gap-3">
 											{/* Icon */}
-											<div className="flex-shrink-0">
+											<div className="shrink-0">
 												<div
 													className={`
 													w-10 h-10 rounded-full flex items-center justify-center
@@ -326,7 +326,7 @@ export const NotificationDropdown = memo(() => {
 													</h4>
 													{!notification.read && (
 														<div
-															className={`w-2 h-2 rounded-full flex-shrink-0 mt-1 ${
+															className={`w-2 h-2 rounded-full shrink-0 mt-1 ${
 																notification.type === 'success'
 																	? 'bg-green-500'
 																	: notification.type === 'warning'

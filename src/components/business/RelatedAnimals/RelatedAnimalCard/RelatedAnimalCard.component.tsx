@@ -79,7 +79,7 @@ export const RelatedAnimalCard: FC<CardProps> = ({ animal, ...props }) => {
 		>
 			<div className="flex items-center gap-4">
 				{/* Animal Avatar */}
-				<div className="relative flex-shrink-0">
+				<div className="relative shrink-0">
 					<div className="w-18 h-18 rounded-full bg-gray-100 dark:bg-gray-700 overflow-hidden border-2 border-gray-200 dark:border-gray-600">
 						<img
 							className="w-full h-full object-cover pointer-events-none"
@@ -111,7 +111,7 @@ export const RelatedAnimalCard: FC<CardProps> = ({ animal, ...props }) => {
 				</div>
 
 				{/* Drag Handle */}
-				<div className="flex-shrink-0 opacity-40 hover:opacity-60 transition-opacity">
+				<div className="shrink-0 opacity-40 hover:opacity-60 transition-opacity">
 					<i className="i-material-symbols-drag-handle w-5! h-5! text-gray-400 dark:text-gray-500" />
 				</div>
 			</div>

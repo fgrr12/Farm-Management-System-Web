@@ -113,7 +113,7 @@ export const FarmSelector = memo(() => {
 					</button>
 
 					<ul
-						className="dropdown-content menu bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 z-[50] mt-3 w-full max-w-xs p-2 max-h-64 overflow-y-auto absolute right-0 top-full"
+						className="dropdown-content menu bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 z-50 mt-3 w-full max-w-xs p-2 max-h-64 overflow-y-auto absolute right-0 bottom-[4.5rem]"
 						aria-label="Farm selector options"
 					>
 						{availableFarms.length > 0 ? (

@@ -208,7 +208,7 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 			>
 				{/* Background Gradient */}
 				<div
-					className={`absolute inset-0 bg-gradient-to-br ${healthConfig.color} opacity-3 dark:opacity-8 group-hover:opacity-8 dark:group-hover:opacity-12 transition-opacity duration-300 rounded-lg`}
+					className={`absolute inset-0 bg-linear-to-br ${healthConfig.color} opacity-3 dark:opacity-8 group-hover:opacity-8 dark:group-hover:opacity-12 transition-opacity duration-300 rounded-lg`}
 				/>
 
 				{/* Health Status Indicator */}
@@ -233,7 +233,7 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 						</div>
 					) : (
 						<div
-							className={`w-16 h-16 rounded-full bg-gradient-to-br ${healthConfig.color} flex items-center justify-center shadow-lg dark:shadow-xl border-2 border-white dark:border-gray-600`}
+							className={`w-16 h-16 rounded-full bg-linear-to-br ${healthConfig.color} flex items-center justify-center shadow-lg dark:shadow-xl border-2 border-white dark:border-gray-600`}
 						>
 							<i className="i-healthicons-animal-cow w-8! h-8! bg-white! dark:bg-gray-100!" />
 						</div>

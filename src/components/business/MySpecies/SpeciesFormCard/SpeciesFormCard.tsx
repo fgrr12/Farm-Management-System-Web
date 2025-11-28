@@ -90,8 +90,8 @@ export const SpeciesFormCard = memo(
 					<div
 						className={`p-4 border-b border-gray-200 dark:border-gray-700 ${
 							specie.editable
-								? 'bg-gradient-to-r from-blue-50 to-green-50 dark:from-blue-900/30 dark:to-green-900/30'
-								: 'bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700'
+								? 'bg-linear-to-r from-blue-50 to-green-50 dark:from-blue-900/30 dark:to-green-900/30'
+								: 'bg-linear-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700'
 						}`}
 					>
 						<div className="flex items-center justify-between">

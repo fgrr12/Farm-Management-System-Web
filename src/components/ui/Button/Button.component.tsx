@@ -33,11 +33,11 @@ export const Button: FC<ButtonProps> = memo(
 
 			const variantClasses = {
 				primary:
-					'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 dark:from-blue-500 dark:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-700 text-white border-none shadow-lg hover:shadow-xl focus:ring-blue-500 dark:focus:ring-blue-400',
+					'bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 dark:from-blue-500 dark:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-700 text-white border-none shadow-lg hover:shadow-xl focus:ring-blue-500 dark:focus:ring-blue-400',
 				secondary:
-					'bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 dark:from-gray-700 dark:to-gray-600 dark:hover:from-gray-600 dark:hover:to-gray-500 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 shadow-sm hover:shadow-md focus:ring-gray-500 dark:focus:ring-gray-400',
+					'bg-linear-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 dark:from-gray-700 dark:to-gray-600 dark:hover:from-gray-600 dark:hover:to-gray-500 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 shadow-sm hover:shadow-md focus:ring-gray-500 dark:focus:ring-gray-400',
 				danger:
-					'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 dark:from-red-500 dark:to-red-600 dark:hover:from-red-600 dark:hover:to-red-700 text-white border-none shadow-lg hover:shadow-xl focus:ring-red-500 dark:focus:ring-red-400',
+					'bg-linear-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 dark:from-red-500 dark:to-red-600 dark:hover:from-red-600 dark:hover:to-red-700 text-white border-none shadow-lg hover:shadow-xl focus:ring-red-500 dark:focus:ring-red-400',
 				ghost:
 					'bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 border-none shadow-none focus:ring-gray-500 dark:focus:ring-gray-400',
 				outline:

@@ -32,7 +32,7 @@ export const Sidebar = memo(() => {
 			const isActive = location.pathname.includes(path)
 			return `w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 ${
 				isActive
-					? `bg-gradient-to-br ${colorFrom} ${colorTo} shadow-lg`
+					? `bg-linear-to-br ${colorFrom} ${colorTo} shadow-lg`
 					: 'hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50 dark:bg-gray-800'
 			}`
 		},

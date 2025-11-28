@@ -21,10 +21,20 @@ export const taxDetailsSchema = z.object({
 		.string()
 		.min(1, 'taxDetails.validation.addressRequired')
 		.max(200, 'taxDetails.validation.addressTooLong'),
-	activityCode: z
-		.string()
-		.min(1, 'taxDetails.validation.activityCodeRequired')
-		.max(20, 'taxDetails.validation.activityCodeTooLong'),
+	activities: z
+		.array(
+			z.object({
+				name: z
+					.string()
+					.min(1, 'taxDetails.validation.activityNameRequired')
+					.max(100, 'taxDetails.validation.activityNameTooLong'),
+				code: z
+					.string()
+					.min(1, 'taxDetails.validation.activityCodeRequired')
+					.max(20, 'taxDetails.validation.activityCodeTooLong'),
+			})
+		)
+		.min(1, 'taxDetails.validation.atLeastOneActivity'),
 	uuid: z.string().optional(),
 	status: z.boolean().optional(),
 })

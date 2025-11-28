@@ -105,24 +105,24 @@ export const TaskModal: FC<TaskModalProps> = memo(({ task, isOpen, onClose }) =>
 	const variantConfig = useMemo(() => {
 		const configs = {
 			todo: {
-				headerBg: 'bg-gradient-to-r from-gray-600 to-gray-700 dark:from-gray-500 dark:to-gray-600',
+				headerBg: 'bg-linear-to-r from-gray-600 to-gray-700 dark:from-gray-500 dark:to-gray-600',
 				icon: 'i-material-symbols-task-alt',
 			},
 			'in-progress': {
-				headerBg: 'bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600',
+				headerBg: 'bg-linear-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600',
 				icon: 'i-material-symbols-task-alt',
 			},
 			done: {
 				headerBg:
-					'bg-gradient-to-r from-green-600 to-green-700 dark:from-green-500 dark:to-green-600',
+					'bg-linear-to-r from-green-600 to-green-700 dark:from-green-500 dark:to-green-600',
 				icon: 'i-material-symbols-task-alt',
 			},
 			archived: {
-				headerBg: 'bg-gradient-to-r from-gray-500 to-gray-600 dark:from-gray-400 dark:to-gray-500',
+				headerBg: 'bg-linear-to-r from-gray-500 to-gray-600 dark:from-gray-400 dark:to-gray-500',
 				icon: 'i-material-symbols-task-alt',
 			},
 			overdue: {
-				headerBg: 'bg-gradient-to-r from-red-600 to-red-700 dark:from-red-500 dark:to-red-600',
+				headerBg: 'bg-linear-to-r from-red-600 to-red-700 dark:from-red-500 dark:to-red-600',
 				icon: 'i-material-symbols-task-alt',
 			},
 		}
@@ -415,7 +415,7 @@ export const TaskModal: FC<TaskModalProps> = memo(({ task, isOpen, onClose }) =>
 																className="w-8 h-8 rounded-full object-cover"
 															/>
 														) : (
-															<div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-green-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+															<div className="w-8 h-8 bg-linear-to-br from-blue-500 to-green-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
 																{getUserInitials(assignedUser)}
 															</div>
 														)}
@@ -475,7 +475,7 @@ export const TaskModal: FC<TaskModalProps> = memo(({ task, isOpen, onClose }) =>
 																className="w-8 h-8 rounded-full object-cover"
 															/>
 														) : (
-															<div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-green-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+															<div className="w-8 h-8 bg-linear-to-br from-blue-500 to-green-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
 																{getUserInitials(employee)}
 															</div>
 														)}

@@ -24,6 +24,9 @@ export default defineConfig({
 		react(),
 		VitePWA({
 			registerType: 'autoUpdate',
+			strategies: 'injectManifest',
+			srcDir: 'src',
+			filename: 'sw.ts',
 			includeAssets: ['favicon.ico', 'apple-touch-icon-180x180.png'],
 			manifest: {
 				name: 'Cattle - Farm Management',
@@ -62,15 +65,12 @@ export default defineConfig({
 					},
 				],
 			},
-			workbox: {
+			injectManifest: {
 				globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
-				skipWaiting: false, // No skipWaiting automático para evitar refrescos
-				clientsClaim: false, // No claim automático para evitar conflictos
-				// Ignorar el service worker de FCM
-				globIgnores: ['**/firebase-messaging-sw.js'],
 			},
 			devOptions: {
 				enabled: true,
+				type: 'classic',
 			},
 		}),
 	],

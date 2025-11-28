@@ -48,25 +48,24 @@ export const Modal: FC<ModalProps> = memo(
 		const variantConfig = useMemo(() => {
 			const configs = {
 				default: {
-					headerBg:
-						'bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600',
+					headerBg: 'bg-linear-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600',
 					icon: 'i-material-symbols-info',
 					iconColor: 'bg-white!',
 				},
 				danger: {
-					headerBg: 'bg-gradient-to-r from-red-600 to-red-700 dark:from-red-500 dark:to-red-600',
+					headerBg: 'bg-linear-to-r from-red-600 to-red-700 dark:from-red-500 dark:to-red-600',
 					icon: 'i-material-symbols-warning',
 					iconColor: 'bg-white!',
 				},
 				success: {
 					headerBg:
-						'bg-gradient-to-r from-green-600 to-green-700 dark:from-green-500 dark:to-green-600',
+						'bg-linear-to-r from-green-600 to-green-700 dark:from-green-500 dark:to-green-600',
 					icon: 'i-material-symbols-check-circle',
 					iconColor: 'bg-white!',
 				},
 				warning: {
 					headerBg:
-						'bg-gradient-to-r from-yellow-600 to-orange-600 dark:from-yellow-500 dark:to-orange-500',
+						'bg-linear-to-r from-yellow-600 to-orange-600 dark:from-yellow-500 dark:to-orange-500',
 					icon: 'i-material-symbols-warning',
 					iconColor: 'bg-white!',
 				},

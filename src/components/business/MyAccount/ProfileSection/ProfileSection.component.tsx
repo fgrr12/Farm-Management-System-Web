@@ -29,7 +29,7 @@ export const ProfileSection: FC<ProfileSectionProps> = ({
 	return (
 		<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-xl dark:shadow-gray-900/25 overflow-hidden">
 			{/* Header */}
-			<div className="bg-gradient-to-r from-blue-600 to-green-600 px-4 sm:px-6 py-4">
+			<div className="bg-linear-to-r from-blue-600 to-green-600 px-4 sm:px-6 py-4">
 				<div className="flex items-center justify-between">
 					<div className="flex items-center gap-3">
 						<div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">

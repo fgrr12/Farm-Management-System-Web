@@ -199,7 +199,7 @@ export const Navbar = memo(() => {
 		<div className="drawer">
 			<input id="my-drawer" type="checkbox" className="drawer-toggle" ref={drawerRef} />
 			<div className="drawer-content">
-				<div className="navbar bg-gradient-to-r from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 shadow-lg border-b border-gray-100 dark:border-gray-700">
+				<div className="navbar bg-linear-to-r from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 shadow-lg border-b border-gray-100 dark:border-gray-700">
 					<div className="navbar-start">
 						<div className="flex items-center gap-2">
 							<label
@@ -219,7 +219,7 @@ export const Navbar = memo(() => {
 					<div className="navbar-center">
 						<div className="flex items-center gap-3">
 							<div
-								className={`w-8 h-8 bg-gradient-to-br ${getCurrentPageColor} rounded-lg flex items-center justify-center shadow-md transition-all duration-300 hover:scale-110 hover:rotate-12`}
+								className={`w-8 h-8 bg-linear-to-br ${getCurrentPageColor} rounded-lg flex items-center justify-center shadow-md transition-all duration-300 hover:scale-110 hover:rotate-12`}
 							>
 								<i
 									className={`${getCurrentPageIcon} w-5! h-5! bg-white! transition-transform duration-200`}
@@ -252,7 +252,7 @@ export const Navbar = memo(() => {
 											className="w-8 h-8 rounded-full object-cover transition-all duration-200 hover:shadow-lg"
 										/>
 									) : (
-										<div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center transition-all duration-200 hover:shadow-lg">
+										<div className="w-8 h-8 rounded-full bg-linear-to-br from-blue-500 to-purple-600 flex items-center justify-center transition-all duration-200 hover:shadow-lg">
 											<span className="text-white text-sm font-semibold leading-none h-full flex items-center justify-center transition-transform duration-200 hover:scale-110">
 												{user?.name?.charAt(0)?.toUpperCase() || 'U'}
 											</span>
@@ -260,7 +260,7 @@ export const Navbar = memo(() => {
 									)}
 								</button>
 								<ul
-									className="menu dropdown-content bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 z-[50] mt-3 w-52 p-2 absolute right-0 top-full"
+									className="menu dropdown-content bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 z-50 mt-3 w-52 p-2 absolute right-0 top-full"
 									aria-label="User menu options"
 								>
 									<li className="menu-title text-xs text-gray-500 dark:text-gray-400 px-3 py-1">
@@ -311,7 +311,7 @@ export const Navbar = memo(() => {
 				>
 					{/* Sidebar Header */}
 					{farm && (
-						<div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white">
+						<div className="bg-linear-to-r from-blue-600 to-purple-600 p-6 text-white">
 							<div className="flex items-center gap-3 mb-2">
 								<div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
 									<i className="i-healthicons-animal-cow w-6! h-6! bg-white!" />
@@ -338,7 +338,7 @@ export const Navbar = memo(() => {
 								type="button"
 								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
 									location.pathname.includes(AppRoutes.DASHBOARD)
-										? 'bg-gradient-to-r from-cyan-500 to-cyan-600 text-white shadow-lg'
+										? 'bg-linear-to-r from-cyan-500 to-cyan-600 text-white shadow-lg'
 										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
 								}`}
 								onClick={goTo(AppRoutes.DASHBOARD)}
@@ -361,7 +361,7 @@ export const Navbar = memo(() => {
 								type="button"
 								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
 									location.pathname.includes(AppRoutes.ANIMALS)
-										? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg'
+										? 'bg-linear-to-r from-blue-500 to-blue-600 text-white shadow-lg'
 										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
 								}`}
 								onClick={goTo(AppRoutes.ANIMALS)}
@@ -384,7 +384,7 @@ export const Navbar = memo(() => {
 								type="button"
 								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
 									location.pathname.includes(AppRoutes.TASKS)
-										? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg'
+										? 'bg-linear-to-r from-green-500 to-green-600 text-white shadow-lg'
 										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
 								}`}
 								onClick={goTo(AppRoutes.TASKS)}
@@ -407,7 +407,7 @@ export const Navbar = memo(() => {
 								type="button"
 								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
 									location.pathname.includes(AppRoutes.CALENDAR)
-										? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg'
+										? 'bg-linear-to-r from-purple-500 to-purple-600 text-white shadow-lg'
 										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
 								}`}
 								onClick={goTo(AppRoutes.CALENDAR)}
@@ -432,7 +432,7 @@ export const Navbar = memo(() => {
 								type="button"
 								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
 									location.pathname.includes(AppRoutes.MY_SPECIES)
-										? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-lg'
+										? 'bg-linear-to-r from-indigo-500 to-indigo-600 text-white shadow-lg'
 										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
 								}`}
 								onClick={goTo(AppRoutes.MY_SPECIES)}
@@ -459,7 +459,7 @@ export const Navbar = memo(() => {
 								type="button"
 								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
 									location.pathname.includes(AppRoutes.VOICE)
-										? 'bg-gradient-to-r from-pink-500 to-pink-600 text-white shadow-lg'
+										? 'bg-linear-to-r from-pink-500 to-pink-600 text-white shadow-lg'
 										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
 								}`}
 								onClick={goTo(AppRoutes.VOICE)}
@@ -490,7 +490,7 @@ export const Navbar = memo(() => {
 									type="button"
 									className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
 										location.pathname.includes(AppRoutes.EMPLOYEES)
-											? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg'
+											? 'bg-linear-to-r from-orange-500 to-orange-600 text-white shadow-lg'
 											: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
 									}`}
 									onClick={goTo(AppRoutes.EMPLOYEES)}
@@ -518,7 +518,7 @@ export const Navbar = memo(() => {
 										type="button"
 										className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
 											location.pathname.includes(AppRoutes.TAX_DETAILS)
-												? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-lg'
+												? 'bg-linear-to-r from-indigo-500 to-indigo-600 text-white shadow-lg'
 												: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
 										}`}
 										onClick={goTo(AppRoutes.TAX_DETAILS)}

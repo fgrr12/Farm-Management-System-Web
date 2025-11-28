@@ -7,6 +7,9 @@ import { NotificationsService } from '@/services/notifications'
 
 const VAPID_KEY = import.meta.env.VITE_FIREBASE_VAPID_KEY || ''
 
+// Track if Firebase config has been sent to avoid duplicates
+let configSentToSW = false
+
 export const useFCMToken = () => {
 	const [token, setToken] = useState<string | null>(null)
 	const [loading, setLoading] = useState(false)
@@ -19,10 +22,14 @@ export const useFCMToken = () => {
 	const registrationInProgress = useRef(false)
 	const registeredTokenRef = useRef<string | null>(null)
 	const currentUserRef = useRef<string | null>(null)
+	const tokenGenerationAttempted = useRef(false)
 
 	const { user } = useUserStore()
 
-	// Check if FCM is supported
+	// Load token from localStorage removed - relying on Firebase SDK caching
+	useEffect(() => {
+		// Empty effect just to keep the hook structure consistent if needed
+	}, []) // Check if FCM is supported
 	useEffect(() => {
 		const checkSupport = async () => {
 			try {
@@ -73,61 +80,73 @@ export const useFCMToken = () => {
 			return null
 		}
 
+		// Always call getToken to let Firebase handle validity
+		// if (token) {
+		// 	return token
+		// }
 		try {
 			setLoading(true)
 			setError(null)
 
-			// Verificar si ya hay un service worker registrado para FCM
+			// Use the main PWA service worker for FCM
 			if ('serviceWorker' in navigator) {
-				const registrations = await navigator.serviceWorker.getRegistrations()
-				const fcmSWExists = registrations.some(
-					(reg) =>
-						reg.scope.includes('firebase-cloud-messaging-push-scope') ||
-						reg.scope.includes('firebase-messaging-sw') ||
-						reg.active?.scriptURL.includes('firebase-messaging-sw.js')
-				)
+				try {
+					// Get the main service worker registration
+					await navigator.serviceWorker.ready
+					const registration = await navigator.serviceWorker.getRegistration()
 
-				if (!fcmSWExists) {
-					try {
-						// Inyectar configuración de Firebase de manera segura
-						const registration = await navigator.serviceWorker.register(
-							'/firebase-messaging-sw.js',
-							{
-								scope: '/firebase-messaging-sw/',
-								updateViaCache: 'none',
-							}
-						)
-
-						// Esperar a que esté listo antes de continuar
-						await navigator.serviceWorker.ready
-
-						// Configurar las credenciales de Firebase de manera segura
-						if (registration.active) {
-							registration.active.postMessage({
-								type: 'FIREBASE_CONFIG',
-								config: {
-									apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-									authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-									projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-									storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-									messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-									appId: import.meta.env.VITE_FIREBASE_APP_ID,
-								},
-							})
-						}
-					} catch (swError) {
-						console.warn('Failed to register FCM service worker:', swError)
-						// Continuar sin service worker para notificaciones foreground
+					if (!registration) {
+						throw new Error('No service worker registration found')
 					}
+
+					// Send Firebase configuration to service worker
+					const firebaseConfig = {
+						apiKey: import.meta.env.VITE_API_KEY,
+						authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+						projectId: import.meta.env.VITE_PROJECT_ID,
+						storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+						messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+						appId: import.meta.env.VITE_APP_ID,
+					}
+
+					// Validate configuration
+					if (
+						!firebaseConfig.projectId ||
+						!firebaseConfig.apiKey ||
+						!firebaseConfig.messagingSenderId
+					) {
+						throw new Error('Missing Firebase configuration values')
+					}
+
+					// Send configuration to active service worker (only once)
+					if (registration.active && !configSentToSW) {
+						registration.active.postMessage({
+							type: 'FIREBASE_CONFIG',
+							config: firebaseConfig,
+						})
+						configSentToSW = true
+					}
+
+					// Wait a bit for the service worker to process the configuration
+					await new Promise((resolve) => setTimeout(resolve, 1000))
+				} catch (swError) {
+					console.warn('Failed to configure service worker:', swError)
+					// Continuar - Firebase usará firebase-messaging-sw.js por defecto
 				}
 			}
 
+			// Get FCM token - Firebase usará firebase-messaging-sw.js automáticamente
 			const messaging = getMessaging()
 			const currentToken = await getToken(messaging, {
 				vapidKey: VAPID_KEY,
 			})
 
 			if (currentToken) {
+				console.log(
+					'[useFCMToken] Token generated successfully:',
+					`${currentToken.substring(0, 20)}...`
+				)
+				// No manual storage needed
 				setToken(currentToken)
 				return currentToken
 			}
@@ -199,6 +218,8 @@ export const useFCMToken = () => {
 			setError(null)
 
 			await NotificationsService.removeDeviceToken(token)
+
+			// Clear local state
 			setToken(null)
 
 			return true
@@ -211,30 +232,44 @@ export const useFCMToken = () => {
 		}
 	}, [token])
 
-	// Initialize FCM token on mount and when permission changes
+	// biome-ignore lint: use only once
 	useEffect(() => {
-		if (permission === 'granted' && isFCMSupported) {
+		if (permission === 'granted' && isFCMSupported && !token && !tokenGenerationAttempted.current) {
+			tokenGenerationAttempted.current = true
 			getFCMToken()
 		}
-	}, [permission, isFCMSupported, getFCMToken])
+	}, [permission, isFCMSupported, token])
 
-	// Auto-register token when obtained and user is logged in
+	// Auto-register token when obtained and user is logged in (only once)
 	useEffect(() => {
-		if (token && user && permission === 'granted') {
-			registerDeviceToken()
+		if (token && user && permission === 'granted' && !isTokenRegistered) {
+			// Only register if we haven't registered this token for this user yet
+			if (registeredTokenRef.current !== token || currentUserRef.current !== user.uuid) {
+				registerDeviceToken()
+			}
 		}
-	}, [token, user, permission, registerDeviceToken])
+	}, [token, user, permission, isTokenRegistered, registerDeviceToken])
 
-	// Reset registration state when user changes
+	// Reset registration state when user changes (logout/login)
 	useEffect(() => {
 		if (user?.uuid !== currentUserRef.current) {
+			// User changed (logout/login)
 			registeredTokenRef.current = null
-			currentUserRef.current = null
 			setIsTokenRegistered(false)
-		}
-	}, [user?.uuid])
 
-	// Setup foreground message listener - handled by NotificationToast component
+			if (!user) {
+				// User logged out - clear stored token and reset generation flag
+				// User logged out
+				setToken(null)
+				tokenGenerationAttempted.current = false // Reset generation flag
+			} else {
+				// User logged in - allow token generation for new user
+				tokenGenerationAttempted.current = false
+			}
+
+			currentUserRef.current = user?.uuid || null
+		}
+	}, [user]) // Setup foreground message listener - handled by NotificationToast component
 	// useEffect(() => {
 	// 	if (!isFCMSupported || permission !== 'granted') {
 	// 		return

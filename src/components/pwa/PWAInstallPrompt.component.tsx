@@ -41,7 +41,7 @@ export const PWAInstallPrompt = () => {
 		<div className="fixed bottom-4 left-4 z-50 max-w-sm">
 			<div className="bg-white border border-gray-200 rounded-lg shadow-lg p-4">
 				<div className="flex items-start gap-3">
-					<div className="flex-shrink-0">
+					<div className="shrink-0">
 						<div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center">
 							<i className="i-material-symbols-smartphone text-emerald-600 w-5! h-5!" />
 						</div>
@@ -76,7 +76,7 @@ export const PWAInstallPrompt = () => {
 					<button
 						type="button"
 						onClick={handleDismiss}
-						className="flex-shrink-0 text-gray-400 hover:text-gray-600"
+						className="shrink-0 text-gray-400 hover:text-gray-600"
 					>
 						<i className="i-material-symbols-close w-5! h-5!" />
 					</button>

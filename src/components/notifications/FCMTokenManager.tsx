@@ -11,7 +11,7 @@ export const FCMTokenManager = () => {
 	const currentUserUuid = useRef<string | null>(null)
 
 	useEffect(() => {
-		// Only initialize once per user session
+		// Only initialize once per user session and when user is authenticated
 		if (
 			user &&
 			isSupported &&
@@ -22,16 +22,14 @@ export const FCMTokenManager = () => {
 			initializationStarted.current = true
 			currentUserUuid.current = user.uuid
 
-			// Delay permission request to avoid immediate execution
-			const timer = setTimeout(() => {
-				requestPermission().catch((err) => {
-					console.warn('Failed to request notification permission:', err)
-					// Reset on error to allow retry
-					initializationStarted.current = false
-				})
-			}, 2000) // Increased delay
+			console.log('[FCMTokenManager] Initializing FCM for user:', user.uuid)
 
-			return () => clearTimeout(timer)
+			// Request permission immediately for authenticated users
+			requestPermission().catch((err) => {
+				console.warn('Failed to request notification permission:', err)
+				// Reset on error to allow retry
+				initializationStarted.current = false
+			})
 		}
 
 		// Reset when user logs out

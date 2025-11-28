@@ -12,6 +12,12 @@
 		"farmName": "Farm Name",
 		"farmNamePlaceholder": "Enter farm name",
 		"farmSelector": "Farm Management",
+		"language": {
+			"english": "English",
+			"farmLanguage": "Farm Language",
+			"farmLanguageHelper": "Default language for farm operations and reports",
+			"spanish": "Spanish"
+		},
 		"liquidUnit": "Liquid Unit",
 		"loadingFarms": "Loading farms...",
 		"noFarmsAvailable": "No farms available",
@@ -26,13 +32,7 @@
 			"lbs": "Pounds",
 			"liters": "Liters"
 		},
-		"weightUnit": "Weight Unit",
-		"language": {
-			"farmLanguage": "Farm Language",
-			"farmLanguageHelper": "Default language for farm operations and reports",
-			"english": "English",
-			"spanish": "Spanish"
-		}
+		"weightUnit": "Weight Unit"
 	},
 	"customSelect": {
 		"clear": "Clear",

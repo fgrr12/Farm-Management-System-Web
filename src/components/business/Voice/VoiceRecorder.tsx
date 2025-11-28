@@ -116,12 +116,12 @@ export function VoiceRecorder({
 			)}
 
 			{/* Main Recording Card */}
-			<div className="card bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 shadow-xl border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-2xl">
+			<div className="card bg-linear-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 shadow-xl border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-2xl">
 				<div className="card-body p-6 sm:p-8">
 					{/* Header with Progress */}
 					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
 						<div className="flex items-center gap-3">
-							<div className="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center shadow-lg">
+							<div className="w-12 h-12 bg-linear-to-br from-primary to-secondary rounded-full flex items-center justify-center shadow-lg">
 								<i className="i-heroicons-microphone text-white text-xl" />
 							</div>
 							<div>
@@ -233,7 +233,7 @@ export function VoiceRecorder({
 
 					{/* Processing Indicator */}
 					{(isProcessing || isExecuting) && (
-						<div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl p-4 border border-blue-200 dark:border-blue-700 animate-in slide-in-from-bottom-3 duration-500">
+						<div className="bg-linear-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl p-4 border border-blue-200 dark:border-blue-700 animate-in slide-in-from-bottom-3 duration-500">
 							<div className="flex items-center gap-3">
 								<div className="loading loading-spinner loading-sm text-primary" />
 								<div className="flex-1">
@@ -276,7 +276,7 @@ export function VoiceRecorder({
 
 					{/* Transcription */}
 					{transcription && (
-						<div className="card bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 shadow-lg border border-blue-200 dark:border-blue-700">
+						<div className="card bg-linear-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 shadow-lg border border-blue-200 dark:border-blue-700">
 							<div className="card-body p-4">
 								<div className="flex items-center gap-3 mb-3">
 									<i className="i-heroicons-microphone text-blue-600 text-lg" />
@@ -293,7 +293,7 @@ export function VoiceRecorder({
 
 					{/* AI Analysis Results */}
 					{processingResponse && (
-						<div className="card bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 shadow-lg border border-purple-200 dark:border-purple-700">
+						<div className="card bg-linear-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 shadow-lg border border-purple-200 dark:border-purple-700">
 							<div className="card-body p-4">
 								<div className="flex items-center justify-between mb-4">
 									<div className="flex items-center gap-3">
@@ -409,7 +409,7 @@ export function VoiceRecorder({
 
 					{/* Execution Results */}
 					{executionResults.length > 0 && (
-						<div className="card bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 shadow-lg border border-green-200 dark:border-green-700">
+						<div className="card bg-linear-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 shadow-lg border border-green-200 dark:border-green-700">
 							<div className="card-body p-4">
 								<div className="flex items-center gap-3 mb-4">
 									<i className="i-heroicons-check-circle text-green-600 text-lg" />
@@ -434,7 +434,7 @@ export function VoiceRecorder({
 														result.success
 															? 'i-heroicons-check-circle text-green-600'
 															: 'i-heroicons-x-circle text-red-600'
-													} text-lg mt-0.5 flex-shrink-0`}
+													} text-lg mt-0.5 shrink-0`}
 												/>
 												<div className="flex-1">
 													<div className="font-medium text-gray-900 dark:text-gray-100">

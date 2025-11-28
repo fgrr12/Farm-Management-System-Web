@@ -170,7 +170,7 @@ export const ProductionChart = memo(() => {
 							<div className="flex-1 bg-gray-100 dark:bg-gray-700 rounded-full h-8 relative overflow-hidden group-hover:bg-gray-200 dark:group-hover:bg-gray-600 transition-colors">
 								<div
 									ref={refCallback}
-									className="bg-gradient-to-r from-blue-500 to-blue-600 h-full rounded-full flex items-center justify-end pr-3 group-hover:from-blue-600 group-hover:to-blue-700 transition-colors"
+									className="bg-linear-to-r from-blue-500 to-blue-600 h-full rounded-full flex items-center justify-end pr-3 group-hover:from-blue-600 group-hover:to-blue-700 transition-colors"
 									style={{ width: '0%' }}
 								>
 									<span className="text-white text-sm font-medium tabular-nums">

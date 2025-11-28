@@ -1,87 +1,51 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback } from 'react'
 
-import { useFarmStore } from '@/store/useFarmStore'
+import { useNotificationStore } from '@/store/useNotificationStore'
 
 import { NotificationsService } from '@/services/notifications'
 
 import { useFCMToken } from './useFCMToken'
 
 export const useNotifications = () => {
-	const { farm } = useFarmStore()
 	const { hasPermission } = useFCMToken()
-	const [notifications, setNotifications] = useState<NotificationData[]>([])
-	const [loading, setLoading] = useState(false)
-	const [error, setError] = useState<string | null>(null)
+	const { notifications, unreadCount, loading, error, setNotifications } = useNotificationStore()
 
-	const loadNotifications = useCallback(async () => {
-		if (!farm?.uuid) {
-			setNotifications([])
-			return
-		}
-
-		setLoading(true)
-		setError(null)
-
-		try {
-			const newNotifications = await NotificationsService.getNotifications({
-				farmUuid: farm.uuid,
-				limit: 50,
-				unreadOnly: false,
-			})
-			setNotifications(newNotifications)
-		} catch (err) {
-			console.error('Error loading notifications:', err)
-			setError('Error al cargar notificaciones')
-			setNotifications([])
-		} finally {
-			setLoading(false)
-		}
-	}, [farm?.uuid])
-
-	// Load notifications when farm changes
-	useEffect(() => {
-		loadNotifications()
-	}, [loadNotifications])
-
-	// Refresh notifications when FCM permissions change
-	useEffect(() => {
-		if (hasPermission && farm?.uuid) {
-			loadNotifications()
-		}
-	}, [hasPermission, loadNotifications, farm?.uuid])
-
-	const markAsRead = useCallback(async (notificationUuid: string) => {
-		try {
-			await NotificationsService.markNotificationAsRead(notificationUuid)
-			// Update local state immediately for better UX
-			setNotifications((prev) =>
-				prev.map((notification) =>
-					notification.uuid === notificationUuid ? { ...notification, read: true } : notification
+	const markAsRead = useCallback(
+		async (notificationUuid: string) => {
+			try {
+				await NotificationsService.markNotificationAsRead(notificationUuid)
+				// Update local state immediately for better UX
+				setNotifications(
+					notifications.map((notification) =>
+						notification.uuid === notificationUuid ? { ...notification, read: true } : notification
+					)
 				)
-			)
-		} catch (err) {
-			console.error('Error marking notification as read:', err)
-			setError('Error al marcar como leída')
-		}
-	}, [])
+			} catch (err) {
+				console.error('Error marking notification as read:', err)
+			}
+		},
+		[notifications, setNotifications]
+	)
 
-	const markAsDismissed = useCallback(async (notificationUuid: string) => {
-		try {
-			await NotificationsService.markNotificationAsDismissed(notificationUuid)
-			// Remove from local state immediately
-			setNotifications((prev) => prev.filter((n) => n.uuid !== notificationUuid))
-		} catch (err) {
-			console.error('Error dismissing notification:', err)
-			setError('Error al descartar notificación')
-		}
-	}, [])
+	const markAsDismissed = useCallback(
+		async (notificationUuid: string) => {
+			try {
+				await NotificationsService.markNotificationAsDismissed(notificationUuid)
+				// Remove from local state immediately
+				setNotifications(notifications.filter((n) => n.uuid !== notificationUuid))
+			} catch (err) {
+				console.error('Error dismissing notification:', err)
+			}
+		},
+		[notifications, setNotifications]
+	)
 
 	const markAllAsRead = useCallback(async () => {
 		try {
 			const unreadNotifications = notifications.filter((n) => !n.read)
 
 			// Update UI immediately
-			setNotifications((prev) => prev.map((notification) => ({ ...notification, read: true })))
+			setNotifications(notifications.map((notification) => ({ ...notification, read: true })))
 
 			// Update backend
 			await Promise.all(
@@ -91,11 +55,9 @@ export const useNotifications = () => {
 			)
 		} catch (err) {
 			console.error('Error marking all as read:', err)
-			setError('Error al marcar todas como leídas')
-			// Revert UI changes on error
-			loadNotifications()
+			// Note: Real-time subscription will revert changes automatically
 		}
-	}, [notifications, loadNotifications])
+	}, [notifications, setNotifications])
 
 	const getNotificationsByCategory = useCallback(
 		(category: string) => {
@@ -108,7 +70,6 @@ export const useNotifications = () => {
 	)
 
 	// Computed values
-	const unreadCount = notifications.filter((n) => !n.read && !n.dismissed).length
 	const totalCount = notifications.filter((n) => !n.dismissed).length
 
 	return {
@@ -121,7 +82,6 @@ export const useNotifications = () => {
 		markAsDismissed,
 		markAllAsRead,
 		getNotificationsByCategory,
-		refresh: loadNotifications,
 		permissionGranted: hasPermission,
 	}
 }

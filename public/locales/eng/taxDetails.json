@@ -12,6 +12,9 @@
 	"activityCode": "Activity Code",
 	"fiscalDirection": "Fiscal Direction",
 	"fiscalInformation": "Tax Information",
+	"activities": "Activities",
+	"noActivities": "No activities registered",
+	"clickToFlip": "Click to flip",
 	"noTaxDetails": "No Tax Details Found",
 	"noTaxDetailsMessage": "You don't have tax details set up yet. Please configure your tax information in your account settings.",
 	"downloadCards": "Download Tax Cards"

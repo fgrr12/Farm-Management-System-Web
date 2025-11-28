@@ -58,7 +58,7 @@ const LoginForm = () => {
 	}, [user, navigate])
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
+		<div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
 			<a
 				href="#login-form"
 				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
@@ -78,7 +78,7 @@ const LoginForm = () => {
 			>
 				{/* Logo/Brand Section */}
 				<header className="text-center mb-8">
-					<div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+					<div className="w-16 h-16 bg-linear-to-br from-blue-600 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
 						<i className="i-healthicons-animal-cow w-8! h-8! bg-white!" aria-hidden="true" />
 					</div>
 					<h1 id="login-heading" className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
@@ -145,7 +145,7 @@ const LoginForm = () => {
 
 					<Button
 						type="submit"
-						className="w-full h-12 bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
+						className="w-full h-12 bg-linear-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
 						aria-describedby="login-button-help"
 					>
 						<span className="flex items-center justify-center gap-2">

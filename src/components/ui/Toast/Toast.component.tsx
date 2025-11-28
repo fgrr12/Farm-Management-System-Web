@@ -201,7 +201,7 @@ export const Toast = memo(
 				<div className="p-4">
 					<div className="flex items-start gap-3">
 						{/* Icon */}
-						<div className="flex-shrink-0 mt-0.5">
+						<div className="shrink-0 mt-0.5">
 							<i className={`${toastConfig.icon} w-5! h-5! ${toastConfig.iconColor}`} />
 						</div>
 
@@ -231,7 +231,7 @@ export const Toast = memo(
 								type="button"
 								onClick={handleClose}
 								className={`
-									flex-shrink-0 p-1 rounded-lg hover:bg-black/10 dark:hover:bg-white/10
+									shrink-0 p-1 rounded-lg hover:bg-black/10 dark:hover:bg-white/10
 									transition-colors duration-200 focus:outline-none 
 									focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20
 								`}

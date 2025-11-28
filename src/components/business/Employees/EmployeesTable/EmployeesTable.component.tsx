@@ -117,7 +117,7 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 												className="w-10 h-10 rounded-full object-cover"
 											/>
 										) : (
-											<div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-green-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+											<div className="w-10 h-10 bg-linear-to-br from-blue-500 to-green-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
 												{employee.name.charAt(0)}
 												{employee.lastName.charAt(0)}
 											</div>
@@ -216,7 +216,7 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 										className="w-12 h-12 rounded-full object-cover"
 									/>
 								) : (
-									<div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-green-500 rounded-full flex items-center justify-center text-white font-semibold">
+									<div className="w-12 h-12 bg-linear-to-br from-blue-500 to-green-500 rounded-full flex items-center justify-center text-white font-semibold">
 										{employee.name.charAt(0)}
 										{employee.lastName.charAt(0)}
 									</div>
@@ -251,7 +251,7 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 						{/* Contact Info */}
 						<div className="space-y-2 mb-4">
 							<div className="flex items-center text-sm text-gray-800 dark:text-gray-200">
-								<i className="i-material-symbols-mail w-4! h-4! text-gray-500 dark:text-gray-400 mr-2 flex-shrink-0" />
+								<i className="i-material-symbols-mail w-4! h-4! text-gray-500 dark:text-gray-400 mr-2 shrink-0" />
 
 								<a
 									href={`mailto:${employee.email}`}
@@ -261,7 +261,7 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 								</a>
 							</div>
 							<div className="flex items-center text-sm text-gray-800 dark:text-gray-200">
-								<i className="i-material-symbols-phone w-4! h-4! text-gray-500 dark:text-gray-400 mr-2 flex-shrink-0" />
+								<i className="i-material-symbols-phone w-4! h-4! text-gray-500 dark:text-gray-400 mr-2 shrink-0" />
 								<a href={`tel:${employee.phone}`} className="hover:text-blue-600 transition-colors">
 									{employee.phone}
 								</a>

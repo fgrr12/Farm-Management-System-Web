@@ -180,7 +180,7 @@ export const CalendarEventModal = memo<CalendarEventModalProps>(
 			<Modal open={isOpen} onClose={onClose} size="lg">
 				<div className="flex flex-col h-full max-h-[90vh]">
 					{/* Header mejorado con bordes redondeados */}
-					<div className="flex-shrink-0 px-6 py-5 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 rounded-t-xl">
+					<div className="shrink-0 px-6 py-5 border-b border-gray-200 dark:border-gray-700 bg-linear-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 rounded-t-xl">
 						<div className="flex items-center justify-between">
 							<div className="flex items-center space-x-4">
 								<div
@@ -499,7 +499,7 @@ export const CalendarEventModal = memo<CalendarEventModalProps>(
 					</div>
 
 					{/* Footer con botones */}
-					<div className="flex-shrink-0 px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 rounded-b-xl">
+					<div className="shrink-0 px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 rounded-b-xl">
 						{showDeleteConfirm ? (
 							<div className="flex items-center justify-center flex-col space-x-4 gap-4">
 								<span className="text-sm text-red-600 dark:text-red-400 font-medium">

@@ -27,16 +27,16 @@ class Analytics {
 
 	constructor() {
 		if (this.config.enabled) {
-			this.initializeAnalytics()
+			// this.initializeAnalytics()
 		}
 	}
 
-	private initializeAnalytics() {
-		// TODO: Initialize analytics service (Google Analytics, Mixpanel, etc.)
-		if (this.config.debug) {
-			console.log('Analytics initialized')
-		}
-	}
+	// private initializeAnalytics() {
+	// 	// TODO: Initialize analytics service (Google Analytics, Mixpanel, etc.)
+	// 	if (this.config.debug) {
+	// 		console.log('Analytics initialized')
+	// 	}
+	// }
 
 	identify(userId: string, properties?: UserProperties) {
 		const data = {

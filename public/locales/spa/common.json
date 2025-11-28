@@ -12,6 +12,12 @@
 		"farmName": "Nombre de la Granja",
 		"farmNamePlaceholder": "Ingresa el nombre de la granja",
 		"farmSelector": "Gestión de Granjas",
+		"language": {
+			"english": "Inglés",
+			"farmLanguage": "Idioma de la Granja",
+			"farmLanguageHelper": "Idioma predeterminado para operaciones y reportes de la granja",
+			"spanish": "Español"
+		},
 		"liquidUnit": "Unidad de Líquidos",
 		"loadingFarms": "Cargando granjas...",
 		"noFarmsAvailable": "No hay granjas disponibles",
@@ -26,13 +32,7 @@
 			"lbs": "Libras",
 			"liters": "Litros"
 		},
-		"weightUnit": "Unidad de Peso",
-		"language": {
-			"farmLanguage": "Idioma de la Granja",
-			"farmLanguageHelper": "Idioma predeterminado para operaciones y reportes de la granja",
-			"english": "Inglés",
-			"spanish": "Español"
-		}
+		"weightUnit": "Unidad de Peso"
 	},
 	"customSelect": {
 		"clear": "Limpiar",

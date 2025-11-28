@@ -27,6 +27,7 @@ import { SEO } from '@/components/layout/SEO'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { ToastManager } from '@/components/layout/ToastManager'
 import { FCMTokenManager } from '@/components/notifications/FCMTokenManager'
+import { NotificationManager } from '@/components/notifications/NotificationManager'
 import { NotificationToast } from '@/components/notifications/NotificationToast'
 import { PWAInstallPrompt } from '@/components/pwa/PWAInstallPrompt.component'
 import { PWAUpdatePrompt } from '@/components/pwa/PWAUpdatePrompt.component'
@@ -92,7 +93,7 @@ export const App = () => {
 
 	usePreloadRoutes()
 
-	// biome-ignore lint:: UseEffect is only called once
+	//biome-ignore lint: use only once
 	useEffect(() => {
 		setAuthLoading(true)
 		const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
@@ -116,10 +117,9 @@ export const App = () => {
 		return () => unsubscribe()
 	}, [])
 
-	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
 		i18n.changeLanguage(user?.language || browserLanguage)
-	}, [user])
+	}, [user, i18n, browserLanguage])
 
 	useEffect(() => {
 		initializeSEO()
@@ -328,6 +328,7 @@ export const App = () => {
 					<PWAUpdatePrompt />
 					<PWAInstallPrompt />
 					<FCMTokenManager />
+					<NotificationManager />
 					<NotificationToast />
 				</main>
 			</div>

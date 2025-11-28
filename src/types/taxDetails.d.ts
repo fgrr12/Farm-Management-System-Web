@@ -1,3 +1,8 @@
+interface Activity {
+	name: string
+	code: string
+}
+
 interface TaxDetails {
 	uuid: string
 	id: string
@@ -5,6 +10,6 @@ interface TaxDetails {
 	phone: string
 	email: string
 	address: string
-	activityCode: string
+	activities: Activity[]
 	status: boolean
 }

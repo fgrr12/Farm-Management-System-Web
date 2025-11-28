@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFarmStore } from '@/store/useFarmStore'
@@ -11,10 +11,22 @@ const TaxDetails = () => {
 	const { taxDetails } = useFarmStore()
 	const { t } = useTranslation('taxDetails')
 	const { setPageTitle } = usePagePerformance()
+	const [isFlipped, setIsFlipped] = useState(false)
 
 	const handleDownloadCards = useCallback(() => {
 		const printWindow = window.open('', '_blank')
 		if (!printWindow) return
+
+		const activitiesHTML = taxDetails?.activities
+			?.map(
+				(activity) => `
+			<div class="activity-item">
+				<div class="activity-name">${activity.name}</div>
+				<div class="activity-code">${activity.code}</div>
+			</div>
+		`
+			)
+			.join('')
 
 		const cardHTML = `
 			<!DOCTYPE html>
@@ -33,8 +45,8 @@ const TaxDetails = () => {
 						min-height: 297mm;
 						display: grid;
 						grid-template-columns: repeat(2, 1fr);
-						grid-template-rows: repeat(4, 1fr);
-						gap: 8mm;
+						grid-template-rows: repeat(5, 1fr);
+						gap: 2mm;
 						margin: 0 auto;
 						background: white;
 						padding: 12mm;
@@ -89,12 +101,11 @@ const TaxDetails = () => {
 						display: flex;
 						justify-content: space-between;
 						align-items: flex-start;
-						margin-bottom: 4mm;
 					}
 					
 					.card-title {
 						flex: 1;
-						font-size: 8pt;
+						font-size: 10pt;
 						font-weight: 700;
 						color: #e2e8f0;
 						text-transform: uppercase;
@@ -151,7 +162,7 @@ const TaxDetails = () => {
 					}
 					
 					.info-label {
-						font-size: 6pt;
+						font-size: 8pt;
 						font-weight: 600;
 						color: #cbd5e1;
 						text-transform: uppercase;
@@ -160,7 +171,7 @@ const TaxDetails = () => {
 					}
 					
 					.info-value {
-						font-size: 6pt;
+						font-size: 9pt;
 						font-weight: 600;
 						color: white;
 						overflow: hidden;
@@ -168,35 +179,60 @@ const TaxDetails = () => {
 						white-space: nowrap;
 					}
 
-					/* Activity Code */
-					.card-activity {
-						display: flex;
-						flex-direction: column;
-						align-items: center;
-						justify-content: center;
-						margin-left: 4mm;
-						max-width: 20mm;
+					/* Card Back - Activities */
+					.card-back {
+						background: linear-gradient(135deg, #1e293b 0%, #475569 50%, #64748b 100%);
 					}
-					
-					.activity-label {
-						font-size: 6pt;
-						font-weight: 600;
-						color: #cbd5e1;
-						text-transform: uppercase;
-						letter-spacing: 0.3px;
+
+					.activities-header {
+						position: relative;
+						z-index: 10;
 						text-align: center;
-						margin-bottom: 1mm;
-					}
-					
-					.activity-code {
-						padding: 1mm 2mm;
-						background: rgba(59, 130, 246, 0.3);
-						border: 1px solid rgba(59, 130, 246, 0.5);
-						border-radius: 4px;
-						font-size: 6pt;
+						font-size: 11pt;
 						font-weight: 700;
 						color: #60a5fa;
-						text-align: center;
+						text-transform: uppercase;
+						letter-spacing: 0.5px;
+						margin-bottom: 3mm;
+					}
+
+					.activities-list {
+						position: relative;
+						z-index: 10;
+						flex: 1;
+						display: flex;
+						flex-direction: column;
+						gap: 1.5mm;
+						overflow: hidden;
+					}
+
+					.activity-item {
+						padding: 1.5mm 2mm;
+						background: rgba(59, 130, 246, 0.15);
+						border: 1px solid rgba(59, 130, 246, 0.3);
+						border-radius: 4px;
+						display: grid;
+						grid-template-columns: 1fr auto;
+						gap: 2mm;
+						align-items: center;
+					}
+
+					.activity-name {
+						font-size: 8pt;
+						font-weight: 600;
+						color: white;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+					}
+
+					.activity-code {
+						font-size: 8pt;
+						font-weight: 700;
+						color: #60a5fa;
+						background: rgba(59, 130, 246, 0.2);
+						padding: 0.5mm 1.5mm;
+						border-radius: 3px;
 					}
 
 					@media print {
@@ -229,10 +265,11 @@ const TaxDetails = () => {
 			</head>
 			<body>
 				<div class="page">
-					${Array(8)
+					${Array(5)
 						.fill(0)
 						.map(
 							() => `
+						<!-- Front Side -->
 						<div class="card">
 							<div class="card-header">
 								<h3 class="card-title">
@@ -240,7 +277,7 @@ const TaxDetails = () => {
 									<span class="card-title-highlight">${t('electronicInvoicing')}</span>
 								</h3>
 								<div class="farm-logo">
-									<img src="/assets/billing/hen.jpeg" alt="Farm" onerror="this.style.display='none'; this.parentNode.innerHTML='�';" />
+									<img src="/assets/billing/hen.jpeg" alt="Farm" onerror="this.style.display='none'; this.parentNode.innerHTML='🐓';" />
 								</div>
 							</div>
 							<div class="card-content">
@@ -266,12 +303,15 @@ const TaxDetails = () => {
 										<span class="info-value">${taxDetails?.address || 'N/A'}</span>
 									</div>
 								</div>
-								<div class="card-activity">
-									<div class="activity-label">
-										${t('activityCode')}
-									</div>
-									<div class="activity-code">${taxDetails?.activityCode || 'N/A'}</div>
-								</div>
+							</div>
+						</div>
+						<!-- Back Side -->
+						<div class="card card-back">
+							<div class="activities-header">
+								${t('activities')}
+							</div>
+							<div class="activities-list">
+								${activitiesHTML || '<div style="text-align: center; color: #cbd5e1; font-size: 8pt;">No activities</div>'}
 							</div>
 						</div>
 					`
@@ -296,7 +336,7 @@ const TaxDetails = () => {
 
 	if (!taxDetails) {
 		return (
-			<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 overflow-y-auto">
+			<div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-green-50 overflow-y-auto">
 				<div className="max-w-4xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
 					<div className="flex flex-col items-center justify-center py-12">
 						<div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
@@ -315,13 +355,13 @@ const TaxDetails = () => {
 	}
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto">
+		<div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto">
 			<div className="max-w-4xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
 				{/* Hero Header */}
 				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden mb-6 sm:mb-8 border border-gray-100 dark:border-gray-700">
-					<div className="bg-gradient-to-r from-purple-600 to-blue-600 px-4 sm:px-6 py-6 sm:py-8">
+					<div className="bg-linear-to-r from-purple-600 to-blue-600 px-4 sm:px-6 py-6 sm:py-8">
 						<div className="flex items-center gap-3 sm:gap-4">
-							<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+							<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center shrink-0">
 								<i className="i-material-symbols-receipt-long bg-white! w-6! h-6! sm:w-8 sm:h-8" />
 							</div>
 							<div className="min-w-0">
@@ -336,51 +376,63 @@ const TaxDetails = () => {
 
 				{/* Tax Details Display */}
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-					{/* Card Visual */}
+					{/* Card Visual - Flippable */}
 					<div className="flex justify-center">
-						<div className="relative">
-							{/* Credit Card Size Tax Card Design */}
-							<div
-								id="business-card"
-								className="w-[370px] h-[215px] bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 rounded-xl p-5 shadow-2xl transform hover:scale-105 transition-all duration-300 relative overflow-hidden text-white"
-								style={{ fontFamily: 'Inter, Arial, sans-serif' }}
+						<div className="relative perspective-1000">
+							{/* Flip Card Container */}
+							<button
+								type="button"
+								className={`relative w-[370px] h-[215px] transition-transform duration-700 transform-style-3d cursor-pointer ${
+									isFlipped ? 'rotate-y-180' : ''
+								}`}
+								onClick={() => setIsFlipped(!isFlipped)}
+								style={{
+									transformStyle: 'preserve-3d',
+									transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+								}}
 							>
-								{/* Background Effects */}
-								<div className="absolute inset-0 opacity-20">
-									<div className="absolute top-0 right-0 w-24 h-24 bg-blue-400 rounded-full blur-2xl transform translate-x-12 -translate-y-12" />
-									<div className="absolute bottom-0 left-0 w-20 h-20 bg-purple-400 rounded-full blur-2xl transform -translate-x-10 translate-y-10" />
-								</div>
-
-								{/* Header */}
-								<div className="relative z-10 flex justify-between items-start mb-4">
-									<div className="flex-1">
-										<h2 className="text-xs font-bold text-slate-200 uppercase tracking-wide leading-tight">
-											{t('taxCardTitle')}
-											<br />
-											<span className="text-blue-400">{t('electronicInvoicing')}</span>
-										</h2>
+								{/* Front Side */}
+								<div
+									className="absolute inset-0 w-[370px] h-[215px] bg-linear-to-br from-slate-800 via-slate-700 to-slate-900 rounded-xl p-5 shadow-2xl backface-hidden"
+									style={{
+										backfaceVisibility: 'hidden',
+										fontFamily: 'Inter, Arial, sans-serif',
+									}}
+								>
+									{/* Background Effects */}
+									<div className="absolute inset-0 opacity-20">
+										<div className="absolute top-0 right-0 w-24 h-24 bg-blue-400 rounded-full blur-2xl transform translate-x-12 -translate-y-12" />
+										<div className="absolute bottom-0 left-0 w-20 h-20 bg-purple-400 rounded-full blur-2xl transform -translate-x-10 translate-y-10" />
 									</div>
-									<div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/20 ml-4">
-										<img
-											src="/assets/billing/hen.jpeg"
-											alt="Farm"
-											className="w-7 h-7 object-cover rounded-full"
-											onError={(e) => {
-												const target = e.target as HTMLImageElement
-												target.style.display = 'none'
-												const fallback = document.createElement('div')
-												fallback.innerHTML = '🐓'
-												fallback.className = 'text-sm'
-												target.parentNode?.appendChild(fallback)
-											}}
-										/>
-									</div>
-								</div>
 
-								{/* Main Content Area */}
-								<div className="relative z-10 flex">
-									{/* Left Side - Main Information */}
-									<div className="flex-1 space-y-2">
+									{/* Header */}
+									<div className="relative z-10 flex justify-between items-start mb-4">
+										<div className="flex-1">
+											<h2 className="text-xs font-bold text-slate-200 uppercase tracking-wide leading-tight">
+												{t('taxCardTitle')}
+												<br />
+												<span className="text-blue-400">{t('electronicInvoicing')}</span>
+											</h2>
+										</div>
+										<div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/20 ml-4">
+											<img
+												src="/assets/billing/hen.jpeg"
+												alt="Farm"
+												className="w-7 h-7 object-cover rounded-full"
+												onError={(e) => {
+													const target = e.target as HTMLImageElement
+													target.style.display = 'none'
+													const fallback = document.createElement('div')
+													fallback.innerHTML = '🐓'
+													fallback.className = 'text-sm'
+													target.parentNode?.appendChild(fallback)
+												}}
+											/>
+										</div>
+									</div>
+
+									{/* Main Content */}
+									<div className="relative z-10 flex flex-col space-y-2">
 										<div className="grid grid-cols-[auto_1fr] gap-2 items-center">
 											<span className="text-slate-300 font-medium text-xs uppercase tracking-wide min-w-[55px]">
 												{t('name')}
@@ -422,19 +474,59 @@ const TaxDetails = () => {
 											</span>
 										</div>
 									</div>
+								</div>
 
-									{/* Right Side - Activity Code */}
-									<div className="flex flex-col items-center justify-center ml-4 max-w-[70px]">
-										<div className="text-center">
-											<div className="text-xs text-slate-300 uppercase tracking-wide font-medium leading-tight mb-1">
-												{t('activityCode')}
+								{/* Back Side - Activities */}
+								<div
+									className="absolute inset-0 w-[370px] h-[215px] bg-linear-to-br from-slate-800 via-slate-700 to-slate-900 rounded-xl p-5 shadow-2xl"
+									style={{
+										backfaceVisibility: 'hidden',
+										transform: 'rotateY(180deg)',
+										fontFamily: 'Inter, Arial, sans-serif',
+									}}
+								>
+									{/* Background Effects */}
+									<div className="absolute inset-0 opacity-20">
+										<div className="absolute top-0 right-0 w-24 h-24 bg-blue-400 rounded-full blur-2xl transform translate-x-12 -translate-y-12" />
+										<div className="absolute bottom-0 left-0 w-20 h-20 bg-purple-400 rounded-full blur-2xl transform -translate-x-10 translate-y-10" />
+									</div>
+
+									{/* Activities Header */}
+									<div className="relative z-10 text-center mb-3">
+										<h3 className="text-sm font-bold text-blue-400 uppercase tracking-wide">
+											{t('activities')}
+										</h3>
+									</div>
+
+									{/* Activities List */}
+									<div className="relative z-10 space-y-2 overflow-y-auto max-h-[160px]">
+										{taxDetails.activities && taxDetails.activities.length > 0 ? (
+											taxDetails.activities.map((activity, index) => (
+												<div
+													key={index}
+													className="px-3 py-2 bg-blue-500/15 border border-blue-400/30 rounded grid grid-cols-[1fr_auto] gap-2 items-center"
+												>
+													<span className="text-white font-semibold text-xs truncate">
+														{activity.name}
+													</span>
+													<span className="text-blue-200 font-bold text-xs bg-blue-500/20 px-2 py-0.5 rounded">
+														{activity.code}
+													</span>
+												</div>
+											))
+										) : (
+											<div className="text-center text-slate-300 text-xs py-8">
+												{t('noActivities')}
 											</div>
-											<div className="px-2 py-1 bg-blue-500/30 border border-blue-400/50 rounded text-xs font-bold text-blue-200">
-												{taxDetails.activityCode}
-											</div>
-										</div>
+										)}
 									</div>
 								</div>
+							</button>
+
+							{/* Flip Indicator */}
+							<div className="text-xs text-gray-500 dark:text-gray-400 flex justify-center items-center gap-1 mt-4">
+								<i className="i-material-symbols-touch-app w-4! h-4!" />
+								<span>{t('clickToFlip')}</span>
 							</div>
 						</div>
 					</div>
@@ -450,22 +542,36 @@ const TaxDetails = () => {
 							<div className="space-y-3">
 								<div className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
 									<div className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t('name')}</div>
-									<div className="text-sm font-mono font-medium text-gray-900 dark:text-gray-100">
+									<div className="text-sm font-medium text-gray-900 dark:text-gray-100">
 										{taxDetails.name}
 									</div>
 								</div>
 								<div className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
 									<div className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t('id')}</div>
-									<div className="text-sm font-mono font-medium text-gray-900 dark:text-gray-100">
+									<div className="text-sm font-medium text-gray-900 dark:text-gray-100">
 										{taxDetails.id}
 									</div>
 								</div>
 								<div className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
 									<div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-										{t('activityCode')}
+										{t('activities')}
 									</div>
-									<div className="text-sm font-medium text-gray-900 dark:text-gray-100">
-										{taxDetails.activityCode}
+									<div className="space-y-2">
+										{taxDetails.activities && taxDetails.activities.length > 0 ? (
+											taxDetails.activities.map((activity, index) => (
+												<div
+													key={index}
+													className="flex items-center justify-between text-sm font-medium text-gray-900 dark:text-gray-100"
+												>
+													<span>{activity.name}</span>
+													<span className="text-blue-600 dark:text-blue-400">{activity.code}</span>
+												</div>
+											))
+										) : (
+											<div className="text-sm text-gray-500 dark:text-gray-400">
+												{t('noActivities')}
+											</div>
+										)}
 									</div>
 								</div>
 							</div>
