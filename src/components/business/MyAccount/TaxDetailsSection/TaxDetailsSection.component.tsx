@@ -1,3 +1,4 @@
+import { useFieldArray } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { ActionButton } from '@/components/ui/ActionButton'
@@ -13,11 +14,15 @@ export const TaxDetailsSection: FC<TaxDetailsSectionProps> = ({
 	onSubmit,
 }) => {
 	const { t } = useTranslation(['myAccount'])
+	const { fields, append, remove } = useFieldArray({
+		control: taxDetailsForm.control,
+		name: 'activities',
+	})
 
 	return (
 		<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-xl dark:shadow-gray-900/25 overflow-hidden">
 			{/* Header */}
-			<div className="bg-gradient-to-r from-purple-600 to-blue-600 px-4 sm:px-6 py-4">
+			<div className="bg-linear-to-r from-purple-600 to-blue-600 px-4 sm:px-6 py-4">
 				<div className="flex items-center justify-between">
 					<div className="flex items-center gap-3">
 						<div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
@@ -131,14 +136,74 @@ export const TaxDetailsSection: FC<TaxDetailsSectionProps> = ({
 									error={taxDetailsForm.formState.errors.address?.message}
 								/>
 							</div>
-							<TextField
-								{...taxDetailsForm.register('activityCode')}
-								label={t('myTaxDetails.activityCode')}
-								placeholder={t('placeholders.activityCode')}
-								disabled={!isEditing}
-								required
-								error={taxDetailsForm.formState.errors.activityCode?.message}
-							/>
+
+							{/* Activities Section */}
+							<div className="md:col-span-2 space-y-3">
+								<h4 className="text-sm font-medium text-gray-900 dark:text-white flex items-center gap-2">
+									<i className="i-material-symbols-work w-4! h-4! text-gray-600 dark:text-gray-300" />
+									{t('myTaxDetails.activities')}
+								</h4>
+								{isEditing && (
+									<Button
+										type="button"
+										onClick={() => append({ name: '', code: '' })}
+										className="btn-sm btn-outline flex items-center gap-1 my-5"
+									>
+										<i className="i-material-symbols-add w-4! h-4!" />
+										{t('myTaxDetails.addActivity')}
+									</Button>
+								)}
+
+								{fields.length === 0 && (
+									<div className="text-sm text-gray-500 dark:text-gray-400 text-center py-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg">
+										{t('myTaxDetails.noActivities')}
+									</div>
+								)}
+
+								<div className="space-y-3">
+									{fields.map((field, index) => (
+										<div
+											key={field.id}
+											className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600"
+										>
+											<div className="flex items-start gap-3">
+												<div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3">
+													<TextField
+														{...taxDetailsForm.register(`activities.${index}.name`)}
+														label={t('myTaxDetails.activityName')}
+														placeholder={t('placeholders.activityName')}
+														disabled={!isEditing}
+														required
+														error={
+															taxDetailsForm.formState.errors.activities?.[index]?.name?.message
+														}
+													/>
+													<TextField
+														{...taxDetailsForm.register(`activities.${index}.code`)}
+														label={t('myTaxDetails.activityCode')}
+														placeholder={t('placeholders.activityCode')}
+														disabled={!isEditing}
+														required
+														error={
+															taxDetailsForm.formState.errors.activities?.[index]?.code?.message
+														}
+													/>
+												</div>
+												{isEditing && (
+													<button
+														type="button"
+														onClick={() => remove(index)}
+														className="mt-6 p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+														title={t('myTaxDetails.removeActivity')}
+													>
+														<i className="i-material-symbols-delete w-5! h-5!" />
+													</button>
+												)}
+											</div>
+										</div>
+									))}
+								</div>
+							</div>
 						</div>
 					</div>
 

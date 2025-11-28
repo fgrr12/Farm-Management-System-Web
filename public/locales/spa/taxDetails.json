@@ -12,6 +12,9 @@
 	"activityCode": "Código Actividad",
 	"fiscalDirection": "Dirección Fiscal",
 	"fiscalInformation": "Información Fiscal",
+	"activities": "Actividades",
+	"noActivities": "No hay actividades registradas",
+	"clickToFlip": "Haz clic para voltear",
 	"noTaxDetails": "No se Encontraron Datos Fiscales",
 	"noTaxDetailsMessage": "Aún no tienes datos fiscales configurados. Por favor configura tu información fiscal en la configuración de tu cuenta.",
 	"downloadCards": "Descargar Tarjetas Fiscales"

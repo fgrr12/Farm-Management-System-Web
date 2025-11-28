@@ -73,6 +73,11 @@
 		"saving": "Guardando...",
 		"subtitle": "Gestiona tus datos fiscales",
 		"title": "Mis Datos Fiscales",
+		"activities": "Actividades Comerciales",
+		"addActivity": "Agregar Actividad",
+		"removeActivity": "Eliminar Actividad",
+		"activityName": "Nombre de Actividad",
+		"noActivities": "No hay actividades agregadas aún",
 		"toast": {
 			"added": "Datos fiscales añadidos exitosamente",
 			"edited": "Datos fiscales actualizados exitosamente",
@@ -82,6 +87,7 @@
 	"personalInformation": "Información Personal",
 	"placeholders": {
 		"activityCode": "Ingresa código de actividad (ej: 01234)...",
+		"activityName": "Ingresa nombre de actividad (ej: Producción de Huevos)...",
 		"email": "Ingresa tu dirección de email (ej: juan@ejemplo.com)...",
 		"farmAddress": "Ingresa la dirección de tu granja (ej: Calle Rural 123, Ciudad)...",
 		"farmName": "Ingresa el nombre de tu granja (ej: Granja Valle Verde)...",

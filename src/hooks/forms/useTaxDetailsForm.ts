@@ -12,7 +12,7 @@ const DEFAULT_VALUES: TaxDetailsFormData = {
 	email: '',
 	phone: '',
 	address: '',
-	activityCode: '',
+	activities: [],
 	status: false,
 }
 
@@ -31,7 +31,7 @@ export const useTaxDetailsForm = (initialData?: Partial<TaxDetails>) => {
 			email: initialData.email || '',
 			phone: initialData.phone || '',
 			address: initialData.address || '',
-			activityCode: initialData.activityCode || '',
+			activities: initialData.activities || [],
 			status: initialData.status ?? false,
 		}
 	}, [initialData])
@@ -51,7 +51,7 @@ export const useTaxDetailsForm = (initialData?: Partial<TaxDetails>) => {
 			email: data.email,
 			phone: data.phone,
 			address: data.address,
-			activityCode: data.activityCode,
+			activities: data.activities,
 			status: data.status ?? false,
 		}
 	}, [])
@@ -80,7 +80,7 @@ export const useTaxDetailsForm = (initialData?: Partial<TaxDetails>) => {
 				email: data.email || '',
 				phone: data.phone || '',
 				address: data.address || '',
-				activityCode: data.activityCode || '',
+				activities: data.activities || [],
 				status: data.status ?? false,
 			}
 

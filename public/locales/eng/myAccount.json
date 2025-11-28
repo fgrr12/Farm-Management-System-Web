@@ -73,6 +73,11 @@
 		"saving": "Saving...",
 		"subtitle": "Manage your tax details",
 		"title": "My Tax Details",
+		"activities": "Business Activities",
+		"addActivity": "Add Activity",
+		"removeActivity": "Remove Activity",
+		"activityName": "Activity Name",
+		"noActivities": "No activities added yet",
 		"toast": {
 			"added": "Tax details added successfully",
 			"edited": "Tax details updated successfully",
@@ -82,6 +87,7 @@
 	"personalInformation": "Personal Information",
 	"placeholders": {
 		"activityCode": "Enter activity code (e.g., 01234)...",
+		"activityName": "Enter activity name (e.g., Egg Production)...",
 		"email": "Enter your email address (e.g., john@example.com)...",
 		"farmAddress": "Enter your farm address (e.g., 123 Farm Road, City, State)...",
 		"farmName": "Enter your farm name (e.g., Green Valley Farm)...",
