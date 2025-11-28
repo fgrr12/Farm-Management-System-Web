@@ -266,9 +266,9 @@ const TaxDetails = () => {
 			<body>
 				<div class="page">
 					${Array(5)
-				.fill(0)
-				.map(
-					() => `
+						.fill(0)
+						.map(
+							() => `
 						<!-- Front Side -->
 						<div class="card">
 							<div class="card-header">
@@ -315,8 +315,8 @@ const TaxDetails = () => {
 							</div>
 						</div>
 					`
-				)
-				.join('')}
+						)
+						.join('')}
 				</div>
 			</body>
 			</html>
@@ -336,7 +336,7 @@ const TaxDetails = () => {
 
 	if (!taxDetails) {
 		return (
-			<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 overflow-y-auto">
+			<div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-green-50 overflow-y-auto">
 				<div className="max-w-4xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
 					<div className="flex flex-col items-center justify-center py-12">
 						<div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
@@ -355,13 +355,13 @@ const TaxDetails = () => {
 	}
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto">
+		<div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto">
 			<div className="max-w-4xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
 				{/* Hero Header */}
 				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden mb-6 sm:mb-8 border border-gray-100 dark:border-gray-700">
-					<div className="bg-gradient-to-r from-purple-600 to-blue-600 px-4 sm:px-6 py-6 sm:py-8">
+					<div className="bg-linear-to-r from-purple-600 to-blue-600 px-4 sm:px-6 py-6 sm:py-8">
 						<div className="flex items-center gap-3 sm:gap-4">
-							<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+							<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center shrink-0">
 								<i className="i-material-symbols-receipt-long bg-white! w-6! h-6! sm:w-8 sm:h-8" />
 							</div>
 							<div className="min-w-0">
@@ -382,8 +382,9 @@ const TaxDetails = () => {
 							{/* Flip Card Container */}
 							<button
 								type="button"
-								className={`relative w-[370px] h-[215px] transition-transform duration-700 transform-style-3d cursor-pointer ${isFlipped ? 'rotate-y-180' : ''
-									}`}
+								className={`relative w-[370px] h-[215px] transition-transform duration-700 transform-style-3d cursor-pointer ${
+									isFlipped ? 'rotate-y-180' : ''
+								}`}
 								onClick={() => setIsFlipped(!isFlipped)}
 								style={{
 									transformStyle: 'preserve-3d',
@@ -392,7 +393,7 @@ const TaxDetails = () => {
 							>
 								{/* Front Side */}
 								<div
-									className="absolute inset-0 w-[370px] h-[215px] bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 rounded-xl p-5 shadow-2xl backface-hidden"
+									className="absolute inset-0 w-[370px] h-[215px] bg-linear-to-br from-slate-800 via-slate-700 to-slate-900 rounded-xl p-5 shadow-2xl backface-hidden"
 									style={{
 										backfaceVisibility: 'hidden',
 										fontFamily: 'Inter, Arial, sans-serif',
@@ -477,7 +478,7 @@ const TaxDetails = () => {
 
 								{/* Back Side - Activities */}
 								<div
-									className="absolute inset-0 w-[370px] h-[215px] bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 rounded-xl p-5 shadow-2xl"
+									className="absolute inset-0 w-[370px] h-[215px] bg-linear-to-br from-slate-800 via-slate-700 to-slate-900 rounded-xl p-5 shadow-2xl"
 									style={{
 										backfaceVisibility: 'hidden',
 										transform: 'rotateY(180deg)',
@@ -563,9 +564,7 @@ const TaxDetails = () => {
 													className="flex items-center justify-between text-sm font-medium text-gray-900 dark:text-gray-100"
 												>
 													<span>{activity.name}</span>
-													<span className="text-blue-600 dark:text-blue-400">
-														{activity.code}
-													</span>
+													<span className="text-blue-600 dark:text-blue-400">{activity.code}</span>
 												</div>
 											))
 										) : (

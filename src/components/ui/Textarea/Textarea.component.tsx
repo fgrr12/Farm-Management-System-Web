@@ -243,7 +243,7 @@ export const Textarea: FC<TextareaProps> = memo(
 
 					{/* Character Count */}
 					{(showCharCount || maxLength) && (
-						<div className="flex-shrink-0">
+						<div className="shrink-0">
 							<div
 								className={`text-xs font-medium px-2 py-1 rounded-full transition-colors duration-200 ${
 									isOverLimit

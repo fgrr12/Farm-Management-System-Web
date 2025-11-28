@@ -23,7 +23,7 @@ export function VoicePage() {
 
 	if (!user || !farm) {
 		return (
-			<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
+			<div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
 				<div className="text-center">
 					<div className="loading loading-spinner loading-lg mb-4" />
 					<p className="text-gray-600 dark:text-gray-400">Loading...</p>
@@ -33,7 +33,7 @@ export function VoicePage() {
 	}
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300">
+		<div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300">
 			<div className="max-w-6xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
 				<a
 					href="#voice-section"
@@ -44,9 +44,9 @@ export function VoicePage() {
 
 				{/* Hero Header */}
 				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl dark:shadow-black/30 overflow-hidden mb-6 sm:mb-8 border border-gray-100 dark:border-gray-700 transition-all duration-300">
-					<div className="bg-gradient-to-r from-pink-600 to-purple-600 dark:from-pink-700 dark:to-purple-700 px-4 sm:px-6 py-6 sm:py-8">
+					<div className="bg-linear-to-r from-pink-600 to-purple-600 dark:from-pink-700 dark:to-purple-700 px-4 sm:px-6 py-6 sm:py-8">
 						<div className="flex items-center gap-3 sm:gap-4">
-							<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 dark:bg-white/30 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg dark:shadow-black/20 backdrop-blur-sm">
+							<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 dark:bg-white/30 rounded-full flex items-center justify-center shrink-0 shadow-lg dark:shadow-black/20 backdrop-blur-sm">
 								<i className="i-heroicons-microphone bg-white! w-6! h-6! sm:w-8 sm:h-8 drop-shadow-sm" />
 							</div>
 							<div className="min-w-0">
@@ -66,7 +66,7 @@ export function VoicePage() {
 					id="voice-section"
 					className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl dark:shadow-black/30 overflow-hidden mb-6 sm:mb-8 border border-gray-100 dark:border-gray-700 transition-all duration-300"
 				>
-					<div className="bg-gradient-to-r from-emerald-600 to-cyan-600 dark:from-emerald-700 dark:to-cyan-700 px-4 sm:px-6 py-4">
+					<div className="bg-linear-to-r from-emerald-600 to-cyan-600 dark:from-emerald-700 dark:to-cyan-700 px-4 sm:px-6 py-4">
 						<div className="flex items-center justify-between">
 							<h2 className="text-xl font-bold text-white flex items-center gap-2">
 								<i className="i-heroicons-cog-6-tooth bg-white! w-5! h-5!" />
@@ -103,7 +103,7 @@ export function VoicePage() {
 
 				{/* Instructions Section */}
 				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl dark:shadow-black/30 overflow-hidden mb-6 sm:mb-8 border border-gray-100 dark:border-gray-700 transition-all duration-300">
-					<div className="bg-gradient-to-r from-blue-600 to-green-600 dark:from-blue-700 dark:to-green-700 px-4 sm:px-6 py-4">
+					<div className="bg-linear-to-r from-blue-600 to-green-600 dark:from-blue-700 dark:to-green-700 px-4 sm:px-6 py-4">
 						<h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
 							<i className="i-heroicons-light-bulb bg-white! w-6! h-6!" />
 							{t('exampleCommands')}
@@ -200,7 +200,7 @@ export function VoicePage() {
 
 				{/* How It Works Section */}
 				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl dark:shadow-black/30 overflow-hidden border border-gray-100 dark:border-gray-700 transition-all duration-300">
-					<div className="bg-gradient-to-r from-indigo-600 to-blue-600 dark:from-indigo-700 dark:to-blue-700 px-4 sm:px-6 py-4">
+					<div className="bg-linear-to-r from-indigo-600 to-blue-600 dark:from-indigo-700 dark:to-blue-700 px-4 sm:px-6 py-4">
 						<h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
 							<i className="i-heroicons-cog-6-tooth bg-white! w-6! h-6!" />
 							{t('howItWorks')}

@@ -52,7 +52,7 @@ export const PWAUpdatePrompt = () => {
 			{showUpdatePrompt && (
 				<div className="bg-white border border-gray-200 rounded-lg shadow-lg p-4">
 					<div className="flex items-start gap-3">
-						<div className="flex-shrink-0">
+						<div className="shrink-0">
 							<div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
 								<i className="i-material-symbols-refresh text-blue-600 w-5! h-5!" />
 							</div>
@@ -80,7 +80,7 @@ export const PWAUpdatePrompt = () => {
 						<button
 							type="button"
 							onClick={close}
-							className="flex-shrink-0 text-gray-400 hover:text-gray-600"
+							className="shrink-0 text-gray-400 hover:text-gray-600"
 						>
 							<i className="i-material-symbols-close w-5! h-5!" />
 						</button>
@@ -91,7 +91,7 @@ export const PWAUpdatePrompt = () => {
 			{offlineReady && !showUpdatePrompt && (
 				<div className="bg-green-50 border border-green-200 rounded-lg shadow-lg p-4">
 					<div className="flex items-start gap-3">
-						<div className="flex-shrink-0">
+						<div className="shrink-0">
 							<div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
 								<i className="i-material-symbols-check text-green-600 w-5! h-5!" />
 							</div>
@@ -103,7 +103,7 @@ export const PWAUpdatePrompt = () => {
 						<button
 							type="button"
 							onClick={close}
-							className="flex-shrink-0 text-green-400 hover:text-green-600"
+							className="shrink-0 text-green-400 hover:text-green-600"
 						>
 							<i className="i-material-symbols-close w-5! h-5!" />
 						</button>

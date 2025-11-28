@@ -15,7 +15,7 @@ export const DevelopmentBanner = memo(() => {
 
 	return (
 		<div
-			className={`w-full bg-gradient-to-r ${colorClass} text-white text-center py-2 shadow-lg z-50`}
+			className={`w-full bg-linear-to-r ${colorClass} text-white text-center py-2 shadow-lg z-50`}
 		>
 			<div className="flex items-center justify-center gap-2 text-sm font-medium">
 				<i className={`${getEnvironmentIcon()} w-4! h-4!`} />

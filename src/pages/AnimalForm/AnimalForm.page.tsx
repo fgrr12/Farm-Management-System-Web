@@ -186,7 +186,7 @@ const AnimalForm = () => {
 	}, [setPageTitle, t, params.animalUuid])
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto transition-colors duration-300">
+		<div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto transition-colors duration-300">
 			<div className="max-w-4xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
 				<a
 					href="#animal-form"
@@ -197,9 +197,9 @@ const AnimalForm = () => {
 
 				{/* Hero Header */}
 				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl dark:shadow-black/30 overflow-hidden mb-6 sm:mb-8 border border-gray-100 dark:border-gray-700 transition-all duration-300">
-					<div className="bg-gradient-to-r from-blue-600 to-green-600 dark:from-blue-700 dark:to-green-700 px-4 sm:px-6 py-6 sm:py-8">
+					<div className="bg-linear-to-r from-blue-600 to-green-600 dark:from-blue-700 dark:to-green-700 px-4 sm:px-6 py-6 sm:py-8">
 						<div className="flex items-center gap-3 sm:gap-4">
-							<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 dark:bg-white/30 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg dark:shadow-black/20 backdrop-blur-sm">
+							<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 dark:bg-white/30 rounded-full flex items-center justify-center shrink-0 shadow-lg dark:shadow-black/20 backdrop-blur-sm">
 								<i className="i-material-symbols-pets bg-white! w-6! h-6! sm:w-8 sm:h-8 drop-shadow-sm" />
 							</div>
 							<div className="min-w-0">

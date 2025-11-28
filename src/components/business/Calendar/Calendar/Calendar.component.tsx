@@ -291,23 +291,23 @@ export const Calendar = memo(() => {
 				baseStyles += ' bg-gray-50/50 dark:bg-gray-800/50 text-gray-400'
 			} else if (isToday) {
 				baseStyles +=
-					' bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 dark:from-blue-900/40 dark:via-purple-900/30 dark:to-pink-900/40 shadow-lg shadow-blue-200/50 dark:shadow-blue-900/30'
+					' bg-linear-to-br from-blue-100 via-purple-50 to-pink-100 dark:from-blue-900/40 dark:via-purple-900/30 dark:to-pink-900/40 shadow-lg shadow-blue-200/50 dark:shadow-blue-900/30'
 			} else if (isWeekend && isCurrentPeriod) {
 				baseStyles +=
-					' bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20'
+					' bg-linear-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20'
 			} else {
 				baseStyles +=
-					' bg-gradient-to-br from-white to-blue-50/30 dark:from-gray-800 dark:to-purple-900/10'
+					' bg-linear-to-br from-white to-blue-50/30 dark:from-gray-800 dark:to-purple-900/10'
 			}
 
 			// Hover y selección
 			if (isHovered && isCurrentPeriod) {
 				baseStyles +=
-					' ring-2 ring-blue-400 dark:ring-blue-500 shadow-lg shadow-blue-200/50 dark:shadow-blue-900/30 transform scale-[1.02] bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20'
+					' ring-2 ring-blue-400 dark:ring-blue-500 shadow-lg shadow-blue-200/50 dark:shadow-blue-900/30 transform scale-[1.02] bg-linear-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20'
 			}
 			if (isSelected) {
 				baseStyles +=
-					' ring-2 ring-purple-500 shadow-lg shadow-purple-200/50 dark:shadow-purple-900/30 transform scale-[1.02] bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30'
+					' ring-2 ring-purple-500 shadow-lg shadow-purple-200/50 dark:shadow-purple-900/30 transform scale-[1.02] bg-linear-to-br from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30'
 			}
 
 			// Indicadores de eventos
@@ -375,9 +375,9 @@ export const Calendar = memo(() => {
 
 	if (error) {
 		return (
-			<div className="p-6 bg-gradient-to-r from-red-50 to-red-100 border border-red-200 rounded-xl shadow-sm">
+			<div className="p-6 bg-linear-to-r from-red-50 to-red-100 border border-red-200 rounded-xl shadow-sm">
 				<div className="flex items-center space-x-3">
-					<div className="flex-shrink-0">
+					<div className="shrink-0">
 						<div className="i-heroicons-exclamation-triangle w-6 h-6 text-red-500" />
 					</div>
 					<div>
@@ -392,12 +392,12 @@ export const Calendar = memo(() => {
 	return (
 		<div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
 			{/* Header del calendario mejorado */}
-			<div className="bg-gradient-to-r from-blue-50 via-purple-50 to-pink-50 dark:from-gray-700 dark:via-purple-900/20 dark:to-pink-900/20 p-4 border-b border-gray-200 dark:border-gray-600">
+			<div className="bg-linear-to-r from-blue-50 via-purple-50 to-pink-50 dark:from-gray-700 dark:via-purple-900/20 dark:to-pink-900/20 p-4 border-b border-gray-200 dark:border-gray-600">
 				<div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
 					{/* Navegación principal */}
 					<div className="flex items-center justify-between lg:justify-start">
 						<div className="flex items-center space-x-4">
-							<h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+							<h2 className="text-2xl font-bold bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
 								{viewMode === 'day'
 									? (selectedDate || currentDate).format('dddd, DD MMMM YYYY')
 									: viewMode === 'week'
@@ -416,7 +416,7 @@ export const Calendar = memo(() => {
 								<button
 									type="button"
 									onClick={goToToday}
-									className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/30 dark:hover:to-purple-900/30 hover:text-blue-600 dark:hover:text-blue-400 rounded-md transition-all duration-200"
+									className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-linear-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/30 dark:hover:to-purple-900/30 hover:text-blue-600 dark:hover:text-blue-400 rounded-md transition-all duration-200"
 									disabled={isAnimating}
 								>
 									{t('today')}
@@ -440,7 +440,7 @@ export const Calendar = memo(() => {
 								setSelectedEvent(null)
 								setShowEventModal(true)
 							}}
-							className="lg:hidden flex items-center justify-center w-10 h-10 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white rounded-full shadow-lg hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 transition-all duration-200 transform hover:scale-105"
+							className="lg:hidden flex items-center justify-center w-10 h-10 bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 text-white rounded-full shadow-lg hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 transition-all duration-200 transform hover:scale-105"
 						>
 							<div className="i-heroicons-plus w-5 h-5" />
 						</button>
@@ -459,8 +459,8 @@ export const Calendar = memo(() => {
 										px-3 py-1.5 text-sm font-medium rounded-md transition-all duration-200
 										${
 											viewMode === mode
-												? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md'
-												: 'text-gray-600 dark:text-gray-300 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/30 dark:hover:to-purple-900/30'
+												? 'bg-linear-to-r from-blue-600 to-purple-600 text-white shadow-md'
+												: 'text-gray-600 dark:text-gray-300 hover:bg-linear-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/30 dark:hover:to-purple-900/30'
 										}
 									`}
 								>
@@ -477,7 +477,7 @@ export const Calendar = memo(() => {
 								setSelectedEvent(null)
 								setShowEventModal(true)
 							}}
-							className="hidden lg:flex items-center space-x-2 px-4 py-2.5 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white rounded-lg shadow-lg hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 transition-all duration-200 transform hover:scale-105 hover:shadow-xl"
+							className="hidden lg:flex items-center space-x-2 px-4 py-2.5 bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 text-white rounded-lg shadow-lg hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 transition-all duration-200 transform hover:scale-105 hover:shadow-xl"
 						>
 							<div className="i-heroicons-plus w-4 h-4" />
 							<span className="font-medium">{t('createEvent')}</span>
@@ -543,7 +543,7 @@ export const Calendar = memo(() => {
 							{isToday && (
 								<div className="absolute top-0 right-0">
 									<div className="w-0 h-0 border-l-[12px] border-l-transparent border-t-[12px] border-t-blue-500" />
-									<div className="absolute -top-3 -right-3 w-2 h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-pulse shadow-md" />
+									<div className="absolute -top-3 -right-3 w-2 h-2 bg-linear-to-r from-blue-500 to-purple-500 rounded-full animate-pulse shadow-md" />
 								</div>
 							)}
 
@@ -555,9 +555,9 @@ export const Calendar = memo(() => {
 											inline-flex items-center justify-center text-sm font-semibold min-w-[1.5rem] h-6
 											${
 												isToday
-													? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-md'
+													? 'bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-md'
 													: isCurrentPeriod
-														? 'text-gray-900 dark:text-white hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 rounded-full transition-all duration-200'
+														? 'text-gray-900 dark:text-white hover:bg-linear-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 rounded-full transition-all duration-200'
 														: 'text-gray-400 dark:text-gray-500'
 											}
 										`}
@@ -572,7 +572,7 @@ export const Calendar = memo(() => {
 								</div>
 								{dayEvents.length > 0 && (
 									<div className="flex items-center space-x-1">
-										<span className="inline-flex items-center justify-center w-5 h-5 text-xs font-medium bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/60 dark:to-purple-900/60 text-blue-800 dark:text-blue-200 rounded-full shadow-sm border border-blue-200 dark:border-blue-700">
+										<span className="inline-flex items-center justify-center w-5 h-5 text-xs font-medium bg-linear-to-r from-blue-100 to-purple-100 dark:from-blue-900/60 dark:to-purple-900/60 text-blue-800 dark:text-blue-200 rounded-full shadow-sm border border-blue-200 dark:border-blue-700">
 											{dayEvents.length}
 										</span>
 									</div>
@@ -592,7 +592,7 @@ export const Calendar = memo(() => {
 										/>
 									))}
 								{dayEvents.length > (viewMode === 'month' ? 2 : viewMode === 'week' ? 4 : 8) && (
-									<div className="text-xs text-gray-500 dark:text-gray-400 text-center py-1 bg-gradient-to-r from-gray-100 to-blue-50 dark:from-gray-700 dark:to-purple-900/30 rounded-md border border-gray-200 dark:border-gray-600">
+									<div className="text-xs text-gray-500 dark:text-gray-400 text-center py-1 bg-linear-to-r from-gray-100 to-blue-50 dark:from-gray-700 dark:to-purple-900/30 rounded-md border border-gray-200 dark:border-gray-600">
 										+{dayEvents.length - (viewMode === 'month' ? 2 : viewMode === 'week' ? 4 : 8)}{' '}
 										más
 									</div>

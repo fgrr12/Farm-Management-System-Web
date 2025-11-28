@@ -159,7 +159,7 @@ export const HealthOverview = memo(() => {
 			}}
 		>
 			{/* Subtle background pattern */}
-			<div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-gray-50/30 dark:to-gray-700/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+			<div className="absolute inset-0 bg-linear-to-br from-transparent via-transparent to-gray-50/30 dark:to-gray-700/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
 			{/* Content container */}
 			<div className="relative z-10">

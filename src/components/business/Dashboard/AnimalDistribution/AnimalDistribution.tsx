@@ -43,7 +43,7 @@ export const AnimalDistribution = memo(() => {
 	return (
 		<div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-6 hover:shadow-lg dark:hover:shadow-xl transition-all duration-300">
 			{/* Background enhancement */}
-			<div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-gray-50/30 dark:to-gray-700/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+			<div className="absolute inset-0 bg-linear-to-br from-transparent via-transparent to-gray-50/30 dark:to-gray-700/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
 			<div className="relative z-10">
 				<div className="flex items-center justify-between mb-6">

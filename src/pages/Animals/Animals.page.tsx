@@ -130,7 +130,7 @@ const Animals = () => {
 		}
 	}, [filteredAnimals])
 	return (
-		<div className="min-h-screen md:min-h-full bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+		<div className="min-h-screen md:min-h-full bg-linear-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
 			<div className="max-w-7xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
 				<a
 					href="#animals-grid"
@@ -141,10 +141,10 @@ const Animals = () => {
 
 				{/* Hero Header */}
 				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden mb-6 sm:mb-8 border border-gray-100 dark:border-gray-700">
-					<div className="bg-gradient-to-r from-blue-600 to-green-600 dark:from-blue-700 dark:to-green-700 px-4 sm:px-6 py-6 sm:py-8">
+					<div className="bg-linear-to-r from-blue-600 to-green-600 dark:from-blue-700 dark:to-green-700 px-4 sm:px-6 py-6 sm:py-8">
 						<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
 							<div className="flex items-center gap-3 sm:gap-4">
-								<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 dark:bg-white/25 rounded-full flex items-center justify-center flex-shrink-0">
+								<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 dark:bg-white/25 rounded-full flex items-center justify-center shrink-0">
 									<i className="i-material-symbols-pets bg-white! w-6! h-6! sm:w-8 sm:h-8" />
 								</div>
 								<div className="min-w-0">
@@ -197,7 +197,7 @@ const Animals = () => {
 									/>
 								</div>
 
-								<div className="flex-shrink-0">
+								<div className="shrink-0">
 									<Button
 										type="button"
 										className="btn btn-primary h-12 text-base sm:text-lg px-6 sm:px-8 w-full sm:w-auto"

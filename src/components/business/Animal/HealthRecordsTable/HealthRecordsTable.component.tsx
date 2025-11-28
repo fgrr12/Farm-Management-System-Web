@@ -142,7 +142,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 				<div className="flex items-center gap-4">
 					<h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t('title')}</h2>
 					{user && (
-						<div className="flex-shrink-0">
+						<div className="shrink-0">
 							<HealthRecordsFilters
 								filters={filters}
 								onFiltersChange={handleFiltersChange}
@@ -153,7 +153,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 					)}
 				</div>
 
-				<div className="flex-shrink-0">
+				<div className="shrink-0">
 					{haveUser && (
 						<ActionButton
 							title="Add Health Record"

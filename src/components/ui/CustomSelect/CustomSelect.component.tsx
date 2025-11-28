@@ -306,7 +306,7 @@ export const CustomSelect = forwardRef<CustomSelectRef, CustomSelectProps>(
 						<img
 							src={option.image}
 							alt={option.label}
-							className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+							className="w-8 h-8 rounded-full object-cover shrink-0"
 						/>
 					)}
 					<div className="flex-1 min-w-0">
