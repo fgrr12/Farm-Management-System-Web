@@ -219,8 +219,6 @@ export const useFCMToken = () => {
 
 			await NotificationsService.removeDeviceToken(token)
 
-			await NotificationsService.removeDeviceToken(token)
-
 			// Clear local state
 			setToken(null)
 
