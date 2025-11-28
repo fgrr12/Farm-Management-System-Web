@@ -26,38 +26,10 @@ export const useFCMToken = () => {
 
 	const { user } = useUserStore()
 
-	// Token persistence keys
-	const TOKEN_STORAGE_KEY = 'fcm_token'
-	const TOKEN_TIMESTAMP_KEY = 'fcm_token_timestamp'
-	const TOKEN_VALIDITY_HOURS = 24 // Token válido por 24 horas
-
-	// Load token from localStorage on initialization (once only)
+	// Load token from localStorage removed - relying on Firebase SDK caching
 	useEffect(() => {
-		const loadStoredToken = () => {
-			try {
-				const storedToken = localStorage.getItem(TOKEN_STORAGE_KEY)
-				const storedTimestamp = localStorage.getItem(TOKEN_TIMESTAMP_KEY)
-
-				if (storedToken && storedTimestamp) {
-					const tokenAge = Date.now() - Number.parseInt(storedTimestamp, 10)
-					const maxAge = TOKEN_VALIDITY_HOURS * 60 * 60 * 1000 // 24 horas en ms
-
-					if (tokenAge < maxAge) {
-						// Token aún válido
-						setToken(storedToken)
-						return
-					}
-					// Token expirado, limpiar
-					localStorage.removeItem(TOKEN_STORAGE_KEY)
-					localStorage.removeItem(TOKEN_TIMESTAMP_KEY)
-				}
-			} catch (err) {
-				console.warn('[FCM] Error loading stored token:', err)
-			}
-		}
-
-		loadStoredToken()
-	}, []) // Empty dependency array - only run once on mount	// Check if FCM is supported
+		// Empty effect just to keep the hook structure consistent if needed
+	}, []) // Check if FCM is supported
 	useEffect(() => {
 		const checkSupport = async () => {
 			try {
@@ -108,11 +80,10 @@ export const useFCMToken = () => {
 			return null
 		}
 
-		// If we already have a valid token, return it instead of generating a new one
-		if (token) {
-			return token
-		}
-
+		// Always call getToken to let Firebase handle validity
+		// if (token) {
+		// 	return token
+		// }
 		try {
 			setLoading(true)
 			setError(null)
@@ -171,9 +142,11 @@ export const useFCMToken = () => {
 			})
 
 			if (currentToken) {
-				// Guardar token en localStorage
-				localStorage.setItem(TOKEN_STORAGE_KEY, currentToken)
-				localStorage.setItem(TOKEN_TIMESTAMP_KEY, Date.now().toString())
+				console.log(
+					'[useFCMToken] Token generated successfully:',
+					`${currentToken.substring(0, 20)}...`
+				)
+				// No manual storage needed
 				setToken(currentToken)
 				return currentToken
 			}
@@ -187,7 +160,7 @@ export const useFCMToken = () => {
 		} finally {
 			setLoading(false)
 		}
-	}, [isFCMSupported, permission, token])
+	}, [isFCMSupported, permission])
 
 	// Register device token with backend
 	const registerDeviceToken = useCallback(async (): Promise<boolean> => {
@@ -246,9 +219,9 @@ export const useFCMToken = () => {
 
 			await NotificationsService.removeDeviceToken(token)
 
-			// Limpiar token del localStorage
-			localStorage.removeItem(TOKEN_STORAGE_KEY)
-			localStorage.removeItem(TOKEN_TIMESTAMP_KEY)
+			await NotificationsService.removeDeviceToken(token)
+
+			// Clear local state
 			setToken(null)
 
 			return true
@@ -288,8 +261,7 @@ export const useFCMToken = () => {
 
 			if (!user) {
 				// User logged out - clear stored token and reset generation flag
-				localStorage.removeItem(TOKEN_STORAGE_KEY)
-				localStorage.removeItem(TOKEN_TIMESTAMP_KEY)
+				// User logged out
 				setToken(null)
 				tokenGenerationAttempted.current = false // Reset generation flag
 			} else {
