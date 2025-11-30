@@ -20,10 +20,6 @@
 	"processingTime": "Processing time",
 	"tokensUsed": "Tokens used",
 	"executionResults": "Execution Results",
-	"mode": {
-		"automatic": "Automatic mode",
-		"manual": "Manual mode"
-	},
 	"steps": {
 		"record": "Record",
 		"process": "Process",

@@ -9,7 +9,6 @@ import { useVoiceRecorder } from '@/hooks/voice/useVoiceRecorder'
 
 interface VoiceRecorderProps {
 	className?: string
-	autoExecute?: boolean
 	maxRecordingTime?: number
 	onTranscriptionComplete?: (transcription: string) => void
 	onProcessingComplete?: (response: VoiceProcessingResponse) => void
@@ -18,7 +17,6 @@ interface VoiceRecorderProps {
 
 export function VoiceRecorder({
 	className = '',
-	autoExecute = false,
 	maxRecordingTime = 60,
 	onTranscriptionComplete,
 	onProcessingComplete,
@@ -31,7 +29,6 @@ export function VoiceRecorder({
 	const {
 		isRecording,
 		isProcessing,
-		isExecuting,
 		recordingTime,
 		startRecording,
 		stopRecording,
@@ -41,13 +38,11 @@ export function VoiceRecorder({
 		executionResults,
 		error,
 		clearError,
-		executeOperations,
 		reset,
 		audioURL,
 	} = useVoiceRecorder({
 		farmUuid: farm?.uuid || '',
 		userUuid: user?.uuid || '',
-		autoExecute,
 		maxRecordingTime,
 		onTranscriptionComplete,
 		onProcessingComplete,
@@ -63,14 +58,13 @@ export function VoiceRecorder({
 
 	const getRecordingButtonClass = () => {
 		if (isRecording) return 'btn-error hover:btn-error focus:btn-error'
-		if (isProcessing || isExecuting) return 'btn-disabled'
+		if (isProcessing) return 'btn-disabled'
 		return 'btn-primary hover:btn-primary focus:btn-primary'
 	}
 
 	const getRecordingButtonText = () => {
 		if (isRecording) return t('stopRecording')
 		if (isProcessing) return t('processing')
-		if (isExecuting) return t('executing')
 		return t('startRecording')
 	}
 
@@ -82,13 +76,8 @@ export function VoiceRecorder({
 		}
 	}
 
-	const hasOperationsToExecute =
-		processingResponse?.success &&
-		processingResponse.data &&
-		Object.values(processingResponse.data).some((ops) => Array.isArray(ops) && ops.length > 0)
-
 	const getProgressStep = () => {
-		if (isExecuting) return 3
+		if (executionResults.length > 0) return 3
 		if (isProcessing) return 2
 		if (isRecording) return 1
 		return 0
@@ -127,7 +116,7 @@ export function VoiceRecorder({
 							<div>
 								<h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('title')}</h3>
 								<p className="text-sm text-gray-600 dark:text-gray-400">
-									{autoExecute ? t('mode.automatic') : t('mode.manual')}
+									{t('mode.automatic')}
 								</p>
 							</div>
 						</div>
@@ -155,11 +144,10 @@ export function VoiceRecorder({
 								(step, index) => (
 									<div key={step} className="flex flex-col items-center flex-1">
 										<div
-											className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border-2 transition-all duration-300 ${
-												index <= progressStep
+											className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border-2 transition-all duration-300 ${index <= progressStep
 													? 'bg-primary text-primary-content border-primary shadow-lg scale-110'
 													: 'bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 border-gray-300 dark:border-gray-500'
-											}`}
+												}`}
 										>
 											{index < progressStep ? (
 												<i className="i-heroicons-check" />
@@ -170,19 +158,17 @@ export function VoiceRecorder({
 											)}
 										</div>
 										<span
-											className={`text-xs mt-2 font-medium transition-colors duration-300 ${
-												index <= progressStep
+											className={`text-xs mt-2 font-medium transition-colors duration-300 ${index <= progressStep
 													? 'text-primary dark:text-primary'
 													: 'text-gray-400 dark:text-gray-500'
-											}`}
+												}`}
 										>
 											{step}
 										</span>
 										{index < 3 && (
 											<div
-												className={`h-0.5 w-full mt-5 -mb-5 transition-colors duration-500 ${
-													index < progressStep ? 'bg-primary' : 'bg-gray-300 dark:bg-gray-600'
-												}`}
+												className={`h-0.5 w-full mt-5 -mb-5 transition-colors duration-500 ${index < progressStep ? 'bg-primary' : 'bg-gray-300 dark:bg-gray-600'
+													}`}
 											/>
 										)}
 									</div>
@@ -197,7 +183,7 @@ export function VoiceRecorder({
 							type="button"
 							className={`btn btn-lg ${getRecordingButtonClass()} min-w-48 shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95`}
 							onClick={handleRecordingToggle}
-							disabled={isProcessing || isExecuting || !farm || !user}
+							disabled={isProcessing || !farm || !user}
 						>
 							{isRecording ? (
 								<i className="i-heroicons-stop text-2xl" />
@@ -217,33 +203,19 @@ export function VoiceRecorder({
 								{t('cancel')}
 							</button>
 						)}
-
-						{processingResponse && !autoExecute && hasOperationsToExecute && (
-							<button
-								type="button"
-								className="btn btn-success hover:btn-success shadow-lg transition-all duration-300 transform hover:scale-105 animate-in slide-in-from-right-3"
-								onClick={() => executeOperations()}
-								disabled={isExecuting}
-							>
-								<i className="i-heroicons-play" />
-								<span className="ml-2">{isExecuting ? t('executing') : t('execute')}</span>
-							</button>
-						)}
 					</div>
 
 					{/* Processing Indicator */}
-					{(isProcessing || isExecuting) && (
+					{isProcessing && (
 						<div className="bg-linear-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl p-4 border border-blue-200 dark:border-blue-700 animate-in slide-in-from-bottom-3 duration-500">
 							<div className="flex items-center gap-3">
 								<div className="loading loading-spinner loading-sm text-primary" />
 								<div className="flex-1">
 									<p className="font-medium text-gray-900 dark:text-gray-100">
-										{isProcessing && t('status.processingVoiceCommand')}
-										{isExecuting && t('status.executingOperations')}
+										{t('status.processingVoiceCommand')}
 									</p>
 									<p className="text-sm text-gray-600 dark:text-gray-400">
-										{isProcessing && t('status.aiAnalyzing')}
-										{isExecuting && t('status.performingActions')}
+										{t('status.aiAnalyzing')}
 									</p>
 								</div>
 							</div>
@@ -422,19 +394,17 @@ export function VoiceRecorder({
 									{executionResults.map((result, index) => (
 										<div
 											key={index}
-											className={`p-4 rounded-lg border transition-all duration-300 hover:shadow-md ${
-												result.success
+											className={`p-4 rounded-lg border transition-all duration-300 hover:shadow-md ${result.success
 													? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700'
 													: 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-700'
-											}`}
+												}`}
 										>
 											<div className="flex items-start gap-3">
 												<i
-													className={`${
-														result.success
+													className={`${result.success
 															? 'i-heroicons-check-circle text-green-600'
 															: 'i-heroicons-x-circle text-red-600'
-													} text-lg mt-0.5 shrink-0`}
+														} text-lg mt-0.5 shrink-0`}
 												/>
 												<div className="flex-1">
 													<div className="font-medium text-gray-900 dark:text-gray-100">

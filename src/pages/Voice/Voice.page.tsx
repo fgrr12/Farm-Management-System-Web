@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFarmStore } from '@/store/useFarmStore'
@@ -13,8 +13,6 @@ export function VoicePage() {
 	const { farm } = useFarmStore()
 	const { t } = useTranslation(['voice'])
 	const { setPageTitle } = usePagePerformance()
-
-	const [autoExecute, setAutoExecute] = useState(true) // Default to auto-execute for better UX
 
 	// Set page title on mount
 	useEffect(() => {
@@ -66,38 +64,8 @@ export function VoicePage() {
 					id="voice-section"
 					className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl dark:shadow-black/30 overflow-hidden mb-6 sm:mb-8 border border-gray-100 dark:border-gray-700 transition-all duration-300"
 				>
-					<div className="bg-linear-to-r from-emerald-600 to-cyan-600 dark:from-emerald-700 dark:to-cyan-700 px-4 sm:px-6 py-4">
-						<div className="flex items-center justify-between">
-							<h2 className="text-xl font-bold text-white flex items-center gap-2">
-								<i className="i-heroicons-cog-6-tooth bg-white! w-5! h-5!" />
-								{t('settings.executionMode')}
-							</h2>
-							<div className="flex items-center gap-3">
-								<span
-									className={`text-sm ${!autoExecute ? 'text-white font-medium' : 'text-white/70'}`}
-								>
-									{t('settings.manual')}
-								</span>
-								<input
-									type="checkbox"
-									className="toggle toggle-success"
-									checked={autoExecute}
-									onChange={(e) => setAutoExecute(e.target.checked)}
-								/>
-								<span
-									className={`text-sm ${autoExecute ? 'text-white font-medium' : 'text-white/70'}`}
-								>
-									{t('settings.automatic')}
-								</span>
-							</div>
-						</div>
-						<p className="text-white/80 text-sm mt-2">
-							{autoExecute ? t('settings.automaticDescription') : t('settings.manualDescription')}
-						</p>
-					</div>
-
 					<div className="p-4 sm:p-6 lg:p-8">
-						<VoiceRecorder className="w-full" autoExecute={autoExecute} maxRecordingTime={60} />
+						<VoiceRecorder className="w-full" maxRecordingTime={60} />
 					</div>
 				</div>
 

@@ -1,13 +1,6 @@
 {
 	"title": "Comandos de Voz",
 	"subtitle": "Gestiona tu granja usando comandos de lenguaje natural",
-	"settings": {
-		"executionMode": "Modo de Ejecución",
-		"manual": "Manual",
-		"automatic": "Automático",
-		"manualDescription": "Revisar y aprobar operaciones antes de la ejecución",
-		"automaticDescription": "Las operaciones se ejecutan automáticamente después del procesamiento de voz"
-	},
 	"exampleCommands": "Comandos de Ejemplo",
 	"howItWorks": "Cómo Funciona",
 	"animalManagement": "Gestión de Animales",

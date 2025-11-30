@@ -1,13 +1,6 @@
 {
 	"title": "Voice Commands",
 	"subtitle": "Manage your farm using natural language commands",
-	"settings": {
-		"executionMode": "Execution Mode",
-		"manual": "Manual",
-		"automatic": "Automatic",
-		"manualDescription": "Review and approve operations before execution",
-		"automaticDescription": "Operations are executed automatically after voice processing"
-	},
 	"exampleCommands": "Example Commands",
 	"howItWorks": "How It Works",
 	"animalManagement": "Animal Management",

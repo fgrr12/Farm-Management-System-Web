@@ -20,10 +20,6 @@
 	"processingTime": "Tiempo de procesamiento",
 	"tokensUsed": "Tokens utilizados",
 	"executionResults": "Resultados de Ejecución",
-	"mode": {
-		"automatic": "Modo automático",
-		"manual": "Modo manual"
-	},
 	"steps": {
 		"record": "Grabar",
 		"process": "Procesar",
