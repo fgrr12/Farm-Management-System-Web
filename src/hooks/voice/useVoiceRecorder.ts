@@ -9,7 +9,6 @@ import type {
 export interface UseVoiceRecorderConfig {
 	farmUuid: string
 	userUuid: string
-	autoExecute?: boolean
 	maxRecordingTime?: number
 	onTranscriptionComplete?: (transcription: string) => void
 	onProcessingComplete?: (response: VoiceProcessingResponse) => void
@@ -21,7 +20,6 @@ export interface UseVoiceRecorderReturn {
 	// Recording state
 	isRecording: boolean
 	isProcessing: boolean
-	isExecuting: boolean
 	recordingTime: number
 
 	// Audio management
@@ -42,9 +40,6 @@ export interface UseVoiceRecorderReturn {
 	audioBlob: Blob | null
 	audioURL: string | null
 
-	// Manual execution
-	executeOperations: () => Promise<void>
-
 	// Reset state
 	reset: () => void
 }
@@ -52,7 +47,6 @@ export interface UseVoiceRecorderReturn {
 export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecorderReturn => {
 	const [isRecording, setIsRecording] = useState(false)
 	const [isProcessing, setIsProcessing] = useState(false)
-	const [isExecuting, setIsExecuting] = useState(false)
 	const [recordingTime, setRecordingTime] = useState(0)
 	const [transcription, setTranscription] = useState<string | null>(null)
 	const [processingResponse, setProcessingResponse] = useState<VoiceProcessingResponse | null>(null)
@@ -84,41 +78,6 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 		setRecordingTime(0)
 	}, [audioURL])
 
-	const executeOperations = useCallback(
-		async (response?: VoiceProcessingResponse) => {
-			const responseToUse = response || processingResponse
-			if (!responseToUse?.data) {
-				setError('No operations to execute')
-				return
-			}
-
-			try {
-				setIsExecuting(true)
-				clearError()
-
-				// Import service dynamically
-				const { VoiceService } = await import('@/services/voice')
-
-				// Execute operations
-				const results = await VoiceService.executeOperations(
-					responseToUse,
-					config.farmUuid,
-					config.userUuid
-				)
-
-				setExecutionResults(results)
-				config.onExecutionComplete?.(results)
-			} catch (err) {
-				const errorMessage = err instanceof Error ? err.message : 'Failed to execute operations'
-				setError(errorMessage)
-				config.onError?.(errorMessage)
-			} finally {
-				setIsExecuting(false)
-			}
-		},
-		[processingResponse, config, clearError]
-	)
-
 	const processAudio = useCallback(
 		async (blob: Blob) => {
 			try {
@@ -141,73 +100,59 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 					maxDuration: config.maxRecordingTime || 60, // Default to 60 seconds
 				}
 
-				if (config.autoExecute) {
-					// Use the new processAndExecute that handles everything in backend
-					const response = await VoiceService.processAndExecuteVoiceCommand(request)
+				// Always use the processAndExecute that handles everything in backend
+				const response = await VoiceService.processAndExecuteVoiceCommand(request)
 
-					// Validate response structure
-					if (!response || !response.data) {
-						throw new Error('Invalid response from voice processing service')
-					}
-
-					// The response.data contains the extraction result (which includes transcription, success, data, etc.)
-					const extractionResult = response.data
-
-					// Set transcription and processing response from extraction result
-					setTranscription(extractionResult.transcription || null)
-					setProcessingResponse(extractionResult)
-
-					// Trigger transcription callback
-					if (extractionResult.transcription) {
-						config.onTranscriptionComplete?.(extractionResult.transcription)
-					}
-					config.onProcessingComplete?.(extractionResult)
-
-					// Convert execution result to ExecutionResult format for frontend compatibility
-					const executionResults: ExecutionResult[] = []
-					if (extractionResult.execution) {
-						// Add success entries based on successCount
-						for (let i = 0; i < extractionResult.execution.successCount; i++) {
-							executionResults.push({
-								type: 'animal', // Generic type since we don't have detailed info
-								success: true,
-								operation: 'create',
-							})
-						}
-
-						// Add error entries if they exist
-						if (
-							extractionResult.execution.errors &&
-							Array.isArray(extractionResult.execution.errors)
-						) {
-							extractionResult.execution.errors.forEach((error: string) => {
-								executionResults.push({
-									type: 'animal', // Generic type
-									success: false,
-									error: error,
-									operation: 'unknown',
-								})
-							})
-						}
-					}
-
-					setExecutionResults(executionResults)
-
-					// Trigger execution callback
-					config.onExecutionComplete?.(executionResults)
-				} else {
-					// Use the original flow for manual execution
-					const response = await VoiceService.processVoiceCommand(request)
-
-					setTranscription(response.transcription || null)
-					setProcessingResponse(response)
-
-					// Trigger callbacks
-					if (response.transcription) {
-						config.onTranscriptionComplete?.(response.transcription)
-					}
-					config.onProcessingComplete?.(response)
+				// Validate response structure
+				if (!response || !response.data) {
+					throw new Error('Invalid response from voice processing service')
 				}
+
+				// The response.data contains the extraction result (which includes transcription, success, data, etc.)
+				const extractionResult = response.data
+
+				// Set transcription and processing response from extraction result
+				setTranscription(extractionResult.transcription || null)
+				setProcessingResponse(extractionResult)
+
+				// Trigger transcription callback
+				if (extractionResult.transcription) {
+					config.onTranscriptionComplete?.(extractionResult.transcription)
+				}
+				config.onProcessingComplete?.(extractionResult)
+
+				// Convert execution result to ExecutionResult format for frontend compatibility
+				const executionResults: ExecutionResult[] = []
+				if (extractionResult.execution) {
+					// Add success entries based on successCount
+					for (let i = 0; i < extractionResult.execution.successCount; i++) {
+						executionResults.push({
+							type: 'animal', // Generic type since we don't have detailed info
+							success: true,
+							operation: 'create',
+						})
+					}
+
+					// Add error entries if they exist
+					if (
+						extractionResult.execution.errors &&
+						Array.isArray(extractionResult.execution.errors)
+					) {
+						extractionResult.execution.errors.forEach((error: string) => {
+							executionResults.push({
+								type: 'animal', // Generic type
+								success: false,
+								error: error,
+								operation: 'unknown',
+							})
+						})
+					}
+				}
+
+				setExecutionResults(executionResults)
+
+				// Trigger execution callback
+				config.onExecutionComplete?.(executionResults)
 			} catch (err) {
 				const errorMessage = err instanceof Error ? err.message : 'Failed to process audio'
 				setError(errorMessage)
@@ -349,7 +294,6 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 		// Recording state
 		isRecording,
 		isProcessing,
-		isExecuting,
 		recordingTime,
 
 		// Audio management
@@ -369,9 +313,6 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 		// Audio data
 		audioBlob,
 		audioURL,
-
-		// Manual execution
-		executeOperations,
 
 		// Reset state
 		reset,

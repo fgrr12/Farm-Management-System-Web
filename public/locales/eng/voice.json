@@ -1,13 +1,6 @@
 {
 	"title": "Voice Commands",
 	"subtitle": "Manage your farm using natural language commands",
-	"settings": {
-		"executionMode": "Execution Mode",
-		"manual": "Manual",
-		"automatic": "Automatic",
-		"manualDescription": "Review and approve operations before execution",
-		"automaticDescription": "Operations are executed automatically after voice processing"
-	},
 	"exampleCommands": "Example Commands",
 	"howItWorks": "How It Works",
 	"animalManagement": "Animal Management",
@@ -54,5 +47,25 @@
 	},
 	"accessibility": {
 		"skipToRecording": "Skip to voice recording"
+	},
+	"errors": {
+		"animalOperationFailed": "Failed to process animal operation: {{error}}",
+		"healthOperationFailed": "Failed to process health record: {{error}}",
+		"productionOperationFailed": "Failed to process production record: {{error}}",
+		"taskOperationFailed": "Failed to process task: {{error}}",
+		"relationOperationFailed": "Failed to process animal relation: {{error}}",
+		"relationCreationFailed": "Failed to create animal relation",
+		"calendarOperationFailed": "Failed to process calendar event: {{error}}"
+	},
+	"defaults": {
+		"femaleGender": "Female",
+		"unknownColor": "Unknown",
+		"voiceRegistration": "Voice Registration",
+		"healthCheck": "Health Check",
+		"surgeryType": "Surgery",
+		"farmStaff": "Farm Staff",
+		"scheduledEvent": "Scheduled Event",
+		"externalAnimal": "External Animal",
+		"unknownBreed": "Unknown Breed"
 	}
 }
