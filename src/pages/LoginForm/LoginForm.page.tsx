@@ -51,9 +51,11 @@ const LoginForm = () => {
 
 	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {
-		setLoading(false)
 		if (user) {
+			setLoading(true)
 			navigate(AppRoutes.ANIMALS)
+		} else {
+			setLoading(false)
 		}
 	}, [user, navigate])
 
