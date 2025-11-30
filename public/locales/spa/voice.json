@@ -47,5 +47,25 @@
 	},
 	"accessibility": {
 		"skipToRecording": "Saltar a la grabación de voz"
+	},
+	"errors": {
+		"animalOperationFailed": "Error al procesar operación de animal: {{error}}",
+		"healthOperationFailed": "Error al procesar registro de salud: {{error}}",
+		"productionOperationFailed": "Error al procesar registro de producción: {{error}}",
+		"taskOperationFailed": "Error al procesar tarea: {{error}}",
+		"relationOperationFailed": "Error al procesar relación de animales: {{error}}",
+		"relationCreationFailed": "Error al crear relación de animales",
+		"calendarOperationFailed": "Error al procesar evento de calendario: {{error}}"
+	},
+	"defaults": {
+		"femaleGender": "Hembra",
+		"unknownColor": "Desconocido",
+		"voiceRegistration": "Registro por Voz",
+		"healthCheck": "Control de Salud",
+		"surgeryType": "Cirugía",
+		"farmStaff": "Personal de Granja",
+		"scheduledEvent": "Evento Programado",
+		"externalAnimal": "Animal Externo",
+		"unknownBreed": "Raza Desconocida"
 	}
 }

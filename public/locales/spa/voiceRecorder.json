@@ -20,6 +20,12 @@
 	"processingTime": "Tiempo de procesamiento",
 	"tokensUsed": "Tokens utilizados",
 	"executionResults": "Resultados de Ejecución",
+	"pressToSpeak": "Presiona para Hablar",
+	"listening": "Escuchando...",
+	"recordingInProgress": "Grabación en Progreso",
+	"processingYourCommand": "Procesando tu Comando",
+	"done": "¡Listo!",
+	"readyToRecord": "Listo para Grabar",
 	"steps": {
 		"record": "Grabar",
 		"process": "Procesar",

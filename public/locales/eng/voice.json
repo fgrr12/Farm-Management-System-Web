@@ -47,5 +47,25 @@
 	},
 	"accessibility": {
 		"skipToRecording": "Skip to voice recording"
+	},
+	"errors": {
+		"animalOperationFailed": "Failed to process animal operation: {{error}}",
+		"healthOperationFailed": "Failed to process health record: {{error}}",
+		"productionOperationFailed": "Failed to process production record: {{error}}",
+		"taskOperationFailed": "Failed to process task: {{error}}",
+		"relationOperationFailed": "Failed to process animal relation: {{error}}",
+		"relationCreationFailed": "Failed to create animal relation",
+		"calendarOperationFailed": "Failed to process calendar event: {{error}}"
+	},
+	"defaults": {
+		"femaleGender": "Female",
+		"unknownColor": "Unknown",
+		"voiceRegistration": "Voice Registration",
+		"healthCheck": "Health Check",
+		"surgeryType": "Surgery",
+		"farmStaff": "Farm Staff",
+		"scheduledEvent": "Scheduled Event",
+		"externalAnimal": "External Animal",
+		"unknownBreed": "Unknown Breed"
 	}
 }
