@@ -144,8 +144,9 @@ export function VoiceRecorder({
 							onClick={handleRecordingToggle}
 							disabled={isProcessing || !farm || !user}
 							className={`
-								relative w-48 h-48 sm:w-64 sm:h-64 rounded-full 
+								relative w-48 h-48 rounded-full 
 								transition-all duration-300 transform
+								cursor-pointer
 								${
 									isRecording
 										? 'bg-red-500 hover:bg-red-600 scale-110 shadow-2xl shadow-red-500/50'
@@ -165,7 +166,7 @@ export function VoiceRecorder({
 								) : isProcessing ? (
 									<div className="loading loading-spinner loading-lg text-white w-20 h-20 sm:w-24 sm:h-24" />
 								) : (
-									<i className="i-heroicons-microphone text-white text-8xl sm:text-9xl drop-shadow-lg" />
+									<i className="i-heroicons-microphone text-white text-8xl drop-shadow-lg" />
 								)}
 							</div>
 
