@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import { memo, useCallback, useEffect, useMemo } from 'react'
-import { Controller } from 'react-hook-form'
+import { Controller, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -53,9 +53,64 @@ const HealthRecordForm = () => {
 			{ value: 'Deworming', label: t('healthRecordType.deworming') },
 			{ value: 'Birth', label: t('healthRecordType.birth') },
 			{ value: 'Drying', label: t('healthRecordType.drying') },
+			{ value: 'HoofCare', label: t('healthRecordType.hoofCare') },
+			{ value: 'Castration', label: t('healthRecordType.castration') },
+			{ value: 'Dehorning', label: t('healthRecordType.dehorning') },
 		],
 		[t]
 	)
+
+	const administrationRoutes: CustomSelectOption[] = useMemo(
+		() => [
+			{ value: 'IM', label: t('routes.im') },
+			{ value: 'SC', label: t('routes.sc') },
+			{ value: 'Oral', label: t('routes.oral') },
+			{ value: 'Topical', label: t('routes.topical') },
+			{ value: 'Intramammary', label: t('routes.intramammary') },
+			{ value: 'IV', label: t('routes.iv') },
+			{ value: 'Intrauterine', label: t('routes.intrauterine') },
+			{ value: 'Other', label: t('routes.other') },
+		],
+		[t]
+	)
+
+	const injectionSites: CustomSelectOption[] = useMemo(
+		() => [
+			{ value: 'Neck', label: t('sites.neck') },
+			{ value: 'Rump', label: t('sites.rump') },
+			{ value: 'Leg', label: t('sites.leg') },
+			{ value: 'Ear', label: t('sites.ear') },
+			{ value: 'Flank', label: t('sites.flank') },
+			{ value: 'Tail', label: t('sites.tail') },
+			{ value: 'Other', label: t('sites.other') },
+		],
+		[t]
+	)
+
+	const selectedType = useWatch({ control, name: 'type' })
+	const withdrawalDays = useWatch({ control, name: 'withdrawalDays' })
+	const date = useWatch({ control, name: 'date' })
+
+	const reasonLabel = useMemo(() => {
+		if (['Sick', 'Critical', 'Treatment', 'Surgery'].includes(selectedType)) return t('diagnosis')
+		if (selectedType === 'Checkup') return t('observation')
+		if (['Vaccination', 'Deworming'].includes(selectedType)) return t('protocolName')
+		return t('reason')
+	}, [selectedType, t])
+
+	const showMedicationFields = ['Medication', 'Sick', 'Critical', 'Treatment', 'Surgery'].includes(
+		selectedType
+	)
+	const showVaccineFields = ['Vaccination', 'Deworming'].includes(selectedType)
+	const showWithdrawalFields = ['Medication', 'Sick', 'Critical', 'Treatment'].includes(
+		selectedType
+	)
+	const showPhysicalFields = !['Drying', 'Birth'].includes(selectedType)
+
+	const withdrawalEndDate = useMemo(() => {
+		if (!withdrawalDays || !date) return null
+		return dayjs(date).add(withdrawalDays, 'day').format('YYYY-MM-DD')
+	}, [withdrawalDays, date])
 
 	const onSubmit = useCallback(
 		async (data: HealthRecordFormData) => {
@@ -166,14 +221,6 @@ const HealthRecordForm = () => {
 									{t('basicInformation')}
 								</h3>
 								<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-									<TextField
-										{...register('reason')}
-										type="text"
-										placeholder={t('placeholders.reason')}
-										label={t('reason')}
-										required
-										error={errors.reason ? getErrorMessage(errors.reason.message || '') : undefined}
-									/>
 									<Controller
 										name="type"
 										control={control}
@@ -188,18 +235,6 @@ const HealthRecordForm = () => {
 												error={errors.type ? getErrorMessage(errors.type.message || '') : undefined}
 											/>
 										)}
-									/>
-									<TextField
-										{...register('reviewedBy')}
-										type="text"
-										placeholder={t('placeholders.reviewedBy')}
-										label={t('reviewedBy')}
-										required
-										error={
-											errors.reviewedBy
-												? getErrorMessage(errors.reviewedBy.message || '')
-												: undefined
-										}
 									/>
 									<Controller
 										name="date"
@@ -216,88 +251,212 @@ const HealthRecordForm = () => {
 											/>
 										)}
 									/>
+									<div className="sm:col-span-2">
+										<TextField
+											{...register('reason')}
+											type="text"
+											placeholder={t('placeholders.reason')}
+											label={reasonLabel}
+											required
+											error={
+												errors.reason ? getErrorMessage(errors.reason.message || '') : undefined
+											}
+										/>
+									</div>
+									<TextField
+										{...register('reviewedBy')}
+										type="text"
+										placeholder={t('placeholders.reviewedBy')}
+										label={t('reviewedBy')}
+										required
+										error={
+											errors.reviewedBy
+												? getErrorMessage(errors.reviewedBy.message || '')
+												: undefined
+										}
+									/>
+									{showVaccineFields && (
+										<TextField
+											{...register('technician')}
+											type="text"
+											placeholder={t('placeholders.technician')}
+											label={t('technician')}
+										/>
+									)}
 								</div>
 							</div>
+
+							{/* Withdrawal Period Alert */}
+							{withdrawalEndDate && (
+								<div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 sm:p-6 animate-fade-in">
+									<div className="flex items-start gap-3">
+										<i className="i-material-symbols-warning bg-red-600! w-6! h-6! shrink-0 mt-1" />
+										<div>
+											<h3 className="text-lg font-bold text-red-800 dark:text-red-200">
+												{t('withdrawalPeriodActive')}
+											</h3>
+											<p className="text-red-700 dark:text-red-300 mt-1">
+												{t('withdrawalWarning', {
+													date: dayjs(withdrawalEndDate).format('DD/MM/YYYY'),
+												})}
+											</p>
+											<p className="text-sm text-red-600 dark:text-red-400 mt-2 font-medium">
+												⚠️ {t('doNotSellOrMilk')}
+											</p>
+										</div>
+									</div>
+								</div>
+							)}
+
+							{/* Treatment & Withdrawal Card */}
+							{(showMedicationFields || showWithdrawalFields || showVaccineFields) && (
+								<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
+									<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+										<i className="i-material-symbols-medication bg-blue-600! w-5! h-5!" />
+										{showVaccineFields ? t('vaccinationDetails') : t('treatmentDetails')}
+									</h3>
+									<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+										<TextField
+											{...register('medication')}
+											type="text"
+											placeholder={
+												showVaccineFields
+													? t('placeholders.vaccineName')
+													: t('placeholders.medication')
+											}
+											label={showVaccineFields ? t('vaccineName') : t('medication')}
+											error={
+												errors.medication
+													? getErrorMessage(errors.medication.message || '')
+													: undefined
+											}
+										/>
+										<TextField
+											{...register('dosage')}
+											type="text"
+											placeholder={t('placeholders.dosage')}
+											label={t('dosage')}
+											error={
+												errors.dosage ? getErrorMessage(errors.dosage.message || '') : undefined
+											}
+										/>
+
+										{showVaccineFields && (
+											<>
+												<TextField
+													{...register('batchNumber')}
+													type="text"
+													placeholder={t('placeholders.batchNumber')}
+													label={t('batchNumber')}
+												/>
+												<TextField
+													{...register('manufacturer')}
+													type="text"
+													placeholder={t('placeholders.manufacturer')}
+													label={t('manufacturer')}
+												/>
+											</>
+										)}
+
+										{(showMedicationFields || showWithdrawalFields) && (
+											<>
+												<Controller
+													name="administrationRoute"
+													control={control}
+													render={({ field }) => (
+														<CustomSelect
+															label={t('administrationRoute')}
+															placeholder={t('placeholders.selectRoute')}
+															value={field.value}
+															onChange={field.onChange}
+															options={administrationRoutes}
+														/>
+													)}
+												/>
+												<Controller
+													name="injectionSite"
+													control={control}
+													render={({ field }) => (
+														<CustomSelect
+															label={t('injectionSite')}
+															placeholder={t('placeholders.selectSite')}
+															value={field.value}
+															onChange={field.onChange}
+															options={injectionSites}
+														/>
+													)}
+												/>
+												<TextField
+													{...register('frequency')}
+													type="text"
+													placeholder={t('placeholders.frequency')}
+													label={t('frequency')}
+												/>
+												<TextField
+													{...register('duration')}
+													type="text"
+													placeholder={t('placeholders.duration')}
+													label={t('duration')}
+												/>
+											</>
+										)}
+
+										{showWithdrawalFields && (
+											<div className="sm:col-span-2 bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
+												<TextField
+													{...register('withdrawalDays', { valueAsNumber: true })}
+													type="number"
+													placeholder="0"
+													label={t('withdrawalDays')}
+													min="0"
+													className="font-bold text-red-600"
+												/>
+												<p className="text-xs text-gray-500 mt-1">{t('withdrawalDaysHelp')}</p>
+											</div>
+										)}
+									</div>
+								</div>
+							)}
 
 							{/* Physical Measurements Card */}
-							<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
-								<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-									<i className="i-material-symbols-monitor-weight bg-blue-600! w-5! h-5!" />
-									{t('physicalMeasurements')}
-								</h3>
-								<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-									<TextField
-										{...register('weight', { valueAsNumber: true })}
-										type="number"
-										placeholder={`${t('placeholders.weight')} (${farm?.weightUnit})`}
-										label={`${t('weight')} (${farm?.weightUnit})`}
-										onWheel={(e) => e.currentTarget.blur()}
-										error={errors.weight ? getErrorMessage(errors.weight.message || '') : undefined}
-										min="0"
-										step="0.1"
-									/>
-									<TextField
-										{...register('temperature', { valueAsNumber: true })}
-										type="number"
-										placeholder={`${t('placeholders.temperature')} (${farm?.temperatureUnit})`}
-										label={`${t('temperature')} (${farm?.temperatureUnit})`}
-										onWheel={(e) => e.currentTarget.blur()}
-										error={
-											errors.temperature
-												? getErrorMessage(errors.temperature.message || '')
-												: undefined
-										}
-										min="0"
-										step="0.1"
-									/>
+							{showPhysicalFields && (
+								<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
+									<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+										<i className="i-material-symbols-monitor-weight bg-blue-600! w-5! h-5!" />
+										{t('physicalMeasurements')}
+									</h3>
+									<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+										<TextField
+											{...register('weight', { valueAsNumber: true })}
+											type="number"
+											placeholder={`${t('placeholders.weight')} (${farm?.weightUnit})`}
+											label={`${t('weight')} (${farm?.weightUnit})`}
+											onWheel={(e) => e.currentTarget.blur()}
+											error={
+												errors.weight ? getErrorMessage(errors.weight.message || '') : undefined
+											}
+											min="0"
+											step="0.1"
+										/>
+										{!showVaccineFields && (
+											<TextField
+												{...register('temperature', { valueAsNumber: true })}
+												type="number"
+												placeholder={`${t('placeholders.temperature')} (${farm?.temperatureUnit})`}
+												label={`${t('temperature')} (${farm?.temperatureUnit})`}
+												onWheel={(e) => e.currentTarget.blur()}
+												error={
+													errors.temperature
+														? getErrorMessage(errors.temperature.message || '')
+														: undefined
+												}
+												min="0"
+												step="0.1"
+											/>
+										)}
+									</div>
 								</div>
-							</div>
-
-							{/* Medication Details Card */}
-							<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
-								<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-									<i className="i-material-symbols-medication bg-blue-600! w-5! h-5!" />
-									{t('medicationDetails')}
-								</h3>
-								<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-									<TextField
-										{...register('medication')}
-										type="text"
-										placeholder={t('placeholders.medication')}
-										label={t('medication')}
-										error={
-											errors.medication
-												? getErrorMessage(errors.medication.message || '')
-												: undefined
-										}
-									/>
-									<TextField
-										{...register('dosage')}
-										type="text"
-										placeholder={t('placeholders.dosage')}
-										label={t('dosage')}
-										error={errors.dosage ? getErrorMessage(errors.dosage.message || '') : undefined}
-									/>
-									<TextField
-										{...register('frequency')}
-										type="text"
-										placeholder={t('placeholders.frequency')}
-										label={t('frequency')}
-										error={
-											errors.frequency ? getErrorMessage(errors.frequency.message || '') : undefined
-										}
-									/>
-									<TextField
-										{...register('duration')}
-										type="text"
-										placeholder={t('placeholders.duration')}
-										label={t('duration')}
-										error={
-											errors.duration ? getErrorMessage(errors.duration.message || '') : undefined
-										}
-									/>
-								</div>
-							</div>
+							)}
 
 							{/* Notes Card */}
 							<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">

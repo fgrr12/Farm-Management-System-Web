@@ -46,7 +46,8 @@
 		"healthy": "Saludable",
 		"sick": "Enfermo",
 		"sold": "Vendido",
-		"treatment": "Tratamiento"
+		"treatment": "Tratamiento",
+		"withdrawal": "Período de Retiro"
 	},
 	"inFarm": "En Granja",
 	"noAnimals": "No hay animales",

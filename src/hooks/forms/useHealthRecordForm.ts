@@ -19,6 +19,13 @@ const DEFAULT_VALUES: Partial<HealthRecordFormData> = {
 	duration: '',
 	notes: '',
 	status: true,
+	withdrawalDays: undefined,
+	withdrawalEndDate: undefined,
+	administrationRoute: undefined,
+	injectionSite: undefined,
+	batchNumber: '',
+	manufacturer: '',
+	technician: '',
 }
 
 export const useHealthRecordForm = (initialData?: Partial<HealthRecord>) => {
@@ -62,6 +69,14 @@ export const useHealthRecordForm = (initialData?: Partial<HealthRecord>) => {
 			notes: initialData.notes || '',
 			createdBy: initialData.createdBy || '',
 			status: initialData.status ?? true,
+			// New fields
+			withdrawalDays: initialData.withdrawalDays || undefined,
+			withdrawalEndDate: initialData.withdrawalEndDate || undefined,
+			administrationRoute: initialData.administrationRoute || undefined,
+			injectionSite: initialData.injectionSite || undefined,
+			batchNumber: initialData.batchNumber || '',
+			manufacturer: initialData.manufacturer || '',
+			technician: initialData.technician || '',
 		}
 	}, [initialData, formatDateForForm])
 
@@ -89,6 +104,13 @@ export const useHealthRecordForm = (initialData?: Partial<HealthRecord>) => {
 			duration: data.duration,
 			notes: data.notes,
 			status: data.status ?? true,
+			withdrawalDays: data.withdrawalDays,
+			withdrawalEndDate: data.withdrawalEndDate,
+			administrationRoute: data.administrationRoute,
+			injectionSite: data.injectionSite,
+			batchNumber: data.batchNumber,
+			manufacturer: data.manufacturer,
+			technician: data.technician,
 		}
 	}, [])
 
@@ -125,6 +147,14 @@ export const useHealthRecordForm = (initialData?: Partial<HealthRecord>) => {
 				notes: data.notes || '',
 				createdBy: data.createdBy || '',
 				status: data.status ?? true,
+				// New fields
+				withdrawalDays: data.withdrawalDays || undefined,
+				withdrawalEndDate: data.withdrawalEndDate || undefined,
+				administrationRoute: data.administrationRoute || undefined,
+				injectionSite: data.injectionSite || undefined,
+				batchNumber: data.batchNumber || '',
+				manufacturer: data.manufacturer || '',
+				technician: data.technician || '',
 			}
 
 			form.reset(formattedData)

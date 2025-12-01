@@ -16,6 +16,9 @@ export const healthRecordSchema = z.object({
 			'Deworming',
 			'Birth',
 			'Drying',
+			'HoofCare',
+			'Castration',
+			'Dehorning',
 		],
 		{
 			message: 'healthRecord.validation.typeRequired',
@@ -41,6 +44,16 @@ export const healthRecordSchema = z.object({
 	animalUuid: z.string().optional(),
 	createdBy: z.string().optional(),
 	status: z.boolean().optional(),
+	// New fields
+	withdrawalDays: z.number().optional(),
+	withdrawalEndDate: z.string().optional(),
+	administrationRoute: z
+		.enum(['IM', 'SC', 'Oral', 'Topical', 'Intramammary', 'IV', 'Intrauterine', 'Other'])
+		.optional(),
+	injectionSite: z.enum(['Neck', 'Rump', 'Leg', 'Ear', 'Flank', 'Tail', 'Other']).optional(),
+	batchNumber: z.string().optional(),
+	manufacturer: z.string().optional(),
+	technician: z.string().optional(),
 })
 
 export type HealthRecordFormData = z.infer<typeof healthRecordSchema>
