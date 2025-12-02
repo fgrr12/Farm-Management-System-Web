@@ -28,7 +28,7 @@ import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 const DetailItem = memo(({ label, value }: { label: string; value: React.ReactNode }) => (
 	<div className="bg-gray-50 rounded-lg p-2 sm:p-3 border border-gray-200">
 		<dt className="text-xs sm:text-sm font-medium text-gray-500 mb-1">{label}</dt>
-		<dd className="text-sm sm:text-lg font-semibold text-gray-900 flex items-center gap-2 break-words">
+		<dd className="text-sm sm:text-lg font-semibold text-gray-900 flex items-center gap-2 wrap-break-word">
 			{value}
 		</dd>
 	</div>

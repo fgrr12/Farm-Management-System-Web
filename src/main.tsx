@@ -7,8 +7,10 @@ import '@/index.css'
 import 'virtual:uno.css'
 import './i18n'
 
+import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { persistQueryClient } from '@tanstack/react-query-persist-client'
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -19,6 +21,13 @@ const queryClient = new QueryClient({
 			refetchOnWindowFocus: false,
 		},
 	},
+})
+
+persistQueryClient({
+	queryClient,
+	persister: createAsyncStoragePersister({
+		storage: window.localStorage,
+	}),
 })
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

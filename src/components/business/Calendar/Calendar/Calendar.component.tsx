@@ -10,7 +10,15 @@ dayjs.locale('es')
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useCalendar } from '@/hooks/calendar/useCalendar'
+import { useFarmStore } from '@/store/useFarmStore'
+import { useUserStore } from '@/store/useUserStore'
+
+import {
+	useCalendarEvents,
+	useCreateCalendarEvent,
+	useDeleteCalendarEvent,
+	useUpdateCalendarEvent,
+} from '@/hooks/queries/useCalendarEvents'
 
 import { CalendarEvent as CalendarEventComponent } from '../CalendarEvent'
 import { CalendarEventModal } from '../CalendarEventModal'
@@ -18,6 +26,11 @@ import { CalendarFilters } from '../CalendarFilters'
 
 export const Calendar = memo(() => {
 	const { t } = useTranslation(['calendar'])
+	const { user } = useUserStore()
+	const { farm } = useFarmStore()
+
+	// State
+	const [currentMonth, setCurrentMonth] = useState<dayjs.Dayjs>(dayjs())
 	const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(null)
 	const [showEventModal, setShowEventModal] = useState(false)
 	const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null)
@@ -27,20 +40,22 @@ export const Calendar = memo(() => {
 	const [isAnimating, setIsAnimating] = useState(false)
 	const calendarRef = useRef<HTMLDivElement>(null)
 
-	const {
-		events,
-		loading,
-		error,
-		createEvent,
-		updateEvent,
-		deleteEvent,
-		currentMonth,
-		goToNextMonth,
-		goToPreviousMonth,
-		goToToday: hookGoToToday,
-	} = useCalendar()
+	// Queries
+	const startOfMonth = currentMonth.startOf('month').format('YYYY-MM-DD')
+	const endOfMonth = currentMonth.endOf('month').format('YYYY-MM-DD')
 
-	// Use currentMonth from hook instead of local state
+	const {
+		data: events = [],
+		isLoading: loading,
+		error,
+	} = useCalendarEvents(startOfMonth, endOfMonth)
+
+	// Mutations
+	const createEventMutation = useCreateCalendarEvent()
+	const updateEventMutation = useUpdateCalendarEvent()
+	const deleteEventMutation = useDeleteCalendarEvent()
+
+	// Use currentMonth from local state
 	const currentDate = currentMonth
 
 	// Generar días según el modo de vista
@@ -101,6 +116,20 @@ export const Calendar = memo(() => {
 		},
 		[visibleEvents]
 	)
+
+	// Navigation Helpers
+	const goToNextMonth = useCallback(() => {
+		setCurrentMonth((prev) => prev.add(1, 'month'))
+	}, [])
+
+	const goToPreviousMonth = useCallback(() => {
+		setCurrentMonth((prev) => prev.subtract(1, 'month'))
+	}, [])
+
+	const goToTodayHelper = useCallback(() => {
+		const today = dayjs()
+		setCurrentMonth(today)
+	}, [])
 
 	// Navegación del calendario con animación
 	const navigateCalendar = useCallback(
@@ -174,7 +203,7 @@ export const Calendar = memo(() => {
 			if (shouldUpdate) {
 				setIsAnimating(true)
 				setTimeout(() => {
-					hookGoToToday()
+					goToTodayHelper()
 					setSelectedDate(null)
 					setIsAnimating(false)
 				}, 150)
@@ -185,13 +214,13 @@ export const Calendar = memo(() => {
 			setTimeout(() => {
 				// Si hoy está en un mes diferente, cambiar el mes
 				if (!today.isSame(currentMonth, 'month')) {
-					hookGoToToday()
+					goToTodayHelper()
 				}
 				setSelectedDate(today)
 				setIsAnimating(false)
 			}, 150)
 		}
-	}, [currentDate, currentMonth, viewMode, hookGoToToday])
+	}, [currentDate, currentMonth, viewMode, goToTodayHelper])
 
 	// Manejo de eventos mejorado
 	const handleDayClick = useCallback((day: dayjs.Dayjs) => {
@@ -216,8 +245,13 @@ export const Calendar = memo(() => {
 		async (
 			eventData: Omit<CalendarEvent, 'uuid' | 'createdAt' | 'farmUuid' | 'updatedAt' | 'createdBy'>
 		) => {
+			if (!user?.uuid) return
+
 			try {
-				await createEvent(eventData)
+				await createEventMutation.mutateAsync({
+					eventData,
+					userUuid: user.uuid,
+				})
 				setShowEventModal(false)
 				setSelectedEvent(null)
 				setSelectedDate(null)
@@ -225,13 +259,18 @@ export const Calendar = memo(() => {
 				console.error('Error creating event:', error)
 			}
 		},
-		[createEvent]
+		[createEventMutation, user?.uuid]
 	)
 
 	const handleUpdateEvent = useCallback(
 		async (eventData: CalendarEvent) => {
+			if (!user?.uuid) return
+
 			try {
-				await updateEvent(eventData.uuid, eventData)
+				await updateEventMutation.mutateAsync({
+					eventData,
+					userUuid: user.uuid,
+				})
 				setShowEventModal(false)
 				setSelectedEvent(null)
 				setSelectedDate(null)
@@ -239,13 +278,18 @@ export const Calendar = memo(() => {
 				console.error('Error updating event:', error)
 			}
 		},
-		[updateEvent]
+		[updateEventMutation, user?.uuid]
 	)
 
 	const handleDeleteEvent = useCallback(
 		async (eventId: string) => {
+			if (!user?.uuid) return
+
 			try {
-				await deleteEvent(eventId)
+				await deleteEventMutation.mutateAsync({
+					eventUuid: eventId,
+					userUuid: user.uuid,
+				})
 				setShowEventModal(false)
 				setSelectedEvent(null)
 				setSelectedDate(null)
@@ -253,7 +297,7 @@ export const Calendar = memo(() => {
 				console.error('Error deleting event:', error)
 			}
 		},
-		[deleteEvent]
+		[deleteEventMutation, user?.uuid]
 	)
 
 	// Obtener el estilo visual para un día
@@ -457,10 +501,9 @@ export const Calendar = memo(() => {
 									onClick={() => setViewMode(mode)}
 									className={`
 										px-3 py-1.5 text-sm font-medium rounded-md transition-all duration-200
-										${
-											viewMode === mode
-												? 'bg-linear-to-r from-blue-600 to-purple-600 text-white shadow-md'
-												: 'text-gray-600 dark:text-gray-300 hover:bg-linear-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/30 dark:hover:to-purple-900/30'
+										${viewMode === mode
+											? 'bg-linear-to-r from-blue-600 to-purple-600 text-white shadow-md'
+											: 'text-gray-600 dark:text-gray-300 hover:bg-linear-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/30 dark:hover:to-purple-900/30'
 										}
 									`}
 								>
@@ -553,12 +596,11 @@ export const Calendar = memo(() => {
 									<span
 										className={`
 											inline-flex items-center justify-center text-sm font-semibold min-w-[1.5rem] h-6
-											${
-												isToday
-													? 'bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-md'
-													: isCurrentPeriod
-														? 'text-gray-900 dark:text-white hover:bg-linear-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 rounded-full transition-all duration-200'
-														: 'text-gray-400 dark:text-gray-500'
+											${isToday
+												? 'bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-md'
+												: isCurrentPeriod
+													? 'text-gray-900 dark:text-white hover:bg-linear-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 rounded-full transition-all duration-200'
+													: 'text-gray-400 dark:text-gray-500'
 											}
 										`}
 									>
