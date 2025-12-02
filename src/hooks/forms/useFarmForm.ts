@@ -18,21 +18,24 @@ const DEFAULT_VALUES: Partial<FarmFormData> = {
 export const useFarmForm = (initialData?: Partial<Farm>) => {
 	const { t } = useTranslation(['myAccount'])
 
+	const mapToFormData = useCallback((data: Partial<Farm>): Partial<FarmFormData> => {
+		return {
+			uuid: data.uuid || '',
+			name: data.name || '',
+			address: data.address || '',
+			liquidUnit: (data.liquidUnit as 'L' | 'Gal') || 'L',
+			weightUnit: (data.weightUnit as 'Kg' | 'P') || 'Kg',
+			temperatureUnit: (data.temperatureUnit as '°C' | '°F') || '°C',
+			language: (data.language as 'eng' | 'spa') || 'eng',
+			taxDetailsUuid: data.taxDetailsUuid || '',
+			status: data.status ?? true,
+		}
+	}, [])
+
 	const getDefaultValues = useCallback((): Partial<FarmFormData> => {
 		if (!initialData) return DEFAULT_VALUES
-
-		return {
-			uuid: initialData.uuid || '',
-			name: initialData.name || '',
-			address: initialData.address || '',
-			liquidUnit: (initialData.liquidUnit as 'L' | 'Gal') || 'L',
-			weightUnit: (initialData.weightUnit as 'Kg' | 'P') || 'Kg',
-			temperatureUnit: (initialData.temperatureUnit as '°C' | '°F') || '°C',
-			language: (initialData.language as 'eng' | 'spa') || 'eng',
-			taxDetailsUuid: initialData.taxDetailsUuid || '',
-			status: initialData.status ?? true,
-		}
-	}, [initialData])
+		return mapToFormData(initialData)
+	}, [initialData, mapToFormData])
 
 	const form = useForm<FarmFormData>({
 		resolver: zodResolver(farmSchema),
@@ -67,26 +70,10 @@ export const useFarmForm = (initialData?: Partial<Farm>) => {
 
 	const resetWithData = useCallback(
 		(data?: Partial<Farm>) => {
-			if (!data) {
-				form.reset(DEFAULT_VALUES)
-				return
-			}
-
-			const formattedData: Partial<FarmFormData> = {
-				uuid: data.uuid || '',
-				name: data.name || '',
-				address: data.address || '',
-				liquidUnit: (data.liquidUnit as 'L' | 'Gal') || 'L',
-				weightUnit: (data.weightUnit as 'Kg' | 'P') || 'Kg',
-				temperatureUnit: (data.temperatureUnit as '°C' | '°F') || '°C',
-				language: (data.language as 'eng' | 'spa') || 'eng',
-				taxDetailsUuid: data.taxDetailsUuid || '',
-				status: data.status ?? true,
-			}
-
-			form.reset(formattedData)
+			const values = data ? mapToFormData(data) : DEFAULT_VALUES
+			form.reset(values)
 		},
-		[form]
+		[form, mapToFormData]
 	)
 
 	return {

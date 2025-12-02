@@ -13,17 +13,20 @@ const DEFAULT_VALUES: Partial<BreedFormData> = {
 export const useBreedForm = (initialData?: Partial<Breed>) => {
 	const { t } = useTranslation(['mySpecies'])
 
+	const mapToFormData = useCallback((data: Partial<Breed>): Partial<BreedFormData> => {
+		return {
+			uuid: data.uuid || '',
+			name: data.name || '',
+			gestationPeriod: data.gestationPeriod || 0,
+			speciesUuid: data.speciesUuid || '',
+			farmUuid: data.farmUuid || '',
+		}
+	}, [])
+
 	const getDefaultValues = useCallback((): Partial<BreedFormData> => {
 		if (!initialData) return DEFAULT_VALUES
-
-		return {
-			uuid: initialData.uuid || '',
-			name: initialData.name || '',
-			gestationPeriod: initialData.gestationPeriod || 0,
-			speciesUuid: initialData.speciesUuid || '',
-			farmUuid: initialData.farmUuid || '',
-		}
-	}, [initialData])
+		return mapToFormData(initialData)
+	}, [initialData, mapToFormData])
 
 	const form = useForm<BreedFormData>({
 		resolver: zodResolver(breedSchema),
@@ -54,22 +57,10 @@ export const useBreedForm = (initialData?: Partial<Breed>) => {
 
 	const resetWithData = useCallback(
 		(data?: Partial<Breed>) => {
-			if (!data) {
-				form.reset(DEFAULT_VALUES)
-				return
-			}
-
-			const formattedData: Partial<BreedFormData> = {
-				uuid: data.uuid || '',
-				name: data.name || '',
-				gestationPeriod: data.gestationPeriod || 0,
-				speciesUuid: data.speciesUuid || '',
-				farmUuid: data.farmUuid || '',
-			}
-
-			form.reset(formattedData)
+			const values = data ? mapToFormData(data) : DEFAULT_VALUES
+			form.reset(values)
 		},
-		[form]
+		[form, mapToFormData]
 	)
 
 	return {

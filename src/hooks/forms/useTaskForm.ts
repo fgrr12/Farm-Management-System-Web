@@ -18,21 +18,24 @@ const DEFAULT_VALUES: Partial<TaskFormData> = {
 export const useTaskForm = (initialData?: Partial<Task>) => {
 	const { t } = useTranslation(['taskForm'])
 
+	const mapToFormData = useCallback((data: Partial<Task>): Partial<TaskFormData> => {
+		return {
+			uuid: data.uuid || '',
+			title: data.title || '',
+			description: data.description || '',
+			priority: data.priority || undefined,
+			speciesUuid: data.speciesUuid || '',
+			status: (data.status === 'overdue' ? 'todo' : data.status) || 'todo',
+			farmUuid: data.farmUuid || '',
+			dueDate: data.dueDate || '',
+			assignedTo: data.assignedTo || '',
+		}
+	}, [])
+
 	const getDefaultValues = useCallback((): Partial<TaskFormData> => {
 		if (!initialData) return DEFAULT_VALUES
-
-		return {
-			uuid: initialData.uuid || '',
-			title: initialData.title || '',
-			description: initialData.description || '',
-			priority: initialData.priority || undefined,
-			speciesUuid: initialData.speciesUuid || '',
-			status: (initialData.status === 'overdue' ? 'todo' : initialData.status) || 'todo',
-			farmUuid: initialData.farmUuid || '',
-			dueDate: initialData.dueDate || '',
-			assignedTo: initialData.assignedTo || '',
-		}
-	}, [initialData])
+		return mapToFormData(initialData)
+	}, [initialData, mapToFormData])
 
 	const form = useForm<TaskFormData>({
 		resolver: zodResolver(taskSchema),
@@ -67,10 +70,10 @@ export const useTaskForm = (initialData?: Partial<Task>) => {
 
 	const resetWithData = useCallback(
 		(data?: Partial<Task>) => {
-			const newDefaults = data ? getDefaultValues() : DEFAULT_VALUES
-			form.reset(newDefaults)
+			const values = data ? mapToFormData(data) : DEFAULT_VALUES
+			form.reset(values)
 		},
-		[form, getDefaultValues]
+		[form, mapToFormData]
 	)
 
 	return {

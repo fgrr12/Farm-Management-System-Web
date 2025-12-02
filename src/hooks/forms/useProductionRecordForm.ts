@@ -4,6 +4,8 @@ import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { formatDateForForm } from '@/utils/date'
+
 import { type ProductionRecordFormData, productionRecordSchema } from '@/schemas'
 
 const DEFAULT_VALUES: Partial<ProductionRecordFormData> = {
@@ -16,35 +18,24 @@ const DEFAULT_VALUES: Partial<ProductionRecordFormData> = {
 export const useProductionRecordForm = (initialData?: Partial<ProductionRecord>) => {
 	const { t } = useTranslation(['productionRecordForm'])
 
-	const formatDateForForm = useCallback((dateValue: string | Date | null | undefined): string => {
-		if (!dateValue) return dayjs().format('YYYY-MM-DD')
-
-		try {
-			if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
-				return dateValue
+	const mapToFormData = useCallback(
+		(data: Partial<ProductionRecord>): Partial<ProductionRecordFormData> => {
+			return {
+				uuid: data.uuid || '',
+				animalUuid: data.animalUuid || '',
+				quantity: data.quantity || 0,
+				date: formatDateForForm(data.date) || dayjs().format('YYYY-MM-DD'),
+				notes: data.notes || '',
+				status: data.status ?? true,
 			}
-
-			const date = new Date(dateValue)
-			if (Number.isNaN(date.getTime())) return dayjs().format('YYYY-MM-DD')
-
-			return dayjs(date).format('YYYY-MM-DD')
-		} catch {
-			return dayjs().format('YYYY-MM-DD')
-		}
-	}, [])
+		},
+		[]
+	)
 
 	const getDefaultValues = useCallback((): Partial<ProductionRecordFormData> => {
 		if (!initialData) return DEFAULT_VALUES
-
-		return {
-			uuid: initialData.uuid || '',
-			animalUuid: initialData.animalUuid || '',
-			quantity: initialData.quantity || 0,
-			date: formatDateForForm(initialData.date),
-			notes: initialData.notes || '',
-			status: initialData.status ?? true,
-		}
-	}, [initialData, formatDateForForm])
+		return mapToFormData(initialData)
+	}, [initialData, mapToFormData])
 
 	const form = useForm<ProductionRecordFormData>({
 		resolver: zodResolver(productionRecordSchema),
@@ -76,23 +67,10 @@ export const useProductionRecordForm = (initialData?: Partial<ProductionRecord>)
 
 	const resetWithData = useCallback(
 		(data?: Partial<ProductionRecord>) => {
-			if (!data) {
-				form.reset(DEFAULT_VALUES)
-				return
-			}
-
-			const formattedData: Partial<ProductionRecordFormData> = {
-				uuid: data.uuid || '',
-				animalUuid: data.animalUuid || '',
-				quantity: data.quantity || 0,
-				date: formatDateForForm(data.date),
-				notes: data.notes || '',
-				status: data.status ?? true,
-			}
-
-			form.reset(formattedData)
+			const values = data ? mapToFormData(data) : DEFAULT_VALUES
+			form.reset(values)
 		},
-		[form, formatDateForForm]
+		[form, mapToFormData]
 	)
 
 	return {

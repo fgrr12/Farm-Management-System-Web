@@ -12,15 +12,18 @@ const DEFAULT_VALUES: Partial<SpeciesFormData> = {
 export const useSpeciesForm = (initialData?: Partial<Species>) => {
 	const { t } = useTranslation(['mySpecies'])
 
+	const mapToFormData = useCallback((data: Partial<Species>): Partial<SpeciesFormData> => {
+		return {
+			uuid: data.uuid || '',
+			name: data.name || '',
+			farmUuid: data.farmUuid || '',
+		}
+	}, [])
+
 	const getDefaultValues = useCallback((): Partial<SpeciesFormData> => {
 		if (!initialData) return DEFAULT_VALUES
-
-		return {
-			uuid: initialData.uuid || '',
-			name: initialData.name || '',
-			farmUuid: initialData.farmUuid || '',
-		}
-	}, [initialData])
+		return mapToFormData(initialData)
+	}, [initialData, mapToFormData])
 
 	const form = useForm<SpeciesFormData>({
 		resolver: zodResolver(speciesSchema),
@@ -49,20 +52,10 @@ export const useSpeciesForm = (initialData?: Partial<Species>) => {
 
 	const resetWithData = useCallback(
 		(data?: Partial<Species>) => {
-			if (!data) {
-				form.reset(DEFAULT_VALUES)
-				return
-			}
-
-			const formattedData: Partial<SpeciesFormData> = {
-				uuid: data.uuid || '',
-				name: data.name || '',
-				farmUuid: data.farmUuid || '',
-			}
-
-			form.reset(formattedData)
+			const values = data ? mapToFormData(data) : DEFAULT_VALUES
+			form.reset(values)
 		},
-		[form]
+		[form, mapToFormData]
 	)
 
 	return {

@@ -18,22 +18,25 @@ const DEFAULT_VALUES: Partial<UserFormData> = {
 export const useUserForm = (initialData?: Partial<User>) => {
 	const { t } = useTranslation(['myAccount'])
 
+	const mapToFormData = useCallback((data: Partial<User>): Partial<UserFormData> => {
+		return {
+			uuid: data.uuid || '',
+			name: data.name || '',
+			lastName: data.lastName || '',
+			email: data.email || '',
+			phone: data.phone || '',
+			language: (data.language as 'spa' | 'eng') || 'spa',
+			role: (data.role as Role) || 'employee',
+			status: data.status ?? true,
+			photoUrl: data.photoUrl || '',
+			farmUuid: data.farmUuid || '',
+		}
+	}, [])
+
 	const getDefaultValues = useCallback((): Partial<UserFormData> => {
 		if (!initialData) return DEFAULT_VALUES
-
-		return {
-			uuid: initialData.uuid || '',
-			name: initialData.name || '',
-			lastName: initialData.lastName || '',
-			email: initialData.email || '',
-			phone: initialData.phone || '',
-			language: (initialData.language as 'spa' | 'eng') || 'spa',
-			role: (initialData.role as Role) || 'employee',
-			status: initialData.status ?? true,
-			photoUrl: initialData.photoUrl || '',
-			farmUuid: initialData.farmUuid || '',
-		}
-	}, [initialData])
+		return mapToFormData(initialData)
+	}, [initialData, mapToFormData])
 
 	const form = useForm<UserFormData>({
 		resolver: zodResolver(userSchema),
@@ -69,27 +72,10 @@ export const useUserForm = (initialData?: Partial<User>) => {
 
 	const resetWithData = useCallback(
 		(data?: Partial<User>) => {
-			if (!data) {
-				form.reset(DEFAULT_VALUES)
-				return
-			}
-
-			const formattedData: Partial<UserFormData> = {
-				uuid: data.uuid || '',
-				name: data.name || '',
-				lastName: data.lastName || '',
-				email: data.email || '',
-				phone: data.phone || '',
-				language: (data.language as 'spa' | 'eng') || 'spa',
-				role: (data.role as 'employee' | 'owner' | 'admin') || 'employee',
-				status: data.status ?? true,
-				photoUrl: data.photoUrl || '',
-				farmUuid: data.farmUuid || '',
-			}
-
-			form.reset(formattedData)
+			const values = data ? mapToFormData(data) : DEFAULT_VALUES
+			form.reset(values)
 		},
-		[form]
+		[form, mapToFormData]
 	)
 
 	return {

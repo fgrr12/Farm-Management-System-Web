@@ -19,22 +19,23 @@ const DEFAULT_VALUES: TaxDetailsFormData = {
 export const useTaxDetailsForm = (initialData?: Partial<TaxDetails>) => {
 	const { t } = useTranslation('taxDetails')
 
-	const getDefaultValues = useCallback((): TaxDetailsFormData => {
-		if (!initialData) {
-			return DEFAULT_VALUES
-		}
-
+	const mapToFormData = useCallback((data: Partial<TaxDetails>): TaxDetailsFormData => {
 		return {
-			uuid: initialData.uuid || '',
-			id: initialData.id || '',
-			name: initialData.name || '',
-			email: initialData.email || '',
-			phone: initialData.phone || '',
-			address: initialData.address || '',
-			activities: initialData.activities || [],
-			status: initialData.status ?? false,
+			uuid: data.uuid || '',
+			id: data.id || '',
+			name: data.name || '',
+			email: data.email || '',
+			phone: data.phone || '',
+			address: data.address || '',
+			activities: data.activities || [],
+			status: data.status ?? false,
 		}
-	}, [initialData])
+	}, [])
+
+	const getDefaultValues = useCallback((): TaxDetailsFormData => {
+		if (!initialData) return DEFAULT_VALUES
+		return mapToFormData(initialData)
+	}, [initialData, mapToFormData])
 
 	const form = useForm<TaxDetailsFormData>({
 		resolver: zodResolver(taxDetailsSchema),
@@ -68,25 +69,10 @@ export const useTaxDetailsForm = (initialData?: Partial<TaxDetails>) => {
 
 	const resetWithData = useCallback(
 		(data?: Partial<TaxDetails>) => {
-			if (!data) {
-				form.reset(DEFAULT_VALUES)
-				return
-			}
-
-			const formattedData: Partial<TaxDetailsFormData> = {
-				uuid: data.uuid || '',
-				id: data.id || '',
-				name: data.name || '',
-				email: data.email || '',
-				phone: data.phone || '',
-				address: data.address || '',
-				activities: data.activities || [],
-				status: data.status ?? false,
-			}
-
-			form.reset(formattedData)
+			const values = data ? mapToFormData(data) : DEFAULT_VALUES
+			form.reset(values)
 		},
-		[form]
+		[form, mapToFormData]
 	)
 
 	return {
