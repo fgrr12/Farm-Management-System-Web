@@ -10,7 +10,6 @@ dayjs.locale('es')
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
 import {
@@ -27,7 +26,6 @@ import { CalendarFilters } from '../CalendarFilters'
 export const Calendar = memo(() => {
 	const { t } = useTranslation(['calendar'])
 	const { user } = useUserStore()
-	const { farm } = useFarmStore()
 
 	// State
 	const [currentMonth, setCurrentMonth] = useState<dayjs.Dayjs>(dayjs())
@@ -501,9 +499,10 @@ export const Calendar = memo(() => {
 									onClick={() => setViewMode(mode)}
 									className={`
 										px-3 py-1.5 text-sm font-medium rounded-md transition-all duration-200
-										${viewMode === mode
-											? 'bg-linear-to-r from-blue-600 to-purple-600 text-white shadow-md'
-											: 'text-gray-600 dark:text-gray-300 hover:bg-linear-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/30 dark:hover:to-purple-900/30'
+										${
+											viewMode === mode
+												? 'bg-linear-to-r from-blue-600 to-purple-600 text-white shadow-md'
+												: 'text-gray-600 dark:text-gray-300 hover:bg-linear-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/30 dark:hover:to-purple-900/30'
 										}
 									`}
 								>
@@ -596,11 +595,12 @@ export const Calendar = memo(() => {
 									<span
 										className={`
 											inline-flex items-center justify-center text-sm font-semibold min-w-[1.5rem] h-6
-											${isToday
-												? 'bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-md'
-												: isCurrentPeriod
-													? 'text-gray-900 dark:text-white hover:bg-linear-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 rounded-full transition-all duration-200'
-													: 'text-gray-400 dark:text-gray-500'
+											${
+												isToday
+													? 'bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-md'
+													: isCurrentPeriod
+														? 'text-gray-900 dark:text-white hover:bg-linear-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 rounded-full transition-all duration-200'
+														: 'text-gray-400 dark:text-gray-500'
 											}
 										`}
 									>
