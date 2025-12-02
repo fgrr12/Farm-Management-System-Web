@@ -7,28 +7,41 @@ import { useNavigate } from 'react-router-dom'
 import { AppRoutes } from '@/config/constants/routes'
 
 import { useFarmStore } from '@/store/useFarmStore'
-import { useUserStore } from '@/store/useUserStore'
-
-import { AnimalsService } from '@/services/animals'
 
 import { AnimalCard } from '@/components/business/Animals/AnimalCard'
 import { AnimalFilters } from '@/components/business/Animals/AnimalFilters'
 import { Button } from '@/components/ui/Button'
 
+import { useAnimals } from '@/hooks/queries/useAnimals'
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
-import type { AnimalCardProps, AnimalsFilters } from './Animals.types'
+import type { AnimalsFilters } from './Animals.types'
 
 const Animals = () => {
-	const { user } = useUserStore()
-	const { farm, species, breeds } = useFarmStore()
+	const { species, breeds } = useFarmStore()
 	const navigation = useNavigate()
 	const { t } = useTranslation(['animals'])
-	const { setPageTitle, withLoadingAndError } = usePagePerformance()
+	const { setPageTitle } = usePagePerformance()
 	const containerRef = useRef<HTMLDivElement>(null)
 
-	const [animals, setAnimals] = useState<AnimalCardProps[]>([])
+	const { data: dbAnimals, isLoading } = useAnimals()
 	const [filters, setFilters] = useState(INITIAL_FILTERS)
+
+	const animals = useMemo(() => {
+		if (!dbAnimals) return []
+
+		return dbAnimals.map((animal) => {
+			const speciesName = species.find((sp) => sp.uuid === animal.speciesUuid)?.name || ''
+			const breedName = breeds.find((br) => br.uuid === animal.breedUuid)?.name || ''
+
+			return {
+				...animal,
+				speciesName,
+				breedName,
+				healthStatus: animal.healthStatus,
+			}
+		})
+	}, [dbAnimals, species, breeds])
 
 	const filteredAnimals = useMemo(() => {
 		if (!animals.length) return []
@@ -72,37 +85,9 @@ const Animals = () => {
 		navigation(AppRoutes.ADD_ANIMAL)
 	}, [navigation])
 
-	const getAnimals = useCallback(async () => {
-		await withLoadingAndError(async () => {
-			if (!farm?.uuid) return []
-
-			const dbAnimals = await AnimalsService.getAnimals(farm.uuid)
-
-			const enrichedAnimals: AnimalCardProps[] = dbAnimals.map((animal) => {
-				const speciesName = species.find((sp) => sp.uuid === animal.speciesUuid)?.name || ''
-				const breedName = breeds.find((br) => br.uuid === animal.breedUuid)?.name || ''
-
-				return {
-					...animal,
-					speciesName,
-					breedName,
-					healthStatus: animal.healthStatus,
-				}
-			})
-
-			setAnimals(enrichedAnimals)
-			return enrichedAnimals
-		}, t('toast.errorGettingAnimals'))
-	}, [farm?.uuid, species, breeds, withLoadingAndError, t])
-
 	useEffect(() => {
 		setPageTitle(t('title'))
 	}, [setPageTitle, t])
-
-	useEffect(() => {
-		if (!user || !farm) return
-		getAnimals()
-	}, [user, farm, getAnimals])
 
 	useGSAP(() => {
 		if (!filteredAnimals.length) return
@@ -227,26 +212,32 @@ const Animals = () => {
 						<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden border border-gray-100 dark:border-gray-700">
 							{/* Animals Grid */}
 							<div className="p-4 sm:p-6">
-								<div
-									ref={containerRef}
-									className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6"
-									id="animals-grid"
-									role="list"
-									aria-label={t('accessibility.animalsGrid', { count: filteredAnimals.length })}
-								>
-									{filteredAnimals.map((animal) => (
-										<div key={animal.uuid} role="listitem" className="animal-card">
-											<AnimalCard
-												animal={animal}
-												aria-label={t('accessibility.animalCardLabel', {
-													animalId: animal.animalId,
-													breedName: animal.breedName,
-													gender: animal.gender,
-												})}
-											/>
-										</div>
-									))}
-								</div>
+								{isLoading ? (
+									<div className="flex justify-center py-12">
+										<div className="loading loading-spinner loading-lg text-primary" />
+									</div>
+								) : (
+									<div
+										ref={containerRef}
+										className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6"
+										id="animals-grid"
+										role="list"
+										aria-label={t('accessibility.animalsGrid', { count: filteredAnimals.length })}
+									>
+										{filteredAnimals.map((animal) => (
+											<div key={animal.uuid} role="listitem" className="animal-card">
+												<AnimalCard
+													animal={animal}
+													aria-label={t('accessibility.animalCardLabel', {
+														animalId: animal.animalId,
+														breedName: animal.breedName,
+														gender: animal.gender,
+													})}
+												/>
+											</div>
+										))}
+									</div>
+								)}
 							</div>
 						</div>
 					) : (

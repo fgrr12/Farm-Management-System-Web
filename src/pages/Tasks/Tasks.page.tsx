@@ -8,13 +8,12 @@ import { AppRoutes } from '@/config/constants/routes'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
-import { TasksService } from '@/services/tasks'
-
 import { TaskColumn } from '@/components/business/Tasks/TaskColumn'
 import { TaskFilters } from '@/components/business/Tasks/TaskFilters'
 import { TaskModal } from '@/components/business/Tasks/TaskModal'
 import { Button } from '@/components/ui/Button'
 
+import { useTasks, useUpdateTask } from '@/hooks/queries/useTasks'
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 import type { TaskColumnInfo, TaskColumns, TaskFilters as TaskFiltersType } from './Tasks.types'
@@ -26,10 +25,26 @@ const Tasks = () => {
 	const { t } = useTranslation(['tasks'])
 	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
 
-	const [taskColumns, setTaskColumns] = useState<TaskColumns>(INITIAL_TASK_COLUMNS)
 	const [filters, setFilters] = useState<TaskFiltersType>(INITIAL_FILTERS)
 	const [selectedTask, setSelectedTask] = useState<Task | null>(null)
 	const [isModalOpen, setIsModalOpen] = useState(false)
+
+	const { data: tasks, isLoading } = useTasks({
+		farmUuid: farm?.uuid || '',
+		search: '',
+		status: '',
+		priority: filters.priority,
+		speciesUuid: filters.speciesUuid,
+	})
+
+	const updateTask = useUpdateTask()
+
+	// Group tasks by status
+	const taskColumns: TaskColumns = {
+		todo: tasks?.filter((task) => task.status === 'todo') || [],
+		'in-progress': tasks?.filter((task) => task.status === 'in-progress') || [],
+		done: tasks?.filter((task) => task.status === 'done') || [],
+	}
 
 	const handleAddTask = useCallback(() => {
 		navigate(AppRoutes.ADD_TASK)
@@ -49,38 +64,18 @@ const Tasks = () => {
 		setSelectedTask(null)
 	}, [])
 
-	const getTasks = useCallback(async () => {
-		await withLoadingAndError(async () => {
-			if (!farm?.uuid) return
-
-			const { priority, speciesUuid } = filters
-			const farmUuid = farm.uuid
-			const tasks = await TasksService.getTasks({
-				search: '', // No global search, each column has its own
-				status: '', // Get all statuses for kanban
-				priority,
-				speciesUuid,
-				farmUuid,
-			})
-
-			// Group tasks by status (only show active columns)
-			const groupedTasks: TaskColumns = {
-				todo: tasks.filter((task) => task.status === 'todo'),
-				'in-progress': tasks.filter((task) => task.status === 'in-progress'),
-				done: tasks.filter((task) => task.status === 'done'),
-			}
-
-			setTaskColumns(groupedTasks)
-		}, t('toast.errorGettingTasks'))
-	}, [farm?.uuid, filters, withLoadingAndError, t])
-
 	const handleTaskMove = useCallback(
 		async (taskId: string, fromStatus: TaskStatus, toStatus: TaskStatus) => {
 			if (fromStatus === toStatus) return
 
 			await withLoadingAndError(async () => {
-				await TasksService.updateTaskStatus(taskId, toStatus, user!.uuid, farm!.uuid)
-				await getTasks()
+				const task = tasks?.find((t) => t.uuid === taskId)
+				if (!task || !user) return
+
+				await updateTask.mutateAsync({
+					task: { ...task, status: toStatus },
+					userUuid: user.uuid,
+				})
 
 				showToast(
 					t('toast.taskMoved', {
@@ -90,7 +85,7 @@ const Tasks = () => {
 				)
 			}, t('toast.errorUpdatingTaskStatus'))
 		},
-		[farm, user, getTasks, showToast, t, withLoadingAndError]
+		[tasks, user, updateTask, showToast, t, withLoadingAndError]
 	)
 
 	// Drag and drop monitor
@@ -110,12 +105,6 @@ const Tasks = () => {
 			},
 		})
 	}, [handleTaskMove])
-
-	//biome-ignore lint: only the required
-	useEffect(() => {
-		if (!user) return
-		getTasks()
-	}, [user, filters.priority, filters.speciesUuid, getTasks])
 
 	useEffect(() => {
 		setPageTitle(t('title'))
@@ -199,19 +188,25 @@ const Tasks = () => {
 				{/* Kanban Board */}
 				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden">
 					<main id="kanban-board" className="p-4 sm:p-6">
-						<div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 min-h-[600px]">
-							{COLUMN_CONFIG.map((column) => (
-								<TaskColumn
-									key={column.id}
-									status={column.id}
-									title={t(`status.${column.id}`)}
-									tasks={taskColumns[column.id]}
-									color={column.color}
-									bgColor={column.bgColor}
-									onTaskClick={handleTaskClick}
-								/>
-							))}
-						</div>
+						{isLoading ? (
+							<div className="flex justify-center py-12">
+								<div className="loading loading-spinner loading-lg text-primary" />
+							</div>
+						) : (
+							<div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 min-h-[600px]">
+								{COLUMN_CONFIG.map((column) => (
+									<TaskColumn
+										key={column.id}
+										status={column.id}
+										title={t(`status.${column.id}`)}
+										tasks={taskColumns[column.id]}
+										color={column.color}
+										bgColor={column.bgColor}
+										onTaskClick={handleTaskClick}
+									/>
+								))}
+							</div>
+						)}
 					</main>
 				</div>
 			</div>
@@ -220,12 +215,6 @@ const Tasks = () => {
 			<TaskModal task={selectedTask} isOpen={isModalOpen} onClose={handleCloseModal} />
 		</div>
 	)
-}
-
-const INITIAL_TASK_COLUMNS: TaskColumns = {
-	todo: [],
-	'in-progress': [],
-	done: [],
 }
 
 const INITIAL_FILTERS: TaskFiltersType = {

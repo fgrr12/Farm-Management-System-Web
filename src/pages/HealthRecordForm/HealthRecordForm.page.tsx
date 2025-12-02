@@ -9,8 +9,6 @@ import { AppRoutes } from '@/config/constants/routes'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
-import { HealthRecordsService } from '@/services/healthRecords'
-
 import { DatePicker } from '@/components/layout/DatePicker'
 import { Button } from '@/components/ui/Button'
 import type { CustomSelectOption } from '@/components/ui/CustomSelect'
@@ -19,6 +17,11 @@ import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
 import { useHealthRecordForm } from '@/hooks/forms/useHealthRecordForm'
+import {
+	useCreateHealthRecord,
+	useHealthRecord,
+	useUpdateHealthRecord,
+} from '@/hooks/queries/useHealthRecords'
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 import type { HealthRecordFormData } from '@/schemas'
@@ -30,6 +33,13 @@ const HealthRecordForm = () => {
 	const params = useParams()
 	const { t } = useTranslation(['healthRecordForm'])
 	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
+
+	const healthRecordUuid = params.healthRecordUuid
+	const { data: healthRecord, isLoading: isLoadingHealthRecord } = useHealthRecord(
+		healthRecordUuid || ''
+	)
+	const createHealthRecord = useCreateHealthRecord()
+	const updateHealthRecord = useUpdateHealthRecord()
 
 	const form = useHealthRecordForm()
 	const {
@@ -117,14 +127,23 @@ const HealthRecordForm = () => {
 			if (!user) return
 
 			await withLoadingAndError(async () => {
-				const healthRecordData = transformToApiFormat(data)
+				const healthRecordData = {
+					...transformToApiFormat(data),
+					farmUuid: farm!.uuid,
+				}
 				const healthRecordUuid = params.healthRecordUuid
 
 				if (healthRecordUuid) {
-					await HealthRecordsService.updateHealthRecord(healthRecordData, user.uuid, farm!.uuid)
+					await updateHealthRecord.mutateAsync({
+						healthRecord: healthRecordData,
+						userUuid: user.uuid,
+					})
 					showToast(t('toast.edited'), 'success')
 				} else {
-					await HealthRecordsService.setHealthRecord(healthRecordData, user.uuid, farm!.uuid)
+					await createHealthRecord.mutateAsync({
+						healthRecord: healthRecordData,
+						userUuid: user.uuid,
+					})
 					showToast(t('toast.added'), 'success')
 				}
 
@@ -134,35 +153,29 @@ const HealthRecordForm = () => {
 		},
 		[
 			user,
-			farm,
 			params.healthRecordUuid,
 			transformToApiFormat,
 			withLoadingAndError,
 			showToast,
 			t,
 			navigate,
+			createHealthRecord,
+			updateHealthRecord,
+			farm,
 		]
 	)
 
-	const getHealthRecord = useCallback(async () => {
-		await withLoadingAndError(async () => {
-			if (!params.healthRecordUuid) return null
-
-			const healthRecordUuid = params.healthRecordUuid
-			const healthRecord = await HealthRecordsService.getHealthRecord(healthRecordUuid)
+	useEffect(() => {
+		if (healthRecord) {
 			resetWithData(healthRecord)
-			return healthRecord
-		}, t('toast.errorGettingHealthRecord'))
-	}, [params.healthRecordUuid, withLoadingAndError, t, resetWithData])
+		}
+	}, [healthRecord, resetWithData])
 
 	useEffect(() => {
 		if (!user) return
 		const animalUuid = params.animalUuid
 		setValue('animalUuid', animalUuid || '')
-		if (params.healthRecordUuid) {
-			getHealthRecord()
-		}
-	}, [user, params.animalUuid, params.healthRecordUuid, getHealthRecord, setValue])
+	}, [user, params.animalUuid, setValue])
 
 	useEffect(() => {
 		setPageTitle(params.healthRecordUuid ? t('editHealthRecordTitle') : t('addHealthRecordTitle'))
@@ -199,304 +212,314 @@ const HealthRecordForm = () => {
 
 				{/* Form Container */}
 				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden border border-gray-100 dark:border-gray-700">
-					<form
-						id="health-record-form"
-						className="p-4 sm:p-6 lg:p-8"
-						onSubmit={handleSubmit(onSubmit)}
-						autoComplete="off"
-						aria-labelledby="form-heading"
-						noValidate
-					>
-						<h2 id="form-heading" className="sr-only">
-							{params.healthRecordUuid
-								? t('accessibility.editHealthRecordForm')
-								: t('accessibility.addHealthRecordForm')}
-						</h2>
+					{isLoadingHealthRecord ? (
+						<div className="flex justify-center py-12">
+							<div className="loading loading-spinner loading-lg text-primary" />
+						</div>
+					) : (
+						<form
+							id="health-record-form"
+							className="p-4 sm:p-6 lg:p-8"
+							onSubmit={handleSubmit(onSubmit)}
+							autoComplete="off"
+							aria-labelledby="form-heading"
+							noValidate
+						>
+							<h2 id="form-heading" className="sr-only">
+								{params.healthRecordUuid
+									? t('accessibility.editHealthRecordForm')
+									: t('accessibility.addHealthRecordForm')}
+							</h2>
 
-						<div className="space-y-6">
-							{/* Basic Information Card */}
-							<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
-								<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-									<i className="i-material-symbols-info bg-blue-600! w-5! h-5!" />
-									{t('basicInformation')}
-								</h3>
-								<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-									<Controller
-										name="type"
-										control={control}
-										render={({ field }) => (
-											<CustomSelect
-												label={t('selectType')}
-												placeholder={t('placeholders.selectType')}
-												value={field.value}
-												onChange={field.onChange}
-												options={healthRecordTypes}
-												required
-												error={errors.type ? getErrorMessage(errors.type.message || '') : undefined}
-											/>
-										)}
-									/>
-									<Controller
-										name="date"
-										control={control}
-										render={({ field }) => (
-											<DatePicker
-												legend={t('date')}
-												label={t('date')}
-												date={dayjs(field.value)}
-												onDateChange={(date) => {
-													field.onChange(dayjs(date).format('YYYY-MM-DD'))
-												}}
-												error={errors.date ? getErrorMessage(errors.date.message || '') : undefined}
-											/>
-										)}
-									/>
-									<div className="sm:col-span-2">
-										<TextField
-											{...register('reason')}
-											type="text"
-											placeholder={t('placeholders.reason')}
-											label={reasonLabel}
-											required
-											error={
-												errors.reason ? getErrorMessage(errors.reason.message || '') : undefined
-											}
-										/>
-									</div>
-									<TextField
-										{...register('reviewedBy')}
-										type="text"
-										placeholder={t('placeholders.reviewedBy')}
-										label={t('reviewedBy')}
-										required
-										error={
-											errors.reviewedBy
-												? getErrorMessage(errors.reviewedBy.message || '')
-												: undefined
-										}
-									/>
-									{showVaccineFields && (
-										<TextField
-											{...register('technician')}
-											type="text"
-											placeholder={t('placeholders.technician')}
-											label={t('technician')}
-										/>
-									)}
-								</div>
-							</div>
-
-							{/* Withdrawal Period Alert */}
-							{withdrawalEndDate && (
-								<div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 sm:p-6 animate-fade-in">
-									<div className="flex items-start gap-3">
-										<i className="i-material-symbols-warning bg-red-600! w-6! h-6! shrink-0 mt-1" />
-										<div>
-											<h3 className="text-lg font-bold text-red-800 dark:text-red-200">
-												{t('withdrawalPeriodActive')}
-											</h3>
-											<p className="text-red-700 dark:text-red-300 mt-1">
-												{t('withdrawalWarning', {
-													date: dayjs(withdrawalEndDate).format('DD/MM/YYYY'),
-												})}
-											</p>
-											<p className="text-sm text-red-600 dark:text-red-400 mt-2 font-medium">
-												⚠️ {t('doNotSellOrMilk')}
-											</p>
-										</div>
-									</div>
-								</div>
-							)}
-
-							{/* Treatment & Withdrawal Card */}
-							{(showMedicationFields || showWithdrawalFields || showVaccineFields) && (
+							<div className="space-y-6">
+								{/* Basic Information Card */}
 								<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
 									<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-										<i className="i-material-symbols-medication bg-blue-600! w-5! h-5!" />
-										{showVaccineFields ? t('vaccinationDetails') : t('treatmentDetails')}
+										<i className="i-material-symbols-info bg-blue-600! w-5! h-5!" />
+										{t('basicInformation')}
 									</h3>
 									<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+										<Controller
+											name="type"
+											control={control}
+											render={({ field }) => (
+												<CustomSelect
+													label={t('selectType')}
+													placeholder={t('placeholders.selectType')}
+													value={field.value}
+													onChange={field.onChange}
+													options={healthRecordTypes}
+													required
+													error={
+														errors.type ? getErrorMessage(errors.type.message || '') : undefined
+													}
+												/>
+											)}
+										/>
+										<Controller
+											name="date"
+											control={control}
+											render={({ field }) => (
+												<DatePicker
+													legend={t('date')}
+													label={t('date')}
+													date={dayjs(field.value)}
+													onDateChange={(date) => {
+														field.onChange(dayjs(date).format('YYYY-MM-DD'))
+													}}
+													error={
+														errors.date ? getErrorMessage(errors.date.message || '') : undefined
+													}
+												/>
+											)}
+										/>
+										<div className="sm:col-span-2">
+											<TextField
+												{...register('reason')}
+												type="text"
+												placeholder={t('placeholders.reason')}
+												label={reasonLabel}
+												required
+												error={
+													errors.reason ? getErrorMessage(errors.reason.message || '') : undefined
+												}
+											/>
+										</div>
 										<TextField
-											{...register('medication')}
+											{...register('reviewedBy')}
 											type="text"
-											placeholder={
-												showVaccineFields
-													? t('placeholders.vaccineName')
-													: t('placeholders.medication')
-											}
-											label={showVaccineFields ? t('vaccineName') : t('medication')}
+											placeholder={t('placeholders.reviewedBy')}
+											label={t('reviewedBy')}
+											required
 											error={
-												errors.medication
-													? getErrorMessage(errors.medication.message || '')
+												errors.reviewedBy
+													? getErrorMessage(errors.reviewedBy.message || '')
 													: undefined
 											}
 										/>
-										<TextField
-											{...register('dosage')}
-											type="text"
-											placeholder={t('placeholders.dosage')}
-											label={t('dosage')}
-											error={
-												errors.dosage ? getErrorMessage(errors.dosage.message || '') : undefined
-											}
-										/>
-
 										{showVaccineFields && (
-											<>
-												<TextField
-													{...register('batchNumber')}
-													type="text"
-													placeholder={t('placeholders.batchNumber')}
-													label={t('batchNumber')}
-												/>
-												<TextField
-													{...register('manufacturer')}
-													type="text"
-													placeholder={t('placeholders.manufacturer')}
-													label={t('manufacturer')}
-												/>
-											</>
-										)}
-
-										{(showMedicationFields || showWithdrawalFields) && (
-											<>
-												<Controller
-													name="administrationRoute"
-													control={control}
-													render={({ field }) => (
-														<CustomSelect
-															label={t('administrationRoute')}
-															placeholder={t('placeholders.selectRoute')}
-															value={field.value}
-															onChange={field.onChange}
-															options={administrationRoutes}
-														/>
-													)}
-												/>
-												<Controller
-													name="injectionSite"
-													control={control}
-													render={({ field }) => (
-														<CustomSelect
-															label={t('injectionSite')}
-															placeholder={t('placeholders.selectSite')}
-															value={field.value}
-															onChange={field.onChange}
-															options={injectionSites}
-														/>
-													)}
-												/>
-												<TextField
-													{...register('frequency')}
-													type="text"
-													placeholder={t('placeholders.frequency')}
-													label={t('frequency')}
-												/>
-												<TextField
-													{...register('duration')}
-													type="text"
-													placeholder={t('placeholders.duration')}
-													label={t('duration')}
-												/>
-											</>
-										)}
-
-										{showWithdrawalFields && (
-											<div className="sm:col-span-2 bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
-												<TextField
-													{...register('withdrawalDays', { valueAsNumber: true })}
-													type="number"
-													placeholder="0"
-													label={t('withdrawalDays')}
-													min="0"
-													className="font-bold text-red-600"
-												/>
-												<p className="text-xs text-gray-500 mt-1">{t('withdrawalDaysHelp')}</p>
-											</div>
+											<TextField
+												{...register('technician')}
+												type="text"
+												placeholder={t('placeholders.technician')}
+												label={t('technician')}
+											/>
 										)}
 									</div>
 								</div>
-							)}
 
-							{/* Physical Measurements Card */}
-							{showPhysicalFields && (
-								<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
-									<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-										<i className="i-material-symbols-monitor-weight bg-blue-600! w-5! h-5!" />
-										{t('physicalMeasurements')}
-									</h3>
-									<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-										<TextField
-											{...register('weight', { valueAsNumber: true })}
-											type="number"
-											placeholder={`${t('placeholders.weight')} (${farm?.weightUnit})`}
-											label={`${t('weight')} (${farm?.weightUnit})`}
-											onWheel={(e) => e.currentTarget.blur()}
-											error={
-												errors.weight ? getErrorMessage(errors.weight.message || '') : undefined
-											}
-											min="0"
-											step="0.1"
-										/>
-										{!showVaccineFields && (
+								{/* Withdrawal Period Alert */}
+								{withdrawalEndDate && (
+									<div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 sm:p-6 animate-fade-in">
+										<div className="flex items-start gap-3">
+											<i className="i-material-symbols-warning bg-red-600! w-6! h-6! shrink-0 mt-1" />
+											<div>
+												<h3 className="text-lg font-bold text-red-800 dark:text-red-200">
+													{t('withdrawalPeriodActive')}
+												</h3>
+												<p className="text-red-700 dark:text-red-300 mt-1">
+													{t('withdrawalWarning', {
+														date: dayjs(withdrawalEndDate).format('DD/MM/YYYY'),
+													})}
+												</p>
+												<p className="text-sm text-red-600 dark:text-red-400 mt-2 font-medium">
+													⚠️ {t('doNotSellOrMilk')}
+												</p>
+											</div>
+										</div>
+									</div>
+								)}
+
+								{/* Treatment & Withdrawal Card */}
+								{(showMedicationFields || showWithdrawalFields || showVaccineFields) && (
+									<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
+										<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+											<i className="i-material-symbols-medication bg-blue-600! w-5! h-5!" />
+											{showVaccineFields ? t('vaccinationDetails') : t('treatmentDetails')}
+										</h3>
+										<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 											<TextField
-												{...register('temperature', { valueAsNumber: true })}
+												{...register('medication')}
+												type="text"
+												placeholder={
+													showVaccineFields
+														? t('placeholders.vaccineName')
+														: t('placeholders.medication')
+												}
+												label={showVaccineFields ? t('vaccineName') : t('medication')}
+												error={
+													errors.medication
+														? getErrorMessage(errors.medication.message || '')
+														: undefined
+												}
+											/>
+											<TextField
+												{...register('dosage')}
+												type="text"
+												placeholder={t('placeholders.dosage')}
+												label={t('dosage')}
+												error={
+													errors.dosage ? getErrorMessage(errors.dosage.message || '') : undefined
+												}
+											/>
+
+											{showVaccineFields && (
+												<>
+													<TextField
+														{...register('batchNumber')}
+														type="text"
+														placeholder={t('placeholders.batchNumber')}
+														label={t('batchNumber')}
+													/>
+													<TextField
+														{...register('manufacturer')}
+														type="text"
+														placeholder={t('placeholders.manufacturer')}
+														label={t('manufacturer')}
+													/>
+												</>
+											)}
+
+											{(showMedicationFields || showWithdrawalFields) && (
+												<>
+													<Controller
+														name="administrationRoute"
+														control={control}
+														render={({ field }) => (
+															<CustomSelect
+																label={t('administrationRoute')}
+																placeholder={t('placeholders.selectRoute')}
+																value={field.value}
+																onChange={field.onChange}
+																options={administrationRoutes}
+															/>
+														)}
+													/>
+													<Controller
+														name="injectionSite"
+														control={control}
+														render={({ field }) => (
+															<CustomSelect
+																label={t('injectionSite')}
+																placeholder={t('placeholders.selectSite')}
+																value={field.value}
+																onChange={field.onChange}
+																options={injectionSites}
+															/>
+														)}
+													/>
+													<TextField
+														{...register('frequency')}
+														type="text"
+														placeholder={t('placeholders.frequency')}
+														label={t('frequency')}
+													/>
+													<TextField
+														{...register('duration')}
+														type="text"
+														placeholder={t('placeholders.duration')}
+														label={t('duration')}
+													/>
+												</>
+											)}
+
+											{showWithdrawalFields && (
+												<div className="sm:col-span-2 bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
+													<TextField
+														{...register('withdrawalDays', { valueAsNumber: true })}
+														type="number"
+														placeholder="0"
+														label={t('withdrawalDays')}
+														min="0"
+														className="font-bold text-red-600"
+													/>
+													<p className="text-xs text-gray-500 mt-1">{t('withdrawalDaysHelp')}</p>
+												</div>
+											)}
+										</div>
+									</div>
+								)}
+
+								{/* Physical Measurements Card */}
+								{showPhysicalFields && (
+									<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
+										<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+											<i className="i-material-symbols-monitor-weight bg-blue-600! w-5! h-5!" />
+											{t('physicalMeasurements')}
+										</h3>
+										<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+											<TextField
+												{...register('weight', { valueAsNumber: true })}
 												type="number"
-												placeholder={`${t('placeholders.temperature')} (${farm?.temperatureUnit})`}
-												label={`${t('temperature')} (${farm?.temperatureUnit})`}
+												placeholder={`${t('placeholders.weight')} (${farm?.weightUnit})`}
+												label={`${t('weight')} (${farm?.weightUnit})`}
 												onWheel={(e) => e.currentTarget.blur()}
 												error={
-													errors.temperature
-														? getErrorMessage(errors.temperature.message || '')
-														: undefined
+													errors.weight ? getErrorMessage(errors.weight.message || '') : undefined
 												}
 												min="0"
 												step="0.1"
 											/>
-										)}
+											{!showVaccineFields && (
+												<TextField
+													{...register('temperature', { valueAsNumber: true })}
+													type="number"
+													placeholder={`${t('placeholders.temperature')} (${farm?.temperatureUnit})`}
+													label={`${t('temperature')} (${farm?.temperatureUnit})`}
+													onWheel={(e) => e.currentTarget.blur()}
+													error={
+														errors.temperature
+															? getErrorMessage(errors.temperature.message || '')
+															: undefined
+													}
+													min="0"
+													step="0.1"
+												/>
+											)}
+										</div>
 									</div>
-								</div>
-							)}
-
-							{/* Notes Card */}
-							<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
-								<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-									<i className="i-material-symbols-notes bg-blue-600! w-5! h-5!" />
-									{t('additionalNotes')}
-								</h3>
-								<Textarea
-									{...register('notes')}
-									placeholder={t('placeholders.notes')}
-									label={t('notes')}
-									required
-									error={errors.notes ? getErrorMessage(errors.notes.message || '') : undefined}
-								/>
-							</div>
-						</div>
-
-						{/* Submit Button */}
-						<div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-600">
-							<Button
-								type="submit"
-								disabled={isSubmitting}
-								className="btn btn-primary h-12 w-full text-lg disabled:loading flex items-center justify-center gap-2"
-							>
-								{isSubmitting ? (
-									<>
-										<i className="i-material-symbols-hourglass-empty bg-white! w-5! h-5! animate-spin" />
-										{t('common:loading')}
-									</>
-								) : (
-									<>
-										<i
-											className={`${params.healthRecordUuid ? 'i-material-symbols-edit' : 'i-material-symbols-add'} bg-white! w-5! h-5!`}
-										/>
-										{params.healthRecordUuid ? t('editButton') : t('addButton')}
-									</>
 								)}
-							</Button>
-						</div>
-					</form>
+
+								{/* Notes Card */}
+								<div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
+									<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+										<i className="i-material-symbols-notes bg-blue-600! w-5! h-5!" />
+										{t('additionalNotes')}
+									</h3>
+									<Textarea
+										{...register('notes')}
+										placeholder={t('placeholders.notes')}
+										label={t('notes')}
+										required
+										error={errors.notes ? getErrorMessage(errors.notes.message || '') : undefined}
+									/>
+								</div>
+							</div>
+
+							{/* Submit Button */}
+							<div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-600">
+								<Button
+									type="submit"
+									disabled={isSubmitting}
+									className="btn btn-primary h-12 w-full text-lg disabled:loading flex items-center justify-center gap-2"
+								>
+									{isSubmitting ? (
+										<>
+											<i className="i-material-symbols-hourglass-empty bg-white! w-5! h-5! animate-spin" />
+											{t('common:loading')}
+										</>
+									) : (
+										<>
+											<i
+												className={`${params.healthRecordUuid ? 'i-material-symbols-edit' : 'i-material-symbols-add'} bg-white! w-5! h-5!`}
+											/>
+											{params.healthRecordUuid ? t('editButton') : t('addButton')}
+										</>
+									)}
+								</Button>
+							</div>
+						</form>
+					)}
 				</div>
 			</div>
 		</div>

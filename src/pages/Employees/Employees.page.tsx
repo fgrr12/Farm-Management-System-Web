@@ -6,24 +6,26 @@ import { AppRoutes } from '@/config/constants/routes'
 
 import { useFarmStore } from '@/store/useFarmStore'
 
-import { EmployeesService } from '@/services/employees'
-
 import { EmployeesTable } from '@/components/business/Employees/EmployeesTable'
 import { Button } from '@/components/ui/Button'
 import { Search } from '@/components/ui/Search'
 
+import { useDeleteEmployee, useEmployees } from '@/hooks/queries/useEmployees'
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 const Employees = () => {
 	const { farm } = useFarmStore()
 	const navigate = useNavigate()
 	const { t } = useTranslation(['employees'])
-	const { setPageTitle, withLoadingAndError } = usePagePerformance()
+	const { setPageTitle } = usePagePerformance()
 
-	const [employees, setEmployees] = useState<User[]>([])
 	const [search, setSearch] = useState('')
 
+	const { data: employees, isLoading } = useEmployees(farm?.uuid || '')
+	const deleteEmployee = useDeleteEmployee()
+
 	const filteredEmployees = useMemo(() => {
+		if (!employees) return []
 		return employees.filter(
 			(employee) =>
 				employee.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -40,26 +42,6 @@ const Employees = () => {
 	const handleDebounceSearch = useCallback((event: ChangeEvent<HTMLInputElement>) => {
 		setSearch(event.target.value)
 	}, [])
-
-	const handleRemoveEmployee = useCallback(
-		(employeeUuid: string) => async () => {
-			setEmployees(employees.filter((employee) => employee.uuid !== employeeUuid))
-		},
-		[employees]
-	)
-
-	const initialData = useCallback(async () => {
-		await withLoadingAndError(async () => {
-			const data = await EmployeesService.getEmployees(farm!.uuid)
-			setEmployees(data)
-			return data
-		}, t('toast.errorGettingEmployees'))
-	}, [farm, withLoadingAndError, t])
-
-	useEffect(() => {
-		if (!farm) return
-		initialData()
-	}, [farm, initialData])
 
 	useEffect(() => {
 		setPageTitle(t('title'))
@@ -95,7 +77,7 @@ const Employees = () => {
 						<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 							<div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 text-center">
 								<div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-									{employees.length}
+									{employees?.length || 0}
 								</div>
 								<div className="text-sm text-blue-600 dark:text-blue-400">
 									{t('totalEmployees')}
@@ -111,7 +93,7 @@ const Employees = () => {
 							</div>
 							<div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 text-center">
 								<div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-									{employees.filter((emp) => emp.role === 'owner').length}
+									{employees?.filter((emp) => emp.role === 'owner').length || 0}
 								</div>
 								<div className="text-sm text-purple-600 dark:text-purple-400">{t('owners')}</div>
 							</div>
@@ -162,11 +144,21 @@ const Employees = () => {
 							{t('accessibility.results')})
 						</h2>
 						<div id="employees-table">
-							<EmployeesTable
-								employees={filteredEmployees}
-								removeEmployee={handleRemoveEmployee}
-								aria-label={t('accessibility.employeesTable', { count: filteredEmployees.length })}
-							/>
+							{isLoading ? (
+								<div className="flex justify-center py-12">
+									<div className="loading loading-spinner loading-lg text-primary" />
+								</div>
+							) : (
+								<EmployeesTable
+									employees={filteredEmployees}
+									removeEmployee={(uuid) => async () => {
+										await deleteEmployee.mutateAsync({ employeeUuid: uuid, userUuid: farm!.uuid })
+									}}
+									aria-label={t('accessibility.employeesTable', {
+										count: filteredEmployees.length,
+									})}
+								/>
+							)}
 						</div>
 					</section>
 				</div>

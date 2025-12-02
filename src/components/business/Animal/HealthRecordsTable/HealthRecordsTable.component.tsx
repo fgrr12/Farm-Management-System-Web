@@ -326,7 +326,8 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 									</td>
 									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
 										<span
-											className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${healthRecord.type === 'Checkup'
+											className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+												healthRecord.type === 'Checkup'
 													? 'bg-sky-100 text-sky-800 dark:bg-sky-900 dark:text-sky-200 dark:border dark:border-sky-700'
 													: healthRecord.type === 'Vaccination'
 														? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200 dark:border dark:border-emerald-700'
@@ -349,7 +350,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 																						: healthRecord.type === 'Dehorning'
 																							? 'bg-lime-100 text-lime-800 dark:bg-lime-900 dark:text-lime-200 dark:border dark:border-lime-700'
 																							: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 dark:border dark:border-gray-600'
-												}`}
+											}`}
 										>
 											{t(`healthRecordType.${healthRecord.type.toLowerCase()}`)}
 										</span>

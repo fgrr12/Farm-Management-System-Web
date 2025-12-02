@@ -9,7 +9,6 @@ import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
-import { AnimalsService } from '@/services/animals'
 import { EmployeesService } from '@/services/employees'
 
 import { HealthRecordsTable } from '@/components/business/Animal/HealthRecordsTable'
@@ -17,6 +16,13 @@ import { ProductionRecordsTable } from '@/components/business/Animal/ProductionR
 import { RelatedAnimalsTable } from '@/components/business/Animal/RelatedAnimalsTable'
 import { ActionButton } from '@/components/ui/ActionButton'
 
+import { useAnimal } from '@/hooks/queries/useAnimals'
+import { useDeleteHealthRecord, useHealthRecords } from '@/hooks/queries/useHealthRecords'
+import {
+	useDeleteProductionRecord,
+	useProductionRecords,
+} from '@/hooks/queries/useProductionRecords'
+import { useDeleteRelatedAnimal, useRelatedAnimals } from '@/hooks/queries/useRelatedAnimals'
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 const DetailItem = memo(({ label, value }: { label: string; value: React.ReactNode }) => (
@@ -45,30 +51,46 @@ const Animal = () => {
 
 	const { defaultModalData, setModalData } = useAppStore()
 	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
-	const [animal, setAnimal] = useState(ANIMAL_INITIAL_STATE)
+
+	const animalUuid = params.animalUuid || ''
+	const { data: animal, isLoading: isLoadingAnimal } = useAnimal(animalUuid)
+	const { data: healthRecords, isLoading: isLoadingHealth } = useHealthRecords(animalUuid)
+	const { data: productionRecords, isLoading: isLoadingProduction } =
+		useProductionRecords(animalUuid)
+	const { data: relatedAnimals, isLoading: isLoadingRelated } = useRelatedAnimals(animalUuid)
+
+	const deleteHealthRecord = useDeleteHealthRecord()
+	const deleteProductionRecord = useDeleteProductionRecord()
+	const deleteRelatedAnimal = useDeleteRelatedAnimal()
+
 	const [employees, setEmployees] = useState<User[]>([])
 	const [activeTab, setActiveTab] = useState<
 		'healthRecords' | 'productionRecords' | 'relatedAnimals'
 	>('healthRecords')
 
 	const { specie, breed } = useMemo(() => {
+		if (!animal) return { specie: undefined, breed: undefined }
 		return {
 			specie: species.find((sp) => sp.uuid === animal.speciesUuid),
 			breed: breeds.find((br) => br.uuid === animal.breedUuid),
 		}
-	}, [breeds, animal.breedUuid, animal.speciesUuid, species])
+	}, [breeds, animal, species])
 
 	const handleEditAnimal = useCallback(() => {
+		if (!animal) return
 		navigate(AppRoutes.EDIT_ANIMAL.replace(':animalUuid', animal.uuid))
-	}, [navigate, animal.uuid])
+	}, [navigate, animal])
 
 	const handleRemoveAnimal = useCallback(async () => {
+		if (!animal) return
 		setModalData({
 			open: true,
 			title: t('modal.removeAnimal.title'),
 			message: t('modal.removeAnimal.message'),
 			onAccept: async () => {
+				// TODO: Migrate to mutation
 				await withLoadingAndError(async () => {
+					const { AnimalsService } = await import('@/services/animals')
 					await AnimalsService.updateAnimalStatus(animal.uuid, user!.uuid)
 					setModalData(defaultModalData)
 					showToast(t('toast.deleted'), 'success')
@@ -80,92 +102,63 @@ const Animal = () => {
 				showToast(t('toast.notDeleted'), 'info')
 			},
 		})
-	}, [
-		animal.uuid,
-		user,
-		t,
-		setModalData,
-		defaultModalData,
-		withLoadingAndError,
-		showToast,
-		navigate,
-	])
+	}, [animal, user, t, setModalData, defaultModalData, withLoadingAndError, showToast, navigate])
 
 	const handleRemoveRelation = useCallback(
-		(uuid: string) => {
-			const updateParents = animal.relatedAnimals!.parents.filter(
-				(related) => related.uuid !== uuid
-			)
-			const updateChildren = animal.relatedAnimals!.children.filter(
-				(related) => related.uuid !== uuid
-			)
-			setAnimal((prev) => ({
-				...prev,
-				relatedAnimals: { parents: updateParents, children: updateChildren },
-			}))
+		async (uuid: string) => {
+			if (!user) return
+			await deleteRelatedAnimal.mutateAsync({ relationUuid: uuid, userUuid: user.uuid })
+			showToast(t('toast.relationDeleted'), 'success')
 		},
-		[animal.relatedAnimals]
+		[user, deleteRelatedAnimal, showToast, t]
 	)
 
 	const handleRemoveHealthRecord = useCallback(
-		(uuid: string) => {
-			const updateHealthRecords = animal.healthRecords!.filter((record) => record.uuid !== uuid)
-			setAnimal((prev) => ({ ...prev, healthRecords: updateHealthRecords }))
+		async (uuid: string) => {
+			if (!user) return
+			await deleteHealthRecord.mutateAsync({ healthRecordUuid: uuid, userUuid: user.uuid })
+			showToast(t('toast.healthRecordDeleted'), 'success')
 		},
-		[animal.healthRecords]
+		[user, deleteHealthRecord, showToast, t]
 	)
 
 	const handleRemoveProductionRecord = useCallback(
-		(uuid: string) => {
-			const updateProductionRecords = animal.productionRecords!.filter(
-				(record) => record.uuid !== uuid
-			)
-			setAnimal((prev) => ({ ...prev, productionRecords: updateProductionRecords }))
+		async (uuid: string) => {
+			if (!user) return
+			await deleteProductionRecord.mutateAsync({ productionRecordUuid: uuid, userUuid: user.uuid })
+			showToast(t('toast.productionRecordDeleted'), 'success')
 		},
-		[animal.productionRecords]
+		[user, deleteProductionRecord, showToast, t]
 	)
 
-	const getHealthRecords = useCallback(async () => {
-		if (activeTab === 'healthRecords') return
-		setActiveTab('healthRecords')
-	}, [activeTab])
+	const handleTabChange = useCallback((tab: typeof activeTab) => {
+		setActiveTab(tab)
+	}, [])
 
-	const getProductionRecords = useCallback(async () => {
-		if (activeTab === 'productionRecords') return
-		setActiveTab('productionRecords')
-	}, [activeTab])
-
-	const getRelatedAnimals = useCallback(async () => {
-		if (activeTab === 'relatedAnimals') return
-		setActiveTab('relatedAnimals')
-	}, [activeTab])
-
-	const getInitialData = useCallback(async () => {
-		await withLoadingAndError(async () => {
-			const animalUuid = params.animalUuid as string
-
-			const dbAnimal = await AnimalsService.loadAnimalWithDetails(animalUuid!)
-
-			if (!farm) {
-				await useFarmStore.getState().loadFarmDataPublic(dbAnimal.farmUuid)
-			}
-
+	useEffect(() => {
+		const loadEmployees = async () => {
 			if (user && farm) {
 				setEmployees(await EmployeesService.getEmployees(farm.uuid))
 			}
+		}
+		loadEmployees()
+	}, [user, farm])
 
-			setPageTitle(`Animal ${dbAnimal.animalId}`)
-			setAnimal(dbAnimal)
-
-			return dbAnimal
-		}, t('toast.errorGettingAnimal'))
-	}, [params.animalUuid, farm, user, setPageTitle, withLoadingAndError, t])
-
-	// biome-ignore lint: UseEffect is only called by farm and params.animalUuid
 	useEffect(() => {
-		setPageTitle('Animal')
-		getInitialData()
-	}, [params.animalUuid, farm, getInitialData, setPageTitle])
+		if (animal) {
+			setPageTitle(`Animal ${animal.animalId}`)
+		}
+	}, [animal, setPageTitle])
+
+	if (isLoadingAnimal) {
+		return (
+			<div className="flex items-center justify-center min-h-screen">
+				<div className="loading loading-spinner loading-lg text-primary" />
+			</div>
+		)
+	}
+
+	if (!animal) return null
 
 	return (
 		<div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
@@ -315,21 +308,21 @@ const Animal = () => {
 								{
 									key: 'healthRecords',
 									label: t('healthRecords'),
-									onClick: getHealthRecords,
+									onClick: () => handleTabChange('healthRecords'),
 									icon: 'i-material-symbols-light-health-metrics-rounded',
 									color: 'emerald',
 								},
 								{
 									key: 'productionRecords',
 									label: t('productionRecords'),
-									onClick: getProductionRecords,
+									onClick: () => handleTabChange('productionRecords'),
 									icon: 'i-icon-park-outline-milk',
 									color: 'blue',
 								},
 								{
 									key: 'relatedAnimals',
 									label: t('relatedAnimals'),
-									onClick: getRelatedAnimals,
+									onClick: () => handleTabChange('relatedAnimals'),
 									icon: 'i-tabler-circles-relation',
 									color: 'yellow',
 								},
@@ -365,41 +358,61 @@ const Animal = () => {
 					<div className="p-4 sm:p-6">
 						{activeTab === 'healthRecords' && (
 							<div className="space-y-6">
-								<HealthRecordsTable
-									haveUser={!!user}
-									farm={farm}
-									healthRecords={animal?.healthRecords || []}
-									employees={employees}
-									removeHealthRecord={handleRemoveHealthRecord}
-								/>
+								{isLoadingHealth ? (
+									<div className="flex justify-center py-8">
+										<div className="loading loading-spinner loading-md text-emerald-500" />
+									</div>
+								) : (
+									<HealthRecordsTable
+										haveUser={!!user}
+										farm={farm}
+										healthRecords={healthRecords || []}
+										employees={employees}
+										removeHealthRecord={handleRemoveHealthRecord}
+									/>
+								)}
 							</div>
 						)}
 						{activeTab === 'productionRecords' && (
 							<div className="space-y-6">
-								<ProductionRecordsTable
-									productionRecords={animal?.productionRecords || []}
-									haveUser={!!user}
-									farm={farm}
-									removeProductionRecord={handleRemoveProductionRecord}
-								/>
+								{isLoadingProduction ? (
+									<div className="flex justify-center py-8">
+										<div className="loading loading-spinner loading-md text-blue-500" />
+									</div>
+								) : (
+									<ProductionRecordsTable
+										productionRecords={productionRecords || []}
+										haveUser={!!user}
+										farm={farm}
+										removeProductionRecord={handleRemoveProductionRecord}
+									/>
+								)}
 							</div>
 						)}
 						{activeTab === 'relatedAnimals' && (
 							<div className="space-y-8">
-								<RelatedAnimalsTable
-									title={t('parentsTitle')}
-									animals={animal?.relatedAnimals?.parents || []}
-									haveUser={!!user}
-									type="parent"
-									removeRelation={handleRemoveRelation}
-								/>
-								<RelatedAnimalsTable
-									title={t('childrenTitle')}
-									animals={animal?.relatedAnimals?.children || []}
-									haveUser={!!user}
-									type="child"
-									removeRelation={handleRemoveRelation}
-								/>
+								{isLoadingRelated ? (
+									<div className="flex justify-center py-8">
+										<div className="loading loading-spinner loading-md text-yellow-500" />
+									</div>
+								) : (
+									<>
+										<RelatedAnimalsTable
+											title={t('parentsTitle')}
+											animals={relatedAnimals?.parents || []}
+											haveUser={!!user}
+											type="parent"
+											removeRelation={handleRemoveRelation}
+										/>
+										<RelatedAnimalsTable
+											title={t('childrenTitle')}
+											animals={relatedAnimals?.children || []}
+											haveUser={!!user}
+											type="child"
+											removeRelation={handleRemoveRelation}
+										/>
+									</>
+								)}
 							</div>
 						)}
 					</div>
@@ -407,31 +420,6 @@ const Animal = () => {
 			</div>
 		</div>
 	)
-}
-
-const ANIMAL_INITIAL_STATE: Animal = {
-	uuid: '',
-	speciesUuid: '',
-	breedUuid: '',
-	farmUuid: '',
-	animalId: '0',
-	gender: 'Male',
-	color: '',
-	weight: 0,
-	picture: '',
-	status: true,
-	origin: '',
-	healthStatus: 'unknown',
-	relatedAnimals: {
-		parents: [],
-		children: [],
-	},
-	healthRecords: [],
-	productionRecords: [],
-	birthDate: undefined,
-	purchaseDate: undefined,
-	soldDate: undefined,
-	deathDate: undefined,
 }
 
 export default memo(Animal)
