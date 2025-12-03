@@ -47,7 +47,39 @@ export const useUpdateTask = () => {
 	return useMutation({
 		mutationFn: ({ task, userUuid }: { task: Task; userUuid: string }) =>
 			TasksService.updateTask(task, userUuid, farm?.uuid || ''),
-		onSuccess: () => {
+
+		// OPTIMISTIC UPDATE: Update UI immediately
+		onMutate: async ({ task }) => {
+			// Cancel any outgoing refetches to avoid overwriting optimistic update
+			await queryClient.cancelQueries({ queryKey: TASKS_KEYS.all })
+
+			// Snapshot all task list queries for rollback
+			const previousQueries: Array<{ queryKey: unknown[]; data: unknown }> = []
+			queryClient.getQueriesData({ queryKey: TASKS_KEYS.all }).forEach(([queryKey, data]) => {
+				previousQueries.push({ queryKey: queryKey as unknown[], data })
+			})
+
+			// Optimistically update all task list caches
+			queryClient.setQueriesData({ queryKey: TASKS_KEYS.all }, (old: Task[] | undefined) => {
+				if (!old || !Array.isArray(old)) return old
+				return old.map((t) => (t.uuid === task.uuid ? { ...t, ...task } : t))
+			})
+
+			// Return context with snapshot for rollback
+			return { previousQueries }
+		},
+
+		// ROLLBACK: If mutation fails, revert to previous state
+		onError: (_err, _variables, context) => {
+			if (context?.previousQueries) {
+				context.previousQueries.forEach(({ queryKey, data }) => {
+					queryClient.setQueryData(queryKey as unknown[], data)
+				})
+			}
+		},
+
+		// SYNC: Always refetch to ensure consistency with server
+		onSettled: () => {
 			queryClient.invalidateQueries({ queryKey: TASKS_KEYS.all })
 		},
 	})
@@ -59,7 +91,39 @@ export const useDeleteTask = () => {
 	return useMutation({
 		mutationFn: ({ taskUuid, userUuid }: { taskUuid: string; userUuid: string }) =>
 			TasksService.deleteTask(taskUuid, userUuid),
-		onSuccess: () => {
+
+		// OPTIMISTIC UPDATE: Remove from UI immediately
+		onMutate: async ({ taskUuid }) => {
+			// Cancel any outgoing refetches
+			await queryClient.cancelQueries({ queryKey: TASKS_KEYS.all })
+
+			// Snapshot all task list queries for rollback
+			const previousQueries: Array<{ queryKey: unknown[]; data: unknown }> = []
+			queryClient.getQueriesData({ queryKey: TASKS_KEYS.all }).forEach(([queryKey, data]) => {
+				previousQueries.push({ queryKey: queryKey as unknown[], data })
+			})
+
+			// Optimistically remove from all task list caches
+			queryClient.setQueriesData({ queryKey: TASKS_KEYS.all }, (old: Task[] | undefined) => {
+				if (!old || !Array.isArray(old)) return old
+				return old.filter((t) => t.uuid !== taskUuid)
+			})
+
+			// Return context with snapshot for rollback
+			return { previousQueries }
+		},
+
+		// ROLLBACK: If mutation fails, restore the deleted task
+		onError: (_err, _variables, context) => {
+			if (context?.previousQueries) {
+				context.previousQueries.forEach(({ queryKey, data }) => {
+					queryClient.setQueryData(queryKey as string[], data)
+				})
+			}
+		},
+
+		// SYNC: Always refetch to ensure consistency with server
+		onSettled: () => {
 			queryClient.invalidateQueries({ queryKey: TASKS_KEYS.all })
 		},
 	})
