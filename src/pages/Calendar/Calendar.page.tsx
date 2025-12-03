@@ -2,6 +2,7 @@ import { memo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Calendar } from '@/components/business/Calendar/Calendar'
+import { PageContainer } from '@/components/layout/PageContainer'
 
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
@@ -14,11 +15,9 @@ const CalendarPage = memo(() => {
 	}, [setPageTitle, t])
 
 	return (
-		<div className="min-h-screen md:min-h-full bg-linear-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-			<div className="max-w-7xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
-				<Calendar />
-			</div>
-		</div>
+		<PageContainer maxWidth="7xl">
+			<Calendar />
+		</PageContainer>
 	)
 })
 

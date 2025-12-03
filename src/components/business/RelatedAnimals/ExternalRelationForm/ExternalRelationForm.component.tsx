@@ -10,8 +10,6 @@ import { useTranslation } from 'react-i18next'
 
 import { useUserStore } from '@/store/useUserStore'
 
-import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
-
 import type { RelatedAnimalInformation } from '@/pages/RelatedAnimalsForm/RelatedAnimalsForm.types'
 
 import { Button } from '@/components/ui/Button'
@@ -49,7 +47,7 @@ export const ExternalRelationForm = forwardRef<ExternalRelationFormRef, External
 
 		const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 			const { name, value } = e.target
-			setRelation({ ...relation, [name]: capitalizeFirstLetter(value) })
+			setRelation({ ...relation, [name]: value })
 		}
 
 		const handleSelectChange = (name: string) => (value: string | number | null) => {
