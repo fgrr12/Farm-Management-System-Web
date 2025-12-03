@@ -352,7 +352,9 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 																							: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 dark:border dark:border-gray-600'
 											}`}
 										>
-											{t(`healthRecordType.${healthRecord.type.toLowerCase()}`)}
+											{healthRecord.type
+												? t(`healthRecordType.${healthRecord.type.toLowerCase()}`)
+												: '-'}
 										</span>
 									</td>
 									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
