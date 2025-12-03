@@ -33,7 +33,64 @@ export const useCreateCalendarEvent = () => {
 			eventData: Omit<CalendarEvent, 'uuid' | 'createdAt' | 'updatedAt' | 'farmUuid' | 'createdBy'>
 			userUuid: string
 		}) => CalendarService.createCalendarEvent(eventData, userUuid, farm?.uuid || ''),
-		onSuccess: () => {
+
+		// OPTIMISTIC UPDATE
+		onMutate: async ({ eventData }) => {
+			// Cancel any outgoing refetches
+			await queryClient.cancelQueries({ queryKey: CALENDAR_KEYS.all })
+
+			// Snapshot the previous value
+			const previousEvents: Array<{ queryKey: unknown[]; data: unknown }> = []
+			queryClient.getQueriesData({ queryKey: CALENDAR_KEYS.all }).forEach(([queryKey, data]) => {
+				previousEvents.push({ queryKey: queryKey as unknown[], data })
+			})
+
+			// Create optimistic event
+			const optimisticEvent: CalendarEvent = {
+				...eventData,
+				uuid: `temp-${Date.now()}`,
+				farmUuid: farm?.uuid || '',
+				createdAt: new Date().toISOString(),
+				updatedAt: new Date().toISOString(),
+				createdBy: 'user-placeholder', // We might not have this easily, but it's okay for display
+			}
+
+			// Optimistically update all calendar queries
+			queryClient.setQueriesData(
+				{ queryKey: CALENDAR_KEYS.all },
+				(old: CalendarEvent[] | undefined) => {
+					if (!old || !Array.isArray(old)) return old
+					return [...old, optimisticEvent]
+				}
+			)
+
+			return { previousEvents, optimisticEvent }
+		},
+
+		// SUCCESS: Replace temporary ID
+		onSuccess: (data, _variables, context) => {
+			if (context?.optimisticEvent && data?.uuid) {
+				queryClient.setQueriesData(
+					{ queryKey: CALENDAR_KEYS.all },
+					(old: CalendarEvent[] | undefined) => {
+						if (!old || !Array.isArray(old)) return old
+						return old.map((e) => (e.uuid === context.optimisticEvent.uuid ? data : e))
+					}
+				)
+			}
+		},
+
+		// ROLLBACK
+		onError: (_err, _variables, context) => {
+			if (context?.previousEvents) {
+				context.previousEvents.forEach(({ queryKey, data }) => {
+					queryClient.setQueryData(queryKey as unknown[], data)
+				})
+			}
+		},
+
+		// SYNC
+		onSettled: () => {
 			queryClient.invalidateQueries({ queryKey: CALENDAR_KEYS.all })
 		},
 	})
@@ -50,7 +107,36 @@ export const useUpdateCalendarEvent = () => {
 			eventData: Partial<CalendarEvent> & { uuid: string }
 			userUuid: string
 		}) => CalendarService.updateCalendarEvent(eventData, userUuid),
-		onSuccess: () => {
+
+		// OPTIMISTIC UPDATE
+		onMutate: async ({ eventData }) => {
+			await queryClient.cancelQueries({ queryKey: CALENDAR_KEYS.all })
+
+			const previousEvents: Array<{ queryKey: unknown[]; data: unknown }> = []
+			queryClient.getQueriesData({ queryKey: CALENDAR_KEYS.all }).forEach(([queryKey, data]) => {
+				previousEvents.push({ queryKey: queryKey as unknown[], data })
+			})
+
+			queryClient.setQueriesData(
+				{ queryKey: CALENDAR_KEYS.all },
+				(old: CalendarEvent[] | undefined) => {
+					if (!old || !Array.isArray(old)) return old
+					return old.map((e) => (e.uuid === eventData.uuid ? { ...e, ...eventData } : e))
+				}
+			)
+
+			return { previousEvents }
+		},
+
+		onError: (_err, _variables, context) => {
+			if (context?.previousEvents) {
+				context.previousEvents.forEach(({ queryKey, data }) => {
+					queryClient.setQueryData(queryKey as unknown[], data)
+				})
+			}
+		},
+
+		onSettled: () => {
 			queryClient.invalidateQueries({ queryKey: CALENDAR_KEYS.all })
 		},
 	})
@@ -69,7 +155,36 @@ export const useUpdateCalendarEventStatus = () => {
 			status: CalendarEvent['status']
 			userUuid: string
 		}) => CalendarService.updateCalendarEventStatus(eventUuid, status, userUuid),
-		onSuccess: () => {
+
+		// OPTIMISTIC UPDATE
+		onMutate: async ({ eventUuid, status }) => {
+			await queryClient.cancelQueries({ queryKey: CALENDAR_KEYS.all })
+
+			const previousEvents: Array<{ queryKey: unknown[]; data: unknown }> = []
+			queryClient.getQueriesData({ queryKey: CALENDAR_KEYS.all }).forEach(([queryKey, data]) => {
+				previousEvents.push({ queryKey: queryKey as unknown[], data })
+			})
+
+			queryClient.setQueriesData(
+				{ queryKey: CALENDAR_KEYS.all },
+				(old: CalendarEvent[] | undefined) => {
+					if (!old || !Array.isArray(old)) return old
+					return old.map((e) => (e.uuid === eventUuid ? { ...e, status } : e))
+				}
+			)
+
+			return { previousEvents }
+		},
+
+		onError: (_err, _variables, context) => {
+			if (context?.previousEvents) {
+				context.previousEvents.forEach(({ queryKey, data }) => {
+					queryClient.setQueryData(queryKey as unknown[], data)
+				})
+			}
+		},
+
+		onSettled: () => {
 			queryClient.invalidateQueries({ queryKey: CALENDAR_KEYS.all })
 		},
 	})
@@ -81,7 +196,36 @@ export const useDeleteCalendarEvent = () => {
 	return useMutation({
 		mutationFn: ({ eventUuid, userUuid }: { eventUuid: string; userUuid: string }) =>
 			CalendarService.deleteCalendarEvent(eventUuid, userUuid),
-		onSuccess: () => {
+
+		// OPTIMISTIC UPDATE
+		onMutate: async ({ eventUuid }) => {
+			await queryClient.cancelQueries({ queryKey: CALENDAR_KEYS.all })
+
+			const previousEvents: Array<{ queryKey: unknown[]; data: unknown }> = []
+			queryClient.getQueriesData({ queryKey: CALENDAR_KEYS.all }).forEach(([queryKey, data]) => {
+				previousEvents.push({ queryKey: queryKey as unknown[], data })
+			})
+
+			queryClient.setQueriesData(
+				{ queryKey: CALENDAR_KEYS.all },
+				(old: CalendarEvent[] | undefined) => {
+					if (!old || !Array.isArray(old)) return old
+					return old.filter((e) => e.uuid !== eventUuid)
+				}
+			)
+
+			return { previousEvents }
+		},
+
+		onError: (_err, _variables, context) => {
+			if (context?.previousEvents) {
+				context.previousEvents.forEach(({ queryKey, data }) => {
+					queryClient.setQueryData(queryKey as unknown[], data)
+				})
+			}
+		},
+
+		onSettled: () => {
 			queryClient.invalidateQueries({ queryKey: CALENDAR_KEYS.all })
 		},
 	})
