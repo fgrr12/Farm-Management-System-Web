@@ -23,6 +23,7 @@ import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
 import { useAnimalForm } from '@/hooks/forms/useAnimalForm'
+import { useCreateAnimal, useUpdateAnimal } from '@/hooks/queries/useAnimals'
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 import type { AnimalFormData } from '@/schemas'
@@ -124,11 +125,14 @@ const AnimalForm = () => {
 		}, t('toast.errorGettingAnimal'))
 	}, [params.animalUuid, withLoadingAndError, t, resetWithData])
 
+	const createAnimal = useCreateAnimal()
+	const updateAnimal = useUpdateAnimal()
+
 	const onSubmit = useCallback(
 		async (data: AnimalFormData) => {
 			if (!user || !farm) return
 
-			await withLoadingAndError(async () => {
+			try {
 				const animalUuid = params.animalUuid as string
 
 				const animalData = transformToApiFormat(data)
@@ -149,23 +153,34 @@ const AnimalForm = () => {
 				}
 
 				if (animalUuid) {
-					await AnimalsService.updateAnimal(animalData, user.uuid)
+					await updateAnimal.mutateAsync({ animal: animalData, userUuid: user.uuid })
 					showToast(t('toast.edited'), 'success')
 					navigate(AppRoutes.ANIMAL.replace(':animalUuid', animalUuid))
 				} else {
-					await AnimalsService.setAnimal(animalData, user.uuid, farm.uuid)
+					const newAnimalUuid = await createAnimal.mutateAsync({
+						animal: animalData,
+						userUuid: user.uuid,
+					})
 					showToast(t('toast.added'), 'success')
 					reset()
 					setPictureUrl('')
+					// Navigate to the new animal's detail page using the returned UUID
+					if (newAnimalUuid) {
+						navigate(AppRoutes.ANIMAL.replace(':animalUuid', newAnimalUuid))
+					}
 				}
-			}, t('toast.errorAddingAnimal'))
+			} catch (error) {
+				console.error('Error saving animal:', error)
+				showToast(t('toast.errorAddingAnimal'), 'error')
+			}
 		},
 		[
 			user,
 			farm,
 			params.animalUuid,
 			transformToApiFormat,
-			withLoadingAndError,
+			createAnimal,
+			updateAnimal,
 			showToast,
 			t,
 			navigate,
