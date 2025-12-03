@@ -9,6 +9,7 @@ import { useUserStore } from '@/store/useUserStore'
 
 import { UserService } from '@/services/user'
 
+import { PageContainer } from '@/components/layout/PageContainer'
 import { Button } from '@/components/ui/Button'
 import { PasswordField, TextField } from '@/components/ui/TextField'
 
@@ -60,7 +61,10 @@ const LoginForm = () => {
 	}, [user, navigate])
 
 	return (
-		<div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
+		<PageContainer
+			maxWidth="md"
+			className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] relative"
+		>
 			<a
 				href="#login-form"
 				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
@@ -69,13 +73,13 @@ const LoginForm = () => {
 			</a>
 
 			{/* Background Pattern */}
-			<div className="absolute inset-0 overflow-hidden pointer-events-none">
+			<div className="fixed inset-0 overflow-hidden pointer-events-none">
 				<div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse" />
 				<div className="absolute -bottom-40 -left-40 w-80 h-80 bg-green-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse" />
 			</div>
 
 			<section
-				className="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-2xl rounded-3xl border border-white/20 dark:border-gray-700/20 p-8 w-full max-w-md"
+				className="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-2xl rounded-3xl border border-white/20 dark:border-gray-700/20 p-8 w-full"
 				aria-labelledby="login-heading"
 			>
 				{/* Logo/Brand Section */}
@@ -188,7 +192,7 @@ const LoginForm = () => {
 					{t('accessibility.googleLoginHelp')}
 				</div>
 			</section>
-		</div>
+		</PageContainer>
 	)
 }
 
