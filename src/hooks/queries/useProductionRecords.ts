@@ -39,7 +39,64 @@ export const useCreateProductionRecord = () => {
 			productionRecord: ProductionRecord
 			userUuid: string
 		}) => ProductionRecordsService.setProductionRecord(productionRecord, userUuid, farm?.uuid),
-		onSuccess: (_, variables) => {
+
+		// OPTIMISTIC UPDATE: Add to list immediately with temporary ID
+		onMutate: async ({ productionRecord }) => {
+			const animalUuid = productionRecord.animalUuid
+
+			// Cancel any outgoing refetches for this animal's production records
+			await queryClient.cancelQueries({
+				queryKey: PRODUCTION_RECORDS_KEYS.list(animalUuid),
+			})
+
+			// Snapshot the previous value for rollback
+			const previousRecords = queryClient.getQueryData(PRODUCTION_RECORDS_KEYS.list(animalUuid))
+
+			// Create optimistic record with temporary ID
+			const optimisticRecord: ProductionRecord = {
+				...productionRecord,
+				uuid: `temp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+			}
+
+			// Add to cache immediately
+			queryClient.setQueryData(
+				PRODUCTION_RECORDS_KEYS.list(animalUuid),
+				(old: ProductionRecord[] | undefined) => {
+					if (!old || !Array.isArray(old)) return [optimisticRecord]
+					return [optimisticRecord, ...old] // Add at the beginning
+				}
+			)
+
+			// Return context with snapshot and optimistic record
+			return { previousRecords, optimisticRecord, animalUuid }
+		},
+
+		// SUCCESS: Replace temporary ID with real ID from server
+		onSuccess: (data, _variables, context) => {
+			if (context?.optimisticRecord && context?.animalUuid && data?.uuid) {
+				// Replace the temporary record with the real one from server
+				queryClient.setQueryData(
+					PRODUCTION_RECORDS_KEYS.list(context.animalUuid),
+					(old: ProductionRecord[] | undefined) => {
+						if (!old || !Array.isArray(old)) return old
+						return old.map((r) => (r.uuid === context.optimisticRecord.uuid ? data : r))
+					}
+				)
+			}
+		},
+
+		// ROLLBACK: If mutation fails, remove the optimistic record
+		onError: (_err, _variables, context) => {
+			if (context?.previousRecords && context?.animalUuid) {
+				queryClient.setQueryData(
+					PRODUCTION_RECORDS_KEYS.list(context.animalUuid),
+					context.previousRecords
+				)
+			}
+		},
+
+		// SYNC: Always refetch to ensure consistency with server
+		onSettled: (_data, _error, variables) => {
 			queryClient.invalidateQueries({
 				queryKey: PRODUCTION_RECORDS_KEYS.list(variables.productionRecord.animalUuid),
 			})

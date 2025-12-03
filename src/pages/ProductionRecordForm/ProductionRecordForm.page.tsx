@@ -17,6 +17,10 @@ import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
 import { useProductionRecordForm } from '@/hooks/forms/useProductionRecordForm'
+import {
+	useCreateProductionRecord,
+	useUpdateProductionRecord,
+} from '@/hooks/queries/useProductionRecords'
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 import type { ProductionRecordFormData } from '@/schemas'
@@ -28,6 +32,9 @@ const ProductionRecordForm = () => {
 	const params = useParams()
 	const { t } = useTranslation(['productionRecordForm'])
 	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
+
+	const createProductionRecord = useCreateProductionRecord()
+	const updateProductionRecord = useUpdateProductionRecord()
 
 	const form = useProductionRecordForm()
 	const {
@@ -45,36 +52,39 @@ const ProductionRecordForm = () => {
 		async (data: ProductionRecordFormData) => {
 			if (!user) return
 
-			await withLoadingAndError(async () => {
+			try {
 				const productionRecordData = transformToApiFormat(data)
 				const productionRecordUuid = params.productionRecordUuid
 				productionRecordData.uuid = productionRecordUuid ?? crypto.randomUUID()
 
 				if (productionRecordUuid) {
-					await ProductionRecordsService.updateProductionRecord(
-						productionRecordData,
-						user.uuid,
-						farm!.uuid
-					)
+					// Update existing record
+					await updateProductionRecord.mutateAsync({
+						productionRecord: productionRecordData,
+						userUuid: user.uuid,
+					})
 					showToast(t('toast.edited'), 'success')
 					navigate(AppRoutes.ANIMAL.replace(':animalUuid', productionRecordData.animalUuid))
 				} else {
-					await ProductionRecordsService.setProductionRecord(
-						productionRecordData,
-						user.uuid,
-						farm!.uuid
-					)
+					// Create new record with optimistic update
+					await createProductionRecord.mutateAsync({
+						productionRecord: productionRecordData,
+						userUuid: user.uuid,
+					})
 					showToast(t('toast.added'), 'success')
 					navigate(AppRoutes.ANIMAL.replace(':animalUuid', productionRecordData.animalUuid))
 				}
-			}, t('toast.errorAddingProductionRecord'))
+			} catch (error) {
+				console.error('Production record operation failed:', error)
+				showToast(t('toast.errorAddingProductionRecord'), 'error')
+			}
 		},
 		[
-			farm,
 			user,
 			params.productionRecordUuid,
 			transformToApiFormat,
-			withLoadingAndError,
+			createProductionRecord,
+			updateProductionRecord,
 			showToast,
 			t,
 			navigate,

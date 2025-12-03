@@ -23,7 +23,7 @@ const Tasks = () => {
 	const { farm, species } = useFarmStore()
 	const navigate = useNavigate()
 	const { t } = useTranslation(['tasks'])
-	const { setPageTitle, showToast } = usePagePerformance()
+	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
 
 	const [filters, setFilters] = useState<TaskFiltersType>(INITIAL_FILTERS)
 	const [selectedTask, setSelectedTask] = useState<Task | null>(null)
@@ -67,7 +67,8 @@ const Tasks = () => {
 	const handleTaskMove = useCallback(
 		async (taskId: string, fromStatus: TaskStatus, toStatus: TaskStatus) => {
 			if (fromStatus === toStatus) return
-			try {
+
+			await withLoadingAndError(async () => {
 				const task = tasks?.find((t) => t.uuid === taskId)
 				if (!task || !user) return
 
@@ -82,13 +83,9 @@ const Tasks = () => {
 					}),
 					'success'
 				)
-			} catch (error) {
-				console.error('Operation failed:', error)
-				showToast(t('toast.errorUpdatingTaskStatus'), 'error')
-				return null
-			}
+			}, t('toast.errorUpdatingTaskStatus'))
 		},
-		[tasks, user, updateTask, showToast, t]
+		[tasks, user, updateTask, showToast, t, withLoadingAndError]
 	)
 
 	// Drag and drop monitor

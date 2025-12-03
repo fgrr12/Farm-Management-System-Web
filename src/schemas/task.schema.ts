@@ -17,8 +17,8 @@ export const taskSchema = z.object({
 
 	speciesUuid: z.string().min(1, 'task.validation.speciesRequired'),
 
-	dueDate: z.string().optional(),
-	assignedTo: z.string().optional(),
+	dueDate: z.string().optional().nullable(),
+	assignedTo: z.string().optional().nullable(),
 	uuid: z.string().optional(),
 	farmUuid: z.string().optional(),
 	status: z.enum(['todo', 'in-progress', 'done', 'archived', 'overdue']).optional(),

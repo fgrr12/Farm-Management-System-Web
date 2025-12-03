@@ -34,7 +34,59 @@ export const useCreateTask = () => {
 	return useMutation({
 		mutationFn: ({ task, userUuid }: { task: Task; userUuid: string }) =>
 			TasksService.setTask(task, userUuid, farm?.uuid || ''),
-		onSuccess: () => {
+
+		// OPTIMISTIC UPDATE: Add to list immediately with temporary ID
+		onMutate: async ({ task }) => {
+			// Cancel any outgoing refetches
+			await queryClient.cancelQueries({ queryKey: TASKS_KEYS.all })
+
+			// Snapshot all task list queries for rollback
+			const previousQueries: Array<{ queryKey: unknown[]; data: unknown }> = []
+			queryClient.getQueriesData({ queryKey: TASKS_KEYS.all }).forEach(([queryKey, data]) => {
+				previousQueries.push({ queryKey: queryKey as unknown[], data })
+			})
+
+			// Create optimistic task with temporary ID
+			const optimisticTask: Task = {
+				...task,
+				uuid: `temp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+				createdAt: new Date().toISOString(),
+				updatedAt: new Date().toISOString(),
+				farmUuid: farm?.uuid || '',
+			}
+
+			// Add to all task list caches immediately
+			queryClient.setQueriesData({ queryKey: TASKS_KEYS.all }, (old: Task[] | undefined) => {
+				if (!old || !Array.isArray(old)) return [optimisticTask]
+				return [optimisticTask, ...old] // Add at the beginning
+			})
+
+			// Return context with snapshot and optimistic task for later use
+			return { previousQueries, optimisticTask }
+		},
+
+		// SUCCESS: Replace temporary ID with real ID from server
+		onSuccess: (data, _variables, context) => {
+			if (context?.optimisticTask && data?.uuid) {
+				// Replace the temporary task with the real one from server
+				queryClient.setQueriesData({ queryKey: TASKS_KEYS.all }, (old: Task[] | undefined) => {
+					if (!old || !Array.isArray(old)) return old
+					return old.map((t) => (t.uuid === context.optimisticTask.uuid ? data : t))
+				})
+			}
+		},
+
+		// ROLLBACK: If mutation fails, remove the optimistic task
+		onError: (_err, _variables, context) => {
+			if (context?.previousQueries) {
+				context.previousQueries.forEach(({ queryKey, data }) => {
+					queryClient.setQueryData(queryKey as unknown[], data)
+				})
+			}
+		},
+
+		// SYNC: Always refetch to ensure consistency with server
+		onSettled: () => {
 			queryClient.invalidateQueries({ queryKey: TASKS_KEYS.all })
 		},
 	})
