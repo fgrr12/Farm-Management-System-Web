@@ -1,3 +1,5 @@
+import { useQueryClient } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFarmStore } from '@/store/useFarmStore'
@@ -49,6 +51,41 @@ export function VoiceRecorder({
 		onExecutionComplete,
 		onError: (err) => console.error('Voice recording error:', err),
 	})
+
+	// Auto-refresh data based on voice operations
+	const queryClient = useQueryClient()
+
+	useEffect(() => {
+		if (processingResponse?.success && processingResponse.data) {
+			Object.entries(processingResponse.data).forEach(([type, operations]) => {
+				if (!Array.isArray(operations) || operations.length === 0) return
+
+				// Invalidate queries based on operation type
+				switch (type) {
+					case 'animals':
+						queryClient.invalidateQueries({ queryKey: ['animals'] })
+						break
+					case 'health':
+						queryClient.invalidateQueries({ queryKey: ['health-records'] })
+						// Also invalidate animals as health status might change
+						queryClient.invalidateQueries({ queryKey: ['animals'] })
+						break
+					case 'production':
+						queryClient.invalidateQueries({ queryKey: ['production-records'] })
+						break
+					case 'tasks':
+						queryClient.invalidateQueries({ queryKey: ['tasks'] })
+						break
+					case 'relations':
+						queryClient.invalidateQueries({ queryKey: ['related-animals'] })
+						break
+					case 'calendar':
+						queryClient.invalidateQueries({ queryKey: ['calendar-events'] })
+						break
+				}
+			})
+		}
+	}, [processingResponse, queryClient])
 
 	const formatTime = (seconds: number) => {
 		const mins = Math.floor(seconds / 60)
