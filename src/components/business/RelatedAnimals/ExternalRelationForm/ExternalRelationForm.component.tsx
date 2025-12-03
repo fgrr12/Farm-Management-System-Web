@@ -8,18 +8,18 @@ import {
 } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useFarmStore } from '@/store/useFarmStore'
+
 import { useUserStore } from '@/store/useUserStore'
 
 import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
-
-import { RelatedAnimalsService } from '@/services/relatedAnimals'
 
 import type { RelatedAnimalInformation } from '@/pages/RelatedAnimalsForm/RelatedAnimalsForm.types'
 
 import { Button } from '@/components/ui/Button'
 import { CustomSelect } from '@/components/ui/CustomSelect'
 import { TextField } from '@/components/ui/TextField'
+
+import { useCreateRelatedAnimal } from '@/hooks/queries/useRelatedAnimals'
 
 import type {
 	ExternalRelation,
@@ -32,8 +32,9 @@ export const ExternalRelationForm = forwardRef<ExternalRelationFormRef, External
 		const { t } = useTranslation(['externalRelationForm'])
 		const [relation, setRelation] = useState<ExternalRelation>(INITIAL_RELATION)
 		const { user } = useUserStore()
-		const { farm } = useFarmStore()
 		const dialogRef = useRef<HTMLDialogElement>(null)
+
+		const createRelatedAnimal = useCreateRelatedAnimal()
 
 		useImperativeHandle(ref, () => ({
 			openModal: () => {
@@ -41,6 +42,7 @@ export const ExternalRelationForm = forwardRef<ExternalRelationFormRef, External
 			},
 		}))
 
+		// ... (handlers)
 		const handleClose = () => {
 			setRelation(INITIAL_RELATION)
 			dialogRef.current?.close()
@@ -84,14 +86,13 @@ export const ExternalRelationForm = forwardRef<ExternalRelationFormRef, External
 			child: RelatedAnimalInformation,
 			parent: RelatedAnimalInformation
 		) => {
-			await RelatedAnimalsService.setRelatedAnimal(
-				{
+			await createRelatedAnimal.mutateAsync({
+				relation: {
 					child: buildRelation(child, true),
 					parent: buildRelation(parent, false),
 				},
-				user!.uuid,
-				farm!.uuid
-			)
+				userUuid: user!.uuid,
+			})
 		}
 
 		return (
@@ -125,11 +126,10 @@ export const ExternalRelationForm = forwardRef<ExternalRelationFormRef, External
 						<div className="grid grid-cols-2 gap-2">
 							<button
 								type="button"
-								className={`btn btn-sm ${
-									relation.relation === 'Child'
-										? 'btn-primary'
-										: 'btn-outline btn-primary dark:border-blue-500 dark:text-blue-400 dark:hover:bg-blue-500 dark:hover:text-white'
-								} flex items-center gap-2`}
+								className={`btn btn-sm ${relation.relation === 'Child'
+									? 'btn-primary'
+									: 'btn-outline btn-primary dark:border-blue-500 dark:text-blue-400 dark:hover:bg-blue-500 dark:hover:text-white'
+									} flex items-center gap-2`}
 								onClick={() => setRelation({ ...relation, relation: 'Child' })}
 							>
 								<i className="i-material-symbols-family-restroom w-4! h-4!" />
@@ -137,11 +137,10 @@ export const ExternalRelationForm = forwardRef<ExternalRelationFormRef, External
 							</button>
 							<button
 								type="button"
-								className={`btn btn-sm ${
-									relation.relation === 'Parent'
-										? 'btn-primary'
-										: 'btn-outline btn-primary dark:border-blue-500 dark:text-blue-400 dark:hover:bg-blue-500 dark:hover:text-white'
-								} flex items-center gap-2`}
+								className={`btn btn-sm ${relation.relation === 'Parent'
+									? 'btn-primary'
+									: 'btn-outline btn-primary dark:border-blue-500 dark:text-blue-400 dark:hover:bg-blue-500 dark:hover:text-white'
+									} flex items-center gap-2`}
 								onClick={() => setRelation({ ...relation, relation: 'Parent' })}
 							>
 								<i className="i-material-symbols-child-care w-4! h-4!" />
