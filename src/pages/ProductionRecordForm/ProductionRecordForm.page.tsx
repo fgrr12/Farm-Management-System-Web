@@ -31,7 +31,7 @@ const ProductionRecordForm = () => {
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation(['productionRecordForm'])
-	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
+	const { setPageTitle, showToast, withError, withLoadingAndError } = usePagePerformance()
 
 	const createProductionRecord = useCreateProductionRecord()
 	const updateProductionRecord = useUpdateProductionRecord()
@@ -52,7 +52,7 @@ const ProductionRecordForm = () => {
 		async (data: ProductionRecordFormData) => {
 			if (!user) return
 
-			try {
+			await withError(async () => {
 				const productionRecordData = transformToApiFormat(data)
 				const productionRecordUuid = params.productionRecordUuid
 				productionRecordData.uuid = productionRecordUuid ?? crypto.randomUUID()
@@ -74,10 +74,7 @@ const ProductionRecordForm = () => {
 					showToast(t('toast.added'), 'success')
 					navigate(AppRoutes.ANIMAL.replace(':animalUuid', productionRecordData.animalUuid))
 				}
-			} catch (error) {
-				console.error('Production record operation failed:', error)
-				showToast(t('toast.errorAddingProductionRecord'), 'error')
-			}
+			}, t('toast.errorAddingProductionRecord'))
 		},
 		[
 			user,
@@ -88,6 +85,7 @@ const ProductionRecordForm = () => {
 			showToast,
 			t,
 			navigate,
+			withError,
 		]
 	)
 

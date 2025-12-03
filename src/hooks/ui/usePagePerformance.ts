@@ -37,7 +37,7 @@ export const usePagePerformance = () => {
 			successMessage?: string
 		): Promise<T | null> => {
 			try {
-				// setLoading(true)
+				setLoading(true)
 				const result = await operation()
 				if (successMessage) {
 					setToastData({ message: successMessage, type: 'success' })
@@ -48,7 +48,28 @@ export const usePagePerformance = () => {
 				setToastData({ message: errorMessage, type: 'error' })
 				return null
 			} finally {
-				// setLoading(false)
+				setLoading(false)
+			}
+		},
+		[setLoading, setToastData]
+	)
+
+	const withError = useCallback(
+		async <T>(
+			operation: () => Promise<T>,
+			errorMessage: string,
+			successMessage?: string
+		): Promise<T | null> => {
+			try {
+				const result = await operation()
+				if (successMessage) {
+					setToastData({ message: successMessage, type: 'success' })
+				}
+				return result
+			} catch (error) {
+				console.error('Operation failed:', error)
+				setToastData({ message: errorMessage, type: 'error' })
+				return null
 			}
 		},
 		[setToastData]
@@ -59,5 +80,6 @@ export const usePagePerformance = () => {
 		handleLoading,
 		showToast,
 		withLoadingAndError,
+		withError,
 	}
 }

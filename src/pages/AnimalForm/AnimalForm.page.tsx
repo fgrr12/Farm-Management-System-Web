@@ -35,7 +35,7 @@ const AnimalForm = () => {
 	const params = useParams()
 	const { t } = useTranslation(['animalForm'])
 
-	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
+	const { setPageTitle, showToast, withError, withLoadingAndError } = usePagePerformance()
 
 	const [pictureUrl, setPictureUrl] = useState<string>('')
 
@@ -132,7 +132,7 @@ const AnimalForm = () => {
 		async (data: AnimalFormData) => {
 			if (!user || !farm) return
 
-			try {
+			await withError(async () => {
 				const animalUuid = params.animalUuid as string
 
 				const animalData = transformToApiFormat(data)
@@ -169,10 +169,7 @@ const AnimalForm = () => {
 						navigate(AppRoutes.ANIMAL.replace(':animalUuid', newAnimalUuid))
 					}
 				}
-			} catch (error) {
-				console.error('Error saving animal:', error)
-				showToast(t('toast.errorAddingAnimal'), 'error')
-			}
+			}, t('toast.errorAddingAnimal'))
 		},
 		[
 			user,
@@ -185,6 +182,7 @@ const AnimalForm = () => {
 			t,
 			navigate,
 			reset,
+			withError,
 		]
 	)
 

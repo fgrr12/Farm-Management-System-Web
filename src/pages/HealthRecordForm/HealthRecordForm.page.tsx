@@ -32,7 +32,7 @@ const HealthRecordForm = () => {
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation(['healthRecordForm'])
-	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
+	const { setPageTitle, showToast, withError } = usePagePerformance()
 
 	const healthRecordUuid = params.healthRecordUuid
 	const { data: healthRecord, isLoading: isLoadingHealthRecord } = useHealthRecord(
@@ -126,7 +126,7 @@ const HealthRecordForm = () => {
 		async (data: HealthRecordFormData) => {
 			if (!user) return
 
-			await withLoadingAndError(async () => {
+			await withError(async () => {
 				const healthRecordData = {
 					...transformToApiFormat(data),
 					farmUuid: farm!.uuid,
@@ -155,7 +155,7 @@ const HealthRecordForm = () => {
 			user,
 			params.healthRecordUuid,
 			transformToApiFormat,
-			withLoadingAndError,
+			withError,
 			showToast,
 			t,
 			navigate,

@@ -27,7 +27,7 @@ const TaskForm = () => {
 	const { farm, species } = useFarmStore()
 	const navigate = useNavigate()
 	const { t } = useTranslation(['taskForm'])
-	const { setPageTitle, showToast } = usePagePerformance()
+	const { setPageTitle, showToast, withError } = usePagePerformance()
 
 	const form = useTaskForm()
 	const {
@@ -60,7 +60,7 @@ const TaskForm = () => {
 		async (data: TaskFormData) => {
 			if (!user || !farm) return
 
-			try {
+			await withError(async () => {
 				const taskData = transformToApiFormat(data)
 				taskData.uuid = taskData.uuid || crypto.randomUUID()
 				taskData.farmUuid = farm.uuid
@@ -71,11 +71,9 @@ const TaskForm = () => {
 				})
 				showToast(t('toast.taskAdded'), 'success')
 				navigate(AppRoutes.TASKS)
-			} catch {
-				showToast(t('toast.errorAddingTask'), 'error')
-			}
+			}, t('toast.errorAddingTask'))
 		},
-		[user, farm, transformToApiFormat, createTask, showToast, t, navigate]
+		[user, farm, transformToApiFormat, createTask, showToast, t, navigate, withError]
 	)
 
 	useEffect(() => {

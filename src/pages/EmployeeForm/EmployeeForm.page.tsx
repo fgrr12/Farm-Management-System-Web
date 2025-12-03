@@ -25,7 +25,7 @@ const EmployeeForm = () => {
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation(['employeeForm'])
-	const { setPageTitle, showToast } = usePagePerformance()
+	const { setPageTitle, showToast, withError } = usePagePerformance()
 
 	const form = useEmployeeForm()
 	const {
@@ -61,7 +61,7 @@ const EmployeeForm = () => {
 		async (data: EmployeeFormData) => {
 			if (!user || !farm) return
 
-			try {
+			await withError(async () => {
 				const employeeData = transformToApiFormat(data)
 				employeeData.farmUuid = farm.uuid
 
@@ -80,9 +80,7 @@ const EmployeeForm = () => {
 					showToast(t('toast.added'), 'success')
 				}
 				navigate(AppRoutes.EMPLOYEES)
-			} catch {
-				showToast(t('toast.errorAddingEmployee'), 'error')
-			}
+			}, t('toast.errorAddingEmployee'))
 		},
 		[
 			farm,
@@ -94,6 +92,7 @@ const EmployeeForm = () => {
 			showToast,
 			t,
 			navigate,
+			withError,
 		]
 	)
 
