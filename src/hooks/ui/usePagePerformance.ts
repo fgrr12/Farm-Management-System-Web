@@ -37,7 +37,7 @@ export const usePagePerformance = () => {
 			successMessage?: string
 		): Promise<T | null> => {
 			try {
-				setLoading(true)
+				// setLoading(true)
 				const result = await operation()
 				if (successMessage) {
 					setToastData({ message: successMessage, type: 'success' })
@@ -48,10 +48,10 @@ export const usePagePerformance = () => {
 				setToastData({ message: errorMessage, type: 'error' })
 				return null
 			} finally {
-				setLoading(false)
+				// setLoading(false)
 			}
 		},
-		[setLoading, setToastData]
+		[setToastData]
 	)
 
 	return {
