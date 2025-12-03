@@ -6,8 +6,6 @@ import { useParams } from 'react-router-dom'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
-
-
 import { CardContainer } from '@/components/business/RelatedAnimals/CardContainer'
 import type { ExternalRelationFormRef } from '@/components/business/RelatedAnimals/ExternalRelationForm'
 import { ExternalRelationForm } from '@/components/business/RelatedAnimals/ExternalRelationForm'
@@ -73,8 +71,7 @@ const RelatedAnimalsForm = () => {
 					animal.uuid !== animalUuid &&
 					!relatedAnimals.some(
 						(related) =>
-							related.child.animalUuid === animal.uuid ||
-							related.parent.animalUuid === animal.uuid
+							related.child.animalUuid === animal.uuid || related.parent.animalUuid === animal.uuid
 					)
 			)
 			.map((animal) => ({
@@ -244,10 +241,6 @@ const RelatedAnimalsForm = () => {
 			},
 		})
 	}, [animalsLists])
-
-
-
-
 
 	useEffect(() => {
 		setPageTitle(t('title'))

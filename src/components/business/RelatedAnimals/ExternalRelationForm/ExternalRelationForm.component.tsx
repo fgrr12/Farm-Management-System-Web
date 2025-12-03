@@ -8,7 +8,6 @@ import {
 } from 'react'
 import { useTranslation } from 'react-i18next'
 
-
 import { useUserStore } from '@/store/useUserStore'
 
 import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
@@ -126,10 +125,11 @@ export const ExternalRelationForm = forwardRef<ExternalRelationFormRef, External
 						<div className="grid grid-cols-2 gap-2">
 							<button
 								type="button"
-								className={`btn btn-sm ${relation.relation === 'Child'
-									? 'btn-primary'
-									: 'btn-outline btn-primary dark:border-blue-500 dark:text-blue-400 dark:hover:bg-blue-500 dark:hover:text-white'
-									} flex items-center gap-2`}
+								className={`btn btn-sm ${
+									relation.relation === 'Child'
+										? 'btn-primary'
+										: 'btn-outline btn-primary dark:border-blue-500 dark:text-blue-400 dark:hover:bg-blue-500 dark:hover:text-white'
+								} flex items-center gap-2`}
 								onClick={() => setRelation({ ...relation, relation: 'Child' })}
 							>
 								<i className="i-material-symbols-family-restroom w-4! h-4!" />
@@ -137,10 +137,11 @@ export const ExternalRelationForm = forwardRef<ExternalRelationFormRef, External
 							</button>
 							<button
 								type="button"
-								className={`btn btn-sm ${relation.relation === 'Parent'
-									? 'btn-primary'
-									: 'btn-outline btn-primary dark:border-blue-500 dark:text-blue-400 dark:hover:bg-blue-500 dark:hover:text-white'
-									} flex items-center gap-2`}
+								className={`btn btn-sm ${
+									relation.relation === 'Parent'
+										? 'btn-primary'
+										: 'btn-outline btn-primary dark:border-blue-500 dark:text-blue-400 dark:hover:bg-blue-500 dark:hover:text-white'
+								} flex items-center gap-2`}
 								onClick={() => setRelation({ ...relation, relation: 'Parent' })}
 							>
 								<i className="i-material-symbols-child-care w-4! h-4!" />
