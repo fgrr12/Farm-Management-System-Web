@@ -4,6 +4,8 @@ import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { formatDateForForm } from '@/utils/date'
+
 import { type HealthRecordFormData, healthRecordSchema } from '@/schemas'
 
 const DEFAULT_VALUES: Partial<HealthRecordFormData> = {
@@ -19,51 +21,52 @@ const DEFAULT_VALUES: Partial<HealthRecordFormData> = {
 	duration: '',
 	notes: '',
 	status: true,
+	withdrawalDays: undefined,
+	withdrawalEndDate: undefined,
+	administrationRoute: undefined,
+	injectionSite: undefined,
+	batchNumber: '',
+	manufacturer: '',
+	technician: '',
 }
 
 export const useHealthRecordForm = (initialData?: Partial<HealthRecord>) => {
 	const { t } = useTranslation(['healthRecordForm'])
 
-	const formatDateForForm = useCallback((dateValue: string | Date | null | undefined): string => {
-		if (!dateValue) return dayjs().format('YYYY-MM-DD')
-
-		try {
-			// If it's already in YYYY-MM-DD format, return as is
-			if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
-				return dateValue
+	const mapToFormData = useCallback(
+		(data: Partial<HealthRecord>): Partial<HealthRecordFormData> => {
+			return {
+				uuid: data.uuid || '',
+				animalUuid: data.animalUuid || '',
+				reason: data.reason || '',
+				type: data.type || '',
+				reviewedBy: data.reviewedBy || '',
+				date: formatDateForForm(data.date) || dayjs().format('YYYY-MM-DD'),
+				weight: data.weight || 0,
+				temperature: data.temperature || 0,
+				medication: data.medication || '',
+				dosage: data.dosage || '',
+				frequency: data.frequency || '',
+				duration: data.duration || '',
+				notes: data.notes || '',
+				createdBy: data.createdBy || '',
+				status: data.status ?? true,
+				withdrawalDays: data.withdrawalDays || undefined,
+				withdrawalEndDate: data.withdrawalEndDate || undefined,
+				administrationRoute: data.administrationRoute || undefined,
+				injectionSite: data.injectionSite || undefined,
+				batchNumber: data.batchNumber || '',
+				manufacturer: data.manufacturer || '',
+				technician: data.technician || '',
 			}
-
-			// If it's a timestamp or Date object, convert it
-			const date = new Date(dateValue)
-			if (Number.isNaN(date.getTime())) return dayjs().format('YYYY-MM-DD')
-
-			return dayjs(date).format('YYYY-MM-DD')
-		} catch {
-			return dayjs().format('YYYY-MM-DD')
-		}
-	}, [])
+		},
+		[]
+	)
 
 	const getDefaultValues = useCallback((): Partial<HealthRecordFormData> => {
 		if (!initialData) return DEFAULT_VALUES
-
-		return {
-			uuid: initialData.uuid || '',
-			animalUuid: initialData.animalUuid || '',
-			reason: initialData.reason || '',
-			type: initialData.type || '',
-			reviewedBy: initialData.reviewedBy || '',
-			date: formatDateForForm(initialData.date),
-			weight: initialData.weight || 0,
-			temperature: initialData.temperature || 0,
-			medication: initialData.medication || '',
-			dosage: initialData.dosage || '',
-			frequency: initialData.frequency || '',
-			duration: initialData.duration || '',
-			notes: initialData.notes || '',
-			createdBy: initialData.createdBy || '',
-			status: initialData.status ?? true,
-		}
-	}, [initialData, formatDateForForm])
+		return mapToFormData(initialData)
+	}, [initialData, mapToFormData])
 
 	const form = useForm<HealthRecordFormData>({
 		resolver: zodResolver(healthRecordSchema),
@@ -81,14 +84,21 @@ export const useHealthRecordForm = (initialData?: Partial<HealthRecord>) => {
 			reviewedBy: data.reviewedBy,
 			createdBy: data.createdBy || '',
 			date: typeof data.date === 'string' ? data.date : dayjs(data.date).format('YYYY-MM-DD'),
-			weight: data.weight,
-			temperature: data.temperature,
-			medication: data.medication,
-			dosage: data.dosage,
-			frequency: data.frequency,
-			duration: data.duration,
-			notes: data.notes,
+			weight: data.weight || 0,
+			temperature: data.temperature || 0,
+			medication: data.medication || '',
+			dosage: data.dosage || '',
+			frequency: data.frequency || '',
+			duration: data.duration || '',
+			notes: data.notes || '',
 			status: data.status ?? true,
+			withdrawalDays: data.withdrawalDays || undefined,
+			withdrawalEndDate: data.withdrawalEndDate || undefined,
+			administrationRoute: data.administrationRoute || undefined,
+			injectionSite: data.injectionSite || undefined,
+			batchNumber: data.batchNumber || '',
+			manufacturer: data.manufacturer || '',
+			technician: data.technician || '',
 		}
 	}, [])
 
@@ -104,32 +114,10 @@ export const useHealthRecordForm = (initialData?: Partial<HealthRecord>) => {
 
 	const resetWithData = useCallback(
 		(data?: Partial<HealthRecord>) => {
-			if (!data) {
-				form.reset(DEFAULT_VALUES)
-				return
-			}
-
-			const formattedData: Partial<HealthRecordFormData> = {
-				uuid: data.uuid || '',
-				animalUuid: data.animalUuid || '',
-				reason: data.reason || '',
-				type: data.type || '',
-				reviewedBy: data.reviewedBy || '',
-				date: formatDateForForm(data.date),
-				weight: data.weight || 0,
-				temperature: data.temperature || 0,
-				medication: data.medication || '',
-				dosage: data.dosage || '',
-				frequency: data.frequency || '',
-				duration: data.duration || '',
-				notes: data.notes || '',
-				createdBy: data.createdBy || '',
-				status: data.status ?? true,
-			}
-
-			form.reset(formattedData)
+			const values = data ? mapToFormData(data) : DEFAULT_VALUES
+			form.reset(values)
 		},
-		[form, formatDateForForm]
+		[form, mapToFormData]
 	)
 
 	return {

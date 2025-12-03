@@ -100,6 +100,13 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 					bgColor: 'bg-gray-100 dark:bg-gray-700',
 					textColor: 'text-gray-600 dark:text-gray-400',
 				},
+				withdrawal: {
+					color: 'from-red-600 to-orange-600',
+					icon: 'i-material-symbols-warning',
+					text: t('healthStatus.withdrawal'),
+					bgColor: 'bg-red-200 dark:bg-red-900/40',
+					textColor: 'text-red-900 dark:text-red-100',
+				},
 			}
 			return configs[currentHealthStatus]
 		}, [currentHealthStatus, animal.soldDate, animal.deathDate, t])

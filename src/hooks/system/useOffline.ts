@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
 
-import { logError } from '@/utils/errorHandler'
-
 interface OfflineQueueItem {
 	id: string
 	operation: () => Promise<any>
@@ -25,11 +23,7 @@ export const useOffline = () => {
 				await item.operation()
 				processedItems.push(item.id)
 			} catch (error) {
-				logError(error, {
-					context: 'offline_queue_processing',
-					itemId: item.id,
-					retries: item.retries,
-				})
+				console.error('Error processing offline queue item:', error)
 
 				if (item.retries < 3) {
 					failedItems.push({
@@ -58,7 +52,7 @@ export const useOffline = () => {
 				const parsedQueue = JSON.parse(savedQueue)
 				setOfflineQueue(parsedQueue)
 			} catch (error) {
-				logError(error, { context: 'loading_offline_queue' })
+				console.error('Error loading offline queue:', error)
 			}
 		}
 	}, [])

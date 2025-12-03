@@ -16,6 +16,9 @@ export const healthRecordSchema = z.object({
 			'Deworming',
 			'Birth',
 			'Drying',
+			'HoofCare',
+			'Castration',
+			'Dehorning',
 		],
 		{
 			message: 'healthRecord.validation.typeRequired',
@@ -26,12 +29,12 @@ export const healthRecordSchema = z.object({
 		.min(1, 'healthRecord.validation.reviewedByRequired')
 		.max(100, 'healthRecord.validation.reviewedByTooLong'),
 	date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'healthRecord.validation.dateFormat'),
-	weight: z.number().optional(),
-	temperature: z.number().optional(),
-	medication: z.string().optional(),
-	dosage: z.string().optional(),
-	frequency: z.string().optional(),
-	duration: z.string().optional(),
+	weight: z.number().optional().nullable(),
+	temperature: z.number().optional().nullable(),
+	medication: z.string().optional().nullable(),
+	dosage: z.string().optional().nullable(),
+	frequency: z.string().optional().nullable(),
+	duration: z.string().optional().nullable(),
 	notes: z
 		.string()
 		.min(1, 'healthRecord.validation.notesRequired')
@@ -41,6 +44,20 @@ export const healthRecordSchema = z.object({
 	animalUuid: z.string().optional(),
 	createdBy: z.string().optional(),
 	status: z.boolean().optional(),
+	// New fields
+	withdrawalDays: z.number().optional().nullable(),
+	withdrawalEndDate: z.string().optional().nullable(),
+	administrationRoute: z
+		.enum(['IM', 'SC', 'Oral', 'Topical', 'Intramammary', 'IV', 'Intrauterine', 'Other'])
+		.optional()
+		.nullable(),
+	injectionSite: z
+		.enum(['Neck', 'Rump', 'Leg', 'Ear', 'Flank', 'Tail', 'Other'])
+		.optional()
+		.nullable(),
+	batchNumber: z.string().optional().nullable(),
+	manufacturer: z.string().optional().nullable(),
+	technician: z.string().optional().nullable(),
 })
 
 export type HealthRecordFormData = z.infer<typeof healthRecordSchema>

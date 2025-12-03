@@ -6,11 +6,11 @@ interface Task {
 	description: string
 	status: TaskStatus
 	priority: TaskPriority
-	assignedTo?: string
-	dueDate?: string
-	createdBy?: string
-	createdAt?: string
-	updatedAt?: string
+	assignedTo?: string | null
+	dueDate?: string | null
+	createdBy?: string | null
+	createdAt?: string | null
+	updatedAt?: string | null
 }
 
 type TaskStatus = 'todo' | 'in-progress' | 'done' | 'archived' | 'overdue'

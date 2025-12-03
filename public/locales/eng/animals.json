@@ -46,7 +46,8 @@
 		"healthy": "Healthy",
 		"sick": "Sick",
 		"sold": "Sold",
-		"treatment": "Treatment"
+		"treatment": "Treatment",
+		"withdrawal": "Withdrawal Period"
 	},
 	"inFarm": "In Farm",
 	"noAnimals": "No animals",

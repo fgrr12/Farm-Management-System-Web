@@ -8,18 +8,15 @@ import {
 } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
-
-import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
-
-import { RelatedAnimalsService } from '@/services/relatedAnimals'
 
 import type { RelatedAnimalInformation } from '@/pages/RelatedAnimalsForm/RelatedAnimalsForm.types'
 
 import { Button } from '@/components/ui/Button'
 import { CustomSelect } from '@/components/ui/CustomSelect'
 import { TextField } from '@/components/ui/TextField'
+
+import { useCreateRelatedAnimal } from '@/hooks/queries/useRelatedAnimals'
 
 import type {
 	ExternalRelation,
@@ -32,8 +29,9 @@ export const ExternalRelationForm = forwardRef<ExternalRelationFormRef, External
 		const { t } = useTranslation(['externalRelationForm'])
 		const [relation, setRelation] = useState<ExternalRelation>(INITIAL_RELATION)
 		const { user } = useUserStore()
-		const { farm } = useFarmStore()
 		const dialogRef = useRef<HTMLDialogElement>(null)
+
+		const createRelatedAnimal = useCreateRelatedAnimal()
 
 		useImperativeHandle(ref, () => ({
 			openModal: () => {
@@ -41,6 +39,7 @@ export const ExternalRelationForm = forwardRef<ExternalRelationFormRef, External
 			},
 		}))
 
+		// ... (handlers)
 		const handleClose = () => {
 			setRelation(INITIAL_RELATION)
 			dialogRef.current?.close()
@@ -48,7 +47,7 @@ export const ExternalRelationForm = forwardRef<ExternalRelationFormRef, External
 
 		const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 			const { name, value } = e.target
-			setRelation({ ...relation, [name]: capitalizeFirstLetter(value) })
+			setRelation({ ...relation, [name]: value })
 		}
 
 		const handleSelectChange = (name: string) => (value: string | number | null) => {
@@ -84,14 +83,13 @@ export const ExternalRelationForm = forwardRef<ExternalRelationFormRef, External
 			child: RelatedAnimalInformation,
 			parent: RelatedAnimalInformation
 		) => {
-			await RelatedAnimalsService.setRelatedAnimal(
-				{
+			await createRelatedAnimal.mutateAsync({
+				relation: {
 					child: buildRelation(child, true),
 					parent: buildRelation(parent, false),
 				},
-				user!.uuid,
-				farm!.uuid
-			)
+				userUuid: user!.uuid,
+			})
 		}
 
 		return (

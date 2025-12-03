@@ -6,24 +6,29 @@ import { AppRoutes } from '@/config/constants/routes'
 
 import { useFarmStore } from '@/store/useFarmStore'
 
-import { EmployeesService } from '@/services/employees'
-
 import { EmployeesTable } from '@/components/business/Employees/EmployeesTable'
+import { PageContainer } from '@/components/layout/PageContainer'
+import { PageHeader, PageHeaderStats } from '@/components/layout/PageHeader'
 import { Button } from '@/components/ui/Button'
 import { Search } from '@/components/ui/Search'
+import { TableSkeleton } from '@/components/ui/SkeletonLoader'
 
+import { useDeleteEmployee, useEmployees } from '@/hooks/queries/useEmployees'
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 const Employees = () => {
 	const { farm } = useFarmStore()
 	const navigate = useNavigate()
 	const { t } = useTranslation(['employees'])
-	const { setPageTitle, withLoadingAndError } = usePagePerformance()
+	const { setPageTitle } = usePagePerformance()
 
-	const [employees, setEmployees] = useState<User[]>([])
 	const [search, setSearch] = useState('')
 
+	const { data: employees, isLoading } = useEmployees(farm?.uuid || '')
+	const deleteEmployee = useDeleteEmployee()
+
 	const filteredEmployees = useMemo(() => {
+		if (!employees) return []
 		return employees.filter(
 			(employee) =>
 				employee.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -33,6 +38,10 @@ const Employees = () => {
 		)
 	}, [employees, search])
 
+	const ownerCount = useMemo(() => {
+		return employees?.filter((emp) => emp.role === 'owner').length || 0
+	}, [employees])
+
 	const handleAddEmployee = useCallback(() => {
 		navigate(AppRoutes.ADD_EMPLOYEE)
 	}, [navigate])
@@ -41,86 +50,33 @@ const Employees = () => {
 		setSearch(event.target.value)
 	}, [])
 
-	const handleRemoveEmployee = useCallback(
-		(employeeUuid: string) => async () => {
-			setEmployees(employees.filter((employee) => employee.uuid !== employeeUuid))
-		},
-		[employees]
-	)
-
-	const initialData = useCallback(async () => {
-		await withLoadingAndError(async () => {
-			const data = await EmployeesService.getEmployees(farm!.uuid)
-			setEmployees(data)
-			return data
-		}, t('toast.errorGettingEmployees'))
-	}, [farm, withLoadingAndError, t])
-
-	useEffect(() => {
-		if (!farm) return
-		initialData()
-	}, [farm, initialData])
-
 	useEffect(() => {
 		setPageTitle(t('title'))
 	}, [setPageTitle, t])
+
 	return (
-		<div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto">
-			<div className="max-w-7xl mx-auto p-3 sm:p-4 lg:p-6 xl:p-8">
-				<a
-					href="#employees-table"
-					className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
-				>
-					{t('accessibility.skipToEmployees')}
-				</a>
+		<PageContainer>
+			<a
+				href="#employees-table"
+				className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white p-2 rounded z-50"
+			>
+				{t('accessibility.skipToEmployees')}
+			</a>
 
-				{/* Hero Header */}
-				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl dark:shadow-gray-900/50 overflow-hidden mb-6 sm:mb-8">
-					<div className="bg-linear-to-r from-blue-600 to-green-600 px-4 sm:px-6 py-6 sm:py-8">
-						<div className="flex items-center gap-3 sm:gap-4">
-							<div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center shrink-0">
-								<i className="i-material-symbols-group bg-white! w-6! h-6! sm:w-8 sm:h-8" />
-							</div>
-							<div className="min-w-0 flex-1">
-								<h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
-									{t('title')}
-								</h1>
-								<p className="text-blue-100 text-sm sm:text-base mt-1">{t('subtitle')}</p>
-							</div>
-						</div>
-					</div>
-
-					{/* Stats Cards */}
-					<div className="bg-white dark:bg-gray-800 px-4 sm:px-6 py-4">
-						<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-							<div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 text-center">
-								<div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-									{employees.length}
-								</div>
-								<div className="text-sm text-blue-600 dark:text-blue-400">
-									{t('totalEmployees')}
-								</div>
-							</div>
-							<div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 text-center">
-								<div className="text-2xl font-bold text-green-600 dark:text-green-400">
-									{filteredEmployees.length}
-								</div>
-								<div className="text-sm text-green-600 dark:text-green-400">
-									{t('filteredResults')}
-								</div>
-							</div>
-							<div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 text-center">
-								<div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-									{employees.filter((emp) => emp.role === 'owner').length}
-								</div>
-								<div className="text-sm text-purple-600 dark:text-purple-400">{t('owners')}</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				{/* Search and Actions */}
-				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-xl dark:shadow-gray-900/25 p-4 sm:p-6 mb-6">
+			<PageHeader
+				icon="group"
+				title={t('title')}
+				subtitle={t('subtitle')}
+				stats={
+					<PageHeaderStats
+						stats={[
+							{ value: employees?.length || 0, label: t('totalEmployees'), variant: 'info' },
+							{ value: filteredEmployees.length, label: t('filteredResults'), variant: 'success' },
+							{ value: ownerCount, label: t('owners') },
+						]}
+					/>
+				}
+				actions={
 					<section aria-labelledby="search-heading" role="search">
 						<h2 id="search-heading" className="sr-only">
 							{t('accessibility.searchSection')}
@@ -152,26 +108,34 @@ const Employees = () => {
 							</div>
 						</div>
 					</section>
-				</div>
+				}
+			/>
 
-				{/* Employees Table */}
-				<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-xl dark:shadow-gray-900/25 overflow-hidden">
-					<section aria-labelledby="employees-heading" aria-live="polite">
-						<h2 id="employees-heading" className="sr-only">
-							{t('accessibility.employeesList')} ({filteredEmployees.length}{' '}
-							{t('accessibility.results')})
-						</h2>
-						<div id="employees-table">
+			{/* Employees Table */}
+			<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-xl dark:shadow-gray-900/25 overflow-hidden">
+				<section aria-labelledby="employees-heading" aria-live="polite">
+					<h2 id="employees-heading" className="sr-only">
+						{t('accessibility.employeesList')} ({filteredEmployees.length}{' '}
+						{t('accessibility.results')})
+					</h2>
+					<div id="employees-table">
+						{isLoading ? (
+							<TableSkeleton rows={5} columns={5} />
+						) : (
 							<EmployeesTable
 								employees={filteredEmployees}
-								removeEmployee={handleRemoveEmployee}
-								aria-label={t('accessibility.employeesTable', { count: filteredEmployees.length })}
+								removeEmployee={(uuid) => async () => {
+									await deleteEmployee.mutateAsync({ employeeUuid: uuid, userUuid: farm!.uuid })
+								}}
+								aria-label={t('accessibility.employeesTable', {
+									count: filteredEmployees.length,
+								})}
 							/>
-						</div>
-					</section>
-				</div>
+						)}
+					</div>
+				</section>
 			</div>
-		</div>
+		</PageContainer>
 	)
 }
 

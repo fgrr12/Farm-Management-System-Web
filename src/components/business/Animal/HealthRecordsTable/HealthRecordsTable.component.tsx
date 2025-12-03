@@ -36,6 +36,12 @@ const trBgColor = (reason: HealthRecordType) => {
 			return 'bg-yellow-100 dark:bg-yellow-900/20'
 		case 'Drying':
 			return 'bg-orange-100 dark:bg-orange-900/20'
+		case 'HoofCare':
+			return 'bg-purple-100 dark:bg-purple-900/20'
+		case 'Castration':
+			return 'bg-amber-100 dark:bg-amber-900/20'
+		case 'Dehorning':
+			return 'bg-lime-100 dark:bg-lime-900/20'
 	}
 }
 
@@ -79,7 +85,13 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 			healthRecord.medication ||
 			healthRecord.dosage ||
 			healthRecord.frequency ||
-			healthRecord.duration
+			healthRecord.duration ||
+			healthRecord.withdrawalDays ||
+			healthRecord.administrationRoute ||
+			healthRecord.injectionSite ||
+			healthRecord.batchNumber ||
+			healthRecord.manufacturer ||
+			healthRecord.technician
 		)
 	}
 
@@ -260,6 +272,54 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 															</span>
 														</div>
 													)}
+													{healthRecord.withdrawalDays && (
+														<div className="flex items-center gap-1 text-red-700 dark:text-red-300 font-bold">
+															<i className="i-material-symbols-warning w-3 h-3" />
+															<span>
+																{t('withdrawalDays')}: {healthRecord.withdrawalDays} días
+															</span>
+														</div>
+													)}
+													{healthRecord.administrationRoute && (
+														<div className="flex items-center gap-1">
+															<i className="i-material-symbols-syringe w-3 h-3" />
+															<span>
+																{t('route')}: {healthRecord.administrationRoute}
+															</span>
+														</div>
+													)}
+													{healthRecord.injectionSite && (
+														<div className="flex items-center gap-1">
+															<i className="i-material-symbols-location-on w-3 h-3" />
+															<span>
+																{t('site')}: {healthRecord.injectionSite}
+															</span>
+														</div>
+													)}
+													{healthRecord.batchNumber && (
+														<div className="flex items-center gap-1">
+															<i className="i-material-symbols-tag w-3 h-3" />
+															<span>
+																{t('batch')}: {healthRecord.batchNumber}
+															</span>
+														</div>
+													)}
+													{healthRecord.manufacturer && (
+														<div className="flex items-center gap-1">
+															<i className="i-material-symbols-factory w-3 h-3" />
+															<span>
+																{t('manufacturer')}: {healthRecord.manufacturer}
+															</span>
+														</div>
+													)}
+													{healthRecord.technician && (
+														<div className="flex items-center gap-1">
+															<i className="i-material-symbols-person w-3 h-3" />
+															<span>
+																{t('technician')}: {healthRecord.technician}
+															</span>
+														</div>
+													)}
 												</div>
 											)}
 										</div>
@@ -283,10 +343,18 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 																			? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 dark:border dark:border-yellow-700'
 																			: healthRecord.type === 'Drying'
 																				? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200 dark:border dark:border-orange-700'
-																				: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 dark:border dark:border-gray-600'
+																				: healthRecord.type === 'HoofCare'
+																					? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 dark:border dark:border-purple-700'
+																					: healthRecord.type === 'Castration'
+																						? 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200 dark:border dark:border-amber-700'
+																						: healthRecord.type === 'Dehorning'
+																							? 'bg-lime-100 text-lime-800 dark:bg-lime-900 dark:text-lime-200 dark:border dark:border-lime-700'
+																							: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 dark:border dark:border-gray-600'
 											}`}
 										>
-											{t(`healthRecordType.${healthRecord.type.toLowerCase()}`)}
+											{healthRecord.type
+												? t(`healthRecordType.${healthRecord.type.toLowerCase()}`)
+												: '-'}
 										</span>
 									</td>
 									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
