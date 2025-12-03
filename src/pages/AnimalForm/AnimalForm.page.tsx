@@ -25,7 +25,7 @@ import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
 import { useAnimalForm } from '@/hooks/forms/useAnimalForm'
-import { useCreateAnimal, useUpdateAnimal } from '@/hooks/queries/useAnimals'
+import { useAnimals, useCreateAnimal, useUpdateAnimal } from '@/hooks/queries/useAnimals'
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 import type { AnimalFormData } from '@/schemas'
@@ -34,12 +34,14 @@ const AnimalForm = () => {
 	const { user } = useUserStore()
 	const { farm, species, breeds } = useFarmStore()
 	const navigate = useNavigate()
+	const { data: animals } = useAnimals()
 	const params = useParams()
 	const { t } = useTranslation(['animalForm'])
 
 	const { setPageTitle, showToast, withError, withLoadingAndError } = usePagePerformance()
 
 	const [pictureUrl, setPictureUrl] = useState<string>('')
+	const isEditing = !!params.animalUuid
 
 	const form = useAnimalForm()
 	const {
@@ -99,6 +101,22 @@ const AnimalForm = () => {
 			}
 		}
 	}, [watchedSpeciesUuid, filteredBreeds, setValue, watch])
+
+	useEffect(() => {
+		if (isEditing || !animals || animals.length === 0) return
+
+		// Only set if the field is empty (to avoid overwriting user input)
+		const currentId = watch('animalId')
+		if (currentId) return
+
+		const maxId = animals.reduce((max, animal) => {
+			const numId = Number.parseInt(animal.animalId, 10)
+			return !Number.isNaN(numId) && numId > max ? numId : max
+		}, 0)
+
+		const nextId = (maxId + 1).toString()
+		setValue('animalId', nextId)
+	}, [animals, isEditing, setValue, watch])
 
 	const handleFile = useCallback(
 		async (file: File) => {
@@ -198,8 +216,6 @@ const AnimalForm = () => {
 		const title = params.animalUuid ? t('editAnimal') : t('addAnimal')
 		setPageTitle(title)
 	}, [setPageTitle, t, params.animalUuid])
-
-	const isEditing = !!params.animalUuid
 
 	// Photo Sidebar Component
 	const PhotoSidebar = () => (
