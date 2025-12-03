@@ -439,37 +439,37 @@ const AnimalForm = () => {
 					},
 					...(isEditing
 						? [
-							{
-								title: t('healthStatus'),
-								icon: 'health-and-safety',
-								columns: 1 as const,
-								children: (
-									<>
-										<Controller
-											name="healthStatus"
-											control={control}
-											render={({ field }) => (
-												<CustomSelect
-													label={t('currentHealthStatus')}
-													placeholder={t('placeholders.selectHealthStatus')}
-													value={field.value}
-													onChange={field.onChange}
-													options={healthStatusOptions}
-													error={
-														errors.healthStatus
-															? getErrorMessage(errors.healthStatus.message || '')
-															: undefined
-													}
-												/>
-											)}
-										/>
-										<p className="text-sm text-gray-600 dark:text-gray-400">
-											{t('healthStatusNote')}
-										</p>
-									</>
-								),
-							},
-						]
+								{
+									title: t('healthStatus'),
+									icon: 'health-and-safety',
+									columns: 1 as const,
+									children: (
+										<>
+											<Controller
+												name="healthStatus"
+												control={control}
+												render={({ field }) => (
+													<CustomSelect
+														label={t('currentHealthStatus')}
+														placeholder={t('placeholders.selectHealthStatus')}
+														value={field.value}
+														onChange={field.onChange}
+														options={healthStatusOptions}
+														error={
+															errors.healthStatus
+																? getErrorMessage(errors.healthStatus.message || '')
+																: undefined
+														}
+													/>
+												)}
+											/>
+											<p className="text-sm text-gray-600 dark:text-gray-400">
+												{t('healthStatusNote')}
+											</p>
+										</>
+									),
+								},
+							]
 						: []),
 					{
 						title: t('additionalInfo'),
