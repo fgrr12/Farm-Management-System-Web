@@ -389,7 +389,7 @@ const HealthRecordForm = () => {
 															<CustomSelect
 																label={t('administrationRoute')}
 																placeholder={t('placeholders.selectRoute')}
-																value={field.value}
+																value={field.value || undefined}
 																onChange={field.onChange}
 																options={administrationRoutes}
 															/>
@@ -402,7 +402,7 @@ const HealthRecordForm = () => {
 															<CustomSelect
 																label={t('injectionSite')}
 																placeholder={t('placeholders.selectSite')}
-																value={field.value}
+																value={field.value || undefined}
 																onChange={field.onChange}
 																options={injectionSites}
 															/>

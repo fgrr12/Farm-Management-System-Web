@@ -18,6 +18,6 @@ interface Animal {
 	relatedAnimals?: RelatedAnimalList
 	healthRecords?: HealthRecord[]
 	productionRecords?: ProductionRecord[]
-	createdAt: string
-	updatedAt: string
+	createdAt?: string
+	updatedAt?: string
 }

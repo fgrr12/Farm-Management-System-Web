@@ -33,8 +33,8 @@ export const ProductionChart = memo(() => {
 	const chartData = useMemo(() => {
 		if (!productionData?.length) return []
 
-		const maxValue = Math.max(...productionData.map((d) => d.value))
-		return productionData.map((item) => ({
+		const maxValue = Math.max(...productionData.map((item: any) => item.value))
+		return productionData.map((item: any) => ({
 			...item,
 			percentage: (item.value / maxValue) * 100,
 		}))
@@ -66,7 +66,7 @@ export const ProductionChart = memo(() => {
 
 	useGSAP(() => {
 		if (totalRef.current && chartData.length && !loadingTertiary && !productionLoading) {
-			const totalValue = chartData.reduce((sum, item) => sum + item.value, 0)
+			const totalValue = chartData.reduce((sum: number, item: any) => sum + item.value, 0)
 			const obj = { value: 0 }
 
 			gsap.to(obj, {
@@ -160,7 +160,7 @@ export const ProductionChart = memo(() => {
 			</div>
 
 			<div className="space-y-4">
-				{chartData.map((item, index) => {
+				{chartData.map((item: any, index: number) => {
 					const refCallback = setBarRef(index)
 					return (
 						<div key={index} className="flex items-center gap-4 group">

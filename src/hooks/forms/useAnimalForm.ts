@@ -60,7 +60,7 @@ export const useAnimalForm = (initialData?: Partial<Animal>) => {
 
 	const transformToApiFormat = useCallback((data: AnimalFormData): Animal => {
 		return {
-			uuid: data.uuid || crypto.randomUUID(),
+			uuid: data.uuid || self.crypto.randomUUID(),
 			farmUuid: data.farmUuid || '',
 			speciesUuid: data.speciesUuid,
 			breedUuid: data.breedUuid,
