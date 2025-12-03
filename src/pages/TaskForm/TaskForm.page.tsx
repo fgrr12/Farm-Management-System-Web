@@ -9,7 +9,7 @@ import { AppRoutes } from '@/config/constants/routes'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
-import { TasksService } from '@/services/tasks'
+
 
 import { DatePicker } from '@/components/layout/DatePicker'
 import { Button } from '@/components/ui/Button'
@@ -19,6 +19,7 @@ import { Textarea } from '@/components/ui/Textarea'
 import { TextField } from '@/components/ui/TextField'
 
 import { useTaskForm } from '@/hooks/forms/useTaskForm'
+import { useCreateTask } from '@/hooks/queries/useTasks'
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 import type { TaskFormData } from '@/schemas'
@@ -28,7 +29,7 @@ const TaskForm = () => {
 	const { farm, species } = useFarmStore()
 	const navigate = useNavigate()
 	const { t } = useTranslation(['taskForm'])
-	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
+	const { setPageTitle, showToast } = usePagePerformance()
 
 	const form = useTaskForm()
 	const {
@@ -55,21 +56,28 @@ const TaskForm = () => {
 		[species]
 	)
 
+	const createTask = useCreateTask()
+
 	const onSubmit = useCallback(
 		async (data: TaskFormData) => {
 			if (!user || !farm) return
 
-			await withLoadingAndError(async () => {
+			try {
 				const taskData = transformToApiFormat(data)
 				taskData.uuid = taskData.uuid || crypto.randomUUID()
 				taskData.farmUuid = farm.uuid
 
-				await TasksService.setTask(taskData, user.uuid, farm.uuid)
+				await createTask.mutateAsync({
+					task: taskData,
+					userUuid: user.uuid,
+				})
 				showToast(t('toast.taskAdded'), 'success')
 				navigate(AppRoutes.TASKS)
-			}, t('toast.errorAddingTask'))
+			} catch {
+				showToast(t('toast.errorAddingTask'), 'error')
+			}
 		},
-		[user, farm, transformToApiFormat, withLoadingAndError, showToast, t, navigate]
+		[user, farm, transformToApiFormat, createTask, showToast, t, navigate]
 	)
 
 	useEffect(() => {

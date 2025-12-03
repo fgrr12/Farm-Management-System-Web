@@ -8,14 +8,13 @@ import { AppRoutes } from '@/config/constants/routes'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
-import { EmployeesService } from '@/services/employees'
-
 import { Button } from '@/components/ui/Button'
 import type { CustomSelectOption } from '@/components/ui/CustomSelect'
 import { CustomSelect } from '@/components/ui/CustomSelect'
 import { TextField } from '@/components/ui/TextField'
 
 import { useEmployeeForm } from '@/hooks/forms/useEmployeeForm'
+import { useCreateEmployee, useEmployee, useUpdateEmployee } from '@/hooks/queries/useEmployees'
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 import type { EmployeeFormData } from '@/schemas'
@@ -26,7 +25,7 @@ const EmployeeForm = () => {
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation(['employeeForm'])
-	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
+	const { setPageTitle, showToast } = usePagePerformance()
 
 	const form = useEmployeeForm()
 	const {
@@ -39,6 +38,8 @@ const EmployeeForm = () => {
 		resetWithData,
 	} = form
 
+	const { data: employee } = useEmployee(params.employeeUuid || '')
+
 	const roleOptions: CustomSelectOption[] = useMemo(
 		() => [
 			{ value: 'employee', label: t('employee') },
@@ -47,55 +48,54 @@ const EmployeeForm = () => {
 		[t]
 	)
 
-	const getEmployee = useCallback(async () => {
-		await withLoadingAndError(async () => {
-			if (!params.employeeUuid) return null
+	useEffect(() => {
+		if (employee) {
+			resetWithData(employee)
+		}
+	}, [employee, resetWithData])
 
-			const employeeUuid = params.employeeUuid as string
-			const employeeData = await EmployeesService.getEmployee(employeeUuid)
-			resetWithData(employeeData)
-			return employeeData
-		}, t('toast.errorGettingEmployee'))
-	}, [params.employeeUuid, withLoadingAndError, t, resetWithData])
+	const createEmployee = useCreateEmployee()
+	const updateEmployee = useUpdateEmployee()
 
 	const onSubmit = useCallback(
 		async (data: EmployeeFormData) => {
-			if (!user) return
+			if (!user || !farm) return
 
-			await withLoadingAndError(async () => {
+			try {
 				const employeeData = transformToApiFormat(data)
-				employeeData.farmUuid = farm!.uuid
+				employeeData.farmUuid = farm.uuid
 
 				if (params.employeeUuid) {
-					await EmployeesService.updateEmployee(employeeData, user.uuid)
+					await updateEmployee.mutateAsync({
+						employee: employeeData,
+						userUuid: user.uuid,
+					})
 					showToast(t('toast.edited'), 'success')
-					navigate(AppRoutes.EMPLOYEES)
-					return
+				} else {
+					employeeData.createdBy = user.uuid
+					await createEmployee.mutateAsync({
+						employee: employeeData,
+						userUuid: user.uuid,
+					})
+					showToast(t('toast.added'), 'success')
 				}
-
-				employeeData.createdBy = user.uuid
-				await EmployeesService.setEmployee(employeeData, user.uuid)
-				showToast(t('toast.added'), 'success')
 				navigate(AppRoutes.EMPLOYEES)
-			}, t('toast.errorAddingEmployee'))
+			} catch {
+				showToast(t('toast.errorAddingEmployee'), 'error')
+			}
 		},
 		[
 			farm,
 			user,
 			params.employeeUuid,
 			transformToApiFormat,
-			withLoadingAndError,
+			createEmployee,
+			updateEmployee,
 			showToast,
 			t,
 			navigate,
 		]
 	)
-
-	useEffect(() => {
-		if (user && params.employeeUuid) {
-			getEmployee()
-		}
-	}, [user, params.employeeUuid, getEmployee])
 
 	useEffect(() => {
 		const title = params.employeeUuid ? t('editEmployee') : t('addEmployee')
