@@ -32,7 +32,7 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 
 		const cardClasses = useMemo(() => {
 			const baseClasses =
-				'relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden group border border-gray-100 dark:border-gray-700'
+				'relative bg-white/5 backdrop-blur-md rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden group border border-white/10 hover:bg-white/10 hover:scale-[1.02]'
 
 			const variantClasses = {
 				default: 'p-6',
@@ -114,17 +114,17 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 		const genderConfig = useMemo(() => {
 			return gender.toLowerCase() === 'male'
 				? {
-						icon: 'i-tdesign-gender-male',
-						color: 'bg-blue-500!',
-						bgColor: 'bg-blue-100',
-						textColor: 'text-blue-800',
-					}
+					icon: 'i-tdesign-gender-male',
+					color: 'bg-blue-500!',
+					bgColor: 'bg-blue-100',
+					textColor: 'text-blue-800',
+				}
 				: {
-						icon: 'i-tdesign-gender-female',
-						color: 'bg-pink-500!',
-						bgColor: 'bg-pink-100',
-						textColor: 'text-pink-800',
-					}
+					icon: 'i-tdesign-gender-female',
+					color: 'bg-pink-500!',
+					bgColor: 'bg-pink-100',
+					textColor: 'text-pink-800',
+				}
 		}, [gender])
 
 		useGSAP(() => {
@@ -200,7 +200,7 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 				ref={cardRef}
 				role="button"
 				tabIndex={0}
-				className={`${cardClasses} bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl transition-all duration-200`}
+				className={`${cardClasses} shadow-lg hover:shadow-2xl transition-all duration-500 group`}
 				onClick={navigateToAnimal}
 				onKeyDown={(e) => {
 					if (e.key === 'Enter' || e.key === ' ') {
@@ -213,110 +213,123 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 				aria-label={`Animal ${animalId}, ${breedName}, ${gender}`}
 				{...rest}
 			>
-				{/* Background Gradient */}
+				{/* Ambient Glow (Health Status Color) */}
 				<div
-					className={`absolute inset-0 bg-linear-to-br ${healthConfig.color} opacity-3 dark:opacity-8 group-hover:opacity-8 dark:group-hover:opacity-12 transition-opacity duration-300 rounded-lg`}
+					className={`absolute -inset-1 bg-linear-to-b ${healthConfig.color} opacity-0 group-hover:opacity-20 blur-2xl transition-opacity duration-700`}
 				/>
 
-				{/* Health Status Indicator */}
-				<div className="absolute top-4 right-4">
-					<div
-						className={`${healthConfig.bgColor} ${healthConfig.textColor} px-2 py-1 rounded-full flex items-center gap-1 text-xs font-medium shadow-sm dark:shadow-md`}
-					>
-						<i className={`${healthConfig.icon} w-3! h-3! bg-current!`} />
-						<span className="hidden sm:inline">{healthConfig.text}</span>
-					</div>
-				</div>
+				{/* Glass Reflection Overlay */}
+				<div className="absolute inset-0 bg-linear-to-b from-white/10 to-transparent pointer-events-none" />
 
-				{/* Animal Avatar/Image */}
-				<div className="flex justify-center mb-4">
-					{picture ? (
-						<div className="w-16 h-16 rounded-full overflow-hidden border-4 border-white dark:border-gray-600 shadow-lg dark:shadow-xl">
-							<img
-								src={picture}
-								alt={`Animal ${animalId}`}
-								className="w-full h-full object-cover"
-							/>
-						</div>
-					) : (
+				<div className="relative z-10 flex flex-col items-center">
+					{/* Avatar with Glowing Status Ring */}
+					<div className="relative mb-6 mt-2">
+						{/* Status Glow Ring */}
 						<div
-							className={`w-16 h-16 rounded-full bg-linear-to-br ${healthConfig.color} flex items-center justify-center shadow-lg dark:shadow-xl border-2 border-white dark:border-gray-600`}
+							className={`absolute -inset-4 bg-linear-to-tr ${healthConfig.color} rounded-full opacity-40 blur-md animate-pulse`}
+						/>
+
+						{/* Avatar Container */}
+						<div className="relative w-24 h-24 rounded-full p-[3px] bg-linear-to-tr from-white/20 to-white/5 backdrop-blur-md shadow-2xl">
+							<div
+								className={
+									'w-full h-full rounded-full overflow-hidden border-2 border-white/10 relative z-10 bg-black/20'
+								}
+							>
+								{picture ? (
+									<img
+										src={picture}
+										alt={`Animal ${animalId}`}
+										className="w-full h-full object-cover"
+									/>
+								) : (
+									<div
+										className={`w-full h-full flex items-center justify-center bg-linear-to-br ${healthConfig.color} opacity-80`}
+									>
+										<i className="i-healthicons-animal-cow w-10! h-10! text-white" />
+									</div>
+								)}
+							</div>
+						</div>
+
+						{/* Status Icon (Floating Bubble) */}
+						<div
+							className={`absolute -bottom-1 -right-1 h-8 rounded-full ${healthConfig.bgColor} border-2 border-white/10 flex items-center justify-center shadow-lg backdrop-blur-md z-20 transition-all duration-300 ease-out w-8 group-hover:w-auto group-hover:px-3`}
 						>
-							<i className="i-healthicons-animal-cow w-8! h-8! bg-white! dark:bg-gray-100!" />
+							<i className={`${healthConfig.icon} w-4! h-4! ${healthConfig.textColor} shrink-0`} />
+							<span
+								className={`text-[10px] font-bold uppercase tracking-wider ${healthConfig.textColor} overflow-hidden w-0 group-hover:w-auto group-hover:ml-2 transition-all duration-300 opacity-0 group-hover:opacity-100 whitespace-nowrap`}
+							>
+								{healthConfig.text}
+							</span>
+						</div>
+					</div>
+
+					{/* Animal ID */}
+					<h3 className="text-3xl font-bold text-white tracking-tight drop-shadow-lg mb-1">
+						#{animalId}
+					</h3>
+
+					{/* Breed & Gender Pill */}
+					<div className="flex items-center gap-2 mb-6 bg-white/5 rounded-full px-4 py-1.5 border border-white/5 backdrop-blur-sm">
+						<span className="text-sm font-medium text-gray-300">{breedName}</span>
+						<div className="w-1 h-1 rounded-full bg-white/20" />
+						<div className="flex items-center gap-1.5">
+							<i className={`${genderConfig.icon} w-3.5! h-3.5! ${genderConfig.textColor}`} />
+							<span
+								className={`text-xs font-semibold uppercase tracking-wide ${genderConfig.textColor}`}
+							>
+								{gender}
+							</span>
+						</div>
+					</div>
+
+					{/* Stats Grid (Detailed Variant) */}
+					{variant === 'detailed' && (
+						<div className="grid grid-cols-2 gap-3 w-full mb-6">
+							{age && (
+								<div className="bg-white/5 rounded-xl p-3 text-center border border-white/5 hover:bg-white/10 transition-colors">
+									<div className="text-gray-400 text-[10px] uppercase tracking-wider mb-0.5">
+										{t('animalCard.age')}
+									</div>
+									<div className="font-bold text-white text-lg">
+										{age}
+										<span className="text-xs text-gray-500 ml-0.5">y</span>
+									</div>
+								</div>
+							)}
+							{weight && (
+								<div className="bg-white/5 rounded-xl p-3 text-center border border-white/5 hover:bg-white/10 transition-colors">
+									<div className="text-gray-400 text-[10px] uppercase tracking-wider mb-0.5">
+										{t('animalCard.weight')}
+									</div>
+									<div className="font-bold text-white text-lg">
+										{weight}
+										<span className="text-xs text-gray-500 ml-0.5">kg</span>
+									</div>
+								</div>
+							)}
 						</div>
 					)}
-				</div>
 
-				{/* Animal ID */}
-				<div className="text-center mb-3">
-					<h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">#{animalId}</h3>
-				</div>
-
-				{/* Breed and Gender */}
-				<div className="flex items-center justify-center gap-2 mb-4">
-					<span className="text-lg font-medium text-gray-700 dark:text-gray-300">{breedName}</span>
-					<div
-						className={`${genderConfig.bgColor} ${genderConfig.textColor} px-2 py-1 rounded-full flex items-center gap-1 shadow-sm dark:shadow-md`}
-					>
-						<i className={`${genderConfig.icon} w-4! h-4! ${genderConfig.color}`} />
-						<span className="text-xs font-medium capitalize">{gender}</span>
+					{/* Action Buttons (Floating) */}
+					<div className="flex items-center gap-2 mt-auto">
+						<ActionButton
+							title={t('animalCard.addHealthRecord')}
+							icon="i-material-symbols-light-health-metrics-rounded"
+							onClick={navigateToAddHealthRecord}
+						/>
+						<ActionButton
+							title={t('animalCard.addProductionRecord')}
+							icon="i-icon-park-outline-milk"
+							onClick={navigateToAddProductionRecord}
+						/>
+						<ActionButton
+							title={t('animalCard.addRelatedAnimal')}
+							icon="i-tabler-circles-relation"
+							onClick={navigateToAddRelatedAnimal} />
 					</div>
 				</div>
-
-				{/* Additional Info (for detailed variant) */}
-				{variant === 'detailed' && (
-					<div className="grid grid-cols-2 gap-2 mb-4 text-sm">
-						{age && (
-							<div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-2 text-center border border-gray-100 dark:border-gray-700">
-								<div className="text-gray-500 dark:text-gray-400 text-xs">
-									{t('animalCard.age')}
-								</div>
-								<div className="font-semibold text-gray-900 dark:text-gray-100">{age}y</div>
-							</div>
-						)}
-						{weight && (
-							<div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-2 text-center border border-gray-100 dark:border-gray-700">
-								<div className="text-gray-500 dark:text-gray-400 text-xs">
-									{t('animalCard.weight')}
-								</div>
-								<div className="font-semibold text-gray-900 dark:text-gray-100">{weight}kg</div>
-							</div>
-						)}
-					</div>
-				)}
-
-				{/* Notes (if any) */}
-				{notes && variant !== 'compact' && (
-					<div className="mb-4">
-						<p className="text-sm text-gray-600 dark:text-gray-400 italic line-clamp-2">{notes}</p>
-					</div>
-				)}
-
-				{/* Action Buttons */}
-				<div className="flex justify-center items-center gap-1">
-					<ActionButton
-						title={t('animalCard.addHealthRecord')}
-						icon="i-material-symbols-light-health-metrics-rounded"
-						onClick={navigateToAddHealthRecord}
-					/>
-					<ActionButton
-						title={t('animalCard.addProductionRecord')}
-						icon="i-icon-park-outline-milk"
-						onClick={navigateToAddProductionRecord}
-					/>
-					<ActionButton
-						title={t('animalCard.addRelatedAnimal')}
-						icon="i-tabler-circles-relation"
-						onClick={navigateToAddRelatedAnimal}
-					/>
-				</div>
-
-				{/* Last Health Check (if available) */}
-				{lastHealthCheck && variant !== 'compact' && (
-					<div className="absolute bottom-2 left-4 text-xs text-gray-500 dark:text-gray-400">
-						{t('animalCard.lastCheck')}: {lastHealthCheck}
-					</div>
-				)}
 			</div>
 		)
 	}

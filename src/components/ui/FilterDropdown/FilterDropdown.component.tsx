@@ -153,52 +153,47 @@ export const FilterDropdown = <T extends Record<string, any>>(props: FilterDropd
 					type="button"
 					onClick={toggleDropdown}
 					className={`
-						flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200
-						${
-							hasActiveFilters
-								? className?.includes('emerald-theme')
-									? 'border-emerald-500 dark:border-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300'
-									: 'border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
-								: 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-500'
+						flex items-center gap-2 px-4 py-2 rounded-xl border transition-all duration-200 backdrop-blur-md
+						${hasActiveFilters
+							? className?.includes('emerald-theme')
+								? 'border-emerald-500/50 bg-emerald-500/20 text-emerald-300'
+								: 'border-blue-500/50 bg-blue-500/20 text-blue-300'
+							: 'border-white/10 bg-white/5 text-white hover:bg-white/10 hover:border-white/20'
 						}
-						focus:outline-none focus:ring-2 ${
-							className?.includes('emerald-theme')
-								? 'focus:ring-emerald-500 dark:focus:ring-emerald-400'
-								: 'focus:ring-blue-500 dark:focus:ring-blue-400'
-						} focus:border-transparent
+						focus:outline-none focus:ring-2 ${className?.includes('emerald-theme')
+							? 'focus:ring-emerald-500/50'
+							: 'focus:ring-blue-500/50'
+						} focus:border-transparent shadow-lg
 					`}
 					aria-expanded={isOpen}
 					aria-haspopup="true"
 				>
 					<div
-						className={`w-5! h-5! i-material-symbols-filter-list ${
-							hasActiveFilters
+						className={`w-5! h-5! i-material-symbols-filter-list ${hasActiveFilters
 								? className?.includes('emerald-theme')
-									? 'bg-emerald-600! dark:bg-emerald-400!'
-									: 'bg-blue-600! dark:bg-blue-400!'
-								: 'bg-gray-500! dark:bg-gray-400!'
-						}`}
+									? 'bg-emerald-400!'
+									: 'bg-blue-400!'
+								: 'bg-white!'
+							}`}
 					/>
 					<span className="font-medium">{hasActiveFilters ? activeButtonLabel : buttonLabel}</span>
 					{hasActiveFilters && (
 						<span
-							className={`ml-1 px-2 py-0.5 text-xs text-white dark:text-gray-100 rounded-full ${
-								className?.includes('emerald-theme')
-									? 'bg-emerald-600 dark:bg-emerald-500'
-									: 'bg-blue-600 dark:bg-blue-500'
-							}`}
+							className={`ml-1 px-2 py-0.5 text-xs text-white rounded-full ${className?.includes('emerald-theme')
+									? 'bg-emerald-500'
+									: 'bg-blue-500'
+								}`}
 						>
 							{activeFiltersCount}
 						</span>
 					)}
 					<div
-						className={`w-4! h-4! i-material-symbols-keyboard-arrow-down transition-transform duration-200 ${isOpen ? 'rotate-180' : ''} ${
-							hasActiveFilters
+						className={`w-4! h-4! i-material-symbols-keyboard-arrow-down transition-transform duration-200 ${isOpen ? 'rotate-180' : ''} ${hasActiveFilters
 								? className?.includes('emerald-theme')
-									? 'bg-emerald-600! dark:bg-emerald-400!'
-									: 'bg-blue-600! dark:bg-blue-400!'
-								: 'bg-gray-500! dark:bg-gray-400!'
-						}`}
+									? 'bg-emerald-400!'
+									: 'bg-blue-400!'
+								: 'bg-white!'
+							}`}
 					/>
 				</button>
 			</div>
@@ -206,7 +201,7 @@ export const FilterDropdown = <T extends Record<string, any>>(props: FilterDropd
 			{isOpen && (
 				<div
 					ref={dropdownRef}
-					className="fixed bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl dark:shadow-2xl z-[9999] filter-dropdown"
+					className="fixed bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl z-[9999] filter-dropdown"
 					style={{
 						top: `${dropdownPosition.top}px`,
 						left: `${dropdownPosition.left}px`,
@@ -215,18 +210,17 @@ export const FilterDropdown = <T extends Record<string, any>>(props: FilterDropd
 				>
 					<div className="p-4">
 						<div className="flex items-center justify-between mb-4">
-							<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+							<h3 className="text-lg font-semibold text-white">
 								{buttonLabel}
 							</h3>
 							{hasActiveFilters && (
 								<button
 									type="button"
 									onClick={clearFilters}
-									className={`text-sm font-medium transition-colors ${
-										className?.includes('emerald-theme')
-											? 'text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300'
-											: 'text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300'
-									}`}
+									className={`text-sm font-medium transition-colors ${className?.includes('emerald-theme')
+											? 'text-emerald-400 hover:text-emerald-300'
+											: 'text-blue-400 hover:text-blue-300'
+										}`}
 								>
 									{clearButtonLabel}
 								</button>
@@ -235,9 +229,9 @@ export const FilterDropdown = <T extends Record<string, any>>(props: FilterDropd
 
 						<div className="space-y-4">{children}</div>
 
-						<div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+						<div className="mt-6 pt-4 border-t border-white/10">
 							<div className="flex items-center justify-between">
-								<span className="text-sm text-gray-500 dark:text-gray-400">
+								<span className="text-sm text-gray-400">
 									{hasActiveFilters
 										? filtersAppliedLabel.replace('{{count}}', activeFiltersCount.toString())
 										: noFiltersAppliedLabel}
@@ -245,7 +239,7 @@ export const FilterDropdown = <T extends Record<string, any>>(props: FilterDropd
 								<button
 									type="button"
 									onClick={() => setIsOpen(false)}
-									className="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-md transition-colors"
+									className="px-3 py-1 text-sm bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors border border-white/5"
 								>
 									{doneButtonLabel}
 								</button>

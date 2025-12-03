@@ -19,41 +19,46 @@ export const PageHeader = memo(
 		return (
 			<div
 				className={cn(
-					'bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden mb-6 sm:mb-8 border border-gray-100 dark:border-gray-700 transition-all duration-300',
+					'relative overflow-hidden rounded-3xl transition-all duration-300 mb-8',
+					'bg-white/10 backdrop-blur-xl border border-white/10 shadow-2xl',
 					className
 				)}
 			>
+				{/* Glass Reflection Overlay */}
+				<div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent pointer-events-none" />
+
 				{/* Hero Section */}
-				<div className="bg-linear-to-r from-blue-600 to-green-600 dark:from-blue-700 dark:to-green-700 px-4 sm:px-6 py-6 sm:py-8">
-					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+				<div className="px-6 py-8 sm:px-8 sm:py-10 relative z-10">
+					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
 						{/* Title Section */}
-						<div className="flex items-center gap-3 sm:gap-4">
+						<div className="flex items-center gap-5">
 							<div
 								className={cn(
-									'bg-white/20 dark:bg-white/25 rounded-full flex items-center justify-center shrink-0 shadow-lg dark:shadow-black/20 backdrop-blur-sm',
-									isCompact ? 'w-12 h-12 sm:w-14 sm:h-14' : 'w-12 h-12 sm:w-16 sm:h-16'
+									'rounded-2xl flex items-center justify-center shrink-0 shadow-lg backdrop-blur-md border border-white/20',
+									'bg-white/10 text-white',
+									isCompact ? 'w-12 h-12 sm:w-14 sm:h-14' : 'w-16 h-16 sm:w-20 sm:h-20'
 								)}
 							>
 								<i
 									className={cn(
-										`i-material-symbols-${icon} bg-white! drop-shadow-sm`,
-										isCompact ? 'w-6! h-6! sm:w-7 sm:h-7' : 'w-6! h-6! sm:w-8 sm:h-8'
+										`i-material-symbols-${icon} drop-shadow-md`,
+										isCompact ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-4xl'
 									)}
 								/>
 							</div>
 							<div className="min-w-0">
 								<h1
 									className={cn(
-										'font-bold text-white drop-shadow-sm',
+										'font-bold text-white drop-shadow-md tracking-tight',
 										isCompact
 											? 'text-xl sm:text-2xl lg:text-3xl'
-											: 'text-2xl sm:text-3xl lg:text-4xl'
+											: 'text-3xl sm:text-4xl lg:text-5xl'
 									)}
 								>
 									{title}
 								</h1>
 								{subtitle && (
-									<p className="text-blue-100 dark:text-blue-200 text-sm sm:text-base mt-1 drop-shadow-sm">
+									<p className="text-blue-100/80 text-base sm:text-lg mt-2 font-medium tracking-wide">
 										{subtitle}
 									</p>
 								)}
@@ -61,13 +66,13 @@ export const PageHeader = memo(
 						</div>
 
 						{/* Stats Section */}
-						{stats && <div className="flex gap-2 sm:gap-3">{stats}</div>}
+						{stats && <div className="flex gap-3 sm:gap-4">{stats}</div>}
 					</div>
 				</div>
 
 				{/* Actions Section */}
 				{actions && (
-					<div className="p-4 sm:p-6 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-200 dark:border-gray-600">
+					<div className="p-4 sm:p-6 bg-black/20 border-t border-white/5 relative z-10 backdrop-blur-md">
 						{actions}
 					</div>
 				)}

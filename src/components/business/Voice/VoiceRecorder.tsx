@@ -110,17 +110,20 @@ export function VoiceRecorder({
 
 	const currentState = getCurrentState()
 
-	// Get background color based on state
+	// Get background color based on state - Deep Liquid Glass
 	const getBackgroundClass = () => {
+		const baseGlass =
+			'backdrop-blur-3xl bg-white/5 dark:bg-black/20 border-white/20 dark:border-white/10 shadow-[inset_0_0_20px_rgba(255,255,255,0.05)]'
+
 		switch (currentState) {
 			case 'recording':
-				return 'bg-red-50 dark:bg-red-900/10 border-red-300 dark:border-red-700'
+				return `${baseGlass} border-red-500/30 shadow-[0_0_50px_rgba(239,68,68,0.2)]`
 			case 'processing':
-				return 'bg-blue-50 dark:bg-blue-900/10 border-blue-300 dark:border-blue-700'
+				return `${baseGlass} border-blue-500/30 shadow-[0_0_50px_rgba(59,130,246,0.2)]`
 			case 'done':
-				return 'bg-green-50 dark:bg-green-900/10 border-green-300 dark:border-green-700'
+				return `${baseGlass} border-green-500/30 shadow-[0_0_50px_rgba(34,197,94,0.2)]`
 			default:
-				return 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'
+				return `${baseGlass} shadow-2xl`
 		}
 	}
 
@@ -159,63 +162,82 @@ export function VoiceRecorder({
 
 			{/* Main Recording Card */}
 			<div
-				className={`card shadow-2xl border-4 transition-all duration-500 ${getBackgroundClass()}`}
+				className={`
+					relative overflow-hidden rounded-[2.5rem] transition-all duration-700
+					${getBackgroundClass()}
+				`}
 			>
-				<div className="card-body p-8 sm:p-12">
-					{/* Status Message - Large and Prominent */}
-					<div className="text-center mb-8">
-						<h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+				{/* Glass Reflection Overlay */}
+				<div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent pointer-events-none" />
+
+				<div className="card-body p-8 sm:p-12 relative z-10">
+					{/* Status Message */}
+					<div className="text-center mb-12">
+						<h2 className="text-4xl sm:text-5xl font-bold text-white drop-shadow-md mb-4 tracking-tight">
 							{getStatusMessage()}
 						</h2>
 						{isRecording && (
-							<p className="text-xl text-gray-600 dark:text-gray-400 animate-pulse">
+							<p className="text-xl text-white/80 font-medium animate-pulse tracking-wide">
 								{t('listening')}
 							</p>
 						)}
 					</div>
 
 					{/* Giant Recording Button */}
-					<div className="flex flex-col items-center gap-6 mb-8">
+					<div className="flex flex-col items-center gap-8 mb-8">
 						<button
 							type="button"
 							onClick={handleRecordingToggle}
 							disabled={isProcessing || !farm || !user}
 							className={`
-								relative w-48 h-48 rounded-full 
-								transition-all duration-300 transform
-								cursor-pointer
-								${
-									isRecording
-										? 'bg-red-500 hover:bg-red-600 scale-110 shadow-2xl shadow-red-500/50'
-										: isProcessing
-											? 'bg-gray-400 cursor-not-allowed'
-											: 'bg-linear-to-br from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 hover:scale-105 shadow-2xl hover:shadow-pink-500/50'
+								relative rounded-full 
+								transition-all duration-500 transform
+								cursor-pointer flex items-center justify-center
+								w-56 h-56 shadow-2xl hover:scale-105
+								${isRecording
+									? 'bg-red-500/20 backdrop-blur-md shadow-[0_0_60px_rgba(239,68,68,0.4)] border border-red-500/30'
+									: ''
 								}
-								${!isRecording && !isProcessing ? 'animate-pulse' : ''}
+								${!isRecording && !isProcessing
+									? 'bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_60px_rgba(255,255,255,0.1)] hover:shadow-[0_0_80px_rgba(255,255,255,0.2)] hover:bg-white/20'
+									: ''
+								}
+								${isProcessing
+									? 'bg-blue-500/10 backdrop-blur-md border border-blue-500/20 cursor-not-allowed'
+									: ''
+								}
 								disabled:opacity-50 disabled:cursor-not-allowed
-								focus:outline-none focus:ring-8 focus:ring-pink-300 dark:focus:ring-pink-800
+								focus:outline-none focus:ring-4 focus:ring-white/30
 							`}
 						>
+							{/* Organic Ripple Effect */}
+							{isRecording && (
+								<>
+									<span className="absolute inset-0 rounded-full bg-red-500/20 animate-ping duration-[2s]" />
+									<span className="absolute inset-0 rounded-full bg-red-500/10 animate-ping animation-delay-1000 duration-[2s]" />
+								</>
+							)}
+
 							{/* Icon */}
-							<div className="absolute inset-0 flex items-center justify-center">
+							<div className="relative z-10">
 								{isRecording ? (
-									<div className="w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-lg animate-pulse" />
+									<div className="w-24 h-24 bg-red-500 rounded-2xl animate-pulse shadow-[0_0_30px_rgba(239,68,68,0.6)]" />
 								) : isProcessing ? (
-									<div className="loading loading-spinner loading-lg text-white w-20 h-20 sm:w-24 sm:h-24" />
+									<div className="loading loading-spinner loading-lg text-white w-24 h-24" />
 								) : (
-									<i className="i-heroicons-microphone text-white text-8xl drop-shadow-lg" />
+									<i className="i-heroicons-microphone text-9xl text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)]" />
 								)}
 							</div>
 
-							{/* Pulse animation when ready */}
+							{/* Breathing animation when ready */}
 							{!isRecording && !isProcessing && (
-								<span className="absolute inset-0 rounded-full bg-pink-400 animate-ping opacity-75" />
+								<span className="absolute inset-0 rounded-full bg-white/5 animate-pulse duration-[3s]" />
 							)}
 						</button>
 
 						{/* Button Label */}
 						<div className="text-center">
-							<p className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
+							<p className="text-2xl font-semibold text-white/90 drop-shadow-sm">
 								{isRecording
 									? t('stopRecording')
 									: isProcessing
@@ -226,17 +248,17 @@ export function VoiceRecorder({
 
 						{/* Recording Timer - Extra Large */}
 						{(isRecording || recordingTime > 0) && (
-							<div className="flex flex-col items-center gap-2 animate-in slide-in-from-bottom-3 duration-300">
-								<div className="text-6xl sm:text-7xl font-mono font-bold text-red-600 dark:text-red-400 tabular-nums">
+							<div className="flex flex-col items-center gap-3 animate-in slide-in-from-bottom-3 duration-300">
+								<div className="text-7xl font-mono font-bold text-white drop-shadow-lg tabular-nums tracking-wider">
 									{formatTime(recordingTime)}
 								</div>
-								<div className="text-xl text-gray-500 dark:text-gray-400">
+								<div className="text-xl text-white/60 font-medium">
 									/ {formatTime(maxRecordingTime)}
 								</div>
 								{/* Progress bar */}
-								<div className="w-64 h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+								<div className="w-72 h-2 bg-white/10 rounded-full overflow-hidden backdrop-blur-sm">
 									<div
-										className="h-full bg-red-500 transition-all duration-1000"
+										className="h-full bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)] transition-all duration-1000"
 										style={{ width: `${(recordingTime / maxRecordingTime) * 100}%` }}
 									/>
 								</div>
@@ -247,10 +269,10 @@ export function VoiceRecorder({
 						{isRecording && (
 							<button
 								type="button"
-								className="btn btn-lg btn-outline btn-error hover:btn-error transition-all duration-300 animate-in slide-in-from-bottom-3"
+								className="btn btn-lg btn-ghost text-white hover:bg-white/10 transition-all duration-300 animate-in slide-in-from-bottom-3 mt-4"
 								onClick={cancelRecording}
 							>
-								<i className="i-heroicons-x-mark text-xl" />
+								<i className="i-heroicons-x-mark text-2xl" />
 								<span className="text-xl">{t('cancel')}</span>
 							</button>
 						)}
@@ -258,16 +280,14 @@ export function VoiceRecorder({
 
 					{/* Processing Indicator */}
 					{isProcessing && (
-						<div className="bg-blue-100 dark:bg-blue-900/30 rounded-2xl p-6 border-2 border-blue-300 dark:border-blue-700 animate-in slide-in-from-bottom-3 duration-500">
+						<div className="bg-white/5 backdrop-blur-md rounded-2xl p-8 border border-white/10 animate-in slide-in-from-bottom-3 duration-500">
 							<div className="flex flex-col items-center gap-4 text-center">
-								<div className="loading loading-spinner loading-lg text-blue-600" />
+								<div className="loading loading-spinner loading-lg text-white" />
 								<div>
-									<p className="text-2xl font-bold text-blue-900 dark:text-blue-100 mb-2">
+									<p className="text-2xl font-bold text-white mb-2">
 										{t('status.processingVoiceCommand')}
 									</p>
-									<p className="text-lg text-blue-700 dark:text-blue-300">
-										{t('status.aiAnalyzing')}
-									</p>
+									<p className="text-lg text-white/70">{t('status.aiAnalyzing')}</p>
 								</div>
 							</div>
 						</div>
@@ -280,7 +300,7 @@ export function VoiceRecorder({
 				<div className="space-y-4 animate-in slide-in-from-bottom-4 duration-500">
 					{/* Audio Playback */}
 					{audioURL && (
-						<div className="card bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700">
+						<div className="card bg-white/40 dark:bg-black/40 backdrop-blur-xl border border-white/20 shadow-lg">
 							<div className="card-body p-4">
 								<div className="flex items-center gap-3 mb-3">
 									<i className="i-heroicons-musical-note text-primary text-lg" />
@@ -299,7 +319,7 @@ export function VoiceRecorder({
 
 					{/* Transcription */}
 					{transcription && (
-						<div className="card bg-linear-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 shadow-lg border border-blue-200 dark:border-blue-700">
+						<div className="card bg-white/40 dark:bg-black/40 backdrop-blur-xl border border-white/20 shadow-lg">
 							<div className="card-body p-4">
 								<div className="flex items-center gap-3 mb-3">
 									<i className="i-heroicons-microphone text-blue-600 text-lg" />
@@ -307,7 +327,7 @@ export function VoiceRecorder({
 										{t('transcription')}
 									</span>
 								</div>
-								<div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-blue-200 dark:border-blue-600">
+								<div className="bg-white/50 dark:bg-black/20 rounded-lg p-4 border border-white/10">
 									<p className="text-lg text-gray-700 dark:text-gray-300 italic">
 										"{transcription}"
 									</p>
@@ -318,7 +338,7 @@ export function VoiceRecorder({
 
 					{/* AI Analysis Results */}
 					{processingResponse && (
-						<div className="card bg-linear-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 shadow-lg border border-purple-200 dark:border-purple-700">
+						<div className="card bg-white/40 dark:bg-black/40 backdrop-blur-xl border border-white/20 shadow-lg">
 							<div className="card-body p-4">
 								<div className="flex items-center justify-between mb-4">
 									<div className="flex items-center gap-3">
@@ -434,7 +454,7 @@ export function VoiceRecorder({
 
 					{/* Execution Results */}
 					{executionResults.length > 0 && (
-						<div className="card bg-linear-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 shadow-lg border border-green-200 dark:border-green-700">
+						<div className="card bg-white/40 dark:bg-black/40 backdrop-blur-xl border border-white/20 shadow-lg">
 							<div className="card-body p-4">
 								<div className="flex items-center gap-3 mb-4">
 									<i className="i-heroicons-check-circle text-green-600 text-lg" />
@@ -447,19 +467,17 @@ export function VoiceRecorder({
 									{executionResults.map((result, index) => (
 										<div
 											key={index}
-											className={`p-4 rounded-lg border transition-all duration-300 hover:shadow-md ${
-												result.success
-													? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700'
-													: 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-700'
-											}`}
+											className={`p-4 rounded-lg border transition-all duration-300 hover:shadow-md ${result.success
+												? 'bg-green-50/50 dark:bg-green-900/20 border-green-200 dark:border-green-700'
+												: 'bg-red-50/50 dark:bg-red-900/20 border-red-200 dark:border-red-700'
+												}`}
 										>
 											<div className="flex items-start gap-3">
 												<i
-													className={`${
-														result.success
-															? 'i-heroicons-check-circle text-green-600'
-															: 'i-heroicons-x-circle text-red-600'
-													} text-lg mt-0.5 shrink-0`}
+													className={`${result.success
+														? 'i-heroicons-check-circle text-green-600'
+														: 'i-heroicons-x-circle text-red-600'
+														} text-lg mt-0.5 shrink-0`}
 												/>
 												<div className="flex-1">
 													<div className="font-medium text-gray-900 dark:text-gray-100">
