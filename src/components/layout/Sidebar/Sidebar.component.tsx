@@ -30,11 +30,11 @@ export const Sidebar = memo(() => {
 	const getButtonClasses = useCallback(
 		(path: string, colorFrom: string, colorTo: string) => {
 			const isActive = location.pathname.includes(path)
-			return `w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 ${
-				isActive
-					? `bg-linear-to-br ${colorFrom} ${colorTo} shadow-lg`
-					: 'hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50 dark:bg-gray-800'
-			}`
+			const shadowColor = colorFrom.replace('from-', '').replace('-500', '-500/30')
+			return `w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 ${isActive
+				? `bg-linear-to-br ${colorFrom} ${colorTo} shadow-lg shadow-${shadowColor}`
+				: 'hover:bg-white/20 dark:hover:bg-white/10 bg-white/5'
+				}`
 		},
 		[location.pathname]
 	)
@@ -73,7 +73,7 @@ export const Sidebar = memo(() => {
 	}, [location])
 	return (
 		<div
-			className="bg-white dark:bg-gray-900 h-full hidden lg:flex flex-col items-center py-4 shadow-lg border-r border-gray-100 dark:border-gray-700 w-20"
+			className="bg-white/10 dark:bg-white/5 backdrop-blur-xl h-[calc(100vh-24px)] hidden lg:flex flex-col items-center py-4 shadow-2xl border-r border-white/20 dark:border-white/10 w-20 ml-3 my-3 rounded-2xl"
 			role="navigation"
 			aria-label="Main navigation"
 		>
@@ -139,7 +139,7 @@ export const Sidebar = memo(() => {
 			{/* Admin Section */}
 			{showAdminRoutes && (
 				<>
-					<div className="w-8 h-px bg-gray-200 dark:bg-gray-600 my-4" />
+					<div className="w-8 h-px bg-white/10 my-4" />
 					<div className="flex flex-col gap-3">
 						<button
 							type="button"
@@ -174,7 +174,7 @@ export const Sidebar = memo(() => {
 			<div className="mt-auto flex flex-col gap-3">
 				<button
 					type="button"
-					className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50 dark:bg-gray-800"
+					className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 hover:bg-white/20 dark:hover:bg-white/10 bg-white/5"
 					onClick={toggleTheme}
 					aria-label={`Current theme: ${theme}. Click to change theme`}
 					title={`Theme: ${theme}`}

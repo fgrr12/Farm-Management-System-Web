@@ -126,11 +126,83 @@ export const App = () => {
 	}, [])
 
 	return (
-		<div className="flex flex-col w-full h-screen">
+		<div className="flex flex-col w-full h-screen relative overflow-hidden">
+			{/* Global Animated Background Blobs */}
+			{location.pathname !== AppRoutes.LOGIN && (
+				<div className="absolute inset-0 overflow-hidden pointer-events-none bg-white dark:bg-slate-900 transition-colors duration-300">
+					<div
+						className={`absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[120px] opacity-50 animate-blob transition-colors duration-1000 ${location.pathname.includes(AppRoutes.ANIMALS)
+								? 'bg-blue-500/30'
+								: location.pathname.includes(AppRoutes.TASKS)
+									? 'bg-green-500/30'
+									: location.pathname.includes(AppRoutes.MY_SPECIES)
+										? 'bg-indigo-500/30'
+										: location.pathname.includes(AppRoutes.EMPLOYEES)
+											? 'bg-orange-500/30'
+											: location.pathname.includes(AppRoutes.TAX_DETAILS)
+												? 'bg-indigo-500/30'
+												: location.pathname.includes(AppRoutes.MY_ACCOUNT)
+													? 'bg-gray-500/30'
+													: location.pathname.includes(AppRoutes.DASHBOARD)
+														? 'bg-cyan-500/30'
+														: location.pathname.includes(AppRoutes.CALENDAR)
+															? 'bg-purple-500/30'
+															: location.pathname.includes(AppRoutes.VOICE)
+																? 'bg-pink-500/30'
+																: 'bg-blue-500/30'
+							}`}
+					/>
+					<div
+						className={`absolute top-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[120px] opacity-50 animate-blob animation-delay-2000 transition-colors duration-1000 ${location.pathname.includes(AppRoutes.ANIMALS)
+								? 'bg-cyan-500/30'
+								: location.pathname.includes(AppRoutes.TASKS)
+									? 'bg-emerald-500/30'
+									: location.pathname.includes(AppRoutes.MY_SPECIES)
+										? 'bg-violet-500/30'
+										: location.pathname.includes(AppRoutes.EMPLOYEES)
+											? 'bg-amber-500/30'
+											: location.pathname.includes(AppRoutes.TAX_DETAILS)
+												? 'bg-blue-500/30'
+												: location.pathname.includes(AppRoutes.MY_ACCOUNT)
+													? 'bg-slate-500/30'
+													: location.pathname.includes(AppRoutes.DASHBOARD)
+														? 'bg-sky-500/30'
+														: location.pathname.includes(AppRoutes.CALENDAR)
+															? 'bg-fuchsia-500/30'
+															: location.pathname.includes(AppRoutes.VOICE)
+																? 'bg-rose-500/30'
+																: 'bg-purple-500/30'
+							}`}
+					/>
+					<div
+						className={`absolute bottom-[-20%] left-[20%] w-[60vw] h-[60vw] rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[120px] opacity-50 animate-blob animation-delay-4000 transition-colors duration-1000 ${location.pathname.includes(AppRoutes.ANIMALS)
+								? 'bg-indigo-500/30'
+								: location.pathname.includes(AppRoutes.TASKS)
+									? 'bg-teal-500/30'
+									: location.pathname.includes(AppRoutes.MY_SPECIES)
+										? 'bg-blue-500/30'
+										: location.pathname.includes(AppRoutes.EMPLOYEES)
+											? 'bg-red-500/30'
+											: location.pathname.includes(AppRoutes.TAX_DETAILS)
+												? 'bg-purple-500/30'
+												: location.pathname.includes(AppRoutes.MY_ACCOUNT)
+													? 'bg-zinc-500/30'
+													: location.pathname.includes(AppRoutes.DASHBOARD)
+														? 'bg-teal-500/30'
+														: location.pathname.includes(AppRoutes.CALENDAR)
+															? 'bg-indigo-500/30'
+															: location.pathname.includes(AppRoutes.VOICE)
+																? 'bg-purple-500/30'
+																: 'bg-indigo-500/30'
+							}`}
+					/>
+				</div>
+			)}
+
 			<SEO />
 			<DevelopmentBanner />
 			{location.pathname !== AppRoutes.LOGIN && <Navbar />}
-			<div className="flex flex-row w-full h-full overflow-hidden">
+			<div className="flex flex-row w-full h-full overflow-hidden relative z-10">
 				{location.pathname !== AppRoutes.LOGIN && <Sidebar />}
 				<main className="w-full h-full overflow-auto relative">
 					<Suspense

@@ -149,7 +149,7 @@ export const NotificationDropdown = memo(() => {
 			{/* Trigger Button */}
 			<button
 				type="button"
-				className="btn btn-ghost btn-circle hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 hover:scale-110 active:scale-95"
+				className="btn btn-ghost btn-circle hover:bg-white/20 dark:hover:bg-white/10 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 hover:scale-110 active:scale-95"
 				aria-label={t('title')}
 				onClick={() => setIsOpen(!isOpen)}
 			>
@@ -165,7 +165,7 @@ export const NotificationDropdown = memo(() => {
 
 			{/* Dropdown Content */}
 			{isOpen && (
-				<div className="absolute right-0 top-full mt-2 w-[420px] bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 max-h-[85vh] flex flex-col">
+				<div className="absolute right-0 top-full mt-2 w-[420px] bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-xl shadow-2xl border border-white/20 dark:border-gray-700/50 z-50 max-h-[85vh] flex flex-col">
 					{/* Header */}
 					<div className="p-4 border-b border-gray-200 dark:border-gray-700 shrink-0">
 						<div className="flex items-center justify-between mb-3">
@@ -210,10 +210,9 @@ export const NotificationDropdown = memo(() => {
 										onClick={() => setSelectedCategory(category.key)}
 										className={`
 											flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 whitespace-nowrap shrink-0
-											${
-												selectedCategory === category.key
-													? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-100 shadow-sm'
-													: 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+											${selectedCategory === category.key
+												? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-100 shadow-sm'
+												: 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
 											}
 										`}
 									>
@@ -223,10 +222,9 @@ export const NotificationDropdown = memo(() => {
 											<span
 												className={`
 													px-1.5 py-0.5 rounded-full text-xs font-medium
-													${
-														selectedCategory === category.key
-															? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
-															: 'bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-300'
+													${selectedCategory === category.key
+														? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
+														: 'bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-300'
 													}
 												`}
 											>
@@ -312,43 +310,40 @@ export const NotificationDropdown = memo(() => {
 											<div className="flex-1 min-w-0">
 												<div className="flex items-start justify-between gap-2 mb-3">
 													<h4
-														className={`text-sm font-semibold ${
-															notification.type === 'success'
+														className={`text-sm font-semibold ${notification.type === 'success'
 																? 'text-green-800 dark:text-green-200'
 																: notification.type === 'warning'
 																	? 'text-yellow-800 dark:text-yellow-200'
 																	: notification.type === 'error'
 																		? 'text-red-800 dark:text-red-200'
 																		: 'text-blue-800 dark:text-blue-200'
-														}`}
+															}`}
 													>
 														{notification.title}
 													</h4>
 													{!notification.read && (
 														<div
-															className={`w-2 h-2 rounded-full shrink-0 mt-1 ${
-																notification.type === 'success'
+															className={`w-2 h-2 rounded-full shrink-0 mt-1 ${notification.type === 'success'
 																	? 'bg-green-500'
 																	: notification.type === 'warning'
 																		? 'bg-yellow-500'
 																		: notification.type === 'error'
 																			? 'bg-red-500'
 																			: 'bg-blue-500'
-															}`}
+																}`}
 														/>
 													)}
 												</div>
 
 												<p
-													className={`text-sm leading-relaxed ${
-														notification.type === 'success'
+													className={`text-sm leading-relaxed ${notification.type === 'success'
 															? 'text-green-700 dark:text-green-300'
 															: notification.type === 'warning'
 																? 'text-yellow-700 dark:text-yellow-300'
 																: notification.type === 'error'
 																	? 'text-red-700 dark:text-red-300'
 																	: 'text-blue-700 dark:text-blue-300'
-													}`}
+														}`}
 												>
 													{notification.message}
 												</p>
@@ -356,28 +351,26 @@ export const NotificationDropdown = memo(() => {
 												<div className="flex items-center justify-between mt-3 pt-2 border-t border-gray-200/50 dark:border-gray-600/50">
 													<div className="flex items-center gap-2">
 														<span
-															className={`text-xs font-medium ${
-																notification.type === 'success'
+															className={`text-xs font-medium ${notification.type === 'success'
 																	? 'text-green-600 dark:text-green-400'
 																	: notification.type === 'warning'
 																		? 'text-yellow-600 dark:text-yellow-400'
 																		: notification.type === 'error'
 																			? 'text-red-600 dark:text-red-400'
 																			: 'text-blue-600 dark:text-blue-400'
-															}`}
+																}`}
 														>
 															{dayjs(notification.createdAt).fromNow()}
 														</span>
 														<span
-															className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-																notification.type === 'success'
+															className={`text-xs px-2 py-0.5 rounded-full font-medium ${notification.type === 'success'
 																	? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
 																	: notification.type === 'warning'
 																		? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300'
 																		: notification.type === 'error'
 																			? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
 																			: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
-															}`}
+																}`}
 														>
 															{t(`categories.${notification.category}`)}
 														</span>
@@ -388,15 +381,14 @@ export const NotificationDropdown = memo(() => {
 															<button
 																type="button"
 																onClick={(e) => handleMarkAsRead(e, notification.uuid)}
-																className={`p-1.5 rounded-md transition-colors ${
-																	notification.type === 'success'
+																className={`p-1.5 rounded-md transition-colors ${notification.type === 'success'
 																		? 'text-green-600 hover:bg-green-100 dark:text-green-400 dark:hover:bg-green-900/30'
 																		: notification.type === 'warning'
 																			? 'text-yellow-600 hover:bg-yellow-100 dark:text-yellow-400 dark:hover:bg-yellow-900/30'
 																			: notification.type === 'error'
 																				? 'text-red-600 hover:bg-red-100 dark:text-red-400 dark:hover:bg-red-900/30'
 																				: 'text-blue-600 hover:bg-blue-100 dark:text-blue-400 dark:hover:bg-blue-900/30'
-																}`}
+																	}`}
 																title={t('markAsRead')}
 															>
 																<i className="i-material-symbols-mark-email-read w-3! h-3!" />
