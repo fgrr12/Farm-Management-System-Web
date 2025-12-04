@@ -1,4 +1,5 @@
 import { useGSAP } from '@gsap/react'
+import { useQueryClient } from '@tanstack/react-query'
 import gsap from 'gsap'
 import { SplitText } from 'gsap/SplitText'
 import { memo, useCallback, useMemo, useRef } from 'react'
@@ -32,6 +33,7 @@ export const Navbar = memo(() => {
 	const { headerTitle, loading } = useAppStore()
 	const backRoute = useBackRoute()
 	const { theme, toggleTheme } = useTheme()
+	const queryClient = useQueryClient()
 
 	const getCurrentPageIcon = useMemo(() => {
 		if (location.pathname.includes(AppRoutes.ANIMALS)) {
@@ -140,15 +142,16 @@ export const Navbar = memo(() => {
 
 	const handleLogout = useCallback(async () => {
 		if (!user) return
-		// Close dropdown first
 		if (document.activeElement instanceof HTMLElement) {
 			document.activeElement.blur()
 		}
+
 		await UserService.logout()
 		setUser(null)
 		setFarm(null)
+		queryClient.clear()
 		navigate(AppRoutes.LOGIN)
-	}, [user, setUser, setFarm, navigate])
+	}, [user, setUser, setFarm, navigate, queryClient])
 
 	useGSAP(() => {
 		const el = titleRef.current

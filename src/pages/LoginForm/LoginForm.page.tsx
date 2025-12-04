@@ -72,12 +72,6 @@ const LoginForm = () => {
 				{t('accessibility.skipToLogin')}
 			</a>
 
-			{/* Background Pattern */}
-			<div className="fixed inset-0 overflow-hidden pointer-events-none">
-				<div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse" />
-				<div className="absolute -bottom-40 -left-40 w-80 h-80 bg-green-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse" />
-			</div>
-
 			<section
 				className="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-2xl rounded-3xl border border-white/20 dark:border-gray-700/20 p-8 w-full"
 				aria-labelledby="login-heading"
