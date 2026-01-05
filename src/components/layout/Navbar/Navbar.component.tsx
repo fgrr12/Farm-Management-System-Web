@@ -305,7 +305,7 @@ export const Navbar = memo(() => {
 					</div>
 				</div>
 			</div>
-			<div className="drawer-side z-10">
+			<div className="drawer-side z-999">
 				<label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay" />
 				<div
 					className="bg-white dark:bg-gray-800 min-h-full w-80 shadow-2xl border-r border-gray-100 dark:border-gray-700"
