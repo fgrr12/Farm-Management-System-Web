@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
 
+import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 
 import { AnimalCard } from '@/components/business/Animals/AnimalCard'
@@ -27,6 +28,7 @@ const Animals = () => {
 	const { t } = useTranslation(['animals'])
 	const { setPageTitle } = usePagePerformance()
 	const containerRef = useRef<HTMLDivElement>(null)
+	const { setLoading } = useAppStore()
 
 	const { data: dbAnimals, isLoading } = useAnimals()
 	const [filters, setFilters] = useState(INITIAL_FILTERS)
@@ -91,7 +93,8 @@ const Animals = () => {
 
 	useEffect(() => {
 		setPageTitle(t('title'))
-	}, [setPageTitle, t])
+		setLoading(false)
+	}, [setPageTitle, t, setLoading])
 
 	useGSAP(() => {
 		if (!filteredAnimals.length) return
