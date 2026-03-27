@@ -94,7 +94,7 @@ export const animalSchemaWithRefinements = animalSchema
 
 export type AnimalFormData = z.infer<typeof animalSchemaWithRefinements>
 
-export const createAnimalSchema = animalSchemaWithRefinements.omit({ uuid: true })
+export const createAnimalSchema = animalSchemaWithRefinements //.omit({ uuid: true })
 
 export const updateAnimalSchema = animalSchema
 	.extend({
