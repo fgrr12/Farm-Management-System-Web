@@ -1,4 +1,3 @@
-import * as path from 'node:path'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react-swc'
 import unocss from 'unocss/vite'
@@ -10,7 +9,7 @@ export default defineConfig({
 	publicDir: './public',
 	resolve: {
 		alias: {
-			'@': path.resolve(__dirname, './src'),
+			'@': `${import.meta.dirname}/src`,
 		},
 	},
 	test: {
@@ -76,8 +75,7 @@ export default defineConfig({
 	],
 	build: {
 		target: 'esnext',
-		minify: 'terser',
-		rollupOptions: {
+		rolldownOptions: {
 			output: {
 				manualChunks: (id) => {
 					// React ecosystem
