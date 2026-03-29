@@ -1,5 +1,6 @@
 import { callableFireFunction } from '@/utils/callableFireFunction'
 
+import type { Task } from '@/types'
 import type { GetTasksParams } from './types'
 
 const getTasks = async ({

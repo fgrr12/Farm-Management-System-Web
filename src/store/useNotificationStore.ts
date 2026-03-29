@@ -1,5 +1,7 @@
 import { create } from 'zustand'
 
+import type { NotificationData } from '@/types'
+
 interface NotificationStore {
 	notifications: NotificationData[]
 	unreadCount: number

@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { type BreedFormData, breedSchema } from '@/schemas'
+import type { Breed } from '@/types'
 
 const DEFAULT_VALUES: Partial<BreedFormData> = {
 	name: '',

@@ -1,7 +1,5 @@
-import { useGSAP } from '@gsap/react'
-import gsap from 'gsap'
 import type { FC } from 'react'
-import { memo, useCallback, useId, useMemo, useRef, useState } from 'react'
+import { memo, useCallback, useId, useMemo, useState } from 'react'
 
 import type { PasswordFieldProps, TextFieldProps } from './TextField.types'
 
@@ -22,7 +20,6 @@ export const TextField: FC<TextFieldProps> = memo(
 		...rest
 	}) => {
 		const fieldId = useId()
-		const inputRef = useRef<HTMLInputElement>(null)
 		const [isFocused, setIsFocused] = useState(false)
 
 		const fieldClasses = useMemo(() => {
@@ -30,15 +27,15 @@ export const TextField: FC<TextFieldProps> = memo(
 
 			const variantClasses = {
 				default:
-					'input bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400',
+					'input bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-300',
 				filled:
-					'bg-gray-100 dark:bg-gray-700 border-0 border-b-2 border-gray-300 dark:border-gray-500 focus:border-blue-500 dark:focus:border-blue-400 focus:bg-white dark:focus:bg-gray-600 rounded-t-lg rounded-b-none px-4 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400',
+					'bg-gray-100 dark:bg-gray-700 border-0 border-b-2 border-gray-300 dark:border-gray-500 focus:border-blue-500 dark:focus:border-blue-400 focus:bg-white dark:focus:bg-gray-600 rounded-t-lg rounded-b-none px-4 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-300',
 				outlined:
-					'bg-transparent border-2 border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400',
+					'bg-transparent border-2 border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-300',
 			}
 
 			const sizeClasses = {
-				sm: 'h-10 text-sm px-3',
+				sm: 'h-11 text-sm px-3',
 				md: 'h-12 text-base px-4',
 				lg: 'h-14 text-lg px-5',
 			}
@@ -55,7 +52,7 @@ export const TextField: FC<TextFieldProps> = memo(
 		}, [variant, size, error, success, leftIcon, rightIcon, className])
 
 		const labelClasses = useMemo(() => {
-			const baseClasses = 'block text-sm font-medium mb-2 transition-colors duration-200'
+			const baseClasses = 'block text-base font-medium mb-2 transition-colors duration-200'
 			const stateClasses = error
 				? 'text-red-700 dark:text-red-400'
 				: success
@@ -67,33 +64,9 @@ export const TextField: FC<TextFieldProps> = memo(
 			return `${baseClasses} ${stateClasses}`
 		}, [error, success, isFocused])
 
-		useGSAP(() => {
-			if (inputRef.current) {
-				const animation = gsap.fromTo(
-					inputRef.current,
-					{ y: 10, opacity: 0 },
-					{ y: 0, opacity: 1, duration: 0.4, ease: 'power2.out' }
-				)
-
-				return () => {
-					// Kill the animation if component unmounts
-					if (animation) {
-						animation.kill()
-					}
-					// Kill any remaining tweens on this element
-					gsap.killTweensOf(inputRef.current)
-				}
-			}
-		}, [])
-
 		const handleFocus = useCallback(
 			(e: React.FocusEvent<HTMLInputElement>) => {
 				setIsFocused(true)
-				if (inputRef.current) {
-					// Kill any existing scale animations before starting new one
-					gsap.killTweensOf(inputRef.current, 'scale')
-					gsap.to(inputRef.current, { scale: 1.01, duration: 0.2, ease: 'power1.out' })
-				}
 				rest.onFocus?.(e)
 			},
 			[rest.onFocus]
@@ -102,11 +75,6 @@ export const TextField: FC<TextFieldProps> = memo(
 		const handleBlur = useCallback(
 			(e: React.FocusEvent<HTMLInputElement>) => {
 				setIsFocused(false)
-				if (inputRef.current) {
-					// Kill any existing scale animations before starting new one
-					gsap.killTweensOf(inputRef.current, 'scale')
-					gsap.to(inputRef.current, { scale: 1, duration: 0.2, ease: 'power1.out' })
-				}
 				rest.onBlur?.(e)
 			},
 			[rest.onBlur]
@@ -121,7 +89,7 @@ export const TextField: FC<TextFieldProps> = memo(
 					</label>
 				)}
 
-				<div className="relative group">
+				<div className="relative">
 					{/* Left Icon */}
 					{leftIcon && (
 						<div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none z-10">
@@ -139,7 +107,6 @@ export const TextField: FC<TextFieldProps> = memo(
 
 					{/* Input Field */}
 					<input
-						ref={inputRef}
 						id={fieldId}
 						className={fieldClasses}
 						required={required}
@@ -166,10 +133,7 @@ export const TextField: FC<TextFieldProps> = memo(
 									<i className="i-material-symbols-progress-activity w-5! h-5! bg-blue-500! dark:bg-blue-400!" />
 								</div>
 							) : error ? (
-								<i
-									className="i-material-symbols-error w-5! h-5! bg-red-500! dark:bg-red-400!"
-									title={error}
-								/>
+								<i className="i-material-symbols-error w-5! h-5! bg-red-500! dark:bg-red-400!" />
 							) : success ? (
 								<i className="i-material-symbols-check-circle w-5! h-5! bg-green-500! dark:bg-green-400!" />
 							) : rightIcon ? (
@@ -177,20 +141,19 @@ export const TextField: FC<TextFieldProps> = memo(
 							) : null}
 						</div>
 					)}
-
-					{/* Error Tooltip */}
-					{error && (
-						<div
-							id={`${fieldId}-error`}
-							className="absolute top-full left-0 mt-2 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-lg shadow-lg dark:shadow-red-900/20 z-30 max-w-xs opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200 ease-in-out backdrop-blur-sm"
-							role="tooltip"
-							aria-live="polite"
-						>
-							<div className="text-sm text-red-700 dark:text-red-300 font-medium">{error}</div>
-							<div className="absolute -top-2 left-4 w-4 h-4 bg-red-50 dark:bg-red-900/30 border-l border-t border-red-200 dark:border-red-700 transform rotate-45" />
-						</div>
-					)}
 				</div>
+
+				{/* Error Message — always visible */}
+				{error && (
+					<div
+						id={`${fieldId}-error`}
+						className="mt-1.5 flex items-start gap-1.5 text-sm text-red-600 dark:text-red-400"
+						role="alert"
+					>
+						<i className="i-material-symbols-error w-4! h-4! bg-red-500! dark:bg-red-400! shrink-0 mt-0.5" />
+						<span>{error}</span>
+					</div>
+				)}
 
 				{/* Helper Text */}
 				{helperText && !error && (

@@ -1,7 +1,7 @@
-import { useGSAP } from '@gsap/react'
-import gsap from 'gsap'
-import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { animateValue } from '@/utils/animateValue'
 
 interface StatCardProps {
 	title: string
@@ -41,10 +41,6 @@ export const StatCard = memo<StatCardProps>(
 		const { t } = useTranslation('dashboard')
 		const colors = colorClasses[color]
 
-		const cardRef = useRef<HTMLDivElement>(null)
-		const valueRef = useRef<HTMLParagraphElement>(null)
-		const changeRef = useRef<HTMLSpanElement>(null)
-		const iconRef = useRef<HTMLElement>(null)
 		const [displayValue, setDisplayValue] = useState<string | number>(0)
 		const [displayChange, setDisplayChange] = useState<number>(0)
 
@@ -56,79 +52,22 @@ export const StatCard = memo<StatCardProps>(
 		useEffect(() => {
 			if (loading || numericValue === 0) return
 
-			const obj = { value: 0 }
-			gsap.to(obj, {
-				value: numericValue,
-				duration: 1.5,
-				ease: 'power2.out',
-				onUpdate: () => {
-					const currentValue = Math.round(obj.value)
-					if (typeof value === 'string' && value.includes('L')) {
-						setDisplayValue(`${currentValue}L`)
-					} else {
-						setDisplayValue(currentValue)
-					}
-				},
+			const hasSuffix = typeof value === 'string' && value.includes('L')
+			const cancel = animateValue(0, numericValue, 1500, (v) => {
+				setDisplayValue(hasSuffix ? `${v}L` : v)
 			})
+			return cancel
 		}, [numericValue, loading, value])
 
 		// Animate change percentage
 		useEffect(() => {
 			if (changeLoading || change === undefined || change === null) return
 
-			const obj = { change: 0 }
-			gsap.to(obj, {
-				change: change,
-				duration: 1,
-				ease: 'power2.out',
-				delay: 0.5,
-				onUpdate: () => {
-					setDisplayChange(Math.round(obj.change * 10) / 10)
-				},
+			const cancel = animateValue(0, change, 1000, (v) => {
+				setDisplayChange(Math.round(v * 10) / 10)
 			})
+			return cancel
 		}, [change, changeLoading])
-
-		// Card entrance animation
-		useGSAP(() => {
-			if (cardRef.current && !loading) {
-				gsap.fromTo(
-					cardRef.current,
-					{ y: 30, opacity: 0, scale: 0.95 },
-					{ y: 0, opacity: 1, scale: 1, duration: 0.6, ease: 'power2.out' }
-				)
-			}
-		}, [loading])
-
-		// Icon pulse animation
-		useGSAP(() => {
-			if (iconRef.current && !loading) {
-				gsap.fromTo(
-					iconRef.current,
-					{ scale: 0, rotation: -180 },
-					{ scale: 1, rotation: 0, duration: 0.8, ease: 'back.out(1.7)', delay: 0.3 }
-				)
-			}
-		}, [loading])
-
-		const handleMouseEnter = useCallback(() => {
-			if (cardRef.current && !loading) {
-				gsap.to(cardRef.current, {
-					y: -4,
-					duration: 0.3,
-					ease: 'power2.out',
-				})
-			}
-		}, [loading])
-
-		const handleMouseLeave = useCallback(() => {
-			if (cardRef.current && !loading) {
-				gsap.to(cardRef.current, {
-					y: 0,
-					duration: 0.3,
-					ease: 'power2.out',
-				})
-			}
-		}, [loading])
 
 		if (loading) {
 			return (
@@ -151,31 +90,11 @@ export const StatCard = memo<StatCardProps>(
 		}
 
 		return (
-			<div
-				ref={cardRef}
-				className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-6 hover:shadow-lg dark:hover:shadow-xl transition-all duration-300 cursor-pointer"
-				role="button"
-				tabIndex={0}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
-				onKeyDown={(e) => {
-					if (e.key === 'Enter' || e.key === ' ') {
-						e.preventDefault()
-						handleMouseEnter()
-					}
-				}}
-				style={{
-					transform: 'translateZ(0)',
-					willChange: 'transform',
-				}}
-			>
+			<div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-6 hover:shadow-lg dark:hover:shadow-xl hover:-translate-y-1 transition-all duration-300 animate-fade-in-up">
 				<div className="flex items-center justify-between">
 					<div className="flex-1">
-						<p className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">{title}</p>
-						<p
-							ref={valueRef}
-							className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tabular-nums"
-						>
+						<p className="text-base font-medium text-gray-600 dark:text-gray-300 mb-1">{title}</p>
+						<p className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tabular-nums">
 							{loading ? '...' : displayValue}
 						</p>
 						{changeLoading ? (
@@ -188,7 +107,6 @@ export const StatCard = memo<StatCardProps>(
 							change !== null && (
 								<div className="flex items-center mt-2">
 									<span
-										ref={changeRef}
 										className={`text-sm font-medium tabular-nums ${
 											displayChange > 0
 												? 'text-green-600 dark:text-green-400'
@@ -208,7 +126,7 @@ export const StatCard = memo<StatCardProps>(
 						)}
 					</div>
 					<div className={`p-3 rounded-lg ${colors.bg} transition-all duration-300`}>
-						<i ref={iconRef} className={`w-6! h-6! ${icon} ${colors.icon}`} />
+						<i className={`w-6! h-6! ${icon} ${colors.icon} animate-spin-in`} />
 						{/* Pulse effect on hover */}
 						<div
 							className={`absolute inset-0 rounded-xl ${colors.bg} opacity-0 group-hover:opacity-50 group-hover:scale-150 transition-all duration-500`}

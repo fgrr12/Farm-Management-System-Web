@@ -1,6 +1,4 @@
-import { useGSAP } from '@gsap/react'
-import { gsap } from 'gsap'
-import { type MouseEvent, memo, useCallback, useMemo, useRef } from 'react'
+import { type FC, type MouseEvent, memo, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -25,7 +23,6 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 	}) => {
 		const { t } = useTranslation(['animals'])
 		const navigate = useNavigate()
-		const cardRef = useRef<HTMLDivElement>(null)
 		const { uuid, animalId, breedName, gender, picture } = animal
 
 		const currentHealthStatus = animal.healthStatus || healthStatus || 'unknown'
@@ -127,38 +124,6 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 					}
 		}, [gender])
 
-		useGSAP(() => {
-			if (cardRef.current) {
-				gsap.fromTo(
-					cardRef.current,
-					{ y: 20, opacity: 0, scale: 0.95 },
-					{ y: 0, opacity: 1, scale: 1, duration: 0.6, ease: 'power3.out' }
-				)
-			}
-		}, [])
-
-		const handleMouseEnter = useCallback(() => {
-			if (cardRef.current) {
-				gsap.to(cardRef.current, {
-					scale: 1.03,
-					y: -8,
-					duration: 0.3,
-					ease: 'power2.out',
-				})
-			}
-		}, [])
-
-		const handleMouseLeave = useCallback(() => {
-			if (cardRef.current) {
-				gsap.to(cardRef.current, {
-					scale: 1,
-					y: 0,
-					duration: 0.3,
-					ease: 'power2.out',
-				})
-			}
-		}, [])
-
 		const navigateToAnimal = useCallback(
 			(e: MouseEvent<HTMLDivElement>) => {
 				e.stopPropagation()
@@ -197,10 +162,9 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 
 		return (
 			<div
-				ref={cardRef}
 				role="button"
 				tabIndex={0}
-				className={`${cardClasses} bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl transition-all duration-200`}
+				className={`${cardClasses} animal-card bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl hover:scale-[1.03] hover:-translate-y-2 active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
 				onClick={navigateToAnimal}
 				onKeyDown={(e) => {
 					if (e.key === 'Enter' || e.key === ' ') {
@@ -208,8 +172,6 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 						navigateToAnimal(e as any)
 					}
 				}}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
 				aria-label={`Animal ${animalId}, ${breedName}, ${gender}`}
 				{...rest}
 			>
@@ -221,10 +183,10 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 				{/* Health Status Indicator */}
 				<div className="absolute top-4 right-4">
 					<div
-						className={`${healthConfig.bgColor} ${healthConfig.textColor} px-2 py-1 rounded-full flex items-center gap-1 text-xs font-medium shadow-sm dark:shadow-md`}
+						className={`${healthConfig.bgColor} ${healthConfig.textColor} px-2.5 py-1.5 rounded-full flex items-center gap-1.5 text-sm font-medium shadow-sm dark:shadow-md`}
 					>
-						<i className={`${healthConfig.icon} w-3! h-3! bg-current!`} />
-						<span className="hidden sm:inline">{healthConfig.text}</span>
+						<i className={`${healthConfig.icon} w-3.5! h-3.5! bg-current!`} />
+						<span>{healthConfig.text}</span>
 					</div>
 				</div>
 
@@ -259,7 +221,7 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 						className={`${genderConfig.bgColor} ${genderConfig.textColor} px-2 py-1 rounded-full flex items-center gap-1 shadow-sm dark:shadow-md`}
 					>
 						<i className={`${genderConfig.icon} w-4! h-4! ${genderConfig.color}`} />
-						<span className="text-xs font-medium capitalize">{gender}</span>
+						<span className="text-sm font-medium capitalize">{gender}</span>
 					</div>
 				</div>
 
@@ -293,7 +255,7 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 				)}
 
 				{/* Action Buttons */}
-				<div className="flex justify-center items-center gap-1">
+				<div className="flex justify-center items-center gap-2 sm:gap-1">
 					<ActionButton
 						title={t('animalCard.addHealthRecord')}
 						icon="i-material-symbols-light-health-metrics-rounded"

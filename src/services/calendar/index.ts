@@ -1,5 +1,7 @@
 import { callableFireFunction } from '@/utils/callableFireFunction'
 
+import type { CalendarEvent } from '@/types'
+
 const getCalendarEvents = async (
 	farmUuid: string,
 	startDate?: string,
@@ -42,9 +44,15 @@ const getCalendarEvents = async (
 	}
 }
 
-const getCalendarEventByUuid = async (_eventUuid: string) => {
-	// This operation doesn't exist in the current API
-	throw new Error('getCalendarEventByUuid operation not supported')
+const getCalendarEventByUuid = async (eventUuid: string): Promise<CalendarEvent> => {
+	const response = await callableFireFunction<{
+		success: boolean
+		data: CalendarEvent
+	}>('calendar', {
+		operation: 'getCalendarEventByUuid',
+		eventUuid,
+	})
+	return response.data
 }
 
 const createCalendarEvent = async (
@@ -99,51 +107,10 @@ const updateCalendarEventStatus = async (
 }
 
 const deleteCalendarEvent = async (eventUuid: string, userUuid: string) => {
-	// Delete operation is not available in the current API
-	// Instead, we'll mark the event as cancelled
-	console.warn('Delete operation not available. Marking event as cancelled instead.')
-	return await updateCalendarEventStatus(eventUuid, 'cancelled', userUuid)
-}
-
-// Legacy methods - keeping for backward compatibility but they may not work with current API
-const getAnimalEvents = async (animalUuid: string) => {
-	// This operation doesn't exist in the new API, but keeping for compatibility
-	console.warn('getAnimalEvents operation may not be supported in current API')
-	const response = await callableFireFunction<{
-		success: boolean
-		data: CalendarEvent[]
-		count: number
-	}>('calendar', {
-		operation: 'getAnimalEvents',
-		animalUuid,
-	})
-	return response.data
-}
-
-const createHealthRecordEvents = async (healthRecord: any, farmUuid: string, userUuid: string) => {
-	// This operation doesn't exist in the new API, but keeping for compatibility
-	console.warn('createHealthRecordEvents operation may not be supported in current API')
 	const response = await callableFireFunction<{ success: boolean }>('calendar', {
-		operation: 'createHealthRecordEvents',
-		healthRecord,
-		farmUuid,
-		userUuid,
-	})
-	return response
-}
-
-const updateAnimalHealthEvents = async (
-	animalUuid: string,
-	oldStatus: string,
-	newStatus: string
-) => {
-	// This operation doesn't exist in the new API, but keeping for compatibility
-	console.warn('updateAnimalHealthEvents operation may not be supported in current API')
-	const response = await callableFireFunction<{ success: boolean }>('calendar', {
-		operation: 'updateAnimalHealthEvents',
-		animalUuid,
-		oldStatus,
-		newStatus,
+		operation: 'deleteCalendarEvent',
+		eventUuid,
+		deletedBy: userUuid,
 	})
 	return response
 }
@@ -155,7 +122,4 @@ export const CalendarService = {
 	updateCalendarEvent,
 	updateCalendarEventStatus,
 	deleteCalendarEvent,
-	getAnimalEvents,
-	createHealthRecordEvents,
-	updateAnimalHealthEvents,
 }

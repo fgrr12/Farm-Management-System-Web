@@ -67,18 +67,6 @@ export const mockServices = {
 	},
 }
 
-// Global mock for GSAP
-export const mockGsap = {
-	to: vi.fn(),
-	from: vi.fn(),
-	set: vi.fn(),
-	timeline: vi.fn(() => ({
-		to: vi.fn(),
-		from: vi.fn(),
-		set: vi.fn(),
-	})),
-}
-
 // Global mock for storage
 export const mockStorage = {
 	setPicture: vi.fn(),

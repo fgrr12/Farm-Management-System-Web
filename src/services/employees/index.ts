@@ -1,5 +1,7 @@
 import { callableFireFunction } from '@/utils/callableFireFunction'
 
+import type { User } from '@/types'
+
 const getEmployees = async (farmUuid: string): Promise<User[]> => {
 	const response = await callableFireFunction<{ success: boolean; data: User[]; count: number }>(
 		'users',

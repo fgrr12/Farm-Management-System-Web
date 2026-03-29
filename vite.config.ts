@@ -1,6 +1,5 @@
-import * as path from 'node:path'
 import tailwindcss from '@tailwindcss/vite'
-import react from '@vitejs/plugin-react-swc'
+import react from '@vitejs/plugin-react'
 import unocss from 'unocss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import { defineConfig } from 'vitest/config'
@@ -10,7 +9,7 @@ export default defineConfig({
 	publicDir: './public',
 	resolve: {
 		alias: {
-			'@': path.resolve(__dirname, './src'),
+			'@': `${import.meta.dirname}/src`,
 		},
 	},
 	test: {
@@ -76,8 +75,10 @@ export default defineConfig({
 	],
 	build: {
 		target: 'esnext',
-		minify: 'terser',
-		rollupOptions: {
+		rolldownOptions: {
+			checks: {
+				pluginTimings: false,
+			},
 			output: {
 				manualChunks: (id) => {
 					// React ecosystem

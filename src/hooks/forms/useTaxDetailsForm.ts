@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { type TaxDetailsFormData, taxDetailsSchema } from '@/schemas/tax-details.schema'
+import type { TaxDetails } from '@/types'
 
 const DEFAULT_VALUES: TaxDetailsFormData = {
 	uuid: '',

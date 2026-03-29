@@ -1,5 +1,7 @@
 import { callableFireFunction } from '@/utils/callableFireFunction'
 
+import type { DashboardStats } from '@/types'
+
 const getDashboardStats = async (farmUuid: string): Promise<DashboardStats> => {
 	const response = await callableFireFunction<{ success: boolean; data: DashboardStats }>(
 		'dashboard',

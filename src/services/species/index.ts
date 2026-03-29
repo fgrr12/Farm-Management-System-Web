@@ -1,5 +1,7 @@
 import { callableFireFunction } from '@/utils/callableFireFunction'
 
+import type { Species } from '@/types'
+
 const upsertSpecies = async (speciesData: Species, userUuid?: string, farmUuid?: string) => {
 	const response = await callableFireFunction<{
 		success: boolean

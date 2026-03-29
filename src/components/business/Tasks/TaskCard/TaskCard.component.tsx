@@ -1,11 +1,10 @@
 import { draggable } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
-import { useGSAP } from '@gsap/react'
-import gsap from 'gsap'
 import { type FC, memo, useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useIsMobile } from '@/hooks/ui/useIsMobile'
 
+import type { TaskPriority, TaskStatus } from '@/types'
 import type { TaskCardProps } from './TaskCard.types'
 
 export const TaskCard: FC<TaskCardProps> = memo(
@@ -92,42 +91,6 @@ export const TaskCard: FC<TaskCardProps> = memo(
 			}
 		}, [])
 
-		// GSAP animations - simplified to avoid blur issues
-		useGSAP(() => {
-			if (ref.current) {
-				// Set initial state without animation to avoid blur
-				gsap.set(ref.current, {
-					y: 0,
-					opacity: 1,
-					scale: 1,
-					clearProps: 'transform', // Clear any transform issues
-				})
-			}
-		}, [])
-
-		const handleMouseEnter = useCallback(() => {
-			if (ref.current && !dragging && !isMobile) {
-				// Only animate on desktop to avoid conflicts
-				gsap.killTweensOf(ref.current, 'y')
-				gsap.to(ref.current, {
-					y: -2, // Reduced movement to avoid blur
-					duration: 0.15,
-					ease: 'power1.out',
-				})
-			}
-		}, [dragging, isMobile])
-
-		const handleMouseLeave = useCallback(() => {
-			if (ref.current && !dragging && !isMobile) {
-				gsap.killTweensOf(ref.current, 'y')
-				gsap.to(ref.current, {
-					y: 0,
-					duration: 0.15,
-					ease: 'power1.out',
-				})
-			}
-		}, [dragging, isMobile])
-
 		useEffect(() => {
 			const el = ref.current
 			if (!el || !isDraggable) return
@@ -139,49 +102,27 @@ export const TaskCard: FC<TaskCardProps> = memo(
 					currentStatus: task.status,
 					type: 'task',
 				}),
-				// Add mobile-specific configurations
 				canDrag: () => {
-					// On mobile, require a longer press to start dragging
 					if (isMobile && touchStartTime > 0) {
 						return Date.now() - touchStartTime > 300
 					}
-					return !isMobile // Only allow immediate drag on desktop
+					return !isMobile
 				},
 				onDragStart: () => {
 					setDragging(true)
 					if (el) {
-						// Simplified drag animation to avoid blur
-						gsap.killTweensOf(el)
-						gsap.set(el, { scale: 1.02, rotation: 1 })
+						el.style.transform = 'scale(1.02) rotate(1deg)'
 					}
 				},
 				onDrop: () => {
 					setDragging(false)
 					if (el) {
-						// Reset to normal state
-						gsap.killTweensOf(el)
-						gsap.to(el, {
-							scale: 1,
-							rotation: 0,
-							duration: 0.2,
-							ease: 'power2.out',
-							clearProps: 'transform', // Clear transform after animation
-						})
+						el.style.transform = ''
 					}
 				},
 			})
 
-			return () => {
-				// Clean up drag and drop
-				if (cleanup) {
-					cleanup()
-				}
-				// Kill any remaining GSAP animations and clear transforms
-				if (el) {
-					gsap.killTweensOf(el)
-					gsap.set(el, { clearProps: 'all' })
-				}
-			}
+			return cleanup
 		}, [isDraggable, task.uuid, task.status, isMobile, touchStartTime])
 
 		const handleCardClick = useCallback(() => {
@@ -236,22 +177,13 @@ export const TaskCard: FC<TaskCardProps> = memo(
 			[isMobile, isDraggable, touchStartTime, touchStartPos, handleCardClick]
 		)
 
-		// Cleanup effect to prevent blur issues
-		useEffect(() => {
-			return () => {
-				if (ref.current) {
-					gsap.killTweensOf(ref.current)
-					gsap.set(ref.current, { clearProps: 'all' })
-				}
-			}
-		}, [])
-
 		return (
 			<div
 				ref={ref}
 				className={`
 				card bg-white dark:bg-gray-800 w-full shadow-sm rounded-xl overflow-hidden
 				transition-all duration-200 hover:shadow-xl dark:hover:shadow-2xl
+				${!isMobile ? 'hover:-translate-y-0.5' : ''}
 				${isDraggable ? 'cursor-grab' : onTaskClick ? 'cursor-pointer' : ''}
 				${dragging ? 'opacity-90 shadow-2xl z-10 ring-2 ring-blue-300 dark:ring-blue-400' : ''}
 				${isMobile ? 'touch-manipulation select-none' : ''}
@@ -260,30 +192,23 @@ export const TaskCard: FC<TaskCardProps> = memo(
 				role="article"
 				aria-labelledby={`task-${task.uuid}-title`}
 				aria-describedby={`task-${task.uuid}-description`}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
 				onClick={!isMobile ? handleCardClick : undefined}
 				onTouchStart={handleTouchStart}
 				onTouchMove={handleTouchMove}
 				onTouchEnd={handleTouchEnd}
-				style={
-					{
-						// Remove problematic styles that can cause blur
-					}
-				}
 			>
 				<div className="card-body p-4">
 					{/* Header with status and priority */}
 					<div className="flex items-center justify-between mb-2">
 						<div className="flex items-center gap-2">
 							<div className={`w-4 h-4 ${getStatusIcon(task.status)}`} />
-							<span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+							<span className="text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wide">
 								{t(`status.${task.status}`)}
 							</span>
 						</div>
 						<div className="flex items-center gap-1">
 							<div className={`w-4 h-4 ${getPriorityIcon(task.priority)}`} />
-							<span className="text-xs text-gray-500 dark:text-gray-400">
+							<span className="text-sm text-gray-500 dark:text-gray-400">
 								{t(`priority.${task.priority}`)}
 							</span>
 						</div>
@@ -321,7 +246,7 @@ export const TaskCard: FC<TaskCardProps> = memo(
 
 					{/* Timestamps */}
 					{(task.createdAt || task.updatedAt) && (
-						<div className="mt-2 text-xs text-gray-400 dark:text-gray-500">
+						<div className="mt-2 text-sm text-gray-500 dark:text-gray-400">
 							{task.updatedAt && (
 								<span>
 									{t('updatedAt')}: {new Date(task.updatedAt).toLocaleDateString()}

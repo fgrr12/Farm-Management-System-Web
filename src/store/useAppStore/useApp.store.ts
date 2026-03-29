@@ -13,10 +13,12 @@ export const useAppStore = create<AppStore & AppStoreActions>((set) => ({
 	toastData: null,
 	defaultModalData: DEFAULT_MODAL_DATA,
 	headerTitle: '',
+	isVoiceModalOpen: false,
 	setLoading: (loading) => set({ loading }),
 	setToastData: (toastData) => set({ toastData: toastData }),
 	setModalData: (modalData) => set({ defaultModalData: modalData }),
 	setHeaderTitle: (title) => set({ headerTitle: title }),
+	setVoiceModalOpen: (open) => set({ isVoiceModalOpen: open }),
 }))
 
 export const GENERIC_MODAL_DATA: AppModalData = {

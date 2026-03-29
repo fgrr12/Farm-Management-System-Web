@@ -13,6 +13,7 @@ import { TextField } from '@/components/ui/TextField'
 import { useCalendarEventForm } from '@/hooks/forms/useCalendarEventForm'
 
 import type { CalendarEventFormData } from '@/schemas'
+import type { CalendarEvent } from '@/types'
 
 interface CalendarEventModalProps {
 	isOpen: boolean
@@ -40,6 +41,7 @@ export const CalendarEventModal = memo<CalendarEventModalProps>(
 			control,
 			register,
 			watch,
+			setValue,
 			formState: { errors, isSubmitting },
 			transformToApiFormat,
 			getErrorMessage,
@@ -92,6 +94,8 @@ export const CalendarEventModal = memo<CalendarEventModalProps>(
 
 		const watchedType = watch('type')
 		const watchedDate = watch('date')
+		const watchedReminder = watch('reminder')
+		const watchedReminderMinutes = watch('reminderMinutes')
 
 		const categoryOptions = [
 			{
@@ -484,15 +488,78 @@ export const CalendarEventModal = memo<CalendarEventModalProps>(
 							{/* Tab: Recordatorio */}
 							{activeTab === 'reminder' && (
 								<div className="space-y-6">
-									<div className="text-center py-8">
-										<div className="i-heroicons-bell w-12 h-12 text-gray-400 mx-auto mb-4" />
-										<h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-											{t('reminder.enable')}
-										</h3>
-										<p className="text-sm text-gray-500 dark:text-gray-400">
-											Feature coming soon...
-										</p>
+									{/* Toggle de recordatorio */}
+									<div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+										<div className="flex items-center space-x-3">
+											<div className="i-heroicons-bell w-5 h-5 text-purple-500" />
+											<div>
+												<p className="font-medium text-sm text-gray-900 dark:text-white">
+													{t('reminder.enable')}
+												</p>
+											</div>
+										</div>
+										<label className="relative inline-flex items-center cursor-pointer">
+											<input
+												type="checkbox"
+												className="sr-only peer"
+												checked={watchedReminder ?? true}
+												onChange={(e) => {
+													setValue('reminder', e.target.checked, { shouldDirty: true })
+													if (!e.target.checked) {
+														setValue('reminderMinutes', [], { shouldDirty: true })
+													} else {
+														setValue('reminderMinutes', [60, 1440], { shouldDirty: true })
+													}
+												}}
+											/>
+											<div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:after:border-gray-500 peer-checked:bg-purple-600" />
+										</label>
 									</div>
+
+									{/* Opciones de timing */}
+									{watchedReminder !== false && (
+										<div className="space-y-3">
+											<p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+												{t('reminder.time')}
+											</p>
+											<div className="grid grid-cols-2 gap-2">
+												{[
+													{ minutes: 5, label: t('reminder.5min') },
+													{ minutes: 15, label: t('reminder.15min') },
+													{ minutes: 30, label: t('reminder.30min') },
+													{ minutes: 60, label: t('reminder.1hour') },
+													{ minutes: 1440, label: t('reminder.1day') },
+												].map((option) => {
+													const isSelected = (watchedReminderMinutes ?? []).includes(option.minutes)
+													return (
+														<button
+															key={option.minutes}
+															type="button"
+															onClick={() => {
+																const current = watchedReminderMinutes ?? []
+																const updated = isSelected
+																	? current.filter((m: number) => m !== option.minutes)
+																	: [...current, option.minutes].sort(
+																			(a: number, b: number) => a - b
+																		)
+																setValue('reminderMinutes', updated, { shouldDirty: true })
+															}}
+															className={`
+																px-3 py-2 rounded-lg text-sm font-medium border transition-all duration-200
+																${
+																	isSelected
+																		? 'bg-purple-100 text-purple-800 border-purple-300 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-700'
+																		: 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-600'
+																}
+															`}
+														>
+															{option.label}
+														</button>
+													)
+												})}
+											</div>
+										</div>
+									)}
 								</div>
 							)}
 						</form>
@@ -501,10 +568,11 @@ export const CalendarEventModal = memo<CalendarEventModalProps>(
 					{/* Footer con botones */}
 					<div className="shrink-0 px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 rounded-b-xl">
 						{showDeleteConfirm ? (
-							<div className="flex items-center justify-center flex-col space-x-4 gap-4">
-								<span className="text-sm text-red-600 dark:text-red-400 font-medium">
-									{t('confirmDelete')}
-								</span>
+							<div className="flex items-center justify-center flex-col gap-3">
+								<div className="flex items-center gap-2 text-red-600 dark:text-red-400">
+									<span className="i-lucide-triangle-alert text-lg" />
+									<span className="text-sm font-semibold">{t('confirmDeletePermanent')}</span>
+								</div>
 								<div className="flex items-center justify-center space-x-3">
 									<Button
 										variant="danger"

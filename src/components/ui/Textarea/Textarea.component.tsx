@@ -1,5 +1,3 @@
-import { useGSAP } from '@gsap/react'
-import gsap from 'gsap'
 import type { FC } from 'react'
 import { memo, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 
@@ -34,11 +32,11 @@ export const Textarea: FC<TextareaProps> = memo(
 
 			const variantClasses = {
 				default:
-					'bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 py-3',
+					'bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-300 px-4 py-3',
 				filled:
-					'bg-gray-100 dark:bg-gray-700 border-0 border-b-2 border-gray-300 dark:border-gray-500 focus:border-blue-500 dark:focus:border-blue-400 focus:bg-white dark:focus:bg-gray-600 rounded-t-lg rounded-b-none text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 py-3',
+					'bg-gray-100 dark:bg-gray-700 border-0 border-b-2 border-gray-300 dark:border-gray-500 focus:border-blue-500 dark:focus:border-blue-400 focus:bg-white dark:focus:bg-gray-600 rounded-t-lg rounded-b-none text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-300 px-4 py-3',
 				outlined:
-					'bg-transparent border-2 border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 py-3',
+					'bg-transparent border-2 border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-300 px-4 py-3',
 			}
 
 			const resizeClasses = {
@@ -58,7 +56,7 @@ export const Textarea: FC<TextareaProps> = memo(
 		}, [variant, resize, error, success, className])
 
 		const labelClasses = useMemo(() => {
-			const baseClasses = 'block text-sm font-medium mb-2 transition-colors duration-200'
+			const baseClasses = 'block text-base font-medium mb-2 transition-colors duration-200'
 			const stateClasses = error
 				? 'text-red-700 dark:text-red-400'
 				: success
@@ -78,22 +76,9 @@ export const Textarea: FC<TextareaProps> = memo(
 			}
 		}, [autoResize])
 
-		useGSAP(() => {
-			if (textareaRef.current) {
-				gsap.fromTo(
-					textareaRef.current,
-					{ y: 10, opacity: 0 },
-					{ y: 0, opacity: 1, duration: 0.4, ease: 'power2.out' }
-				)
-			}
-		}, [])
-
 		const handleFocus = useCallback(
 			(e: React.FocusEvent<HTMLTextAreaElement>) => {
 				setIsFocused(true)
-				if (textareaRef.current) {
-					gsap.to(textareaRef.current, { scale: 1.01, duration: 0.2, ease: 'power1.out' })
-				}
 				rest.onFocus?.(e)
 			},
 			[rest.onFocus]
@@ -102,9 +87,6 @@ export const Textarea: FC<TextareaProps> = memo(
 		const handleBlur = useCallback(
 			(e: React.FocusEvent<HTMLTextAreaElement>) => {
 				setIsFocused(false)
-				if (textareaRef.current) {
-					gsap.to(textareaRef.current, { scale: 1, duration: 0.2, ease: 'power1.out' })
-				}
 				rest.onBlur?.(e)
 			},
 			[rest.onBlur]
@@ -149,7 +131,7 @@ export const Textarea: FC<TextareaProps> = memo(
 					</label>
 				)}
 
-				<div className="relative group">
+				<div className="relative">
 					{/* Textarea Field */}
 					<textarea
 						ref={textareaRef}
@@ -183,26 +165,10 @@ export const Textarea: FC<TextareaProps> = memo(
 									<i className="i-material-symbols-progress-activity w-5! h-5! bg-blue-500! dark:bg-blue-400!" />
 								</div>
 							) : error ? (
-								<i
-									className="i-material-symbols-error w-5! h-5! bg-red-500! dark:bg-red-400!"
-									title={error}
-								/>
+								<i className="i-material-symbols-error w-5! h-5! bg-red-500! dark:bg-red-400!" />
 							) : success ? (
 								<i className="i-material-symbols-check-circle w-5! h-5! bg-green-500! dark:bg-green-400!" />
 							) : null}
-						</div>
-					)}
-
-					{/* Error Tooltip */}
-					{error && (
-						<div
-							id={`${fieldId}-error`}
-							className="absolute top-full left-0 mt-2 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-lg shadow-lg dark:shadow-red-900/20 z-30 max-w-xs opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200 ease-in-out backdrop-blur-sm"
-							role="tooltip"
-							aria-live="polite"
-						>
-							<div className="text-sm text-red-700 dark:text-red-300 font-medium">{error}</div>
-							<div className="absolute -top-2 left-4 w-4 h-4 bg-red-50 dark:bg-red-900/30 border-l border-t border-red-200 dark:border-red-700 transform rotate-45" />
 						</div>
 					)}
 
@@ -218,6 +184,18 @@ export const Textarea: FC<TextareaProps> = memo(
 						</div>
 					)}
 				</div>
+
+				{/* Error Message — always visible */}
+				{error && (
+					<div
+						id={`${fieldId}-error`}
+						className="mt-1.5 flex items-start gap-1.5 text-sm text-red-600 dark:text-red-400"
+						role="alert"
+					>
+						<i className="i-material-symbols-error w-4! h-4! bg-red-500! dark:bg-red-400! shrink-0 mt-0.5" />
+						<span>{error}</span>
+					</div>
+				)}
 
 				{/* Footer with character count and helper text */}
 				<div className="flex justify-between items-start mt-2 gap-2">

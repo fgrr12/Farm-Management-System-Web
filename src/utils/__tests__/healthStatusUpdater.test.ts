@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
+import type { HealthRecord } from '@/types'
 import { calculateHealthStatusFromRecords } from '../healthStatusUpdater'
 
 // Mock the AnimalsService

@@ -371,7 +371,7 @@ const TaxDetails = () => {
 						{/* Flip Card Container */}
 						<button
 							type="button"
-							className={`relative w-[370px] h-[215px] transition-transform duration-700 transform-style-3d cursor-pointer ${
+							className={`relative w-92.5 h-53.75 transition-transform duration-700 transform-style-3d cursor-pointer ${
 								isFlipped ? 'rotate-y-180' : ''
 							}`}
 							onClick={() => setIsFlipped(!isFlipped)}
@@ -382,7 +382,7 @@ const TaxDetails = () => {
 						>
 							{/* Front Side */}
 							<div
-								className="absolute inset-0 w-[370px] h-[215px] bg-linear-to-br from-slate-800 via-slate-700 to-slate-900 rounded-xl p-5 shadow-2xl backface-hidden"
+								className="absolute inset-0 w-92.5 h-53.75 bg-linear-to-br from-slate-800 via-slate-700 to-slate-900 rounded-xl p-5 shadow-2xl backface-hidden"
 								style={{
 									backfaceVisibility: 'hidden',
 									fontFamily: 'Inter, Arial, sans-serif',
@@ -423,7 +423,7 @@ const TaxDetails = () => {
 								{/* Main Content */}
 								<div className="relative z-10 flex flex-col space-y-2">
 									<div className="grid grid-cols-[auto_1fr] gap-2 items-center">
-										<span className="text-slate-300 font-medium text-xs uppercase tracking-wide min-w-[55px]">
+										<span className="text-slate-300 font-medium text-xs uppercase tracking-wide min-w-13.75">
 											{t('name')}
 										</span>
 										<span className="text-white font-semibold text-xs truncate">
@@ -432,21 +432,21 @@ const TaxDetails = () => {
 									</div>
 
 									<div className="grid grid-cols-[auto_1fr] gap-2 items-center">
-										<span className="text-slate-300 font-medium text-xs uppercase tracking-wide min-w-[55px]">
+										<span className="text-slate-300 font-medium text-xs uppercase tracking-wide min-w-13.75">
 											{t('id')}
 										</span>
 										<span className="text-white font-semibold text-xs">{taxDetails.id}</span>
 									</div>
 
 									<div className="grid grid-cols-[auto_1fr] gap-2 items-center">
-										<span className="text-slate-300 font-medium text-xs uppercase tracking-wide min-w-[55px]">
+										<span className="text-slate-300 font-medium text-xs uppercase tracking-wide min-w-13.75">
 											{t('phone')}
 										</span>
 										<span className="text-white font-semibold text-xs">{taxDetails.phone}</span>
 									</div>
 
 									<div className="grid grid-cols-[auto_1fr] gap-2 items-start">
-										<span className="text-slate-300 font-medium text-xs uppercase tracking-wide min-w-[55px]">
+										<span className="text-slate-300 font-medium text-xs uppercase tracking-wide min-w-13.75">
 											{t('email')}
 										</span>
 										<span className="text-white font-semibold text-xs leading-tight break-all">
@@ -455,7 +455,7 @@ const TaxDetails = () => {
 									</div>
 
 									<div className="grid grid-cols-[auto_1fr] gap-2 items-start">
-										<span className="text-slate-300 font-medium text-xs uppercase tracking-wide min-w-[55px]">
+										<span className="text-slate-300 font-medium text-xs uppercase tracking-wide min-w-13.75">
 											{t('address')}
 										</span>
 										<span className="text-white font-semibold text-xs leading-tight">
@@ -467,7 +467,7 @@ const TaxDetails = () => {
 
 							{/* Back Side - Activities */}
 							<div
-								className="absolute inset-0 w-[370px] h-[215px] bg-linear-to-br from-slate-800 via-slate-700 to-slate-900 rounded-xl p-5 shadow-2xl"
+								className="absolute inset-0 w-92.5 h-53.75 bg-linear-to-br from-slate-800 via-slate-700 to-slate-900 rounded-xl p-5 shadow-2xl"
 								style={{
 									backfaceVisibility: 'hidden',
 									transform: 'rotateY(180deg)',
@@ -488,7 +488,7 @@ const TaxDetails = () => {
 								</div>
 
 								{/* Activities List */}
-								<div className="relative z-10 space-y-2 overflow-y-auto max-h-[160px]">
+								<div className="relative z-10 space-y-2 overflow-y-auto max-h-40">
 									{taxDetails.activities && taxDetails.activities.length > 0 ? (
 										taxDetails.activities.map((activity, index) => (
 											<div

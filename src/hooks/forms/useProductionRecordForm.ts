@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { formatDateForForm } from '@/utils/date'
 
 import { type ProductionRecordFormData, productionRecordSchema } from '@/schemas'
+import type { ProductionRecord } from '@/types'
 
 const DEFAULT_VALUES: Partial<ProductionRecordFormData> = {
 	quantity: 0,

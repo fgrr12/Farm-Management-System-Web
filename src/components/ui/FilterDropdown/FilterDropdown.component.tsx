@@ -206,7 +206,7 @@ export const FilterDropdown = <T extends Record<string, any>>(props: FilterDropd
 			{isOpen && (
 				<div
 					ref={dropdownRef}
-					className="fixed bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl dark:shadow-2xl z-[9999] filter-dropdown"
+					className="fixed bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl dark:shadow-2xl z-9999 filter-dropdown"
 					style={{
 						top: `${dropdownPosition.top}px`,
 						left: `${dropdownPosition.left}px`,

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
-import { VoiceRecorder } from '@/components/business/Voice/VoiceRecorder'
 import { PageContainer } from '@/components/layout/PageContainer'
 import { PageHeader } from '@/components/layout/PageHeader'
 
@@ -13,6 +13,7 @@ import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 export function VoicePage() {
 	const { user } = useUserStore()
 	const { farm } = useFarmStore()
+	const { setVoiceModalOpen } = useAppStore()
 	const { t } = useTranslation(['voice'])
 	const { setPageTitle } = usePagePerformance()
 	const [showExamples, setShowExamples] = useState(false)
@@ -50,9 +51,22 @@ export function VoicePage() {
 				className="bg-linear-to-r from-pink-600 to-purple-600 dark:from-pink-700 dark:to-purple-700"
 			/>
 
-			{/* Voice Recorder Section - Front and Center */}
+			{/* Voice CTA Section */}
 			<div id="voice-section" className="mb-8">
-				<VoiceRecorder className="w-full" maxRecordingTime={60} />
+				<div className="flex flex-col items-center text-center p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700">
+					<button
+						type="button"
+						onClick={() => setVoiceModalOpen(true)}
+						aria-label={t('startRecording')}
+						className="w-28 h-28 rounded-full bg-linear-to-br from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 flex items-center justify-center shadow-2xl shadow-pink-500/30 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer focus:outline-none focus:ring-8 focus:ring-pink-300 dark:focus:ring-pink-800 mb-4"
+					>
+						<span className="i-heroicons-microphone text-white w-14! h-14! drop-shadow-lg" />
+					</button>
+					<h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
+						{t('startRecording')}
+					</h3>
+					<p className="text-sm text-gray-500 dark:text-gray-400">{t('subtitle')}</p>
+				</div>
 			</div>
 
 			{/* How It Works - Simplified */}

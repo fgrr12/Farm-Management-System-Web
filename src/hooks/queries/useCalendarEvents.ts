@@ -4,6 +4,8 @@ import { useFarmStore } from '@/store/useFarmStore'
 
 import { CalendarService } from '@/services/calendar'
 
+import type { CalendarEvent } from '@/types'
+
 export const CALENDAR_KEYS = {
 	all: ['calendar'] as const,
 	events: (farmUuid: string, startDate?: string, endDate?: string) =>

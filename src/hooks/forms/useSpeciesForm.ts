@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { type SpeciesFormData, speciesSchema } from '@/schemas'
+import type { Species } from '@/types'
 
 const DEFAULT_VALUES: Partial<SpeciesFormData> = {
 	name: '',

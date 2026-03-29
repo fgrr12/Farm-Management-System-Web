@@ -5,6 +5,8 @@ import { useFarmStore } from '@/store/useFarmStore'
 import { TasksService } from '@/services/tasks'
 import type { GetTasksParams } from '@/services/tasks/types'
 
+import type { Task } from '@/types'
+
 export const TASKS_KEYS = {
 	all: ['tasks'] as const,
 	list: (params: GetTasksParams) => [...TASKS_KEYS.all, 'list', params] as const,

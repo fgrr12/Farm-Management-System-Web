@@ -4,6 +4,8 @@ import { useFarmStore } from '@/store/useFarmStore'
 
 import { AnimalsService } from '@/services/animals'
 
+import type { Animal } from '@/types'
+
 export const ANIMALS_KEYS = {
 	all: ['animals'] as const,
 	list: (farmUuid: string) => [...ANIMALS_KEYS.all, 'list', farmUuid] as const,

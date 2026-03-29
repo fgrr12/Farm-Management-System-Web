@@ -1,5 +1,3 @@
-import { useGSAP } from '@gsap/react'
-import gsap from 'gsap'
 import {
 	type ChangeEvent,
 	forwardRef,
@@ -106,15 +104,15 @@ export const CustomSelect = forwardRef<CustomSelectRef, CustomSelectProps>(
 
 			const variantClasses = {
 				default:
-					'input bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400',
+					'input bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-300',
 				filled:
-					'bg-gray-100 dark:bg-gray-700 border-0 border-b-2 border-gray-300 dark:border-gray-500 focus:border-blue-500 dark:focus:border-blue-400 focus:bg-white dark:focus:bg-gray-600 rounded-t-lg rounded-b-none px-4 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400',
+					'bg-gray-100 dark:bg-gray-700 border-0 border-b-2 border-gray-300 dark:border-gray-500 focus:border-blue-500 dark:focus:border-blue-400 focus:bg-white dark:focus:bg-gray-600 rounded-t-lg rounded-b-none px-4 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-300',
 				outlined:
-					'bg-transparent border-2 border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400',
+					'bg-transparent border-2 border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-300',
 			}
 
 			const sizeClasses = {
-				sm: 'h-10 text-sm px-3',
+				sm: 'h-11 text-sm px-3',
 				md: 'h-12 text-base px-4',
 				lg: 'h-14 text-lg px-5',
 			}
@@ -132,7 +130,7 @@ export const CustomSelect = forwardRef<CustomSelectRef, CustomSelectProps>(
 		}, [variant, size, error, success, leftIcon, leftImage])
 
 		const labelClasses = useMemo(() => {
-			const baseClasses = 'block text-sm font-medium mb-2 transition-colors duration-200'
+			const baseClasses = 'block text-base font-medium mb-2 transition-colors duration-200'
 			const stateClasses = error
 				? 'text-red-600 dark:text-red-400'
 				: success
@@ -285,19 +283,6 @@ export const CustomSelect = forwardRef<CustomSelectRef, CustomSelectProps>(
 			}
 		}, [isOpen])
 
-		// GSAP animations
-		useGSAP(() => {
-			if (dropdownRef.current) {
-				if (isOpen) {
-					gsap.fromTo(
-						dropdownRef.current,
-						{ opacity: 0, y: -10, scale: 0.95 },
-						{ opacity: 1, y: 0, scale: 1, duration: 0.2, ease: 'power2.out' }
-					)
-				}
-			}
-		}, [isOpen])
-
 		// Default option renderer
 		const defaultRenderOption = useCallback(
 			(option: CustomSelectOption) => (
@@ -314,7 +299,7 @@ export const CustomSelect = forwardRef<CustomSelectRef, CustomSelectProps>(
 							{option.label}
 						</div>
 						{option.description && (
-							<div className="text-xs text-gray-500 dark:text-gray-400 truncate">
+							<div className="text-sm text-gray-500 dark:text-gray-400 truncate">
 								{option.description}
 							</div>
 						)}
@@ -401,7 +386,7 @@ export const CustomSelect = forwardRef<CustomSelectRef, CustomSelectProps>(
 					{isOpen && !disabled && (
 						<div
 							ref={dropdownRef}
-							className="absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+							className="absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto animate-slide-down"
 							role="listbox"
 						>
 							{loading ? (

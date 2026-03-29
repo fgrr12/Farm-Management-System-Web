@@ -1,6 +1,4 @@
-import { useGSAP } from '@gsap/react'
-import gsap from 'gsap'
-import { type FC, memo, useCallback, useMemo, useRef } from 'react'
+import { type FC, memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAppStore } from '@/store/useAppStore'
@@ -21,7 +19,6 @@ export const Button: FC<ButtonProps> = memo(
 		className,
 		...props
 	}) => {
-		const btnRef = useRef<HTMLButtonElement>(null)
 		const { loading: globalLoading } = useAppStore()
 
 		const isLoading = propLoading || globalLoading
@@ -29,7 +26,7 @@ export const Button: FC<ButtonProps> = memo(
 
 		const buttonClasses = useMemo(() => {
 			const baseClasses =
-				'btn transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-offset-2'
+				'btn transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-95 hover:scale-[1.02]'
 
 			const variantClasses = {
 				primary:
@@ -45,7 +42,7 @@ export const Button: FC<ButtonProps> = memo(
 			}
 
 			const sizeClasses = {
-				sm: 'h-9 px-3 text-sm',
+				sm: 'h-11 px-4 text-sm',
 				md: 'h-12 px-6 text-base',
 				lg: 'h-14 px-8 text-lg',
 			}
@@ -55,41 +52,6 @@ export const Button: FC<ButtonProps> = memo(
 
 			return `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${widthClass} ${disabledClass} ${className || ''}`
 		}, [variant, size, fullWidth, isDisabled, className])
-
-		useGSAP(() => {
-			if (!globalLoading && btnRef.current) {
-				const animation = gsap.fromTo(
-					btnRef.current,
-					{ y: 20, opacity: 0 },
-					{ y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }
-				)
-
-				return () => {
-					// Kill the animation if component unmounts
-					if (animation) {
-						animation.kill()
-					}
-					// Kill any remaining tweens on this element
-					gsap.killTweensOf(btnRef.current)
-				}
-			}
-		}, [globalLoading])
-
-		const handleMouseEnter = useCallback(() => {
-			if (btnRef.current && !isDisabled) {
-				// Kill any existing scale animations before starting new one
-				gsap.killTweensOf(btnRef.current, 'scale')
-				gsap.to(btnRef.current, { scale: 1.02, duration: 0.2, ease: 'power1.out' })
-			}
-		}, [isDisabled])
-
-		const handleMouseLeave = useCallback(() => {
-			if (btnRef.current && !isDisabled) {
-				// Kill any existing scale animations before starting new one
-				gsap.killTweensOf(btnRef.current, 'scale')
-				gsap.to(btnRef.current, { scale: 1, duration: 0.2, ease: 'power1.out' })
-			}
-		}, [isDisabled])
 
 		const renderContent = () => {
 			if (isLoading) {
@@ -111,14 +73,7 @@ export const Button: FC<ButtonProps> = memo(
 		}
 
 		return (
-			<button
-				ref={btnRef}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
-				className={buttonClasses}
-				disabled={isDisabled}
-				{...props}
-			>
+			<button className={buttonClasses} disabled={isDisabled} {...props}>
 				{renderContent()}
 			</button>
 		)
@@ -126,57 +81,17 @@ export const Button: FC<ButtonProps> = memo(
 )
 
 export const BackButton: FC<BackButtonProps> = memo((props) => {
-	const btnRef = useRef<HTMLButtonElement>(null)
-	const { loading } = useAppStore()
 	const { t } = useTranslation('common')
-
-	useGSAP(() => {
-		if (!loading && btnRef.current) {
-			const animation = gsap.fromTo(
-				btnRef.current,
-				{ x: -30, opacity: 0 },
-				{ x: 0, opacity: 1, duration: 0.5, ease: 'power2.out', delay: 0.2 }
-			)
-
-			return () => {
-				// Kill the animation if component unmounts
-				if (animation) {
-					animation.kill()
-				}
-				// Kill any remaining tweens on this element
-				gsap.killTweensOf(btnRef.current)
-			}
-		}
-	}, [loading])
-
-	const handleMouseEnter = useCallback(() => {
-		if (btnRef.current) {
-			// Kill any existing scale animations before starting new one
-			gsap.killTweensOf(btnRef.current, 'scale')
-			gsap.to(btnRef.current, { scale: 1.05, duration: 0.2, ease: 'power1.out' })
-		}
-	}, [])
-
-	const handleMouseLeave = useCallback(() => {
-		if (btnRef.current) {
-			// Kill any existing scale animations before starting new one
-			gsap.killTweensOf(btnRef.current, 'scale')
-			gsap.to(btnRef.current, { scale: 1, duration: 0.2, ease: 'power1.out' })
-		}
-	}, [])
 
 	return (
 		<button
-			ref={btnRef}
 			type="button"
-			onMouseEnter={handleMouseEnter}
-			onMouseLeave={handleMouseLeave}
-			className="items-center gap-2 px-3 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-all duration-200 hidden md:inline-flex ml-4 focus:outline-none focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+			className="inline-flex items-center gap-2 px-3 py-2 min-h-11 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-all duration-200 ml-2 sm:ml-4 focus:outline-none focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900 hover:scale-105 active:scale-95 animate-fade-in-left"
 			aria-label={t('header.back')}
 			{...props}
 		>
 			<i className="i-material-symbols-arrow-left-alt-rounded w-5! h-5! bg-current!" />
-			<span className="text-sm font-medium">{t('header.back')}</span>
+			<span className="text-sm font-medium hidden sm:inline">{t('header.back')}</span>
 		</button>
 	)
 })

@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { formatDateForForm } from '@/utils/date'
 
 import { type HealthRecordFormData, healthRecordSchema } from '@/schemas'
+import type { HealthRecord, HealthRecordType } from '@/types'
 
 const DEFAULT_VALUES: Partial<HealthRecordFormData> = {
 	reason: '',

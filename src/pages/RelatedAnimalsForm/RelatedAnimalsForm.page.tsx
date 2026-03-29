@@ -22,6 +22,7 @@ import {
 } from '@/hooks/queries/useRelatedAnimals'
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
+import type { Gender, RelatedAnimal } from '@/types'
 import type {
 	DragSingularRelation,
 	RelatedAnimalInformation,

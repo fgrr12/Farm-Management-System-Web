@@ -1,5 +1,7 @@
 import { callableFireFunction } from '@/utils/callableFireFunction'
 
+import type { TaxDetails } from '@/types'
+
 const setTaxDetails = async (
 	taxDetails: TaxDetails,
 	userUuid: string,

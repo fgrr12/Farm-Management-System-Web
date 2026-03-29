@@ -16,6 +16,7 @@ import { Search } from '@/components/ui/Search'
 
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
+import type { Breed, Species } from '@/types'
 import type { MySpeciesI } from './MySpecies.types'
 
 const MySpecies = () => {

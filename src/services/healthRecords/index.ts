@@ -1,5 +1,7 @@
 import { callableFireFunction } from '@/utils/callableFireFunction'
 
+import type { HealthRecord } from '@/types'
+
 // Gets
 
 const getHealthRecords = async (animalUuid: string, limit?: number): Promise<HealthRecord[]> => {

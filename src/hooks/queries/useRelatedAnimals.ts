@@ -4,6 +4,8 @@ import { useFarmStore } from '@/store/useFarmStore'
 
 import { RelatedAnimalsService } from '@/services/relatedAnimals'
 
+import type { Relation } from '@/types'
+
 export const RELATED_ANIMALS_KEYS = {
 	all: ['relatedAnimals'] as const,
 	organized: (animalUuid: string) =>

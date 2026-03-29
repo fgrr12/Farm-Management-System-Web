@@ -26,10 +26,12 @@ import {
 import { useDeleteRelatedAnimal, useRelatedAnimals } from '@/hooks/queries/useRelatedAnimals'
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
+import type { User } from '@/types'
+
 const DetailItem = memo(({ label, value }: { label: string; value: React.ReactNode }) => (
-	<div className="bg-gray-50 rounded-lg p-2 sm:p-3 border border-gray-200">
-		<dt className="text-xs sm:text-sm font-medium text-gray-500 mb-1">{label}</dt>
-		<dd className="text-sm sm:text-lg font-semibold text-gray-900 flex items-center gap-2 wrap-break-word">
+	<div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 sm:p-4 border border-gray-200 dark:border-gray-600">
+		<dt className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{label}</dt>
+		<dd className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2 wrap-break-word">
 			{value}
 		</dd>
 	</div>
@@ -235,9 +237,7 @@ const Animal = () => {
 									>
 										<div className="flex items-center gap-1 sm:gap-2">
 											<GenderIcon gender={animal.gender} />
-											<span className="hidden sm:inline">
-												{t(`genderList.${animal.gender.toLowerCase()}`)}
-											</span>
+											<span>{t(`genderList.${animal.gender.toLowerCase()}`)}</span>
 										</div>
 									</div>
 								</div>
@@ -299,7 +299,7 @@ const Animal = () => {
 			<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700">
 				{/* Tab Navigation */}
 				<div className="border-b border-gray-200 dark:border-gray-600 overflow-x-auto">
-					<nav className="flex space-x-4 sm:space-x-8 px-4 sm:px-6 min-w-max" aria-label="Tabs">
+					<nav className="flex space-x-2 sm:space-x-8 px-3 sm:px-6 min-w-max" aria-label="Tabs">
 						{[
 							{
 								key: 'healthRecords',
@@ -328,7 +328,7 @@ const Animal = () => {
 								type="button"
 								onClick={tab.onClick}
 								className={`
-								group inline-flex items-center py-3 sm:py-4 px-1 border-b-2 font-medium text-xs sm:text-sm transition-colors cursor-pointer whitespace-nowrap
+								group inline-flex items-center py-3 sm:py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer whitespace-nowrap
 								${
 									activeTab === tab.key
 										? `border-${tab.color}-500 text-${tab.color}-600 dark:text-${tab.color}-400`
@@ -343,8 +343,7 @@ const Animal = () => {
 											: 'text-gray-400 dark:text-gray-500 group-hover:text-gray-500 dark:group-hover:text-gray-400'
 									}`}
 								/>
-								<span className="hidden sm:inline">{tab.label}</span>
-								<span className="sm:hidden text-xs">{tab.label.split(' ')[0]}</span>
+								<span className="text-sm sm:text-base">{tab.label}</span>
 							</button>
 						))}
 					</nav>

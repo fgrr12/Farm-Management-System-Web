@@ -1,6 +1,7 @@
 {
 	"title": "Comandos de Voz",
 	"subtitle": "Gestiona tu granja usando comandos de lenguaje natural",
+	"startRecording": "Comenzar Grabación",
 	"exampleCommands": "Comandos de Ejemplo",
 	"howItWorks": "Cómo Funciona",
 	"animalManagement": "Gestión de Animales",

@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { type FarmFormData, farmSchema } from '@/schemas'
+import type { Farm } from '@/types'
 
 const DEFAULT_VALUES: Partial<FarmFormData> = {
 	name: '',

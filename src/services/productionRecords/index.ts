@@ -1,5 +1,7 @@
 import { callableFireFunction } from '@/utils/callableFireFunction'
 
+import type { ProductionRecord } from '@/types'
+
 // Gets
 
 const getProductionRecords = async (

@@ -1,5 +1,7 @@
 import { callableFireFunction } from '@/utils/callableFireFunction'
 
+import type { Breed } from '@/types'
+
 const createBreed = async (
 	breed: Breed,
 	userUuid: string,

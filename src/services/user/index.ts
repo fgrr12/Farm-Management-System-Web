@@ -10,6 +10,8 @@ import { auth, firestore } from '@/config/firebaseConfig'
 
 import { callableFireFunction } from '@/utils/callableFireFunction'
 
+import type { User } from '@/types'
+
 const collectionName = 'users'
 
 const loginWithEmailAndPassword = async (email: string, password: string) => {

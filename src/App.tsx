@@ -1,8 +1,5 @@
-import { useGSAP } from '@gsap/react'
 import { onAuthStateChanged } from 'firebase/auth'
-import { gsap } from 'gsap'
-import { SplitText } from 'gsap/all'
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 
@@ -18,6 +15,8 @@ import { initializeSEO } from '@/utils/seo'
 
 import { UserService } from '@/services/user'
 
+import { VoiceCommandButton } from '@/components/business/Voice/VoiceCommandButton'
+import { VoiceCommandModal } from '@/components/business/Voice/VoiceCommandModal'
 import { DevelopmentBanner } from '@/components/layout/DevelopmentBanner'
 import { Loading } from '@/components/layout/Loading'
 import { Modal } from '@/components/layout/Modal'
@@ -35,8 +34,6 @@ import { PWAUpdatePrompt } from '@/components/pwa/PWAUpdatePrompt.component'
 import { useTheme } from '@/hooks/system/useTheme'
 
 import { usePreloadRoutes } from './hooks/ui/usePreloadRoutes'
-
-gsap.registerPlugin(SplitText, useGSAP)
 
 // Core pages (loaded immediately)
 const Animals = lazy(() => import('@/pages/Animals/Animals.page'))
@@ -80,18 +77,25 @@ const Calendar = lazy(() => import('@/pages/Calendar/Calendar.page'))
 const Voice = lazy(() => import('@/pages/Voice/Voice.page'))
 
 export const App = () => {
-	const { user, setUser } = useUserStore()
-	const { setFarm } = useFarmStore()
-	const { loading: appLoading, defaultModalData: modalData } = useAppStore()
+	const { user, setUser, authLoading, setAuthLoading } = useUserStore()
+	const { setFarm, farm } = useFarmStore()
+	const {
+		loading: appLoading,
+		defaultModalData: modalData,
+		isVoiceModalOpen,
+		setVoiceModalOpen,
+	} = useAppStore()
 	const { i18n } = useTranslation()
 	const location = useLocation()
-	const [authLoading, setAuthLoading] = useState(true)
 	const browserLanguage = navigator.language === 'en' ? 'eng' : 'spa'
 
 	// Initialize theme system
 	useTheme()
 
 	usePreloadRoutes()
+
+	const openVoiceModal = useCallback(() => setVoiceModalOpen(true), [setVoiceModalOpen])
+	const closeVoiceModal = useCallback(() => setVoiceModalOpen(false), [setVoiceModalOpen])
 
 	//biome-ignore lint: use only once
 	useEffect(() => {
@@ -330,6 +334,12 @@ export const App = () => {
 					<FCMTokenManager />
 					<NotificationManager />
 					<NotificationToast />
+					{user && farm && (
+						<>
+							<VoiceCommandButton onClick={openVoiceModal} />
+							<VoiceCommandModal isOpen={isVoiceModalOpen} onClose={closeVoiceModal} />
+						</>
+					)}
 				</main>
 			</div>
 		</div>

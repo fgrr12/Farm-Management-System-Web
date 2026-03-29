@@ -1,8 +1,10 @@
 import dayjs from 'dayjs'
 import { memo } from 'react'
 
+import type { CalendarEvent as CalendarEventType } from '@/types'
+
 interface CalendarEventProps {
-	event: CalendarEvent
+	event: CalendarEventType
 	onClick?: (event: React.MouseEvent) => void
 	compact?: boolean
 }
@@ -12,22 +14,27 @@ export const CalendarEvent = memo<CalendarEventProps>(({ event, onClick, compact
 		switch (type) {
 			case 'medication':
 				return 'bg-red-100 text-red-800 border-red-200'
-			case 'vaccination':
-				return 'bg-yellow-100 text-yellow-800 border-yellow-200'
+			case 'checkup':
+				return 'bg-green-100 text-green-800 border-green-200'
 			case 'task':
 				return 'bg-blue-100 text-blue-800 border-blue-200'
-			case 'appointment':
-				return 'bg-pink-100 text-pink-800 border-pink-200'
-			case 'general':
-				return 'bg-green-100 text-green-800 border-green-200'
+			case 'birth':
+				return 'bg-purple-100 text-purple-800 border-purple-200'
+			case 'drying':
+				return 'bg-orange-100 text-orange-800 border-orange-200'
+			case 'custom':
+				return 'bg-indigo-100 text-indigo-800 border-indigo-200'
 			default:
 				return 'bg-gray-100 text-gray-800 border-gray-200'
 		}
 	}
 
 	const getPriorityIcon = (priority: string) => {
+		if (priority === 'critical') {
+			return <div className="i-heroicons-fire w-3 h-3 text-red-600" />
+		}
 		if (priority === 'high') {
-			return <div className="i-heroicons-exclamation-triangle w-3 h-3 text-red-500" />
+			return <div className="i-heroicons-exclamation-triangle w-3 h-3 text-orange-500" />
 		}
 		return null
 	}

@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { useMemo, useState } from 'react'
+import { type FC, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -12,6 +12,7 @@ import { HealthRecordsService } from '@/services/healthRecords'
 
 import { ActionButton } from '@/components/ui/ActionButton'
 
+import type { HealthRecord, HealthRecordType } from '@/types'
 import { HealthRecordsFilters } from '../HealthRecordsFilters'
 import type {
 	HealthRecordsFilters as HealthRecordsFiltersType,

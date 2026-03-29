@@ -1,8 +1,5 @@
-import { useGSAP } from '@gsap/react'
 import { useQueryClient } from '@tanstack/react-query'
-import gsap from 'gsap'
-import { SplitText } from 'gsap/SplitText'
-import { memo, useCallback, useMemo, useRef } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -20,20 +17,23 @@ import { BackButton } from '@/components/ui/Button'
 
 import { useTheme } from '@/hooks/system/useTheme'
 import { useBackRoute } from '@/hooks/ui/useBackRoute'
+import { useRouteTitle } from '@/hooks/ui/useRouteTitle'
 
-export const Navbar = memo(() => {
+export const Navbar = () => {
 	const drawerRef = useRef<HTMLInputElement>(null)
-	const titleRef = useRef<HTMLHeadingElement>(null)
-	const drawerTitleRef = useRef<HTMLHeadingElement>(null)
 	const { user, setUser } = useUserStore()
 	const { farm, taxDetails, setFarm } = useFarmStore()
 	const { t } = useTranslation('common')
 	const navigate = useNavigate()
 	const location = useLocation()
-	const { headerTitle, loading } = useAppStore()
+	const { headerTitle } = useAppStore()
 	const backRoute = useBackRoute()
 	const { theme, toggleTheme } = useTheme()
 	const queryClient = useQueryClient()
+
+	// useRouteTitle: sync on navigation (useLocation re-render), async on refresh (i18n.store 'added' event)
+	// Falls back to headerTitle (set by dynamic pages like /animals/:uuid on mount)
+	const routeTitle = useRouteTitle() || headerTitle
 
 	const getCurrentPageIcon = useMemo(() => {
 		if (location.pathname.includes(AppRoutes.ANIMALS)) {
@@ -153,57 +153,12 @@ export const Navbar = memo(() => {
 		navigate(AppRoutes.LOGIN)
 	}, [user, setUser, setFarm, navigate, queryClient])
 
-	useGSAP(() => {
-		const el = titleRef.current
-		if (!el || loading || !headerTitle.trim()) return
-
-		const split = new SplitText(el, { type: 'chars' })
-
-		gsap.from(split.chars, {
-			autoAlpha: 0,
-			x: 10,
-			duration: 1,
-			stagger: 0.05,
-			ease: 'power1.out',
-		})
-
-		return () => {
-			split.revert()
-		}
-	}, [headerTitle, loading])
-
-	useGSAP(() => {
-		const drawer = drawerRef.current
-		if (!drawer || !drawerTitleRef.current || !farm) return
-
-		const handleChange = () => {
-			if (drawer.checked && drawerTitleRef.current) {
-				const split = new SplitText(drawerTitleRef.current, { type: 'chars' })
-				gsap.from(split.chars, {
-					autoAlpha: 0,
-					x: 10,
-					duration: 1,
-					stagger: 0.05,
-					ease: 'power1.out',
-				})
-				return () => {
-					setTimeout(() => split.revert(), 2000)
-				}
-			}
-		}
-
-		drawer.addEventListener('change', handleChange)
-
-		return () => {
-			drawer.removeEventListener('change', handleChange)
-		}
-	}, [farm])
 	return (
 		<div className="drawer">
 			<input id="my-drawer" type="checkbox" className="drawer-toggle" ref={drawerRef} />
 			<div className="drawer-content">
 				<div className="navbar bg-linear-to-r from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 shadow-lg border-b border-gray-100 dark:border-gray-700">
-					<div className="navbar-start">
+					<div className="navbar-start shrink-0 w-auto md:flex-1">
 						<div className="flex items-center gap-2">
 							<label
 								htmlFor="my-drawer"
@@ -219,24 +174,24 @@ export const Navbar = memo(() => {
 							)}
 						</div>
 					</div>
-					<div className="navbar-center">
-						<div className="flex items-center gap-3">
+					<div className="navbar-center min-w-0 flex-1 md:flex-none">
+						<div className="flex items-center gap-2 sm:gap-3 min-w-0">
 							<div
-								className={`w-8 h-8 bg-linear-to-br ${getCurrentPageColor} rounded-lg flex items-center justify-center shadow-md transition-all duration-300 hover:scale-110 hover:rotate-12`}
+								className={`w-8 h-8 shrink-0 bg-linear-to-br ${getCurrentPageColor} rounded-lg flex items-center justify-center shadow-md transition-all duration-300 hover:scale-110 hover:rotate-12`}
 							>
 								<i
 									className={`${getCurrentPageIcon} w-5! h-5! bg-white! transition-transform duration-200`}
 								/>
 							</div>
 							<h2
-								ref={titleRef}
-								className="text-xl font-bold text-gray-800 dark:text-gray-200 tracking-tight"
+								key={routeTitle}
+								className="text-base sm:text-xl font-bold text-gray-800 dark:text-gray-200 tracking-tight animate-fade-in-up truncate"
 							>
-								{headerTitle}
+								{routeTitle}
 							</h2>
 						</div>
 					</div>
-					<div className="navbar-end">
+					<div className="navbar-end shrink-0 w-auto md:flex-1">
 						<div className="flex items-center gap-2">
 							{/* User Avatar */}
 							<div className="dropdown dropdown-end relative">
@@ -277,7 +232,7 @@ export const Navbar = memo(() => {
 											type="button"
 											role="menuitem"
 											onClick={goToFromDropdown(AppRoutes.MY_ACCOUNT)}
-											className="flex items-center gap-3 px-3 py-3 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors text-gray-700 dark:text-gray-300 w-full text-left touch-manipulation min-h-[44px] focus:outline-none focus:bg-blue-50 dark:focus:bg-blue-900/20"
+											className="flex items-center gap-3 px-3 py-3 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors text-gray-700 dark:text-gray-300 w-full text-left touch-manipulation min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset"
 											tabIndex={-1}
 										>
 											<i className="i-material-symbols-account-circle w-4! h-4! bg-blue-600! dark:bg-blue-400!" />
@@ -289,7 +244,7 @@ export const Navbar = memo(() => {
 											type="button"
 											role="menuitem"
 											onClick={handleLogout}
-											className="flex items-center gap-3 px-3 py-3 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors text-red-600 dark:text-red-400 w-full text-left touch-manipulation min-h-[44px] focus:outline-none focus:bg-red-50 dark:focus:bg-red-900/20"
+											className="flex items-center gap-3 px-3 py-3 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors text-red-600 dark:text-red-400 w-full text-left touch-manipulation min-h-11 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-inset"
 											tabIndex={-1}
 										>
 											<i className="i-material-symbols-logout w-4! h-4! bg-red-600! dark:bg-red-400!" />
@@ -320,9 +275,7 @@ export const Navbar = memo(() => {
 									<i className="i-healthicons-animal-cow w-6! h-6! bg-white!" />
 								</div>
 								<div>
-									<h2 ref={drawerTitleRef} className="font-bold">
-										{farm!.name}
-									</h2>
+									<h2 className="font-bold">{farm!.name}</h2>
 									<p className="text-blue-100 text-sm opacity-90">{t('sidebar.farmManagement')}</p>
 								</div>
 							</div>
@@ -332,8 +285,8 @@ export const Navbar = memo(() => {
 					{/* Navigation Menu */}
 					<div className="p-4">
 						{/* Main Navigation */}
-						<div className="space-y-2">
-							<div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider px-3 py-2">
+						<div className="space-y-2.5">
+							<div className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider px-3 py-2">
 								{t('sidebar.mainMenu')}
 							</div>
 
@@ -484,8 +437,8 @@ export const Navbar = memo(() => {
 
 						{/* Admin Section */}
 						{(user?.role === 'admin' || user?.role === 'owner') && (
-							<div className="mt-6 space-y-2">
-								<div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider px-3 py-2">
+							<div className="mt-6 space-y-2.5">
+								<div className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider px-3 py-2">
 									{t('sidebar.administration')}
 								</div>
 
@@ -551,8 +504,8 @@ export const Navbar = memo(() => {
 						<FarmSelector />
 
 						{/* Settings Section */}
-						<div className="mt-6 space-y-2">
-							<div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider px-3 py-2">
+						<div className="mt-6 space-y-2.5">
+							<div className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider px-3 py-2">
 								{t('sidebar.settings')}
 							</div>
 
@@ -589,4 +542,4 @@ export const Navbar = memo(() => {
 			</div>
 		</div>
 	)
-})
+}

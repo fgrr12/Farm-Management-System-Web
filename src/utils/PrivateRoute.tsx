@@ -13,7 +13,11 @@ export const PrivateRoute = ({
 	requiredRoles?: string[]
 }) => {
 	const location = useLocation()
-	const { user } = useUserStore()
+	const { user, authLoading } = useUserStore()
+
+	if (authLoading) {
+		return null
+	}
 
 	if (!user || (requiredRoles && !requiredRoles.includes(user.role))) {
 		return <Navigate to={AppRoutes.LOGIN} state={{ from: location }} replace />

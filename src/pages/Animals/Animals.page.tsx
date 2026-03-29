@@ -1,6 +1,4 @@
-import { useGSAP } from '@gsap/react'
-import gsap from 'gsap'
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -27,7 +25,6 @@ const Animals = () => {
 	const navigation = useNavigate()
 	const { t } = useTranslation(['animals'])
 	const { setPageTitle } = usePagePerformance()
-	const containerRef = useRef<HTMLDivElement>(null)
 	const { setLoading } = useAppStore()
 
 	const { data: dbAnimals, isLoading } = useAnimals()
@@ -96,32 +93,6 @@ const Animals = () => {
 		setLoading(false)
 	}, [setPageTitle, t, setLoading])
 
-	useGSAP(() => {
-		if (!filteredAnimals.length) return
-
-		const cards = containerRef.current?.querySelectorAll('.animal-card')
-
-		if (cards && cards.length > 0) {
-			const animation = gsap.from(cards, {
-				opacity: 0,
-				x: 30,
-				stagger: 0.1,
-				duration: 0.5,
-				ease: 'power2.out',
-				clearProps: 'opacity,transform',
-			})
-
-			return () => {
-				// Kill the animation if component unmounts or filteredAnimals changes
-				if (animation) {
-					animation.kill()
-				}
-				// Kill any remaining tweens on the cards
-				gsap.killTweensOf(cards)
-			}
-		}
-	}, [filteredAnimals])
-
 	return (
 		<PageContainer>
 			<a
@@ -189,21 +160,25 @@ const Animals = () => {
 				</h2>
 
 				{isLoading ? (
-					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6">
+					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6">
 						<CardSkeleton count={8} />
 					</div>
 				) : filteredAnimals.length > 0 ? (
 					<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden border border-gray-100 dark:border-gray-700">
 						<div className="p-4 sm:p-6">
 							<div
-								ref={containerRef}
-								className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6"
+								className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6"
 								id="animals-grid"
 								role="list"
 								aria-label={t('accessibility.animalsGrid', { count: filteredAnimals.length })}
 							>
-								{filteredAnimals.map((animal) => (
-									<div key={animal.uuid} role="listitem" className="animal-card">
+								{filteredAnimals.map((animal, index) => (
+									<div
+										key={animal.uuid}
+										role="listitem"
+										className="animal-card animate-fade-in-up"
+										style={{ animationDelay: `${Math.min(index * 50, 500)}ms` }}
+									>
 										<AnimalCard
 											animal={animal}
 											aria-label={t('accessibility.animalCardLabel', {

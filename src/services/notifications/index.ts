@@ -4,6 +4,8 @@ import { auth, firestore } from '@/config/firebaseConfig'
 
 import { callableFireFunction } from '@/utils/callableFireFunction'
 
+import type { NotificationData } from '@/types'
+
 // Type mapping from backend notification types to frontend display types
 const mapNotificationTypeToDisplayType = (
 	backendType: string

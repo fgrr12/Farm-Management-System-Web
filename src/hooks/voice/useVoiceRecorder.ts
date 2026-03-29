@@ -1,10 +1,13 @@
 import { useCallback, useRef, useState } from 'react'
 
-import type {
-	ExecutionResult,
-	VoiceProcessingRequest,
-	VoiceProcessingResponse,
+import {
+	type ExecutionResult,
+	type VoiceProcessingRequest,
+	type VoiceProcessingResponse,
+	VoiceService,
 } from '@/services/voice'
+
+export type VoicePhase = 'idle' | 'recording' | 'processing' | 'done' | 'error'
 
 export interface UseVoiceRecorderConfig {
 	farmUuid: string
@@ -17,36 +20,30 @@ export interface UseVoiceRecorderConfig {
 }
 
 export interface UseVoiceRecorderReturn {
-	// Recording state
+	phase: VoicePhase
 	isRecording: boolean
 	isProcessing: boolean
 	recordingTime: number
 
-	// Audio management
 	startRecording: () => Promise<void>
 	stopRecording: () => Promise<void>
 	cancelRecording: () => void
 
-	// Results
 	transcription: string | null
 	processingResponse: VoiceProcessingResponse | null
 	executionResults: ExecutionResult[]
 
-	// Error handling
 	error: string | null
 	clearError: () => void
 
-	// Audio data
 	audioBlob: Blob | null
 	audioURL: string | null
 
-	// Reset state
 	reset: () => void
 }
 
 export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecorderReturn => {
-	const [isRecording, setIsRecording] = useState(false)
-	const [isProcessing, setIsProcessing] = useState(false)
+	const [phase, setPhase] = useState<VoicePhase>('idle')
 	const [recordingTime, setRecordingTime] = useState(0)
 	const [transcription, setTranscription] = useState<string | null>(null)
 	const [processingResponse, setProcessingResponse] = useState<VoiceProcessingResponse | null>(null)
@@ -59,11 +56,12 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 	const audioChunksRef = useRef<Blob[]>([])
 	const recordingTimerRef = useRef<NodeJS.Timeout | null>(null)
 	const streamRef = useRef<MediaStream | null>(null)
-	const isCancelledRef = useRef(false) // Track if recording was cancelled
+	const isCancelledRef = useRef(false)
 
 	const clearError = useCallback(() => {
 		setError(null)
-	}, [])
+		if (phase === 'error') setPhase('idle')
+	}, [phase])
 
 	const reset = useCallback(() => {
 		setTranscription(null)
@@ -76,123 +74,136 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 		}
 		setAudioURL(null)
 		setRecordingTime(0)
+		setPhase('idle')
 	}, [audioURL])
 
 	const processAudio = useCallback(
 		async (blob: Blob) => {
 			try {
-				setIsProcessing(true)
-				clearError()
+				setPhase('processing')
+				setError(null)
 
-				// Convert blob to base64
 				const arrayBuffer = await blob.arrayBuffer()
 				const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)))
 
-				// Import service dynamically
-				const { VoiceService } = await import('@/services/voice')
-
-				// Create request
 				const request: VoiceProcessingRequest = {
 					audioData: base64,
 					farmUuid: config.farmUuid,
 					userUuid: config.userUuid,
 					audioFormat: 'webm',
-					maxDuration: config.maxRecordingTime || 60, // Default to 60 seconds
+					maxDuration: config.maxRecordingTime || 60,
 				}
 
-				// Always use the processAndExecute that handles everything in backend
 				const response = await VoiceService.processAndExecuteVoiceCommand(request)
 
-				// Validate response structure
 				if (!response || !response.data) {
 					throw new Error('Invalid response from voice processing service')
 				}
 
-				// The response.data contains the extraction result (which includes transcription, success, data, etc.)
 				const extractionResult = response.data
 
-				// Set transcription and processing response from extraction result
 				setTranscription(extractionResult.transcription || null)
 				setProcessingResponse(extractionResult)
 
-				// Trigger transcription callback
 				if (extractionResult.transcription) {
 					config.onTranscriptionComplete?.(extractionResult.transcription)
 				}
 				config.onProcessingComplete?.(extractionResult)
 
-				// Convert execution result to ExecutionResult format for frontend compatibility
-				const executionResults: ExecutionResult[] = []
-				if (extractionResult.execution) {
-					// Add success entries based on successCount
-					for (let i = 0; i < extractionResult.execution.successCount; i++) {
-						executionResults.push({
-							type: 'animal', // Generic type since we don't have detailed info
-							success: true,
-							operation: 'create',
-						})
-					}
-
-					// Add error entries if they exist
-					if (
-						extractionResult.execution.errors &&
-						Array.isArray(extractionResult.execution.errors)
-					) {
-						extractionResult.execution.errors.forEach((error: string) => {
-							executionResults.push({
-								type: 'animal', // Generic type
-								success: false,
-								error: error,
-								operation: 'unknown',
+				// Build execution results with proper type mapping from response data
+				const results: ExecutionResult[] = []
+				if (extractionResult.data) {
+					for (const [type, operations] of Object.entries(extractionResult.data)) {
+						if (!Array.isArray(operations)) continue
+						for (const op of operations) {
+							results.push({
+								type: type as ExecutionResult['type'],
+								success: true,
+								operation: op.operation || 'create',
 							})
-						})
+						}
 					}
 				}
 
-				setExecutionResults(executionResults)
+				// Cross-reference execution results to mark failures
+				const execution = extractionResult.execution
+				if (execution) {
+					const executionErrors = execution.errors ?? []
 
-				// Trigger execution callback
-				config.onExecutionComplete?.(executionResults)
+					if (results.length > 0) {
+						const failedCount = results.length - (execution.successCount ?? results.length)
+						if (failedCount > 0) {
+							for (let i = 0; i < failedCount && i < results.length; i++) {
+								const idx = results.length - 1 - i
+								results[idx].success = false
+								results[idx].error = executionErrors[i] || undefined
+							}
+						}
+						// Append extra errors not mapped to an operation
+						const mappedCount = Math.min(
+							Math.max(results.length - (execution.successCount ?? results.length), 0),
+							results.length
+						)
+						for (let i = mappedCount; i < executionErrors.length; i++) {
+							results.push({
+								type: 'animal',
+								success: false,
+								error: executionErrors[i],
+								operation: 'unknown',
+							})
+						}
+					} else {
+						// No operations parsed from AI data — show each error as standalone
+						for (const err of executionErrors) {
+							results.push({
+								type: 'animal',
+								success: false,
+								error: err,
+								operation: 'create',
+							})
+						}
+					}
+				}
+
+				setExecutionResults(results)
+				config.onExecutionComplete?.(results)
+				setPhase('done')
 			} catch (err) {
 				const errorMessage = err instanceof Error ? err.message : 'Failed to process audio'
 				setError(errorMessage)
+				setPhase('error')
 				config.onError?.(errorMessage)
-			} finally {
-				setIsProcessing(false)
 			}
 		},
-		[config, clearError]
+		[config]
 	)
 
 	const startRecording = useCallback(async () => {
 		try {
-			clearError()
+			setError(null)
 			reset()
-			isCancelledRef.current = false // Reset cancellation flag
+			isCancelledRef.current = false
 
-			// Request microphone access with optimized settings for compression
 			const stream = await navigator.mediaDevices.getUserMedia({
 				audio: {
 					echoCancellation: true,
 					noiseSuppression: true,
 					autoGainControl: true,
-					sampleRate: 16000, // Reduced from default 44.1kHz
-					channelCount: 1, // Mono instead of stereo
+					sampleRate: 16000,
+					channelCount: 1,
 				},
 			})
 
 			streamRef.current = stream
 
-			// Create MediaRecorder with aggressive compression settings
 			const mediaRecorder = new MediaRecorder(stream, {
 				mimeType: 'audio/webm;codecs=opus',
-				audioBitsPerSecond: 16000, // 16kbps instead of default 128kbps = 87.5% reduction
+				audioBitsPerSecond: 16000,
 			})
 
 			mediaRecorderRef.current = mediaRecorder
 			audioChunksRef.current = []
 
-			// Event handlers
 			mediaRecorder.ondataavailable = (event) => {
 				if (event.data.size > 0) {
 					audioChunksRef.current.push(event.data)
@@ -204,32 +215,26 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 				setAudioBlob(blob)
 				setAudioURL(URL.createObjectURL(blob))
 
-				// Stop all tracks
 				if (streamRef.current) {
 					// biome-ignore lint: kill-stream
 					streamRef.current.getTracks().forEach((track) => track.stop())
 					streamRef.current = null
 				}
 
-				// Only process the audio if not cancelled
 				if (!isCancelledRef.current) {
 					await processAudio(blob)
 				}
 			}
 
-			// Start recording
-			mediaRecorder.start(100) // Collect data every 100ms
-			setIsRecording(true)
+			mediaRecorder.start(100)
+			setPhase('recording')
 			setRecordingTime(0)
 
-			// Start timer
 			recordingTimerRef.current = setInterval(() => {
 				setRecordingTime((prev) => {
 					const newTime = prev + 1
-					const maxTime = config.maxRecordingTime || 60 // Default to 60 seconds
-					// Auto-stop if max time reached
+					const maxTime = config.maxRecordingTime || 60
 					if (newTime >= maxTime) {
-						// Stop recording when max time reached
 						if (mediaRecorderRef.current?.state === 'recording') {
 							mediaRecorderRef.current.stop()
 						}
@@ -240,47 +245,38 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 		} catch (err) {
 			const errorMessage = err instanceof Error ? err.message : 'Failed to start recording'
 			setError(errorMessage)
+			setPhase('error')
 			config.onError?.(errorMessage)
 		}
-	}, [config, clearError, reset, processAudio])
+	}, [config, reset, processAudio])
 
 	const stopRecording = useCallback(async () => {
-		if (!mediaRecorderRef.current || !isRecording) return
+		if (!mediaRecorderRef.current || phase !== 'recording') return
 
-		// Clear timer
 		if (recordingTimerRef.current) {
 			clearInterval(recordingTimerRef.current)
 			recordingTimerRef.current = null
 		}
 
-		setIsRecording(false)
-
-		// Stop recording
 		if (mediaRecorderRef.current.state === 'recording') {
 			mediaRecorderRef.current.stop()
 		}
-	}, [isRecording])
+	}, [phase])
 
 	const cancelRecording = useCallback(() => {
-		if (!isRecording) return
+		if (phase !== 'recording') return
 
-		// Set cancellation flag to prevent processing
 		isCancelledRef.current = true
 
-		// Clear timer
 		if (recordingTimerRef.current) {
 			clearInterval(recordingTimerRef.current)
 			recordingTimerRef.current = null
 		}
 
-		setIsRecording(false)
-
-		// Stop recording without processing
 		if (mediaRecorderRef.current?.state === 'recording') {
 			mediaRecorderRef.current.stop()
 		}
 
-		// Stop all tracks
 		if (streamRef.current) {
 			// biome-ignore lint: kill-stream
 			streamRef.current.getTracks().forEach((track) => track.stop())
@@ -288,33 +284,28 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 		}
 
 		reset()
-	}, [isRecording, reset])
+	}, [phase, reset])
 
 	return {
-		// Recording state
-		isRecording,
-		isProcessing,
+		phase,
+		isRecording: phase === 'recording',
+		isProcessing: phase === 'processing',
 		recordingTime,
 
-		// Audio management
 		startRecording,
 		stopRecording,
 		cancelRecording,
 
-		// Results
 		transcription,
 		processingResponse,
 		executionResults,
 
-		// Error handling
 		error,
 		clearError,
 
-		// Audio data
 		audioBlob,
 		audioURL,
 
-		// Reset state
 		reset,
 	}
 }
