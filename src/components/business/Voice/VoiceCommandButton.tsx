@@ -2,18 +2,18 @@ import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 interface VoiceCommandButtonProps {
-    onClick: () => void
+	onClick: () => void
 }
 
 export const VoiceCommandButton = memo<VoiceCommandButtonProps>(({ onClick }) => {
-    const { t } = useTranslation(['voiceRecorder'])
+	const { t } = useTranslation(['voiceRecorder'])
 
-    return (
-        <button
-            type="button"
-            onClick={onClick}
-            aria-label={t('startVoiceCommand')}
-            className="
+	return (
+		<button
+			type="button"
+			onClick={onClick}
+			aria-label={t('startVoiceCommand')}
+			className="
 				fixed bottom-6 right-6 z-40
 				w-14 h-14 rounded-full
 				bg-linear-to-br from-pink-500 to-purple-600
@@ -28,10 +28,10 @@ export const VoiceCommandButton = memo<VoiceCommandButtonProps>(({ onClick }) =>
 				max-sm:bottom-20 max-sm:right-4
 				animate-scale-bounce-in
 			"
-        >
-            <span className="i-heroicons-microphone w-7! h-7!" />
-        </button>
-    )
+		>
+			<span className="i-heroicons-microphone w-7! h-7!" />
+		</button>
+	)
 })
 
 VoiceCommandButton.displayName = 'VoiceCommandButton'
