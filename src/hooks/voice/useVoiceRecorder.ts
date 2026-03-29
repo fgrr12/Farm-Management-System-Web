@@ -127,28 +127,41 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 
 				// Cross-reference execution results to mark failures
 				const execution = extractionResult.execution
-				if (execution && results.length > 0) {
-					const failedCount = results.length - (execution.successCount ?? results.length)
-					if (failedCount > 0) {
-						const errors = execution.errors ?? []
-						// Mark last N results as failed (operations fail in order)
-						for (let i = 0; i < failedCount && i < results.length; i++) {
-							const idx = results.length - 1 - i
-							results[idx].success = false
-							results[idx].error = errors[i] || undefined
+				if (execution) {
+					const executionErrors = execution.errors ?? []
+
+					if (results.length > 0) {
+						const failedCount = results.length - (execution.successCount ?? results.length)
+						if (failedCount > 0) {
+							for (let i = 0; i < failedCount && i < results.length; i++) {
+								const idx = results.length - 1 - i
+								results[idx].success = false
+								results[idx].error = executionErrors[i] || undefined
+							}
 						}
-					}
-					// Append any extra errors not mapped to an operation
-					const unmappedErrors = (execution.errors ?? []).slice(
-						Math.min(failedCount ?? 0, results.length)
-					)
-					for (const err of unmappedErrors) {
-						results.push({
-							type: 'animal',
-							success: false,
-							error: err,
-							operation: 'unknown',
-						})
+						// Append extra errors not mapped to an operation
+						const mappedCount = Math.min(
+							Math.max(results.length - (execution.successCount ?? results.length), 0),
+							results.length
+						)
+						for (let i = mappedCount; i < executionErrors.length; i++) {
+							results.push({
+								type: 'animal',
+								success: false,
+								error: executionErrors[i],
+								operation: 'unknown',
+							})
+						}
+					} else {
+						// No operations parsed from AI data — show each error as standalone
+						for (const err of executionErrors) {
+							results.push({
+								type: 'animal',
+								success: false,
+								error: err,
+								operation: 'create',
+							})
+						}
 					}
 				}
 

@@ -222,7 +222,7 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
 				</div>
 
 				{/* Body */}
-				<div className="flex-1 overflow-y-hidden p-6">
+				<div className="flex-1 overflow-y-auto overflow-x-hidden p-6">
 					{/* ────── STEP 1: Record ────── */}
 					{(phase === 'idle' || phase === 'recording') && (
 						<div className="flex flex-col items-center text-center gap-6 py-4">
@@ -477,7 +477,7 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
 													</span>
 												)}
 												{!result.success && result.error && (
-													<p className="text-xs text-red-500 dark:text-red-400 mt-0.5 truncate">
+													<p className="text-xs text-red-500 dark:text-red-400 mt-0.5">
 														{result.error}
 													</p>
 												)}
