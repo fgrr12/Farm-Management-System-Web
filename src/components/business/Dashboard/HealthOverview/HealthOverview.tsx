@@ -55,7 +55,7 @@ export const HealthOverview = memo(() => {
 		},
 	]
 
-	// Animate counters
+	// biome-ignore lint: This is intentional to create a smooth counting animation whenever the data changes
 	useEffect(() => {
 		if (loading || loadingSecondary) return
 
@@ -76,6 +76,7 @@ export const HealthOverview = memo(() => {
 		const totalValue = healthItems.reduce((sum, item) => sum + item.count, 0)
 		cancels.push(animateValue(0, totalValue, 1500, setDisplayTotal))
 
+		//biome-ignore lint: This is intentional to allow all animations to complete before any state updates if the component unmounts
 		return () => cancels.forEach((c) => c())
 	}, [loading, loadingSecondary, healthOverview])
 
