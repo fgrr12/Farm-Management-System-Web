@@ -181,11 +181,12 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
 									<div
 										className={`
 											w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-500
-											${index < currentStep
-												? 'bg-green-500 text-white'
-												: index === currentStep
-													? 'bg-linear-to-br from-pink-500 to-purple-600 text-white shadow-md shadow-pink-500/30 scale-110'
-													: 'bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400'
+											${
+												index < currentStep
+													? 'bg-green-500 text-white'
+													: index === currentStep
+														? 'bg-linear-to-br from-pink-500 to-purple-600 text-white shadow-md shadow-pink-500/30 scale-110'
+														: 'bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400'
 											}
 										`}
 									>
@@ -196,10 +197,11 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
 										)}
 									</div>
 									<span
-										className={`text-xs mt-1 font-medium transition-colors duration-300 ${index <= currentStep
-											? 'text-gray-900 dark:text-white'
-											: 'text-gray-400 dark:text-gray-500'
-											}`}
+										className={`text-xs mt-1 font-medium transition-colors duration-300 ${
+											index <= currentStep
+												? 'text-gray-900 dark:text-white'
+												: 'text-gray-400 dark:text-gray-500'
+										}`}
 									>
 										{t(`stepper.${step}`)}
 									</span>
@@ -208,8 +210,9 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
 								{index < STEPS.length - 1 && (
 									<div className="w-16 sm:w-24 h-0.5 mx-2 mb-5 rounded-full transition-colors duration-500">
 										<div
-											className={`h-full rounded-full transition-all duration-500 ${index < currentStep ? 'bg-green-500' : 'bg-gray-200 dark:bg-gray-600'
-												}`}
+											className={`h-full rounded-full transition-all duration-500 ${
+												index < currentStep ? 'bg-green-500' : 'bg-gray-200 dark:bg-gray-600'
+											}`}
 										/>
 									</div>
 								)}
@@ -257,9 +260,10 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
 										flex items-center justify-center
 										focus:outline-none focus:ring-8 focus:ring-pink-300 dark:focus:ring-pink-800
 										disabled:opacity-50 disabled:cursor-not-allowed
-										${isRecording
-											? 'bg-red-500 hover:bg-red-600 shadow-2xl shadow-red-500/40 scale-105'
-											: 'bg-linear-to-br from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 shadow-2xl shadow-pink-500/30 hover:scale-105'
+										${
+											isRecording
+												? 'bg-red-500 hover:bg-red-600 shadow-2xl shadow-red-500/40 scale-105'
+												: 'bg-linear-to-br from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 shadow-2xl shadow-pink-500/30 hover:scale-105'
 										}
 									`}
 								>
@@ -450,16 +454,18 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
 									{executionResults.map((result, index) => (
 										<div
 											key={index}
-											className={`flex items-center gap-3 p-3 rounded-lg border ${result.success
+											className={`flex items-center gap-3 p-3 rounded-lg border ${
+												result.success
 													? 'bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-800'
 													: 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-800'
-												}`}
+											}`}
 										>
 											<span
-												className={`shrink-0 w-5 h-5 ${result.success
+												className={`shrink-0 w-5 h-5 ${
+													result.success
 														? 'i-heroicons-check-circle text-green-500'
 														: 'i-heroicons-x-circle text-red-500'
-													}`}
+												}`}
 											/>
 											<div className="flex-1 min-w-0">
 												<span className="text-sm font-medium text-gray-900 dark:text-gray-100">
@@ -525,7 +531,7 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
 				</div>
 
 				{/* Footer actions */}
-				< div className="shrink-0 px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50" >
+				<div className="shrink-0 px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
 					{phase === 'done' && (
 						<div className="flex gap-3">
 							<button
@@ -545,45 +551,39 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
 							</button>
 						</div>
 					)}
-					{
-						phase === 'error' && (
-							<div className="flex gap-3">
-								<button
-									type="button"
-									onClick={clearError}
-									className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-linear-to-r from-pink-500 to-purple-600 text-white hover:from-pink-600 hover:to-purple-700 transition-all font-medium text-sm shadow-md cursor-pointer"
-								>
-									<span className="i-heroicons-arrow-path w-4 h-4" />
-									{t('tryAgain')}
-								</button>
-								<button
-									type="button"
-									onClick={onClose}
-									className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-sm cursor-pointer"
-								>
-									{t('close')}
-								</button>
-							</div>
-						)
-					}
-					{
-						phase === 'idle' && (
-							<p className="text-center text-xs text-gray-400 dark:text-gray-500">
-								{t('maxDuration', { seconds: 60 })}
-							</p>
-						)
-					}
-					{
-						phase === 'processing' && (
-							<div className="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-								<div className="loading loading-dots loading-xs" />
-								{t('processing')}
-							</div>
-						)
-					}
-				</div >
-			</div >
-		</div >
+					{phase === 'error' && (
+						<div className="flex gap-3">
+							<button
+								type="button"
+								onClick={clearError}
+								className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-linear-to-r from-pink-500 to-purple-600 text-white hover:from-pink-600 hover:to-purple-700 transition-all font-medium text-sm shadow-md cursor-pointer"
+							>
+								<span className="i-heroicons-arrow-path w-4 h-4" />
+								{t('tryAgain')}
+							</button>
+							<button
+								type="button"
+								onClick={onClose}
+								className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-sm cursor-pointer"
+							>
+								{t('close')}
+							</button>
+						</div>
+					)}
+					{phase === 'idle' && (
+						<p className="text-center text-xs text-gray-400 dark:text-gray-500">
+							{t('maxDuration', { seconds: 60 })}
+						</p>
+					)}
+					{phase === 'processing' && (
+						<div className="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+							<div className="loading loading-dots loading-xs" />
+							{t('processing')}
+						</div>
+					)}
+				</div>
+			</div>
+		</div>
 	)
 })
 
