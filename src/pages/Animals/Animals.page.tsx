@@ -160,14 +160,14 @@ const Animals = () => {
 				</h2>
 
 				{isLoading ? (
-					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6">
+					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6">
 						<CardSkeleton count={8} />
 					</div>
 				) : filteredAnimals.length > 0 ? (
 					<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden border border-gray-100 dark:border-gray-700">
 						<div className="p-4 sm:p-6">
 							<div
-								className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6"
+								className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6"
 								id="animals-grid"
 								role="list"
 								aria-label={t('accessibility.animalsGrid', { count: filteredAnimals.length })}

@@ -186,7 +186,7 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 						className={`${healthConfig.bgColor} ${healthConfig.textColor} px-2.5 py-1.5 rounded-full flex items-center gap-1.5 text-sm font-medium shadow-sm dark:shadow-md`}
 					>
 						<i className={`${healthConfig.icon} w-3.5! h-3.5! bg-current!`} />
-						<span className="hidden sm:inline">{healthConfig.text}</span>
+						<span>{healthConfig.text}</span>
 					</div>
 				</div>
 
@@ -255,7 +255,7 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 				)}
 
 				{/* Action Buttons */}
-				<div className="flex justify-center items-center gap-1">
+				<div className="flex justify-center items-center gap-2 sm:gap-1">
 					<ActionButton
 						title={t('animalCard.addHealthRecord')}
 						icon="i-material-symbols-light-health-metrics-rounded"

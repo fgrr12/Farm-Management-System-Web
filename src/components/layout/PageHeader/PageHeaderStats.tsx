@@ -31,7 +31,7 @@ export const PageHeaderStats = memo(({ stats }: PageHeaderStatsProps) => {
 					)}
 				>
 					<div className="text-lg sm:text-xl font-bold text-white">{stat.value}</div>
-					<div className="text-xs text-blue-100 dark:text-blue-200">{stat.label}</div>
+					<div className="text-sm text-blue-100 dark:text-blue-200">{stat.label}</div>
 				</div>
 			))}
 		</>

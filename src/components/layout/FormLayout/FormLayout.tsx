@@ -35,14 +35,14 @@ export const FormSection = memo(
 					className
 				)}
 			>
-				<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+				<h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 sm:mb-5 flex items-center gap-2">
 					{icon && (
-						<i className={`i-material-symbols-${icon} w-5! h-5! bg-blue-600! dark:bg-blue-500!`} />
+						<i className={`i-material-symbols-${icon} w-5! h-5! sm:w-6 sm:h-6 bg-blue-600! dark:bg-blue-500!`} />
 					)}
 					{title}
 				</h3>
 				<div
-					className={cn('grid gap-4', columns === 2 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1')}
+					className={cn('grid gap-4 sm:gap-5', columns === 2 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1')}
 				>
 					{children}
 				</div>
@@ -75,8 +75,10 @@ export const FormLayout = memo(
 							sidebar ? 'grid-cols-1 lg:grid-cols-3' : 'grid-cols-1'
 						)}
 					>
-						{/* Sidebar Section */}
-						{sidebar && <div className="lg:col-span-1">{sidebar}</div>}
+						{/* Sidebar Section — shown first on mobile for photo upload visibility */}
+						{sidebar && (
+							<div className="lg:col-span-1 order-first lg:order-last">{sidebar}</div>
+						)}
 
 						{/* Main Content Section */}
 						<div className={cn('space-y-6', sidebar ? 'lg:col-span-2' : 'lg:col-span-1')}>
@@ -87,10 +89,10 @@ export const FormLayout = memo(
 					</div>
 
 					{/* Submit Button */}
-					<div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-600">
+					<div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-600 sticky bottom-0 bg-white dark:bg-gray-800 pb-2 sm:relative sm:pb-0">
 						<Button
 							type="submit"
-							className="btn btn-primary h-12 text-lg disabled:loading flex items-center justify-center gap-2 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl dark:shadow-blue-900/20 dark:hover:shadow-blue-800/30"
+							className="btn btn-primary h-14 text-lg disabled:loading flex items-center justify-center gap-2 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl dark:shadow-blue-900/20 dark:hover:shadow-blue-800/30"
 							disabled={submitButton.isSubmitting || submitButton.disabled}
 						>
 							{submitButton.isSubmitting ? (

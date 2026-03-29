@@ -26,7 +26,7 @@ export const Sidebar = memo(() => {
 	const getButtonClasses = useCallback(
 		(path: string, colorFrom: string, colorTo: string) => {
 			const isActive = location.pathname.includes(path)
-			return `w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 ${isActive
+			return `w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 ${isActive
 				? `bg-linear-to-br ${colorFrom} ${colorTo} shadow-lg`
 				: 'hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50 dark:bg-gray-800'
 				}`
@@ -54,7 +54,7 @@ export const Sidebar = memo(() => {
 
 	return (
 		<div
-			className="bg-white dark:bg-gray-900 h-full hidden lg:flex flex-col items-center py-4 shadow-lg border-r border-gray-100 dark:border-gray-700 w-20"
+			className="bg-white dark:bg-gray-900 h-full hidden lg:flex flex-col items-center py-4 shadow-lg border-r border-gray-100 dark:border-gray-700 w-22"
 			role="navigation"
 			aria-label="Main navigation"
 		>
@@ -155,7 +155,7 @@ export const Sidebar = memo(() => {
 			<div className="mt-auto flex flex-col gap-3">
 				<button
 					type="button"
-					className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50 dark:bg-gray-800"
+					className="w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50 dark:bg-gray-800"
 					onClick={toggleTheme}
 					aria-label={`Current theme: ${theme}. Click to change theme`}
 					title={`Theme: ${theme}`}

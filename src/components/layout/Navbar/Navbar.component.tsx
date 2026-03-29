@@ -157,8 +157,8 @@ export const Navbar = () => {
 		<div className="drawer">
 			<input id="my-drawer" type="checkbox" className="drawer-toggle" ref={drawerRef} />
 			<div className="drawer-content">
-				<div className="navbar bg-linear-to-r from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 shadow-lg border-b border-gray-100 dark:border-gray-700">
-					<div className="navbar-start">
+				<div className="navbar bg-linear-to-r from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 shadow-lg border-b border-gray-100 dark:border-gray-700 overflow-hidden">
+					<div className="navbar-start shrink-0 w-auto md:flex-1">
 						<div className="flex items-center gap-2">
 							<label
 								htmlFor="my-drawer"
@@ -174,10 +174,10 @@ export const Navbar = () => {
 							)}
 						</div>
 					</div>
-					<div className="navbar-center">
-						<div className="flex items-center gap-3">
+					<div className="navbar-center min-w-0 flex-1 md:flex-none">
+						<div className="flex items-center gap-2 sm:gap-3 min-w-0">
 							<div
-								className={`w-8 h-8 bg-linear-to-br ${getCurrentPageColor} rounded-lg flex items-center justify-center shadow-md transition-all duration-300 hover:scale-110 hover:rotate-12`}
+								className={`w-8 h-8 shrink-0 bg-linear-to-br ${getCurrentPageColor} rounded-lg flex items-center justify-center shadow-md transition-all duration-300 hover:scale-110 hover:rotate-12`}
 							>
 								<i
 									className={`${getCurrentPageIcon} w-5! h-5! bg-white! transition-transform duration-200`}
@@ -185,13 +185,13 @@ export const Navbar = () => {
 							</div>
 							<h2
 								key={routeTitle}
-								className="text-xl font-bold text-gray-800 dark:text-gray-200 tracking-tight animate-fade-in-up"
+								className="text-base sm:text-xl font-bold text-gray-800 dark:text-gray-200 tracking-tight animate-fade-in-up truncate"
 							>
 								{routeTitle}
 							</h2>
 						</div>
 					</div>
-					<div className="navbar-end">
+					<div className="navbar-end shrink-0 w-auto md:flex-1">
 						<div className="flex items-center gap-2">
 							{/* User Avatar */}
 							<div className="dropdown dropdown-end relative">
@@ -287,8 +287,8 @@ export const Navbar = () => {
 					{/* Navigation Menu */}
 					<div className="p-4">
 						{/* Main Navigation */}
-						<div className="space-y-2">
-							<div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider px-3 py-2">
+						<div className="space-y-2.5">
+							<div className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider px-3 py-2">
 								{t('sidebar.mainMenu')}
 							</div>
 
@@ -421,8 +421,8 @@ export const Navbar = () => {
 
 						{/* Admin Section */}
 						{(user?.role === 'admin' || user?.role === 'owner') && (
-							<div className="mt-6 space-y-2">
-								<div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider px-3 py-2">
+							<div className="mt-6 space-y-2.5">
+								<div className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider px-3 py-2">
 									{t('sidebar.administration')}
 								</div>
 
@@ -482,8 +482,8 @@ export const Navbar = () => {
 						<FarmSelector />
 
 						{/* Settings Section */}
-						<div className="mt-6 space-y-2">
-							<div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider px-3 py-2">
+						<div className="mt-6 space-y-2.5">
+							<div className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider px-3 py-2">
 								{t('sidebar.settings')}
 							</div>
 

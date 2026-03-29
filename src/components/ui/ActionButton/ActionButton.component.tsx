@@ -32,6 +32,7 @@ export const ActionButton: FC<ActionButtonProps> = memo(({ icon, title, ...rest 
 			type="button"
 			className="btn btn-circle btn-ghost min-w-11 min-h-11 hover:bg-base-200 animate-scale-bounce-in transition-transform duration-200 hover:scale-110 active:scale-95"
 			aria-label={title}
+			title={title}
 			{...rest}
 		>
 			<i
