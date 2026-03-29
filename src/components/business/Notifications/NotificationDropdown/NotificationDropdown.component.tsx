@@ -10,6 +10,8 @@ import { NotificationSettings } from '@/components/notifications/NotificationSet
 
 import { useNotifications } from '@/hooks/notifications/useNotifications'
 
+import type { NotificationData } from '@/types'
+
 dayjs.extend(relativeTime)
 
 export const NotificationDropdown = memo(() => {

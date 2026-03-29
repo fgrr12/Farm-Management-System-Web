@@ -9,6 +9,7 @@ import { useUserStore } from '@/store/useUserStore'
 import { EmployeesService } from '@/services/employees'
 import { TasksService } from '@/services/tasks'
 
+import type { TaskPriority, TaskStatus, User } from '@/types'
 import type { TaskModalProps } from './TaskModal.types'
 
 export const TaskModal: FC<TaskModalProps> = memo(({ task, isOpen, onClose }) => {

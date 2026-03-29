@@ -1,8 +1,10 @@
 import dayjs from 'dayjs'
 import { memo } from 'react'
 
+import type { CalendarEvent as CalendarEventType } from '@/types'
+
 interface CalendarEventProps {
-	event: CalendarEvent
+	event: CalendarEventType
 	onClick?: (event: React.MouseEvent) => void
 	compact?: boolean
 }

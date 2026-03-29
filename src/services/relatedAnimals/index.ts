@@ -4,6 +4,8 @@ import { firestore } from '@/config/firebaseConfig'
 
 import { callableFireFunction } from '@/utils/callableFireFunction'
 
+import type { Relation } from '@/types'
+
 const collectionName = 'relatedAnimals'
 
 // Gets

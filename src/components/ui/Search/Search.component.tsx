@@ -1,6 +1,6 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import { memo, useCallback, useId, useRef } from 'react'
+import { type FC, memo, useCallback, useId, useRef } from 'react'
 
 import type { SearchProps } from './Search.types'
 

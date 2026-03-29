@@ -1,5 +1,5 @@
 import { draggable } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { type FC, useCallback, useEffect, useRef, useState } from 'react'
 
 import { useIsMobile } from '@/hooks/ui/useIsMobile'
 

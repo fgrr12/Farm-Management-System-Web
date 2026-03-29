@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useIsMobile } from '@/hooks/ui/useIsMobile'
 
+import type { TaskPriority, TaskStatus } from '@/types'
 import type { TaskCardProps } from './TaskCard.types'
 
 export const TaskCard: FC<TaskCardProps> = memo(

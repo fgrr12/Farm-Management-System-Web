@@ -37,18 +37,16 @@ const LoginForm = () => {
 			await withLoadingAndError(async () => {
 				const { email, password } = credentials
 				await UserService.loginWithEmailAndPassword(email, password)
-				navigate(AppRoutes.ANIMALS)
 			}, t('toast.errorLoggingIn'))
 		},
-		[credentials, withLoadingAndError, t, navigate]
+		[credentials, withLoadingAndError, t]
 	)
 
 	const handleGoogleLogin = useCallback(async () => {
 		await withLoadingAndError(async () => {
 			await UserService.loginWithGoogle()
-			navigate(AppRoutes.ANIMALS)
 		}, t('toast.errorLoggingIn'))
-	}, [withLoadingAndError, t, navigate])
+	}, [withLoadingAndError, t])
 
 	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {

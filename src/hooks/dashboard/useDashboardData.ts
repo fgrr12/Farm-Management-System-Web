@@ -6,6 +6,15 @@ import {
 	useDashboardStats,
 } from '@/hooks/queries/useDashboard'
 
+import type {
+	AnimalDistribution,
+	DashboardStats,
+	HealthOverview,
+	ProductionData,
+	RecentActivity,
+	TasksOverview,
+} from '@/types'
+
 export const useDashboardData = () => {
 	// Phase 1: Quick Stats (Critical data)
 	const { data: quickStats, isLoading: loading, refetch: refetchStats } = useDashboardStats()

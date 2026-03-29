@@ -4,6 +4,8 @@ import { useFarmStore } from '@/store/useFarmStore'
 
 import { ProductionRecordsService } from '@/services/productionRecords'
 
+import type { ProductionRecord } from '@/types'
+
 export const PRODUCTION_RECORDS_KEYS = {
 	all: ['productionRecords'] as const,
 	list: (animalUuid: string) => [...PRODUCTION_RECORDS_KEYS.all, 'list', animalUuid] as const,

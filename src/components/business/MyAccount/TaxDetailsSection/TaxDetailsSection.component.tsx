@@ -1,3 +1,4 @@
+import type { FC } from 'react'
 import { useFieldArray } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 

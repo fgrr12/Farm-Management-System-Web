@@ -6,6 +6,8 @@ import { TextField } from '@/components/ui/TextField'
 
 import { useBreedForm } from '@/hooks/forms/useBreedForm'
 
+import type { Breed } from '@/types'
+
 interface BreedFormRowProps {
 	breed: Breed
 	editable: boolean

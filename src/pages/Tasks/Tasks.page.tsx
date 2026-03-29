@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/Button'
 import { useTasks, useUpdateTask } from '@/hooks/queries/useTasks'
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
+import type { Task, TaskStatus } from '@/types'
 import type { TaskColumnInfo, TaskColumns, TaskFilters as TaskFiltersType } from './Tasks.types'
 
 const Tasks = () => {

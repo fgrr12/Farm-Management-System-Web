@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/Button'
 
 import { useSpeciesForm } from '@/hooks/forms/useSpeciesForm'
 
+import type { Breed, Species } from '@/types'
 import type { MySpeciesI } from '../../../../pages/MySpecies/MySpecies.types'
 import { BreedFormRow } from '../BreedFormRow'
 

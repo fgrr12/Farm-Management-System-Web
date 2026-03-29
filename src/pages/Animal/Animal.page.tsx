@@ -26,6 +26,8 @@ import {
 import { useDeleteRelatedAnimal, useRelatedAnimals } from '@/hooks/queries/useRelatedAnimals'
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
+import type { User } from '@/types'
+
 const DetailItem = memo(({ label, value }: { label: string; value: React.ReactNode }) => (
 	<div className="bg-gray-50 rounded-lg p-2 sm:p-3 border border-gray-200">
 		<dt className="text-xs sm:text-sm font-medium text-gray-500 mb-1">{label}</dt>

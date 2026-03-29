@@ -2,7 +2,7 @@ import { useGSAP } from '@gsap/react'
 import { onAuthStateChanged } from 'firebase/auth'
 import { gsap } from 'gsap'
 import { SplitText } from 'gsap/all'
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 
@@ -80,12 +80,11 @@ const Calendar = lazy(() => import('@/pages/Calendar/Calendar.page'))
 const Voice = lazy(() => import('@/pages/Voice/Voice.page'))
 
 export const App = () => {
-	const { user, setUser } = useUserStore()
+	const { user, setUser, authLoading, setAuthLoading } = useUserStore()
 	const { setFarm } = useFarmStore()
 	const { loading: appLoading, defaultModalData: modalData } = useAppStore()
 	const { i18n } = useTranslation()
 	const location = useLocation()
-	const [authLoading, setAuthLoading] = useState(true)
 	const browserLanguage = navigator.language === 'en' ? 'eng' : 'spa'
 
 	// Initialize theme system

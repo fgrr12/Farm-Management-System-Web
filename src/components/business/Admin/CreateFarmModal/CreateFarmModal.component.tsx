@@ -10,6 +10,7 @@ import type { CustomSelectOption } from '@/components/ui/CustomSelect'
 import { CustomSelect } from '@/components/ui/CustomSelect'
 import { TextField } from '@/components/ui/TextField'
 
+import type { FarmLanguage, LiquidUnit, TemperatureUnit, WeightUnit } from '@/types'
 import type { CreateFarmModalProps } from './CreateFarmModal.types'
 
 export const CreateFarmModal = memo<CreateFarmModalProps>(({ isOpen, onClose, onFarmCreated }) => {

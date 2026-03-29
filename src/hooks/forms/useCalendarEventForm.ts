@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { type CalendarEventFormData, calendarEventSchema } from '@/schemas'
+import type { CalendarEvent } from '@/types'
 
 const DEFAULT_VALUES: Partial<CalendarEventFormData> = {
 	title: '',

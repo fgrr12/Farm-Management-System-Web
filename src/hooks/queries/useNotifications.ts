@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react'
 
 import { NotificationsService } from '@/services/notifications'
 
+import type { NotificationData } from '@/types'
+
 export const NOTIFICATIONS_KEYS = {
 	all: ['notifications'] as const,
 	list: (farmUuid: string) => [...NOTIFICATIONS_KEYS.all, 'list', farmUuid] as const,

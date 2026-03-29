@@ -19,6 +19,7 @@ import {
 	useUpdateCalendarEvent,
 } from '@/hooks/queries/useCalendarEvents'
 
+import type { CalendarEvent } from '@/types'
 import { CalendarEvent as CalendarEventComponent } from '../CalendarEvent'
 import { CalendarEventModal } from '../CalendarEventModal'
 import { CalendarFilters } from '../CalendarFilters'

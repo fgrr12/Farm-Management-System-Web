@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { type TaskFormData, taskSchema } from '@/schemas'
+import type { Task } from '@/types'
 
 const DEFAULT_VALUES: Partial<TaskFormData> = {
 	title: '',

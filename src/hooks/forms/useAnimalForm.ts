@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { formatDateForForm } from '@/utils/date'
 
 import { type AnimalFormData, animalSchemaWithRefinements } from '@/schemas'
+import type { Animal } from '@/types'
 
 const DEFAULT_VALUES: Partial<AnimalFormData> = {
 	animalId: '',

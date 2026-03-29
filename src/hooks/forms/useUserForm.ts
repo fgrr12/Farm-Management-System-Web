@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { type UserFormData, userSchema } from '@/schemas'
+import type { Role, User } from '@/types'
 
 const DEFAULT_VALUES: Partial<UserFormData> = {
 	name: '',

@@ -1,6 +1,6 @@
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
-import { type MouseEvent, memo, useCallback, useMemo, useRef } from 'react'
+import { type FC, type MouseEvent, memo, useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 

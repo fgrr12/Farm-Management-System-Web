@@ -2,6 +2,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { EmployeesService } from '@/services/employees'
 
+import type { User } from '@/types'
+
 export const EMPLOYEES_KEYS = {
 	all: ['employees'] as const,
 	list: (farmUuid: string) => [...EMPLOYEES_KEYS.all, 'list', farmUuid] as const,

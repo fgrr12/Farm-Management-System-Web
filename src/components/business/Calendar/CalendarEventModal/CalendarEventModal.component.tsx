@@ -13,6 +13,7 @@ import { TextField } from '@/components/ui/TextField'
 import { useCalendarEventForm } from '@/hooks/forms/useCalendarEventForm'
 
 import type { CalendarEventFormData } from '@/schemas'
+import type { CalendarEvent } from '@/types'
 
 interface CalendarEventModalProps {
 	isOpen: boolean

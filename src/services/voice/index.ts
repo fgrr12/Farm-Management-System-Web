@@ -1,5 +1,7 @@
 import { callableFireFunction } from '@/utils/callableFireFunction'
 
+import type { Animal } from '@/types'
+
 // Voice processing interfaces
 export interface VoiceProcessingRequest {
 	audioData: string // Base64 encoded audio

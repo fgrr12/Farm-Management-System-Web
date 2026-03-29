@@ -1,5 +1,7 @@
 import { AnimalsService } from '@/services/animals'
 
+import type { Animal, HealthRecord, HealthStatus } from '@/types'
+
 /**
  * Updates an animal's health status based on health records or manual override
  */

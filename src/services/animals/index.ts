@@ -1,5 +1,7 @@
 import { callableFireFunction } from '@/utils/callableFireFunction'
 
+import type { Animal, HealthStatus } from '@/types'
+
 // Gets
 
 const getAnimals = async (farmUuid: string): Promise<Animal[]> => {

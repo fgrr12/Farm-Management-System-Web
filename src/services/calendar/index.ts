@@ -1,5 +1,7 @@
 import { callableFireFunction } from '@/utils/callableFireFunction'
 
+import type { CalendarEvent } from '@/types'
+
 const getCalendarEvents = async (
 	farmUuid: string,
 	startDate?: string,

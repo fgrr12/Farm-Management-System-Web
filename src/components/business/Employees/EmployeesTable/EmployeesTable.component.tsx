@@ -1,3 +1,4 @@
+import type { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -10,6 +11,7 @@ import { EmployeesService } from '@/services/employees'
 
 import { ActionButton } from '@/components/ui/ActionButton'
 
+import type { User } from '@/types'
 import type { EmployeesTableProps } from './EmployeesTable.types'
 
 export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmployee }) => {

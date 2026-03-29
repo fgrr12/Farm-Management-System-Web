@@ -1,5 +1,7 @@
 import { callableFireFunction } from '@/utils/callableFireFunction'
 
+import type { Breed, Farm, Species, TaxDetails } from '@/types'
+
 const updateFarm = async (farm: Farm, userUuid: string) => {
 	const response = await callableFireFunction<{
 		success: boolean

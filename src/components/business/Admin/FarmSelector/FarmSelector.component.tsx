@@ -6,6 +6,7 @@ import { useUserStore } from '@/store/useUserStore'
 
 import { FarmsService } from '@/services/farms'
 
+import type { Farm } from '@/types'
 import { CreateFarmModal } from '../CreateFarmModal'
 
 export const FarmSelector = memo(() => {
