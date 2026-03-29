@@ -1,9 +1,10 @@
 import { useCallback, useRef, useState } from 'react'
 
-import type {
-	ExecutionResult,
-	VoiceProcessingRequest,
-	VoiceProcessingResponse,
+import {
+	type ExecutionResult,
+	type VoiceProcessingRequest,
+	type VoiceProcessingResponse,
+	VoiceService,
 } from '@/services/voice'
 
 export type VoicePhase = 'idle' | 'recording' | 'processing' | 'done' | 'error'
@@ -85,8 +86,6 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 				const arrayBuffer = await blob.arrayBuffer()
 				const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)))
 
-				const { VoiceService } = await import('@/services/voice')
-
 				const request: VoiceProcessingRequest = {
 					audioData: base64,
 					farmUuid: config.farmUuid,
@@ -125,15 +124,44 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 						}
 					}
 				}
-				// Add error entries from execution
-				if (extractionResult.execution?.errors) {
-					for (const err of extractionResult.execution.errors) {
-						results.push({
-							type: 'animal',
-							success: false,
-							error: err,
-							operation: 'unknown',
-						})
+
+				// Cross-reference execution results to mark failures
+				const execution = extractionResult.execution
+				if (execution) {
+					const executionErrors = execution.errors ?? []
+
+					if (results.length > 0) {
+						const failedCount = results.length - (execution.successCount ?? results.length)
+						if (failedCount > 0) {
+							for (let i = 0; i < failedCount && i < results.length; i++) {
+								const idx = results.length - 1 - i
+								results[idx].success = false
+								results[idx].error = executionErrors[i] || undefined
+							}
+						}
+						// Append extra errors not mapped to an operation
+						const mappedCount = Math.min(
+							Math.max(results.length - (execution.successCount ?? results.length), 0),
+							results.length
+						)
+						for (let i = mappedCount; i < executionErrors.length; i++) {
+							results.push({
+								type: 'animal',
+								success: false,
+								error: executionErrors[i],
+								operation: 'unknown',
+							})
+						}
+					} else {
+						// No operations parsed from AI data — show each error as standalone
+						for (const err of executionErrors) {
+							results.push({
+								type: 'animal',
+								success: false,
+								error: err,
+								operation: 'create',
+							})
+						}
 					}
 				}
 

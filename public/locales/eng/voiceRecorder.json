@@ -35,6 +35,8 @@
 	"recordAgain": "Record Again",
 	"tryAgain": "Try Again",
 	"operationsCompleted": "Operations Completed",
+	"operationsPartial": "Partially Completed",
+	"operationsFailed": "Operations Failed",
 	"successCount": "{{count}} successful",
 	"errorCount": "{{count}} failed",
 	"maxDuration": "Max duration: {{seconds}}s",
