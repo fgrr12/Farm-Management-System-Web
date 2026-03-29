@@ -2,7 +2,7 @@ import { useGSAP } from '@gsap/react'
 import { useQueryClient } from '@tanstack/react-query'
 import gsap from 'gsap'
 import { SplitText } from 'gsap/SplitText'
-import { memo, useCallback, useMemo, useRef } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -20,31 +20,15 @@ import { BackButton } from '@/components/ui/Button'
 
 import { useTheme } from '@/hooks/system/useTheme'
 import { useBackRoute } from '@/hooks/ui/useBackRoute'
+import { useRouteTitle } from '@/hooks/ui/useRouteTitle'
 
-export const Navbar = memo(() => {
+export const Navbar = () => {
 	const drawerRef = useRef<HTMLInputElement>(null)
 	const titleRef = useRef<HTMLHeadingElement>(null)
 	const drawerTitleRef = useRef<HTMLHeadingElement>(null)
 	const { user, setUser } = useUserStore()
 	const { farm, taxDetails, setFarm } = useFarmStore()
-	const { t } = useTranslation([
-		'common',
-		'animals',
-		'tasks',
-		'myAccount',
-		'mySpecies',
-		'taxDetails',
-		'dashboard',
-		'calendar',
-		'voice',
-		'employees',
-		'animalForm',
-		'healthRecordForm',
-		'productionRecordForm',
-		'employeeForm',
-		'taskForm',
-		'relatedAnimals',
-	])
+	const { t } = useTranslation('common')
 	const navigate = useNavigate()
 	const location = useLocation()
 	const { headerTitle, loading } = useAppStore()
@@ -52,35 +36,9 @@ export const Navbar = memo(() => {
 	const { theme, toggleTheme } = useTheme()
 	const queryClient = useQueryClient()
 
-	const getRouteTitle = useMemo(() => {
-		const path = location.pathname
-		if (path.includes('/add-health-record'))
-			return t('addHealthRecordTitle', { ns: 'healthRecordForm' })
-		if (path.includes('/edit-health-record'))
-			return t('editHealthRecordTitle', { ns: 'healthRecordForm' })
-		if (path.includes('/add-production-record'))
-			return t('addProductionRecordTitle', { ns: 'productionRecordForm' })
-		if (path.includes('/edit-production-record'))
-			return t('editProductionRecordTitle', { ns: 'productionRecordForm' })
-		if (path.includes('/related-animals')) return t('title', { ns: 'relatedAnimals' })
-		if (path.includes('/add-animal')) return t('addAnimal', { ns: 'animalForm' })
-		if (path.includes('/edit-animal')) return t('editAnimal', { ns: 'animalForm' })
-		if (path.includes('/add-employee')) return t('addEmployee', { ns: 'employeeForm' })
-		if (path.match(/\/employees\/.+\/edit-employee/))
-			return t('editEmployee', { ns: 'employeeForm' })
-		if (path.includes('/add-task')) return t('title', { ns: 'taskForm' })
-		if (path === AppRoutes.ANIMALS) return t('title', { ns: 'animals' })
-		if (path === AppRoutes.EMPLOYEES) return t('title', { ns: 'employees' })
-		if (path === AppRoutes.MY_ACCOUNT) return t('title', { ns: 'myAccount' })
-		if (path === AppRoutes.MY_SPECIES) return t('title', { ns: 'mySpecies' })
-		if (path === AppRoutes.TASKS) return t('title', { ns: 'tasks' })
-		if (path === AppRoutes.TAX_DETAILS) return t('title', { ns: 'taxDetails' })
-		if (path === AppRoutes.DASHBOARD) return t('title', { ns: 'dashboard' })
-		if (path === AppRoutes.CALENDAR) return t('title', { ns: 'calendar' })
-		if (path === AppRoutes.VOICE) return t('title', { ns: 'voice' })
-		// For dynamic pages (like individual animal), use headerTitle from store
-		return headerTitle
-	}, [location.pathname, t, headerTitle])
+	// useRouteTitle: sync on navigation (useLocation re-render), async on refresh (i18n.store 'added' event)
+	// Falls back to headerTitle (set by dynamic pages like /animals/:uuid on mount)
+	const routeTitle = useRouteTitle() || headerTitle
 
 	const getCurrentPageIcon = useMemo(() => {
 		if (location.pathname.includes(AppRoutes.ANIMALS)) {
@@ -202,7 +160,7 @@ export const Navbar = memo(() => {
 
 	useGSAP(() => {
 		const el = titleRef.current
-		if (!el || loading || !getRouteTitle.trim()) return
+		if (!el || loading || !routeTitle.trim()) return
 
 		const split = new SplitText(el, { type: 'chars' })
 
@@ -217,7 +175,7 @@ export const Navbar = memo(() => {
 		return () => {
 			split.revert()
 		}
-	}, [getRouteTitle, loading])
+	}, [routeTitle, loading])
 
 	useGSAP(() => {
 		const drawer = drawerRef.current
@@ -276,10 +234,11 @@ export const Navbar = memo(() => {
 								/>
 							</div>
 							<h2
+								key={routeTitle}
 								ref={titleRef}
 								className="text-xl font-bold text-gray-800 dark:text-gray-200 tracking-tight"
 							>
-								{getRouteTitle}
+								{routeTitle}
 							</h2>
 						</div>
 					</div>
@@ -324,7 +283,7 @@ export const Navbar = memo(() => {
 											type="button"
 											role="menuitem"
 											onClick={goToFromDropdown(AppRoutes.MY_ACCOUNT)}
-											className="flex items-center gap-3 px-3 py-3 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors text-gray-700 dark:text-gray-300 w-full text-left touch-manipulation min-h-[44px] focus:outline-none focus:bg-blue-50 dark:focus:bg-blue-900/20"
+											className="flex items-center gap-3 px-3 py-3 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors text-gray-700 dark:text-gray-300 w-full text-left touch-manipulation min-h-11 focus:outline-none focus:bg-blue-50 dark:focus:bg-blue-900/20"
 											tabIndex={-1}
 										>
 											<i className="i-material-symbols-account-circle w-4! h-4! bg-blue-600! dark:bg-blue-400!" />
@@ -336,7 +295,7 @@ export const Navbar = memo(() => {
 											type="button"
 											role="menuitem"
 											onClick={handleLogout}
-											className="flex items-center gap-3 px-3 py-3 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors text-red-600 dark:text-red-400 w-full text-left touch-manipulation min-h-[44px] focus:outline-none focus:bg-red-50 dark:focus:bg-red-900/20"
+											className="flex items-center gap-3 px-3 py-3 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors text-red-600 dark:text-red-400 w-full text-left touch-manipulation min-h-11 focus:outline-none focus:bg-red-50 dark:focus:bg-red-900/20"
 											tabIndex={-1}
 										>
 											<i className="i-material-symbols-logout w-4! h-4! bg-red-600! dark:bg-red-400!" />
@@ -387,8 +346,8 @@ export const Navbar = memo(() => {
 							<button
 								type="button"
 								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${location.pathname.includes(AppRoutes.DASHBOARD)
-										? 'bg-linear-to-r from-cyan-500 to-cyan-600 text-white shadow-lg'
-										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+									? 'bg-linear-to-r from-cyan-500 to-cyan-600 text-white shadow-lg'
+									: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
 									}`}
 								onClick={goTo(AppRoutes.DASHBOARD)}
 							>
@@ -407,8 +366,8 @@ export const Navbar = memo(() => {
 							<button
 								type="button"
 								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${location.pathname.includes(AppRoutes.ANIMALS)
-										? 'bg-linear-to-r from-blue-500 to-blue-600 text-white shadow-lg'
-										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+									? 'bg-linear-to-r from-blue-500 to-blue-600 text-white shadow-lg'
+									: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
 									}`}
 								onClick={goTo(AppRoutes.ANIMALS)}
 							>
@@ -427,8 +386,8 @@ export const Navbar = memo(() => {
 							<button
 								type="button"
 								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${location.pathname.includes(AppRoutes.TASKS)
-										? 'bg-linear-to-r from-green-500 to-green-600 text-white shadow-lg'
-										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+									? 'bg-linear-to-r from-green-500 to-green-600 text-white shadow-lg'
+									: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
 									}`}
 								onClick={goTo(AppRoutes.TASKS)}
 							>
@@ -447,8 +406,8 @@ export const Navbar = memo(() => {
 							<button
 								type="button"
 								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${location.pathname.includes(AppRoutes.CALENDAR)
-										? 'bg-linear-to-r from-purple-500 to-purple-600 text-white shadow-lg'
-										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+									? 'bg-linear-to-r from-purple-500 to-purple-600 text-white shadow-lg'
+									: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
 									}`}
 								onClick={goTo(AppRoutes.CALENDAR)}
 							>
@@ -458,8 +417,8 @@ export const Navbar = memo(() => {
 								>
 									<i
 										className={`i-material-symbols-calendar-month w-5! h-5! ${location.pathname.includes(AppRoutes.CALENDAR)
-												? 'bg-white!'
-												: 'bg-purple-600!'
+											? 'bg-white!'
+											: 'bg-purple-600!'
 											}`}
 									/>
 								</div>
@@ -469,21 +428,21 @@ export const Navbar = memo(() => {
 							<button
 								type="button"
 								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${location.pathname.includes(AppRoutes.MY_SPECIES)
-										? 'bg-linear-to-r from-indigo-500 to-indigo-600 text-white shadow-lg'
-										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+									? 'bg-linear-to-r from-indigo-500 to-indigo-600 text-white shadow-lg'
+									: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
 									}`}
 								onClick={goTo(AppRoutes.MY_SPECIES)}
 							>
 								<div
 									className={`w-8 h-8 rounded-lg flex items-center justify-center ${location.pathname.includes(AppRoutes.MY_SPECIES)
-											? 'bg-white/20'
-											: 'bg-indigo-100'
+										? 'bg-white/20'
+										: 'bg-indigo-100'
 										}`}
 								>
 									<i
 										className={`i-solar-dna-bold-duotone w-5! h-5! ${location.pathname.includes(AppRoutes.MY_SPECIES)
-												? 'bg-white!'
-												: 'bg-indigo-600!'
+											? 'bg-white!'
+											: 'bg-indigo-600!'
 											}`}
 									/>
 								</div>
@@ -493,8 +452,8 @@ export const Navbar = memo(() => {
 							<button
 								type="button"
 								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${location.pathname.includes(AppRoutes.VOICE)
-										? 'bg-linear-to-r from-pink-500 to-pink-600 text-white shadow-lg'
-										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+									? 'bg-linear-to-r from-pink-500 to-pink-600 text-white shadow-lg'
+									: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
 									}`}
 								onClick={goTo(AppRoutes.VOICE)}
 							>
@@ -521,21 +480,21 @@ export const Navbar = memo(() => {
 								<button
 									type="button"
 									className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${location.pathname.includes(AppRoutes.EMPLOYEES)
-											? 'bg-linear-to-r from-orange-500 to-orange-600 text-white shadow-lg'
-											: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+										? 'bg-linear-to-r from-orange-500 to-orange-600 text-white shadow-lg'
+										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
 										}`}
 									onClick={goTo(AppRoutes.EMPLOYEES)}
 								>
 									<div
 										className={`w-8 h-8 rounded-lg flex items-center justify-center ${location.pathname.includes(AppRoutes.EMPLOYEES)
-												? 'bg-white/20'
-												: 'bg-orange-100'
+											? 'bg-white/20'
+											: 'bg-orange-100'
 											}`}
 									>
 										<i
 											className={`i-clarity-employee-group-solid w-5! h-5! ${location.pathname.includes(AppRoutes.EMPLOYEES)
-													? 'bg-white!'
-													: 'bg-orange-600!'
+												? 'bg-white!'
+												: 'bg-orange-600!'
 												}`}
 										/>
 									</div>
@@ -546,21 +505,21 @@ export const Navbar = memo(() => {
 									<button
 										type="button"
 										className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${location.pathname.includes(AppRoutes.TAX_DETAILS)
-												? 'bg-linear-to-r from-indigo-500 to-indigo-600 text-white shadow-lg'
-												: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+											? 'bg-linear-to-r from-indigo-500 to-indigo-600 text-white shadow-lg'
+											: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
 											}`}
 										onClick={goTo(AppRoutes.TAX_DETAILS)}
 									>
 										<div
 											className={`w-8 h-8 rounded-lg flex items-center justify-center ${location.pathname.includes(AppRoutes.TAX_DETAILS)
-													? 'bg-white/20'
-													: 'bg-indigo-100'
+												? 'bg-white/20'
+												: 'bg-indigo-100'
 												}`}
 										>
 											<i
 												className={`i-typcn-business-card w-5! h-5! ${location.pathname.includes(AppRoutes.TAX_DETAILS)
-														? 'bg-white!'
-														: 'bg-indigo-600!'
+													? 'bg-white!'
+													: 'bg-indigo-600!'
 													}`}
 											/>
 										</div>
@@ -612,4 +571,4 @@ export const Navbar = memo(() => {
 			</div>
 		</div>
 	)
-})
+}
