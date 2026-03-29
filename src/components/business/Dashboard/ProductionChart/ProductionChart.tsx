@@ -1,10 +1,10 @@
-import { useGSAP } from '@gsap/react'
 import dayjs from 'dayjs'
-import gsap from 'gsap'
-import { memo, useCallback, useMemo, useRef, useState } from 'react'
+import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFarmStore } from '@/store/useFarmStore'
+
+import { animateValue } from '@/utils/animateValue'
 
 import { useDashboardData } from '@/hooks/dashboard/useDashboardData'
 import { useProductionData } from '@/hooks/dashboard/useProductionData'
@@ -17,8 +17,6 @@ export const ProductionChart = memo(() => {
 
 	const { productionData, loading: productionLoading } = useProductionData(selectedYear)
 
-	const chartRef = useRef<HTMLDivElement>(null)
-	const barsRef = useRef<HTMLDivElement[]>([])
 	const totalRef = useRef<HTMLSpanElement>(null)
 
 	const yearOptions = useMemo(() => {
@@ -40,75 +38,18 @@ export const ProductionChart = memo(() => {
 		}))
 	}, [productionData])
 
-	useGSAP(() => {
-		if (chartRef.current && !loadingTertiary && !productionLoading) {
-			gsap.fromTo(
-				chartRef.current,
-				{ y: 30, opacity: 0 },
-				{ y: 0, opacity: 1, duration: 0.6, ease: 'power2.out' }
-			)
-		}
-	}, [loadingTertiary, productionLoading])
+	// Animate total counter
+	useEffect(() => {
+		if (!chartData.length || loadingTertiary || productionLoading) return
+		const totalValue = chartData.reduce((sum: number, item: any) => sum + item.value, 0)
 
-	useGSAP(() => {
-		if (barsRef.current.length && chartData.length && !loadingTertiary && !productionLoading) {
-			gsap.set(barsRef.current, { width: '0%' })
-
-			gsap.to(barsRef.current, {
-				width: (i) => `${chartData[i]?.percentage || 0}%`,
-				duration: 1.2,
-				ease: 'power2.out',
-				stagger: 0.1,
-				delay: 0.3,
-			})
-		}
-	}, [chartData, loadingTertiary, productionLoading])
-
-	useGSAP(() => {
-		if (totalRef.current && chartData.length && !loadingTertiary && !productionLoading) {
-			const totalValue = chartData.reduce((sum: number, item: any) => sum + item.value, 0)
-			const obj = { value: 0 }
-
-			gsap.to(obj, {
-				value: totalValue,
-				duration: 1.5,
-				ease: 'power2.out',
-				delay: 0.8,
-				onUpdate: () => {
-					if (totalRef.current) {
-						totalRef.current.textContent = `${Math.round(obj.value)}${farm?.liquidUnit}`
-					}
-				},
-			})
-		}
-	}, [chartData, loadingTertiary, productionLoading])
-
-	const setBarRef = useCallback(
-		(index: number) => (el: HTMLDivElement | null) => {
-			if (el) barsRef.current[index] = el
-		},
-		[]
-	)
-
-	const handleMouseEnter = useCallback(() => {
-		if (chartRef.current) {
-			gsap.to(chartRef.current, {
-				y: -2,
-				duration: 0.3,
-				ease: 'power2.out',
-			})
-		}
-	}, [])
-
-	const handleMouseLeave = useCallback(() => {
-		if (chartRef.current) {
-			gsap.to(chartRef.current, {
-				y: 0,
-				duration: 0.3,
-				ease: 'power2.out',
-			})
-		}
-	}, [])
+		const cancel = animateValue(0, totalValue, 1500, (v) => {
+			if (totalRef.current) {
+				totalRef.current.textContent = `${v}${farm?.liquidUnit}`
+			}
+		})
+		return cancel
+	}, [chartData, loadingTertiary, productionLoading, farm?.liquidUnit])
 
 	if (loadingTertiary || productionLoading) {
 		return (
@@ -123,16 +64,9 @@ export const ProductionChart = memo(() => {
 
 	return (
 		<div
-			ref={chartRef}
-			className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg dark:hover:shadow-2xl transition-all duration-300"
+			className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg dark:hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300 animate-fade-in-up"
 			role="region"
 			aria-label="Production Chart"
-			onMouseEnter={handleMouseEnter}
-			onMouseLeave={handleMouseLeave}
-			style={{
-				transform: 'translateZ(0)',
-				willChange: 'transform',
-			}}
 		>
 			<div className="flex items-center justify-between mb-6">
 				<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
@@ -161,7 +95,6 @@ export const ProductionChart = memo(() => {
 
 			<div className="space-y-4">
 				{chartData.map((item: any, index: number) => {
-					const refCallback = setBarRef(index)
 					return (
 						<div key={index} className="flex items-center gap-4 group">
 							<div className="w-16 text-sm text-gray-600 dark:text-gray-400 font-medium">
@@ -169,9 +102,11 @@ export const ProductionChart = memo(() => {
 							</div>
 							<div className="flex-1 bg-gray-100 dark:bg-gray-700 rounded-full h-8 relative overflow-hidden group-hover:bg-gray-200 dark:group-hover:bg-gray-600 transition-colors">
 								<div
-									ref={refCallback}
-									className="bg-linear-to-r from-blue-500 to-blue-600 h-full rounded-full flex items-center justify-end pr-3 group-hover:from-blue-600 group-hover:to-blue-700 transition-colors"
-									style={{ width: '0%' }}
+									className="bg-linear-to-r from-blue-500 to-blue-600 h-full rounded-full flex items-center justify-end pr-3 group-hover:from-blue-600 group-hover:to-blue-700 transition-colors animate-bar-grow"
+									style={{
+										width: `${item.percentage}%`,
+										animationDelay: `${index * 100}ms`,
+									}}
 								>
 									<span className="text-white text-sm font-medium tabular-nums">
 										{item.value}

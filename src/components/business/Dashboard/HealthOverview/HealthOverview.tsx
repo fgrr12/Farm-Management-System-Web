@@ -1,7 +1,7 @@
-import { useGSAP } from '@gsap/react'
-import gsap from 'gsap'
-import { memo, useCallback, useRef, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { animateValue } from '@/utils/animateValue'
 
 import { useDashboardData } from '@/hooks/dashboard/useDashboardData'
 
@@ -9,9 +9,6 @@ export const HealthOverview = memo(() => {
 	const { t } = useTranslation(['dashboard'])
 	const { healthOverview, loading, loadingSecondary } = useDashboardData()
 
-	const containerRef = useRef<HTMLDivElement>(null)
-	const itemsRef = useRef<HTMLDivElement[]>([])
-	const totalRef = useRef<HTMLSpanElement>(null)
 	const [displayCounts, setDisplayCounts] = useState<number[]>([0, 0, 0, 0])
 	const [displayTotal, setDisplayTotal] = useState(0)
 
@@ -58,109 +55,36 @@ export const HealthOverview = memo(() => {
 		},
 	]
 
-	useGSAP(() => {
-		if (containerRef.current && !loading && !loadingSecondary) {
-			gsap.fromTo(
-				containerRef.current,
-				{ y: 30, opacity: 0 },
-				{ y: 0, opacity: 1, duration: 0.6, ease: 'power2.out' }
-			)
-		}
-	}, [loading, loadingSecondary])
+	// Animate counters
+	useEffect(() => {
+		if (loading || loadingSecondary) return
 
-	useGSAP(() => {
-		if (itemsRef.current.length && !loading && !loadingSecondary) {
-			gsap.fromTo(
-				itemsRef.current,
-				{ x: -30, opacity: 0 },
-				{
-					x: 0,
-					opacity: 1,
-					duration: 0.5,
-					ease: 'power2.out',
-					stagger: 0.1,
-					delay: 0.3,
-				}
-			)
-		}
-	}, [loading, loadingSecondary])
+		const cancels: (() => void)[] = []
 
-	useGSAP(() => {
-		if (!loading && !loadingSecondary && healthItems.length) {
-			healthItems.forEach((item, index) => {
-				const obj = { value: 0 }
-				gsap.to(obj, {
-					value: item.count,
-					duration: 1.2,
-					ease: 'power2.out',
-					delay: 0.5 + index * 0.1,
-					onUpdate: () => {
-						setDisplayCounts((prev) => {
-							const newCounts = [...prev]
-							newCounts[index] = Math.round(obj.value)
-							return newCounts
-						})
-					},
+		healthItems.forEach((item, index) => {
+			cancels.push(
+				animateValue(0, item.count, 1200, (v) => {
+					setDisplayCounts((prev) => {
+						const newCounts = [...prev]
+						newCounts[index] = v
+						return newCounts
+					})
 				})
-			})
+			)
+		})
 
-			const totalValue = healthItems.reduce((sum, item) => sum + item.count, 0)
-			const totalObj = { value: 0 }
-			gsap.to(totalObj, {
-				value: totalValue,
-				duration: 1.5,
-				ease: 'power2.out',
-				delay: 1,
-				onUpdate: () => {
-					setDisplayTotal(Math.round(totalObj.value))
-				},
-			})
-		}
+		const totalValue = healthItems.reduce((sum, item) => sum + item.count, 0)
+		cancels.push(animateValue(0, totalValue, 1500, setDisplayTotal))
+
+		return () => cancels.forEach((c) => c())
 	}, [loading, loadingSecondary, healthOverview])
-
-	const setItemRef = useCallback(
-		(index: number) => (el: HTMLDivElement | null) => {
-			if (el) itemsRef.current[index] = el
-		},
-		[]
-	)
-
-	const handleMouseEnter = useCallback(() => {
-		if (containerRef.current) {
-			gsap.to(containerRef.current, {
-				y: -2,
-				duration: 0.3,
-				ease: 'power2.out',
-			})
-		}
-	}, [])
-
-	const handleMouseLeave = useCallback(() => {
-		if (containerRef.current) {
-			gsap.to(containerRef.current, {
-				y: 0,
-				duration: 0.3,
-				ease: 'power2.out',
-			})
-		}
-	}, [])
 
 	return (
 		<div
-			ref={containerRef}
-			className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-6 hover:shadow-lg dark:hover:shadow-xl transition-all duration-300"
+			className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-6 hover:shadow-lg dark:hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 animate-fade-in-up"
 			role="region"
 			aria-label="Health Overview"
-			onMouseEnter={handleMouseEnter}
-			onMouseLeave={handleMouseLeave}
-			style={{
-				transform: 'translateZ(0)',
-				willChange: 'transform',
-			}}
 		>
-			{/* Subtle background pattern */}
-			<div className="absolute inset-0 bg-linear-to-br from-transparent via-transparent to-gray-50/30 dark:to-gray-700/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
 			{/* Content container */}
 			<div className="relative z-10">
 				<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">
@@ -169,12 +93,11 @@ export const HealthOverview = memo(() => {
 
 				<div className="space-y-3">
 					{healthItems.map((item, index) => {
-						const refCallback = setItemRef(index)
 						return (
 							<div
 								key={index}
-								ref={refCallback}
-								className={`p-4 rounded-lg ${item.bgColor} ${item.hoverBg} transition-all duration-200 cursor-pointer group`}
+								className={`p-4 rounded-lg ${item.bgColor} ${item.hoverBg} transition-all duration-200 cursor-pointer group animate-fade-in-left`}
+								style={{ animationDelay: `${index * 100}ms` }}
 							>
 								<div className="flex items-center justify-between">
 									<div className="flex items-center gap-3">
@@ -212,7 +135,6 @@ export const HealthOverview = memo(() => {
 							{t('health.totalAnimals')}
 						</span>
 						<span
-							ref={totalRef}
 							className="text-lg font-semibold text-gray-900 dark:text-gray-100 tabular-nums"
 						>
 							{loading || loadingSecondary ? '...' : displayTotal}

@@ -1,11 +1,8 @@
-import { useGSAP } from '@gsap/react'
-import gsap from 'gsap'
 import { memo, useCallback, useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
 
-import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
@@ -14,7 +11,6 @@ import { useTheme } from '@/hooks/system/useTheme'
 export const Sidebar = memo(() => {
 	const { user } = useUserStore()
 	const { taxDetails } = useFarmStore()
-	const { loading } = useAppStore()
 	const navigate = useNavigate()
 	const location = useLocation()
 	const { theme, resolvedTheme, toggleTheme } = useTheme()
@@ -30,11 +26,10 @@ export const Sidebar = memo(() => {
 	const getButtonClasses = useCallback(
 		(path: string, colorFrom: string, colorTo: string) => {
 			const isActive = location.pathname.includes(path)
-			return `w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 ${
-				isActive
+			return `w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 ${isActive
 					? `bg-linear-to-br ${colorFrom} ${colorTo} shadow-lg`
 					: 'hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50 dark:bg-gray-800'
-			}`
+				}`
 		},
 		[location.pathname]
 	)
@@ -57,20 +52,6 @@ export const Sidebar = memo(() => {
 		[showAdminRoutes, taxDetails]
 	)
 
-	useGSAP(() => {
-		if (loading) return
-		gsap.fromTo(
-			'.menu li, .divider',
-			{ opacity: 0, y: 20, duration: 0, ease: 'power1.out' },
-			{
-				opacity: 1,
-				y: 0,
-				stagger: 0.05,
-				duration: 0.2,
-				ease: 'power1.out',
-			}
-		)
-	}, [location])
 	return (
 		<div
 			className="bg-white dark:bg-gray-900 h-full hidden lg:flex flex-col items-center py-4 shadow-lg border-r border-gray-100 dark:border-gray-700 w-20"

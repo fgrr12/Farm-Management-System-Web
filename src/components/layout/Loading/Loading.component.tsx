@@ -1,6 +1,5 @@
-import gsap from 'gsap'
 import type { FC } from 'react'
-import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
+import { memo, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { LoadingProps } from './Loading.types'
@@ -19,10 +18,6 @@ export const Loading: FC<LoadingProps> = memo(
 		useLoading(open)
 
 		const containerRef = useRef<HTMLDivElement>(null)
-		const dotsRef = useRef<HTMLSpanElement[]>([])
-		const iconsRef = useRef<HTMLElement[]>([])
-		const spinnerRef = useRef<HTMLDivElement>(null)
-		const circularContainerRef = useRef<HTMLDivElement>(null)
 
 		const sizeClasses = useMemo(() => {
 			const sizes = {
@@ -44,77 +39,6 @@ export const Loading: FC<LoadingProps> = memo(
 			'i-noto-duck',
 		]
 
-		const setDotsRef = useCallback(
-			(i: number) => (el: HTMLSpanElement | null) => {
-				if (el) dotsRef.current[i] = el
-			},
-			[]
-		)
-
-		const setIconsRef = useCallback(
-			(i: number) => (el: HTMLElement | null) => {
-				if (el) iconsRef.current[i] = el
-			},
-			[]
-		)
-
-		useEffect(() => {
-			if (!open || variant !== 'default') return
-
-			const ellipseWidth = 280
-			const ellipseHeight = 40
-			const tweens: gsap.core.Tween[] = []
-
-			iconsRef.current.forEach((icon, i) => {
-				const startAngle = (i / iconsRef.current.length) * Math.PI * 2
-				const angleObj = { angle: startAngle }
-
-				const tween = gsap.to(angleObj, {
-					angle: startAngle + Math.PI * 2,
-					duration: 5,
-					repeat: -1,
-					ease: 'none',
-					onUpdate: () => {
-						const currentAngle = angleObj.angle
-						const x = Math.cos(currentAngle) * (ellipseWidth / 2)
-						const y = Math.sin(currentAngle) * (ellipseHeight / 2)
-						const distanceFromCenter = Math.abs(x) / (ellipseWidth / 2)
-						const depthFactor = 1 - distanceFromCenter
-						const isVisible = Math.sin(currentAngle) >= -0.1
-
-						if (isVisible) {
-							const scale = 0.6 + depthFactor * 0.8
-							const opacity = 0.3 + depthFactor * 0.7
-
-							gsap.set(icon, {
-								x,
-								y,
-								scale,
-								opacity,
-								visibility: 'visible',
-								zIndex: Math.round(depthFactor * 10),
-							})
-						} else {
-							gsap.set(icon, {
-								x,
-								y,
-								opacity: 0,
-								visibility: 'hidden',
-								zIndex: 0,
-							})
-						}
-					},
-				})
-
-				tweens.push(tween)
-			})
-
-			return () => {
-				// biome-ignore lint: kill-tweens
-				tweens.forEach((t) => t.kill())
-			}
-		}, [open, variant])
-
 		const renderContent = () => {
 			const displayMessage = message || t('loading')
 
@@ -134,12 +58,13 @@ export const Loading: FC<LoadingProps> = memo(
 						<div className="flex flex-col items-center gap-6">
 							<span className={`text-white font-medium ${sizeClasses.text}`}>{displayMessage}</span>
 							<div className="flex items-center gap-2">
-								{[0, 1, 2].map((i) => {
-									const refCallback = setDotsRef(i)
-									return (
-										<span key={i} ref={refCallback} className="w-3 h-3 bg-white rounded-full" />
-									)
-								})}
+								{[0, 1, 2].map((i) => (
+									<span
+										key={i}
+										className="w-3 h-3 bg-white rounded-full animate-dot-pulse"
+										style={{ animationDelay: `${i * 200}ms` }}
+									/>
+								))}
 							</div>
 						</div>
 					)
@@ -147,7 +72,9 @@ export const Loading: FC<LoadingProps> = memo(
 				case 'pulse':
 					return (
 						<div className="flex flex-col items-center gap-4">
-							<div className={`${sizeClasses.spinner} bg-white rounded-full opacity-80`} />
+							<div
+								className={`${sizeClasses.spinner} bg-white rounded-full opacity-80 animate-dot-pulse`}
+							/>
 							<span className={`text-white font-medium ${sizeClasses.text}`}>{displayMessage}</span>
 						</div>
 					)
@@ -156,8 +83,7 @@ export const Loading: FC<LoadingProps> = memo(
 					return (
 						<div className="flex flex-col items-center gap-4">
 							<div
-								ref={spinnerRef}
-								className={`${sizeClasses.spinner} border-4 border-white/20 border-t-white border-r-white rounded-full`}
+								className={`${sizeClasses.spinner} border-4 border-white/20 border-t-white border-r-white rounded-full animate-spin`}
 							/>
 							<span className={`text-white font-medium ${sizeClasses.text}`}>{displayMessage}</span>
 						</div>
@@ -170,28 +96,35 @@ export const Loading: FC<LoadingProps> = memo(
 								<span className={`text-white font-medium ${sizeClasses.text}`}>
 									{displayMessage}
 								</span>
-								{[0, 1, 2].map((i) => {
-									const refCallback = setDotsRef(i)
-									return (
-										<span key={i} ref={refCallback} className="w-3 h-3 bg-white rounded-full" />
-									)
-								})}
+								{[0, 1, 2].map((i) => (
+									<span
+										key={i}
+										className="w-3 h-3 bg-white rounded-full animate-dot-pulse"
+										style={{ animationDelay: `${i * 200}ms` }}
+									/>
+								))}
 							</div>
 
 							<div className="relative flex items-center justify-center">
-								<div
-									ref={circularContainerRef}
-									className="relative flex items-center justify-center"
-									style={{ width: '320px', height: '80px' }}
-								>
+								<div className="orbit-container" style={{ width: '320px', height: '80px' }}>
 									{animalIcons.map((icon, i) => {
-										const refCallback = setIconsRef(i)
+										const angle = (i / animalIcons.length) * 360
 										return (
-											<i
+											<div
 												key={i}
-												ref={refCallback}
-												className={`${icon} ${sizeClasses.icon} absolute`}
-											/>
+												className="absolute left-1/2 top-1/2"
+												style={{
+													animation: 'orbit 5s linear infinite',
+													animationDelay: `${-(i / animalIcons.length) * 5}s`,
+													width: 0,
+													height: 0,
+												}}
+											>
+												<i
+													className={`${icon} ${sizeClasses.icon} block`}
+													style={{ transform: 'translate(-50%, -50%)' }}
+												/>
+											</div>
 										)
 									})}
 								</div>

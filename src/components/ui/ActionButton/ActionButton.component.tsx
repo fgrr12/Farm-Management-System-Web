@@ -1,9 +1,5 @@
-import { useGSAP } from '@gsap/react'
-import gsap from 'gsap'
 import type { FC } from 'react'
-import { memo, useCallback, useRef } from 'react'
-
-import { useAppStore } from '@/store/useAppStore'
+import { memo } from 'react'
 
 import type { ActionButtonProps } from './ActionButton.types'
 
@@ -31,38 +27,10 @@ const iconColor = (icon: string | undefined) => {
 }
 
 export const ActionButton: FC<ActionButtonProps> = memo(({ icon, title, ...rest }) => {
-	const btnRef = useRef<HTMLButtonElement>(null)
-	const { loading } = useAppStore()
-
-	useGSAP(() => {
-		if (!loading && btnRef.current) {
-			gsap.fromTo(
-				btnRef.current,
-				{ scale: 0.6, opacity: 0 },
-				{ scale: 1, opacity: 1, duration: 0.5, ease: 'back.out(1.7)' }
-			)
-		}
-	}, [loading])
-
-	const handleMouseEnter = useCallback(() => {
-		if (btnRef.current) {
-			gsap.to(btnRef.current, { scale: 1.1, duration: 0.2, ease: 'power1.out' })
-		}
-	}, [])
-
-	const handleMouseLeave = useCallback(() => {
-		if (btnRef.current) {
-			gsap.to(btnRef.current, { scale: 1, duration: 0.2, ease: 'power1.out' })
-		}
-	}, [])
-
 	return (
 		<button
-			ref={btnRef}
 			type="button"
-			className="btn btn-circle btn-ghost hover:bg-base-200"
-			onMouseEnter={handleMouseEnter}
-			onMouseLeave={handleMouseLeave}
+			className="btn btn-circle btn-ghost hover:bg-base-200 animate-scale-bounce-in transition-transform duration-200 hover:scale-110 active:scale-95"
 			aria-label={title}
 			{...rest}
 		>

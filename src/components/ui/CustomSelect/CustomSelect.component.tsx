@@ -1,5 +1,3 @@
-import { useGSAP } from '@gsap/react'
-import gsap from 'gsap'
 import {
 	type ChangeEvent,
 	forwardRef,
@@ -285,19 +283,6 @@ export const CustomSelect = forwardRef<CustomSelectRef, CustomSelectProps>(
 			}
 		}, [isOpen])
 
-		// GSAP animations
-		useGSAP(() => {
-			if (dropdownRef.current) {
-				if (isOpen) {
-					gsap.fromTo(
-						dropdownRef.current,
-						{ opacity: 0, y: -10, scale: 0.95 },
-						{ opacity: 1, y: 0, scale: 1, duration: 0.2, ease: 'power2.out' }
-					)
-				}
-			}
-		}, [isOpen])
-
 		// Default option renderer
 		const defaultRenderOption = useCallback(
 			(option: CustomSelectOption) => (
@@ -401,7 +386,7 @@ export const CustomSelect = forwardRef<CustomSelectRef, CustomSelectProps>(
 					{isOpen && !disabled && (
 						<div
 							ref={dropdownRef}
-							className="absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+							className="absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto animate-slide-down"
 							role="listbox"
 						>
 							{loading ? (
@@ -415,15 +400,13 @@ export const CustomSelect = forwardRef<CustomSelectRef, CustomSelectProps>(
 										type="button"
 										onClick={() => handleOptionSelect(option)}
 										disabled={option.disabled}
-										className={`w-full p-3 text-left transition-colors ${
-											index === highlightedIndex
+										className={`w-full p-3 text-left transition-colors ${index === highlightedIndex
 												? 'bg-blue-50 dark:bg-blue-900/20'
 												: 'hover:bg-gray-50 dark:hover:bg-gray-700'
-										} ${option.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} ${
-											selectedOption?.value === option.value
+											} ${option.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} ${selectedOption?.value === option.value
 												? 'bg-blue-100 dark:bg-blue-900/30'
 												: ''
-										} first:rounded-t-lg last:rounded-b-lg focus:outline-none focus:bg-blue-50 dark:focus:bg-blue-900/20`}
+											} first:rounded-t-lg last:rounded-b-lg focus:outline-none focus:bg-blue-50 dark:focus:bg-blue-900/20`}
 										role="option"
 										aria-selected={selectedOption?.value === option.value}
 									>

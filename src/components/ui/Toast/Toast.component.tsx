@@ -1,6 +1,4 @@
-import { useGSAP } from '@gsap/react'
-import gsap from 'gsap'
-import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import type { ToastConfig, ToastProps } from './Toast.types'
 
@@ -14,9 +12,8 @@ export const Toast = memo(
 		action,
 		onClose,
 	}: ToastProps) => {
-		const toastRef = useRef<HTMLDivElement>(null)
 		const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-		const progressRef = useRef<HTMLDivElement>(null)
+		const [isExiting, setIsExiting] = useState(false)
 
 		const toastConfig = useMemo((): ToastConfig => {
 			const configs = {
@@ -52,113 +49,18 @@ export const Toast = memo(
 			return configs[type]
 		}, [type])
 
-		const getInitialPosition = useCallback(() => {
-			// Para el ToastManager que está en top-right, las animaciones vienen desde la derecha
-			return { x: 300, y: 0 }
-		}, [])
-
-		const getExitPosition = useCallback(() => {
-			// Salida hacia la derecha
-			return { x: 300, y: 0 }
-		}, [])
-
 		const handleClose = useCallback(() => {
 			if (timeoutRef.current) {
 				clearTimeout(timeoutRef.current)
 			}
-
-			const el = toastRef.current
-			if (!el) return
-
-			const exitPos = getExitPosition()
-			gsap.to(el, {
-				x: exitPos.x,
-				y: exitPos.y,
-				opacity: 0,
-				scale: 0.9,
-				duration: 0.4,
-				ease: 'power2.in',
-				onComplete: () => onClose(id),
-			})
-		}, [id, onClose, getExitPosition])
+			setIsExiting(true)
+			setTimeout(() => onClose(id), 400)
+		}, [id, onClose])
 
 		const handleActionClick = useCallback(() => {
 			action?.onClick()
 			handleClose()
 		}, [action, handleClose])
-
-		useGSAP(() => {
-			const el = toastRef.current
-			const progressEl = progressRef.current
-			if (!el) return
-
-			const initialPos = getInitialPosition()
-
-			// Set initial position
-			gsap.set(el, {
-				x: initialPos.x,
-				y: initialPos.y,
-				opacity: 0,
-				scale: 0.9,
-			})
-
-			// Entrance animation with improved easing
-			const entranceAnimation = gsap.to(el, {
-				x: 0,
-				y: 0,
-				opacity: 1,
-				scale: 1,
-				duration: 0.6,
-				ease: 'back.out(1.4)',
-			})
-
-			// Add subtle bounce effect on hover
-			const handleMouseEnter = () => {
-				gsap.to(el, { scale: 1.02, duration: 0.2, ease: 'power1.out' })
-			}
-
-			const handleMouseLeave = () => {
-				gsap.to(el, { scale: 1, duration: 0.2, ease: 'power1.out' })
-			}
-
-			el.addEventListener('mouseenter', handleMouseEnter)
-			el.addEventListener('mouseleave', handleMouseLeave)
-
-			// Progress bar animation
-			let progressAnimation: gsap.core.Tween | null = null
-			if (progressEl && duration > 0) {
-				progressAnimation = gsap.fromTo(
-					progressEl,
-					{ width: '100%' },
-					{
-						width: '0%',
-						duration: duration / 1000,
-						ease: 'none',
-						delay: 0.6, // Start after entrance animation
-					}
-				)
-			}
-
-			return () => {
-				// Clean up event listeners
-				el.removeEventListener('mouseenter', handleMouseEnter)
-				el.removeEventListener('mouseleave', handleMouseLeave)
-
-				// Kill all GSAP animations for this element
-				gsap.killTweensOf(el)
-				if (progressEl) {
-					gsap.killTweensOf(progressEl)
-				}
-
-				// Kill specific animations
-				if (entranceAnimation) {
-					entranceAnimation.kill()
-				}
-				if (progressAnimation) {
-					progressAnimation.kill()
-				}
-			}
-		}, [getInitialPosition, duration])
 
 		useEffect(() => {
 			if (duration <= 0) return
@@ -174,25 +76,24 @@ export const Toast = memo(
 
 		return (
 			<div
-				ref={toastRef}
 				className={`
 					relative w-full max-w-sm
 					${toastConfig.bgColor} ${toastConfig.borderColor} ${toastConfig.textColor}
 					border rounded-xl shadow-2xl dark:shadow-3xl backdrop-blur-sm
+					hover:scale-[1.02] transition-transform duration-200
+					${isExiting ? 'animate-slide-right-out' : 'animate-slide-right-in'}
 				`}
 				role="alert"
 				aria-live="polite"
-				style={{
-					transform: 'translateZ(0)', // Force hardware acceleration
-					willChange: 'transform, opacity', // Optimize for animations
-				}}
 			>
 				{/* Progress Bar */}
 				{duration > 0 && (
 					<div className="absolute top-0 left-0 right-0 h-1 bg-black/10 dark:bg-white/10 rounded-t-xl overflow-hidden">
 						<div
-							ref={progressRef}
-							className={`h-full ${toastConfig.iconColor.replace('!', '').replace(' dark:bg-', ' dark:bg-')} transition-all`}
+							className={`h-full ${toastConfig.iconColor.replace('!', '').replace(' dark:bg-', ' dark:bg-')}`}
+							style={{
+								animation: `progress-shrink ${duration}ms linear 0.6s forwards`,
+							}}
 						/>
 					</div>
 				)}

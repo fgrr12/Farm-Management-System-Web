@@ -1,6 +1,4 @@
-import { useGSAP } from '@gsap/react'
-import { gsap } from 'gsap'
-import { type FC, type MouseEvent, memo, useCallback, useMemo, useRef } from 'react'
+import { type FC, type MouseEvent, memo, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -25,7 +23,6 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 	}) => {
 		const { t } = useTranslation(['animals'])
 		const navigate = useNavigate()
-		const cardRef = useRef<HTMLDivElement>(null)
 		const { uuid, animalId, breedName, gender, picture } = animal
 
 		const currentHealthStatus = animal.healthStatus || healthStatus || 'unknown'
@@ -114,50 +111,18 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 		const genderConfig = useMemo(() => {
 			return gender.toLowerCase() === 'male'
 				? {
-						icon: 'i-tdesign-gender-male',
-						color: 'bg-blue-500!',
-						bgColor: 'bg-blue-100',
-						textColor: 'text-blue-800',
-					}
+					icon: 'i-tdesign-gender-male',
+					color: 'bg-blue-500!',
+					bgColor: 'bg-blue-100',
+					textColor: 'text-blue-800',
+				}
 				: {
-						icon: 'i-tdesign-gender-female',
-						color: 'bg-pink-500!',
-						bgColor: 'bg-pink-100',
-						textColor: 'text-pink-800',
-					}
+					icon: 'i-tdesign-gender-female',
+					color: 'bg-pink-500!',
+					bgColor: 'bg-pink-100',
+					textColor: 'text-pink-800',
+				}
 		}, [gender])
-
-		useGSAP(() => {
-			if (cardRef.current) {
-				gsap.fromTo(
-					cardRef.current,
-					{ y: 20, opacity: 0, scale: 0.95 },
-					{ y: 0, opacity: 1, scale: 1, duration: 0.6, ease: 'power3.out' }
-				)
-			}
-		}, [])
-
-		const handleMouseEnter = useCallback(() => {
-			if (cardRef.current) {
-				gsap.to(cardRef.current, {
-					scale: 1.03,
-					y: -8,
-					duration: 0.3,
-					ease: 'power2.out',
-				})
-			}
-		}, [])
-
-		const handleMouseLeave = useCallback(() => {
-			if (cardRef.current) {
-				gsap.to(cardRef.current, {
-					scale: 1,
-					y: 0,
-					duration: 0.3,
-					ease: 'power2.out',
-				})
-			}
-		}, [])
 
 		const navigateToAnimal = useCallback(
 			(e: MouseEvent<HTMLDivElement>) => {
@@ -197,10 +162,9 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 
 		return (
 			<div
-				ref={cardRef}
 				role="button"
 				tabIndex={0}
-				className={`${cardClasses} bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl transition-all duration-200`}
+				className={`${cardClasses} animal-card bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl hover:scale-[1.03] hover:-translate-y-2 active:scale-[0.98] transition-all duration-200`}
 				onClick={navigateToAnimal}
 				onKeyDown={(e) => {
 					if (e.key === 'Enter' || e.key === ' ') {
@@ -208,8 +172,6 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 						navigateToAnimal(e as any)
 					}
 				}}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
 				aria-label={`Animal ${animalId}, ${breedName}, ${gender}`}
 				{...rest}
 			>

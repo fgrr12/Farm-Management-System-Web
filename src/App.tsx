@@ -1,7 +1,4 @@
-import { useGSAP } from '@gsap/react'
 import { onAuthStateChanged } from 'firebase/auth'
-import { gsap } from 'gsap'
-import { SplitText } from 'gsap/all'
 import { lazy, Suspense, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
@@ -35,8 +32,6 @@ import { PWAUpdatePrompt } from '@/components/pwa/PWAUpdatePrompt.component'
 import { useTheme } from '@/hooks/system/useTheme'
 
 import { usePreloadRoutes } from './hooks/ui/usePreloadRoutes'
-
-gsap.registerPlugin(SplitText, useGSAP)
 
 // Core pages (loaded immediately)
 const Animals = lazy(() => import('@/pages/Animals/Animals.page'))

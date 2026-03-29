@@ -1,5 +1,3 @@
-import { useGSAP } from '@gsap/react'
-import gsap from 'gsap'
 import { type FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -134,69 +132,6 @@ export const TaskModal: FC<TaskModalProps> = memo(({ task, isOpen, onClose }) =>
 		onClose()
 	}, [onClose])
 
-	// GSAP animations
-	useGSAP(() => {
-		if (!modalRef.current || !backdropRef.current || !contentRef.current) return
-
-		let timeline: gsap.core.Timeline | null = null
-
-		if (isOpen) {
-			// Entrance animation
-			gsap.set(backdropRef.current, { opacity: 0, backdropFilter: 'blur(0px)' })
-			gsap.set(contentRef.current, { scale: 0.9, opacity: 0, y: 30, rotationX: -10 })
-
-			timeline = gsap.timeline()
-			timeline.to(backdropRef.current, {
-				opacity: 1,
-				backdropFilter: 'blur(4px)',
-				duration: 0.4,
-				ease: 'power2.out',
-			})
-			timeline.to(
-				contentRef.current,
-				{
-					scale: 1,
-					opacity: 1,
-					y: 0,
-					rotationX: 0,
-					duration: 0.5,
-					ease: 'back.out(1.4)',
-				},
-				'-=0.2'
-			)
-		} else {
-			// Exit animation
-			if (backdropRef.current && contentRef.current) {
-				timeline = gsap.timeline()
-				timeline.to(contentRef.current, {
-					scale: 0.9,
-					opacity: 0,
-					y: -20,
-					rotationX: 10,
-					duration: 0.3,
-					ease: 'power2.in',
-				})
-				timeline.to(
-					backdropRef.current,
-					{
-						opacity: 0,
-						backdropFilter: 'blur(0px)',
-						duration: 0.3,
-						ease: 'power2.in',
-					},
-					'-=0.1'
-				)
-			}
-		}
-
-		return () => {
-			if (timeline) {
-				timeline.kill()
-			}
-			gsap.killTweensOf([backdropRef.current, contentRef.current])
-		}
-	}, [isOpen])
-
 	useEffect(() => {
 		if (!modalRef.current) return
 
@@ -207,7 +142,7 @@ export const TaskModal: FC<TaskModalProps> = memo(({ task, isOpen, onClose }) =>
 			setTimeout(() => {
 				modalRef.current?.close()
 				document.body.style.overflow = 'unset'
-			}, 400)
+			}, 350)
 		}
 
 		return () => {
@@ -294,16 +229,12 @@ export const TaskModal: FC<TaskModalProps> = memo(({ task, isOpen, onClose }) =>
 			<div
 				role="dialog"
 				ref={backdropRef}
-				className="modal-backdrop bg-black/50 dark:bg-black/70 backdrop-blur-sm transition-all duration-300"
+				className={`modal-backdrop bg-black/50 dark:bg-black/70 backdrop-blur-sm ${isOpen ? 'animate-modal-backdrop-in' : 'animate-modal-backdrop-out'}`}
 				onClick={handleBackdropClick}
 			/>
 			<div
 				ref={contentRef}
-				className="modal-box relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border-0 p-0 overflow-hidden transition-all duration-300 max-w-2xl"
-				style={{
-					transform: 'translateZ(0)',
-					willChange: 'transform, opacity',
-				}}
+				className={`modal-box relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border-0 p-0 overflow-hidden max-w-2xl ${isOpen ? 'animate-modal-content-in' : 'animate-modal-content-out'}`}
 			>
 				{/* Header */}
 				<div className={`${variantConfig.headerBg} px-6 py-4 text-white relative`}>

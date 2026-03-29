@@ -1,7 +1,4 @@
-import { useGSAP } from '@gsap/react'
 import { useQueryClient } from '@tanstack/react-query'
-import gsap from 'gsap'
-import { SplitText } from 'gsap/SplitText'
 import { useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -24,14 +21,12 @@ import { useRouteTitle } from '@/hooks/ui/useRouteTitle'
 
 export const Navbar = () => {
 	const drawerRef = useRef<HTMLInputElement>(null)
-	const titleRef = useRef<HTMLHeadingElement>(null)
-	const drawerTitleRef = useRef<HTMLHeadingElement>(null)
 	const { user, setUser } = useUserStore()
 	const { farm, taxDetails, setFarm } = useFarmStore()
 	const { t } = useTranslation('common')
 	const navigate = useNavigate()
 	const location = useLocation()
-	const { headerTitle, loading } = useAppStore()
+	const { headerTitle } = useAppStore()
 	const backRoute = useBackRoute()
 	const { theme, toggleTheme } = useTheme()
 	const queryClient = useQueryClient()
@@ -158,51 +153,6 @@ export const Navbar = () => {
 		navigate(AppRoutes.LOGIN)
 	}, [user, setUser, setFarm, navigate, queryClient])
 
-	useGSAP(() => {
-		const el = titleRef.current
-		if (!el || loading || !routeTitle.trim()) return
-
-		const split = new SplitText(el, { type: 'chars' })
-
-		gsap.from(split.chars, {
-			autoAlpha: 0,
-			x: 10,
-			duration: 1,
-			stagger: 0.05,
-			ease: 'power1.out',
-		})
-
-		return () => {
-			split.revert()
-		}
-	}, [routeTitle, loading])
-
-	useGSAP(() => {
-		const drawer = drawerRef.current
-		if (!drawer || !drawerTitleRef.current || !farm) return
-
-		const handleChange = () => {
-			if (drawer.checked && drawerTitleRef.current) {
-				const split = new SplitText(drawerTitleRef.current, { type: 'chars' })
-				gsap.from(split.chars, {
-					autoAlpha: 0,
-					x: 10,
-					duration: 1,
-					stagger: 0.05,
-					ease: 'power1.out',
-				})
-				return () => {
-					setTimeout(() => split.revert(), 2000)
-				}
-			}
-		}
-
-		drawer.addEventListener('change', handleChange)
-
-		return () => {
-			drawer.removeEventListener('change', handleChange)
-		}
-	}, [farm])
 	return (
 		<div className="drawer">
 			<input id="my-drawer" type="checkbox" className="drawer-toggle" ref={drawerRef} />
@@ -235,8 +185,7 @@ export const Navbar = () => {
 							</div>
 							<h2
 								key={routeTitle}
-								ref={titleRef}
-								className="text-xl font-bold text-gray-800 dark:text-gray-200 tracking-tight"
+								className="text-xl font-bold text-gray-800 dark:text-gray-200 tracking-tight animate-fade-in-up"
 							>
 								{routeTitle}
 							</h2>
@@ -326,7 +275,7 @@ export const Navbar = () => {
 									<i className="i-healthicons-animal-cow w-6! h-6! bg-white!" />
 								</div>
 								<div>
-									<h2 ref={drawerTitleRef} className="font-bold">
+									<h2 className="font-bold">
 										{farm!.name}
 									</h2>
 									<p className="text-blue-100 text-sm opacity-90">{t('sidebar.farmManagement')}</p>
