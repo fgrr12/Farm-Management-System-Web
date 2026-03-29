@@ -157,7 +157,7 @@ export const Navbar = () => {
 		<div className="drawer">
 			<input id="my-drawer" type="checkbox" className="drawer-toggle" ref={drawerRef} />
 			<div className="drawer-content">
-				<div className="navbar bg-linear-to-r from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 shadow-lg border-b border-gray-100 dark:border-gray-700 overflow-hidden">
+				<div className="navbar bg-linear-to-r from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 shadow-lg border-b border-gray-100 dark:border-gray-700">
 					<div className="navbar-start shrink-0 w-auto md:flex-1">
 						<div className="flex items-center gap-2">
 							<label
