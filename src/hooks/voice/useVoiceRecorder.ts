@@ -124,9 +124,25 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 						}
 					}
 				}
-				// Add error entries from execution
-				if (extractionResult.execution?.errors) {
-					for (const err of extractionResult.execution.errors) {
+
+				// Cross-reference execution results to mark failures
+				const execution = extractionResult.execution
+				if (execution && results.length > 0) {
+					const failedCount = results.length - (execution.successCount ?? results.length)
+					if (failedCount > 0) {
+						const errors = execution.errors ?? []
+						// Mark last N results as failed (operations fail in order)
+						for (let i = 0; i < failedCount && i < results.length; i++) {
+							const idx = results.length - 1 - i
+							results[idx].success = false
+							results[idx].error = errors[i] || undefined
+						}
+					}
+					// Append any extra errors not mapped to an operation
+					const unmappedErrors = (execution.errors ?? []).slice(
+						Math.min(failedCount ?? 0, results.length)
+					)
+					for (const err of unmappedErrors) {
 						results.push({
 							type: 'animal',
 							success: false,
