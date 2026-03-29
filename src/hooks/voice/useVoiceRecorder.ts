@@ -1,9 +1,10 @@
 import { useCallback, useRef, useState } from 'react'
 
-import type {
-	ExecutionResult,
-	VoiceProcessingRequest,
-	VoiceProcessingResponse,
+import {
+	type ExecutionResult,
+	type VoiceProcessingRequest,
+	type VoiceProcessingResponse,
+	VoiceService,
 } from '@/services/voice'
 
 export type VoicePhase = 'idle' | 'recording' | 'processing' | 'done' | 'error'
@@ -84,8 +85,6 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 
 				const arrayBuffer = await blob.arrayBuffer()
 				const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)))
-
-				const { VoiceService } = await import('@/services/voice')
 
 				const request: VoiceProcessingRequest = {
 					audioData: base64,
