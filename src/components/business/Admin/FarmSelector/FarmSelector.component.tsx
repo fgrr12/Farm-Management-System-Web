@@ -90,7 +90,7 @@ export const FarmSelector = memo(() => {
 					<button
 						type="button"
 						tabIndex={0}
-						className="w-full flex items-center justify-between px-4 py-3 min-h-[44px] hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl transition-all duration-200 text-left touch-manipulation focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+						className="w-full flex items-center justify-between px-4 py-3 min-h-11 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl transition-all duration-200 text-left touch-manipulation focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
 						aria-label="Farm selector"
 						aria-haspopup="true"
 						aria-expanded="false"
@@ -114,7 +114,7 @@ export const FarmSelector = memo(() => {
 					</button>
 
 					<ul
-						className="dropdown-content menu bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 z-50 mt-3 w-full max-w-xs p-2 max-h-64 overflow-y-auto absolute right-0 bottom-[4.5rem]"
+						className="dropdown-content menu bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 z-50 mt-3 w-full max-w-xs p-2 max-h-64 overflow-y-auto absolute right-0 bottom-18"
 						aria-label="Farm selector options"
 					>
 						{availableFarms.length > 0 ? (
@@ -128,7 +128,7 @@ export const FarmSelector = memo(() => {
 											type="button"
 											role="menuitem"
 											onClick={() => handleFarmChange(farmOption)}
-											className={`flex items-center gap-3 px-3 py-2 min-h-[44px] rounded-lg transition-colors touch-manipulation focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 w-full text-left ${
+											className={`flex items-center gap-3 px-3 py-2 min-h-11 rounded-lg transition-colors touch-manipulation focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 w-full text-left ${
 												farm?.uuid === farmOption.uuid
 													? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
 													: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
@@ -154,7 +154,7 @@ export const FarmSelector = memo(() => {
 										type="button"
 										role="menuitem"
 										onClick={handleCreateFarm}
-										className="flex items-center gap-3 px-3 py-2 min-h-[44px] hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-colors text-green-700 dark:text-green-300 touch-manipulation focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400 w-full text-left"
+										className="flex items-center gap-3 px-3 py-2 min-h-11 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-colors text-green-700 dark:text-green-300 touch-manipulation focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400 w-full text-left"
 										tabIndex={-1}
 									>
 										<i className="i-material-symbols-add w-4! h-4! bg-green-600! dark:bg-green-400!" />
@@ -176,7 +176,7 @@ export const FarmSelector = memo(() => {
 										type="button"
 										role="menuitem"
 										onClick={handleCreateFarm}
-										className="flex items-center gap-3 px-3 py-2 min-h-[44px] hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-colors text-green-700 dark:text-green-300 touch-manipulation focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400 w-full text-left"
+										className="flex items-center gap-3 px-3 py-2 min-h-11 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-colors text-green-700 dark:text-green-300 touch-manipulation focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400 w-full text-left"
 										tabIndex={-1}
 									>
 										<i className="i-material-symbols-add w-4! h-4! bg-green-600! dark:bg-green-400!" />

@@ -44,7 +44,7 @@ export const TaskColumn: FC<TaskColumnProps> = memo(
 			<div
 				ref={ref}
 				className={`
-		flex flex-col h-full min-h-[600px] rounded-lg shadow-sm border-2 transition-all duration-200 relative
+		flex flex-col h-full min-h-150 rounded-lg shadow-sm border-2 transition-all duration-200 relative
 		${
 			isDraggedOver
 				? `border-${color} bg-${bgColor} dark:border-${color} dark:bg-${bgColor}`

@@ -585,7 +585,7 @@ export const Calendar = memo(() => {
 							{/* Indicador de esquina para día actual */}
 							{isToday && (
 								<div className="absolute top-0 right-0">
-									<div className="w-0 h-0 border-l-[12px] border-l-transparent border-t-[12px] border-t-blue-500" />
+									<div className="w-0 h-0 border-l-12 border-l-transparent border-t-12 border-t-blue-500" />
 									<div className="absolute -top-3 -right-3 w-2 h-2 bg-linear-to-r from-blue-500 to-purple-500 rounded-full animate-pulse shadow-md" />
 								</div>
 							)}
@@ -595,7 +595,7 @@ export const Calendar = memo(() => {
 								<div className="flex flex-col">
 									<span
 										className={`
-											inline-flex items-center justify-center text-sm font-semibold min-w-[1.5rem] h-6
+											inline-flex items-center justify-center text-sm font-semibold min-w-6 h-6
 											${
 												isToday
 													? 'bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-md'

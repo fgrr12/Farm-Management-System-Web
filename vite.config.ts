@@ -76,6 +76,9 @@ export default defineConfig({
 	build: {
 		target: 'esnext',
 		rolldownOptions: {
+			checks: {
+				pluginTimings: false,
+			},
 			output: {
 				manualChunks: (id) => {
 					// React ecosystem
