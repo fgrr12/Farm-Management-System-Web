@@ -50,7 +50,12 @@ export const EmptyState = memo(
 
 						{/* Action Button */}
 						{action && (
-							<Button type="button" size="lg" className="btn btn-primary mt-4" onClick={action.onClick}>
+							<Button
+								type="button"
+								size="lg"
+								className="btn btn-primary mt-4"
+								onClick={action.onClick}
+							>
 								{action.icon && (
 									<i className={`i-material-symbols-${action.icon} w-6! h-6! mr-2`} />
 								)}

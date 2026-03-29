@@ -73,11 +73,7 @@ export const Button: FC<ButtonProps> = memo(
 		}
 
 		return (
-			<button
-				className={buttonClasses}
-				disabled={isDisabled}
-				{...props}
-			>
+			<button className={buttonClasses} disabled={isDisabled} {...props}>
 				{renderContent()}
 			</button>
 		)

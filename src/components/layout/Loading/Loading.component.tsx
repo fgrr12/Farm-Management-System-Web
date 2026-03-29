@@ -106,7 +106,10 @@ export const Loading: FC<LoadingProps> = memo(
 							</div>
 
 							<div className="relative flex items-center justify-center">
-								<div className="orbit-container relative" style={{ width: '220px', height: '220px' }}>
+								<div
+									className="orbit-container relative"
+									style={{ width: '220px', height: '220px' }}
+								>
 									{animalIcons.map((icon, i) => {
 										return (
 											<div

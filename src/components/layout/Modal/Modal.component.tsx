@@ -246,7 +246,8 @@ const useModal = (open?: boolean) => {
 				document.body.style.overflow = 'unset'
 			}, 300)
 		} else {
-			contentRef.current.style.transition = 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease-out'
+			contentRef.current.style.transition =
+				'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease-out'
 			contentRef.current.style.transform = ''
 			contentRef.current.style.opacity = '1'
 

@@ -268,9 +268,9 @@ const TaxDetails = () => {
 			<body>
 				<div class="page">
 					${Array(5)
-				.fill(0)
-				.map(
-					() => `
+						.fill(0)
+						.map(
+							() => `
 						<!-- Front Side -->
 						<div class="card">
 							<div class="card-header">
@@ -317,8 +317,8 @@ const TaxDetails = () => {
 							</div>
 						</div>
 					`
-				)
-				.join('')}
+						)
+						.join('')}
 				</div>
 			</body>
 			</html>
@@ -371,8 +371,9 @@ const TaxDetails = () => {
 						{/* Flip Card Container */}
 						<button
 							type="button"
-							className={`relative w-92.5 h-53.75 transition-transform duration-700 transform-style-3d cursor-pointer ${isFlipped ? 'rotate-y-180' : ''
-								}`}
+							className={`relative w-92.5 h-53.75 transition-transform duration-700 transform-style-3d cursor-pointer ${
+								isFlipped ? 'rotate-y-180' : ''
+							}`}
 							onClick={() => setIsFlipped(!isFlipped)}
 							style={{
 								transformStyle: 'preserve-3d',

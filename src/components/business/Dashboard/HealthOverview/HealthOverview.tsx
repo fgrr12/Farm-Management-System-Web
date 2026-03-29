@@ -134,9 +134,7 @@ export const HealthOverview = memo(() => {
 						<span className="text-sm text-gray-600 dark:text-gray-400 font-medium">
 							{t('health.totalAnimals')}
 						</span>
-						<span
-							className="text-lg font-semibold text-gray-900 dark:text-gray-100 tabular-nums"
-						>
+						<span className="text-lg font-semibold text-gray-900 dark:text-gray-100 tabular-nums">
 							{loading || loadingSecondary ? '...' : displayTotal}
 						</span>
 					</div>

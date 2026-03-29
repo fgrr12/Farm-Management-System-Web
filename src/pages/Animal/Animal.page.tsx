@@ -229,16 +229,15 @@ const Animal = () => {
 								/>
 								<div className="absolute top-3 right-3 sm:top-4 sm:right-4">
 									<div
-										className={`px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-medium ${animal.gender.toLowerCase() === 'male'
+										className={`px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-medium ${
+											animal.gender.toLowerCase() === 'male'
 												? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 dark:border dark:border-blue-700'
 												: 'bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200 dark:border dark:border-pink-700'
-											}`}
+										}`}
 									>
 										<div className="flex items-center gap-1 sm:gap-2">
 											<GenderIcon gender={animal.gender} />
-											<span>
-												{t(`genderList.${animal.gender.toLowerCase()}`)}
-											</span>
+											<span>{t(`genderList.${animal.gender.toLowerCase()}`)}</span>
 										</div>
 									</div>
 								</div>
@@ -330,17 +329,19 @@ const Animal = () => {
 								onClick={tab.onClick}
 								className={`
 								group inline-flex items-center py-3 sm:py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer whitespace-nowrap
-								${activeTab === tab.key
+								${
+									activeTab === tab.key
 										? `border-${tab.color}-500 text-${tab.color}-600 dark:text-${tab.color}-400`
 										: 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-500'
-									}
+								}
 							`}
 							>
 								<i
-									className={`${tab.icon} w-5! h-5! sm:w-7! sm:h-7! mr-1 sm:mr-2 ${activeTab === tab.key
+									className={`${tab.icon} w-5! h-5! sm:w-7! sm:h-7! mr-1 sm:mr-2 ${
+										activeTab === tab.key
 											? `bg-${tab.color}-500! dark:bg-${tab.color}-400!`
 											: 'text-gray-400 dark:text-gray-500 group-hover:text-gray-500 dark:group-hover:text-gray-400'
-										}`}
+									}`}
 								/>
 								<span className="text-sm sm:text-base">{tab.label}</span>
 							</button>

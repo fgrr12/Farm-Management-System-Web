@@ -94,12 +94,13 @@ export const TextField: FC<TextFieldProps> = memo(
 					{leftIcon && (
 						<div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none z-10">
 							<i
-								className={`${leftIcon} w-5! h-5! ${error
-									? 'bg-red-500! dark:bg-red-400!'
-									: success
-										? 'bg-green-500! dark:bg-green-400!'
-										: 'bg-gray-400! dark:bg-gray-500!'
-									}`}
+								className={`${leftIcon} w-5! h-5! ${
+									error
+										? 'bg-red-500! dark:bg-red-400!'
+										: success
+											? 'bg-green-500! dark:bg-green-400!'
+											: 'bg-gray-400! dark:bg-gray-500!'
+								}`}
 							/>
 						</div>
 					)}
@@ -255,24 +256,26 @@ export const PasswordField: FC<PasswordFieldProps> = memo(
 						<div className="flex items-center justify-between mb-1">
 							<span className="text-xs text-gray-600 dark:text-gray-400">Password strength</span>
 							<span
-								className={`text-xs font-medium ${passwordStrength.level === 'weak'
-									? 'text-red-600 dark:text-red-400'
-									: passwordStrength.level === 'medium'
-										? 'text-yellow-600 dark:text-yellow-400'
-										: 'text-green-600 dark:text-green-400'
-									}`}
+								className={`text-xs font-medium ${
+									passwordStrength.level === 'weak'
+										? 'text-red-600 dark:text-red-400'
+										: passwordStrength.level === 'medium'
+											? 'text-yellow-600 dark:text-yellow-400'
+											: 'text-green-600 dark:text-green-400'
+								}`}
 							>
 								{strengthText[passwordStrength.level as keyof typeof strengthText]}
 							</span>
 						</div>
 						<div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
 							<div
-								className={`h-2 rounded-full transition-all duration-300 ${passwordStrength.level === 'weak'
-									? 'bg-red-500 dark:bg-red-400'
-									: passwordStrength.level === 'medium'
-										? 'bg-yellow-500 dark:bg-yellow-400'
-										: 'bg-green-500 dark:bg-green-400'
-									}`}
+								className={`h-2 rounded-full transition-all duration-300 ${
+									passwordStrength.level === 'weak'
+										? 'bg-red-500 dark:bg-red-400'
+										: passwordStrength.level === 'medium'
+											? 'bg-yellow-500 dark:bg-yellow-400'
+											: 'bg-green-500 dark:bg-green-400'
+								}`}
 								style={{ width: passwordStrength.width }}
 							/>
 						</div>

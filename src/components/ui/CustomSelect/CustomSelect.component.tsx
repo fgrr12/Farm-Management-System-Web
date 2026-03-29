@@ -400,13 +400,15 @@ export const CustomSelect = forwardRef<CustomSelectRef, CustomSelectProps>(
 										type="button"
 										onClick={() => handleOptionSelect(option)}
 										disabled={option.disabled}
-										className={`w-full p-3 text-left transition-colors ${index === highlightedIndex
-											? 'bg-blue-50 dark:bg-blue-900/20'
-											: 'hover:bg-gray-50 dark:hover:bg-gray-700'
-											} ${option.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} ${selectedOption?.value === option.value
+										className={`w-full p-3 text-left transition-colors ${
+											index === highlightedIndex
+												? 'bg-blue-50 dark:bg-blue-900/20'
+												: 'hover:bg-gray-50 dark:hover:bg-gray-700'
+										} ${option.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} ${
+											selectedOption?.value === option.value
 												? 'bg-blue-100 dark:bg-blue-900/30'
 												: ''
-											} first:rounded-t-lg last:rounded-b-lg focus:outline-none focus:bg-blue-50 dark:focus:bg-blue-900/20`}
+										} first:rounded-t-lg last:rounded-b-lg focus:outline-none focus:bg-blue-50 dark:focus:bg-blue-900/20`}
 										role="option"
 										aria-selected={selectedOption?.value === option.value}
 									>

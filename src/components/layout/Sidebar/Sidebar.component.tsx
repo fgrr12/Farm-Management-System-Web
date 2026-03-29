@@ -28,10 +28,11 @@ export const Sidebar = memo(() => {
 	const getButtonClasses = useCallback(
 		(path: string, colorFrom: string, colorTo: string) => {
 			const isActive = location.pathname.includes(path)
-			return `w-16 h-16 rounded-xl flex flex-col items-center justify-center gap-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 ${isActive
-				? `bg-linear-to-br ${colorFrom} ${colorTo} shadow-lg`
-				: 'hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50 dark:bg-gray-800'
-				}`
+			return `w-16 h-16 rounded-xl flex flex-col items-center justify-center gap-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 ${
+				isActive
+					? `bg-linear-to-br ${colorFrom} ${colorTo} shadow-lg`
+					: 'hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50 dark:bg-gray-800'
+			}`
 		},
 		[location.pathname]
 	)
@@ -162,7 +163,9 @@ export const Sidebar = memo(() => {
 								aria-label={t('sidebar.businessCard')}
 							>
 								<i className={`i-typcn-business-card ${getIconClasses(AppRoutes.TAX_DETAILS)}`} />
-								<span className={getLabelClasses(AppRoutes.TAX_DETAILS)}>{t('sidebar.businessCard')}</span>
+								<span className={getLabelClasses(AppRoutes.TAX_DETAILS)}>
+									{t('sidebar.businessCard')}
+								</span>
 							</button>
 						)}
 					</div>
@@ -185,7 +188,9 @@ export const Sidebar = memo(() => {
 					) : (
 						<i className="i-material-symbols-light-mode w-6! h-6! bg-gray-600! dark:bg-gray-300!" />
 					)}
-					<span className="text-[10px] font-medium leading-tight text-center w-full px-1 line-clamp-2 text-gray-500 dark:text-gray-400">{t('sidebar.theme')}</span>
+					<span className="text-[10px] font-medium leading-tight text-center w-full px-1 line-clamp-2 text-gray-500 dark:text-gray-400">
+						{t('sidebar.theme')}
+					</span>
 				</button>
 			</div>
 		</div>

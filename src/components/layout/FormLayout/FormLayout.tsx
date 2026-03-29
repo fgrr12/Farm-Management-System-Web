@@ -37,12 +37,17 @@ export const FormSection = memo(
 			>
 				<h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 sm:mb-5 flex items-center gap-2">
 					{icon && (
-						<i className={`i-material-symbols-${icon} w-5! h-5! sm:w-6 sm:h-6 bg-blue-600! dark:bg-blue-500!`} />
+						<i
+							className={`i-material-symbols-${icon} w-5! h-5! sm:w-6 sm:h-6 bg-blue-600! dark:bg-blue-500!`}
+						/>
 					)}
 					{title}
 				</h3>
 				<div
-					className={cn('grid gap-4 sm:gap-5', columns === 2 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1')}
+					className={cn(
+						'grid gap-4 sm:gap-5',
+						columns === 2 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1'
+					)}
 				>
 					{children}
 				</div>
@@ -76,9 +81,7 @@ export const FormLayout = memo(
 						)}
 					>
 						{/* Sidebar Section — shown first on mobile for photo upload visibility */}
-						{sidebar && (
-							<div className="lg:col-span-1 order-first lg:order-last">{sidebar}</div>
-						)}
+						{sidebar && <div className="lg:col-span-1 order-first lg:order-last">{sidebar}</div>}
 
 						{/* Main Content Section */}
 						<div className={cn('space-y-6', sidebar ? 'lg:col-span-2' : 'lg:col-span-1')}>

@@ -223,12 +223,13 @@ export const Textarea: FC<TextareaProps> = memo(
 					{(showCharCount || maxLength) && (
 						<div className="shrink-0">
 							<div
-								className={`text-xs font-medium px-2 py-1 rounded-full transition-colors duration-200 ${isOverLimit
-									? 'text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/30'
-									: isNearLimit
-										? 'text-yellow-600 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-900/30'
-										: 'text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700/50'
-									}`}
+								className={`text-xs font-medium px-2 py-1 rounded-full transition-colors duration-200 ${
+									isOverLimit
+										? 'text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/30'
+										: isNearLimit
+											? 'text-yellow-600 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-900/30'
+											: 'text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700/50'
+								}`}
 							>
 								{maxLength ? `${charCount}/${maxLength}` : charCount}
 								{maxLength && (
