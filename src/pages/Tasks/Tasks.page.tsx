@@ -177,7 +177,7 @@ const Tasks = () => {
 							<div className="loading loading-spinner loading-lg text-primary" />
 						</div>
 					) : (
-						<div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 min-h-[600px]">
+						<div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 min-h-150">
 							{COLUMN_CONFIG.map((column) => (
 								<TaskColumn
 									key={column.id}
