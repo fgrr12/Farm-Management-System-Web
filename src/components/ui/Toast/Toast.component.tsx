@@ -132,13 +132,13 @@ export const Toast = memo(
 								type="button"
 								onClick={handleClose}
 								className={`
-									shrink-0 p-1 rounded-lg hover:bg-black/10 dark:hover:bg-white/10
+									shrink-0 min-w-11 min-h-11 flex items-center justify-center rounded-lg hover:bg-black/10 dark:hover:bg-white/10
 									transition-colors duration-200 focus:outline-none 
 									focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20
 								`}
 								aria-label="Close notification"
 							>
-								<i className={`i-material-symbols-close w-4! h-4! ${toastConfig.iconColor}`} />
+								<i className={`i-material-symbols-close w-5! h-5! ${toastConfig.iconColor}`} />
 							</button>
 						)}
 					</div>

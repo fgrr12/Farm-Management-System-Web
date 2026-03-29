@@ -232,7 +232,7 @@ export const Navbar = () => {
 											type="button"
 											role="menuitem"
 											onClick={goToFromDropdown(AppRoutes.MY_ACCOUNT)}
-											className="flex items-center gap-3 px-3 py-3 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors text-gray-700 dark:text-gray-300 w-full text-left touch-manipulation min-h-11 focus:outline-none focus:bg-blue-50 dark:focus:bg-blue-900/20"
+											className="flex items-center gap-3 px-3 py-3 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors text-gray-700 dark:text-gray-300 w-full text-left touch-manipulation min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset"
 											tabIndex={-1}
 										>
 											<i className="i-material-symbols-account-circle w-4! h-4! bg-blue-600! dark:bg-blue-400!" />
@@ -244,7 +244,7 @@ export const Navbar = () => {
 											type="button"
 											role="menuitem"
 											onClick={handleLogout}
-											className="flex items-center gap-3 px-3 py-3 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors text-red-600 dark:text-red-400 w-full text-left touch-manipulation min-h-11 focus:outline-none focus:bg-red-50 dark:focus:bg-red-900/20"
+											className="flex items-center gap-3 px-3 py-3 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors text-red-600 dark:text-red-400 w-full text-left touch-manipulation min-h-11 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-inset"
 											tabIndex={-1}
 										>
 											<i className="i-material-symbols-logout w-4! h-4! bg-red-600! dark:bg-red-400!" />

@@ -91,13 +91,11 @@ export const StatCard = memo<StatCardProps>(
 
 		return (
 			<div
-				className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-6 hover:shadow-lg dark:hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer animate-fade-in-up"
-				role="button"
-				tabIndex={0}
+				className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-6 hover:shadow-lg dark:hover:shadow-xl hover:-translate-y-1 transition-all duration-300 animate-fade-in-up"
 			>
 				<div className="flex items-center justify-between">
 					<div className="flex-1">
-						<p className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">{title}</p>
+						<p className="text-base font-medium text-gray-600 dark:text-gray-300 mb-1">{title}</p>
 						<p
 							className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tabular-nums"
 						>
@@ -114,10 +112,10 @@ export const StatCard = memo<StatCardProps>(
 								<div className="flex items-center mt-2">
 									<span
 										className={`text-sm font-medium tabular-nums ${displayChange > 0
-												? 'text-green-600 dark:text-green-400'
-												: displayChange < 0
-													? 'text-red-600 dark:text-red-400'
-													: 'text-gray-500 dark:text-gray-400'
+											? 'text-green-600 dark:text-green-400'
+											: displayChange < 0
+												? 'text-red-600 dark:text-red-400'
+												: 'text-gray-500 dark:text-gray-400'
 											}`}
 									>
 										{displayChange > 0 && '+'}

@@ -27,15 +27,15 @@ export const TextField: FC<TextFieldProps> = memo(
 
 			const variantClasses = {
 				default:
-					'input bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400',
+					'input bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-300',
 				filled:
-					'bg-gray-100 dark:bg-gray-700 border-0 border-b-2 border-gray-300 dark:border-gray-500 focus:border-blue-500 dark:focus:border-blue-400 focus:bg-white dark:focus:bg-gray-600 rounded-t-lg rounded-b-none px-4 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400',
+					'bg-gray-100 dark:bg-gray-700 border-0 border-b-2 border-gray-300 dark:border-gray-500 focus:border-blue-500 dark:focus:border-blue-400 focus:bg-white dark:focus:bg-gray-600 rounded-t-lg rounded-b-none px-4 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-300',
 				outlined:
-					'bg-transparent border-2 border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400',
+					'bg-transparent border-2 border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-300',
 			}
 
 			const sizeClasses = {
-				sm: 'h-10 text-sm px-3',
+				sm: 'h-11 text-sm px-3',
 				md: 'h-12 text-base px-4',
 				lg: 'h-14 text-lg px-5',
 			}
@@ -52,7 +52,7 @@ export const TextField: FC<TextFieldProps> = memo(
 		}, [variant, size, error, success, leftIcon, rightIcon, className])
 
 		const labelClasses = useMemo(() => {
-			const baseClasses = 'block text-sm font-medium mb-2 transition-colors duration-200'
+			const baseClasses = 'block text-base font-medium mb-2 transition-colors duration-200'
 			const stateClasses = error
 				? 'text-red-700 dark:text-red-400'
 				: success
@@ -95,10 +95,10 @@ export const TextField: FC<TextFieldProps> = memo(
 						<div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none z-10">
 							<i
 								className={`${leftIcon} w-5! h-5! ${error
-										? 'bg-red-500! dark:bg-red-400!'
-										: success
-											? 'bg-green-500! dark:bg-green-400!'
-											: 'bg-gray-400! dark:bg-gray-500!'
+									? 'bg-red-500! dark:bg-red-400!'
+									: success
+										? 'bg-green-500! dark:bg-green-400!'
+										: 'bg-gray-400! dark:bg-gray-500!'
 									}`}
 							/>
 						</div>
@@ -256,10 +256,10 @@ export const PasswordField: FC<PasswordFieldProps> = memo(
 							<span className="text-xs text-gray-600 dark:text-gray-400">Password strength</span>
 							<span
 								className={`text-xs font-medium ${passwordStrength.level === 'weak'
-										? 'text-red-600 dark:text-red-400'
-										: passwordStrength.level === 'medium'
-											? 'text-yellow-600 dark:text-yellow-400'
-											: 'text-green-600 dark:text-green-400'
+									? 'text-red-600 dark:text-red-400'
+									: passwordStrength.level === 'medium'
+										? 'text-yellow-600 dark:text-yellow-400'
+										: 'text-green-600 dark:text-green-400'
 									}`}
 							>
 								{strengthText[passwordStrength.level as keyof typeof strengthText]}
@@ -268,10 +268,10 @@ export const PasswordField: FC<PasswordFieldProps> = memo(
 						<div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
 							<div
 								className={`h-2 rounded-full transition-all duration-300 ${passwordStrength.level === 'weak'
-										? 'bg-red-500 dark:bg-red-400'
-										: passwordStrength.level === 'medium'
-											? 'bg-yellow-500 dark:bg-yellow-400'
-											: 'bg-green-500 dark:bg-green-400'
+									? 'bg-red-500 dark:bg-red-400'
+									: passwordStrength.level === 'medium'
+										? 'bg-yellow-500 dark:bg-yellow-400'
+										: 'bg-green-500 dark:bg-green-400'
 									}`}
 								style={{ width: passwordStrength.width }}
 							/>

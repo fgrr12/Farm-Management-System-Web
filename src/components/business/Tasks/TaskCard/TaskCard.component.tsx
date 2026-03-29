@@ -202,13 +202,13 @@ export const TaskCard: FC<TaskCardProps> = memo(
 					<div className="flex items-center justify-between mb-2">
 						<div className="flex items-center gap-2">
 							<div className={`w-4 h-4 ${getStatusIcon(task.status)}`} />
-							<span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+							<span className="text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wide">
 								{t(`status.${task.status}`)}
 							</span>
 						</div>
 						<div className="flex items-center gap-1">
 							<div className={`w-4 h-4 ${getPriorityIcon(task.priority)}`} />
-							<span className="text-xs text-gray-500 dark:text-gray-400">
+							<span className="text-sm text-gray-500 dark:text-gray-400">
 								{t(`priority.${task.priority}`)}
 							</span>
 						</div>
@@ -246,7 +246,7 @@ export const TaskCard: FC<TaskCardProps> = memo(
 
 					{/* Timestamps */}
 					{(task.createdAt || task.updatedAt) && (
-						<div className="mt-2 text-xs text-gray-400 dark:text-gray-500">
+						<div className="mt-2 text-sm text-gray-500 dark:text-gray-400">
 							{task.updatedAt && (
 								<span>
 									{t('updatedAt')}: {new Date(task.updatedAt).toLocaleDateString()}

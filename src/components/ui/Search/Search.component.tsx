@@ -24,7 +24,7 @@ export const Search: FC<SearchProps> = memo(
 					<input
 						id={fieldId}
 						type="search"
-						className="flex-1 bg-transparent text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:outline-none"
+						className="flex-1 bg-transparent text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-300 focus:outline-none text-base"
 						placeholder={placeholder}
 						autoComplete="off"
 						aria-label={placeholder}

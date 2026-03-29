@@ -26,9 +26,9 @@ export const Sidebar = memo(() => {
 	const getButtonClasses = useCallback(
 		(path: string, colorFrom: string, colorTo: string) => {
 			const isActive = location.pathname.includes(path)
-			return `w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 ${isActive
-					? `bg-linear-to-br ${colorFrom} ${colorTo} shadow-lg`
-					: 'hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50 dark:bg-gray-800'
+			return `w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 ${isActive
+				? `bg-linear-to-br ${colorFrom} ${colorTo} shadow-lg`
+				: 'hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50 dark:bg-gray-800'
 				}`
 		},
 		[location.pathname]

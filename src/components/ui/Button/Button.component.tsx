@@ -42,7 +42,7 @@ export const Button: FC<ButtonProps> = memo(
 			}
 
 			const sizeClasses = {
-				sm: 'h-9 px-3 text-sm',
+				sm: 'h-11 px-4 text-sm',
 				md: 'h-12 px-6 text-base',
 				lg: 'h-14 px-8 text-lg',
 			}

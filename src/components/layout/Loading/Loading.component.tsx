@@ -108,7 +108,6 @@ export const Loading: FC<LoadingProps> = memo(
 							<div className="relative flex items-center justify-center">
 								<div className="orbit-container" style={{ width: '320px', height: '80px' }}>
 									{animalIcons.map((icon, i) => {
-										const angle = (i / animalIcons.length) * 360
 										return (
 											<div
 												key={i}
@@ -151,8 +150,8 @@ export const Loading: FC<LoadingProps> = memo(
 					fixed inset-0 flex items-center justify-center
 					z-50 w-full h-full pointer-events-none
 				"
-					role="dialog"
-					aria-modal="true"
+					role="status"
+					aria-live="polite"
 					aria-label="Loading"
 				>
 					<div

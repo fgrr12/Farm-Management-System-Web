@@ -32,11 +32,11 @@ export const Textarea: FC<TextareaProps> = memo(
 
 			const variantClasses = {
 				default:
-					'bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 py-3',
+					'bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-300 px-4 py-3',
 				filled:
-					'bg-gray-100 dark:bg-gray-700 border-0 border-b-2 border-gray-300 dark:border-gray-500 focus:border-blue-500 dark:focus:border-blue-400 focus:bg-white dark:focus:bg-gray-600 rounded-t-lg rounded-b-none text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 py-3',
+					'bg-gray-100 dark:bg-gray-700 border-0 border-b-2 border-gray-300 dark:border-gray-500 focus:border-blue-500 dark:focus:border-blue-400 focus:bg-white dark:focus:bg-gray-600 rounded-t-lg rounded-b-none text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-300 px-4 py-3',
 				outlined:
-					'bg-transparent border-2 border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 py-3',
+					'bg-transparent border-2 border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-300 px-4 py-3',
 			}
 
 			const resizeClasses = {
@@ -56,7 +56,7 @@ export const Textarea: FC<TextareaProps> = memo(
 		}, [variant, resize, error, success, className])
 
 		const labelClasses = useMemo(() => {
-			const baseClasses = 'block text-sm font-medium mb-2 transition-colors duration-200'
+			const baseClasses = 'block text-base font-medium mb-2 transition-colors duration-200'
 			const stateClasses = error
 				? 'text-red-700 dark:text-red-400'
 				: success
@@ -224,10 +224,10 @@ export const Textarea: FC<TextareaProps> = memo(
 						<div className="shrink-0">
 							<div
 								className={`text-xs font-medium px-2 py-1 rounded-full transition-colors duration-200 ${isOverLimit
-										? 'text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/30'
-										: isNearLimit
-											? 'text-yellow-600 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-900/30'
-											: 'text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700/50'
+									? 'text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/30'
+									: isNearLimit
+										? 'text-yellow-600 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-900/30'
+										: 'text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700/50'
 									}`}
 							>
 								{maxLength ? `${charCount}/${maxLength}` : charCount}

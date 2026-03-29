@@ -164,7 +164,7 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 			<div
 				role="button"
 				tabIndex={0}
-				className={`${cardClasses} animal-card bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl hover:scale-[1.03] hover:-translate-y-2 active:scale-[0.98] transition-all duration-200`}
+				className={`${cardClasses} animal-card bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl hover:scale-[1.03] hover:-translate-y-2 active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
 				onClick={navigateToAnimal}
 				onKeyDown={(e) => {
 					if (e.key === 'Enter' || e.key === ' ') {
@@ -183,9 +183,9 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 				{/* Health Status Indicator */}
 				<div className="absolute top-4 right-4">
 					<div
-						className={`${healthConfig.bgColor} ${healthConfig.textColor} px-2 py-1 rounded-full flex items-center gap-1 text-xs font-medium shadow-sm dark:shadow-md`}
+						className={`${healthConfig.bgColor} ${healthConfig.textColor} px-2.5 py-1.5 rounded-full flex items-center gap-1.5 text-sm font-medium shadow-sm dark:shadow-md`}
 					>
-						<i className={`${healthConfig.icon} w-3! h-3! bg-current!`} />
+						<i className={`${healthConfig.icon} w-3.5! h-3.5! bg-current!`} />
 						<span className="hidden sm:inline">{healthConfig.text}</span>
 					</div>
 				</div>
@@ -221,7 +221,7 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 						className={`${genderConfig.bgColor} ${genderConfig.textColor} px-2 py-1 rounded-full flex items-center gap-1 shadow-sm dark:shadow-md`}
 					>
 						<i className={`${genderConfig.icon} w-4! h-4! ${genderConfig.color}`} />
-						<span className="text-xs font-medium capitalize">{gender}</span>
+						<span className="text-sm font-medium capitalize">{gender}</span>
 					</div>
 				</div>
 
