@@ -65,9 +65,7 @@ export function VoicePage() {
 					<h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
 						{t('startRecording')}
 					</h3>
-					<p className="text-sm text-gray-500 dark:text-gray-400">
-						{t('subtitle')}
-					</p>
+					<p className="text-sm text-gray-500 dark:text-gray-400">{t('subtitle')}</p>
 				</div>
 			</div>
 

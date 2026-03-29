@@ -231,9 +231,10 @@ export const CalendarEventModal = memo<CalendarEventModalProps>(
 									onClick={() => setActiveTab(tab.id as any)}
 									className={`
 										flex-1 flex items-center justify-center space-x-2 px-4 py-2.5 rounded-lg transition-all duration-200
-										${activeTab === tab.id
-											? 'bg-blue-600 text-white shadow-sm'
-											: 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+										${
+											activeTab === tab.id
+												? 'bg-blue-600 text-white shadow-sm'
+												: 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
 										}
 									`}
 								>
@@ -289,9 +290,10 @@ export const CalendarEventModal = memo<CalendarEventModalProps>(
 																onClick={() => field.onChange(option.value)}
 																className={`
 																	flex items-center space-x-3 p-3 rounded-lg border-2 transition-all duration-200
-																	${field.value === option.value
-																		? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-																		: 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
+																	${
+																		field.value === option.value
+																			? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+																			: 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
 																	}
 																`}
 															>
@@ -322,9 +324,10 @@ export const CalendarEventModal = memo<CalendarEventModalProps>(
 																onClick={() => field.onChange(option.value)}
 																className={`
 																	flex items-center space-x-3 w-full p-3 rounded-lg border-2 transition-all duration-200
-																	${field.value === option.value
-																		? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-																		: 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
+																	${
+																		field.value === option.value
+																			? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+																			: 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
 																	}
 																`}
 															>
@@ -374,9 +377,10 @@ export const CalendarEventModal = memo<CalendarEventModalProps>(
 												className={`
 													w-full px-4 py-3 border-2 rounded-lg transition-all duration-200
 													focus:ring-2 focus:ring-blue-500 focus:border-transparent
-													${errors.time
-														? 'border-red-300 bg-red-50 dark:bg-red-900/20'
-														: 'border-gray-200 dark:border-gray-600'
+													${
+														errors.time
+															? 'border-red-300 bg-red-50 dark:bg-red-900/20'
+															: 'border-gray-200 dark:border-gray-600'
 													}
 													dark:bg-gray-800 dark:text-white
 												`}
@@ -411,9 +415,10 @@ export const CalendarEventModal = memo<CalendarEventModalProps>(
 															onClick={() => field.onChange(option.value)}
 															className={`
 																flex items-center justify-center w-full p-3 rounded-lg border-2 transition-all duration-200
-																${field.value === option.value
-																	? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-																	: 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
+																${
+																	field.value === option.value
+																		? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+																		: 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
 																}
 															`}
 														>
@@ -461,9 +466,10 @@ export const CalendarEventModal = memo<CalendarEventModalProps>(
 															onClick={() => field.onChange(option.value)}
 															className={`
 																flex items-center justify-center p-3 rounded-lg border-2 transition-all duration-200
-																${field.value === option.value
-																	? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-																	: 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
+																${
+																	field.value === option.value
+																		? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+																		: 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
 																}
 															`}
 														>
@@ -534,15 +540,16 @@ export const CalendarEventModal = memo<CalendarEventModalProps>(
 																const updated = isSelected
 																	? current.filter((m: number) => m !== option.minutes)
 																	: [...current, option.minutes].sort(
-																		(a: number, b: number) => a - b
-																	)
+																			(a: number, b: number) => a - b
+																		)
 																setValue('reminderMinutes', updated, { shouldDirty: true })
 															}}
 															className={`
 																px-3 py-2 rounded-lg text-sm font-medium border transition-all duration-200
-																${isSelected
-																	? 'bg-purple-100 text-purple-800 border-purple-300 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-700'
-																	: 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-600'
+																${
+																	isSelected
+																		? 'bg-purple-100 text-purple-800 border-purple-300 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-700'
+																		: 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-600'
 																}
 															`}
 														>

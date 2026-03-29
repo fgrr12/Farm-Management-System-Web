@@ -159,9 +159,7 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
                             <div className="p-2 rounded-xl bg-linear-to-br from-pink-500 to-purple-600 text-white shadow-md">
                                 <span className="i-heroicons-microphone w-5 h-5" />
                             </div>
-                            <h2 className="text-lg font-bold text-gray-900 dark:text-white">
-                                {t('title')}
-                            </h2>
+                            <h2 className="text-lg font-bold text-gray-900 dark:text-white">{t('title')}</h2>
                         </div>
                         <button
                             type="button"
@@ -199,8 +197,8 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
                                     </div>
                                     <span
                                         className={`text-xs mt-1 font-medium transition-colors duration-300 ${index <= currentStep
-                                            ? 'text-gray-900 dark:text-white'
-                                            : 'text-gray-400 dark:text-gray-500'
+                                                ? 'text-gray-900 dark:text-white'
+                                                : 'text-gray-400 dark:text-gray-500'
                                             }`}
                                     >
                                         {t(`stepper.${step}`)}
@@ -241,9 +239,7 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
                                 {isRecording && (
                                     <>
                                         <span className="absolute inset-0 rounded-full bg-red-400 animate-ping opacity-30" />
-                                        <span
-                                            className="absolute -inset-3 rounded-full border-4 border-red-300 dark:border-red-700 opacity-50 animate-pulse"
-                                        />
+                                        <span className="absolute -inset-3 rounded-full border-4 border-red-300 dark:border-red-700 opacity-50 animate-pulse" />
                                     </>
                                 )}
                                 {/* Subtle pulse when idle */}
@@ -418,14 +414,14 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
                                         <div
                                             key={index}
                                             className={`flex items-center gap-3 p-3 rounded-lg border ${result.success
-                                                ? 'bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-800'
-                                                : 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-800'
+                                                    ? 'bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-800'
+                                                    : 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-800'
                                                 }`}
                                         >
                                             <span
                                                 className={`shrink-0 w-5 h-5 ${result.success
-                                                    ? 'i-heroicons-check-circle text-green-500'
-                                                    : 'i-heroicons-x-circle text-red-500'
+                                                        ? 'i-heroicons-check-circle text-green-500'
+                                                        : 'i-heroicons-x-circle text-red-500'
                                                     }`}
                                             />
                                             <div className="flex-1 min-w-0">
@@ -484,12 +480,8 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
                                 <span className="i-heroicons-exclamation-triangle text-red-500 w-8 h-8" />
                             </div>
                             <div>
-                                <p className="text-lg font-bold text-gray-900 dark:text-white">
-                                    {t('errors')}
-                                </p>
-                                <p className="text-sm text-red-500 dark:text-red-400 mt-1 max-w-xs">
-                                    {error}
-                                </p>
+                                <p className="text-lg font-bold text-gray-900 dark:text-white">{t('errors')}</p>
+                                <p className="text-sm text-red-500 dark:text-red-400 mt-1 max-w-xs">{error}</p>
                             </div>
                         </div>
                     )}

@@ -79,7 +79,12 @@ const Voice = lazy(() => import('@/pages/Voice/Voice.page'))
 export const App = () => {
 	const { user, setUser, authLoading, setAuthLoading } = useUserStore()
 	const { setFarm, farm } = useFarmStore()
-	const { loading: appLoading, defaultModalData: modalData, isVoiceModalOpen, setVoiceModalOpen } = useAppStore()
+	const {
+		loading: appLoading,
+		defaultModalData: modalData,
+		isVoiceModalOpen,
+		setVoiceModalOpen,
+	} = useAppStore()
 	const { i18n } = useTranslation()
 	const location = useLocation()
 	const browserLanguage = navigator.language === 'en' ? 'eng' : 'spa'
