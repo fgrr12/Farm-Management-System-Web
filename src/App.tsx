@@ -1,5 +1,5 @@
 import { onAuthStateChanged } from 'firebase/auth'
-import { lazy, Suspense, useEffect } from 'react'
+import { lazy, Suspense, useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 
@@ -15,6 +15,8 @@ import { initializeSEO } from '@/utils/seo'
 
 import { UserService } from '@/services/user'
 
+import { VoiceCommandButton } from '@/components/business/Voice/VoiceCommandButton'
+import { VoiceCommandModal } from '@/components/business/Voice/VoiceCommandModal'
 import { DevelopmentBanner } from '@/components/layout/DevelopmentBanner'
 import { Loading } from '@/components/layout/Loading'
 import { Modal } from '@/components/layout/Modal'
@@ -76,8 +78,8 @@ const Voice = lazy(() => import('@/pages/Voice/Voice.page'))
 
 export const App = () => {
 	const { user, setUser, authLoading, setAuthLoading } = useUserStore()
-	const { setFarm } = useFarmStore()
-	const { loading: appLoading, defaultModalData: modalData } = useAppStore()
+	const { setFarm, farm } = useFarmStore()
+	const { loading: appLoading, defaultModalData: modalData, isVoiceModalOpen, setVoiceModalOpen } = useAppStore()
 	const { i18n } = useTranslation()
 	const location = useLocation()
 	const browserLanguage = navigator.language === 'en' ? 'eng' : 'spa'
@@ -86,6 +88,9 @@ export const App = () => {
 	useTheme()
 
 	usePreloadRoutes()
+
+	const openVoiceModal = useCallback(() => setVoiceModalOpen(true), [setVoiceModalOpen])
+	const closeVoiceModal = useCallback(() => setVoiceModalOpen(false), [setVoiceModalOpen])
 
 	//biome-ignore lint: use only once
 	useEffect(() => {
@@ -324,6 +329,12 @@ export const App = () => {
 					<FCMTokenManager />
 					<NotificationManager />
 					<NotificationToast />
+					{user && farm && (
+						<>
+							<VoiceCommandButton onClick={openVoiceModal} />
+							<VoiceCommandModal isOpen={isVoiceModalOpen} onClose={closeVoiceModal} />
+						</>
+					)}
 				</main>
 			</div>
 		</div>

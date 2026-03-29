@@ -3,6 +3,7 @@ export interface AppStore {
 	toastData: AppToastData | null
 	defaultModalData: AppModalData
 	headerTitle: string
+	isVoiceModalOpen: boolean
 }
 
 export interface AppStoreActions {
@@ -10,6 +11,7 @@ export interface AppStoreActions {
 	setToastData: (data: AppToastData) => void
 	setModalData: (data: AppModalData) => void
 	setHeaderTitle: (title: string) => void
+	setVoiceModalOpen: (open: boolean) => void
 }
 
 export interface AppModalData {

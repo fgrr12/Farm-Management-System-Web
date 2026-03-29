@@ -1,6 +1,7 @@
 {
 	"title": "Voice Commands",
 	"subtitle": "Manage your farm using natural language commands",
+	"startRecording": "Start Recording",
 	"exampleCommands": "Example Commands",
 	"howItWorks": "How It Works",
 	"animalManagement": "Animal Management",
