@@ -19,5 +19,6 @@
 	"noTaxDetailsMessage": "You don't have tax details set up yet. Please configure your tax information in your account settings.",
 	"downloadCards": "Download Tax Cards",
 	"downloadDarkCards": "Dark Version",
-	"downloadLightCards": "Light Version"
+	"downloadLightCards": "Light Version",
+	"printDuplexHint": "Print page 1 → flip sheet on long edge → print page 2"
 }

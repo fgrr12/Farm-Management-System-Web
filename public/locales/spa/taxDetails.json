@@ -19,5 +19,6 @@
 	"noTaxDetailsMessage": "Aún no tienes datos fiscales configurados. Por favor configura tu información fiscal en la configuración de tu cuenta.",
 	"downloadCards": "Descargar Tarjetas Fiscales",
 	"downloadDarkCards": "Versión Oscura",
-	"downloadLightCards": "Versión Clara"
+	"downloadLightCards": "Versión Clara",
+	"printDuplexHint": "Imprime la pág. 1 → voltea por el borde largo → imprime la pág. 2"
 }
