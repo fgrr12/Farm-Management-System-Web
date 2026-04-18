@@ -54,7 +54,7 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 
 	const mediaRecorderRef = useRef<MediaRecorder | null>(null)
 	const audioChunksRef = useRef<Blob[]>([])
-	const recordingTimerRef = useRef<NodeJS.Timeout | null>(null)
+	const recordingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 	const streamRef = useRef<MediaStream | null>(null)
 	const isCancelledRef = useRef(false)
 

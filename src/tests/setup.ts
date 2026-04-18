@@ -28,7 +28,7 @@ vi.mock('@/config/environment', () => ({
 }))
 
 // Mock IntersectionObserver
-global.IntersectionObserver = vi.fn(() => ({
+globalThis.IntersectionObserver = vi.fn(() => ({
 	observe: vi.fn(),
 	disconnect: vi.fn(),
 	unobserve: vi.fn(),
@@ -39,7 +39,7 @@ global.IntersectionObserver = vi.fn(() => ({
 })) as any
 
 // Mock ResizeObserver
-global.ResizeObserver = vi.fn(() => ({
+globalThis.ResizeObserver = vi.fn(() => ({
 	observe: vi.fn(),
 	disconnect: vi.fn(),
 	unobserve: vi.fn(),

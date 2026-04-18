@@ -12,7 +12,7 @@ export const Toast = memo(
 		action,
 		onClose,
 	}: ToastProps) => {
-		const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+		const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 		const [isExiting, setIsExiting] = useState(false)
 
 		const toastConfig = useMemo((): ToastConfig => {

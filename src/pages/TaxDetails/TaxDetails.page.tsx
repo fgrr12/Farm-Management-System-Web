@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFarmStore } from '@/store/useFarmStore'
@@ -9,328 +9,14 @@ import { Button } from '@/components/ui/Button'
 
 import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
+import { useTaxCardPrintable } from './TaxCardPrintable'
+
 const TaxDetails = () => {
 	const { taxDetails } = useFarmStore()
 	const { t } = useTranslation('taxDetails')
 	const { setPageTitle } = usePagePerformance()
 	const [isFlipped, setIsFlipped] = useState(false)
-
-	const handleDownloadCards = useCallback(() => {
-		const printWindow = window.open('', '_blank')
-		if (!printWindow) return
-
-		const activitiesHTML = taxDetails?.activities
-			?.map(
-				(activity) => `
-			<div class="activity-item">
-				<div class="activity-name">${activity.name}</div>
-				<div class="activity-code">${activity.code}</div>
-			</div>
-		`
-			)
-			.join('')
-
-		const cardHTML = `
-			<!DOCTYPE html>
-			<html>
-			<head>
-				<title>${t('title')} - ${taxDetails?.name}</title>
-				<style>
-					* { margin: 0; padding: 0; box-sizing: border-box; }
-					body { 
-						font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
-						background: #f8fafc;
-						padding: 10mm;
-					}
-					.page {
-						width: 210mm;
-						min-height: 297mm;
-						display: grid;
-						grid-template-columns: repeat(2, 1fr);
-						grid-template-rows: repeat(5, 1fr);
-						gap: 2mm;
-						margin: 0 auto;
-						background: white;
-						padding: 12mm;
-					}
-					.card {
-						width: 85.60mm;
-						height: 42mm;
-						background: linear-gradient(135deg, #1e293b 0%, #475569 50%, #64748b 100%);
-						border-radius: 12px;
-						padding: 5mm;
-						position: relative;
-						overflow: hidden;
-						color: white;
-						display: flex;
-						flex-direction: column;
-						box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-					}
-					
-					/* Background Effects */
-					.card::before {
-						content: '';
-						position: absolute;
-						top: 0;
-						right: 0;
-						width: 24mm;
-						height: 24mm;
-						background: #3b82f6;
-						border-radius: 50%;
-						filter: blur(20px);
-						transform: translate(12mm, -12mm);
-						opacity: 0.3;
-					}
-					
-					.card::after {
-						content: '';
-						position: absolute;
-						bottom: 0;
-						left: 0;
-						width: 20mm;
-						height: 20mm;
-						background: #8b5cf6;
-						border-radius: 50%;
-						filter: blur(20px);
-						transform: translate(-10mm, 10mm);
-						opacity: 0.3;
-					}
-
-					/* Header */
-					.card-header {
-						position: relative;
-						z-index: 10;
-						display: flex;
-						justify-content: space-between;
-						align-items: flex-start;
-					}
-					
-					.card-title {
-						flex: 1;
-						font-size: 10pt;
-						font-weight: 700;
-						color: #e2e8f0;
-						text-transform: uppercase;
-						letter-spacing: 0.5px;
-						line-height: 1.1;
-						max-width: 70%;
-					}
-					
-					.card-title-highlight {
-						color: #60a5fa;
-					}
-					
-					.farm-logo {
-						width: 10mm;
-						height: 10mm;
-						background: rgba(255, 255, 255, 0.1);
-						border-radius: 50%;
-						display: flex;
-						align-items: center;
-						justify-content: center;
-						border: 1px solid rgba(255, 255, 255, 0.2);
-						backdrop-filter: blur(10px);
-						margin-left: 4mm;
-						overflow: hidden;
-					}
-					
-					.farm-logo img {
-						width: 7mm;
-						height: 7mm;
-						object-fit: cover;
-						border-radius: 50%;
-					}
-
-					/* Main Content */
-					.card-content {
-						position: relative;
-						z-index: 10;
-						flex: 1;
-						display: flex;
-					}
-					
-					.card-main-info {
-						flex: 1;
-						display: flex;
-						flex-direction: column;
-						gap: 1mm;
-					}
-					
-					.info-row {
-						display: grid;
-						grid-template-columns: auto 1fr;
-						gap: 2mm;
-						align-items: center;
-					}
-					
-					.info-label {
-						font-size: 8pt;
-						font-weight: 600;
-						color: #cbd5e1;
-						text-transform: uppercase;
-						letter-spacing: 0.3px;
-						min-width: 12mm;
-					}
-					
-					.info-value {
-						font-size: 9pt;
-						font-weight: 600;
-						color: white;
-						overflow: hidden;
-						text-overflow: ellipsis;
-						white-space: nowrap;
-					}
-
-					/* Card Back - Activities */
-					.card-back {
-						background: linear-gradient(135deg, #1e293b 0%, #475569 50%, #64748b 100%);
-					}
-
-					.activities-header {
-						position: relative;
-						z-index: 10;
-						text-align: center;
-						font-size: 11pt;
-						font-weight: 700;
-						color: #60a5fa;
-						text-transform: uppercase;
-						letter-spacing: 0.5px;
-						margin-bottom: 3mm;
-					}
-
-					.activities-list {
-						position: relative;
-						z-index: 10;
-						flex: 1;
-						display: flex;
-						flex-direction: column;
-						gap: 1.5mm;
-						overflow: hidden;
-					}
-
-					.activity-item {
-						padding: 1.5mm 2mm;
-						background: rgba(59, 130, 246, 0.15);
-						border: 1px solid rgba(59, 130, 246, 0.3);
-						border-radius: 4px;
-						display: grid;
-						grid-template-columns: 1fr auto;
-						gap: 2mm;
-						align-items: center;
-					}
-
-					.activity-name {
-						font-size: 8pt;
-						font-weight: 600;
-						color: white;
-						overflow: hidden;
-						text-overflow: ellipsis;
-						white-space: nowrap;
-					}
-
-					.activity-code {
-						font-size: 8pt;
-						font-weight: 700;
-						color: #60a5fa;
-						background: rgba(59, 130, 246, 0.2);
-						padding: 0.5mm 1.5mm;
-						border-radius: 3px;
-					}
-
-					@media print {
-						body { 
-							background: white !important;
-							padding: 0 !important; 
-							margin: 0 !important;
-							-webkit-print-color-adjust: exact !important;
-							print-color-adjust: exact !important;
-						}
-						.page { 
-							margin: 0 !important;
-							padding: 8mm !important;
-							width: 100% !important;
-							height: 100% !important;
-						}
-						.card {
-							background: linear-gradient(135deg, #1e293b 0%, #475569 50%, #64748b 100%) !important;
-							-webkit-print-color-adjust: exact !important;
-							print-color-adjust: exact !important;
-							color: white !important;
-							page-break-inside: avoid !important;
-						}
-						.card::before, .card::after {
-							-webkit-print-color-adjust: exact !important;
-							print-color-adjust: exact !important;
-						}
-					}
-				</style>
-			</head>
-			<body>
-				<div class="page">
-					${Array(5)
-						.fill(0)
-						.map(
-							() => `
-						<!-- Front Side -->
-						<div class="card">
-							<div class="card-header">
-								<h3 class="card-title">
-									${t('taxCardTitle')}<br>
-									<span class="card-title-highlight">${t('electronicInvoicing')}</span>
-								</h3>
-								<div class="farm-logo">
-									<img src="/assets/billing/hen.jpeg" alt="Farm" onerror="this.style.display='none'; this.parentNode.innerHTML='🐓';" />
-								</div>
-							</div>
-							<div class="card-content">
-								<div class="card-main-info">
-									<div class="info-row">
-										<span class="info-label">${t('name')}</span>
-										<span class="info-value">${taxDetails?.name || 'N/A'}</span>
-									</div>
-									<div class="info-row">
-										<span class="info-label">${t('id')}</span>
-										<span class="info-value">${taxDetails?.id || 'N/A'}</span>
-									</div>
-									<div class="info-row">
-										<span class="info-label">${t('phone')}</span>
-										<span class="info-value">${taxDetails?.phone || 'N/A'}</span>
-									</div>
-									<div class="info-row">
-										<span class="info-label">${t('email')}</span>
-										<span class="info-value">${taxDetails?.email || 'N/A'}</span>
-									</div>
-									<div class="info-row">
-										<span class="info-label">${t('address')}</span>
-										<span class="info-value">${taxDetails?.address || 'N/A'}</span>
-									</div>
-								</div>
-							</div>
-						</div>
-						<!-- Back Side -->
-						<div class="card card-back">
-							<div class="activities-header">
-								${t('activities')}
-							</div>
-							<div class="activities-list">
-								${activitiesHTML || '<div style="text-align: center; color: #cbd5e1; font-size: 8pt;">No activities</div>'}
-							</div>
-						</div>
-					`
-						)
-						.join('')}
-				</div>
-			</body>
-			</html>
-		`
-
-		printWindow.document.write(cardHTML)
-		printWindow.document.close()
-		printWindow.focus()
-		setTimeout(() => {
-			printWindow.print()
-		}, 500)
-	}, [taxDetails, t])
+	const { handleDownloadCards } = useTaxCardPrintable({ taxDetails: taxDetails! })
 
 	useEffect(() => {
 		setPageTitle(t('title'))
@@ -366,7 +52,7 @@ const TaxDetails = () => {
 			{/* Tax Details Display */}
 			<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 				{/* Card Visual - Flippable */}
-				<div className="flex justify-center">
+				<div className="flex flex-col items-center gap-6">
 					<div className="relative perspective-1000">
 						{/* Flip Card Container */}
 						<button
@@ -518,6 +204,29 @@ const TaxDetails = () => {
 							<span>{t('clickToFlip')}</span>
 						</div>
 					</div>
+
+					{/* Download Buttons */}
+					<div className="flex flex-col items-center gap-3 w-full">
+						<p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+							{t('downloadCards')}
+						</p>
+						<div className="flex flex-col gap-3 w-[90%]">
+							<Button
+								onClick={() => handleDownloadCards('dark')}
+								className="btn btn-neutral flex items-center gap-2 px-5 py-2.5"
+							>
+								<i className="i-material-symbols-download w-5! h-5!" />
+								{t('downloadDarkCards')}
+							</Button>
+							<Button
+								onClick={() => handleDownloadCards('light')}
+								className="btn btn-outline flex items-center gap-2 px-5 py-2.5"
+							>
+								<i className="i-material-symbols-download w-5! h-5!" />
+								{t('downloadLightCards')}
+							</Button>
+						</div>
+					</div>
 				</div>
 
 				{/* Card Information */}
@@ -529,38 +238,49 @@ const TaxDetails = () => {
 							{t('fiscalInformation')}
 						</h3>
 						<div className="space-y-3">
-							<div className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
-								<div className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t('name')}</div>
-								<div className="text-sm font-medium text-gray-900 dark:text-gray-100">
-									{taxDetails.name}
+							<div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+								<i className="i-material-symbols-person w-5! h-5! text-gray-600 dark:text-gray-400 shrink-0" />
+								<div>
+									<div className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t('name')}</div>
+									<div className="text-sm font-medium text-gray-900 dark:text-gray-100">
+										{taxDetails.name}
+									</div>
 								</div>
 							</div>
-							<div className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
-								<div className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t('id')}</div>
-								<div className="text-sm font-medium text-gray-900 dark:text-gray-100">
-									{taxDetails.id}
+							<div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+								<i className="i-material-symbols-badge w-5! h-5! text-gray-600 dark:text-gray-400 shrink-0" />
+								<div>
+									<div className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t('id')}</div>
+									<div className="text-sm font-medium text-gray-900 dark:text-gray-100">
+										{taxDetails.id}
+									</div>
 								</div>
 							</div>
-							<div className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
-								<div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-									{t('activities')}
-								</div>
-								<div className="space-y-2">
-									{taxDetails.activities && taxDetails.activities.length > 0 ? (
-										taxDetails.activities.map((activity, index) => (
-											<div
-												key={index}
-												className="flex items-center justify-between text-sm font-medium text-gray-900 dark:text-gray-100"
-											>
-												<span>{activity.name}</span>
-												<span className="text-blue-600 dark:text-blue-400">{activity.code}</span>
+							<div className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+								<i className="i-material-symbols-work w-5! h-5! text-gray-600 dark:text-gray-400 shrink-0 mt-0.5" />
+								<div className="flex-1 min-w-0">
+									<div className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+										{t('activities')}
+									</div>
+									<div className="space-y-2">
+										{taxDetails.activities && taxDetails.activities.length > 0 ? (
+											taxDetails.activities.map((activity, index) => (
+												<div
+													key={index}
+													className="flex items-center justify-between text-sm font-medium text-gray-900 dark:text-gray-100"
+												>
+													<span>{activity.name}</span>
+													<span className="text-blue-600 dark:text-blue-400 ml-2 shrink-0">
+														{activity.code}
+													</span>
+												</div>
+											))
+										) : (
+											<div className="text-sm text-gray-500 dark:text-gray-400">
+												{t('noActivities')}
 											</div>
-										))
-									) : (
-										<div className="text-sm text-gray-500 dark:text-gray-400">
-											{t('noActivities')}
-										</div>
-									)}
+										)}
+									</div>
 								</div>
 							</div>
 						</div>
@@ -617,17 +337,6 @@ const TaxDetails = () => {
 								</div>
 							</div>
 						</div>
-					</div>
-
-					{/* Download Button */}
-					<div className="flex justify-center">
-						<Button
-							onClick={handleDownloadCards}
-							className="btn btn-primary flex items-center gap-2 px-6 py-3"
-						>
-							<i className="i-material-symbols-download w-5! h-5!" />
-							{t('downloadCards')}
-						</Button>
 					</div>
 				</div>
 			</div>
