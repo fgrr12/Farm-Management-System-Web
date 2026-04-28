@@ -10,6 +10,7 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			'@': `${import.meta.dirname}/src`,
+			daisyui: `${import.meta.dirname}/node_modules/daisyui/index.js`,
 		},
 	},
 	test: {
