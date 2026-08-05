@@ -24,7 +24,7 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 	const { user } = useUserStore()
 	const navigate = useNavigate()
 	const params = useParams()
-	const { t } = useTranslation(['animalProductionRecords'])
+	const { t } = useTranslation(['animalProductionRecords', 'common'])
 
 	const handleAddHealthRecord = () => {
 		const animalUuid = params.animalUuid as string
@@ -124,9 +124,18 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 										{dayjs(productionRecord.date).format('DD/MM/YYYY')}
 									</td>
 									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-100">
-										<div className="flex items-center gap-1">
+										<div className="flex items-center gap-2">
 											<span className="font-semibold">{productionRecord.quantity}</span>
 											<span className="text-gray-500 dark:text-gray-400">{farm!.liquidUnit}</span>
+											{productionRecord.pendingSync && (
+												<span
+													title={t('common:offline.pendingSyncBadge')}
+													className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200 shrink-0"
+												>
+													<i className="i-material-symbols-cloud-off w-3! h-3! bg-current!" />
+													{t('common:offline.pendingSyncBadge')}
+												</span>
+											)}
 										</div>
 									</td>
 									<td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-100">

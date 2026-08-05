@@ -33,4 +33,6 @@ export interface HealthRecord {
 	batchNumber?: string
 	manufacturer?: string
 	technician?: string
+	/** Set client-side while this write is still queued waiting for a connection; never sent to or read from the server. */
+	pendingSync?: boolean
 }

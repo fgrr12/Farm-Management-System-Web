@@ -1,142 +1,50 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
-interface OfflineQueueItem {
-	id: string
-	operation: () => Promise<any>
-	data: any
-	timestamp: number
-	retries: number
-}
+import { useAppStore } from '@/store/useAppStore'
+import { useOfflineQueueStore } from '@/store/useOfflineQueueStore'
 
+import { flushOfflineQueue } from '@/utils/offlineQueue'
+
+/**
+ * Tracks connectivity and drives the offline queue: whenever the browser comes back online (or
+ * this hook mounts already online with pending items — e.g. the app was reopened after being
+ * closed while offline), it replays whatever forms/voice commands got queued while offline.
+ * `flushOfflineQueue` guards against concurrent flushes itself, so it's safe for multiple
+ * components (this hook can be mounted more than once) to call `sync` around the same time.
+ */
 export const useOffline = () => {
 	const [isOffline, setIsOffline] = useState(!navigator.onLine)
-	const [offlineQueue, setOfflineQueue] = useState<OfflineQueueItem[]>([])
+	const queueLength = useOfflineQueueStore((state) => state.queue.length)
+	const queryClient = useQueryClient()
+	const { setToastData } = useAppStore()
+	const { t } = useTranslation('common')
 
-	const processOfflineQueue = useCallback(async () => {
-		if (offlineQueue.length === 0) return
-
-		const processedItems: string[] = []
-		const failedItems: OfflineQueueItem[] = []
-
-		for (const item of offlineQueue) {
-			try {
-				await item.operation()
-				processedItems.push(item.id)
-			} catch (error) {
-				console.error('Error processing offline queue item:', error)
-
-				if (item.retries < 3) {
-					failedItems.push({
-						...item,
-						retries: item.retries + 1,
-					})
-				} else {
-					processedItems.push(item.id)
-				}
-			}
-		}
-
-		setOfflineQueue((prev) => [
-			...failedItems,
-			...prev.filter(
-				(item) =>
-					!processedItems.includes(item.id) && !failedItems.some((failed) => failed.id === item.id)
-			),
-		])
-	}, [offlineQueue])
-
-	useEffect(() => {
-		const savedQueue = localStorage.getItem('offlineQueue')
-		if (savedQueue) {
-			try {
-				const parsedQueue = JSON.parse(savedQueue)
-				setOfflineQueue(parsedQueue)
-			} catch (error) {
-				console.error('Error loading offline queue:', error)
-			}
-		}
-	}, [])
-
-	useEffect(() => {
-		if (offlineQueue.length > 0) {
-			localStorage.setItem('offlineQueue', JSON.stringify(offlineQueue))
-		} else {
-			localStorage.removeItem('offlineQueue')
-		}
-	}, [offlineQueue])
+	const sync = useCallback(() => {
+		flushOfflineQueue(queryClient, (message, type) => setToastData({ message, type }), t)
+	}, [queryClient, setToastData, t])
 
 	useEffect(() => {
 		const handleOnline = () => {
 			setIsOffline(false)
-			processOfflineQueue()
+			sync()
 		}
-
-		const handleOffline = () => {
-			setIsOffline(true)
-		}
+		const handleOffline = () => setIsOffline(true)
 
 		window.addEventListener('online', handleOnline)
 		window.addEventListener('offline', handleOffline)
+
+		if (navigator.onLine) sync()
 
 		return () => {
 			window.removeEventListener('online', handleOnline)
 			window.removeEventListener('offline', handleOffline)
 		}
-	}, [processOfflineQueue])
-
-	const addToOfflineQueue = useCallback((operation: () => Promise<any>, data: any) => {
-		const queueItem: OfflineQueueItem = {
-			id: crypto.randomUUID(),
-			operation,
-			data,
-			timestamp: Date.now(),
-			retries: 0,
-		}
-
-		setOfflineQueue((prev) => [...prev, queueItem])
-	}, [])
-
-	const clearOfflineQueue = useCallback(() => {
-		setOfflineQueue([])
-	}, [])
+	}, [sync])
 
 	return {
 		isOffline,
-		offlineQueue,
-		queueLength: offlineQueue.length,
-		addToOfflineQueue,
-		clearOfflineQueue,
-		processOfflineQueue,
-	}
-}
-
-/**
- * Hook for operations that should work offline
- */
-export const useOfflineOperation = () => {
-	const { isOffline, addToOfflineQueue } = useOffline()
-
-	const executeOperation = async (
-		operation: () => Promise<any>,
-		data?: any,
-		fallback?: () => void
-	) => {
-		if (!isOffline) {
-			try {
-				return await operation()
-			} catch (error) {
-				addToOfflineQueue(operation, data)
-				if (fallback) fallback()
-				throw error
-			}
-		} else {
-			addToOfflineQueue(operation, data)
-			if (fallback) fallback()
-		}
-	}
-
-	return {
-		executeOperation,
-		isOffline,
+		queueLength,
 	}
 }

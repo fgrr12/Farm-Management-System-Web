@@ -2,6 +2,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { useFarmStore } from '@/store/useFarmStore'
 
+import { withOfflineQueue } from '@/utils/offlineQueue'
+
 import { HealthRecordsService } from '@/services/healthRecords'
 
 import type { HealthRecord } from '@/types'
@@ -34,8 +36,18 @@ export const useCreateHealthRecord = () => {
 	const { farm } = useFarmStore()
 
 	return useMutation({
-		mutationFn: ({ healthRecord, userUuid }: { healthRecord: HealthRecord; userUuid: string }) =>
-			HealthRecordsService.setHealthRecord(healthRecord, userUuid, farm?.uuid),
+		mutationFn: ({ healthRecord, userUuid }: { healthRecord: HealthRecord; userUuid: string }) => {
+			const farmUuid = farm?.uuid
+			return withOfflineQueue(
+				async () => ({
+					...(await HealthRecordsService.setHealthRecord(healthRecord, userUuid, farmUuid)),
+					pendingSync: false,
+				}),
+				() => ({ uuid: crypto.randomUUID(), isNew: true, pendingSync: true }),
+				'createHealthRecord',
+				{ healthRecord, userUuid, farmUuid }
+			)
+		},
 
 		// OPTIMISTIC UPDATE: Add to list immediately with temporary ID
 		onMutate: async ({ healthRecord }) => {
@@ -53,6 +65,7 @@ export const useCreateHealthRecord = () => {
 			const optimisticRecord: HealthRecord = {
 				...healthRecord,
 				uuid: `temp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+				pendingSync: !navigator.onLine,
 			}
 
 			// Add to cache immediately
@@ -68,15 +81,19 @@ export const useCreateHealthRecord = () => {
 			return { previousRecords, optimisticRecord, animalUuid }
 		},
 
-		// SUCCESS: Replace temporary ID with real ID from server
+		// SUCCESS: Replace temporary ID with real ID from server (keeps the rest of the
+		// optimistic record's fields — the API only echoes back {uuid, isNew})
 		onSuccess: (data, _variables, context) => {
 			if (context?.optimisticRecord && context?.animalUuid && data?.uuid) {
-				// Replace the temporary record with the real one from server
 				queryClient.setQueryData(
 					HEALTH_RECORDS_KEYS.list(context.animalUuid),
 					(old: HealthRecord[] | undefined) => {
 						if (!old || !Array.isArray(old)) return old
-						return old.map((r) => (r.uuid === context.optimisticRecord.uuid ? data : r))
+						return old.map((r) =>
+							r.uuid === context.optimisticRecord.uuid
+								? { ...context.optimisticRecord, uuid: data.uuid, pendingSync: data.pendingSync }
+								: r
+						)
 					}
 				)
 			}
@@ -109,8 +126,41 @@ export const useUpdateHealthRecord = () => {
 
 	return useMutation({
 		mutationFn: ({ healthRecord, userUuid }: { healthRecord: HealthRecord; userUuid: string }) =>
-			HealthRecordsService.updateHealthRecord(healthRecord, userUuid, farm?.uuid),
-		onSuccess: (_, variables) => {
+			withOfflineQueue(
+				async () => ({
+					...(await HealthRecordsService.updateHealthRecord(healthRecord, userUuid, farm?.uuid)),
+					pendingSync: false,
+				}),
+				() => ({ uuid: healthRecord.uuid || '', isNew: false, pendingSync: true }),
+				'updateHealthRecord',
+				{ healthRecord, userUuid, farmUuid: farm?.uuid }
+			),
+		// Flag the already-cached record as pending while offline — doesn't touch its other
+		// fields, this mutation has no optimistic field merge (and no rollback) to begin with.
+		onMutate: ({ healthRecord }) => {
+			if (navigator.onLine) return
+			queryClient.setQueryData(
+				HEALTH_RECORDS_KEYS.list(healthRecord.animalUuid),
+				(old: HealthRecord[] | undefined) =>
+					old?.map((r) => (r.uuid === healthRecord.uuid ? { ...r, pendingSync: true } : r))
+			)
+			queryClient.setQueryData(
+				HEALTH_RECORDS_KEYS.detail(healthRecord.uuid || ''),
+				(old: HealthRecord | undefined) => (old ? { ...old, pendingSync: true } : old)
+			)
+		},
+		onSuccess: (data, variables) => {
+			queryClient.setQueryData(
+				HEALTH_RECORDS_KEYS.list(variables.healthRecord.animalUuid),
+				(old: HealthRecord[] | undefined) =>
+					old?.map((r) =>
+						r.uuid === variables.healthRecord.uuid ? { ...r, pendingSync: data.pendingSync } : r
+					)
+			)
+			queryClient.setQueryData(
+				HEALTH_RECORDS_KEYS.detail(variables.healthRecord.uuid || ''),
+				(old: HealthRecord | undefined) => (old ? { ...old, pendingSync: data.pendingSync } : old)
+			)
 			queryClient.invalidateQueries({
 				queryKey: HEALTH_RECORDS_KEYS.detail(variables.healthRecord.uuid || ''),
 			})

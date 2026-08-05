@@ -36,7 +36,7 @@ const AnimalForm = () => {
 	const navigate = useNavigate()
 	const { data: animals } = useAnimals()
 	const params = useParams()
-	const { t } = useTranslation(['animalForm'])
+	const { t } = useTranslation(['animalForm', 'common'])
 
 	const { setPageTitle, showToast, withError, withLoadingAndError } = usePagePerformance()
 
@@ -173,20 +173,31 @@ const AnimalForm = () => {
 				}
 
 				if (animalUuid) {
-					await updateAnimal.mutateAsync({ animal: animalData, userUuid: user.uuid })
-					showToast(t('toast.edited'), 'success')
+					const result = await updateAnimal.mutateAsync({ animal: animalData, userUuid: user.uuid })
+					showToast(
+						result.pendingSync ? t('common:offline.savedOffline') : t('toast.edited'),
+						'success'
+					)
 					navigate(AppRoutes.ANIMAL.replace(':animalUuid', animalUuid))
 				} else {
-					const newAnimalUuid = await createAnimal.mutateAsync({
+					const result = await createAnimal.mutateAsync({
 						animal: animalData,
 						userUuid: user.uuid,
 					})
-					showToast(t('toast.added'), 'success')
+					showToast(
+						result.pendingSync ? t('common:offline.savedOffline') : t('toast.added'),
+						'success'
+					)
 					reset()
 					setPictureUrl('')
-					if (newAnimalUuid) {
-						navigate(AppRoutes.ANIMAL.replace(':animalUuid', newAnimalUuid))
-					}
+					// A queued write only resolves once network access comes back — until then
+					// there's no server-assigned uuid to navigate to, so a brand-new animal goes
+					// to the list instead of its (not yet real) detail page.
+					navigate(
+						result.pendingSync
+							? AppRoutes.ANIMALS
+							: AppRoutes.ANIMAL.replace(':animalUuid', result.uuid)
+					)
 				}
 			}, t('toast.errorAddingAnimal'))
 		},

@@ -2,6 +2,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { useFarmStore } from '@/store/useFarmStore'
 
+import { withOfflineQueue } from '@/utils/offlineQueue'
+
 import { AnimalsService } from '@/services/animals'
 
 import type { Animal } from '@/types'
@@ -36,8 +38,18 @@ export const useCreateAnimal = () => {
 	const { farm } = useFarmStore()
 
 	return useMutation({
-		mutationFn: ({ animal, userUuid }: { animal: Animal; userUuid: string }) =>
-			AnimalsService.setAnimal(animal, userUuid, farm?.uuid || ''),
+		mutationFn: ({ animal, userUuid }: { animal: Animal; userUuid: string }) => {
+			const farmUuid = farm?.uuid || ''
+			return withOfflineQueue(
+				async () => ({
+					uuid: await AnimalsService.setAnimal(animal, userUuid, farmUuid),
+					pendingSync: false,
+				}),
+				() => ({ uuid: crypto.randomUUID(), pendingSync: true }),
+				'createAnimal',
+				{ animal, userUuid, farmUuid }
+			)
+		},
 
 		// OPTIMISTIC UPDATE: Add to list immediately with temporary ID
 		onMutate: async ({ animal }) => {
@@ -53,6 +65,7 @@ export const useCreateAnimal = () => {
 			const optimisticAnimal: Animal = {
 				...animal,
 				uuid: `temp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+				pendingSync: !navigator.onLine,
 				createdAt: new Date().toISOString(),
 				updatedAt: new Date().toISOString(),
 			}
@@ -67,10 +80,14 @@ export const useCreateAnimal = () => {
 			return { previousAnimals, optimisticAnimal, farmUuid }
 		},
 
-		// SUCCESS: Replace temporary ID with real ID from server
+		// SUCCESS: Replace temporary ID with real ID from server (or the local id if it got queued)
 		onSuccess: (data, _variables, context) => {
 			if (context?.optimisticAnimal && context?.farmUuid && data) {
-				const realAnimal = { ...context.optimisticAnimal, uuid: data }
+				const realAnimal = {
+					...context.optimisticAnimal,
+					uuid: data.uuid,
+					pendingSync: data.pendingSync,
+				}
 				queryClient.setQueryData(
 					ANIMALS_KEYS.list(context.farmUuid),
 					(old: Animal[] | undefined) => {
@@ -103,11 +120,20 @@ export const useUpdateAnimal = () => {
 
 	return useMutation({
 		mutationFn: ({ animal, userUuid }: { animal: Animal; userUuid: string }) =>
-			AnimalsService.updateAnimal(animal, userUuid),
+			withOfflineQueue(
+				async () => ({
+					...(await AnimalsService.updateAnimal(animal, userUuid)),
+					pendingSync: false,
+				}),
+				() => ({ uuid: animal.uuid, isNew: false, pendingSync: true }),
+				'updateAnimal',
+				{ animal, userUuid }
+			),
 
 		// OPTIMISTIC UPDATE: Update list and detail immediately
 		onMutate: async ({ animal }) => {
 			const farmUuid = farm?.uuid || ''
+			const pendingSync = !navigator.onLine
 
 			// Cancel any outgoing refetches
 			await queryClient.cancelQueries({ queryKey: ANIMALS_KEYS.list(farmUuid) })
@@ -120,17 +146,32 @@ export const useUpdateAnimal = () => {
 			// Optimistically update list
 			queryClient.setQueryData(ANIMALS_KEYS.list(farmUuid), (old: Animal[] | undefined) => {
 				if (!old || !Array.isArray(old)) return old
-				return old.map((a) => (a.uuid === animal.uuid ? { ...a, ...animal } : a))
+				return old.map((a) => (a.uuid === animal.uuid ? { ...a, ...animal, pendingSync } : a))
 			})
 
 			// Optimistically update detail
 			queryClient.setQueryData(ANIMALS_KEYS.detail(animal.uuid), (old: Animal | undefined) => {
 				if (!old) return old
-				return { ...old, ...animal }
+				return { ...old, ...animal, pendingSync }
 			})
 
 			// Return a context object with the snapshotted values
 			return { previousAnimals, previousAnimal, farmUuid, animalUuid: animal.uuid }
+		},
+
+		// SUCCESS: correct the pendingSync flag once we actually know whether this went
+		// through or got queued (onMutate only knows the connectivity at submit time)
+		onSuccess: (data, variables) => {
+			const farmUuid = farm?.uuid || ''
+			queryClient.setQueryData(ANIMALS_KEYS.list(farmUuid), (old: Animal[] | undefined) =>
+				old?.map((a) =>
+					a.uuid === variables.animal.uuid ? { ...a, pendingSync: data.pendingSync } : a
+				)
+			)
+			queryClient.setQueryData(
+				ANIMALS_KEYS.detail(variables.animal.uuid),
+				(old: Animal | undefined) => (old ? { ...old, pendingSync: data.pendingSync } : old)
+			)
 		},
 
 		// ROLLBACK

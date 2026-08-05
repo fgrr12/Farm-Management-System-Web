@@ -55,7 +55,13 @@
 	"offline": {
 		"noConnection": "No internet connection",
 		"pendingOperations": "{{count}} pending operation",
-		"pendingOperations_plural": "{{count}} pending operations"
+		"pendingOperations_plural": "{{count}} pending operations",
+		"savedOffline": "Saved. It will be sent automatically once you're back online.",
+		"pendingSyncBadge": "Not synced",
+		"syncSuccess": "{{count}} record synced",
+		"syncSuccess_plural": "{{count}} records synced",
+		"syncFailed": "{{count}} record couldn't be synced, please check it",
+		"syncFailed_plural": "{{count}} records couldn't be synced, please check them"
 	},
 	"pwa": {
 		"install": {

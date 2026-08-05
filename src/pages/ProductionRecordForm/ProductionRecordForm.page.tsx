@@ -32,7 +32,7 @@ const ProductionRecordForm = () => {
 	const { farm } = useFarmStore()
 	const navigate = useNavigate()
 	const params = useParams()
-	const { t } = useTranslation(['productionRecordForm'])
+	const { t } = useTranslation(['productionRecordForm', 'common'])
 	const { setPageTitle, showToast, withError, withLoadingAndError } = usePagePerformance()
 
 	const createProductionRecord = useCreateProductionRecord()
@@ -61,19 +61,25 @@ const ProductionRecordForm = () => {
 
 				if (productionRecordUuid) {
 					// Update existing record
-					await updateProductionRecord.mutateAsync({
+					const result = await updateProductionRecord.mutateAsync({
 						productionRecord: productionRecordData,
 						userUuid: user.uuid,
 					})
-					showToast(t('toast.edited'), 'success')
+					showToast(
+						result.pendingSync ? t('common:offline.savedOffline') : t('toast.edited'),
+						'success'
+					)
 					navigate(AppRoutes.ANIMAL.replace(':animalUuid', productionRecordData.animalUuid))
 				} else {
 					// Create new record with optimistic update
-					await createProductionRecord.mutateAsync({
+					const result = await createProductionRecord.mutateAsync({
 						productionRecord: productionRecordData,
 						userUuid: user.uuid,
 					})
-					showToast(t('toast.added'), 'success')
+					showToast(
+						result.pendingSync ? t('common:offline.savedOffline') : t('toast.added'),
+						'success'
+					)
 					navigate(AppRoutes.ANIMAL.replace(':animalUuid', productionRecordData.animalUuid))
 				}
 			}, t('toast.errorAddingProductionRecord'))

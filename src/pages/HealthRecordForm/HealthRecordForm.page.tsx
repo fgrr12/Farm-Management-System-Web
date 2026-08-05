@@ -33,7 +33,7 @@ const HealthRecordForm = () => {
 	const { farm } = useFarmStore()
 	const navigate = useNavigate()
 	const params = useParams()
-	const { t } = useTranslation(['healthRecordForm'])
+	const { t } = useTranslation(['healthRecordForm', 'common'])
 	const { setPageTitle, showToast, withError } = usePagePerformance()
 
 	const healthRecordUuid = params.healthRecordUuid
@@ -134,17 +134,23 @@ const HealthRecordForm = () => {
 				const healthRecordUuid = params.healthRecordUuid
 
 				if (healthRecordUuid) {
-					await updateHealthRecord.mutateAsync({
+					const result = await updateHealthRecord.mutateAsync({
 						healthRecord: healthRecordData,
 						userUuid: user.uuid,
 					})
-					showToast(t('toast.edited'), 'success')
+					showToast(
+						result.pendingSync ? t('common:offline.savedOffline') : t('toast.edited'),
+						'success'
+					)
 				} else {
-					await createHealthRecord.mutateAsync({
+					const result = await createHealthRecord.mutateAsync({
 						healthRecord: healthRecordData,
 						userUuid: user.uuid,
 					})
-					showToast(t('toast.added'), 'success')
+					showToast(
+						result.pendingSync ? t('common:offline.savedOffline') : t('toast.added'),
+						'success'
+					)
 				}
 
 				navigate(AppRoutes.ANIMAL.replace(':animalUuid', healthRecordData.animalUuid))

@@ -21,7 +21,7 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 		className,
 		...rest
 	}) => {
-		const { t } = useTranslation(['animals'])
+		const { t } = useTranslation(['animals', 'common'])
 		const navigate = useNavigate()
 		const { uuid, animalId, breedName, gender, picture } = animal
 
@@ -179,6 +179,16 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 				<div
 					className={`absolute inset-0 bg-linear-to-br ${healthConfig.color} opacity-3 dark:opacity-8 group-hover:opacity-8 dark:group-hover:opacity-12 transition-opacity duration-300 rounded-lg`}
 				/>
+
+				{/* Pending Sync Indicator */}
+				{animal.pendingSync && (
+					<div className="absolute top-4 left-4">
+						<div className="bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200 px-2.5 py-1.5 rounded-full flex items-center gap-1.5 text-sm font-medium shadow-sm dark:shadow-md">
+							<i className="i-material-symbols-cloud-off w-3.5! h-3.5! bg-current!" />
+							<span>{t('common:offline.pendingSyncBadge')}</span>
+						</div>
+					</div>
+				)}
 
 				{/* Health Status Indicator */}
 				<div className="absolute top-4 right-4">

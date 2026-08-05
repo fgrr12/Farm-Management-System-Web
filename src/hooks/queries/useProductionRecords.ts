@@ -2,6 +2,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { useFarmStore } from '@/store/useFarmStore'
 
+import { withOfflineQueue } from '@/utils/offlineQueue'
+
 import { ProductionRecordsService } from '@/services/productionRecords'
 
 import type { ProductionRecord } from '@/types'
@@ -40,7 +42,22 @@ export const useCreateProductionRecord = () => {
 		}: {
 			productionRecord: ProductionRecord
 			userUuid: string
-		}) => ProductionRecordsService.setProductionRecord(productionRecord, userUuid, farm?.uuid),
+		}) => {
+			const farmUuid = farm?.uuid
+			return withOfflineQueue(
+				async () => ({
+					...(await ProductionRecordsService.setProductionRecord(
+						productionRecord,
+						userUuid,
+						farmUuid
+					)),
+					pendingSync: false,
+				}),
+				() => ({ uuid: crypto.randomUUID(), isNew: true, pendingSync: true }),
+				'createProductionRecord',
+				{ productionRecord, userUuid, farmUuid }
+			)
+		},
 
 		// OPTIMISTIC UPDATE: Add to list immediately with temporary ID
 		onMutate: async ({ productionRecord }) => {
@@ -58,6 +75,7 @@ export const useCreateProductionRecord = () => {
 			const optimisticRecord: ProductionRecord = {
 				...productionRecord,
 				uuid: `temp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+				pendingSync: !navigator.onLine,
 			}
 
 			// Add to cache immediately
@@ -73,15 +91,19 @@ export const useCreateProductionRecord = () => {
 			return { previousRecords, optimisticRecord, animalUuid }
 		},
 
-		// SUCCESS: Replace temporary ID with real ID from server
+		// SUCCESS: Replace temporary ID with real ID from server (keeps the rest of the
+		// optimistic record's fields — the API only echoes back {uuid, isNew})
 		onSuccess: (data, _variables, context) => {
 			if (context?.optimisticRecord && context?.animalUuid && data?.uuid) {
-				// Replace the temporary record with the real one from server
 				queryClient.setQueryData(
 					PRODUCTION_RECORDS_KEYS.list(context.animalUuid),
 					(old: ProductionRecord[] | undefined) => {
 						if (!old || !Array.isArray(old)) return old
-						return old.map((r) => (r.uuid === context.optimisticRecord.uuid ? data : r))
+						return old.map((r) =>
+							r.uuid === context.optimisticRecord.uuid
+								? { ...context.optimisticRecord, uuid: data.uuid, pendingSync: data.pendingSync }
+								: r
+						)
 					}
 				)
 			}
@@ -117,8 +139,47 @@ export const useUpdateProductionRecord = () => {
 		}: {
 			productionRecord: ProductionRecord
 			userUuid: string
-		}) => ProductionRecordsService.updateProductionRecord(productionRecord, userUuid, farm?.uuid),
-		onSuccess: (_, variables) => {
+		}) =>
+			withOfflineQueue(
+				async () => ({
+					...(await ProductionRecordsService.updateProductionRecord(
+						productionRecord,
+						userUuid,
+						farm?.uuid
+					)),
+					pendingSync: false,
+				}),
+				() => ({ uuid: productionRecord.uuid || '', isNew: false, pendingSync: true }),
+				'updateProductionRecord',
+				{ productionRecord, userUuid, farmUuid: farm?.uuid }
+			),
+		// Flag the already-cached record as pending while offline — doesn't touch its other
+		// fields, this mutation has no optimistic field merge (and no rollback) to begin with.
+		onMutate: ({ productionRecord }) => {
+			if (navigator.onLine) return
+			queryClient.setQueryData(
+				PRODUCTION_RECORDS_KEYS.list(productionRecord.animalUuid),
+				(old: ProductionRecord[] | undefined) =>
+					old?.map((r) => (r.uuid === productionRecord.uuid ? { ...r, pendingSync: true } : r))
+			)
+			queryClient.setQueryData(
+				PRODUCTION_RECORDS_KEYS.detail(productionRecord.uuid || ''),
+				(old: ProductionRecord | undefined) => (old ? { ...old, pendingSync: true } : old)
+			)
+		},
+		onSuccess: (data, variables) => {
+			queryClient.setQueryData(
+				PRODUCTION_RECORDS_KEYS.list(variables.productionRecord.animalUuid),
+				(old: ProductionRecord[] | undefined) =>
+					old?.map((r) =>
+						r.uuid === variables.productionRecord.uuid ? { ...r, pendingSync: data.pendingSync } : r
+					)
+			)
+			queryClient.setQueryData(
+				PRODUCTION_RECORDS_KEYS.detail(variables.productionRecord.uuid || ''),
+				(old: ProductionRecord | undefined) =>
+					old ? { ...old, pendingSync: data.pendingSync } : old
+			)
 			queryClient.invalidateQueries({
 				queryKey: PRODUCTION_RECORDS_KEYS.detail(variables.productionRecord.uuid || ''),
 			})

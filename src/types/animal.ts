@@ -25,4 +25,6 @@ export interface Animal {
 	productionRecords?: ProductionRecord[]
 	createdAt?: string
 	updatedAt?: string
+	/** Set client-side while this write is still queued waiting for a connection; never sent to or read from the server. */
+	pendingSync?: boolean
 }

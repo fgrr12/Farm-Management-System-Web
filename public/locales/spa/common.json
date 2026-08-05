@@ -55,7 +55,13 @@
 	"offline": {
 		"noConnection": "Sin conexión a internet",
 		"pendingOperations": "{{count}} operación pendiente",
-		"pendingOperations_plural": "{{count}} operaciones pendientes"
+		"pendingOperations_plural": "{{count}} operaciones pendientes",
+		"savedOffline": "Guardado. Se enviará solo cuando vuelva la conexión.",
+		"pendingSyncBadge": "Sin sincronizar",
+		"syncSuccess": "{{count}} registro sincronizado",
+		"syncSuccess_plural": "{{count}} registros sincronizados",
+		"syncFailed": "{{count}} registro no se pudo sincronizar, revisalo",
+		"syncFailed_plural": "{{count}} registros no se pudieron sincronizar, revisalos"
 	},
 	"pwa": {
 		"install": {

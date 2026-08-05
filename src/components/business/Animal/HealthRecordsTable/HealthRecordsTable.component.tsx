@@ -57,7 +57,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 	const { user } = useUserStore()
 	const navigate = useNavigate()
 	const params = useParams()
-	const { t } = useTranslation(['animalHealthRecords'])
+	const { t } = useTranslation(['animalHealthRecords', 'common'])
 
 	const [filters, setFilters] = useState<HealthRecordsFiltersType>(INITIAL_FILTERS)
 
@@ -214,7 +214,18 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 									className={`${trBgColor(healthRecord.type)} hover:bg-opacity-80 transition-colors`}
 								>
 									<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-										{healthRecord.reason}
+										<div className="flex items-center gap-2">
+											{healthRecord.reason}
+											{healthRecord.pendingSync && (
+												<span
+													title={t('common:offline.pendingSyncBadge')}
+													className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200 shrink-0"
+												>
+													<i className="i-material-symbols-cloud-off w-3! h-3! bg-current!" />
+													{t('common:offline.pendingSyncBadge')}
+												</span>
+											)}
+										</div>
 									</td>
 									<td className="px-6 py-4 text-sm text-gray-900 dark:text-white">
 										<div className="space-y-2">
