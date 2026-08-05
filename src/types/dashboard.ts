@@ -60,3 +60,19 @@ export interface DashboardPhase3Data {
 	animalDistribution: AnimalDistribution[]
 	recentActivities: RecentActivity[]
 }
+
+/** One entry in the farm-wide activity feed (see ActivityFeed page) — kept mostly raw so the
+ *  frontend can translate and format it the same way it already does for the underlying record types. */
+export interface FarmActivityItem {
+	id: string
+	kind: 'health' | 'production' | 'task'
+	date: string
+	animalUuid?: string
+	animalId?: string
+	userUuid?: string
+	healthType?: string
+	reason?: string
+	quantity?: number
+	title?: string
+	taskStatus?: string
+}

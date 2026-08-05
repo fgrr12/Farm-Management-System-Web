@@ -1,0 +1,26 @@
+{
+	"title": "Journal",
+	"subtitle": "Everything that happened on the farm, in order",
+	"empty": "Nothing recorded for this period.",
+	"range": {
+		"today": "Today",
+		"week": "This week",
+		"month": "This month"
+	},
+	"day": {
+		"today": "Today",
+		"yesterday": "Yesterday"
+	},
+	"feed": {
+		"health": "Health record",
+		"healthFor": "Health — #{{animal}}",
+		"production": "Production",
+		"productionFor": "Production — #{{animal}}",
+		"taskStatus": {
+			"todo": "Task created",
+			"in-progress": "Task in progress",
+			"done": "Task completed",
+			"archived": "Task archived"
+		}
+	}
+}

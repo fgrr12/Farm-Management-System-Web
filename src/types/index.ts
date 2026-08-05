@@ -12,6 +12,7 @@ export type {
 	DashboardPhase3Data,
 	DashboardStats,
 	DynamicLimits,
+	FarmActivityItem,
 	HealthOverview,
 	ProductionData,
 	RecentActivity,

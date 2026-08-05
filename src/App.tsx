@@ -76,6 +76,7 @@ const Tasks = lazy(() =>
 const Dashboard = lazy(() => import('@/pages/Dashboard/Dashboard.page'))
 const Calendar = lazy(() => import('@/pages/Calendar/Calendar.page'))
 const Voice = lazy(() => import('@/pages/Voice/Voice.page'))
+const ActivityFeed = lazy(() => import('@/pages/ActivityFeed/ActivityFeed.page'))
 
 export const App = () => {
 	const { user, setUser, authLoading, setAuthLoading } = useUserStore()
@@ -297,6 +298,15 @@ export const App = () => {
 								element={
 									<PrivateRoute>
 										<Calendar />
+									</PrivateRoute>
+								}
+							/>
+
+							<Route
+								path={AppRoutes.ACTIVITY_FEED}
+								element={
+									<PrivateRoute>
+										<ActivityFeed />
 									</PrivateRoute>
 								}
 							/>

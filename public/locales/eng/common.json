@@ -89,6 +89,7 @@
 		"default": "Select an option"
 	},
 	"sidebar": {
+		"activityFeed": "Journal",
 		"administration": "Administration",
 		"animals": "Animals",
 		"businessCard": "Business Card",

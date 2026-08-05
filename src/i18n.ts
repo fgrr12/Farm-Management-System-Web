@@ -4,6 +4,7 @@ import Backend from 'i18next-http-backend'
 import { initReactI18next } from 'react-i18next'
 
 const ALL_NAMESPACES = [
+	'activityFeed',
 	'animal',
 	'animalForm',
 	'animalHealthRecords',

@@ -1,0 +1,26 @@
+{
+	"title": "Diario",
+	"subtitle": "Todo lo que pasó en el campo, en orden",
+	"empty": "No hay nada registrado en este período.",
+	"range": {
+		"today": "Hoy",
+		"week": "Esta semana",
+		"month": "Este mes"
+	},
+	"day": {
+		"today": "Hoy",
+		"yesterday": "Ayer"
+	},
+	"feed": {
+		"health": "Registro de salud",
+		"healthFor": "Salud — #{{animal}}",
+		"production": "Producción",
+		"productionFor": "Producción — #{{animal}}",
+		"taskStatus": {
+			"todo": "Tarea creada",
+			"in-progress": "Tarea en curso",
+			"done": "Tarea completada",
+			"archived": "Tarea archivada"
+		}
+	}
+}

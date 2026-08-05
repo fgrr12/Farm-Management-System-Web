@@ -10,6 +10,8 @@ export const DASHBOARD_KEYS = {
 	phase2: (farmUuid: string) => [...DASHBOARD_KEYS.all, 'phase2', farmUuid] as const,
 	phase3: (farmUuid: string, year?: number) =>
 		[...DASHBOARD_KEYS.all, 'phase3', farmUuid, year] as const,
+	activityFeed: (farmUuid: string, startDate: string, endDate: string) =>
+		[...DASHBOARD_KEYS.all, 'activityFeed', farmUuid, startDate, endDate] as const,
 }
 
 export const useDashboardStats = () => {
@@ -45,5 +47,17 @@ export const useDashboardPhase3 = (year?: number) => {
 		queryFn: () => DashboardService.loadDashboardPhase3(farmUuid, year),
 		enabled: !!farmUuid,
 		staleTime: 60000, // 1 minute - historical data changes less frequently
+	})
+}
+
+export const useActivityFeed = (startDate: string, endDate: string) => {
+	const { farm } = useFarmStore()
+	const farmUuid = farm?.uuid || ''
+
+	return useQuery({
+		queryKey: DASHBOARD_KEYS.activityFeed(farmUuid, startDate, endDate),
+		queryFn: () => DashboardService.getActivityFeed(farmUuid, startDate, endDate),
+		enabled: !!farmUuid,
+		staleTime: 30000,
 	})
 }

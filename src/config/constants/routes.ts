@@ -36,6 +36,9 @@ export enum AppRoutes {
 	// Dashboard
 	DASHBOARD = '/dashboard',
 
+	// Activity Feed
+	ACTIVITY_FEED = '/activity',
+
 	// Voice
 	VOICE = '/voice',
 }

@@ -69,8 +69,11 @@ export const Sidebar = memo(() => {
 			role="navigation"
 			aria-label="Main navigation"
 		>
-			{/* Main Navigation */}
-			<div className="flex flex-col gap-2 items-center">
+			{/* Scrollable nav — the button list can outgrow short viewports, this is what keeps
+			    every item reachable instead of getting clipped by the fixed-height sidebar. */}
+			<div className="flex-1 min-h-0 overflow-y-auto w-full flex flex-col items-center gap-2">
+				{/* Main Navigation */}
+				<div className="flex flex-col gap-2 items-center">
 				<button
 					type="button"
 					className={getButtonClasses(AppRoutes.DASHBOARD, 'from-cyan-500', 'to-cyan-600')}
@@ -79,6 +82,18 @@ export const Sidebar = memo(() => {
 				>
 					<i className={`i-material-symbols-dashboard ${getIconClasses(AppRoutes.DASHBOARD)}`} />
 					<span className={getLabelClasses(AppRoutes.DASHBOARD)}>{t('sidebar.dashboard')}</span>
+				</button>
+
+				<button
+					type="button"
+					className={getButtonClasses(AppRoutes.ACTIVITY_FEED, 'from-teal-500', 'to-teal-600')}
+					onClick={handleGoTo(AppRoutes.ACTIVITY_FEED)}
+					aria-label={t('sidebar.activityFeed')}
+				>
+					<i className={`i-material-symbols-history ${getIconClasses(AppRoutes.ACTIVITY_FEED)}`} />
+					<span className={getLabelClasses(AppRoutes.ACTIVITY_FEED)}>
+						{t('sidebar.activityFeed')}
+					</span>
 				</button>
 
 				<button
@@ -172,8 +187,10 @@ export const Sidebar = memo(() => {
 				</>
 			)}
 
-			{/* Bottom Section */}
-			<div className="mt-auto flex flex-col gap-2 items-center">
+			</div>
+
+			{/* Bottom Section — outside the scroll area, always visible */}
+			<div className="shrink-0 flex flex-col gap-2 items-center">
 				<button
 					type="button"
 					className="w-16 h-16 rounded-xl flex flex-col items-center justify-center gap-0.5 transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50 dark:bg-gray-800"

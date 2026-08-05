@@ -89,6 +89,7 @@
 		"default": "Selecciona una opción"
 	},
 	"sidebar": {
+		"activityFeed": "Diario",
 		"administration": "Administración",
 		"animals": "Animales",
 		"businessCard": "Tarjeta de Negocio",
