@@ -32,6 +32,7 @@ function getStepIndex(phase: VoicePhase): number {
 			return 2
 		case 'done':
 		case 'error':
+		case 'queued':
 			return 3
 	}
 }
@@ -67,7 +68,11 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
 		previewErrors,
 		discardOperation,
 		confirmOperations,
+		discardReview,
 		executionResults,
+		pendingRecordingsCount,
+		queuedForReviewCount,
+		reviewNextQueued,
 		error,
 		clearError,
 		reset,
@@ -261,6 +266,31 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
 					{/* ────── STEP 1: Record ────── */}
 					{(phase === 'idle' || phase === 'recording') && (
 						<div className="flex flex-col items-center text-center gap-6 py-4">
+							{/* Queue banner — recordings waiting for signal, or already interpreted
+							    and waiting for review. Nothing here is lost, just not dealt with yet. */}
+							{phase === 'idle' && (queuedForReviewCount > 0 || pendingRecordingsCount > 0) && (
+								<div className="w-full flex flex-col gap-2">
+									{queuedForReviewCount > 0 && (
+										<button
+											type="button"
+											onClick={reviewNextQueued}
+											className="w-full flex items-center justify-between gap-3 p-3 rounded-xl bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-700 hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors cursor-pointer"
+										>
+											<span className="text-sm font-medium text-purple-800 dark:text-purple-200">
+												{t('queue.readyBanner', { count: queuedForReviewCount })}
+											</span>
+											<span className="i-heroicons-chevron-right text-purple-500 w-4 h-4 shrink-0" />
+										</button>
+									)}
+									{pendingRecordingsCount > 0 && (
+										<div className="w-full flex items-center gap-2 p-3 rounded-xl bg-gray-50 dark:bg-gray-700/50 text-sm text-gray-500 dark:text-gray-400">
+											<span className="i-heroicons-clock w-4 h-4 shrink-0" />
+											{t('queue.pendingBanner', { count: pendingRecordingsCount })}
+										</div>
+									)}
+								</div>
+							)}
+
 							{/* Instruction text */}
 							<div>
 								<p className="text-xl font-bold text-gray-900 dark:text-white">
@@ -388,6 +418,23 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
 									</p>
 								</div>
 							)}
+						</div>
+					)}
+
+					{/* ────── Queued: recorded with no signal, saved for later ────── */}
+					{phase === 'queued' && (
+						<div className="flex flex-col items-center text-center gap-5 py-4 animate-in fade-in duration-300">
+							<div className="w-16 h-16 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
+								<span className="i-material-symbols-cloud-off text-amber-600 dark:text-amber-400 w-8 h-8" />
+							</div>
+							<div>
+								<p className="text-lg font-bold text-gray-900 dark:text-white">
+									{t('queued.title')}
+								</p>
+								<p className="text-sm text-gray-500 dark:text-gray-400 mt-1 max-w-xs">
+									{t('queued.subtitle')}
+								</p>
+							</div>
 						</div>
 					)}
 
@@ -592,7 +639,7 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
 						<div className="flex gap-3">
 							<button
 								type="button"
-								onClick={handleRecordAgain}
+								onClick={discardReview}
 								className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-sm cursor-pointer"
 							>
 								<span className="i-heroicons-arrow-path w-4 h-4" />
@@ -653,6 +700,15 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
 								{t('close')}
 							</button>
 						</div>
+					)}
+					{phase === 'queued' && (
+						<button
+							type="button"
+							onClick={onClose}
+							className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-linear-to-r from-pink-500 to-purple-600 text-white hover:from-pink-600 hover:to-purple-700 transition-all font-medium text-sm shadow-md cursor-pointer"
+						>
+							{t('close')}
+						</button>
 					)}
 					{phase === 'idle' && (
 						<p className="text-center text-xs text-gray-400 dark:text-gray-500">

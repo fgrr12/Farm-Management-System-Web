@@ -61,7 +61,9 @@
 		"syncSuccess": "{{count}} record synced",
 		"syncSuccess_plural": "{{count}} records synced",
 		"syncFailed": "{{count}} record couldn't be synced, please check it",
-		"syncFailed_plural": "{{count}} records couldn't be synced, please check them"
+		"syncFailed_plural": "{{count}} records couldn't be synced, please check them",
+		"voiceReady": "{{count}} voice recording ready to review",
+		"voiceReady_plural": "{{count}} voice recordings ready to review"
 	},
 	"pwa": {
 		"install": {

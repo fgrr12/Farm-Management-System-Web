@@ -6,6 +6,7 @@ import { useAppStore } from '@/store/useAppStore'
 import { useOfflineQueueStore } from '@/store/useOfflineQueueStore'
 
 import { flushOfflineQueue } from '@/utils/offlineQueue'
+import { flushVoiceQueue } from '@/utils/voiceQueue'
 
 /**
  * Tracks connectivity and drives the offline queue: whenever the browser comes back online (or
@@ -22,7 +23,9 @@ export const useOffline = () => {
 	const { t } = useTranslation('common')
 
 	const sync = useCallback(() => {
-		flushOfflineQueue(queryClient, (message, type) => setToastData({ message, type }), t)
+		const notify = (message: string, type: 'success' | 'error') => setToastData({ message, type })
+		flushOfflineQueue(queryClient, notify, t)
+		flushVoiceQueue(notify, t)
 	}, [queryClient, setToastData, t])
 
 	useEffect(() => {

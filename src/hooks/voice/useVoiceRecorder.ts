@@ -1,5 +1,10 @@
 import { useCallback, useRef, useState } from 'react'
 
+import { useVoiceQueueStore } from '@/store/useVoiceQueueStore'
+
+import { isConnectivityError } from '@/utils/offlineQueue'
+import { queueRecordingForLater } from '@/utils/voiceQueue'
+
 import {
 	type ExecutionResult,
 	type VoiceEntityType,
@@ -12,6 +17,7 @@ export type VoicePhase =
 	| 'idle'
 	| 'recording'
 	| 'processing'
+	| 'queued'
 	| 'review'
 	| 'executing'
 	| 'done'
@@ -44,8 +50,18 @@ export interface UseVoiceRecorderReturn {
 	previewErrors: string[]
 	discardOperation: (type: VoiceEntityType, index: number) => void
 	confirmOperations: () => Promise<void>
+	/** Discards the operations currently in review — if they came from the queue, they're
+	 *  removed from it too (unlike reset(), which just clears local state on modal close). */
+	discardReview: () => void
 
 	executionResults: ExecutionResult[]
+
+	/** Recordings made offline, still waiting for a connection to be interpreted. */
+	pendingRecordingsCount: number
+	/** Recordings already interpreted, waiting for the user to review them. */
+	queuedForReviewCount: number
+	/** Loads the oldest queued-and-interpreted recording into the review step. */
+	reviewNextQueued: () => void
 
 	error: string | null
 	clearError: () => void
@@ -73,6 +89,12 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 	const recordingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 	const streamRef = useRef<MediaStream | null>(null)
 	const isCancelledRef = useRef(false)
+	/** Set while pendingOperations came from the queue rather than a fresh recording, so
+	 *  confirming/discarding it also removes it from the queue. */
+	const activeQueueIdRef = useRef<string | null>(null)
+
+	const pendingRecordingsCount = useVoiceQueueStore((state) => state.pending.length)
+	const queuedForReviewCount = useVoiceQueueStore((state) => state.ready.length)
 
 	const clearError = useCallback(() => {
 		setError(null)
@@ -80,6 +102,7 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 	}, [phase])
 
 	const reset = useCallback(() => {
+		activeQueueIdRef.current = null
 		setTranscription(null)
 		setPendingOperations(null)
 		setPreviewWarnings([])
@@ -97,19 +120,29 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 
 	const processAudio = useCallback(
 		async (blob: Blob) => {
+			const arrayBuffer = await blob.arrayBuffer()
+			const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)))
+			const audioFormat = 'webm' as const
+			const maxDuration = config.maxRecordingTime || 60
+
+			// No point attempting the network call at all if we already know there's no signal —
+			// the recording itself doesn't need one, only interpreting it does.
+			if (typeof navigator !== 'undefined' && !navigator.onLine) {
+				queueRecordingForLater(base64, audioFormat, maxDuration, config.farmUuid, config.userUuid)
+				setPhase('queued')
+				return
+			}
+
 			try {
 				setPhase('processing')
 				setError(null)
-
-				const arrayBuffer = await blob.arrayBuffer()
-				const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)))
 
 				const request: VoiceProcessingRequest = {
 					audioData: base64,
 					farmUuid: config.farmUuid,
 					userUuid: config.userUuid,
-					audioFormat: 'webm',
-					maxDuration: config.maxRecordingTime || 60,
+					audioFormat,
+					maxDuration,
 				}
 
 				const response = await VoiceService.previewVoiceCommand(request)
@@ -125,6 +158,11 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 				setPendingOperations(response.data || {})
 				setPhase('review')
 			} catch (err) {
+				if (isConnectivityError(err)) {
+					queueRecordingForLater(base64, audioFormat, maxDuration, config.farmUuid, config.userUuid)
+					setPhase('queued')
+					return
+				}
 				const errorMessage = err instanceof Error ? err.message : 'Failed to process audio'
 				setError(errorMessage)
 				setPhase('error')
@@ -133,6 +171,24 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 		},
 		[config]
 	)
+
+	const reviewNextQueued = useCallback(() => {
+		const next = useVoiceQueueStore.getState().ready[0]
+		if (!next) return
+		activeQueueIdRef.current = next.id
+		setTranscription(next.transcription)
+		setPreviewWarnings(next.warnings)
+		setPreviewErrors(next.errors)
+		setPendingOperations(next.operations)
+		setPhase('review')
+	}, [])
+
+	const discardReview = useCallback(() => {
+		if (activeQueueIdRef.current) {
+			useVoiceQueueStore.getState().dequeueReady(activeQueueIdRef.current)
+		}
+		reset()
+	}, [reset])
 
 	const discardOperation = useCallback((type: VoiceEntityType, index: number) => {
 		setPendingOperations((prev) => {
@@ -166,6 +222,11 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 			for (let i = 0; i < failedCount && i < flattened.length; i++) {
 				const idx = flattened.length - 1 - i
 				flattened[idx] = { ...flattened[idx]!, success: false, error: execution.errors[i] }
+			}
+
+			if (activeQueueIdRef.current) {
+				useVoiceQueueStore.getState().dequeueReady(activeQueueIdRef.current)
+				activeQueueIdRef.current = null
 			}
 
 			setExecutionResults(flattened)
@@ -304,8 +365,13 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 		previewErrors,
 		discardOperation,
 		confirmOperations,
+		discardReview,
 
 		executionResults,
+
+		pendingRecordingsCount,
+		queuedForReviewCount,
+		reviewNextQueued,
 
 		error,
 		clearError,

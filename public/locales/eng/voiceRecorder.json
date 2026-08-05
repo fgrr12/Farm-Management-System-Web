@@ -47,6 +47,16 @@
 		"review": "Review",
 		"results": "Results"
 	},
+	"queued": {
+		"title": "Recording saved",
+		"subtitle": "No signal right now. It'll be interpreted automatically once the connection is back — no need to record it again."
+	},
+	"queue": {
+		"readyBanner": "You have {{count}} voice command ready to review",
+		"readyBanner_plural": "You have {{count}} voice commands ready to review",
+		"pendingBanner": "{{count}} recording waiting for signal",
+		"pendingBanner_plural": "{{count}} recordings waiting for signal"
+	},
 	"review": {
 		"title": "Is this right?",
 		"subtitle": "Check what's about to be saved. Remove anything that's wrong before confirming.",

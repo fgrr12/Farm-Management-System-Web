@@ -61,7 +61,9 @@
 		"syncSuccess": "{{count}} registro sincronizado",
 		"syncSuccess_plural": "{{count}} registros sincronizados",
 		"syncFailed": "{{count}} registro no se pudo sincronizar, revisalo",
-		"syncFailed_plural": "{{count}} registros no se pudieron sincronizar, revisalos"
+		"syncFailed_plural": "{{count}} registros no se pudieron sincronizar, revisalos",
+		"voiceReady": "{{count}} grabación de voz lista para revisar",
+		"voiceReady_plural": "{{count}} grabaciones de voz listas para revisar"
 	},
 	"pwa": {
 		"install": {

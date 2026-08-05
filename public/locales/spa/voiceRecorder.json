@@ -47,6 +47,16 @@
 		"review": "Revisar",
 		"results": "Resultados"
 	},
+	"queued": {
+		"title": "Grabación guardada",
+		"subtitle": "No hay señal ahora. La vamos a interpretar sola apenas vuelva la conexión — no hace falta grabar de nuevo."
+	},
+	"queue": {
+		"readyBanner": "Tenés {{count}} comando de voz listo para revisar",
+		"readyBanner_plural": "Tenés {{count}} comandos de voz listos para revisar",
+		"pendingBanner": "{{count}} grabación esperando señal",
+		"pendingBanner_plural": "{{count}} grabaciones esperando señal"
+	},
 	"review": {
 		"title": "¿Esto es correcto?",
 		"subtitle": "Revisá lo que se va a guardar. Sacá lo que esté mal antes de confirmar.",

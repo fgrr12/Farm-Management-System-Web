@@ -9,6 +9,7 @@ import { auth } from '@/config/firebaseConfig'
 import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
+import { useVoiceQueueStore } from '@/store/useVoiceQueueStore'
 
 import { PrivateRoute } from '@/utils/PrivateRoute'
 import { initializeSEO } from '@/utils/seo'
@@ -88,6 +89,7 @@ export const App = () => {
 	const { i18n } = useTranslation()
 	const location = useLocation()
 	const browserLanguage = navigator.language === 'en' ? 'eng' : 'spa'
+	const voiceQueueCount = useVoiceQueueStore((state) => state.pending.length + state.ready.length)
 
 	// Initialize theme system
 	useTheme()
@@ -336,7 +338,7 @@ export const App = () => {
 					<NotificationToast />
 					{user && farm && (
 						<>
-							<VoiceCommandButton onClick={openVoiceModal} />
+							<VoiceCommandButton onClick={openVoiceModal} badgeCount={voiceQueueCount} />
 							<VoiceCommandModal isOpen={isVoiceModalOpen} onClose={closeVoiceModal} />
 						</>
 					)}
