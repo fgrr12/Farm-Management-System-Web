@@ -153,7 +153,7 @@ const TaxDetails = () => {
 
 							{/* Back Side - Activities */}
 							<div
-								className="absolute inset-0 w-92.5 h-53.75 bg-linear-to-br from-slate-800 via-slate-700 to-slate-900 rounded-xl p-5 shadow-2xl"
+								className="absolute inset-0 w-92.5 h-53.75 bg-linear-to-br from-slate-800 via-slate-700 to-slate-900 rounded-xl p-5 shadow-2xl backface-hidden"
 								style={{
 									backfaceVisibility: 'hidden',
 									transform: 'rotateY(180deg)',
