@@ -9,6 +9,8 @@ import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
+import { printAnimalHistory } from '@/utils/animalHistoryPrintable'
+
 import { EmployeesService } from '@/services/employees'
 
 import { HealthRecordsTable } from '@/components/business/Animal/HealthRecordsTable'
@@ -51,6 +53,8 @@ const Animal = () => {
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation(['animal'])
+	const { t: printT } = useTranslation(['printable'])
+	const { t: healthTypeT } = useTranslation(['healthRecordForm'])
 
 	const { defaultModalData, setModalData } = useAppStore()
 	const { setPageTitle, showToast, withLoadingAndError } = usePagePerformance()
@@ -78,6 +82,20 @@ const Animal = () => {
 			breed: breeds.find((br) => br.uuid === animal.breedUuid),
 		}
 	}, [breeds, animal, species])
+
+	const handlePrintHistory = useCallback(() => {
+		if (!animal || !farm) return
+		printAnimalHistory({
+			farm,
+			animal,
+			speciesName: specie?.name,
+			breedName: breed?.name,
+			healthRecords: healthRecords || [],
+			productionRecords: productionRecords || [],
+			t: printT,
+			healthTypeT,
+		})
+	}, [animal, farm, specie, breed, healthRecords, productionRecords, printT, healthTypeT])
 
 	const handleEditAnimal = useCallback(() => {
 		if (!animal) return
@@ -200,20 +218,27 @@ const Animal = () => {
 								</p>
 							</div>
 						</div>
-						{user && (
-							<div className="flex gap-2 shrink-0">
-								<ActionButton
-									icon="i-material-symbols-edit-square-outline"
-									title="Edit Animal"
-									onClick={handleEditAnimal}
-								/>
-								<ActionButton
-									icon="i-material-symbols-delete-outline"
-									title="Delete Animal"
-									onClick={handleRemoveAnimal}
-								/>
-							</div>
-						)}
+						<div className="flex gap-2 shrink-0">
+							<ActionButton
+								icon="i-material-symbols-print-outline"
+								title={printT('print')}
+								onClick={handlePrintHistory}
+							/>
+							{user && (
+								<>
+									<ActionButton
+										icon="i-material-symbols-edit-square-outline"
+										title="Edit Animal"
+										onClick={handleEditAnimal}
+									/>
+									<ActionButton
+										icon="i-material-symbols-delete-outline"
+										title="Delete Animal"
+										onClick={handleRemoveAnimal}
+									/>
+								</>
+							)}
+						</div>
 					</div>
 				</div>
 

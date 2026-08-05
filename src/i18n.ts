@@ -25,6 +25,7 @@ const ALL_NAMESPACES = [
 	'myAccount',
 	'mySpecies',
 	'notifications',
+	'printable',
 	'productionRecordForm',
 	'relatedAnimals',
 	'taskForm',

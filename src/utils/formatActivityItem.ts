@@ -27,7 +27,7 @@ export const formatActivityItem = (
 	switch (item.kind) {
 		case 'health':
 			return {
-				icon: 'i-material-symbols-medical-services',
+				icon: 'i-material-symbols-health-and-safety',
 				title: item.animalId ? t('feed.healthFor', { animal: item.animalId }) : t('feed.health'),
 				description: joinDefined([
 					item.healthType
@@ -39,7 +39,7 @@ export const formatActivityItem = (
 
 		case 'production':
 			return {
-				icon: 'i-material-symbols-water-drop',
+				icon: 'i-icon-park-outline-milk',
 				title: item.animalId
 					? t('feed.productionFor', { animal: item.animalId })
 					: t('feed.production'),
@@ -49,7 +49,7 @@ export const formatActivityItem = (
 
 		default:
 			return {
-				icon: 'i-material-symbols-task-alt',
+				icon: 'i-fluent-tasks-app-24-filled',
 				title: t(`feed.taskStatus.${item.taskStatus || 'todo'}`),
 				description: item.title,
 			}

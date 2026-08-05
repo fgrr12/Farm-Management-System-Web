@@ -1,6 +1,8 @@
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { openPrintWindow } from '@/utils/printDocument'
+
 import type { TaxDetails } from '@/types/taxDetails'
 
 type CardVariant = 'dark' | 'light'
@@ -365,15 +367,6 @@ const buildCardHTML = (
 		</body>
 		</html>
 	`
-}
-
-const openPrintWindow = (html: string) => {
-	const printWindow = window.open('', '_blank')
-	if (!printWindow) return
-
-	printWindow.document.write(html)
-	printWindow.document.close()
-	printWindow.focus()
 }
 
 export const useTaxCardPrintable = ({ taxDetails }: TaxCardPrintableProps) => {

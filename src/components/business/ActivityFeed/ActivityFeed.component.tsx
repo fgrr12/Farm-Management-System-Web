@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { memo, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -9,6 +9,7 @@ import { useFarmStore } from '@/store/useFarmStore'
 
 import { formatActivityItem } from '@/utils/formatActivityItem'
 import { groupActivitiesByDay } from '@/utils/groupActivitiesByDay'
+import { printProductionSummary } from '@/utils/productionSummaryPrintable'
 
 import { useActivityFeed } from '@/hooks/queries/useDashboard'
 
@@ -23,6 +24,7 @@ const RANGE_UNITS: Record<Range, [number, dayjs.ManipulateType]> = {
 export const ActivityFeed = memo(() => {
 	const { t } = useTranslation(['activityFeed'])
 	const { t: healthT } = useTranslation(['healthRecordForm'])
+	const { t: printT } = useTranslation(['printable'])
 	const { farm } = useFarmStore()
 	const navigate = useNavigate()
 	const [range, setRange] = useState<Range>('today')
@@ -37,30 +39,57 @@ export const ActivityFeed = memo(() => {
 
 	const { data: activities, isLoading } = useActivityFeed(startDate, endDate)
 	const groups = useMemo(() => groupActivitiesByDay(activities || []), [activities])
+	const productionRecords = useMemo(
+		() => (activities || []).filter((item) => item.kind === 'production'),
+		[activities]
+	)
 
 	const goToAnimal = (animalUuid?: string) => {
 		if (!animalUuid) return
 		navigate(AppRoutes.ANIMAL.replace(':animalUuid', animalUuid))
 	}
 
+	const handlePrintProduction = useCallback(() => {
+		if (!farm) return
+		printProductionSummary({
+			farm,
+			rangeLabel: t(`range.${range}`),
+			records: productionRecords,
+			t: printT,
+		})
+	}, [farm, range, productionRecords, t, printT])
+
 	return (
 		<div className="flex flex-col gap-4">
 			{/* Range selector */}
-			<div className="inline-flex self-start rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-1 shadow-sm">
-				{(['today', 'week', 'month'] as const).map((option) => (
+			<div className="flex flex-wrap items-center justify-between gap-3">
+				<div className="inline-flex self-start rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-1 shadow-sm">
+					{(['today', 'week', 'month'] as const).map((option) => (
+						<button
+							key={option}
+							type="button"
+							onClick={() => setRange(option)}
+							className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
+								range === option
+									? 'bg-blue-600 text-white shadow-sm'
+									: 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+							}`}
+						>
+							{t(`range.${option}`)}
+						</button>
+					))}
+				</div>
+
+				{productionRecords.length > 0 && (
 					<button
-						key={option}
 						type="button"
-						onClick={() => setRange(option)}
-						className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
-							range === option
-								? 'bg-blue-600 text-white shadow-sm'
-								: 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-						}`}
+						onClick={handlePrintProduction}
+						className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer"
 					>
-						{t(`range.${option}`)}
+						<i className="i-material-symbols-print-outline w-4! h-4!" />
+						{printT('print')}
 					</button>
-				))}
+				)}
 			</div>
 
 			{isLoading && (
@@ -119,9 +148,13 @@ export const ActivityFeed = memo(() => {
 												</p>
 											)}
 										</div>
-										<span className="shrink-0 text-xs text-gray-400 dark:text-gray-500 tabular-nums">
-											{dayjs(item.date).format('HH:mm')}
-										</span>
+										{/* Health/production records only carry a date, no time of day —
+										only tasks (createdAt/updatedAt) have real time granularity to show. */}
+										{item.kind === 'task' && (
+											<span className="shrink-0 text-xs text-gray-400 dark:text-gray-500 tabular-nums">
+												{dayjs(item.date).format('HH:mm')}
+											</span>
+										)}
 									</button>
 								)
 							})}
