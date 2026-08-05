@@ -38,6 +38,9 @@ export const useCreateAnimal = () => {
 	const { farm } = useFarmStore()
 
 	return useMutation({
+		// Bypass TanStack Query's own online/offline pausing — withOfflineQueue inside
+		// mutationFn already handles offline, and 'online' mode would pause before it runs.
+		networkMode: 'always',
 		mutationFn: ({ animal, userUuid }: { animal: Animal; userUuid: string }) => {
 			const farmUuid = farm?.uuid || ''
 			return withOfflineQueue(
@@ -119,6 +122,7 @@ export const useUpdateAnimal = () => {
 	const { farm } = useFarmStore()
 
 	return useMutation({
+		networkMode: 'always',
 		mutationFn: ({ animal, userUuid }: { animal: Animal; userUuid: string }) =>
 			withOfflineQueue(
 				async () => ({

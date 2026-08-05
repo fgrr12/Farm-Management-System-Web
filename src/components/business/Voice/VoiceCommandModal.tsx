@@ -231,7 +231,7 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
 										`}
 									>
 										{index < currentStep ? (
-											<span className="i-heroicons-check-mini w-5 h-5" />
+											<span className="i-heroicons-check w-5 h-5" />
 										) : (
 											index + 1
 										)}
@@ -540,7 +540,7 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
 									? 'i-heroicons-x-circle'
 									: hasErrors
 										? 'i-heroicons-exclamation-triangle'
-										: 'i-heroicons-check-mini'
+										: 'i-heroicons-check'
 								const titleColor = allFailed
 									? 'text-red-900 dark:text-red-100'
 									: hasErrors

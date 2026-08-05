@@ -36,6 +36,9 @@ export const useCreateProductionRecord = () => {
 	const { farm } = useFarmStore()
 
 	return useMutation({
+		// Bypass TanStack Query's own online/offline pausing — withOfflineQueue inside
+		// mutationFn already handles offline, and 'online' mode would pause before it runs.
+		networkMode: 'always',
 		mutationFn: ({
 			productionRecord,
 			userUuid,
@@ -133,6 +136,7 @@ export const useUpdateProductionRecord = () => {
 	const { farm } = useFarmStore()
 
 	return useMutation({
+		networkMode: 'always',
 		mutationFn: ({
 			productionRecord,
 			userUuid,

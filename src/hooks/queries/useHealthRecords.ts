@@ -36,6 +36,9 @@ export const useCreateHealthRecord = () => {
 	const { farm } = useFarmStore()
 
 	return useMutation({
+		// Bypass TanStack Query's own online/offline pausing — withOfflineQueue inside
+		// mutationFn already handles offline, and 'online' mode would pause before it runs.
+		networkMode: 'always',
 		mutationFn: ({ healthRecord, userUuid }: { healthRecord: HealthRecord; userUuid: string }) => {
 			const farmUuid = farm?.uuid
 			return withOfflineQueue(
@@ -125,6 +128,7 @@ export const useUpdateHealthRecord = () => {
 	const { farm } = useFarmStore()
 
 	return useMutation({
+		networkMode: 'always',
 		mutationFn: ({ healthRecord, userUuid }: { healthRecord: HealthRecord; userUuid: string }) =>
 			withOfflineQueue(
 				async () => ({
