@@ -37,8 +37,8 @@
 	"instructions": {
 		"record": "Habla naturalmente sobre lo que quieres hacer",
 		"process": "La IA analiza y entiende tu comando",
-		"execute": "Las acciones se realizan automáticamente",
-		"review": "Revisa los resultados y confirma la finalización"
+		"execute": "Confirmas y las acciones se ejecutan",
+		"review": "Revisa lo que se entendió antes de guardar nada"
 	},
 	"steps": {
 		"record": "Grabar",

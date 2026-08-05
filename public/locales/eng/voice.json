@@ -37,8 +37,8 @@
 	"instructions": {
 		"record": "Speak naturally about what you want to do",
 		"process": "AI analyzes and understands your command",
-		"execute": "Actions are performed automatically",
-		"review": "Check results and confirm completion"
+		"execute": "You confirm and the actions run",
+		"review": "Review what was understood before anything is saved"
 	},
 	"steps": {
 		"record": "Record",

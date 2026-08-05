@@ -99,18 +99,18 @@ export function VoicePage() {
 							<span className="text-white text-xl font-bold">3</span>
 						</div>
 						<h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">
-							{t('steps.execute')}
+							{t('steps.review')}
 						</h3>
-						<p className="text-sm text-gray-600 dark:text-gray-400">{t('instructions.execute')}</p>
+						<p className="text-sm text-gray-600 dark:text-gray-400">{t('instructions.review')}</p>
 					</div>
 					<div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-xl">
 						<div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-3">
 							<span className="text-white text-xl font-bold">4</span>
 						</div>
 						<h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">
-							{t('steps.review')}
+							{t('steps.execute')}
 						</h3>
-						<p className="text-sm text-gray-600 dark:text-gray-400">{t('instructions.review')}</p>
+						<p className="text-sm text-gray-600 dark:text-gray-400">{t('instructions.execute')}</p>
 					</div>
 				</div>
 			</div>
