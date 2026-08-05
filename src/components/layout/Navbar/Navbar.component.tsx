@@ -57,6 +57,9 @@ export const Navbar = () => {
 		if (location.pathname.includes(AppRoutes.DASHBOARD)) {
 			return 'i-material-symbols-dashboard'
 		}
+		if (location.pathname.includes(AppRoutes.ACTIVITY_FEED)) {
+			return 'i-material-symbols-history'
+		}
 		if (location.pathname.includes(AppRoutes.CALENDAR)) {
 			return 'i-material-symbols-calendar-month'
 		}
@@ -89,6 +92,9 @@ export const Navbar = () => {
 		if (location.pathname.includes(AppRoutes.DASHBOARD)) {
 			return 'from-cyan-500 to-cyan-600'
 		}
+		if (location.pathname.includes(AppRoutes.ACTIVITY_FEED)) {
+			return 'from-teal-500 to-teal-600'
+		}
 		if (location.pathname.includes(AppRoutes.CALENDAR)) {
 			return 'from-purple-500 to-purple-600'
 		}
@@ -108,6 +114,7 @@ export const Navbar = () => {
 			location.pathname === AppRoutes.MY_SPECIES ||
 			location.pathname === AppRoutes.TAX_DETAILS ||
 			location.pathname === AppRoutes.DASHBOARD ||
+			location.pathname === AppRoutes.ACTIVITY_FEED ||
 			location.pathname === AppRoutes.CALENDAR ||
 			location.pathname === AppRoutes.VOICE,
 		[location.pathname]
@@ -311,6 +318,32 @@ export const Navbar = () => {
 									/>
 								</div>
 								<span className="font-medium">{t('sidebar.dashboard')}</span>
+							</button>
+							<button
+								type="button"
+								className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
+									location.pathname.includes(AppRoutes.ACTIVITY_FEED)
+										? 'bg-linear-to-r from-teal-500 to-teal-600 text-white shadow-lg'
+										: 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+								}`}
+								onClick={goTo(AppRoutes.ACTIVITY_FEED)}
+							>
+								<div
+									className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+										location.pathname.includes(AppRoutes.ACTIVITY_FEED)
+											? 'bg-white/20'
+											: 'bg-teal-100'
+									}`}
+								>
+									<i
+										className={`i-material-symbols-history w-5! h-5! ${
+											location.pathname.includes(AppRoutes.ACTIVITY_FEED)
+												? 'bg-white!'
+												: 'bg-teal-600!'
+										}`}
+									/>
+								</div>
+								<span className="font-medium">{t('sidebar.activityFeed')}</span>
 							</button>
 
 							<button

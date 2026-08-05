@@ -74,119 +74,126 @@ export const Sidebar = memo(() => {
 			<div className="flex-1 min-h-0 overflow-y-auto w-full flex flex-col items-center gap-2">
 				{/* Main Navigation */}
 				<div className="flex flex-col gap-2 items-center">
-				<button
-					type="button"
-					className={getButtonClasses(AppRoutes.DASHBOARD, 'from-cyan-500', 'to-cyan-600')}
-					onClick={handleGoTo(AppRoutes.DASHBOARD)}
-					aria-label={t('sidebar.dashboard')}
-				>
-					<i className={`i-material-symbols-dashboard ${getIconClasses(AppRoutes.DASHBOARD)}`} />
-					<span className={getLabelClasses(AppRoutes.DASHBOARD)}>{t('sidebar.dashboard')}</span>
-				</button>
+					<button
+						type="button"
+						className={getButtonClasses(AppRoutes.DASHBOARD, 'from-cyan-500', 'to-cyan-600')}
+						onClick={handleGoTo(AppRoutes.DASHBOARD)}
+						aria-label={t('sidebar.dashboard')}
+					>
+						<i className={`i-material-symbols-dashboard ${getIconClasses(AppRoutes.DASHBOARD)}`} />
+						<span className={getLabelClasses(AppRoutes.DASHBOARD)}>{t('sidebar.dashboard')}</span>
+					</button>
 
-				<button
-					type="button"
-					className={getButtonClasses(AppRoutes.ACTIVITY_FEED, 'from-teal-500', 'to-teal-600')}
-					onClick={handleGoTo(AppRoutes.ACTIVITY_FEED)}
-					aria-label={t('sidebar.activityFeed')}
-				>
-					<i className={`i-material-symbols-history ${getIconClasses(AppRoutes.ACTIVITY_FEED)}`} />
-					<span className={getLabelClasses(AppRoutes.ACTIVITY_FEED)}>
-						{t('sidebar.activityFeed')}
-					</span>
-				</button>
+					<button
+						type="button"
+						className={getButtonClasses(AppRoutes.ACTIVITY_FEED, 'from-teal-500', 'to-teal-600')}
+						onClick={handleGoTo(AppRoutes.ACTIVITY_FEED)}
+						aria-label={t('sidebar.activityFeed')}
+					>
+						<i
+							className={`i-material-symbols-history ${getIconClasses(AppRoutes.ACTIVITY_FEED)}`}
+						/>
+						<span className={getLabelClasses(AppRoutes.ACTIVITY_FEED)}>
+							{t('sidebar.activityFeed')}
+						</span>
+					</button>
 
-				<button
-					type="button"
-					className={getButtonClasses(AppRoutes.ANIMALS, 'from-blue-500', 'to-blue-600')}
-					onClick={handleGoTo(AppRoutes.ANIMALS)}
-					aria-label={t('sidebar.animals')}
-				>
-					<i className={`i-healthicons-animal-cow ${getIconClasses(AppRoutes.ANIMALS)}`} />
-					<span className={getLabelClasses(AppRoutes.ANIMALS)}>{t('sidebar.animals')}</span>
-				</button>
+					<button
+						type="button"
+						className={getButtonClasses(AppRoutes.ANIMALS, 'from-blue-500', 'to-blue-600')}
+						onClick={handleGoTo(AppRoutes.ANIMALS)}
+						aria-label={t('sidebar.animals')}
+					>
+						<i className={`i-healthicons-animal-cow ${getIconClasses(AppRoutes.ANIMALS)}`} />
+						<span className={getLabelClasses(AppRoutes.ANIMALS)}>{t('sidebar.animals')}</span>
+					</button>
 
-				<button
-					type="button"
-					className={getButtonClasses(AppRoutes.TASKS, 'from-green-500', 'to-green-600')}
-					onClick={handleGoTo(AppRoutes.TASKS)}
-					aria-label={t('sidebar.tasks')}
-				>
-					<i className={`i-fluent-tasks-app-24-filled ${getIconClasses(AppRoutes.TASKS)}`} />
-					<span className={getLabelClasses(AppRoutes.TASKS)}>{t('sidebar.tasks')}</span>
-				</button>
+					<button
+						type="button"
+						className={getButtonClasses(AppRoutes.TASKS, 'from-green-500', 'to-green-600')}
+						onClick={handleGoTo(AppRoutes.TASKS)}
+						aria-label={t('sidebar.tasks')}
+					>
+						<i className={`i-fluent-tasks-app-24-filled ${getIconClasses(AppRoutes.TASKS)}`} />
+						<span className={getLabelClasses(AppRoutes.TASKS)}>{t('sidebar.tasks')}</span>
+					</button>
 
-				<button
-					type="button"
-					className={getButtonClasses(AppRoutes.CALENDAR, 'from-purple-500', 'to-purple-600')}
-					onClick={handleGoTo(AppRoutes.CALENDAR)}
-					aria-label={t('sidebar.calendar')}
-				>
-					<i
-						className={`i-material-symbols-calendar-month ${getIconClasses(AppRoutes.CALENDAR)}`}
-					/>
-					<span className={getLabelClasses(AppRoutes.CALENDAR)}>{t('sidebar.calendar')}</span>
-				</button>
+					<button
+						type="button"
+						className={getButtonClasses(AppRoutes.CALENDAR, 'from-purple-500', 'to-purple-600')}
+						onClick={handleGoTo(AppRoutes.CALENDAR)}
+						aria-label={t('sidebar.calendar')}
+					>
+						<i
+							className={`i-material-symbols-calendar-month ${getIconClasses(AppRoutes.CALENDAR)}`}
+						/>
+						<span className={getLabelClasses(AppRoutes.CALENDAR)}>{t('sidebar.calendar')}</span>
+					</button>
 
-				<button
-					type="button"
-					className={getButtonClasses(AppRoutes.MY_SPECIES, 'from-indigo-500', 'to-indigo-600')}
-					onClick={handleGoTo(AppRoutes.MY_SPECIES)}
-					aria-label={t('sidebar.mySpecies')}
-				>
-					<i className={`i-solar-dna-bold-duotone ${getIconClasses(AppRoutes.MY_SPECIES)}`} />
-					<span className={getLabelClasses(AppRoutes.MY_SPECIES)}>{t('sidebar.mySpecies')}</span>
-				</button>
+					<button
+						type="button"
+						className={getButtonClasses(AppRoutes.MY_SPECIES, 'from-indigo-500', 'to-indigo-600')}
+						onClick={handleGoTo(AppRoutes.MY_SPECIES)}
+						aria-label={t('sidebar.mySpecies')}
+					>
+						<i className={`i-solar-dna-bold-duotone ${getIconClasses(AppRoutes.MY_SPECIES)}`} />
+						<span className={getLabelClasses(AppRoutes.MY_SPECIES)}>{t('sidebar.mySpecies')}</span>
+					</button>
 
-				<button
-					type="button"
-					className={getButtonClasses(AppRoutes.VOICE, 'from-pink-500', 'to-pink-600')}
-					onClick={handleGoTo(AppRoutes.VOICE)}
-					aria-label={t('sidebar.voice')}
-				>
-					<i className={`i-heroicons-microphone ${getIconClasses(AppRoutes.VOICE)}`} />
-					<span className={getLabelClasses(AppRoutes.VOICE)}>{t('sidebar.voice')}</span>
-				</button>
-			</div>
+					<button
+						type="button"
+						className={getButtonClasses(AppRoutes.VOICE, 'from-pink-500', 'to-pink-600')}
+						onClick={handleGoTo(AppRoutes.VOICE)}
+						aria-label={t('sidebar.voice')}
+					>
+						<i className={`i-heroicons-microphone ${getIconClasses(AppRoutes.VOICE)}`} />
+						<span className={getLabelClasses(AppRoutes.VOICE)}>{t('sidebar.voice')}</span>
+					</button>
+				</div>
 
-			{/* Admin Section */}
-			{showAdminRoutes && (
-				<>
-					<div className="w-10 h-px bg-gray-200 dark:bg-gray-600 my-3" />
-					<div className="flex flex-col gap-2 items-center">
-						<button
-							type="button"
-							className={getButtonClasses(AppRoutes.EMPLOYEES, 'from-orange-500', 'to-orange-600')}
-							onClick={handleGoTo(AppRoutes.EMPLOYEES)}
-							aria-label={t('sidebar.employees')}
-						>
-							<i
-								className={`i-clarity-employee-group-solid ${getIconClasses(AppRoutes.EMPLOYEES)}`}
-							/>
-							<span className={getLabelClasses(AppRoutes.EMPLOYEES)}>{t('sidebar.employees')}</span>
-						</button>
-
-						{showTaxDetails && (
+				{/* Admin Section */}
+				{showAdminRoutes && (
+					<>
+						<div className="w-10 h-px bg-gray-200 dark:bg-gray-600 my-3" />
+						<div className="flex flex-col gap-2 items-center">
 							<button
 								type="button"
 								className={getButtonClasses(
-									AppRoutes.TAX_DETAILS,
-									'from-indigo-500',
-									'to-indigo-600'
+									AppRoutes.EMPLOYEES,
+									'from-orange-500',
+									'to-orange-600'
 								)}
-								onClick={handleGoTo(AppRoutes.TAX_DETAILS)}
-								aria-label={t('sidebar.businessCard')}
+								onClick={handleGoTo(AppRoutes.EMPLOYEES)}
+								aria-label={t('sidebar.employees')}
 							>
-								<i className={`i-typcn-business-card ${getIconClasses(AppRoutes.TAX_DETAILS)}`} />
-								<span className={getLabelClasses(AppRoutes.TAX_DETAILS)}>
-									{t('sidebar.businessCard')}
+								<i
+									className={`i-clarity-employee-group-solid ${getIconClasses(AppRoutes.EMPLOYEES)}`}
+								/>
+								<span className={getLabelClasses(AppRoutes.EMPLOYEES)}>
+									{t('sidebar.employees')}
 								</span>
 							</button>
-						)}
-					</div>
-				</>
-			)}
 
+							{showTaxDetails && (
+								<button
+									type="button"
+									className={getButtonClasses(
+										AppRoutes.TAX_DETAILS,
+										'from-indigo-500',
+										'to-indigo-600'
+									)}
+									onClick={handleGoTo(AppRoutes.TAX_DETAILS)}
+									aria-label={t('sidebar.businessCard')}
+								>
+									<i className={`i-typcn-business-card ${getIconClasses(AppRoutes.TAX_DETAILS)}`} />
+									<span className={getLabelClasses(AppRoutes.TAX_DETAILS)}>
+										{t('sidebar.businessCard')}
+									</span>
+								</button>
+							)}
+						</div>
+					</>
+				)}
 			</div>
 
 			{/* Bottom Section — outside the scroll area, always visible */}
