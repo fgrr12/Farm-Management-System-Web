@@ -44,7 +44,26 @@
 	"stepper": {
 		"record": "Record",
 		"process": "Process",
+		"review": "Review",
 		"results": "Results"
+	},
+	"review": {
+		"title": "Is this right?",
+		"subtitle": "Check what's about to be saved. Remove anything that's wrong before confirming.",
+		"nothingDetected": "I couldn't find any action to take. Try recording again, a bit slower.",
+		"confirmAndSave": "Confirm and save",
+		"discardAll": "Discard all",
+		"discardOne": "Remove",
+		"savingChanges": "Saving...",
+		"unknownAnimal": "an animal",
+		"untitled": "untitled",
+		"newAnimal": "New animal #{{id}}",
+		"updateAnimal": "Edit animal #{{id}}",
+		"healthRecord": "Health — {{animal}}",
+		"productionRecord": "Production — {{animal}}",
+		"task": "Task: {{title}}",
+		"relation": "Relation between animals",
+		"calendarEvent": "Event: {{title}}"
 	},
 	"steps": {
 		"record": "Record",

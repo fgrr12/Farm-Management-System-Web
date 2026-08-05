@@ -1,10 +1,15 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { memo, useCallback, useEffect } from 'react'
+import { memo, useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
+import { summarizeVoiceOperation } from '@/utils/voiceOperationSummary'
+
+import type { VoiceEntityType } from '@/services/voice'
+
+import { useAnimals } from '@/hooks/queries/useAnimals'
 import type { VoicePhase } from '@/hooks/voice/useVoiceRecorder'
 import { useVoiceRecorder } from '@/hooks/voice/useVoiceRecorder'
 
@@ -13,7 +18,7 @@ interface VoiceCommandModalProps {
 	onClose: () => void
 }
 
-const STEPS = ['record', 'process', 'results'] as const
+const STEPS = ['record', 'process', 'review', 'results'] as const
 
 function getStepIndex(phase: VoicePhase): number {
 	switch (phase) {
@@ -22,28 +27,46 @@ function getStepIndex(phase: VoicePhase): number {
 			return 0
 		case 'processing':
 			return 1
+		case 'review':
+		case 'executing':
+			return 2
 		case 'done':
 		case 'error':
-			return 2
+			return 3
 	}
 }
+
+const ENTITY_TYPES: VoiceEntityType[] = [
+	'animals',
+	'health',
+	'production',
+	'tasks',
+	'relations',
+	'calendar',
+]
 
 export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose }) => {
 	const { t } = useTranslation(['voiceRecorder'])
 	const { user } = useUserStore()
 	const { farm } = useFarmStore()
 	const queryClient = useQueryClient()
+	const { data: animals } = useAnimals()
 
 	const {
 		phase,
 		isRecording,
 		isProcessing,
+		isExecuting,
 		recordingTime,
 		startRecording,
 		stopRecording,
 		cancelRecording,
 		transcription,
-		processingResponse,
+		pendingOperations,
+		previewWarnings,
+		previewErrors,
+		discardOperation,
+		confirmOperations,
 		executionResults,
 		error,
 		clearError,
@@ -56,35 +79,47 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
 		onError: (err) => console.error('Voice recording error:', err),
 	})
 
-	// Invalidate queries when operations complete
-	useEffect(() => {
-		if (processingResponse?.success && processingResponse.data) {
-			for (const [type, operations] of Object.entries(processingResponse.data)) {
-				if (!Array.isArray(operations) || operations.length === 0) continue
-				switch (type) {
-					case 'animals':
-						queryClient.invalidateQueries({ queryKey: ['animals'] })
-						break
-					case 'health':
-						queryClient.invalidateQueries({ queryKey: ['health-records'] })
-						queryClient.invalidateQueries({ queryKey: ['animals'] })
-						break
-					case 'production':
-						queryClient.invalidateQueries({ queryKey: ['production-records'] })
-						break
-					case 'tasks':
-						queryClient.invalidateQueries({ queryKey: ['tasks'] })
-						break
-					case 'relations':
-						queryClient.invalidateQueries({ queryKey: ['related-animals'] })
-						break
-					case 'calendar':
-						queryClient.invalidateQueries({ queryKey: ['calendar-events'] })
-						break
-				}
-			}
+	const animalLabelByUuid = useMemo(() => {
+		const map = new Map<string, string>()
+		for (const animal of animals || []) {
+			map.set(animal.uuid, `#${animal.animalId}`)
 		}
-	}, [processingResponse, queryClient])
+		return map
+	}, [animals])
+
+	// Flattened, review-ordered list — used both for the review cards and to keep the
+	// results list in the same order the operations were actually sent in.
+	const reviewItems = useMemo(() => {
+		if (!pendingOperations) return []
+		return ENTITY_TYPES.flatMap((type) =>
+			(pendingOperations[type] || []).map((op, index) => ({
+				type,
+				index,
+				op,
+				summary: summarizeVoiceOperation(type, op, t, animalLabelByUuid),
+			}))
+		)
+	}, [pendingOperations, t, animalLabelByUuid])
+
+	// Invalidate queries for whatever actually got written once execution finishes.
+	useEffect(() => {
+		if (phase !== 'done' || executionResults.length === 0) return
+		const touchedTypes = new Set(executionResults.filter((r) => r.success).map((r) => r.type))
+		const keyByType: Record<VoiceEntityType, string> = {
+			animals: 'animals',
+			health: 'healthRecords',
+			production: 'productionRecords',
+			tasks: 'tasks',
+			relations: 'related-animals',
+			calendar: 'calendar-events',
+		}
+		for (const type of touchedTypes) {
+			queryClient.invalidateQueries({ queryKey: [keyByType[type]] })
+		}
+		if (touchedTypes.has('health')) {
+			queryClient.invalidateQueries({ queryKey: ['animals'] })
+		}
+	}, [phase, executionResults, queryClient])
 
 	// Reset on close
 	useEffect(() => {
@@ -99,18 +134,18 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
 	useEffect(() => {
 		if (!isOpen) return
 		const handleKey = (e: KeyboardEvent) => {
-			if (e.key === 'Escape' && !isRecording && !isProcessing) {
+			if (e.key === 'Escape' && !isRecording && !isProcessing && !isExecuting) {
 				onClose()
 			}
 		}
 		document.addEventListener('keydown', handleKey)
 		return () => document.removeEventListener('keydown', handleKey)
-	}, [isOpen, isRecording, isProcessing, onClose])
+	}, [isOpen, isRecording, isProcessing, isExecuting, onClose])
 
 	const handleClose = useCallback(() => {
 		if (isRecording) cancelRecording()
-		if (!isProcessing) onClose()
-	}, [isRecording, isProcessing, cancelRecording, onClose])
+		if (!isProcessing && !isExecuting) onClose()
+	}, [isRecording, isProcessing, isExecuting, cancelRecording, onClose])
 
 	const handleRecordToggle = useCallback(async () => {
 		if (isRecording) {
@@ -164,7 +199,7 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
 						<button
 							type="button"
 							onClick={handleClose}
-							disabled={isProcessing}
+							disabled={isProcessing || isExecuting}
 							aria-label={t('close')}
 							className="p-2 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 cursor-pointer"
 						>
@@ -208,7 +243,7 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
 								</div>
 								{/* Connector line */}
 								{index < STEPS.length - 1 && (
-									<div className="w-16 sm:w-24 h-0.5 mx-2 mb-5 rounded-full transition-colors duration-500">
+									<div className="w-12 sm:w-20 h-0.5 mx-2 mb-5 rounded-full transition-colors duration-500">
 										<div
 											className={`h-full rounded-full transition-all duration-500 ${
 												index < currentStep ? 'bg-green-500' : 'bg-gray-200 dark:bg-gray-600'
@@ -356,12 +391,93 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
 						</div>
 					)}
 
-					{/* ────── STEP 3: Results ────── */}
+					{/* ────── STEP 3: Review (nothing has been saved yet) ────── */}
+					{(phase === 'review' || phase === 'executing') && (
+						<div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-3 duration-500">
+							<div>
+								<p className="text-lg font-bold text-gray-900 dark:text-white">
+									{t('review.title')}
+								</p>
+								<p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+									{t('review.subtitle')}
+								</p>
+							</div>
+
+							{transcription && (
+								<div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-3">
+									<p className="text-sm text-gray-700 dark:text-gray-300 italic">
+										"{transcription}"
+									</p>
+								</div>
+							)}
+
+							{previewErrors.length > 0 && (
+								<div className="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800 rounded-xl p-3">
+									<ul className="text-xs text-red-600 dark:text-red-400 space-y-0.5 list-disc pl-4">
+										{previewErrors.map((err, i) => (
+											<li key={i}>{err}</li>
+										))}
+									</ul>
+								</div>
+							)}
+
+							{previewWarnings.length > 0 && (
+								<div className="bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-200 dark:border-yellow-800 rounded-xl p-3">
+									<ul className="text-xs text-yellow-700 dark:text-yellow-400 space-y-0.5 list-disc pl-4">
+										{previewWarnings.map((warning, i) => (
+											<li key={i}>{warning}</li>
+										))}
+									</ul>
+								</div>
+							)}
+
+							{reviewItems.length === 0 ? (
+								<div className="text-center py-6 text-sm text-gray-500 dark:text-gray-400">
+									{t('review.nothingDetected')}
+								</div>
+							) : (
+								<div className="space-y-2">
+									{reviewItems.map(({ type, index, summary }) => (
+										<div
+											key={`${type}-${index}`}
+											className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
+										>
+											<span className="shrink-0 w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+												<OperationIcon type={type} />
+											</span>
+											<div className="flex-1 min-w-0">
+												<p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+													{summary.primary}
+												</p>
+												{summary.secondary && (
+													<p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+														{summary.secondary}
+													</p>
+												)}
+											</div>
+											{phase === 'review' && (
+												<button
+													type="button"
+													onClick={() => discardOperation(type, index)}
+													aria-label={t('review.discardOne')}
+													className="shrink-0 p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors cursor-pointer"
+												>
+													<span className="i-heroicons-x-mark w-4 h-4" />
+												</button>
+											)}
+										</div>
+									))}
+								</div>
+							)}
+						</div>
+					)}
+
+					{/* ────── STEP 4: Results ────── */}
 					{phase === 'done' && (
 						<div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-3 duration-500">
 							{/* Result header */}
 							{(() => {
-								const allFailed = successCount === 0
+								const allFailed = successCount === 0 && errorCount > 0
 								const hasErrors = errorCount > 0
 								const bannerClass = allFailed
 									? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-700'
@@ -412,39 +528,6 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
 								)
 							})()}
 
-							{/* Transcription */}
-							{transcription && (
-								<div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
-									<div className="flex items-center gap-2 mb-2">
-										<span className="i-heroicons-chat-bubble-bottom-center-text text-gray-400 w-4 h-4" />
-										<span className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">
-											{t('transcription')}
-										</span>
-									</div>
-									<p className="text-sm text-gray-700 dark:text-gray-300 italic">
-										"{transcription}"
-									</p>
-								</div>
-							)}
-
-							{/* Operations badges */}
-							{processingResponse?.data && (
-								<div className="flex flex-wrap gap-2">
-									{Object.entries(processingResponse.data).map(([type, operations]) => {
-										if (!Array.isArray(operations) || operations.length === 0) return null
-										return (
-											<span
-												key={type}
-												className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300"
-											>
-												<OperationIcon type={type} />
-												{t(`operations.${type}`)}: {operations.length}
-											</span>
-										)
-									})}
-								</div>
-							)}
-
 							{/* Execution results list */}
 							{executionResults.length > 0 && (
 								<div className="space-y-2">
@@ -486,33 +569,6 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
 									))}
 								</div>
 							)}
-
-							{/* Warnings */}
-							{processingResponse?.warnings && processingResponse.warnings.length > 0 && (
-								<div className="bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-200 dark:border-yellow-800 rounded-xl p-3">
-									<div className="flex items-center gap-2 mb-1">
-										<span className="i-heroicons-exclamation-triangle text-yellow-500 w-4 h-4" />
-										<span className="text-xs font-semibold text-yellow-700 dark:text-yellow-300">
-											{t('warnings')} ({processingResponse.warnings.length})
-										</span>
-									</div>
-									<ul className="text-xs text-yellow-600 dark:text-yellow-400 space-y-0.5 pl-6 list-disc">
-										{processingResponse.warnings.map((warning, i) => (
-											<li key={i}>{warning}</li>
-										))}
-									</ul>
-								</div>
-							)}
-
-							{/* Audio playback */}
-							{audioURL && (
-								<div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-3">
-									<audio controls className="w-full h-8" style={{ height: '32px' }}>
-										<source src={audioURL} type="audio/webm" />
-										<track kind="captions" srcLang="en" label="English captions" />
-									</audio>
-								</div>
-							)}
 						</div>
 					)}
 
@@ -532,6 +588,34 @@ export const VoiceCommandModal = memo<VoiceCommandModalProps>(({ isOpen, onClose
 
 				{/* Footer actions */}
 				<div className="shrink-0 px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+					{phase === 'review' && (
+						<div className="flex gap-3">
+							<button
+								type="button"
+								onClick={handleRecordAgain}
+								className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-sm cursor-pointer"
+							>
+								<span className="i-heroicons-arrow-path w-4 h-4" />
+								{reviewItems.length === 0 ? t('recordAgain') : t('review.discardAll')}
+							</button>
+							{reviewItems.length > 0 && (
+								<button
+									type="button"
+									onClick={confirmOperations}
+									className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-linear-to-r from-pink-500 to-purple-600 text-white hover:from-pink-600 hover:to-purple-700 transition-all font-medium text-sm shadow-md cursor-pointer"
+								>
+									<span className="i-heroicons-check w-4 h-4" />
+									{t('review.confirmAndSave')}
+								</button>
+							)}
+						</div>
+					)}
+					{phase === 'executing' && (
+						<div className="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+							<div className="loading loading-dots loading-xs" />
+							{t('review.savingChanges')}
+						</div>
+					)}
 					{phase === 'done' && (
 						<div className="flex gap-3">
 							<button

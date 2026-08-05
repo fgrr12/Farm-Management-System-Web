@@ -8,6 +8,7 @@ import { connectStorageEmulator, getStorage } from 'firebase/storage'
 import {
 	isLocalDevelopment,
 	useEmulators,
+	useFunctionsEmulator,
 	VITE_API_KEY,
 	VITE_APP_ID,
 	VITE_AUTH_DOMAIN,
@@ -56,6 +57,17 @@ if (useEmulators && isLocalDevelopment) {
 		console.info('🔧 Firebase Emulators connected for local development')
 	} catch (error) {
 		console.warn('Firebase Emulators connection failed (may already be connected):', error)
+	}
+}
+
+// Functions-only emulator: local backend code, real Auth/Firestore/Storage data
+if (useFunctionsEmulator && !useEmulators && VITE_FUNCTIONS_EMULATOR_URL) {
+	try {
+		const url = new URL(VITE_FUNCTIONS_EMULATOR_URL)
+		connectFunctionsEmulator(functions, url.hostname, Number(url.port))
+		console.info('🔧 Functions emulator connected (Auth/Firestore/Storage using real backend)')
+	} catch (error) {
+		console.warn('Functions emulator connection failed (may already be connected):', error)
 	}
 }
 

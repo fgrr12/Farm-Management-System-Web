@@ -2,19 +2,26 @@ import { useCallback, useRef, useState } from 'react'
 
 import {
 	type ExecutionResult,
+	type VoiceEntityType,
+	type VoiceOperations,
 	type VoiceProcessingRequest,
-	type VoiceProcessingResponse,
 	VoiceService,
 } from '@/services/voice'
 
-export type VoicePhase = 'idle' | 'recording' | 'processing' | 'done' | 'error'
+export type VoicePhase =
+	| 'idle'
+	| 'recording'
+	| 'processing'
+	| 'review'
+	| 'executing'
+	| 'done'
+	| 'error'
 
 export interface UseVoiceRecorderConfig {
 	farmUuid: string
 	userUuid: string
 	maxRecordingTime?: number
 	onTranscriptionComplete?: (transcription: string) => void
-	onProcessingComplete?: (response: VoiceProcessingResponse) => void
 	onExecutionComplete?: (results: ExecutionResult[]) => void
 	onError?: (error: string) => void
 }
@@ -23,6 +30,7 @@ export interface UseVoiceRecorderReturn {
 	phase: VoicePhase
 	isRecording: boolean
 	isProcessing: boolean
+	isExecuting: boolean
 	recordingTime: number
 
 	startRecording: () => Promise<void>
@@ -30,7 +38,13 @@ export interface UseVoiceRecorderReturn {
 	cancelRecording: () => void
 
 	transcription: string | null
-	processingResponse: VoiceProcessingResponse | null
+	/** What the AI understood, still editable (by dropping items) before it's written anywhere. */
+	pendingOperations: VoiceOperations | null
+	previewWarnings: string[]
+	previewErrors: string[]
+	discardOperation: (type: VoiceEntityType, index: number) => void
+	confirmOperations: () => Promise<void>
+
 	executionResults: ExecutionResult[]
 
 	error: string | null
@@ -46,7 +60,9 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 	const [phase, setPhase] = useState<VoicePhase>('idle')
 	const [recordingTime, setRecordingTime] = useState(0)
 	const [transcription, setTranscription] = useState<string | null>(null)
-	const [processingResponse, setProcessingResponse] = useState<VoiceProcessingResponse | null>(null)
+	const [pendingOperations, setPendingOperations] = useState<VoiceOperations | null>(null)
+	const [previewWarnings, setPreviewWarnings] = useState<string[]>([])
+	const [previewErrors, setPreviewErrors] = useState<string[]>([])
 	const [executionResults, setExecutionResults] = useState<ExecutionResult[]>([])
 	const [error, setError] = useState<string | null>(null)
 	const [audioBlob, setAudioBlob] = useState<Blob | null>(null)
@@ -65,7 +81,9 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 
 	const reset = useCallback(() => {
 		setTranscription(null)
-		setProcessingResponse(null)
+		setPendingOperations(null)
+		setPreviewWarnings([])
+		setPreviewErrors([])
 		setExecutionResults([])
 		setError(null)
 		setAudioBlob(null)
@@ -94,80 +112,18 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 					maxDuration: config.maxRecordingTime || 60,
 				}
 
-				const response = await VoiceService.processAndExecuteVoiceCommand(request)
+				const response = await VoiceService.previewVoiceCommand(request)
 
-				if (!response || !response.data) {
-					throw new Error('Invalid response from voice processing service')
+				setTranscription(response.transcription || null)
+				setPreviewWarnings(response.warnings || [])
+				setPreviewErrors(response.errors || [])
+				if (response.transcription) {
+					config.onTranscriptionComplete?.(response.transcription)
 				}
 
-				const extractionResult = response.data
-
-				setTranscription(extractionResult.transcription || null)
-				setProcessingResponse(extractionResult)
-
-				if (extractionResult.transcription) {
-					config.onTranscriptionComplete?.(extractionResult.transcription)
-				}
-				config.onProcessingComplete?.(extractionResult)
-
-				// Build execution results with proper type mapping from response data
-				const results: ExecutionResult[] = []
-				if (extractionResult.data) {
-					for (const [type, operations] of Object.entries(extractionResult.data)) {
-						if (!Array.isArray(operations)) continue
-						for (const op of operations) {
-							results.push({
-								type: type as ExecutionResult['type'],
-								success: true,
-								operation: op.operation || 'create',
-							})
-						}
-					}
-				}
-
-				// Cross-reference execution results to mark failures
-				const execution = extractionResult.execution
-				if (execution) {
-					const executionErrors = execution.errors ?? []
-
-					if (results.length > 0) {
-						const failedCount = results.length - (execution.successCount ?? results.length)
-						if (failedCount > 0) {
-							for (let i = 0; i < failedCount && i < results.length; i++) {
-								const idx = results.length - 1 - i
-								results[idx].success = false
-								results[idx].error = executionErrors[i] || undefined
-							}
-						}
-						// Append extra errors not mapped to an operation
-						const mappedCount = Math.min(
-							Math.max(results.length - (execution.successCount ?? results.length), 0),
-							results.length
-						)
-						for (let i = mappedCount; i < executionErrors.length; i++) {
-							results.push({
-								type: 'animal',
-								success: false,
-								error: executionErrors[i],
-								operation: 'unknown',
-							})
-						}
-					} else {
-						// No operations parsed from AI data — show each error as standalone
-						for (const err of executionErrors) {
-							results.push({
-								type: 'animal',
-								success: false,
-								error: err,
-								operation: 'create',
-							})
-						}
-					}
-				}
-
-				setExecutionResults(results)
-				config.onExecutionComplete?.(results)
-				setPhase('done')
+				// Nothing gets written yet — the user reviews what was understood next.
+				setPendingOperations(response.data || {})
+				setPhase('review')
 			} catch (err) {
 				const errorMessage = err instanceof Error ? err.message : 'Failed to process audio'
 				setError(errorMessage)
@@ -177,6 +133,51 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 		},
 		[config]
 	)
+
+	const discardOperation = useCallback((type: VoiceEntityType, index: number) => {
+		setPendingOperations((prev) => {
+			if (!prev?.[type]) return prev
+			return { ...prev, [type]: prev[type]!.filter((_, i) => i !== index) }
+		})
+	}, [])
+
+	const confirmOperations = useCallback(async () => {
+		if (!pendingOperations) return
+
+		// Flatten in the same order they'll be sent, so the backend's aggregate
+		// successCount/errors can be mapped back onto individual items for display.
+		const flattened: ExecutionResult[] = []
+		for (const [type, ops] of Object.entries(pendingOperations)) {
+			if (!Array.isArray(ops)) continue
+			for (const op of ops) {
+				flattened.push({ type: type as VoiceEntityType, success: true, operation: op.operation })
+			}
+		}
+
+		try {
+			setPhase('executing')
+			const execution = await VoiceService.executeVoiceOperations(
+				pendingOperations,
+				config.farmUuid,
+				config.userUuid
+			)
+
+			const failedCount = flattened.length - execution.successCount
+			for (let i = 0; i < failedCount && i < flattened.length; i++) {
+				const idx = flattened.length - 1 - i
+				flattened[idx] = { ...flattened[idx]!, success: false, error: execution.errors[i] }
+			}
+
+			setExecutionResults(flattened)
+			config.onExecutionComplete?.(flattened)
+			setPhase('done')
+		} catch (err) {
+			const errorMessage = err instanceof Error ? err.message : 'Failed to save the changes'
+			setError(errorMessage)
+			setPhase('error')
+			config.onError?.(errorMessage)
+		}
+	}, [pendingOperations, config])
 
 	const startRecording = useCallback(async () => {
 		try {
@@ -290,6 +291,7 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 		phase,
 		isRecording: phase === 'recording',
 		isProcessing: phase === 'processing',
+		isExecuting: phase === 'executing',
 		recordingTime,
 
 		startRecording,
@@ -297,7 +299,12 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 		cancelRecording,
 
 		transcription,
-		processingResponse,
+		pendingOperations,
+		previewWarnings,
+		previewErrors,
+		discardOperation,
+		confirmOperations,
+
 		executionResults,
 
 		error,

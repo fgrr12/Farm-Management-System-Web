@@ -44,7 +44,26 @@
 	"stepper": {
 		"record": "Grabar",
 		"process": "Procesar",
+		"review": "Revisar",
 		"results": "Resultados"
+	},
+	"review": {
+		"title": "¿Esto es correcto?",
+		"subtitle": "Revisá lo que se va a guardar. Sacá lo que esté mal antes de confirmar.",
+		"nothingDetected": "No encontré ninguna acción para hacer. Probá grabar de nuevo, más despacio.",
+		"confirmAndSave": "Confirmar y guardar",
+		"discardAll": "Descartar todo",
+		"discardOne": "Quitar",
+		"savingChanges": "Guardando...",
+		"unknownAnimal": "un animal",
+		"untitled": "sin título",
+		"newAnimal": "Animal nuevo #{{id}}",
+		"updateAnimal": "Editar animal #{{id}}",
+		"healthRecord": "Salud — {{animal}}",
+		"productionRecord": "Producción — {{animal}}",
+		"task": "Tarea: {{title}}",
+		"relation": "Relación entre animales",
+		"calendarEvent": "Evento: {{title}}"
 	},
 	"steps": {
 		"record": "Grabar",
