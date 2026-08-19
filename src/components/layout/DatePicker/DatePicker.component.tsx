@@ -149,8 +149,9 @@ export const DatePicker: FC<DatePickerProps> = ({ legend, label, date, onDateCha
 							className="react-day-picker p-2 text-gray-900 dark:text-gray-100"
 							mode="single"
 							captionLayout="dropdown"
-							fromYear={2010}
-							toYear={dayjs().year() + 10}
+							// react-day-picker v10 dropped fromYear/toYear in favour of a month range.
+							startMonth={new Date(2010, 0)}
+							endMonth={new Date(dayjs().year() + 10, 11)}
 							locale={user?.language === 'spa' ? es : enUS}
 							components={{ Dropdown: CustomSelectDropdown }}
 							selected={date?.toDate()}
