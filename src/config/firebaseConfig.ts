@@ -18,29 +18,21 @@ import {
 	VITE_STORAGE_BUCKET,
 } from './environment'
 
-/**
- * Serve the OAuth handler from our own origin whenever we can.
+/*
+ * NOTE: authDomain deliberately stays on Firebase's own `<project>.firebaseapp.com`.
  *
- * The default `<project>.firebaseapp.com` authDomain makes the sign-in popup
- * cross-origin, which costs us two things: Chrome reports COOP on the SDK's
- * `window.close()`, and `signInWithRedirect` ends up depending on third-party
- * cookies (blocked by Safari, increasingly by Chrome) where it fails silently.
- * Firebase Hosting serves `/__/auth/**` natively for any site in the project,
- * so pointing authDomain at our own host makes the whole flow same-origin.
- *
- * Only applies over https: the SDK always builds the handler URL as
- * `https://<authDomain>/__/auth/handler`, so a plain-http dev server would end
- * up requesting an https URL that does not exist. Local dev keeps Firebase's
- * own domain, and the auth emulator keeps it too since it serves its own widget.
+ * Pointing it at our own host would make the sign-in popup same-origin (no COOP
+ * warning, and redirect sign-in would stop depending on third-party cookies), and
+ * Firebase Hosting does serve `/__/auth/**` for any site in the project. But the
+ * handler URL doubles as the OAuth `redirect_uri`, and Google only has
+ * `https://<project>.firebaseapp.com/__/auth/handler` registered on the project's
+ * OAuth client. Switching the domain without also adding the new URI under
+ * Google Cloud Console → Credentials → OAuth 2.0 Client ID → Authorized redirect
+ * URIs breaks sign-in with `Error 400: redirect_uri_mismatch`.
  */
-const resolveAuthDomain = () => {
-	if (typeof window === 'undefined' || useEmulators) return VITE_AUTH_DOMAIN
-	return window.location.protocol === 'https:' ? window.location.host : VITE_AUTH_DOMAIN
-}
-
 const firebaseConfig = {
 	apiKey: VITE_API_KEY,
-	authDomain: resolveAuthDomain(),
+	authDomain: VITE_AUTH_DOMAIN,
 	projectId: VITE_PROJECT_ID,
 	storageBucket: VITE_STORAGE_BUCKET,
 	messagingSenderId: VITE_MESSAGING_SENDER_ID,
