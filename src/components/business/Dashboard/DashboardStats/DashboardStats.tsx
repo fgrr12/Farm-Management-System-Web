@@ -1,6 +1,8 @@
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useFarmStore } from '@/store/useFarmStore'
+
 import { useDashboardData } from '@/hooks/dashboard/useDashboardData'
 
 import { StatCard } from './StatCard'
@@ -8,6 +10,7 @@ import { StatCard } from './StatCard'
 export const DashboardStats = memo(() => {
 	const { t } = useTranslation(['dashboard'])
 	const { stats, loading, loadingSecondary } = useDashboardData()
+	const { farm } = useFarmStore()
 
 	return (
 		<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -37,7 +40,8 @@ export const DashboardStats = memo(() => {
 			/>
 			<StatCard
 				title={t('stats.monthlyProduction')}
-				value={`${stats.monthlyProduction}L`}
+				value={stats.monthlyProduction}
+				suffix={farm?.liquidUnit ?? ''}
 				change={stats.productionChange}
 				icon="i-material-symbols-water-drop"
 				color="purple"

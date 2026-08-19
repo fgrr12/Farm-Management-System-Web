@@ -55,12 +55,6 @@
 		"description": "Ingresa la descripción del evento",
 		"relatedId": "Ingresa el ID relacionado"
 	},
-	"errors": {
-		"titleRequired": "El título es requerido",
-		"titleTooShort": "El título debe tener al menos 3 caracteres",
-		"dateRequired": "La fecha es requerida",
-		"invalidTime": "La hora no es válida"
-	},
 	"categories": {
 		"all": "Todos",
 		"medication": "Medicación",
@@ -84,22 +78,13 @@
 		"date": "Fecha",
 		"time": "Hora",
 		"optional": "opcional",
-		"animalId": "ID del Animal",
-		"animalIdPlaceholder": "Ingresa el ID del animal",
-		"location": "Ubicación",
-		"locationPlaceholder": "Ingresa la ubicación del evento",
-		"notes": "Notas",
-		"notesPlaceholder": "Ingresa notas adicionales",
-		"tags": "Etiquetas",
-		"tagsPlaceholder": "Presiona Enter para agregar",
-		"tagsHint": "Presiona Enter para agregar una etiqueta",
-		"completed": "Completado",
 		"errors": {
 			"titleRequired": "El título es requerido",
 			"titleTooShort": "El título debe tener al menos 3 caracteres",
 			"dateRequired": "La fecha es requerida",
 			"invalidTime": "La hora no es válida"
-		}
+		},
+		"status": "Estado"
 	},
 	"view": {
 		"month": "Mes",
@@ -124,5 +109,12 @@
 		"daily": "Diario",
 		"weekly": "Semanal",
 		"monthly": "Mensual"
-	}
+	},
+	"toast": {
+		"saved": "Evento guardado",
+		"saveError": "No se pudo guardar el evento",
+		"deleted": "Evento eliminado",
+		"deleteError": "No se pudo eliminar el evento"
+	},
+	"relatedTypeLabel": "Relacionado con"
 }

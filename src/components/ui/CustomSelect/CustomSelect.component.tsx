@@ -55,6 +55,7 @@ export const CustomSelect = forwardRef<CustomSelectRef, CustomSelectProps>(
 		// Refs
 		const containerRef = useRef<HTMLDivElement>(null)
 		const inputRef = useRef<HTMLInputElement>(null)
+		const suppressOpenOnFocus = useRef(false)
 		const dropdownRef = useRef<HTMLDivElement>(null)
 
 		// State
@@ -152,7 +153,13 @@ export const CustomSelect = forwardRef<CustomSelectRef, CustomSelectProps>(
 		// Handle input focus
 		const handleInputFocus = useCallback(() => {
 			setIsFocused(true)
-			setIsOpen(true)
+			// Clearing refocuses the input for keyboard users; without this guard that
+			// focus immediately reopened the list the user had just closed.
+			if (suppressOpenOnFocus.current) {
+				suppressOpenOnFocus.current = false
+			} else {
+				setIsOpen(true)
+			}
 			if (searchable && selectedOption) {
 				setSearchTerm('')
 			}
@@ -225,6 +232,7 @@ export const CustomSelect = forwardRef<CustomSelectRef, CustomSelectProps>(
 			setSearchTerm('')
 			setIsOpen(false)
 			setHighlightedIndex(-1)
+			suppressOpenOnFocus.current = true
 			inputRef.current?.focus()
 		}, [onChange])
 
@@ -344,6 +352,7 @@ export const CustomSelect = forwardRef<CustomSelectRef, CustomSelectProps>(
 						onFocus={handleInputFocus}
 						onBlur={handleInputBlur}
 						onKeyDown={handleKeyDown}
+						aria-invalid={!!error}
 						placeholder={
 							isOpen && searchable
 								? t('common:customSelect.searchPlaceholder')

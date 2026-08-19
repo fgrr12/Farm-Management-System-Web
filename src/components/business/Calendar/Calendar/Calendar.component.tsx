@@ -1,15 +1,18 @@
 import dayjs from 'dayjs'
 import isBetween from 'dayjs/plugin/isBetween'
 import localeData from 'dayjs/plugin/localeData'
-import 'dayjs/locale/es'
 
 dayjs.extend(isBetween)
 dayjs.extend(localeData)
-dayjs.locale('es')
+
+// Locale is set globally in src/i18n.ts and follows the UI language — do not
+// pin it here: this module is lazy-loaded, so it would change dates app-wide
+// only after the user happens to visit the calendar.
 
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useAppStore } from '@/store/useAppStore'
 import { useUserStore } from '@/store/useUserStore'
 
 import {
@@ -27,6 +30,7 @@ import { CalendarFilters } from '../CalendarFilters'
 export const Calendar = memo(() => {
 	const { t } = useTranslation(['calendar'])
 	const { user } = useUserStore()
+	const { setToastData } = useAppStore()
 
 	// State
 	const [currentMonth, setCurrentMonth] = useState<dayjs.Dayjs>(dayjs())
@@ -254,11 +258,15 @@ export const Calendar = memo(() => {
 				setShowEventModal(false)
 				setSelectedEvent(null)
 				setSelectedDate(null)
+				setToastData({ message: t('toast.saved'), type: 'success' })
 			} catch (error) {
 				console.error('Error creating event:', error)
+				setToastData({ message: t('toast.saveError'), type: 'error' })
+				// Rethrow so the modal keeps itself open instead of closing as if it saved.
+				throw error
 			}
 		},
-		[createEventMutation, user?.uuid]
+		[createEventMutation, user?.uuid, setToastData, t]
 	)
 
 	const handleUpdateEvent = useCallback(
@@ -273,11 +281,14 @@ export const Calendar = memo(() => {
 				setShowEventModal(false)
 				setSelectedEvent(null)
 				setSelectedDate(null)
+				setToastData({ message: t('toast.saved'), type: 'success' })
 			} catch (error) {
 				console.error('Error updating event:', error)
+				setToastData({ message: t('toast.saveError'), type: 'error' })
+				throw error
 			}
 		},
-		[updateEventMutation, user?.uuid]
+		[updateEventMutation, user?.uuid, setToastData, t]
 	)
 
 	const handleDeleteEvent = useCallback(
@@ -292,11 +303,14 @@ export const Calendar = memo(() => {
 				setShowEventModal(false)
 				setSelectedEvent(null)
 				setSelectedDate(null)
+				setToastData({ message: t('toast.deleted'), type: 'success' })
 			} catch (error) {
 				console.error('Error deleting event:', error)
+				setToastData({ message: t('toast.deleteError'), type: 'error' })
+				throw error
 			}
 		},
-		[deleteEventMutation, user?.uuid]
+		[deleteEventMutation, user?.uuid, setToastData, t]
 	)
 
 	// Obtener el estilo visual para un día
@@ -540,7 +554,10 @@ export const Calendar = memo(() => {
 			{/* Días de la semana - solo mostrar en vista de mes y semana */}
 			{viewMode !== 'day' && (
 				<div className="grid grid-cols-7 bg-gray-100 dark:bg-gray-700">
-					{dayjs.weekdaysShort().map((day) => (
+					{/* `true` reorders the array to the locale's weekStart, matching the grid,
+					    which is built from startOf('week'). Without it the headers start on
+					    Sunday while the grid starts on Monday and every date is off by one. */}
+					{dayjs.weekdaysShort(true).map((day) => (
 						<div
 							key={day}
 							className="py-3 px-2 text-center text-sm font-semibold text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-600 last:border-r-0"

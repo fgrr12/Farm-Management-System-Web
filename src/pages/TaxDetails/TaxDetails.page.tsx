@@ -61,18 +61,11 @@ const TaxDetails = () => {
 								isFlipped ? 'rotate-y-180' : ''
 							}`}
 							onClick={() => setIsFlipped(!isFlipped)}
-							style={{
-								transformStyle: 'preserve-3d',
-								transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
-							}}
 						>
 							{/* Front Side */}
 							<div
 								className="absolute inset-0 w-92.5 h-53.75 bg-linear-to-br from-slate-800 via-slate-700 to-slate-900 rounded-xl p-5 shadow-2xl backface-hidden"
-								style={{
-									backfaceVisibility: 'hidden',
-									fontFamily: 'Inter, Arial, sans-serif',
-								}}
+								style={{ fontFamily: 'Inter, Arial, sans-serif' }}
 							>
 								{/* Background Effects */}
 								<div className="absolute inset-0 opacity-20">
@@ -153,12 +146,8 @@ const TaxDetails = () => {
 
 							{/* Back Side - Activities */}
 							<div
-								className="absolute inset-0 w-92.5 h-53.75 bg-linear-to-br from-slate-800 via-slate-700 to-slate-900 rounded-xl p-5 shadow-2xl backface-hidden"
-								style={{
-									backfaceVisibility: 'hidden',
-									transform: 'rotateY(180deg)',
-									fontFamily: 'Inter, Arial, sans-serif',
-								}}
+								className="absolute inset-0 w-92.5 h-53.75 bg-linear-to-br from-slate-800 via-slate-700 to-slate-900 rounded-xl p-5 shadow-2xl backface-hidden backface-back"
+								style={{ fontFamily: 'Inter, Arial, sans-serif' }}
 							>
 								{/* Background Effects */}
 								<div className="absolute inset-0 opacity-20">

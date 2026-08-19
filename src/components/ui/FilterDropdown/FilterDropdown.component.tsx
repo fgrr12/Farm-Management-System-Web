@@ -8,7 +8,8 @@ interface FilterDropdownProps<T = Record<string, any>> {
 	activeButtonLabel?: string
 	clearButtonLabel?: string
 	doneButtonLabel?: string
-	filtersAppliedLabel?: string
+	/** Receives the count so i18next can pick the right plural form. */
+	filtersAppliedLabel?: (count: number) => string
 	noFiltersAppliedLabel?: string
 	className?: string
 }
@@ -22,7 +23,7 @@ export const FilterDropdown = <T extends Record<string, any>>(props: FilterDropd
 		activeButtonLabel = 'Filters Active',
 		clearButtonLabel = 'Clear Filters',
 		doneButtonLabel = 'Done',
-		filtersAppliedLabel = '{{count}} filters applied',
+		filtersAppliedLabel = (count: number) => `${count} filters applied`,
 		noFiltersAppliedLabel = 'No filters applied',
 		className,
 	} = props
@@ -50,39 +51,31 @@ export const FilterDropdown = <T extends Record<string, any>>(props: FilterDropd
 	}, [filters, onFiltersChange])
 
 	const calculateDropdownPosition = useCallback(() => {
-		if (buttonRef.current) {
-			const rect = buttonRef.current.getBoundingClientRect()
-			const dropdownHeight = 400
-			const spaceAbove = rect.top
-			const spaceBelow = window.innerHeight - rect.bottom
-			const isMobile = window.innerWidth < 640
+		if (!buttonRef.current) return
 
-			if (isMobile) {
-				// En mobile, usar posicionamiento más simple y centrado
-				const dropdownWidth = Math.min(320, window.innerWidth - 32) // 16px margin on each side
-				const leftPosition = Math.max(16, (window.innerWidth - dropdownWidth) / 2)
+		const rect = buttonRef.current.getBoundingClientRect()
+		const margin = 8
+		const dropdownHeight = 400
+		const spaceAbove = rect.top - margin
+		const spaceBelow = window.innerHeight - rect.bottom - margin
+		const isMobile = window.innerWidth < 640
 
-				// En mobile, siempre mostrar debajo del botón si hay espacio, sino arriba
-				const showAbove = spaceBelow < 300 && spaceAbove > 300
+		// Only flip upwards when it genuinely fits there. The old rule opened upwards
+		// whenever the space below was tight, even with less room above, and then
+		// subtracted a fixed 400px — pushing the panel off the top of the screen.
+		const showAbove = spaceBelow < dropdownHeight && spaceAbove > spaceBelow
 
-				setDropdownPosition({
-					top: showAbove ? rect.top - dropdownHeight - 8 : rect.bottom + 8,
-					left: leftPosition,
-					width: dropdownWidth,
-				})
-			} else {
-				// Desktop: posicionamiento original
-				const showAbove = spaceAbove > dropdownHeight || spaceBelow < dropdownHeight
-				const dropdownWidth = 320
-				let leftPosition = rect.right - dropdownWidth
+		const dropdownWidth = isMobile ? Math.min(320, window.innerWidth - 32) : 320
+		const leftPosition = isMobile
+			? Math.max(16, (window.innerWidth - dropdownWidth) / 2)
+			: Math.max(margin, rect.right - dropdownWidth)
 
-				setDropdownPosition({
-					top: showAbove ? rect.top - dropdownHeight - 8 : rect.bottom + 8,
-					left: leftPosition,
-					width: dropdownWidth,
-				})
-			}
-		}
+		const rawTop = showAbove ? rect.top - dropdownHeight - margin : rect.bottom + margin
+		// Clamp so the panel is always fully on screen whichever way it opened.
+		const maxTop = Math.max(margin, window.innerHeight - dropdownHeight - margin)
+		const top = Math.min(Math.max(margin, rawTop), maxTop)
+
+		setDropdownPosition({ top, left: leftPosition, width: dropdownWidth })
 	}, [])
 
 	const handleClickOutside = useCallback((event: MouseEvent) => {
@@ -239,7 +232,7 @@ export const FilterDropdown = <T extends Record<string, any>>(props: FilterDropd
 							<div className="flex items-center justify-between">
 								<span className="text-sm text-gray-500 dark:text-gray-400">
 									{hasActiveFilters
-										? filtersAppliedLabel.replace('{{count}}', activeFiltersCount.toString())
+										? filtersAppliedLabel(activeFiltersCount)
 										: noFiltersAppliedLabel}
 								</span>
 								<button

@@ -73,7 +73,7 @@ const updateProductionRecordStatus = async (productionRecordUuid: string, userUu
 	const response = await callableFireFunction<{ success: boolean }>('production', {
 		operation: 'updateProductionRecordStatus',
 		productionRecordUuid,
-		userUuid,
+		updatedBy: userUuid,
 	})
 	return response
 }

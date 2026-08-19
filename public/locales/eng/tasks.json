@@ -44,7 +44,8 @@
 		"archived": "Archived",
 		"done": "Done",
 		"in-progress": "In Progress",
-		"todo": "To Do"
+		"todo": "To Do",
+		"overdue": "Overdue"
 	},
 	"statusLabel": "Status",
 	"subtitle": "Organize and track your farm tasks",

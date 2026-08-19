@@ -13,6 +13,7 @@ export interface HealthRecordsTableProps {
 export interface HealthRecordsFilters {
 	fromDate: dayjs.Dayjs | null
 	toDate: dayjs.Dayjs | null
-	type: HealthRecordType
+	/** '' means "any type" — a filter value, not a valid record type. */
+	type: HealthRecordType | ''
 	createdBy: string
 }

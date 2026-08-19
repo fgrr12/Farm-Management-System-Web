@@ -1,4 +1,5 @@
 import { draggable } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
+import dayjs from 'dayjs'
 import { type FC, memo, useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -249,12 +250,12 @@ export const TaskCard: FC<TaskCardProps> = memo(
 						<div className="mt-2 text-sm text-gray-500 dark:text-gray-400">
 							{task.updatedAt && (
 								<span>
-									{t('updatedAt')}: {new Date(task.updatedAt).toLocaleDateString()}
+									{t('updatedAt')}: {dayjs(task.updatedAt).format('DD/MM/YYYY')}
 								</span>
 							)}
 							{!task.updatedAt && task.createdAt && (
 								<span>
-									{t('createdAt')}: {new Date(task.createdAt).toLocaleDateString()}
+									{t('createdAt')}: {dayjs(task.createdAt).format('DD/MM/YYYY')}
 								</span>
 							)}
 						</div>

@@ -1,13 +1,4 @@
 {
-	"title": "Notificaciones",
-	"unread": "sin leer",
-	"markAllRead": "Marcar todas como leídas",
-	"markAsRead": "Marcar como leída",
-	"dismiss": "Descartar",
-	"noNotifications": "No hay notificaciones",
-	"enableNotifications": "Activar",
-	"settings": "Configuración",
-	"notificationSettings": "Configuración de Notificaciones",
 	"categories": {
 		"all": "Todas",
 		"medication": "Medicación",
@@ -16,6 +7,46 @@
 		"production": "Producción",
 		"general": "General"
 	},
+	"dismiss": "Descartar",
+	"enableNotifications": "Activar",
+	"errors": {
+		"notSupported": "Las notificaciones no están soportadas en este navegador",
+		"permissionDenied": "Permisos de notificación denegados",
+		"permissionRequestFailed": "Error al solicitar permisos de notificación",
+		"tokenUnavailable": "No se pudo obtener el token de registro",
+		"tokenFailed": "Error al obtener el token FCM",
+		"registerFailed": "Error al registrar el token del dispositivo",
+		"removeFailed": "Error al eliminar el token del dispositivo"
+	},
+	"markAllRead": "Marcar todas como leídas",
+	"markAsRead": "Marcar como leída",
+	"noNotifications": "No hay notificaciones",
 	"noNotificationsInCategory": "No hay notificaciones en esta categoría",
-	"notificationsWillAppearHere": "Las notificaciones aparecerán aquí"
+	"notificationSettings": "Configuración de Notificaciones",
+	"notificationsWillAppearHere": "Las notificaciones aparecerán aquí",
+	"settings": "Configuración",
+	"settingsPanel": {
+		"unsupportedTitle": "Notificaciones no soportadas",
+		"unsupportedMessage": "Tu navegador no soporta notificaciones push. Para recibir notificaciones, actualiza tu navegador o usa uno compatible.",
+		"permissionStatus": "Estado de permisos",
+		"permissionGranted": "Permisos concedidos",
+		"permissionDenied": "Permisos no concedidos",
+		"active": "Activo",
+		"inactive": "Inactivo",
+		"deviceRegistered": "Dispositivo registrado",
+		"deviceRegisteredYes": "Tu dispositivo está registrado para recibir notificaciones",
+		"deviceRegisteredNo": "Tu dispositivo no está registrado",
+		"registered": "Registrado",
+		"notRegistered": "No registrado",
+		"enable": "Activar notificaciones",
+		"disableOnDevice": "Desactivar en este dispositivo",
+		"infoTitle": "Información sobre las notificaciones:",
+		"infoKeepsYouInformed": "Te mantienen informado sobre eventos importantes en tu granja",
+		"infoIncludes": "Incluyen alertas de salud animal, recordatorios de medicación y actualizaciones de tareas",
+		"infoCanDisable": "Puedes desactivarlas en cualquier momento",
+		"infoPerDevice": "Los permisos son por dispositivo y navegador",
+		"errorIcon": "Icono de error"
+	},
+	"title": "Notificaciones",
+	"unread": "sin leer"
 }

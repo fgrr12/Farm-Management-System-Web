@@ -8,7 +8,9 @@
 	"datesAndStatus": "Fechas y Estado",
 	"deathDate": "Fecha de fallecimiento",
 	"delete": "Eliminar",
+	"deleteAnimal": "Eliminar animal",
 	"edit": "Editar",
+	"editAnimal": "Editar animal",
 	"gender": "Género",
 	"genderList": {
 		"female": "Hembra",
@@ -24,15 +26,23 @@
 	"origin": "Procedencia",
 	"parentsTitle": "Padres",
 	"productionRecords": "Registros de producción",
+	"publicAccess": {
+		"title": "Vista pública",
+		"message": "Estás viendo el perfil público de este animal. Inicia sesión para gestionarlo."
+	},
 	"purchaseDate": "Fecha de compra",
 	"relatedAnimals": "Animales relacionados",
 	"soldDate": "Fecha de venta",
 	"species": "Especie",
+	"tabsLabel": "Pestañas",
 	"toast": {
 		"deleteError": "Se ha producido un error al eliminar el animal.",
 		"deleted": "Animal eliminado con éxito.",
 		"errorGettingAnimal": "Se ha producido un error al obtener el animal.",
-		"notDeleted": "El animal no se ha eliminado."
+		"healthRecordDeleted": "Registro de salud eliminado con éxito.",
+		"notDeleted": "El animal no se ha eliminado.",
+		"productionRecordDeleted": "Registro de producción eliminado con éxito.",
+		"relationDeleted": "Relación eliminada con éxito."
 	},
 	"weight": "Peso"
 }

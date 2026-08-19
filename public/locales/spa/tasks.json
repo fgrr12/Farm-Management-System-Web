@@ -44,7 +44,8 @@
 		"archived": "Archivadas",
 		"done": "Completadas",
 		"in-progress": "En Progreso",
-		"todo": "Por Hacer"
+		"todo": "Por Hacer",
+		"overdue": "Vencidas"
 	},
 	"statusLabel": "Estado",
 	"subtitle": "Organiza y rastrea las tareas de tu granja",

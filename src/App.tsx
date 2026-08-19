@@ -87,7 +87,8 @@ export const App = () => {
 	} = useAppStore()
 	const { i18n } = useTranslation()
 	const location = useLocation()
-	const browserLanguage = navigator.language === 'en' ? 'eng' : 'spa'
+	// navigator.language is 'en-US' / 'en-GB', never a bare 'en'.
+	const browserLanguage = navigator.language.toLowerCase().startsWith('en') ? 'eng' : 'spa'
 
 	// Initialize theme system
 	useTheme()
@@ -108,14 +109,21 @@ export const App = () => {
 				return
 			}
 
-			const user = await UserService.getUser(authUser.uid)
-			setUser(user)
+			try {
+				const user = await UserService.getUser(authUser.uid)
+				setUser(user)
 
-			if (user.role !== 'admin') {
-				await useFarmStore.getState().loadFarmData(user.farmUuid, user.role)
+				if (user.role !== 'admin') {
+					await useFarmStore.getState().loadFarmData(user.farmUuid, user.role)
+				}
+			} catch (error) {
+				// Leaving authLoading on would freeze the app behind the spinner forever.
+				console.error('Error loading session:', error)
+				setUser(null)
+				setFarm(null)
+			} finally {
+				setAuthLoading(false)
 			}
-
-			setAuthLoading(false)
 		})
 
 		return () => unsubscribe()

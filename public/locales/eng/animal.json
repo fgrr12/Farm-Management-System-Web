@@ -8,7 +8,9 @@
 	"datesAndStatus": "Dates & Status",
 	"deathDate": "Death Date",
 	"delete": "Delete",
+	"deleteAnimal": "Delete animal",
 	"edit": "Edit",
+	"editAnimal": "Edit animal",
 	"gender": "Gender",
 	"genderList": {
 		"female": "Female",
@@ -24,15 +26,23 @@
 	"origin": "Origin",
 	"parentsTitle": "Parents",
 	"productionRecords": "Production Records",
+	"publicAccess": {
+		"title": "Public view",
+		"message": "You're viewing this animal's public profile. Sign in to manage it."
+	},
 	"purchaseDate": "Purchase Date",
 	"relatedAnimals": "Related Animals",
 	"soldDate": "Sold Date",
 	"species": "Species",
+	"tabsLabel": "Tabs",
 	"toast": {
 		"deleteError": "An error occurred while deleting the animal.",
 		"deleted": "Animal deleted successfully.",
 		"errorGettingAnimal": "There was an error getting the animal.",
-		"notDeleted": "The animal was not deleted."
+		"healthRecordDeleted": "Health record deleted successfully.",
+		"notDeleted": "The animal was not deleted.",
+		"productionRecordDeleted": "Production record deleted successfully.",
+		"relationDeleted": "Relation deleted successfully."
 	},
 	"weight": "Weight"
 }

@@ -53,6 +53,11 @@
 		"treatment": "En Tratamiento",
 		"unknown": "Desconocido"
 	},
+	"noSpecies": {
+		"title": "Aún no tienes especies",
+		"message": "Registra al menos una especie con su raza antes de añadir animales.",
+		"cta": "Ir a Mis Especies"
+	},
 	"origin": "Origen",
 	"photoHint": "Sube una foto clara de tu animal (opcional)",
 	"placeholders": {
@@ -78,17 +83,21 @@
 		"errorGettingAnimal": "Se ha producido un error al obtener el animal."
 	},
 	"validation": {
+		"birthDateInFuture": "La fecha de nacimiento no puede estar en el futuro",
 		"breedRequired": "La raza es requerida",
 		"colorTooLong": "El color debe tener 100 caracteres o menos",
 		"dateFormat": "Por favor ingresa una fecha válida (YYYY-MM-DD)",
 		"deathAfterBirth": "La fecha de fallecimiento debe ser posterior a la fecha de nacimiento",
+		"deathDateInFuture": "La fecha de muerte no puede estar en el futuro",
 		"genderInvalid": "Por favor selecciona un género válido",
 		"genderRequired": "El género es requerido",
 		"idRequired": "El ID del animal es requerido",
 		"idTooLong": "El ID del animal debe tener 50 caracteres o menos",
 		"originTooLong": "La procedencia debe tener 200 caracteres o menos",
 		"purchaseAfterBirth": "La fecha de compra debe ser posterior a la fecha de nacimiento",
+		"purchaseDateInFuture": "La fecha de compra no puede estar en el futuro",
 		"soldAfterBirth": "La fecha de venta debe ser posterior a la fecha de nacimiento",
+		"soldDateInFuture": "La fecha de venta no puede estar en el futuro",
 		"speciesRequired": "La especie es requerida",
 		"uuidRequired": "El UUID del animal es requerido",
 		"weightPositive": "El peso debe ser un número positivo",

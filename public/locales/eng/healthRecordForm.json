@@ -70,8 +70,11 @@
 		"reasonTooLong": "Reason must be 100 characters or less",
 		"reviewedByRequired": "Reviewed by is required",
 		"reviewedByTooLong": "Reviewed by must be 100 characters or less",
+		"temperaturePositive": "Temperature cannot be negative",
 		"typeRequired": "Type is required",
-		"uuidRequired": "Health record UUID is required"
+		"uuidRequired": "Health record UUID is required",
+		"weightPositive": "Weight cannot be negative",
+		"withdrawalDaysPositive": "Withdrawal days cannot be negative"
 	},
 	"weight": "Weight",
 	"administrationRoute": "Administration Route",

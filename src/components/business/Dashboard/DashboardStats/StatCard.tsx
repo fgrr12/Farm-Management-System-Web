@@ -6,6 +6,8 @@ import { animateValue } from '@/utils/animateValue'
 interface StatCardProps {
 	title: string
 	value: string | number
+	/** Unit appended to the animated number, e.g. the farm's liquid unit. */
+	suffix?: string
 	change?: number
 	icon: string
 	color: 'blue' | 'green' | 'orange' | 'purple'
@@ -37,7 +39,7 @@ const colorClasses = {
 }
 
 export const StatCard = memo<StatCardProps>(
-	({ title, value, change, icon, color, loading = false, changeLoading = false }) => {
+	({ title, value, suffix = '', change, icon, color, loading = false, changeLoading = false }) => {
 		const { t } = useTranslation('dashboard')
 		const colors = colorClasses[color]
 
@@ -50,14 +52,20 @@ export const StatCard = memo<StatCardProps>(
 
 		// Animate counter when value changes
 		useEffect(() => {
-			if (loading || numericValue === 0) return
+			if (loading) return
 
-			const hasSuffix = typeof value === 'string' && value.includes('L')
+			// Bailing out on 0 used to leave the previous value on screen forever —
+			// complete every pending task and the card kept showing the old count.
+			if (numericValue === 0) {
+				setDisplayValue(suffix ? `0${suffix}` : 0)
+				return
+			}
+
 			const cancel = animateValue(0, numericValue, 1500, (v) => {
-				setDisplayValue(hasSuffix ? `${v}L` : v)
+				setDisplayValue(suffix ? `${v}${suffix}` : v)
 			})
 			return cancel
-		}, [numericValue, loading, value])
+		}, [numericValue, loading, suffix])
 
 		// Animate change percentage
 		useEffect(() => {

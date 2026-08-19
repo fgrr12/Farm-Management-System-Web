@@ -2,15 +2,57 @@ import { dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element
 import { type FC, memo, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import type { TaskStatus } from '@/types'
 import { TaskCard } from '../TaskCard'
 import type { TaskColumnProps } from './TaskColumn.types'
 
+/**
+ * Full class strings, never interpolated. Tailwind scans source text, so a class
+ * assembled at runtime (`bg-${color}`) is never generated — that is why the grey
+ * "To Do" column rendered with no colour at all while the others survived by
+ * coincidence, their shades appearing literally elsewhere in the codebase.
+ */
+const COLUMN_STYLES: Record<TaskStatus, { text: string; dot: string; bg: string; border: string }> =
+	{
+		todo: {
+			text: 'text-gray-600 dark:text-gray-300',
+			dot: 'bg-gray-500',
+			bg: 'bg-gray-50 dark:bg-gray-700',
+			border: 'border-gray-500',
+		},
+		'in-progress': {
+			text: 'text-blue-600 dark:text-blue-300',
+			dot: 'bg-blue-500',
+			bg: 'bg-blue-50 dark:bg-blue-900/20',
+			border: 'border-blue-500',
+		},
+		done: {
+			text: 'text-green-600 dark:text-green-300',
+			dot: 'bg-green-500',
+			bg: 'bg-green-50 dark:bg-green-900/20',
+			border: 'border-green-500',
+		},
+		overdue: {
+			text: 'text-red-600 dark:text-red-300',
+			dot: 'bg-red-500',
+			bg: 'bg-red-50 dark:bg-red-900/20',
+			border: 'border-red-500',
+		},
+		archived: {
+			text: 'text-gray-500 dark:text-gray-400',
+			dot: 'bg-gray-400',
+			bg: 'bg-gray-50 dark:bg-gray-700',
+			border: 'border-gray-400',
+		},
+	}
+
 export const TaskColumn: FC<TaskColumnProps> = memo(
-	({ status, title, tasks, color, bgColor, onSearch, onTaskClick }) => {
+	({ status, title, tasks, onSearch, onTaskClick }) => {
 		const { t } = useTranslation(['tasks'])
 		const ref = useRef<HTMLDivElement>(null)
 		const [isDraggedOver, setIsDraggedOver] = useState(false)
 		const [search, setSearch] = useState('')
+		const styles = COLUMN_STYLES[status]
 
 		const filteredTasks = useMemo(() => {
 			if (!search.trim()) return tasks
@@ -47,7 +89,7 @@ export const TaskColumn: FC<TaskColumnProps> = memo(
 		flex flex-col h-full min-h-150 rounded-lg shadow-sm border-2 transition-all duration-200 relative
 		${
 			isDraggedOver
-				? `border-${color} bg-${bgColor} dark:border-${color} dark:bg-${bgColor}`
+				? `${styles.border} ${styles.bg}`
 				: 'border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800'
 		}
 	`}
@@ -55,18 +97,17 @@ export const TaskColumn: FC<TaskColumnProps> = memo(
 				aria-labelledby={`column-${status}-heading`}
 			>
 				{/* Column Header */}
-				<div
-					className={`p-4 border-b border-gray-200 dark:border-gray-600 bg-${bgColor} dark:bg-gray-700`}
-				>
+				<div className={`p-4 border-b border-gray-200 dark:border-gray-600 ${styles.bg}`}>
 					<div className="flex items-center justify-between mb-3">
 						<h2
 							id={`column-${status}-heading`}
-							className={`text-lg font-semibold text-${color} dark:text-${color} flex items-center gap-2`}
+							className={`text-lg font-semibold ${styles.text} flex items-center gap-2`}
 						>
-							<div className={`w-3 h-3 rounded-full bg-${color}`} />
+							<div className={`w-3 h-3 rounded-full ${styles.dot}`} />
 							{title}
-							<span className={`ml-2 px-2 py-1 text-xs rounded-full bg-${color} text-white`}>
-								{tasks.length}
+							{/* Counts what is actually rendered below, which is the filtered list. */}
+							<span className={`ml-2 px-2 py-1 text-xs rounded-full ${styles.dot} text-white`}>
+								{filteredTasks.length}
 							</span>
 						</h2>
 					</div>
@@ -113,10 +154,10 @@ export const TaskColumn: FC<TaskColumnProps> = memo(
 					{isDraggedOver && (
 						<div className="absolute inset-0 pointer-events-none">
 							<div
-								className={`w-full h-full border-2 border-dashed border-${color} bg-${bgColor} dark:bg-${bgColor} bg-opacity-15 dark:bg-opacity-20 rounded-md flex items-center justify-center`}
+								className={`w-full h-full border-2 border-dashed ${styles.border} ${styles.bg} bg-opacity-15 dark:bg-opacity-20 rounded-md flex items-center justify-center`}
 							>
 								<div
-									className={`bg-${color} text-white text-sm font-medium px-3 py-2 rounded-md shadow-lg`}
+									className={`${styles.dot} text-white text-sm font-medium px-3 py-2 rounded-md shadow-lg`}
 								>
 									{t('dropTaskHere')}
 								</div>

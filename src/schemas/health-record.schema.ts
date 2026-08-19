@@ -7,7 +7,6 @@ export const healthRecordSchema = z.object({
 		.max(100, 'healthRecord.validation.reasonTooLong'),
 	type: z.enum(
 		[
-			'',
 			'Checkup',
 			'Vaccination',
 			'Medication',
@@ -29,8 +28,12 @@ export const healthRecordSchema = z.object({
 		.min(1, 'healthRecord.validation.reviewedByRequired')
 		.max(100, 'healthRecord.validation.reviewedByTooLong'),
 	date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'healthRecord.validation.dateFormat'),
-	weight: z.number().optional().nullable(),
-	temperature: z.number().optional().nullable(),
+	weight: z.number().nonnegative('healthRecord.validation.weightPositive').optional().nullable(),
+	temperature: z
+		.number()
+		.nonnegative('healthRecord.validation.temperaturePositive')
+		.optional()
+		.nullable(),
 	medication: z.string().optional().nullable(),
 	dosage: z.string().optional().nullable(),
 	frequency: z.string().optional().nullable(),
@@ -45,7 +48,11 @@ export const healthRecordSchema = z.object({
 	createdBy: z.string().optional(),
 	status: z.boolean().optional(),
 	// New fields
-	withdrawalDays: z.number().optional().nullable(),
+	withdrawalDays: z
+		.number()
+		.nonnegative('healthRecord.validation.withdrawalDaysPositive')
+		.optional()
+		.nullable(),
 	withdrawalEndDate: z.string().optional().nullable(),
 	administrationRoute: z
 		.enum(['IM', 'SC', 'Oral', 'Topical', 'Intramammary', 'IV', 'Intrauterine', 'Other'])

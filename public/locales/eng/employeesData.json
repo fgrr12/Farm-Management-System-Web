@@ -22,6 +22,7 @@
 	"phone": "Phone",
 	"role": "Role",
 	"roleList": {
+		"admin": "Admin",
 		"employee": "Employee",
 		"owner": "Owner"
 	},

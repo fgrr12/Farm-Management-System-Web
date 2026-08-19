@@ -102,19 +102,15 @@ const HealthRecordForm = () => {
 	const date = useWatch({ control, name: 'date' })
 
 	const reasonLabel = useMemo(() => {
-		if (['Sick', 'Critical', 'Treatment', 'Surgery'].includes(selectedType)) return t('diagnosis')
+		if (selectedType === 'Surgery') return t('diagnosis')
 		if (selectedType === 'Checkup') return t('observation')
 		if (['Vaccination', 'Deworming'].includes(selectedType)) return t('protocolName')
 		return t('reason')
 	}, [selectedType, t])
 
-	const showMedicationFields = ['Medication', 'Sick', 'Critical', 'Treatment', 'Surgery'].includes(
-		selectedType
-	)
+	const showMedicationFields = ['Medication', 'Surgery'].includes(selectedType)
 	const showVaccineFields = ['Vaccination', 'Deworming'].includes(selectedType)
-	const showWithdrawalFields = ['Medication', 'Sick', 'Critical', 'Treatment'].includes(
-		selectedType
-	)
+	const showWithdrawalFields = selectedType === 'Medication'
 	const showPhysicalFields = !['Drying', 'Birth'].includes(selectedType)
 
 	const withdrawalEndDate = useMemo(() => {
@@ -130,6 +126,9 @@ const HealthRecordForm = () => {
 				const healthRecordData = {
 					...transformToApiFormat(data),
 					farmUuid: farm!.uuid,
+					// The form never registers this field, it only derives and displays it in
+					// the "do not sell or milk" warning. Persist exactly what the user was shown.
+					withdrawalEndDate: withdrawalEndDate || undefined,
 				}
 				const healthRecordUuid = params.healthRecordUuid
 
@@ -161,6 +160,7 @@ const HealthRecordForm = () => {
 			createHealthRecord,
 			updateHealthRecord,
 			farm,
+			withdrawalEndDate,
 		]
 	)
 
@@ -248,7 +248,9 @@ const HealthRecordForm = () => {
 											label={t('date')}
 											date={dayjs(field.value)}
 											onDateChange={(date) => {
-												field.onChange(dayjs(date).format('YYYY-MM-DD'))
+												// The clear button hands back null; dayjs(null) formats to
+												// the literal string "Invalid Date".
+												field.onChange(date ? dayjs(date).format('YYYY-MM-DD') : '')
 											}}
 											error={errors.date ? getErrorMessage(errors.date.message || '') : undefined}
 										/>

@@ -35,8 +35,6 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 					setLoading(true)
 					await EmployeesService.deleteEmployee(user.uuid, currentUser!.uuid)
 					removeEmployee(user.uuid)
-					setModalData(defaultModalData)
-					setLoading(false)
 					setToastData({
 						message: t('toast.deleted'),
 						type: 'success',
@@ -46,6 +44,9 @@ export const EmployeesTable: FC<EmployeesTableProps> = ({ employees, removeEmplo
 						message: t('toast.deleteError'),
 						type: 'error',
 					})
+				} finally {
+					setModalData(defaultModalData)
+					setLoading(false)
 				}
 			},
 			onCancel: () => {

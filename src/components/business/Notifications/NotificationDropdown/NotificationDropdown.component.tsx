@@ -65,19 +65,30 @@ export const NotificationDropdown = memo(() => {
 		}
 	}
 
+	/**
+	 * Literal classes only. This used to build `bg-green-${read ? '5' : '10'}`, which
+	 * produced `bg-green-5` / `bg-green-10` — shades that do not exist in Tailwind
+	 * (the scale starts at 50) and that the scanner never sees anyway. Every
+	 * notification rendered flat, so read and unread looked identical.
+	 */
 	const getNotificationBackground = (type: NotificationData['type'], read: boolean) => {
-		const baseOpacity = read ? '5' : '10'
-		const borderOpacity = read ? '200' : '300'
-
 		switch (type) {
 			case 'success':
-				return `bg-green-${baseOpacity} border-l-green-${borderOpacity} dark:bg-green-900/${baseOpacity} dark:border-l-green-${borderOpacity}`
+				return read
+					? 'bg-green-50/50 border-l-green-200 dark:bg-green-900/10 dark:border-l-green-800'
+					: 'bg-green-100 border-l-green-500 dark:bg-green-900/30 dark:border-l-green-400'
 			case 'warning':
-				return `bg-yellow-${baseOpacity} border-l-yellow-${borderOpacity} dark:bg-yellow-900/${baseOpacity} dark:border-l-yellow-${borderOpacity}`
+				return read
+					? 'bg-yellow-50/50 border-l-yellow-200 dark:bg-yellow-900/10 dark:border-l-yellow-800'
+					: 'bg-yellow-100 border-l-yellow-500 dark:bg-yellow-900/30 dark:border-l-yellow-400'
 			case 'error':
-				return `bg-red-${baseOpacity} border-l-red-${borderOpacity} dark:bg-red-900/${baseOpacity} dark:border-l-red-${borderOpacity}`
+				return read
+					? 'bg-red-50/50 border-l-red-200 dark:bg-red-900/10 dark:border-l-red-800'
+					: 'bg-red-100 border-l-red-500 dark:bg-red-900/30 dark:border-l-red-400'
 			default:
-				return `bg-blue-${baseOpacity} border-l-blue-${borderOpacity} dark:bg-blue-900/${baseOpacity} dark:border-l-blue-${borderOpacity}`
+				return read
+					? 'bg-blue-50/50 border-l-blue-200 dark:bg-blue-900/10 dark:border-l-blue-800'
+					: 'bg-blue-100 border-l-blue-500 dark:bg-blue-900/30 dark:border-l-blue-400'
 		}
 	}
 

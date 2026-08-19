@@ -53,6 +53,11 @@
 		"treatment": "Under Treatment",
 		"unknown": "Unknown"
 	},
+	"noSpecies": {
+		"title": "No species yet",
+		"message": "Register at least one species with a breed before adding animals.",
+		"cta": "Go to My Species"
+	},
 	"origin": "Origin",
 	"photoHint": "Upload a clear photo of your animal (optional)",
 	"placeholders": {
@@ -78,17 +83,21 @@
 		"errorGettingAnimal": "There was an error getting the animal."
 	},
 	"validation": {
+		"birthDateInFuture": "Birth date cannot be in the future",
 		"breedRequired": "Breed is required",
 		"colorTooLong": "Color must be 100 characters or less",
 		"dateFormat": "Please enter a valid date (YYYY-MM-DD)",
 		"deathAfterBirth": "Death date must be after birth date",
+		"deathDateInFuture": "Death date cannot be in the future",
 		"genderInvalid": "Please select a valid gender",
 		"genderRequired": "Gender is required",
 		"idRequired": "Animal ID is required",
 		"idTooLong": "Animal ID must be 50 characters or less",
 		"originTooLong": "Origin must be 200 characters or less",
 		"purchaseAfterBirth": "Purchase date must be after birth date",
+		"purchaseDateInFuture": "Purchase date cannot be in the future",
 		"soldAfterBirth": "Sold date must be after birth date",
+		"soldDateInFuture": "Sold date cannot be in the future",
 		"speciesRequired": "Species is required",
 		"uuidRequired": "Animal UUID is required",
 		"weightPositive": "Weight must be a positive number",

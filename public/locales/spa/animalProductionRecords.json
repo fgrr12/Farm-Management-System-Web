@@ -1,6 +1,9 @@
 {
 	"actions": "Acciones",
+	"addRecord": "Añadir registro de producción",
 	"date": "Fecha",
+	"delete": "Eliminar",
+	"edit": "Editar",
 	"modal": {
 		"deleteProductionRecord": {
 			"message": "Esta acción no se puede deshacer.",
@@ -10,6 +13,7 @@
 	"noProductionRecords": "No hay registros de producción",
 	"notes": "Notas",
 	"quantity": "Cantidad",
+	"tableLabel": "Registros de producción",
 	"title": "Registros de producción",
 	"toast": {
 		"deleteError": "Se ha producido un error al eliminar el registro de producción.",

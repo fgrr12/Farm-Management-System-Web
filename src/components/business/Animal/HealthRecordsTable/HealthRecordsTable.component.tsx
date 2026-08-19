@@ -125,8 +125,6 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 					setLoading(true)
 					await HealthRecordsService.updateHealthRecordsStatus(uuid, user!.uuid)
 					removeHealthRecord(uuid)
-					setModalData(defaultModalData)
-					setLoading(false)
 					setToastData({
 						message: t('toast.deleted'),
 						type: 'success',
@@ -136,6 +134,9 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 						message: t('toast.deleteError'),
 						type: 'error',
 					})
+				} finally {
+					setModalData(defaultModalData)
+					setLoading(false)
 				}
 			},
 			onCancel: () => {
@@ -169,7 +170,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 				<div className="shrink-0">
 					{haveUser && (
 						<ActionButton
-							title="Add Health Record"
+							title={t('addRecord')}
 							icon="i-material-symbols-add-circle-outline"
 							onClick={handleAddHealthRecord}
 						/>
@@ -181,7 +182,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 				<div className="overflow-x-auto">
 					<table
 						className="min-w-full divide-y divide-gray-200 dark:divide-gray-700"
-						aria-label="Health records"
+						aria-label={t('tableLabel')}
 					>
 						<thead className="bg-gray-50 dark:bg-gray-900">
 							<tr>
@@ -228,7 +229,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 														<div className="flex items-center gap-1">
 															<i className="i-material-symbols-monitor-weight w-3 h-3" />
 															<span>
-																{t('weight')}: {healthRecord.weight} {farm!.weightUnit}
+																{t('weight')}: {healthRecord.weight} {farm?.weightUnit}
 															</span>
 														</div>
 													)}
@@ -237,7 +238,7 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 															<i className="i-material-symbols-device-thermostat w-3 h-3" />
 															<span>
 																{t('temperature')}: {healthRecord.temperature}{' '}
-																{farm!.temperatureUnit}
+																{farm?.temperatureUnit}
 															</span>
 														</div>
 													)}
@@ -353,8 +354,12 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 																							: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 dark:border dark:border-gray-600'
 											}`}
 										>
+											{/* Keys are camelCase ('hoofCare'), so only the first letter is lowered —
+											    toLowerCase() produced 'hoofcare' and rendered the raw key. */}
 											{healthRecord.type
-												? t(`healthRecordType.${healthRecord.type.toLowerCase()}`)
+												? t(
+														`healthRecordType.${healthRecord.type.charAt(0).toLowerCase()}${healthRecord.type.slice(1)}`
+													)
 												: '-'}
 										</span>
 									</td>
@@ -368,12 +373,12 @@ export const HealthRecordsTable: FC<HealthRecordsTableProps> = ({
 										<td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
 											<div className="flex items-center gap-2">
 												<ActionButton
-													title="Edit"
+													title={t('edit')}
 													icon="i-material-symbols-edit-square-outline"
 													onClick={handleEditHealthRecord(healthRecord.uuid)}
 												/>
 												<ActionButton
-													title="Delete"
+													title={t('delete')}
 													icon="i-material-symbols-delete-outline"
 													onClick={handleDeleteHealthRecord(healthRecord.uuid)}
 												/>

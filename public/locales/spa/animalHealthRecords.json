@@ -1,12 +1,16 @@
 {
 	"actions": "Acciones",
+	"addRecord": "Añadir registro de salud",
 	"additionalInfo": "Información adicional",
+	"batch": "Lote",
 	"createdBy": {
 		"me": "Yo"
 	},
 	"date": "Fecha",
+	"delete": "Eliminar",
 	"dosage": "Dosis",
 	"duration": "Duración",
+	"edit": "Editar",
 	"filter": {
 		"allEmployees": "Todos los Empleados",
 		"allTypes": "Todos los Tipos",
@@ -28,14 +32,18 @@
 	"frequency": "Frecuencia",
 	"healthRecordType": {
 		"birth": "Nacimiento/Parto",
+		"castration": "Castración",
 		"checkup": "Revision",
+		"dehorning": "Descorne",
 		"deworming": "Desparasitación",
 		"drying": "Secado",
+		"hoofCare": "Cuidado de pezuñas",
 		"medication": "Medicación",
 		"pregnancy": "Embarazo/Preñes",
 		"surgery": "Cirugía",
 		"vaccination": "Vacunación"
 	},
+	"manufacturer": "Fabricante",
 	"medication": "Medicación",
 	"modal": {
 		"deleteHealthRecord": {
@@ -47,6 +55,10 @@
 	"notes": "Notas",
 	"reason": "Razón",
 	"reviewedBy": "Revisado por",
+	"route": "Vía",
+	"site": "Sitio",
+	"tableLabel": "Registros de salud",
+	"technician": "Técnico",
 	"temperature": "Temperatura",
 	"title": "Registros de salud",
 	"toast": {
@@ -55,5 +67,6 @@
 		"notDeleted": "El registro de salud no se ha eliminado."
 	},
 	"type": "Tipo",
-	"weight": "Peso"
+	"weight": "Peso",
+	"withdrawalDays": "Días de retiro"
 }

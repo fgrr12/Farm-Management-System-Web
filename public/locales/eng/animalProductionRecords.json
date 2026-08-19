@@ -1,6 +1,9 @@
 {
 	"actions": "Actions",
+	"addRecord": "Add production record",
 	"date": "Date",
+	"delete": "Delete",
+	"edit": "Edit",
 	"modal": {
 		"deleteProductionRecord": {
 			"message": "This action cannot be undone.",
@@ -10,6 +13,7 @@
 	"noProductionRecords": "No production records",
 	"notes": "Notes",
 	"quantity": "Quantity",
+	"tableLabel": "Production records",
 	"title": "Production Records",
 	"toast": {
 		"deleteError": "An error occurred while deleting the production record.",

@@ -47,6 +47,9 @@ const Tasks = () => {
 		todo: tasks?.filter((task) => task.status === 'todo') || [],
 		'in-progress': tasks?.filter((task) => task.status === 'in-progress') || [],
 		done: tasks?.filter((task) => task.status === 'done') || [],
+		// The backend escalation job sets this status; without a column the task
+		// vanished from the board entirely.
+		overdue: tasks?.filter((task) => task.status === 'overdue') || [],
 	}
 
 	const handleAddTask = useCallback(() => {
@@ -132,7 +135,10 @@ const Tasks = () => {
 					<PageHeaderStats
 						stats={[
 							{
-								value: taskColumns.todo.length + taskColumns['in-progress'].length,
+								value:
+									taskColumns.todo.length +
+									taskColumns['in-progress'].length +
+									taskColumns.overdue.length,
 								label: t('activeTasks'),
 							},
 							{
@@ -177,15 +183,13 @@ const Tasks = () => {
 							<div className="loading loading-spinner loading-lg text-primary" />
 						</div>
 					) : (
-						<div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 min-h-150">
+						<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6 min-h-150">
 							{COLUMN_CONFIG.map((column) => (
 								<TaskColumn
 									key={column.id}
 									status={column.id}
 									title={t(`status.${column.id}`)}
 									tasks={taskColumns[column.id]}
-									color={column.color}
-									bgColor={column.bgColor}
 									onTaskClick={handleTaskClick}
 								/>
 							))}
@@ -205,25 +209,13 @@ const INITIAL_FILTERS: TaskFiltersType = {
 	speciesUuid: '',
 }
 
+// Colours live in TaskColumn's own literal class map — Tailwind can't see
+// classes assembled at runtime, so they must never be built from these values.
 const COLUMN_CONFIG: TaskColumnInfo[] = [
-	{
-		id: 'todo',
-		title: 'To Do',
-		color: 'gray-500',
-		bgColor: 'gray-50',
-	},
-	{
-		id: 'in-progress',
-		title: 'In Progress',
-		color: 'blue-500',
-		bgColor: 'blue-50',
-	},
-	{
-		id: 'done',
-		title: 'Done',
-		color: 'green-500',
-		bgColor: 'green-50',
-	},
+	{ id: 'todo' },
+	{ id: 'in-progress' },
+	{ id: 'done' },
+	{ id: 'overdue' },
 ]
 
 export default memo(Tasks)

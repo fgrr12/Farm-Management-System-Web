@@ -47,7 +47,7 @@ const GenderIcon = memo(({ gender }: { gender: string }) =>
 
 const Animal = () => {
 	const { user } = useUserStore()
-	const { farm, species, breeds } = useFarmStore()
+	const { farm, species, breeds, loadFarmDataPublic } = useFarmStore()
 	const navigate = useNavigate()
 	const params = useParams()
 	const { t } = useTranslation(['animal'])
@@ -141,11 +141,24 @@ const Animal = () => {
 	useEffect(() => {
 		const loadEmployees = async () => {
 			if (user && farm) {
-				setEmployees(await EmployeesService.getEmployees(farm.uuid))
+				try {
+					setEmployees(await EmployeesService.getEmployees(farm.uuid))
+				} catch (_error) {
+					setEmployees([])
+				}
 			}
 		}
 		loadEmployees()
 	}, [user, farm])
+
+	// Public visitors have no session, so nothing else hydrates the farm store.
+	// Without it the record tables read units off a null farm and crash the app.
+	useEffect(() => {
+		if (user || !animal?.farmUuid || farm) return
+		loadFarmDataPublic(animal.farmUuid).catch(() => {
+			// Units and species names stay blank; the profile itself still renders.
+		})
+	}, [user, animal?.farmUuid, farm, loadFarmDataPublic])
 
 	useEffect(() => {
 		if (animal) {
@@ -171,13 +184,10 @@ const Animal = () => {
 						<i className="i-material-symbols-info bg-blue-600! dark:bg-blue-400! w-5! h-5!" />
 						<div>
 							<p className="text-blue-800 dark:text-blue-200 font-medium text-sm">
-								{t('publicAccess.title', 'Public View')}
+								{t('publicAccess.title')}
 							</p>
 							<p className="text-blue-600 dark:text-blue-300 text-xs">
-								{t(
-									'publicAccess.message',
-									'You are viewing this animal in read-only mode. Sign in to access full features.'
-								)}
+								{t('publicAccess.message')}
 							</p>
 						</div>
 					</div>
@@ -204,12 +214,12 @@ const Animal = () => {
 							<div className="flex gap-2 shrink-0">
 								<ActionButton
 									icon="i-material-symbols-edit-square-outline"
-									title="Edit Animal"
+									title={t('editAnimal')}
 									onClick={handleEditAnimal}
 								/>
 								<ActionButton
 									icon="i-material-symbols-delete-outline"
-									title="Delete Animal"
+									title={t('deleteAnimal')}
 									onClick={handleRemoveAnimal}
 								/>
 							</div>
@@ -299,7 +309,10 @@ const Animal = () => {
 			<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700">
 				{/* Tab Navigation */}
 				<div className="border-b border-gray-200 dark:border-gray-600 overflow-x-auto">
-					<nav className="flex space-x-2 sm:space-x-8 px-3 sm:px-6 min-w-max" aria-label="Tabs">
+					<nav
+						className="flex space-x-2 sm:space-x-8 px-3 sm:px-6 min-w-max"
+						aria-label={t('tabsLabel')}
+					>
 						{[
 							{
 								key: 'healthRecords',

@@ -1,13 +1,4 @@
 {
-	"title": "Notifications",
-	"unread": "unread",
-	"markAllRead": "Mark all as read",
-	"markAsRead": "Mark as read",
-	"dismiss": "Dismiss",
-	"noNotifications": "No notifications",
-	"enableNotifications": "Enable",
-	"settings": "Settings",
-	"notificationSettings": "Notification Settings",
 	"categories": {
 		"all": "All",
 		"medication": "Medication",
@@ -16,6 +7,46 @@
 		"production": "Production",
 		"general": "General"
 	},
+	"dismiss": "Dismiss",
+	"enableNotifications": "Enable",
+	"errors": {
+		"notSupported": "Notifications are not supported in this browser",
+		"permissionDenied": "Notification permission denied",
+		"permissionRequestFailed": "Couldn't request notification permission",
+		"tokenUnavailable": "Couldn't obtain the registration token",
+		"tokenFailed": "Couldn't obtain the FCM token",
+		"registerFailed": "Couldn't register this device's token",
+		"removeFailed": "Couldn't remove this device's token"
+	},
+	"markAllRead": "Mark all as read",
+	"markAsRead": "Mark as read",
+	"noNotifications": "No notifications",
 	"noNotificationsInCategory": "No notifications in this category",
-	"notificationsWillAppearHere": "Notifications will appear here"
+	"notificationSettings": "Notification Settings",
+	"notificationsWillAppearHere": "Notifications will appear here",
+	"settings": "Settings",
+	"settingsPanel": {
+		"unsupportedTitle": "Notifications not supported",
+		"unsupportedMessage": "Your browser doesn't support push notifications. Update your browser or use a supported one to receive them.",
+		"permissionStatus": "Permission status",
+		"permissionGranted": "Permission granted",
+		"permissionDenied": "Permission not granted",
+		"active": "Active",
+		"inactive": "Inactive",
+		"deviceRegistered": "Device registered",
+		"deviceRegisteredYes": "This device is registered to receive notifications",
+		"deviceRegisteredNo": "This device is not registered",
+		"registered": "Registered",
+		"notRegistered": "Not registered",
+		"enable": "Enable notifications",
+		"disableOnDevice": "Disable on this device",
+		"infoTitle": "About notifications:",
+		"infoKeepsYouInformed": "They keep you informed about important events on your farm",
+		"infoIncludes": "They include animal health alerts, medication reminders and task updates",
+		"infoCanDisable": "You can turn them off at any time",
+		"infoPerDevice": "Permissions are per device and browser",
+		"errorIcon": "Error icon"
+	},
+	"title": "Notifications",
+	"unread": "unread"
 }

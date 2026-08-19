@@ -36,8 +36,8 @@
 	"filtersApplied_other": "{{count}} filtros aplicados",
 	"filtersButton": "Abrir menú de filtros",
 	"gender": {
-		"female": "Femenino",
-		"male": "Masculino"
+		"female": "Hembra",
+		"male": "Macho"
 	},
 	"healthStatus": {
 		"checkNeeded": "Revisión Necesaria",

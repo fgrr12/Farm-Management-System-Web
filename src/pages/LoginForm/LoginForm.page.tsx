@@ -1,6 +1,6 @@
 import { type ChangeEvent, type FormEvent, memo, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { AppRoutes } from '@/config/constants/routes'
 
@@ -120,25 +120,6 @@ const LoginForm = () => {
 						<div id="password-help" className="sr-only">
 							{t('accessibility.passwordHelp')}
 						</div>
-					</div>
-
-					<div className="flex items-center justify-between">
-						<label className="flex items-center">
-							<input
-								type="checkbox"
-								className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-							/>
-							<span className="ml-2 text-sm text-gray-600 dark:text-gray-300">
-								{t('rememberMe')}
-							</span>
-						</label>
-						<Link
-							to={AppRoutes.LOGIN}
-							className="text-sm text-blue-600 hover:text-blue-800 transition-colors duration-200"
-							aria-label={t('accessibility.forgotPasswordLink')}
-						>
-							{t('forgotPassword')}
-						</Link>
 					</div>
 
 					<Button

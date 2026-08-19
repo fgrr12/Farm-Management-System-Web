@@ -1,5 +1,6 @@
 import { isSupported as checkFCMSupport, getMessaging, getToken } from 'firebase/messaging'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { useUserStore } from '@/store/useUserStore'
 
@@ -25,6 +26,7 @@ export const useFCMToken = () => {
 	const tokenGenerationAttempted = useRef(false)
 
 	const { user } = useUserStore()
+	const { t } = useTranslation(['notifications'])
 
 	// Load token from localStorage removed - relying on Firebase SDK caching
 	useEffect(() => {
@@ -53,7 +55,7 @@ export const useFCMToken = () => {
 	// Request notification permission
 	const requestPermission = useCallback(async (): Promise<boolean> => {
 		if (!isFCMSupported || !('Notification' in window)) {
-			setError('Las notificaciones no están soportadas en este navegador')
+			setError(t('errors.notSupported'))
 			return false
 		}
 
@@ -65,14 +67,14 @@ export const useFCMToken = () => {
 				setError(null)
 				return true
 			}
-			setError('Permisos de notificación denegados')
+			setError(t('errors.permissionDenied'))
 			return false
 		} catch (err) {
 			console.error('Error requesting notification permission:', err)
-			setError('Error al solicitar permisos de notificación')
+			setError(t('errors.permissionRequestFailed'))
 			return false
 		}
-	}, [isFCMSupported])
+	}, [isFCMSupported, t])
 
 	// Get FCM token
 	const getFCMToken = useCallback(async (): Promise<string | null> => {
@@ -151,16 +153,16 @@ export const useFCMToken = () => {
 				return currentToken
 			}
 			console.warn('No registration token available.')
-			setError('No se pudo obtener el token de registro')
+			setError(t('errors.tokenUnavailable'))
 			return null
 		} catch (err) {
 			console.error('Error getting FCM token:', err)
-			setError('Error al obtener el token FCM')
+			setError(t('errors.tokenFailed'))
 			return null
 		} finally {
 			setLoading(false)
 		}
-	}, [isFCMSupported, permission])
+	}, [isFCMSupported, permission, t])
 
 	// Register device token with backend
 	const registerDeviceToken = useCallback(async (): Promise<boolean> => {
@@ -199,13 +201,13 @@ export const useFCMToken = () => {
 			return true
 		} catch (err) {
 			console.error('Error registering device token:', err)
-			setError('Error al registrar el token del dispositivo')
+			setError(t('errors.registerFailed'))
 			return false
 		} finally {
 			registrationInProgress.current = false
 			setLoading(false)
 		}
-	}, [token, user])
+	}, [token, user, t])
 
 	// Remove device token from backend
 	const removeDeviceToken = useCallback(async (): Promise<boolean> => {
@@ -225,12 +227,12 @@ export const useFCMToken = () => {
 			return true
 		} catch (err) {
 			console.error('Error removing device token:', err)
-			setError('Error al eliminar el token del dispositivo')
+			setError(t('errors.removeFailed'))
 			return false
 		} finally {
 			setLoading(false)
 		}
-	}, [token])
+	}, [token, t])
 
 	// biome-ignore lint: use only once
 	useEffect(() => {

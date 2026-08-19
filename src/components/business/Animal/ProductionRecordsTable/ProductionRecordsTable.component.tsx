@@ -51,8 +51,6 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 					setLoading(true)
 					await ProductionRecordsService.updateProductionRecordStatus(uuid, user!.uuid)
 					removeProductionRecord(uuid)
-					setModalData(defaultModalData)
-					setLoading(false)
 					setToastData({
 						message: t('toast.deleted'),
 						type: 'success',
@@ -62,6 +60,9 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 						message: t('toast.deleteError'),
 						type: 'error',
 					})
+				} finally {
+					setModalData(defaultModalData)
+					setLoading(false)
 				}
 			},
 			onCancel: () => {
@@ -80,7 +81,7 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 				<h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t('title')}</h2>
 				{haveUser && (
 					<ActionButton
-						title="Add Production Record"
+						title={t('addRecord')}
 						icon="i-material-symbols-add-circle-outline"
 						onClick={handleAddHealthRecord}
 					/>
@@ -92,7 +93,7 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 				<div className="overflow-x-auto">
 					<table
 						className="min-w-full divide-y divide-gray-200 dark:divide-gray-700"
-						aria-label="Production records"
+						aria-label={t('tableLabel')}
 					>
 						<thead className="bg-gray-50 dark:bg-gray-900">
 							<tr>
@@ -126,7 +127,7 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-100">
 										<div className="flex items-center gap-1">
 											<span className="font-semibold">{productionRecord.quantity}</span>
-											<span className="text-gray-500 dark:text-gray-400">{farm!.liquidUnit}</span>
+											<span className="text-gray-500 dark:text-gray-400">{farm?.liquidUnit}</span>
 										</div>
 									</td>
 									<td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-100">
@@ -138,12 +139,12 @@ export const ProductionRecordsTable: FC<ProductionRecordsTableProps> = ({
 										<td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
 											<div className="flex items-center gap-2">
 												<ActionButton
-													title="Edit"
+													title={t('edit')}
 													icon="i-material-symbols-edit-square-outline"
 													onClick={handleEditHealthRecord(productionRecord.uuid)}
 												/>
 												<ActionButton
-													title="Delete"
+													title={t('delete')}
 													icon="i-material-symbols-delete-outline"
 													onClick={handleDeleteHealthRecord(productionRecord.uuid)}
 												/>

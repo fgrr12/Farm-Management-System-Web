@@ -1,12 +1,16 @@
 {
 	"actions": "Actions",
+	"addRecord": "Add health record",
 	"additionalInfo": "Additional Info",
+	"batch": "Batch",
 	"createdBy": {
 		"me": "Me"
 	},
 	"date": "Date",
+	"delete": "Delete",
 	"dosage": "Dosage",
 	"duration": "Duration",
+	"edit": "Edit",
 	"filter": {
 		"allEmployees": "All Employees",
 		"allTypes": "All Types",
@@ -28,14 +32,18 @@
 	"frequency": "Frequency",
 	"healthRecordType": {
 		"birth": "Birth",
+		"castration": "Castration",
 		"checkup": "Checkup",
+		"dehorning": "Dehorning",
 		"deworming": "Deworming",
 		"drying": "Drying",
+		"hoofCare": "Hoof care",
 		"medication": "Medication",
 		"pregnancy": "Pregnancy",
 		"surgery": "Surgery",
 		"vaccination": "Vaccination"
 	},
+	"manufacturer": "Manufacturer",
 	"medication": "Medication",
 	"modal": {
 		"deleteHealthRecord": {
@@ -47,6 +55,10 @@
 	"notes": "Notes",
 	"reason": "Reason",
 	"reviewedBy": "Reviewed By",
+	"route": "Route",
+	"site": "Site",
+	"tableLabel": "Health records",
+	"technician": "Technician",
 	"temperature": "Temperature",
 	"title": "Health Records",
 	"toast": {
@@ -55,5 +67,6 @@
 		"notDeleted": "The health record was not deleted."
 	},
 	"type": "Type",
-	"weight": "Weight"
+	"weight": "Weight",
+	"withdrawalDays": "Withdrawal days"
 }

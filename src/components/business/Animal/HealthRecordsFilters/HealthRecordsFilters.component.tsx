@@ -67,7 +67,7 @@ export const HealthRecordsFilters: FC<HealthRecordsFiltersProps> = memo(
 				activeButtonLabel={t('filter.filtersActive')}
 				clearButtonLabel={t('filter.clearFilters')}
 				doneButtonLabel={t('filter.done')}
-				filtersAppliedLabel={t('filter.filtersApplied')}
+				filtersAppliedLabel={(count) => t('filter.filtersApplied', { count })}
 				noFiltersAppliedLabel={t('filter.noFiltersApplied')}
 				className="emerald-theme"
 			>

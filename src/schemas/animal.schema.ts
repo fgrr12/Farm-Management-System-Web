@@ -54,7 +54,30 @@ export const animalSchema = z.object({
 	status: z.boolean().optional(),
 })
 
+/** Today at 23:59:59 local time, so "today" always counts as a valid past date. */
+const endOfToday = () => {
+	const d = new Date()
+	d.setHours(23, 59, 59, 999)
+	return d
+}
+
 export const animalSchemaWithRefinements = animalSchema
+	.refine((data) => !data.birthDate || new Date(data.birthDate) <= endOfToday(), {
+		message: 'animal.validation.birthDateInFuture',
+		path: ['birthDate'],
+	})
+	.refine((data) => !data.purchaseDate || new Date(data.purchaseDate) <= endOfToday(), {
+		message: 'animal.validation.purchaseDateInFuture',
+		path: ['purchaseDate'],
+	})
+	.refine((data) => !data.soldDate || new Date(data.soldDate) <= endOfToday(), {
+		message: 'animal.validation.soldDateInFuture',
+		path: ['soldDate'],
+	})
+	.refine((data) => !data.deathDate || new Date(data.deathDate) <= endOfToday(), {
+		message: 'animal.validation.deathDateInFuture',
+		path: ['deathDate'],
+	})
 	.refine(
 		(data) => {
 			if (data.deathDate && data.birthDate) {

@@ -71,7 +71,7 @@ export const AnimalFilters: FC<AnimalFiltersProps> = memo(
 				activeButtonLabel={t('filtersActive')}
 				clearButtonLabel={t('clearFilters')}
 				doneButtonLabel={t('done')}
-				filtersAppliedLabel={t('filtersApplied')}
+				filtersAppliedLabel={(count) => t('filtersApplied', { count })}
 				noFiltersAppliedLabel={t('noFiltersApplied')}
 			>
 				{/* Search Filter */}

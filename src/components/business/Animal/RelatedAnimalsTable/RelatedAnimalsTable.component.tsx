@@ -50,10 +50,7 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 				try {
 					setLoading(true)
 					await RelatedAnimalsService.deleteRelatedAnimal(animalUuid, user!.uuid)
-					animals = animals.filter((animal) => animal.uuid !== animalUuid)
 					removeRelation(animalUuid)
-					setModalData(defaultModalData)
-					setLoading(false)
 					setToastData({
 						message: t('toast.deleted'),
 						type: 'success',
@@ -63,6 +60,9 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 						message: t('toast.deleteError'),
 						type: 'error',
 					})
+				} finally {
+					setModalData(defaultModalData)
+					setLoading(false)
 				}
 			},
 			onCancel: () => {
@@ -118,7 +118,7 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 				<div className="overflow-x-auto">
 					<table
 						className="min-w-full divide-y divide-gray-200 dark:divide-gray-700"
-						aria-label="Related animals"
+						aria-label={t('tableLabel')}
 					>
 						<thead className="bg-gray-50 dark:bg-gray-900">
 							<tr>
@@ -202,12 +202,12 @@ export const RelatedAnimalsTable: FC<RelatedAnimalsTableProps> = ({
 										<td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
 											<div className="flex items-center gap-2">
 												<ActionButton
-													title="View"
+													title={t('view')}
 													icon="i-material-symbols-visibility-outline"
 													onClick={handleViewRelatedAnimal(animal[type].animalUuid)}
 												/>
 												<ActionButton
-													title="Delete"
+													title={t('delete')}
 													icon="i-material-symbols-delete-outline"
 													onClick={handleDeleteRelatedAnimal(animal.uuid)}
 												/>

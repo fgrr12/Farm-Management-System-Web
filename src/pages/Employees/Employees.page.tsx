@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { AppRoutes } from '@/config/constants/routes'
 
 import { useFarmStore } from '@/store/useFarmStore'
+import { useUserStore } from '@/store/useUserStore'
 
 import { EmployeesTable } from '@/components/business/Employees/EmployeesTable'
 import { PageContainer } from '@/components/layout/PageContainer'
@@ -18,6 +19,7 @@ import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
 
 const Employees = () => {
 	const { farm } = useFarmStore()
+	const { user } = useUserStore()
 	const navigate = useNavigate()
 	const { t } = useTranslation(['employees'])
 	const { setPageTitle } = usePagePerformance()
@@ -125,7 +127,7 @@ const Employees = () => {
 							<EmployeesTable
 								employees={filteredEmployees}
 								removeEmployee={(uuid) => async () => {
-									await deleteEmployee.mutateAsync({ employeeUuid: uuid, userUuid: farm!.uuid })
+									await deleteEmployee.mutateAsync({ employeeUuid: uuid, userUuid: user!.uuid })
 								}}
 								aria-label={t('accessibility.employeesTable', {
 									count: filteredEmployees.length,

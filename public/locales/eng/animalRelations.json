@@ -5,6 +5,7 @@
 	"animalId": "Animal ID",
 	"breed": "Breed",
 	"daughter": "Daughter",
+	"delete": "Delete",
 	"father": "Father",
 	"modal": {
 		"deleteRelatedAnimal": {
@@ -18,10 +19,12 @@
 	"noRelatedAnimals": "No related animals",
 	"relation": "Relation",
 	"son": "Son",
+	"tableLabel": "Related animals",
 	"title": "Animal Relations",
 	"toast": {
 		"deleteError": "An error occurred while deleting the relation.",
 		"deleted": "Relation deleted successfully.",
 		"notDeleted": "The relation was not deleted."
-	}
+	},
+	"view": "View"
 }

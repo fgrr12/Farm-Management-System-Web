@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAppStore } from '@/store/useAppStore'
@@ -34,6 +34,19 @@ const MySpecies = () => {
 
 	const [species, setSpecies] = useState<MySpeciesI[]>(INITIAL_SPECIES)
 	const [breeds, setBreeds] = useState<Breed[]>(INITIAL_BREEDS)
+	const [search, setSearch] = useState('')
+
+	const filteredSpecies = useMemo(() => {
+		const term = search.trim().toLowerCase()
+		if (!term) return species
+		return species.filter(
+			(specie) =>
+				specie.name.toLowerCase().includes(term) ||
+				breeds.some(
+					(breed) => breed.speciesUuid === specie.uuid && breed.name.toLowerCase().includes(term)
+				)
+		)
+	}, [species, breeds, search])
 
 	const handleSpecieChange = useCallback(
 		(specieUuid: string, field: keyof Species, value: string | number) => {
@@ -134,8 +147,11 @@ const MySpecies = () => {
 				onAccept: async () => {
 					await withLoadingAndError(async () => {
 						await BreedsService.deleteBreed(breedUuid, user!.uuid)
-						setBreeds((prev) => prev.filter((breed) => breed.uuid !== breedUuid))
-						setDbBreeds(breeds)
+						// `breeds` here is the pre-deletion closure value, so pushing it to the
+						// store resurrected the breed on the next visit. Compute once, use twice.
+						const remainingBreeds = breeds.filter((breed) => breed.uuid !== breedUuid)
+						setBreeds(remainingBreeds)
+						setDbBreeds(remainingBreeds)
 						setModalData(defaultModalData)
 						showToast(t('toast.deletedBreed'), 'success')
 					}, t('toast.errorDeletingBreed'))
@@ -211,7 +227,11 @@ const MySpecies = () => {
 				actions={
 					<div className="flex items-center justify-between gap-4 w-full">
 						<div className="flex-1 max-w-md">
-							<Search placeholder={t('search')} />
+							<Search
+								placeholder={t('search')}
+								value={search}
+								onChange={(e) => setSearch(e.target.value)}
+							/>
 						</div>
 
 						<div className="shrink-0">
@@ -234,7 +254,7 @@ const MySpecies = () => {
 					{/* Species Cards Grid */}
 					<div className="p-4 sm:p-6">
 						<div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
-							{species.map((specie) => (
+							{filteredSpecies.map((specie) => (
 								<SpeciesFormCard
 									key={specie.uuid}
 									specie={specie}

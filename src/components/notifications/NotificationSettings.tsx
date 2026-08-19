@@ -1,8 +1,11 @@
+import { useTranslation } from 'react-i18next'
+
 import { Button } from '@/components/ui/Button'
 
 import { useFCMToken } from '@/hooks/notifications/useFCMToken'
 
 export const NotificationSettings = () => {
+	const { t } = useTranslation(['notifications'])
 	const {
 		hasPermission,
 		isSupported,
@@ -17,11 +20,8 @@ export const NotificationSettings = () => {
 		return (
 			<div className="card bg-base-100 shadow-md">
 				<div className="card-body">
-					<h3 className="card-title text-warning">Notificaciones no soportadas</h3>
-					<p className="text-base-content/70">
-						Tu navegador no soporta notificaciones push. Para recibir notificaciones, actualiza tu
-						navegador o usa un navegador compatible.
-					</p>
+					<h3 className="card-title text-warning">{t('settingsPanel.unsupportedTitle')}</h3>
+					<p className="text-base-content/70">{t('settingsPanel.unsupportedMessage')}</p>
 				</div>
 			</div>
 		)
@@ -30,34 +30,36 @@ export const NotificationSettings = () => {
 	return (
 		<div className="card bg-base-100 shadow-md">
 			<div className="card-body">
-				<h3 className="card-title">Configuración de Notificaciones</h3>
+				<h3 className="card-title">{t('notificationSettings')}</h3>
 
 				<div className="space-y-4">
 					{/* Permission Status */}
 					<div className="flex items-center justify-between">
 						<div>
-							<p className="font-medium">Estado de permisos</p>
+							<p className="font-medium">{t('settingsPanel.permissionStatus')}</p>
 							<p className="text-sm text-base-content/70">
-								{hasPermission ? 'Permisos concedidos' : 'Permisos no concedidos'}
+								{hasPermission
+									? t('settingsPanel.permissionGranted')
+									: t('settingsPanel.permissionDenied')}
 							</p>
 						</div>
 						<div className={`badge ${hasPermission ? 'badge-success' : 'badge-warning'}`}>
-							{hasPermission ? 'Activo' : 'Inactivo'}
+							{hasPermission ? t('settingsPanel.active') : t('settingsPanel.inactive')}
 						</div>
 					</div>
 
 					{/* Token Status */}
 					<div className="flex items-center justify-between">
 						<div>
-							<p className="font-medium">Dispositivo registrado</p>
+							<p className="font-medium">{t('settingsPanel.deviceRegistered')}</p>
 							<p className="text-sm text-base-content/70">
 								{isTokenRegistered
-									? 'Tu dispositivo está registrado para recibir notificaciones'
-									: 'Tu dispositivo no está registrado'}
+									? t('settingsPanel.deviceRegisteredYes')
+									: t('settingsPanel.deviceRegisteredNo')}
 							</p>
 						</div>
 						<div className={`badge ${isTokenRegistered ? 'badge-success' : 'badge-error'}`}>
-							{isTokenRegistered ? 'Registrado' : 'No registrado'}
+							{isTokenRegistered ? t('settingsPanel.registered') : t('settingsPanel.notRegistered')}
 						</div>
 					</div>
 
@@ -70,7 +72,7 @@ export const NotificationSettings = () => {
 								fill="none"
 								viewBox="0 0 24 24"
 							>
-								<title>Error icon</title>
+								<title>{t('settingsPanel.errorIcon')}</title>
 								<path
 									strokeLinecap="round"
 									strokeLinejoin="round"
@@ -91,7 +93,7 @@ export const NotificationSettings = () => {
 								loading={loading}
 								disabled={loading}
 							>
-								Activar Notificaciones
+								{t('settingsPanel.enable')}
 							</Button>
 						)}
 
@@ -102,24 +104,19 @@ export const NotificationSettings = () => {
 								loading={loading}
 								disabled={loading}
 							>
-								Desactivar en este Dispositivo
+								{t('settingsPanel.disableOnDevice')}
 							</Button>
 						)}
 					</div>
 
 					{/* Information */}
 					<div className="text-sm text-base-content/70 bg-base-200 p-3 rounded-lg">
-						<p className="font-medium mb-2">Información sobre las notificaciones:</p>
+						<p className="font-medium mb-2">{t('settingsPanel.infoTitle')}</p>
 						<ul className="list-disc list-inside space-y-1">
-							<li>
-								Las notificaciones te mantienen informado sobre eventos importantes en tu granja
-							</li>
-							<li>
-								Incluyen alertas de salud animal, recordatorios de medicación y actualizaciones de
-								tareas
-							</li>
-							<li>Puedes desactivar las notificaciones en cualquier momento</li>
-							<li>Los permisos de notificación son por dispositivo y navegador</li>
+							<li>{t('settingsPanel.infoKeepsYouInformed')}</li>
+							<li>{t('settingsPanel.infoIncludes')}</li>
+							<li>{t('settingsPanel.infoCanDisable')}</li>
+							<li>{t('settingsPanel.infoPerDevice')}</li>
 						</ul>
 					</div>
 				</div>

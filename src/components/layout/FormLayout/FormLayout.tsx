@@ -1,4 +1,4 @@
-import { type FormEvent, memo, type ReactNode } from 'react'
+import { type FormEvent, memo, type ReactNode, useCallback, useRef } from 'react'
 
 import { cn } from '@/utils/cn'
 
@@ -60,6 +60,27 @@ FormSection.displayName = 'FormSection'
 
 export const FormLayout = memo(
 	({ sidebar, sections, onSubmit, submitButton, formId = 'form', className }: FormLayoutProps) => {
+		const formRef = useRef<HTMLFormElement>(null)
+
+		/**
+		 * These forms are long enough that the first invalid field is usually off
+		 * screen, so a failed submit looked like a dead button: no movement, no
+		 * message in view. Bring the offending field to the user after React has
+		 * painted the validation errors.
+		 */
+		const handleSubmit = useCallback(
+			(e: FormEvent) => {
+				onSubmit(e)
+				requestAnimationFrame(() => {
+					const firstInvalid = formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')
+					if (!firstInvalid) return
+					firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' })
+					firstInvalid.focus({ preventScroll: true })
+				})
+			},
+			[onSubmit]
+		)
+
 		return (
 			<div
 				className={cn(
@@ -68,9 +89,10 @@ export const FormLayout = memo(
 				)}
 			>
 				<form
+					ref={formRef}
 					id={formId}
 					className="p-4 sm:p-6 lg:p-8"
-					onSubmit={onSubmit}
+					onSubmit={handleSubmit}
 					autoComplete="off"
 					noValidate
 				>

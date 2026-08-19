@@ -5,15 +5,10 @@ export interface TaskFilters {
 	speciesUuid: string
 }
 
-export interface TaskColumns {
-	todo: Task[]
-	'in-progress': Task[]
-	done: Task[]
-}
+export type TaskColumnId = 'todo' | 'in-progress' | 'done' | 'overdue'
+
+export type TaskColumns = Record<TaskColumnId, Task[]>
 
 export interface TaskColumnInfo {
-	id: 'todo' | 'in-progress' | 'done'
-	title: string
-	color: string
-	bgColor: string
+	id: TaskColumnId
 }

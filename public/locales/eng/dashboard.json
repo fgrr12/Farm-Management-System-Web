@@ -1,35 +1,6 @@
 {
-	"title": "Dashboard",
-	"subtitle": "Overview of your farm operations and key metrics",
-	"stats": {
-		"totalAnimals": "Total Animals",
-		"healthyAnimals": "Healthy Animals",
-		"pendingTasks": "Pending Tasks",
-		"monthlyProduction": "Monthly Production"
-	},
-	"charts": {
-		"productionTrend": "Production Trend",
-		"production": "Production",
-		"totalProduction": "Total Production",
-		"animalDistribution": "Animal Distribution",
-		"totalAnimals": "Total"
-	},
-	"health": {
-		"title": "Health Overview",
-		"healthy": "Healthy",
-		"sick": "Sick",
-		"treatment": "In Treatment",
-		"checkupDue": "Checkup Due",
-		"totalAnimals": "Total Animals"
-	},
-	"tasks": {
-		"title": "Tasks Overview",
-		"pending": "Pending",
-		"inProgress": "In Progress",
-		"completed": "Completed",
-		"tasks": "tasks",
-		"completionRate": "Completion Rate",
-		"activeTasks": "Active Tasks"
+	"accessibility": {
+		"skipToDashboard": "Skip to dashboard"
 	},
 	"activities": {
 		"title": "Recent Activities",
@@ -59,6 +30,14 @@
 			"farmStaff": "Farm Staff"
 		}
 	},
+	"charts": {
+		"productionTrend": "Production Trend",
+		"production": "Production",
+		"totalProduction": "Total Production",
+		"animalDistribution": "Animal Distribution",
+		"totalAnimals": "Total"
+	},
+	"comingSoon": "Coming Soon",
 	"common": {
 		"vsLastMonth": "vs last month",
 		"timeAgo": {
@@ -71,11 +50,35 @@
 			"yearsAgo": "{{count}} years ago"
 		}
 	},
-	"liveData": "Live Data",
-	"farmStatistics": "Farm Statistics",
 	"dashboardChartsOverview": "Dashboard Charts and Overview",
+	"farmStatistics": "Farm Statistics",
+	"health": {
+		"title": "Health Overview",
+		"healthy": "Healthy",
+		"sick": "Sick",
+		"treatment": "In Treatment",
+		"checkupDue": "Checkup Due",
+		"totalAnimals": "Total Animals"
+	},
+	"liveData": "Live Data",
 	"species": "Species",
-	"comingSoon": "Coming Soon",
+	"stats": {
+		"totalAnimals": "Total Animals",
+		"healthyAnimals": "Healthy Animals",
+		"pendingTasks": "Pending Tasks",
+		"monthlyProduction": "Monthly Production"
+	},
+	"subtitle": "Overview of your farm operations and key metrics",
+	"tasks": {
+		"title": "Tasks Overview",
+		"pending": "Pending",
+		"inProgress": "In Progress",
+		"completed": "Completed",
+		"tasks": "tasks",
+		"completionRate": "Completion Rate",
+		"activeTasks": "Active Tasks"
+	},
+	"title": "Dashboard",
 	"widgets": {
 		"financials": "Financials",
 		"employeeMetrics": "Employee Metrics",

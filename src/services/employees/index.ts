@@ -52,7 +52,7 @@ const deleteEmployee = async (employeeUuid: string, userUuid: string) => {
 	const response = await callableFireFunction<{ success: boolean }>('users', {
 		operation: 'updateEmployeeStatus',
 		employeeUuid,
-		userUuid,
+		updatedBy: userUuid,
 	})
 	return response
 }

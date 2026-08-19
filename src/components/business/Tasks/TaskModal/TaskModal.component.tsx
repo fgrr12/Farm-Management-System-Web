@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { type FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -5,7 +6,8 @@ import { useFarmStore } from '@/store/useFarmStore'
 import { useUserStore } from '@/store/useUserStore'
 
 import { EmployeesService } from '@/services/employees'
-import { TasksService } from '@/services/tasks'
+
+import { useUpdateTask } from '@/hooks/queries/useTasks'
 
 import type { TaskPriority, TaskStatus, User } from '@/types'
 import type { TaskModalProps } from './TaskModal.types'
@@ -22,6 +24,7 @@ export const TaskModal: FC<TaskModalProps> = memo(({ task, isOpen, onClose }) =>
 
 	// Get stores
 	const { farm } = useFarmStore()
+	const updateTask = useUpdateTask()
 	const { user } = useUserStore()
 
 	const getPriorityIcon = useCallback((priority: TaskPriority) => {
@@ -175,23 +178,24 @@ export const TaskModal: FC<TaskModalProps> = memo(({ task, isOpen, onClose }) =>
 		async (employeeUuid: string) => {
 			if (!task || !user?.uuid || !farm?.uuid) return
 
+			const previousAssignee = assignedUser
 			try {
 				const updatedTask = { ...task, assignedTo: employeeUuid || undefined }
-				await TasksService.updateTask(updatedTask, user.uuid, farm.uuid)
-				// Update local state
-				if (employeeUuid) {
-					const employee = availableEmployees.find((emp) => emp.uuid === employeeUuid)
-					setAssignedUser(employee || null)
-				} else {
-					setAssignedUser(null)
-				}
-				// Close dropdown
+				// Update local state first so the dropdown reacts immediately.
+				setAssignedUser(
+					employeeUuid ? availableEmployees.find((emp) => emp.uuid === employeeUuid) || null : null
+				)
 				setIsDropdownOpen(false)
+				// Going through the mutation (instead of the service directly) is what
+				// invalidates the task queries, so the board stops showing the old assignee.
+				await updateTask.mutateAsync({ task: updatedTask, userUuid: user.uuid })
 			} catch (error) {
 				console.error('Error updating task assignment:', error)
+				// The save failed, so don't leave the UI claiming it succeeded.
+				setAssignedUser(previousAssignee)
 			}
 		},
-		[task, user?.uuid, farm?.uuid, availableEmployees]
+		[task, user?.uuid, farm?.uuid, availableEmployees, assignedUser, updateTask]
 	)
 
 	// Handle dropdown toggle
@@ -428,7 +432,7 @@ export const TaskModal: FC<TaskModalProps> = memo(({ task, isOpen, onClose }) =>
 										{t('dueDate', 'Due Date')}
 									</span>
 									<span className="text-sm text-gray-700 dark:text-gray-300">
-										{new Date(task.dueDate).toLocaleDateString()}
+										{dayjs(task.dueDate).format('DD/MM/YYYY')}
 									</span>
 								</div>
 							)}
@@ -448,7 +452,7 @@ export const TaskModal: FC<TaskModalProps> = memo(({ task, isOpen, onClose }) =>
 											{t('createdAt')}
 										</span>
 										<span className="text-sm text-gray-700 dark:text-gray-300">
-											{new Date(task.createdAt).toLocaleString()}
+											{dayjs(task.createdAt).format('DD/MM/YYYY HH:mm')}
 										</span>
 									</div>
 								)}
@@ -458,7 +462,7 @@ export const TaskModal: FC<TaskModalProps> = memo(({ task, isOpen, onClose }) =>
 											{t('updatedAt')}
 										</span>
 										<span className="text-sm text-gray-700 dark:text-gray-300">
-											{new Date(task.updatedAt).toLocaleString()}
+											{dayjs(task.updatedAt).format('DD/MM/YYYY HH:mm')}
 										</span>
 									</div>
 								)}

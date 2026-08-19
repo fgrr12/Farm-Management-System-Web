@@ -123,14 +123,14 @@ export const SpeciesFormCard = memo(
 									title={t('editButton')}
 									icon="i-material-symbols-edit-square-outline"
 									onClick={() => onEdit(specie.uuid)}
-									className={`p-2 rounded-lg transition-colors ${specie.editable ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'}`}
+									className={`p-2 rounded-lg transition-colors ${specie.editable ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-300' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-white'}`}
 								/>
 								<ActionButton
 									type="button"
 									title={t('deleteButton')}
 									icon="i-material-symbols-delete-outline"
 									onClick={() => onRemove(specie.uuid)}
-									className="p-2 rounded-lg hover:bg-red-100 hover:text-red-600 transition-colors"
+									className="p-2 rounded-lg text-red-600 dark:text-red-400 hover:bg-red-100 hover:text-red-700 dark:hover:bg-red-900/40 dark:hover:text-red-300 transition-colors"
 								/>
 							</div>
 						</div>

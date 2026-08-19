@@ -160,7 +160,9 @@ const ProductionRecordForm = () => {
 											label={t('date')}
 											date={dayjs(field.value)}
 											onDateChange={(date) => {
-												field.onChange(dayjs(date).format('YYYY-MM-DD'))
+												// The clear button hands back null; dayjs(null) formats to
+												// the literal string "Invalid Date".
+												field.onChange(date ? dayjs(date).format('YYYY-MM-DD') : '')
 											}}
 											error={errors.date ? getErrorMessage(errors.date.message || '') : undefined}
 										/>

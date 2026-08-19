@@ -34,7 +34,10 @@ export const ProductionChart = memo(() => {
 		const maxValue = Math.max(...productionData.map((item: any) => item.value))
 		return productionData.map((item: any) => ({
 			...item,
-			percentage: (item.value / maxValue) * 100,
+			// With every month at 0, maxValue is 0 and the division yields NaN.
+			// `width: "NaN%"` is invalid CSS, so the browser drops it and every bar
+			// renders full width — reading as maximum production instead of none.
+			percentage: maxValue > 0 ? (item.value / maxValue) * 100 : 0,
 		}))
 	}, [productionData])
 

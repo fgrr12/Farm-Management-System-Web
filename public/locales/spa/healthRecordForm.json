@@ -70,8 +70,11 @@
 		"reasonTooLong": "La razón debe tener 100 caracteres o menos",
 		"reviewedByRequired": "Revisado por es requerido",
 		"reviewedByTooLong": "Revisado por debe tener 100 caracteres o menos",
+		"temperaturePositive": "La temperatura no puede ser negativa",
 		"typeRequired": "El tipo es requerido",
-		"uuidRequired": "El UUID del registro de salud es requerido"
+		"uuidRequired": "El UUID del registro de salud es requerido",
+		"weightPositive": "El peso no puede ser negativo",
+		"withdrawalDaysPositive": "Los días de retiro no pueden ser negativos"
 	},
 	"weight": "Peso",
 	"administrationRoute": "Vía de Administración",

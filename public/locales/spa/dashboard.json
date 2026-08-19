@@ -1,35 +1,6 @@
 {
-	"title": "Panel de Control",
-	"subtitle": "Resumen de las operaciones de tu granja y métricas clave",
-	"stats": {
-		"totalAnimals": "Total de Animales",
-		"healthyAnimals": "Animales Sanos",
-		"pendingTasks": "Tareas Pendientes",
-		"monthlyProduction": "Producción Mensual"
-	},
-	"charts": {
-		"productionTrend": "Tendencia de Producción",
-		"production": "Producción",
-		"totalProduction": "Producción Total",
-		"animalDistribution": "Distribución de Animales",
-		"totalAnimals": "Total"
-	},
-	"health": {
-		"title": "Resumen de Salud",
-		"healthy": "Sanos",
-		"sick": "Enfermos",
-		"treatment": "En Tratamiento",
-		"checkupDue": "Revisión Pendiente",
-		"totalAnimals": "Total de Animales"
-	},
-	"tasks": {
-		"title": "Resumen de Tareas",
-		"pending": "Pendientes",
-		"inProgress": "En Progreso",
-		"completed": "Completadas",
-		"tasks": "tareas",
-		"completionRate": "Tasa de Finalización",
-		"activeTasks": "Tareas Activas"
+	"accessibility": {
+		"skipToDashboard": "Saltar al panel de control"
 	},
 	"activities": {
 		"title": "Actividades Recientes",
@@ -59,6 +30,14 @@
 			"farmStaff": "Personal de Granja"
 		}
 	},
+	"charts": {
+		"productionTrend": "Tendencia de Producción",
+		"production": "Producción",
+		"totalProduction": "Producción Total",
+		"animalDistribution": "Distribución de Animales",
+		"totalAnimals": "Total"
+	},
+	"comingSoon": "Próximamente",
 	"common": {
 		"vsLastMonth": "vs mes anterior",
 		"timeAgo": {
@@ -71,11 +50,35 @@
 			"yearsAgo": "hace {{count}} años"
 		}
 	},
-	"liveData": "Datos en Vivo",
-	"farmStatistics": "Estadísticas de la Granja",
 	"dashboardChartsOverview": "Gráficos y Resumen del Panel",
+	"farmStatistics": "Estadísticas de la Granja",
+	"health": {
+		"title": "Resumen de Salud",
+		"healthy": "Sanos",
+		"sick": "Enfermos",
+		"treatment": "En Tratamiento",
+		"checkupDue": "Revisión Pendiente",
+		"totalAnimals": "Total de Animales"
+	},
+	"liveData": "Datos en Vivo",
 	"species": "Especies",
-	"comingSoon": "Próximamente",
+	"stats": {
+		"totalAnimals": "Total de Animales",
+		"healthyAnimals": "Animales Sanos",
+		"pendingTasks": "Tareas Pendientes",
+		"monthlyProduction": "Producción Mensual"
+	},
+	"subtitle": "Resumen de las operaciones de tu granja y métricas clave",
+	"tasks": {
+		"title": "Resumen de Tareas",
+		"pending": "Pendientes",
+		"inProgress": "En Progreso",
+		"completed": "Completadas",
+		"tasks": "tareas",
+		"completionRate": "Tasa de Finalización",
+		"activeTasks": "Tareas Activas"
+	},
+	"title": "Panel de Control",
 	"widgets": {
 		"financials": "Finanzas",
 		"employeeMetrics": "Métricas de Empleados",

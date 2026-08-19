@@ -14,8 +14,10 @@ export const AnimalDistribution = memo(() => {
 		let currentAngle = 0
 
 		return animalDistribution.map((item, index) => {
-			const percentage = (item.count / total) * 100
-			const angle = (item.count / total) * 360
+			// Species present but all with 0 animals makes total 0 → NaN in the legend
+			// and strokeDasharray="NaN 251.32" in the SVG.
+			const percentage = total > 0 ? (item.count / total) * 100 : 0
+			const angle = total > 0 ? (item.count / total) * 360 : 0
 			const startAngle = currentAngle
 			currentAngle += angle
 

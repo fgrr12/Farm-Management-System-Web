@@ -46,7 +46,7 @@ export const TaskFilters: FC<TaskFiltersProps> = memo(({ filters, onFiltersChang
 			activeButtonLabel={t('filtersActive')}
 			clearButtonLabel={t('clearFilters')}
 			doneButtonLabel={t('done')}
-			filtersAppliedLabel={t('filtersApplied')}
+			filtersAppliedLabel={(count) => t('filtersApplied', { count })}
 			noFiltersAppliedLabel={t('noFiltersApplied')}
 		>
 			{/* Priority Filter */}

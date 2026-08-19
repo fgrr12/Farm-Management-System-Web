@@ -401,7 +401,7 @@ export const CalendarEventModal = memo<CalendarEventModalProps>(
 									{/* Related Type */}
 									<div className="space-y-2">
 										<span className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-											{t('relatedType')}
+											{t('relatedTypeLabel')}
 										</span>
 										<Controller
 											name="relatedType"
@@ -452,7 +452,7 @@ export const CalendarEventModal = memo<CalendarEventModalProps>(
 									{/* Status */}
 									<div className="space-y-2">
 										<span className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-											Status
+											{t('form.status')}
 										</span>
 										<Controller
 											name="status"

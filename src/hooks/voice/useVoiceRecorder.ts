@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import {
 	type ExecutionResult,
@@ -84,7 +84,15 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 				setError(null)
 
 				const arrayBuffer = await blob.arrayBuffer()
-				const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)))
+				// Spreading the whole buffer into String.fromCharCode passes one argument
+				// per byte — a 60s clip is ~120k arguments and overflows the call stack.
+				const bytes = new Uint8Array(arrayBuffer)
+				let binary = ''
+				const CHUNK_SIZE = 8192
+				for (let i = 0; i < bytes.length; i += CHUNK_SIZE) {
+					binary += String.fromCharCode(...bytes.subarray(i, i + CHUNK_SIZE))
+				}
+				const base64 = btoa(binary)
 
 				const request: VoiceProcessingRequest = {
 					audioData: base64,
@@ -238,6 +246,13 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 						if (mediaRecorderRef.current?.state === 'recording') {
 							mediaRecorderRef.current.stop()
 						}
+						// Auto-stop used to leave this interval running. The next recording
+						// then started a second one over the same ref, so the clock counted
+						// two seconds per second and cut off at half the limit.
+						if (recordingTimerRef.current) {
+							clearInterval(recordingTimerRef.current)
+							recordingTimerRef.current = null
+						}
 					}
 					return newTime
 				})
@@ -285,6 +300,24 @@ export const useVoiceRecorder = (config: UseVoiceRecorderConfig): UseVoiceRecord
 
 		reset()
 	}, [phase, reset])
+
+	// Leaving the recorder mid-recording (navigation, modal close) left the interval
+	// and the microphone stream running.
+	useEffect(
+		() => () => {
+			if (recordingTimerRef.current) {
+				clearInterval(recordingTimerRef.current)
+				recordingTimerRef.current = null
+			}
+			if (mediaRecorderRef.current?.state === 'recording') {
+				mediaRecorderRef.current.stop()
+			}
+			for (const track of streamRef.current?.getTracks() ?? []) {
+				track.stop()
+			}
+		},
+		[]
+	)
 
 	return {
 		phase,

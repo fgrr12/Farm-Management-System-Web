@@ -83,7 +83,8 @@
 			"titleTooShort": "Title must be at least 3 characters",
 			"dateRequired": "Date is required",
 			"invalidTime": "Invalid time"
-		}
+		},
+		"status": "Status"
 	},
 	"view": {
 		"month": "Month",
@@ -108,5 +109,12 @@
 		"daily": "Daily",
 		"weekly": "Weekly",
 		"monthly": "Monthly"
-	}
+	},
+	"toast": {
+		"saved": "Event saved",
+		"saveError": "Couldn't save the event",
+		"deleted": "Event deleted",
+		"deleteError": "Couldn't delete the event"
+	},
+	"relatedTypeLabel": "Related to"
 }

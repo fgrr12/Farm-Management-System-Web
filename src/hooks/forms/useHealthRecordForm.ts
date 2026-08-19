@@ -11,7 +11,7 @@ import type { HealthRecord, HealthRecordType } from '@/types'
 
 const DEFAULT_VALUES: Partial<HealthRecordFormData> = {
 	reason: '',
-	type: '',
+	type: undefined,
 	reviewedBy: '',
 	date: dayjs().format('YYYY-MM-DD'),
 	weight: 0,
@@ -40,7 +40,7 @@ export const useHealthRecordForm = (initialData?: Partial<HealthRecord>) => {
 				uuid: data.uuid || '',
 				animalUuid: data.animalUuid || '',
 				reason: data.reason || '',
-				type: data.type || '',
+				type: data.type || undefined,
 				reviewedBy: data.reviewedBy || '',
 				date: formatDateForForm(data.date) || dayjs().format('YYYY-MM-DD'),
 				weight: data.weight || 0,

@@ -5,6 +5,7 @@
 	"animalId": "ID del animal",
 	"breed": "Raza",
 	"daughter": "Hija",
+	"delete": "Eliminar",
 	"father": "Padre",
 	"modal": {
 		"deleteRelatedAnimal": {
@@ -18,10 +19,12 @@
 	"noRelatedAnimals": "No hay animales relacionados",
 	"relation": "Relación",
 	"son": "Hijo",
+	"tableLabel": "Animales relacionados",
 	"title": "Relaciones con animales",
 	"toast": {
 		"deleteError": "Se ha producido un error al eliminar la relación.",
 		"deleted": "La relación se ha eliminado correctamente.",
 		"notDeleted": "La relación no se ha eliminado."
-	}
+	},
+	"view": "Ver"
 }

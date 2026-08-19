@@ -5,7 +5,6 @@ export type Relationship = 'Father' | 'Mother' | 'Daughter' | 'Son'
 export type Gender = 'Male' | 'Female' | ''
 
 export type HealthRecordType =
-	| ''
 	| 'Checkup'
 	| 'Vaccination'
 	| 'Medication'
