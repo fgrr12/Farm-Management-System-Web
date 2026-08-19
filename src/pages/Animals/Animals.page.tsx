@@ -184,7 +184,9 @@ const Animals = () => {
 											aria-label={t('accessibility.animalCardLabel', {
 												animalId: animal.animalId,
 												breedName: animal.breedName,
-												gender: animal.gender,
+												// The API value ("Female") would land raw in the label,
+												// which is what screen readers announce.
+												gender: t(`gender.${animal.gender.toLowerCase()}`),
 											})}
 										/>
 									</div>
