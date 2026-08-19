@@ -115,14 +115,16 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 						color: 'bg-blue-500!',
 						bgColor: 'bg-blue-100',
 						textColor: 'text-blue-800',
+						label: t('gender.male'),
 					}
 				: {
 						icon: 'i-tdesign-gender-female',
 						color: 'bg-pink-500!',
 						bgColor: 'bg-pink-100',
 						textColor: 'text-pink-800',
+						label: t('gender.female'),
 					}
-		}, [gender])
+		}, [gender, t])
 
 		const navigateToAnimal = useCallback(
 			(e: MouseEvent<HTMLDivElement>) => {
@@ -172,7 +174,7 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 						navigateToAnimal(e as any)
 					}
 				}}
-				aria-label={`Animal ${animalId}, ${breedName}, ${gender}`}
+				aria-label={`${animalId}, ${breedName}, ${genderConfig.label}`}
 				{...rest}
 			>
 				{/* Background Gradient */}
@@ -221,7 +223,7 @@ export const AnimalCard: FC<AnimalCardProps> = memo(
 						className={`${genderConfig.bgColor} ${genderConfig.textColor} px-2 py-1 rounded-full flex items-center gap-1 shadow-sm dark:shadow-md`}
 					>
 						<i className={`${genderConfig.icon} w-4! h-4! ${genderConfig.color}`} />
-						<span className="text-sm font-medium capitalize">{gender}</span>
+						<span className="text-sm font-medium">{genderConfig.label}</span>
 					</div>
 				</div>
 

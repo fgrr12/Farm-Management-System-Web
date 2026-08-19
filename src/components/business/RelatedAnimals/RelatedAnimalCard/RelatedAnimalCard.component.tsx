@@ -1,5 +1,6 @@
 import { draggable } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
 import { type FC, useCallback, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { useIsMobile } from '@/hooks/ui/useIsMobile'
 
@@ -11,6 +12,7 @@ export const RelatedAnimalCard: FC<CardProps> = ({ animal, ...props }) => {
 	const [touchStartTime, setTouchStartTime] = useState(0)
 	const [touchStartPos, setTouchStartPos] = useState({ x: 0, y: 0 })
 	const isMobile = useIsMobile()
+	const { t } = useTranslation(['animalRelations'])
 
 	// Touch handlers for better mobile experience
 	const handleTouchStart = useCallback(
@@ -72,7 +74,7 @@ export const RelatedAnimalCard: FC<CardProps> = ({ animal, ...props }) => {
 			ref={ref}
 			role="button"
 			tabIndex={0}
-			aria-label={`Animal ${animal.animalId}, ${animal.breed}, ${animal.gender}`}
+			aria-label={`${animal.animalId}, ${animal.breed}, ${t(`genderList.${animal.gender.toLowerCase()}`)}`}
 			onTouchStart={handleTouchStart}
 			onTouchMove={handleTouchMove}
 			{...props}

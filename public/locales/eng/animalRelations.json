@@ -7,6 +7,10 @@
 	"daughter": "Daughter",
 	"delete": "Delete",
 	"father": "Father",
+	"genderList": {
+		"female": "Female",
+		"male": "Male"
+	},
 	"modal": {
 		"deleteRelatedAnimal": {
 			"message": "This action cannot be undone.",

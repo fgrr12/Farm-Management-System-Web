@@ -7,6 +7,10 @@
 	"daughter": "Hija",
 	"delete": "Eliminar",
 	"father": "Padre",
+	"genderList": {
+		"female": "Hembra",
+		"male": "Macho"
+	},
 	"modal": {
 		"deleteRelatedAnimal": {
 			"message": "Esta acción no se puede deshacer.",
