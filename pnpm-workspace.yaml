@@ -63,6 +63,15 @@ overrides:
   '@protobufjs/utf8': ^1.1.1
   '@grpc/grpc-js': ^1.9.16
   esbuild: ^0.28.1
+  # Reached only through workbox-build (vite-plugin-pwa), i.e. build-time tooling —
+  # none of these ship in the client bundle. Pinned per major so the v1/v2 trees
+  # each get their own patched line instead of being forced onto one version.
+  brace-expansion@<1.1.18: ^1.1.18
+  brace-expansion@>=2.0.0 <2.1.4: ^2.1.4
+  minimatch@<3.1.4: ^3.1.4
+  ajv@>=7.0.0 <8.18.0: ^8.18.0
+  '@babel/core': ^7.29.1
+  sharp@<0.35.0: ^0.35.0
 
 # Shared settings across workspace
 shared-workspace-lockfile: true
