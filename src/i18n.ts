@@ -47,6 +47,12 @@ i18n
 		react: {
 			useSuspense: false,
 		},
+		interpolation: {
+			// React already escapes everything it renders. Leaving i18next's own escaping on
+			// double-escapes interpolated values, so a date rendered through a translation
+			// showed up as "23&#x2F;08&#x2F;2026" instead of "23/08/2026".
+			escapeValue: false,
+		},
 	})
 
 /**
