@@ -19,6 +19,12 @@
 	"subtitle": "Gestiona tu ganado de manera inteligente",
 	"title": "Iniciar sesión",
 	"toast": {
-		"errorLoggingIn": "Se ha producido un error al iniciar sesión"
+		"errorLoggingIn": "Se ha producido un error al iniciar sesión",
+		"popupClosed": "Cerraste la ventana antes de completar el inicio de sesión",
+		"popupBlocked": "Tu navegador bloqueó la ventana de inicio de sesión. Permite las ventanas emergentes para este sitio.",
+		"unauthorizedDomain": "Este dominio no está autorizado en Firebase Authentication. Añádelo en Authentication → Settings → Authorized domains.",
+		"networkError": "No se pudo conectar. Revisa tu conexión e inténtalo de nuevo.",
+		"invalidCredentials": "Email o contraseña incorrectos",
+		"userNotRegistered": "Esa cuenta de Google no está registrada en ninguna granja"
 	}
 }

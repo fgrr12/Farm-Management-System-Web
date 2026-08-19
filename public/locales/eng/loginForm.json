@@ -19,6 +19,12 @@
 	"subtitle": "Manage your livestock intelligently",
 	"title": "Login",
 	"toast": {
-		"errorLoggingIn": "There was an error logging in"
+		"errorLoggingIn": "There was an error logging in",
+		"popupClosed": "You closed the window before finishing sign-in",
+		"popupBlocked": "Your browser blocked the sign-in window. Allow pop-ups for this site.",
+		"unauthorizedDomain": "This domain is not authorised in Firebase Authentication. Add it under Authentication → Settings → Authorized domains.",
+		"networkError": "Couldn't connect. Check your connection and try again.",
+		"invalidCredentials": "Wrong email or password",
+		"userNotRegistered": "That Google account isn't registered with any farm"
 	}
 }

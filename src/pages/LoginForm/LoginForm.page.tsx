@@ -13,17 +13,40 @@ import { PageContainer } from '@/components/layout/PageContainer'
 import { Button } from '@/components/ui/Button'
 import { PasswordField, TextField } from '@/components/ui/TextField'
 
-import { usePagePerformance } from '@/hooks/ui/usePagePerformance'
-
 import type { LoginCredentials } from './LoginForm.types'
 
 const LoginForm = () => {
 	const { user } = useUserStore()
-	const { setLoading } = useAppStore()
+	const { setLoading, setToastData } = useAppStore()
 	const navigate = useNavigate()
 	const [credentials, setCredentials] = useState(INITIAL_CREDENTIALS)
 	const { t } = useTranslation(['loginForm'])
-	const { withLoadingAndError } = usePagePerformance()
+
+	// A generic "there was an error" toast made every failure look the same, which is
+	// exactly what makes a broken sign-in impossible to diagnose from the UI.
+	const errorMessageFor = useCallback(
+		(error: unknown) => {
+			const code = (error as { code?: string; message?: string })?.code ?? ''
+			const raw = (error as { message?: string })?.message ?? ''
+			switch (true) {
+				case code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request':
+					return t('toast.popupClosed')
+				case code === 'auth/popup-blocked':
+					return t('toast.popupBlocked')
+				case code === 'auth/unauthorized-domain':
+					return t('toast.unauthorizedDomain')
+				case code === 'auth/network-request-failed':
+					return t('toast.networkError')
+				case code === 'auth/invalid-credential' || code === 'auth/wrong-password':
+					return t('toast.invalidCredentials')
+				case raw.includes('auth/user-not-registered'):
+					return t('toast.userNotRegistered')
+				default:
+					return t('toast.errorLoggingIn')
+			}
+		},
+		[t]
+	)
 
 	const handleTextChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target
@@ -34,19 +57,31 @@ const LoginForm = () => {
 		async (e: FormEvent) => {
 			e.preventDefault()
 
-			await withLoadingAndError(async () => {
+			setLoading(true)
+			try {
 				const { email, password } = credentials
 				await UserService.loginWithEmailAndPassword(email, password)
-			}, t('toast.errorLoggingIn'))
+			} catch (error) {
+				console.error('Email sign-in failed:', error)
+				setToastData({ message: errorMessageFor(error), type: 'error' })
+			} finally {
+				setLoading(false)
+			}
 		},
-		[credentials, withLoadingAndError, t]
+		[credentials, errorMessageFor, setLoading, setToastData]
 	)
 
 	const handleGoogleLogin = useCallback(async () => {
-		await withLoadingAndError(async () => {
+		setLoading(true)
+		try {
 			await UserService.loginWithGoogle()
-		}, t('toast.errorLoggingIn'))
-	}, [withLoadingAndError, t])
+		} catch (error) {
+			console.error('Google sign-in failed:', error)
+			setToastData({ message: errorMessageFor(error), type: 'error' })
+		} finally {
+			setLoading(false)
+		}
+	}, [errorMessageFor, setLoading, setToastData])
 
 	// biome-ignore lint:: UseEffect is only called once
 	useEffect(() => {

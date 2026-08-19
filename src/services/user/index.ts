@@ -1,5 +1,4 @@
 import {
-	deleteUser,
 	GoogleAuthProvider,
 	signInWithEmailAndPassword,
 	signInWithPopup,
@@ -30,14 +29,14 @@ const loginWithGoogle = async () => {
 
 	if (!userDoc.exists()) {
 		// Signing in with Google creates a Firebase Auth account even for people who
-		// were never invited to a farm. Roll it back before returning — and make sure
-		// no session survives, or onAuthStateChanged picks up a user with no document.
-		try {
-			await deleteUser(user)
-		} catch (error) {
-			console.error('Could not delete unregistered account, signing out instead:', error)
-			await signOut(auth)
-		}
+		// were never invited to a farm, so the session must not survive.
+		//
+		// Deliberately signing out rather than deleting the account: a missing
+		// `users/{uid}` document is not proof that the person is unauthorised — the
+		// document may simply not have been created yet, or the read may have raced.
+		// Destroying a real account on that assumption is not a call this flow should
+		// make on its own; an admin can remove the account if it truly is unwanted.
+		await signOut(auth)
 		// Without this the caller treated an unauthorised login as a success and
 		// navigated straight into the app.
 		throw new Error('auth/user-not-registered')
